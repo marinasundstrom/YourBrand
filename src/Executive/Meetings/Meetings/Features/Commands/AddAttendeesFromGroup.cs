@@ -33,7 +33,7 @@ public record AddAttendeesFromGroup(string OrganizationId, int Id, int GroupId) 
 
             var meetingGroup = await context.MeetingGroups
                 .InOrganization(request.OrganizationId)
-                .Include(x => x.Members.OrderBy(x => x.Order))
+                .Include(x => x.Members.OrderBy(x => x.Order ))
                 .FirstOrDefaultAsync(x => x.Id == request.GroupId);
 
             if (meetingGroup is null)

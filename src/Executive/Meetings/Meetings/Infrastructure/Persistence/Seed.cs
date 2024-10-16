@@ -15,7 +15,7 @@ public static class Seed
 
         using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        //await context.Database.EnsureDeletedAsync();
+        await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
         //return;
@@ -27,7 +27,7 @@ public static class Seed
                 Text = "This motion seeks approval for the new organizational policy on remote work.",
                 TenantId = TenantConstants.TenantId,
                 OrganizationId = TenantConstants.OrganizationId,
-                Status = MotionStatus.Proposed
+                Status = MotionStatus.Proposal
             };
             motion1.AddOperativeClause(OperativeAction.Decides, "Decides to implement the remote work policy effective immediately.");
             motion1.AddOperativeClause(OperativeAction.Instructs, "Instructs the HR department to update the employee handbook accordingly.");
@@ -38,7 +38,7 @@ public static class Seed
                 Text = "This motion requests additional funding for the marketing department.",
                 TenantId = TenantConstants.TenantId,
                 OrganizationId = TenantConstants.OrganizationId,
-                Status = MotionStatus.Proposed
+                Status = MotionStatus.Proposal
             };
             motion2.AddOperativeClause(OperativeAction.Requests, "Requests an additional budget allocation of $50,000 for Q4 marketing initiatives.");
             motion2.AddOperativeClause(OperativeAction.Urges, "Urges the finance committee to expedite the approval process.");
@@ -50,7 +50,7 @@ public static class Seed
                 Text = "This motion endorses the organization's commitment to environmental sustainability.",
                 TenantId = TenantConstants.TenantId,
                 OrganizationId = TenantConstants.OrganizationId,
-                Status = MotionStatus.Proposed
+                Status = MotionStatus.Proposal
             };
             motion3.AddOperativeClause(OperativeAction.Endorses, "Endorses the adoption of renewable energy sources for all company facilities.");
             motion3.AddOperativeClause(OperativeAction.CallsFor, "Calls for the reduction of carbon emissions by 25% over the next five years.");
@@ -61,7 +61,7 @@ public static class Seed
                 Text = "This motion seeks approval for the annual budget.",
                 TenantId = TenantConstants.TenantId,
                 OrganizationId = TenantConstants.OrganizationId,
-                Status = MotionStatus.Proposed
+                Status = MotionStatus.Proposal
             };
             motion4.AddOperativeClause(OperativeAction.Decides, "Decides to approve the proposed annual budget effective immediately.");
             motion4.AddOperativeClause(OperativeAction.Instructs, "Instructs the finance department to implement the budget accordingly.");
@@ -93,7 +93,7 @@ public static class Seed
             meetingGroup.AddMember(
                 name: "Bob Smith",
                 email: "bob.smith@example.com",
-                role: AttendeeRole.Participant,
+                role: AttendeeRole.Attendee,
                 userId: TenantConstants.UserBobId,
                 hasSpeakingRights: true,
                 hasVotingRights: true
@@ -105,7 +105,7 @@ public static class Seed
                 meetingGroup.AddMember(
                     name: $"Member {i}",
                     email: $"member{i}@example.com",
-                    role: AttendeeRole.Participant,
+                    role: AttendeeRole.Attendee,
                     userId: null,
                     hasSpeakingRights: true,
                     hasVotingRights: true
@@ -141,67 +141,67 @@ public static class Seed
                 TenantId = TenantConstants.TenantId,
                 OrganizationId = TenantConstants.OrganizationId,
                 MeetingId = 1,
-                State = AgendaState.Drafting
+                State = AgendaState.InDraft
             };
 
             // Add agenda items
-            agenda.AddItem(
+            agenda.AddAgendaItem(
                 type: AgendaItemType.CallToOrder,
                 title: "Call to Order",
                 description: "Chairperson calls the meeting to order."
             );
 
-            agenda.AddItem(
+            agenda.AddAgendaItem(
                 type: AgendaItemType.RollCall,
                 title: "Roll Call",
                 description: "Secretary takes attendance."
             );
 
-            agenda.AddItem(
+            agenda.AddAgendaItem(
                 type: AgendaItemType.ApprovalOfMinutes,
                 title: "Approval of Minutes",
                 description: "Review and approve minutes from the previous meeting."
             );
 
-            agenda.AddItem(
+            agenda.AddAgendaItem(
                 type: AgendaItemType.ApprovalOfAgenda,
                 title: "Approval of Agenda",
                 description: "Approve the agenda for the current meeting."
             );
 
-            agenda.AddItem(
+            agenda.AddAgendaItem(
                 type: AgendaItemType.Reports,
                 title: "Committee Reports",
                 description: "Presentations from various committees."
             );
 
-            agenda.AddItem(
+            agenda.AddAgendaItem(
                 type: AgendaItemType.OldBusiness,
                 title: "Old Business",
                 description: "Discuss unresolved issues from previous meetings."
             );
 
-            agenda.AddItem(
+            agenda.AddAgendaItem(
                 type: AgendaItemType.NewBusiness,
                 title: "New Business",
                 description: "Introduce and discuss new topics."
             );
 
-            var item = agenda.AddItem(
+            var item = agenda.AddAgendaItem(
                 type: AgendaItemType.Motion,
                 title: "Motion to Approve Budget",
                 description: "Proposal to approve the annual budget."
             );
             item.MotionId = 4;
 
-            var item2 = agenda.AddItem(
+            var item2 = agenda.AddAgendaItem(
                 type: AgendaItemType.Motion,
                 title: "Motion to Endorse Environmental Initiative",
                 description: "Proposal for organization's commitment to environmental sustainability."
             );
-            item.MotionId = 3;
+            item2.MotionId = 3;
 
-            agenda.AddItem(
+            agenda.AddAgendaItem(
                 type: AgendaItemType.Adjournment,
                 title: "Adjournment",
                 description: "Formal closing of the meeting."

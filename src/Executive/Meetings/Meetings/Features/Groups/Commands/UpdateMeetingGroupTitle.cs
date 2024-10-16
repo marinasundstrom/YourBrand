@@ -31,7 +31,7 @@ public record UpdateMeetingGroupTitle(string OrganizationId, int Id, string Titl
                 return Errors.MeetingGroups.MeetingGroupNotFound;
             }
 
-            meetingGroup.Title = request.Title;
+            meetingGroup.Name = request.Title;
 
             await context.SaveChangesAsync(cancellationToken);
 

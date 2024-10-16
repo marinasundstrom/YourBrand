@@ -13,17 +13,17 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
     {
     }
 
-    public MeetingGroup(int id, string title, string? description)
+    public MeetingGroup(MeetingGroupId id, string name, string? description)
     {
         Id = id;
-        Title = title;
+        Name = name;
         Description = description;
     }
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
 
-    public string Title { get; set; }
+    public string Name { get; set; }
     public string? Description { get; set; }
 
     public Quorum Quorum { get; set; } = new Quorum();
@@ -36,13 +36,13 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
 
         try 
         {
-            var last = _members.OrderByDescending(x => x.Order).First();
-            order = last.Order + 1;
+            var last = _members.OrderByDescending(x => x.Order ).First();
+            order = last.Order  + 1;
         }
         catch {}
 
         var item = new MeetingGroupMember(name, email, role, userId, hasSpeakingRights, hasVotingRights);
-        item.Order = order;
+        item.Order  = order;
         _members.Add(item);
         return item;
     }
@@ -52,9 +52,9 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
         return _members.Remove(item);
     }
 
-    public bool MoveMember(MeetingGroupMember meetingGroupItem, int newOrderPosition)
+    public bool ReorderMember(MeetingGroupMember meetingGroupItem, int newOrderPosition)
     {
-        int oldOrderPosition = meetingGroupItem.Order;
+        int oldOrderPosition = meetingGroupItem.Order ;
 
         if (oldOrderPosition == newOrderPosition)
             return false;
@@ -63,29 +63,29 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
         if (newOrderPosition < oldOrderPosition)
         {
             var itemsToIncrement = Members
-                .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
+                .Where(i => i.Order  >= newOrderPosition && i.Order  < oldOrderPosition)
                 .ToList();
 
             foreach (var item in itemsToIncrement)
             {
-                item.Order += 1;
+                item.Order  += 1;
             }
         }
         // Flyttar objektet nedåt i listan
         else
         {
             var itemsToDecrement = Members
-                .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
+                .Where(i => i.Order  > oldOrderPosition && i.Order  <= newOrderPosition)
                 .ToList();
 
             foreach (var item in itemsToDecrement)
             {
-                item.Order -= 1;
+                item.Order  -= 1;
             }
         }
 
         // Uppdatera order för objektet som flyttas
-        meetingGroupItem.Order = newOrderPosition;
+        meetingGroupItem.Order  = newOrderPosition;
 
         return true;
     }

@@ -10,7 +10,7 @@ using YourBrand.Meetings.Features.Procedure.Command;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public record MoveAgendaItem(string OrganizationId, int Id, string ItemId, int Order) : IRequest<Result<AgendaItemDto>>
+public record MoveAgendaItem(string OrganizationId, int Id, string ItemId, int Order ) : IRequest<Result<AgendaItemDto>>
 {
     public class Validator : AbstractValidator<MoveAgendaItem>
     {
@@ -40,7 +40,7 @@ public record MoveAgendaItem(string OrganizationId, int Id, string ItemId, int O
                 return Errors.Agendas.AgendaItemNotFound;
             }
 
-            agenda.MoveItem(agendaItem, request.Order);
+            agenda.ReorderAgendaItem(agendaItem, request.Order );
 
             context.Agendas.Update(agenda);
 

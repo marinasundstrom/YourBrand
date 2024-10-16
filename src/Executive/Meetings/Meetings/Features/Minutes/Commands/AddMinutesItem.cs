@@ -37,7 +37,7 @@ public record AddMinutesItem(string OrganizationId, int Id, int? AgendaId, strin
 
             if(request.Order is not null) 
             {
-                minute.MoveItem(minuteItem, request.Order.GetValueOrDefault());
+                minute.ReorderItem(minuteItem, request.Order.GetValueOrDefault());
             }
 
             minuteItem.MotionId = request.MotionId;

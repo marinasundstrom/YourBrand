@@ -17,7 +17,7 @@ public record GetMinutesById(string OrganizationId, int Id) : IRequest<Result<Mi
             var minute = await context.Minutes
                 .InOrganization(request.OrganizationId)
                 .AsNoTracking()
-                .Include(x => x.Items.OrderBy(x => x.Order))
+                .Include(x => x.Items.OrderBy(x => x.Order ))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if(minute is null) 

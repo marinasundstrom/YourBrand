@@ -33,11 +33,11 @@ public record AddAgendaItem(string OrganizationId, int Id, AgendaItemType Type, 
                 return Errors.Agendas.AgendaNotFound;
             }
 
-            var agendaItem = agenda.AddItem(request.Type, request.Title, request.Description);
+            var agendaItem = agenda.AddAgendaItem(request.Type, request.Title, request.Description);
 
             if(request.Order is not null) 
             {
-                agenda.MoveItem(agendaItem, request.Order.GetValueOrDefault());
+                agenda.ReorderAgendaItem(agendaItem, request.Order.GetValueOrDefault());
             }
 
             agendaItem.MotionId = request.MotionId;

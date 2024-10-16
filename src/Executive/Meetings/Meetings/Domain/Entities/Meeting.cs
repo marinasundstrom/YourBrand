@@ -11,7 +11,7 @@ public enum MeetingState
     Scheduled,
     InProgress,
     Completed,
-    Cancelled
+    Canceled
 }
 
 public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrganization
@@ -22,7 +22,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     {
     }
 
-    public Meeting(int id, string title)
+    public Meeting(MeetingId id, string title)
     {
         Id = id;
         Title = title;
@@ -87,9 +87,9 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         Canceled = DateTimeOffset.UtcNow;
 
-        State = MeetingState.Cancelled;
+        State = MeetingState.Canceled;
 
-        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
+        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order ).ToList();
 
         foreach(var item in agendaItems.Skip(CurrentAgendaItemIndex.GetValueOrDefault())) 
         {
@@ -120,7 +120,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             throw new InvalidOperationException("Meeting is not in progress.");
         }
 
-        var agendaItems = Agenda?.Items.OrderBy(ai => ai.Order).ToList();
+        var agendaItems = Agenda?.Items.OrderBy(ai => ai.Order ).ToList();
         if (agendaItems == null || CurrentAgendaItemIndex >= agendaItems.Count - 1)
         {
             throw new InvalidOperationException("No more agenda items.");
@@ -148,7 +148,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         }
 
         return Agenda?.Items
-            .OrderBy(ai => ai.Order)
+            .OrderBy(ai => ai.Order )
             .ElementAtOrDefault(CurrentAgendaItemIndex.GetValueOrDefault());
     }
 
@@ -164,8 +164,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         try
         {
-            var last = _attendees.OrderByDescending(x => x.Order).First();
-            order = last.Order + 1;
+            var last = _attendees.OrderByDescending(x => x.Order ).First();
+            order = last.Order  + 1;
         }
         catch { }
 
@@ -182,7 +182,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             MeetingGroupId = meetingGroupId,
             MeetingGroupMemberId = meetingGroupMemberId
         };
-        attendee.Order = order;
+        attendee.Order  = order;
 
         _attendees.Add(attendee);
 
@@ -194,7 +194,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         return _attendees.Remove(attendee);
     }
 
-    public void ResetProcedure()
+    public void ResetMeetingProgress()
     {
         State = MeetingState.Scheduled;
 

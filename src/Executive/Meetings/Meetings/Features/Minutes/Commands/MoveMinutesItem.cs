@@ -40,7 +40,7 @@ public record MoveMinutesItem(string OrganizationId, int Id, string ItemId, int 
                 return Errors.Minutes.MinutesItemNotFound;
             }
 
-            minute.MoveItem(minuteItem, request.Order);
+            minute.ReorderItem(minuteItem, request.Order);
 
             context.Minutes.Update(minute);
 

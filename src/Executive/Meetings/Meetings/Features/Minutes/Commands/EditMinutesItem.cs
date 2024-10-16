@@ -41,8 +41,8 @@ public record EditMinutesItem(string OrganizationId, int Id, string ItemId, Minu
             }
         
             minuteItem.Type = request.Type;
-            minuteItem.Title = request.Title;
-            minuteItem.Description = request.Description;
+            minuteItem.Heading = request.Title;
+            minuteItem.Details = request.Description;
             minuteItem.MotionId = request.MotionId;
 
             context.Minutes.Update(minute);

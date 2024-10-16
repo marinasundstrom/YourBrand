@@ -3043,7 +3043,7 @@ components:
       - Scheduled
       - InProgress
       - Completed
-      - Cancelled
+      - Canceled
       enum:
       - 0
       - 1
@@ -3085,7 +3085,7 @@ components:
       x-enumNames:
       - Chairperson
       - Secretary
-      - Participant
+      - Attendee
       - Observer
       enum:
       - 0
@@ -3268,13 +3268,13 @@ components:
       type: integer
       description: ''
       x-enumNames:
-      - Drafting
-      - Reviewing
+      - InDraft
+      - UnderReview
       - Approved
-      - Distributed
+      - Published
       - InProgress
       - Completed
-      - FollowUp
+      - InFollowUp
       enum:
       - 0
       - 1
@@ -3352,7 +3352,7 @@ components:
       - Voting
       - Completed
       - Postponed
-      - Cancelled
+      - Canceled
       enum:
       - 0
       - 1
@@ -3484,7 +3484,7 @@ components:
       type: integer
       description: ''
       x-enumNames:
-      - Proposed
+      - Proposal
       - Adopted
       - Rejected
       - Amended
@@ -3620,8 +3620,8 @@ components:
       type: integer
       description: ''
       x-enumNames:
-      - Drafting
-      - Reviewing
+      - Draft
+      - UnderReview
       - Approved
       enum:
       - 0
@@ -3657,7 +3657,7 @@ components:
       type: integer
       description: ''
       x-enumNames:
-      - Default
+      - General
       enum:
       - 0
     MinutesItemState:

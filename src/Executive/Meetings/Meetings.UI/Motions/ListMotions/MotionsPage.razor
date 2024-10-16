@@ -80,7 +80,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         await table.ReloadServerData();
     }

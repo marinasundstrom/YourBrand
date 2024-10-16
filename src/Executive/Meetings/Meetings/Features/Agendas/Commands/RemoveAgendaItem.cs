@@ -40,7 +40,7 @@ public record RemoveAgendaItem(string OrganizationId, int Id, string ItemId) : I
                 return Errors.Agendas.AgendaItemNotFound;
             }
 
-            agenda.RemoveItem(agendaItem);
+            agenda.RemoveAgendaItem(agendaItem);
 
             context.Agendas.Update(agenda);
 

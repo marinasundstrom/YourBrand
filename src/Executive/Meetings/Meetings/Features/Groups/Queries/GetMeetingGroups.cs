@@ -21,7 +21,7 @@ public record GetMeetingGroups(string OrganizationId, int Page = 1, int PageSize
 
             if (request.SearchTerm is not null)
             {
-                query = query.Where(x => x.Title.ToLower().Contains(request.SearchTerm.ToLower()));
+                query = query.Where(x => x.Name.ToLower().Contains(request.SearchTerm.ToLower()));
             }
 
             if (request.SortBy is not null)

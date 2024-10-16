@@ -5,11 +5,11 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public enum MinutesState 
+public enum MinutesState
 {
-    Drafting,           // Minute is being drafted, can still be modified.
-    Reviewing,          // Minute is under review by attendees or stakeholders.
-    Approved           // Minute is finalized and approved for the meeting.
+    Draft,            // Minute is being drafted and can still be modified.
+    UnderReview,      // Minute is under review by attendees or stakeholders.
+    Approved          // Minute is finalized and approved for the meeting.
 }
 
 public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrganization
@@ -29,7 +29,7 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrg
     public OrganizationId OrganizationId { get; set; }
     public MeetingId MeetingId { get; set; }
 
-    public MinutesState State { get; set;} = MinutesState.Drafting;
+    public MinutesState State { get; set;} = MinutesState.Draft;
     
     /*
     public bool? IsApproved { get; set; }
@@ -42,21 +42,21 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrg
 
     public IReadOnlyCollection<MinutesItem> Items => _items;
 
-    public MinutesItem AddItem(MinutesItemType type, int? agendaId, string? agendaItemId, string title, string description) 
+    public MinutesItem AddItem(MinutesItemType type, AgendaId? agendaId, string? agendaItemId, string title, string description) 
     {
         int order = 1;
 
         try 
         {
-            var last = _items.OrderByDescending(x => x.Order).First();
-            order = last.Order + 1;
+            var last = _items.OrderByDescending(x => x.Order ).First();
+            order = last.Order  + 1;
         }
         catch {}
 
         var item = new MinutesItem(type, title, description);
         item.AgendaId = agendaId;
         item.AgendaItemId = agendaItemId;
-        item.Order = order;
+        item.Order  = order;
         _items.Add(item);
         return item;
     }
@@ -66,9 +66,9 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrg
         return _items.Remove(item);
     }
 
-    public bool MoveItem(MinutesItem agendaItem, int newOrderPosition)
+    public bool ReorderItem(MinutesItem agendaItem, int newOrderPosition)
     {
-        int oldOrderPosition = agendaItem.Order;
+        int oldOrderPosition = agendaItem.Order ;
 
         if (oldOrderPosition == newOrderPosition)
             return false;
@@ -77,29 +77,29 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrg
         if (newOrderPosition < oldOrderPosition)
         {
             var itemsToIncrement = Items
-                .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
+                .Where(i => i.Order  >= newOrderPosition && i.Order  < oldOrderPosition)
                 .ToList();
 
             foreach (var item in itemsToIncrement)
             {
-                item.Order += 1;
+                item.Order  += 1;
             }
         }
         // Flyttar objektet nedåt i listan
         else
         {
             var itemsToDecrement = Items
-                .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
+                .Where(i => i.Order  > oldOrderPosition && i.Order  <= newOrderPosition)
                 .ToList();
 
             foreach (var item in itemsToDecrement)
             {
-                item.Order -= 1;
+                item.Order  -= 1;
             }
         }
 
         // Uppdatera order för objektet som flyttas
-        agendaItem.Order = newOrderPosition;
+        agendaItem.Order  = newOrderPosition;
 
         return true;
     }

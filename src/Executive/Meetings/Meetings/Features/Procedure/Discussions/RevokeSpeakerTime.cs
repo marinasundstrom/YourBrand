@@ -17,7 +17,7 @@ public sealed record RevokeSpeakerTime(string OrganizationId, int Id, string Age
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
                 .Include(x => x.Agenda)
-                .ThenInclude(x => x.Items.OrderBy(x => x.Order))
+                .ThenInclude(x => x.Items.OrderBy(x => x.Order ))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (meeting is null)

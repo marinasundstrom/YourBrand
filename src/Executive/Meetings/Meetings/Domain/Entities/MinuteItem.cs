@@ -7,7 +7,7 @@ namespace YourBrand.Meetings.Domain.Entities;
 
 public enum MinutesItemType
 {
-    Default,
+    General,
 }
 
 public enum MinutesItemState
@@ -21,12 +21,12 @@ public class MinutesItem : Entity<MinutesItemId>, IAuditable, IHasTenant, IHasOr
 {
     readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
 
-    public MinutesItem(MinutesItemType type, string title, string description)
+    public MinutesItem(MinutesItemType type, string heading, string details)
     : base(new MinutesItemId())
     {
         Type = type;
-        Title = title;
-        Description = description;
+        Heading = heading;
+        Details = details;
     }
 
     public TenantId TenantId { get; set; }
@@ -38,10 +38,10 @@ public class MinutesItem : Entity<MinutesItemId>, IAuditable, IHasTenant, IHasOr
 
     public MinutesItemType Type { get; set; }
 
-    public string Title { get; set; }
-    public string Description { get; set; }
+    public string Heading { get; set; }
+    public string Details { get; set; }
     public MinutesItemState State { get; set; } = MinutesItemState.Created;
-    public int Order { get; set; }
+    public int Order  { get; set; }
 
     // For motions
     public MotionId? MotionId { get; set; }

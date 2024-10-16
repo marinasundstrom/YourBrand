@@ -17,7 +17,7 @@ public record GetMeetings(string OrganizationId, int Page = 1, int PageSize = 10
             var query = context.Meetings
                 .InOrganization(request.OrganizationId)
                 .AsNoTracking()
-                .Include(x => x.Attendees.OrderBy(x => x.Order))
+                .Include(x => x.Attendees.OrderBy(x => x.Order ))
                 .AsQueryable();
 
             if (request.SearchTerm is not null)

@@ -5,16 +5,28 @@ using YourBrand.Meetings.Domain.ValueObjects;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public enum AgendaState 
+public enum AgendaState
 {
-    Drafting,           // Agenda is being drafted, can still be modified.
-    Reviewing,          // Agenda is under review by attendees or stakeholders.
-    Approved,           // Agenda is finalized and approved for the meeting.
-    Distributed,        // Agenda has been sent to all attendees.
-    InProgress,         // The meeting is happening, and the agenda is being followed.
-    //Adjusted,           // The agenda has been adjusted during the meeting.
-    Completed,          // The meeting is finished, and all agenda items have been covered.
-    FollowUp            // Post-meeting follow-up tasks or action items are in progress.
+    InDraft,           // Agenda is being drafted and can still be modified.
+    UnderReview,       // Agenda is under review by attendees or stakeholders.
+    Approved,          // Agenda is finalized and approved for the meeting.
+    Published,         // Agenda has been sent or made available to all attendees.
+    InProgress,        // The meeting is happening, and the agenda is being followed.
+    Completed,         // The meeting is finished, and all agenda items have been covered.
+    InFollowUp         // Post-meeting follow-up tasks or action items are in progress.
+}
+
+public enum ApprovalStatus
+{
+    Pending,           // Agenda has not been approved yet.
+    Approved,          // Agenda has been approved.
+    Rejected           // Agenda has been rejected.
+}
+
+public enum CompletionStatus
+{
+    Incomplete,        // Agenda has not yet been completed.
+    Completed          // Agenda has been fully completed.
 }
 
 public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrganization
@@ -25,7 +37,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
     {
     }
 
-    public Agenda(int id)
+    public Agenda(AgendaId id)
     {
         Id = id;
     }
@@ -34,44 +46,41 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
     public OrganizationId OrganizationId { get; set; }
     public MeetingId MeetingId { get; set; }
 
-    public AgendaState State { get; set;} = AgendaState.Drafting;
+    public AgendaState State { get; set;} = AgendaState.InDraft;
 
-    /*
-    public bool? IsApproved { get; set; }
+    public ApprovalStatus ApprovalStatus { get; set; }
     public DateTimeOffset? ApprovedAt { get; set; }
-    public bool? IsAdjusted { get; set; }
+    public bool? WasAdjusted { get; set; }
     public DateTimeOffset? AdjustedAt { get; set; }
-    public bool? IsCompleted { get; set; }
-    public DateTimeOffset? CompletedAt { get; set; }
-    */
+    public bool? CompletedAt { get; set; }
 
     public IReadOnlyCollection<AgendaItem> Items => _items;
 
-    public AgendaItem AddItem(AgendaItemType type, string title, string description) 
+    public AgendaItem AddAgendaItem(AgendaItemType type, string title, string description) 
     {
         int order = 1;
 
         try 
         {
-            var last = _items.OrderByDescending(x => x.Order).First();
-            order = last.Order + 1;
+            var last = _items.OrderByDescending(x => x.Order ).First();
+            order = last.Order  + 1;
         }
         catch {}
 
         var item = new AgendaItem(type, title, description);
-        item.Order = order;
+        item.Order  = order;
         _items.Add(item);
         return item;
     }
 
-    public bool RemoveItem(AgendaItem item)
+    public bool RemoveAgendaItem(AgendaItem item)
     {
         return _items.Remove(item);
     }
 
-    public bool MoveItem(AgendaItem agendaItem, int newOrderPosition)
+    public bool ReorderAgendaItem(AgendaItem agendaItem, int newOrderPosition)
     {
-        int oldOrderPosition = agendaItem.Order;
+        int oldOrderPosition = agendaItem.Order ;
 
         if (oldOrderPosition == newOrderPosition)
             return false;
@@ -80,29 +89,29 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
         if (newOrderPosition < oldOrderPosition)
         {
             var itemsToIncrement = Items
-                .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
+                .Where(i => i.Order  >= newOrderPosition && i.Order  < oldOrderPosition)
                 .ToList();
 
             foreach (var item in itemsToIncrement)
             {
-                item.Order += 1;
+                item.Order  += 1;
             }
         }
         // Flyttar objektet nedåt i listan
         else
         {
             var itemsToDecrement = Items
-                .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
+                .Where(i => i.Order  > oldOrderPosition && i.Order  <= newOrderPosition)
                 .ToList();
 
             foreach (var item in itemsToDecrement)
             {
-                item.Order -= 1;
+                item.Order  -= 1;
             }
         }
 
         // Uppdatera order för objektet som flyttas
-        agendaItem.Order = newOrderPosition;
+        agendaItem.Order  = newOrderPosition;
 
         return true;
     }

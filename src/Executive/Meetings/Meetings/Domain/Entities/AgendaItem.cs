@@ -33,7 +33,7 @@ public enum AgendaItemState
     Voting,
     Completed,
     Postponed,
-    Cancelled
+    Canceled
 }
 
 public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrganization
@@ -57,7 +57,14 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
     public string Title { get; set; }
     public string Description { get; set; }
     public AgendaItemState State { get; set; } = AgendaItemState.Pending;
-    public int Order { get; set; }
+    public int Order  { get; set; }
+
+    public bool IsMandatory { get; set; }              // Instead of IsRequired
+    public bool NeedsDiscussion { get; set; }          // Instead of RequiresDiscussion
+    public bool NeedsVote { get; set; }                // Instead of RequiresVote
+
+
+    // public AgendaItemId DependsOnItem { get; set; }
 
     public SpeakerSession? SpeakerSession { get; set; }
     public VotingSession? VotingSession { get; set; }
@@ -135,7 +142,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
             throw new InvalidOperationException("Agenda item can't be cancelled.");
         }
 
-        State = AgendaItemState.Cancelled;
+        State = AgendaItemState.Canceled;
     }
 
     public User? CreatedBy { get; set; } = null!;

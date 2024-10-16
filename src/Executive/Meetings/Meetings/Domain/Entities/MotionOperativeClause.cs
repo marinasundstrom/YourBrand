@@ -38,8 +38,8 @@ public class MotionOperativeClause : Entity<MotionOperativeClauseId>, IAuditable
 
     public OperativeAction Action { get; set; }
 
-    public string Text { get; set; }
-    public int Order { get; set; }
+    public string? Text { get; set; }
+    public int Order  { get; set; }
 
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;

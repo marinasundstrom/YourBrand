@@ -7,7 +7,7 @@ namespace YourBrand.Meetings.Domain.Entities;
 
 public enum MotionStatus
 {
-    Proposed,
+    Proposal,     // Instead of Proposed
     Adopted,
     Rejected,
     Amended
@@ -21,7 +21,7 @@ public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrgan
     {
     }
 
-    public Motion(int id, string title)
+    public Motion(MotionId id, string title)
     {
         Id = id;
         Title = title;
@@ -31,8 +31,8 @@ public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrgan
     public OrganizationId OrganizationId { get; set; }
 
     public string Title { get; set; }
-    public string Text { get; set; }
-    public MotionStatus Status { get; set; } = MotionStatus.Proposed;
+    public string? Text { get; set; }
+    public MotionStatus Status { get; set; } = MotionStatus.Proposal;
 
     public IReadOnlyCollection<MotionOperativeClause> OperativeClauses => _operativeClauses;
 
@@ -42,13 +42,13 @@ public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrgan
 
         try
         {
-            var last = _operativeClauses.OrderByDescending(x => x.Order).First();
-            order = last.Order + 1;
+            var last = _operativeClauses.OrderByDescending(x => x.Order ).First();
+            order = last.Order  + 1;
         }
         catch { }
 
         var clause = new MotionOperativeClause(action, text);
-        clause.Order = order;
+        clause.Order  = order;
         _operativeClauses.Add(clause);
         return clause;
     }

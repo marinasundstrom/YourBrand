@@ -123,7 +123,7 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
     {
         meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
         
-        if(meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Cancelled || meeting.State == MeetingState.Completed)
+        if(meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Canceled || meeting.State == MeetingState.Completed)
         {
             agendaItem = null;
         }
