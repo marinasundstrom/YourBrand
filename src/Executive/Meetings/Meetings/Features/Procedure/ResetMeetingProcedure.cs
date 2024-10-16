@@ -34,7 +34,7 @@ public record ResetMeetingProcedure(string OrganizationId, int Id) : IRequest<Re
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var attendee = meeting.Attendees.FirstOrDefault(x => x.UserId == userContext.UserId);
+            var attendee = meeting.GetAttendeeByUserId(userContext.UserId);
 
             if (attendee is null)
             {

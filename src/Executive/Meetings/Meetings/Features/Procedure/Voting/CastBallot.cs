@@ -23,14 +23,14 @@ public sealed record CastBallot(string OrganizationId, int Id, string CandidateI
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var attendee = meeting.Attendees.FirstOrDefault(x => x.UserId == userContext.UserId);
+            var attendee = meeting.GetAttendeeByUserId(userContext.UserId);
 
             if (attendee is null)
             {
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!attendee.HasVotingRights)
+            if (!meeting.IsAttendeeAllowedToVote(attendee))
             {
                 return Errors.Meetings.YouHaveNoVotingRights;
             }

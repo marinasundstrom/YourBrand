@@ -25,7 +25,7 @@ public sealed record MoveToNextAgendaItem(string OrganizationId, int Id) : IRequ
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var attendee = meeting.Attendees.FirstOrDefault(x => x.UserId == userContext.UserId);
+            var attendee = meeting.GetAttendeeByUserId(userContext.UserId);
 
             if (attendee is null)
             {

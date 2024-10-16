@@ -929,7 +929,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/Agenda/StartDiscussion:
+  /v1/Meetings/{id}/Agenda/Discussion/Start:
     post:
       tags:
       - Meetings
@@ -964,11 +964,81 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/Agenda/StartVoting:
+  /v1/Meetings/{id}/Agenda/Discussion/End:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_EndAgendaItemDiscussion
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Agenda/Voting/Start:
     post:
       tags:
       - Meetings
       operationId: Meetings_StartAgendaItemVoting
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Agenda/Voting/End:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_EndAgendaItemVoting
       parameters:
       - name: organizationId
         in: query
@@ -3017,6 +3087,7 @@ components:
           type: string
         description:
           type: string
+          nullable: true
         state:
           $ref: '#/components/schemas/MeetingState'
         scheduledAt:
@@ -3075,8 +3146,10 @@ components:
           nullable: true
         hasSpeakingRights:
           type: boolean
+          nullable: true
         hasVotingRights:
           type: boolean
+          nullable: true
         isPresent:
           type: boolean
     AttendeeRole:
@@ -3164,8 +3237,10 @@ components:
           $ref: '#/components/schemas/AttendeeRole'
         hasSpeakingRights:
           type: boolean
+          nullable: true
         hasVotingRights:
           type: boolean
+          nullable: true
     UpdateMeetingTitle:
       type: object
       additionalProperties: false
@@ -3219,8 +3294,10 @@ components:
           $ref: '#/components/schemas/AttendeeRole'
         hasSpeakingRights:
           type: boolean
+          nullable: true
         hasVotingRights:
           type: boolean
+          nullable: true
     AddAttendeesFromGroup:
       type: object
       additionalProperties: false
@@ -3243,8 +3320,10 @@ components:
           $ref: '#/components/schemas/AttendeeRole'
         hasSpeakingRights:
           type: boolean
+          nullable: true
         hasVotingRights:
           type: boolean
+          nullable: true
     MarkAttendeeAsPresent:
       type: object
       additionalProperties: false
@@ -3300,6 +3379,16 @@ components:
           $ref: '#/components/schemas/AgendaItemState'
         description:
           type: string
+        isMandatory:
+          type: boolean
+        discussionActions:
+          $ref: '#/components/schemas/DiscussionActions'
+        voteActions:
+          $ref: '#/components/schemas/VoteActions'
+        isDiscussionCompleted:
+          type: boolean
+        isVoteCompleted:
+          type: boolean
         motionId:
           type: integer
           format: int32
@@ -3360,6 +3449,28 @@ components:
       - 3
       - 4
       - 5
+    DiscussionActions:
+      type: integer
+      description: ''
+      x-enumNames:
+      - None
+      - Required
+      - Optional
+      enum:
+      - 0
+      - 1
+      - 2
+    VoteActions:
+      type: integer
+      description: ''
+      x-enumNames:
+      - None
+      - Required
+      - Optional
+      enum:
+      - 0
+      - 1
+      - 2
     SpeakerSession:
       type: object
       additionalProperties: false
@@ -3801,8 +3912,10 @@ components:
           nullable: true
         hasSpeakingRights:
           type: boolean
+          nullable: true
         hasVotingRights:
           type: boolean
+          nullable: true
     CreateMeetingGroup:
       type: object
       additionalProperties: false
@@ -3839,8 +3952,10 @@ components:
           $ref: '#/components/schemas/AttendeeRole'
         hasSpeakingRights:
           type: boolean
+          nullable: true
         hasVotingRights:
           type: boolean
+          nullable: true
     UpdateMeetingGroupTitle:
       type: object
       additionalProperties: false
@@ -3875,8 +3990,10 @@ components:
           $ref: '#/components/schemas/AttendeeRole'
         hasSpeakingRights:
           type: boolean
+          nullable: true
         hasVotingRights:
           type: boolean
+          nullable: true
     EditMeetingGroupMember:
       type: object
       additionalProperties: false
@@ -3892,8 +4009,10 @@ components:
           $ref: '#/components/schemas/AttendeeRole'
         hasSpeakingRights:
           type: boolean
+          nullable: true
         hasVotingRights:
           type: boolean
+          nullable: true
     PagedResultOfAgenda:
       type: object
       additionalProperties: false

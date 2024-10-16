@@ -71,7 +71,7 @@
                     <MudTd DataLabel="Role">@member.Role</MudTd>
                     <MudTd DataLabel="Email">@member.Email</MudTd>
                     <MudTd DataLabel="UserId">@member.User?.Id</MudTd>
-                    <MudTd DataLabel="HasVotingRights">@(member.HasVotingRights ? "Yes" : "No")</MudTd>
+                    <MudTd DataLabel="HasVotingRights">@(member.HasVotingRights.GetValueOrDefault() ? "Yes" : "No")</MudTd>
                     <MudTd>
                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
                             OnClick="() => EditMember(member)">

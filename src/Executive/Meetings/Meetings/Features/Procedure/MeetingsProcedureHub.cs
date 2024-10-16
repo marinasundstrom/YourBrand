@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
-namespace YourBrand.Meetings.Features.Procedure.Command;
+namespace YourBrand.Meetings.Features.Procedure;
 
 public record ConnectionState(string TenantId, string OrganizationId, int MeetingId);
 

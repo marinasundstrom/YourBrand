@@ -40,8 +40,8 @@ public class MeetingAttendee : Entity<MeetingAttendeeId>, IAuditable, IHasTenant
     public DateTimeOffset? InviteAcceptedAt { get; set; }
 
     public bool IsPresent { get; set; }
-    public bool HasSpeakingRights { get; set; }
-    public bool HasVotingRights { get; set; }
+    public bool? HasSpeakingRights { get; set; }
+    public bool? HasVotingRights { get; set; }
     public AttendeeRole Role { get; set; }
 
     public User? CreatedBy { get; set; } = null!;

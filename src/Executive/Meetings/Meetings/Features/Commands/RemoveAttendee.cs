@@ -31,7 +31,7 @@ public record RemoveAttendee(string OrganizationId, int Id, string AttendeeId) :
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var attendee = meeting.Attendees.FirstOrDefault(x => x.Id == request.AttendeeId);
+            var attendee = meeting.GetAttendeeById(request.AttendeeId);
 
             if (attendee is null)
             {

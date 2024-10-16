@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Groups.Command;
 
-public sealed record CreateMeetingGroupMemberDto(string Name, string? UserId, string Email, AttendeeRole Role, bool HasSpeakingRights, bool HasVotingRights);
+public sealed record CreateMeetingGroupMemberDto(string Name, string? UserId, string Email, AttendeeRole Role, bool? HasSpeakingRights, bool? HasVotingRights);
 
 public sealed record CreateMeetingGroupQuorumDto(int RequiredNumber);
 

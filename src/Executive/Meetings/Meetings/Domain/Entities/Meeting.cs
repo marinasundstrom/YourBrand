@@ -14,6 +14,13 @@ public enum MeetingState
     Canceled
 }
 
+public enum AttendeeAccessLevel
+{
+    Everyone,
+    Participants,
+    Select
+}
+
 public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrganization
 {
     readonly HashSet<MeetingAttendee> _attendees = new HashSet<MeetingAttendee>();
@@ -40,6 +47,10 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public Agenda? Agenda { get; set; }
     public int? CurrentAgendaItemIndex { get; private set; } = null;
     public Quorum Quorum { get; set; } = new Quorum();
+
+    public AttendeeAccessLevel SpeakingRightsAccessLevel { get;} = AttendeeAccessLevel.Participants;
+    public AttendeeAccessLevel VotingRightsAccessLevel { get; } = AttendeeAccessLevel.Participants;
+
     public Minutes? Minutes { get; set; }
 
     public DateTimeOffset? Started { get; set; }
@@ -49,7 +60,16 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
     public bool IsQuorumMet()
     {
-        int presentAttendees = Attendees.Count(p => p.IsPresent && p.HasVotingRights);
+        int presentAttendees = 0;
+
+        if (VotingRightsAccessLevel == AttendeeAccessLevel.Everyone) 
+        {
+            presentAttendees = Attendees.Count(p => p.IsPresent);
+        }
+        else 
+        {
+            presentAttendees = Attendees.Count(p => p.IsPresent && p.HasVotingRights.GetValueOrDefault());
+        }
         return presentAttendees >= Quorum.RequiredNumber;
     }
 
@@ -157,8 +177,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         return Agenda?.Items.FirstOrDefault(x => x.Id == id);
     }
 
-    public MeetingAttendee AddAttendee(string name, string? userId, string email, AttendeeRole role, bool hasSpeakingRights, bool hasVotingRights, 
-    MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
+    public MeetingAttendee AddAttendee(string name, string? userId, string email, AttendeeRole role, bool? hasSpeakingRights, bool? hasVotingRights, 
+        MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
     {
         int order = 1;
 
@@ -194,6 +214,16 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         return _attendees.Remove(attendee);
     }
 
+    public MeetingAttendee? GetAttendeeById(string id)
+    {
+        return Attendees.FirstOrDefault(x => x.Id == id);
+    }
+
+    public MeetingAttendee? GetAttendeeByUserId(string userId) 
+    {
+        return Attendees.FirstOrDefault(x => x.UserId == userId);
+    }
+
     public void ResetMeetingProgress()
     {
         State = MeetingState.Scheduled;
@@ -204,6 +234,56 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         {
             agendaItem.State = AgendaItemState.Pending;
         }
+    }
+
+    public bool IsAttendeeAllowedToSpeak(MeetingAttendee attendee)
+    {
+        if(SpeakingRightsAccessLevel == AttendeeAccessLevel.Everyone) 
+        {
+            return true;
+        }
+
+        if (SpeakingRightsAccessLevel == AttendeeAccessLevel.Participants && attendee.Role != AttendeeRole.Observer)
+        {
+            if (attendee.HasSpeakingRights is null)
+            {
+                return true;
+            }
+
+            return attendee.HasSpeakingRights.GetValueOrDefault();
+        }
+
+        if(SpeakingRightsAccessLevel == AttendeeAccessLevel.Select) 
+        {
+            return attendee.HasSpeakingRights.GetValueOrDefault();
+        }
+
+        return false;
+    }
+
+    public bool IsAttendeeAllowedToVote(MeetingAttendee attendee)
+    {
+        if(VotingRightsAccessLevel == AttendeeAccessLevel.Everyone) 
+        {
+            return true;
+        }
+
+        if (VotingRightsAccessLevel == AttendeeAccessLevel.Participants && attendee.Role != AttendeeRole.Observer)
+        {
+            if(attendee.HasVotingRights is null) 
+            {
+                return true;
+            }
+
+            return attendee.HasVotingRights.GetValueOrDefault();
+        }
+
+        if (VotingRightsAccessLevel == AttendeeAccessLevel.Select)
+        {
+            return attendee.HasVotingRights.GetValueOrDefault();
+        }
+
+        return false;
     }
 
     public User? CreatedBy { get; set; } = null!;

@@ -30,7 +30,7 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
 
     public IReadOnlyCollection<MeetingGroupMember> Members => _members;
 
-    public MeetingGroupMember AddMember(string name, string email, AttendeeRole role, UserId? userId, bool hasSpeakingRights, bool hasVotingRights) 
+    public MeetingGroupMember AddMember(string name, string email, AttendeeRole role, UserId? userId, bool? hasSpeakingRights, bool? hasVotingRights) 
     {
         int order = 1;
 

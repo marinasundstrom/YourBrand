@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Groups.Command;
 
-public record AddMember(string OrganizationId, int Id, string Name, string? UserId, string Email, AttendeeRole Role, bool HasSpeakingRights, bool HasVotingRights) : IRequest<Result<MeetingGroupMemberDto>>
+public record AddMember(string OrganizationId, int Id, string Name, string? UserId, string Email, AttendeeRole Role, bool? HasSpeakingRights, bool? HasVotingRights) : IRequest<Result<MeetingGroupMemberDto>>
 {
     public class Validator : AbstractValidator<AddMember>
     {

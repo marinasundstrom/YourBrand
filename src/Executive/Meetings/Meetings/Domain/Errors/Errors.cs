@@ -38,7 +38,11 @@ public static partial class Errors
 
         public static readonly Error OnlyChairpersonCanStartDiscussion = new Error(nameof(OnlyChairpersonCanStartDiscussion), "Only the Chairperson can start a discussion.", string.Empty);
 
+        public static readonly Error OnlyChairpersonCanEndDiscussion = new Error(nameof(OnlyChairpersonCanEndDiscussion), "Only the Chairperson can end a discussion.", string.Empty);
+
         public static readonly Error OnlyChairpersonCanStartVotingSession = new Error(nameof(OnlyChairpersonCanStartVotingSession), "Only the Chairperson can start a voting session.", string.Empty);
+
+        public static readonly Error OnlyChairpersonCanEndVotingSession = new Error(nameof(OnlyChairpersonCanEndVotingSession), "Only the Chairperson can end a voting session.", string.Empty);
 
     }
 

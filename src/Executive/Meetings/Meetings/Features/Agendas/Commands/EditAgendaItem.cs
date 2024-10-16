@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
-using YourBrand.Meetings.Features.Procedure.Command;
+using YourBrand.Meetings.Features.Procedure;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 

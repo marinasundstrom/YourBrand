@@ -26,7 +26,7 @@
         <MudTd DataLabel="Role">@attendee.Role</MudTd>
         <MudTd DataLabel="Email">@attendee.Email</MudTd>
         <MudTd DataLabel="UserId">@attendee.User?.Id</MudTd>
-        <MudTd DataLabel="HasVotingRights">@(attendee.HasVotingRights ? "Yes" : "No")</MudTd>
+        <MudTd DataLabel="HasVotingRights">@(attendee.HasVotingRights.GetValueOrDefault() ? "Yes" : "No")</MudTd>
         <MudTd DataLabel="IsPresent">
             <MudCheckBox T="bool" Value="attendee.IsPresent" ValueChanged="@(async (s) => { await  MarkAttendeeAsPresent(attendee, s); })"/>
         </MudTd>

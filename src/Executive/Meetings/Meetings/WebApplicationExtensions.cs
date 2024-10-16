@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 
+using YourBrand.Meetings.Features.Procedure;
 using YourBrand.Meetings.Features.Procedure.Command;
 using YourBrand.Meetings.Features.Procedure.Discussions;
 

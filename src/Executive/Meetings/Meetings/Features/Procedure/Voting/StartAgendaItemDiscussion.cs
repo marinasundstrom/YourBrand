@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
 using YourBrand.Meetings.Features.Agendas;
 
-namespace YourBrand.Meetings.Features.Procedure.Command;
+namespace YourBrand.Meetings.Features.Procedure.Voting;
 
-public sealed record StartAgendaItemVoting(string OrganizationId, int Id) : IRequest<Result>
+public sealed record StartAgendaItemDiscussion(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<StartAgendaItemVoting, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<StartAgendaItemDiscussion, Result>
     {
-        public async Task<Result> Handle(StartAgendaItemVoting request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(StartAgendaItemDiscussion request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -25,13 +25,13 @@ public sealed record StartAgendaItemVoting(string OrganizationId, int Id) : IReq
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var attendee = meeting.Attendees.FirstOrDefault(x => x.UserId == userContext.UserId);
+            var attendee = meeting.GetAttendeeByUserId(userContext.UserId);
 
             if (attendee is null)
             {
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
-     
+
             var agendaItem = meeting.GetCurrentAgendaItem();
 
             if (agendaItem is null)
@@ -41,10 +41,10 @@ public sealed record StartAgendaItemVoting(string OrganizationId, int Id) : IReq
             
             if (attendee.Role != AttendeeRole.Chairperson)
             {
-                return Errors.Meetings.OnlyChairpersonCanStartVotingSession;
+                return Errors.Meetings.OnlyChairpersonCanStartDiscussion;
             }
-            
-            agendaItem.StartVoting();
+
+            agendaItem.StartDiscussion();
 
             context.Meetings.Update(meeting);
 

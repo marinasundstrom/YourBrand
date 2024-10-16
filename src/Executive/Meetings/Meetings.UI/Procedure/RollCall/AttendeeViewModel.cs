@@ -17,7 +17,7 @@ public class AttendeeViewModel
 
     public Portal.User User { get; set; }
 
-    public bool HasVotingRights { get; set; }
+    public bool? HasVotingRights { get; set; }
 
     public bool IsPresent { get; set; }
 

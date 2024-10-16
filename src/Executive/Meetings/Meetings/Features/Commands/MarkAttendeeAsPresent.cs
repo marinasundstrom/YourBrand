@@ -31,7 +31,7 @@ public record MarkAttendeeAsPresent(string OrganizationId, int Id, string Attend
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var attendee = meeting.Attendees.FirstOrDefault(x => x.Id == request.AttendeeId);
+            var attendee = meeting.GetAttendeeById(request.AttendeeId);
 
             if(attendee is  null) 
             {

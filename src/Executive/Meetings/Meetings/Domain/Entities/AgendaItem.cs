@@ -36,6 +36,20 @@ public enum AgendaItemState
     Canceled
 }
 
+public enum DiscussionActions 
+{
+    None,
+    Required,
+    Optional
+}
+
+public enum VoteActions
+{
+    None,
+    Required,
+    Optional
+}
+
 public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrganization
 {
     readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
@@ -59,10 +73,12 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
     public AgendaItemState State { get; set; } = AgendaItemState.Pending;
     public int Order  { get; set; }
 
-    public bool IsMandatory { get; set; }              // Instead of IsRequired
-    public bool NeedsDiscussion { get; set; }          // Instead of RequiresDiscussion
-    public bool NeedsVote { get; set; }                // Instead of RequiresVote
+    public bool IsMandatory { get; set; }
+    public DiscussionActions DiscussionActions { get; set; }
+    public VoteActions VoteActions { get; set; }
 
+    public bool IsDiscussionCompleted { get; private set; }
+    public bool IsVoteCompleted { get; private set; }
 
     // public AgendaItemId DependsOnItem { get; set; }
 
@@ -79,7 +95,9 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
     public void AddCandidate(MeetingAttendee candidate, string statement)
     {
         if (_candidates.Any(v => v.NomineeId == candidate.Id))
+        {
             throw new InvalidOperationException("Attendee is already a candidate.");
+        }
 
         _candidates.Add(new ElectionCandidate(candidate.Id, statement));
     }
@@ -91,10 +109,20 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
             throw new InvalidOperationException("Cannot start discussion.");
         }
 
+        if (IsDiscussionCompleted)
+        {
+            throw new InvalidOperationException("Already had voting.");
+        }
+
         SpeakerSession = new SpeakerSession();
         SpeakerSession.OrganizationId = OrganizationId;
 
         State = AgendaItemState.UnderDiscussion;
+    }
+
+    public void EndDiscussion()
+    {
+        IsDiscussionCompleted = true;
     }
 
     public void StartVoting()
@@ -102,6 +130,11 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
         if (State != AgendaItemState.UnderDiscussion)
         {
             throw new InvalidOperationException("Cannot start voting.");
+        }
+
+        if(IsVoteCompleted) 
+        {
+            throw new InvalidOperationException("Already had voting.");
         }
 
         VotingSession = new VotingSession((Type) switch 
@@ -115,9 +148,24 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
         State = AgendaItemState.Voting;
     }
 
+    public void EndVoting()
+    {
+        IsVoteCompleted = true;
+    }
+
     public void Complete()
     {
-        if (State != AgendaItemState.Voting)
+        if (State == AgendaItemState.Pending)
+        {
+            throw new InvalidOperationException("Agenda has not been started");
+        }
+
+        if (DiscussionActions == DiscussionActions.Required && !IsDiscussionCompleted)
+        {
+            throw new InvalidOperationException("Agenda item discussion not completed.");
+        }
+        
+        if (VoteActions == VoteActions.Required && !IsVoteCompleted)
         {
             throw new InvalidOperationException("Agenda item voting not completed.");
         }

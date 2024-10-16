@@ -4,14 +4,15 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
+using YourBrand.Meetings.Features.Agendas;
 
-namespace YourBrand.Meetings.Features.Procedure.Command;
+namespace YourBrand.Meetings.Features.Procedure.Voting;
 
-public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IRequest<Result>
+public sealed record EndAgendaItemVoting(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<CompleteAgendaItem, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<EndAgendaItemVoting, Result>
     {
-        public async Task<Result> Handle(CompleteAgendaItem request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(EndAgendaItemVoting request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -30,7 +31,7 @@ public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IReques
             {
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
-
+     
             var agendaItem = meeting.GetCurrentAgendaItem();
 
             if (agendaItem is null)
@@ -40,10 +41,10 @@ public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IReques
             
             if (attendee.Role != AttendeeRole.Chairperson)
             {
-                return Errors.Meetings.OnlyChairpersonCanCompleteAgendaItem;
+                return Errors.Meetings.OnlyChairpersonCanEndVotingSession;
             }
-
-            agendaItem.Complete();
+            
+            agendaItem.EndVoting();
 
             context.Meetings.Update(meeting);
 
@@ -57,3 +58,4 @@ public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IReques
         }
     }
 }
+

@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Command;
 
-public record EditAttendee(string OrganizationId, int Id, string AttendeeId, string Name, string? UserId, string Email, AttendeeRole Role, bool HasSpeakingRights, bool HasVotingRights) : IRequest<Result<MeetingAttendeeDto>>
+public record EditAttendee(string OrganizationId, int Id, string AttendeeId, string Name, string? UserId, string Email, AttendeeRole Role, bool? HasSpeakingRights, bool? HasVotingRights) : IRequest<Result<MeetingAttendeeDto>>
 {
     public class Validator : AbstractValidator<EditAttendee>
     {
@@ -31,7 +31,7 @@ public record EditAttendee(string OrganizationId, int Id, string AttendeeId, str
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            var attendee = meeting.Attendees.FirstOrDefault(x => x.Id == request.AttendeeId);
+            var attendee = meeting.GetAttendeeById(request.AttendeeId);
 
             if(attendee is  null) 
             {

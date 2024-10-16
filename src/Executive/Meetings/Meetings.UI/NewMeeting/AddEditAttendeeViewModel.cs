@@ -15,7 +15,7 @@ public class AddEditAttendeeViewModel
 
     public Portal.User User { get; set; }
 
-    public bool HasVotingRights { get; set; }
+    public bool? HasVotingRights { get; set; }
 
     public AddEditAttendeeViewModel Clone() 
     {
