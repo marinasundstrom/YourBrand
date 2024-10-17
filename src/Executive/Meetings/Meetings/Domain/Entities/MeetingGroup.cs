@@ -54,7 +54,17 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
 
     public bool ReorderMember(MeetingGroupMember meetingGroupItem, int newOrderPosition)
     {
-        int oldOrderPosition = meetingGroupItem.Order ;
+        if (!_members.Contains(meetingGroupItem))
+        {
+            throw new InvalidOperationException("Member does not exist in this group.");
+        }
+
+        if (newOrderPosition < 1 || newOrderPosition > _members.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(newOrderPosition), "New order position is out of range.");
+        }
+
+        int oldOrderPosition = meetingGroupItem.Order;
 
         if (oldOrderPosition == newOrderPosition)
             return false;

@@ -48,8 +48,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public int? CurrentAgendaItemIndex { get; private set; } = null;
     public Quorum Quorum { get; set; } = new Quorum();
 
-    public AttendeeAccessLevel SpeakingRightsAccessLevel { get;} = AttendeeAccessLevel.Participants;
-    public AttendeeAccessLevel VotingRightsAccessLevel { get; } = AttendeeAccessLevel.Participants;
+    public AttendeeAccessLevel SpeakingRightsAccessLevel { get; set; } = AttendeeAccessLevel.Participants;
+    public AttendeeAccessLevel VotingRightsAccessLevel { get; set; } = AttendeeAccessLevel.Participants;
 
     public Minutes? Minutes { get; set; }
 
@@ -60,6 +60,12 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
     public bool IsQuorumMet()
     {
+        if(Quorum.RequiredNumber == 0) 
+        {
+            throw new InvalidOperationException("Quorum can't be zero");
+        }
+
+
         int presentAttendees = 0;
 
         if (VotingRightsAccessLevel == AttendeeAccessLevel.Everyone) 
@@ -80,6 +86,16 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             throw new InvalidOperationException("Meeting cannot be started.");
         }
 
+        if (!Attendees.Any())
+        {
+            throw new InvalidOperationException("Cannot start a meeting without attendees.");
+        }
+
+        if (Agenda == null || !Agenda.Items.Any())
+        {
+            throw new InvalidOperationException("Cannot start a meeting without agenda items.");
+        }
+
         if (!IsQuorumMet())
         {
             throw new InvalidOperationException("Quorum not met.");
@@ -91,19 +107,17 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         CurrentAgendaItemIndex = 0;
 
-        //var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
-
-        //agendaItems[CurrentAgendaItemIndex.GetValueOrDefault()].State = AgendaItemState.UnderDiscussion;
+        // ?
+        // var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
+        // agendaItems[CurrentAgendaItemIndex.Value].State = AgendaItemState.UnderDiscussion;
     }
 
     public void CancelMeeting()
     {
-        /*
-        if (State != MeetingState.InProgress)
+        if (State != MeetingState.Scheduled && State != MeetingState.InProgress)
         {
-            throw new InvalidOperationException("Meeting is not in progress.");
+            throw new InvalidOperationException("Only scheduled or in-progress meetings can be canceled.");
         }
-        */
 
         Canceled = DateTimeOffset.UtcNow;
 
@@ -130,11 +144,25 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         State = MeetingState.Completed;
 
+        var remainingItems = Agenda.Items
+            .OrderBy(ai => ai.Order)
+            .Skip(CurrentAgendaItemIndex.GetValueOrDefault() + 1);
+
+        foreach (var item in remainingItems)
+        {
+            item.State = AgendaItemState.Skipped;
+        }
+
         CurrentAgendaItemIndex = null;
     }
 
     public AgendaItem MoveToNextAgendaItem()
     {
+        if(Agenda is null) 
+        {
+            throw new InvalidOperationException("No agenda is set.");
+        }
+
         if (State != MeetingState.InProgress)
         {
             throw new InvalidOperationException("Meeting is not in progress.");
@@ -180,6 +208,11 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public MeetingAttendee AddAttendee(string name, string? userId, string email, AttendeeRole role, bool? hasSpeakingRights, bool? hasVotingRights, 
         MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
     {
+        if (_attendees.Any(a => (a.UserId != null && a.UserId == userId) || a.Email.Equals(email, StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new InvalidOperationException("An attendee with the same user ID or email already exists.");
+        }
+
         int order = 1;
 
         try

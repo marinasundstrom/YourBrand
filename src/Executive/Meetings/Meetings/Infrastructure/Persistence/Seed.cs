@@ -76,7 +76,11 @@ public static class Seed
             var meetingGroup = new MeetingGroup(1, "Board of directors", "Group for members of board of directors")
             {
                 TenantId = TenantConstants.TenantId,
-                OrganizationId = TenantConstants.OrganizationId
+                OrganizationId = TenantConstants.OrganizationId,
+                Quorum = new Quorum 
+                {
+                    RequiredNumber = 3
+                }
             };
 
             // Add Alice Smith
@@ -141,67 +145,67 @@ public static class Seed
                 TenantId = TenantConstants.TenantId,
                 OrganizationId = TenantConstants.OrganizationId,
                 MeetingId = 1,
-                State = AgendaState.InDraft
+                //State = AgendaState.InDraft
             };
 
             // Add agenda items
-            agenda.AddAgendaItem(
+            agenda.AddItem(
                 type: AgendaItemType.CallToOrder,
                 title: "Call to Order",
                 description: "Chairperson calls the meeting to order."
             );
 
-            agenda.AddAgendaItem(
+            agenda.AddItem(
                 type: AgendaItemType.RollCall,
                 title: "Roll Call",
                 description: "Secretary takes attendance."
             );
 
-            agenda.AddAgendaItem(
+            agenda.AddItem(
                 type: AgendaItemType.ApprovalOfMinutes,
                 title: "Approval of Minutes",
                 description: "Review and approve minutes from the previous meeting."
             );
 
-            agenda.AddAgendaItem(
+            agenda.AddItem(
                 type: AgendaItemType.ApprovalOfAgenda,
                 title: "Approval of Agenda",
                 description: "Approve the agenda for the current meeting."
             );
 
-            agenda.AddAgendaItem(
+            agenda.AddItem(
                 type: AgendaItemType.Reports,
                 title: "Committee Reports",
                 description: "Presentations from various committees."
             );
 
-            agenda.AddAgendaItem(
+            agenda.AddItem(
                 type: AgendaItemType.OldBusiness,
                 title: "Old Business",
                 description: "Discuss unresolved issues from previous meetings."
             );
 
-            agenda.AddAgendaItem(
+            agenda.AddItem(
                 type: AgendaItemType.NewBusiness,
                 title: "New Business",
                 description: "Introduce and discuss new topics."
             );
 
-            var item = agenda.AddAgendaItem(
+            var item = agenda.AddItem(
                 type: AgendaItemType.Motion,
                 title: "Motion to Approve Budget",
                 description: "Proposal to approve the annual budget."
             );
             item.MotionId = 4;
 
-            var item2 = agenda.AddAgendaItem(
+            var item2 = agenda.AddItem(
                 type: AgendaItemType.Motion,
                 title: "Motion to Endorse Environmental Initiative",
                 description: "Proposal for organization's commitment to environmental sustainability."
             );
             item2.MotionId = 3;
 
-            agenda.AddAgendaItem(
+            agenda.AddItem(
                 type: AgendaItemType.Adjournment,
                 title: "Adjournment",
                 description: "Formal closing of the meeting."

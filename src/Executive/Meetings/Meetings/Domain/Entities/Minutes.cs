@@ -120,9 +120,19 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrg
         return _items.Remove(item);
     }
 
-    public bool ReorderItem(MinutesItem agendaItem, int newOrderPosition)
+    public bool ReorderItem(MinutesItem minuteItem, int newOrderPosition)
     {
-        int oldOrderPosition = agendaItem.Order ;
+        if (!_items.Contains(minuteItem))
+        {
+            throw new InvalidOperationException("Item does not exist in this group.");
+        }
+
+        if (newOrderPosition < 1 || newOrderPosition > _items.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(newOrderPosition), "New order position is out of range.");
+        }
+
+        int oldOrderPosition = minuteItem.Order ;
 
         if (oldOrderPosition == newOrderPosition)
             return false;
@@ -153,7 +163,7 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrg
         }
 
         // Uppdatera order för objektet som flyttas
-        agendaItem.Order  = newOrderPosition;
+        minuteItem.Order  = newOrderPosition;
 
         return true;
     }

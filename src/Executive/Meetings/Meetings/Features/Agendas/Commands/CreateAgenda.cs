@@ -42,7 +42,7 @@ public record CreateAgenda(string OrganizationId, int MeetingId, IEnumerable<Cre
 
             foreach (var agendaItem in request.Items) 
             {
-                agenda.AddAgendaItem(agendaItem.Type, agendaItem.Title, agendaItem.Description);
+                agenda.AddItem(agendaItem.Type, agendaItem.Title, agendaItem.Description);
             }
 
             context.Agendas.Add(agenda);

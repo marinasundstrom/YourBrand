@@ -33,7 +33,7 @@ public record AddAgendaItem(string OrganizationId, int Id, AgendaItemType Type, 
                 return Errors.Agendas.AgendaNotFound;
             }
 
-            var agendaItem = agenda.AddAgendaItem(request.Type, request.Title, request.Description);
+            var agendaItem = agenda.AddItem(request.Type, request.Title, request.Description);
 
             if(request.Order is not null) 
             {
