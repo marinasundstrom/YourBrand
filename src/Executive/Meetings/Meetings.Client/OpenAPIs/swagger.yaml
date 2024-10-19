@@ -3348,20 +3348,12 @@ components:
       description: ''
       x-enumNames:
       - InDraft
-      - UnderReview
-      - Approved
+      - Finalized
       - Published
-      - InProgress
-      - Completed
-      - InFollowUp
       enum:
       - 0
       - 1
       - 2
-      - 3
-      - 4
-      - 5
-      - 6
     AgendaItem:
       type: object
       additionalProperties: false
@@ -3461,6 +3453,7 @@ components:
       - Voting
       - Completed
       - Postponed
+      - Skipped
       - Canceled
       enum:
       - 0
@@ -3469,6 +3462,7 @@ components:
       - 3
       - 4
       - 5
+      - 6
     DiscussionActions:
       type: integer
       description: ''

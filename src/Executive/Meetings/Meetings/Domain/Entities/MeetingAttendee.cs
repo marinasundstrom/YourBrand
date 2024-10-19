@@ -36,8 +36,13 @@ public class MeetingAttendee : Entity<MeetingAttendeeId>, IAuditable, IHasTenant
 
     public string? Email { get; set; }
 
+    public DateTimeOffset? AddedAt { get; set; }
+    public DateTimeOffset? RemovedAt { get; set; }
+
     public DateTimeOffset? InvitedAt { get; set; }
     public DateTimeOffset? InviteAcceptedAt { get; set; }
+
+    public DateTimeOffset? JoinedAt { get; set; }
 
     public bool IsPresent { get; set; }
     public bool? HasSpeakingRights { get; set; }

@@ -235,7 +235,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             HasSpeakingRights = hasSpeakingRights,
             HasVotingRights = hasVotingRights,
             MeetingGroupId = meetingGroupId,
-            MeetingGroupMemberId = meetingGroupMemberId
+            MeetingGroupMemberId = meetingGroupMemberId,
+            AddedAt = DateTimeOffset.UtcNow
         };
         attendee.Order  = order;
 
@@ -246,6 +247,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
     public bool RemoveAttendee(MeetingAttendee attendee)
     {
+
+        attendee.RemovedAt = DateTimeOffset.UtcNow;
         return _attendees.Remove(attendee);
     }
 
