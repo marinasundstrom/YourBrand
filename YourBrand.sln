@@ -459,6 +459,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meetings.Client", "src\Exec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Meetings.Shared", "src\Executive\Meetings\Meetings.Shared\Meetings.Shared.csproj", "{AEFB8F71-4C54-4435-82C4-B4D849A7EB33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplateCompiler", "src\TemplateCompiler\TemplateCompiler.csproj", "{FB41291F-3F1D-44D6-9BE6-97355A39448B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1193,6 +1195,10 @@ Global
 		{AEFB8F71-4C54-4435-82C4-B4D849A7EB33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEFB8F71-4C54-4435-82C4-B4D849A7EB33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEFB8F71-4C54-4435-82C4-B4D849A7EB33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB41291F-3F1D-44D6-9BE6-97355A39448B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB41291F-3F1D-44D6-9BE6-97355A39448B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB41291F-3F1D-44D6-9BE6-97355A39448B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB41291F-3F1D-44D6-9BE6-97355A39448B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1390,6 +1396,7 @@ Global
 		{B02664E1-E2B5-445B-8DF9-88B4F43DA134} = {16EF07C2-A000-434F-9EF1-5B1A46106E22}
 		{0B3D5183-A2D3-47FE-B250-3B289C3554E7} = {16EF07C2-A000-434F-9EF1-5B1A46106E22}
 		{AEFB8F71-4C54-4435-82C4-B4D849A7EB33} = {16EF07C2-A000-434F-9EF1-5B1A46106E22}
+		{FB41291F-3F1D-44D6-9BE6-97355A39448B} = {87C189D2-8A9B-44BF-A063-B63DD8998D3B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F844EC9E-6AEE-4238-921B-05A9DCE3EE16}
