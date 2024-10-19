@@ -51,12 +51,14 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     public AttendeeAccessLevel SpeakingRightsAccessLevel { get; set; } = AttendeeAccessLevel.Participants;
     public AttendeeAccessLevel VotingRightsAccessLevel { get; set; } = AttendeeAccessLevel.Participants;
 
+    public bool CanAnyoneJoin { get; set; } = false;
+    public AttendeeRole JoinAs { get; set; } = AttendeeRole.Observer;
+
     public Minutes? Minutes { get; set; }
 
-    public DateTimeOffset? Started { get; set; }
-    public DateTimeOffset? Canceled { get; set; }
-    public DateTimeOffset? Ended { get; set; }
-
+    public DateTimeOffset? StartedAt { get; set; }
+    public DateTimeOffset? CanceledAt { get; set; }
+    public DateTimeOffset? EndedAt { get; set; }
 
     public bool IsQuorumMet()
     {
@@ -101,7 +103,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             throw new InvalidOperationException("Quorum not met.");
         }
 
-        Started = DateTimeOffset.UtcNow;
+        StartedAt = DateTimeOffset.UtcNow;
 
         State = MeetingState.InProgress;
 
@@ -119,7 +121,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             throw new InvalidOperationException("Only scheduled or in-progress meetings can be canceled.");
         }
 
-        Canceled = DateTimeOffset.UtcNow;
+        CanceledAt = DateTimeOffset.UtcNow;
 
         State = MeetingState.Canceled;
 
@@ -140,7 +142,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             throw new InvalidOperationException("Meeting is not in progress.");
         }
 
-        Ended = DateTimeOffset.UtcNow;
+        EndedAt = DateTimeOffset.UtcNow;
 
         State = MeetingState.Completed;
 
