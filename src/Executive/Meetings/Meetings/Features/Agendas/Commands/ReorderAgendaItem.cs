@@ -10,9 +10,9 @@ using YourBrand.Meetings.Features.Procedure;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public record MoveAgendaItem(string OrganizationId, int Id, string ItemId, int Order ) : IRequest<Result<AgendaItemDto>>
+public record ReorderAgendaItem(string OrganizationId, int Id, string ItemId, int Order ) : IRequest<Result<AgendaItemDto>>
 {
-    public class Validator : AbstractValidator<MoveAgendaItem>
+    public class Validator : AbstractValidator<ReorderAgendaItem>
     {
         public Validator()
         {
@@ -20,9 +20,9 @@ public record MoveAgendaItem(string OrganizationId, int Id, string ItemId, int O
         }
     }
 
-    public class Handler(IApplicationDbContext context, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<MoveAgendaItem, Result<AgendaItemDto>>
+    public class Handler(IApplicationDbContext context, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<ReorderAgendaItem, Result<AgendaItemDto>>
     {
-        public async Task<Result<AgendaItemDto>> Handle(MoveAgendaItem request, CancellationToken cancellationToken)
+        public async Task<Result<AgendaItemDto>> Handle(ReorderAgendaItem request, CancellationToken cancellationToken)
         {
             var agenda = await context.Agendas
                 .InOrganization(request.OrganizationId)

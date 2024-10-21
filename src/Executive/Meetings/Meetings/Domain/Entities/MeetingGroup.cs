@@ -30,6 +30,16 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
 
     public IReadOnlyCollection<MeetingGroupMember> Members => _members;
 
+    public MeetingGroupMember? GetMemberById(string id)
+    {
+        return _members.FirstOrDefault(x => x.Id == id);
+    }
+
+    public MeetingGroupMember? GetMemberByUserId(string userId)
+    {
+        return _members.FirstOrDefault(x => x.UserId == userId);
+    }
+
     public MeetingGroupMember AddMember(string name, string email, AttendeeRole role, UserId? userId, bool? hasSpeakingRights, bool? hasVotingRights) 
     {
         int order = 1;
@@ -49,7 +59,13 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
 
     public bool RemoveMember(MeetingGroupMember item)
     {
-        return _members.Remove(item);
+        int i = 1;
+        var r = _members.Remove(item);
+        foreach (var member in _members) 
+        {
+            member.Order = i++;
+        }
+        return r;
     }
 
     public bool ReorderMember(MeetingGroupMember meetingGroupItem, int newOrderPosition)

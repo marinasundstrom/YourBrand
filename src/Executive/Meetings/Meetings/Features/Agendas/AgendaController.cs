@@ -21,7 +21,7 @@ public sealed record AddAgendaItemDto(AgendaItemType Type, string Title, string 
 
 public sealed record EditAgendaItemDto(AgendaItemType Type, string Title, string Description, int? MotionId);
 
-public sealed record MoveAgendaItemDto(int Order);
+public sealed record ReorderAgendaItemDto(int Order);
 
 [ApiController]
 [ApiVersion("1")]
@@ -90,9 +90,9 @@ public sealed class AgendasController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AgendaItemDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<AgendaItemDto>> MoveAgendaItem(string organizationId, int id, string itemId, MoveAgendaItemDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult<AgendaItemDto>> ReorderAgendaItem(string organizationId, int id, string itemId, ReorderAgendaItemDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new MoveAgendaItem(organizationId, id, itemId, request.Order), cancellationToken);
+        var result = await mediator.Send(new ReorderAgendaItem(organizationId, id, itemId, request.Order), cancellationToken);
         return this.HandleResult(result);
     }
 

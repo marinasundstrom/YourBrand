@@ -1,0 +1,218 @@
+@inject IMeetingGroupsClient MeetingGroupsClient
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+<MudTable T="MemberViewModel" Items="Members" Hover="true" Elevation="0" Breakpoint="Breakpoint.Sm"
+    LoadingProgressColor="Color.Info" OnRowClick="async (e) => await EditMember(e.Item)">
+    <ToolBarContent>
+        <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="AddMember" Class="mb-2">Add member</MudButton>
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>Name</MudTh>
+        <MudTh>Role</MudTh>
+        <MudTh>Email</MudTh>
+        <MudTh>UserId</MudTh>
+        <MudTh>Has Voting Rights</MudTh>
+        <MudTh></MudTh>
+        <MudTh></MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate Context="member">
+        <MudTd DataLabel="Name">@member.Name</MudTd>
+        <MudTd DataLabel="Role">@member.Role</MudTd>
+        <MudTd DataLabel="Email">@member.Email</MudTd>
+        <MudTd DataLabel="UserId">@member.User?.Id</MudTd>
+        <MudTd DataLabel="HasVotingRights">@(member.HasVotingRights.GetValueOrDefault() ? "Yes" : "No")</MudTd>
+        <MudTd>
+            @if (member.Order > 1)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.MoveUp" Size="Size.Small"
+                    OnClick="async () => await MoveUp(member)">
+                </MudIconButton>
+            }
+        </MudTd>
+        <MudTd>
+            @if (member.Order != Members.Last().Order)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.MoveDown" Size="Size.Small"
+                    OnClick="async () => await MoveDown(member)">
+                </MudIconButton>
+            }
+        </MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" OnClick="() => EditMember(member)">
+            </MudIconButton>
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="() => RemoveMember(member)">
+            </MudIconButton>
+        </MudTd>
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+</MudTable>
+
+@code
+{
+    [Parameter]
+    [EditorRequired]
+    public string OrganizationId { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public int Id { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public List<MemberViewModel> Members { get; set; }
+
+    async Task AddMember()
+    {
+        DialogParameters parameters = new();
+        parameters.Add(nameof(AddMemberDialog.OrganizationId), OrganizationId);
+
+        var modalRef = DialogService.Show<AddMemberDialog>("Add member", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var memberModel = (MemberViewModel)result.Data;
+
+        var dto = new AddMeetingGroupMember
+        {
+            Name = memberModel.Name,
+            Role = memberModel.Role,
+            Email = memberModel.Email,
+            UserId = memberModel.User?.Id,
+            HasVotingRights = memberModel.HasVotingRights,
+        };
+
+        var model = await MeetingGroupsClient.AddMemberAsync(OrganizationId, Id, dto);
+
+        memberModel.Id = model.Id;
+
+        Members.Add(memberModel);
+    }
+
+    async Task EditMember(MemberViewModel member)
+    {
+        var originalMember = member;
+
+        DialogParameters parameters = new();
+        parameters.Add(nameof(EditMemberDialog.OrganizationId), OrganizationId);
+        parameters.Add(nameof(EditMemberDialog.Model), originalMember.Clone());
+
+        var modalRef = DialogService.Show<EditMemberDialog>("Edit member", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var editedModel = (MemberViewModel)result.Data;
+
+        var dto = new EditMeetingGroupMember
+        {
+            Name = editedModel.Name,
+            Role = editedModel.Role,
+            Email = editedModel.Email,
+            UserId = editedModel.User?.Id,
+            HasVotingRights = editedModel.HasVotingRights
+        };
+        
+        await MeetingGroupsClient.EditMemberAsync(OrganizationId, Id, member.Id, dto);
+
+        var index = Members.IndexOf(originalMember);
+        Members[index] = editedModel;
+    }
+
+    async Task RemoveMember(MemberViewModel member)
+    {
+        var r = await DialogService.ShowMessageBox("Delete member?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+
+        if(!r.GetValueOrDefault()) 
+        {
+            return;
+        }
+
+        await MeetingGroupsClient.RemoveMemberAsync(OrganizationId, Id, member.Id);
+        Members.Remove(member);
+    }
+
+    async Task MoveUp(MemberViewModel groupMember)
+    {
+        await MeetingGroupsClient.ReorderMemberAsync(OrganizationId, Id, groupMember.Id, new ReorderMeetingGroupMember
+            {
+                Order = groupMember.Order - 1
+            });
+
+        MoveItem(groupMember, groupMember.Order - 1);
+
+        Members = Members.OrderBy(x => x.Order).ToList();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    async Task MoveDown(MemberViewModel groupMember)
+    {
+        await MeetingGroupsClient.ReorderMemberAsync(OrganizationId, Id, groupMember.Id, new ReorderMeetingGroupMember
+            {
+                Order = groupMember.Order + 1
+            });
+
+        MoveItem(groupMember, groupMember.Order + 1);
+
+        Members = Members.OrderBy(x => x.Order).ToList();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public bool MoveItem(MemberViewModel member, int newOrderPosition)
+    {
+        if (!Members.Contains(member))
+        {
+            throw new InvalidOperationException("Agenda groupMember does not exist in this agenda.");
+        }
+
+        if (newOrderPosition < 1 || newOrderPosition > Members.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(newOrderPosition), "New order position is out of range.");
+        }
+
+        int oldOrderPosition = member.Order;
+
+        if (oldOrderPosition == newOrderPosition)
+            return false;
+
+        // Flyttar objektet uppåt i listan
+        if (newOrderPosition < oldOrderPosition)
+        {
+            var groupMembersToIncrement = Members
+            .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
+            .ToList();
+
+            foreach (var groupMember in groupMembersToIncrement)
+            {
+                groupMember.Order += 1;
+            }
+        }
+        // Flyttar objektet nedåt i listan
+        else
+        {
+            var groupMembersToDecrement = Members
+            .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
+            .ToList();
+
+            foreach (var groupMember in groupMembersToDecrement)
+            {
+                groupMember.Order -= 1;
+            }
+        }
+
+        // Uppdatera order för objektet som flyttas
+        member.Order = newOrderPosition;
+
+        return true;
+    }
+}

@@ -50,41 +50,7 @@
         <MudPaper Elevation="25" Class="pa-4 mb-4">
             <MudText Typo="@Typo.h4" GutterBottom="true">Members</MudText>
 
-            <MudTable T="MemberViewModel" Items="Members" Hover="true" Elevation="0"
-                Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info"
-                OnRowClick="async (e) => await EditMember(e.Item)">
-                <ToolBarContent>
-                    <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add"
-                        OnClick="AddMember" Class="mb-2">Add member</MudButton>
-                </ToolBarContent>
-
-                <HeaderContent>
-                    <MudTh>Name</MudTh>
-                    <MudTh>Role</MudTh>
-                    <MudTh>Email</MudTh>
-                    <MudTh>UserId</MudTh>
-                    <MudTh>Has Voting Rights</MudTh>
-                    <MudTh></MudTh>
-                </HeaderContent>
-                <RowTemplate Context="member">
-                    <MudTd DataLabel="Name">@member.Name</MudTd>
-                    <MudTd DataLabel="Role">@member.Role</MudTd>
-                    <MudTd DataLabel="Email">@member.Email</MudTd>
-                    <MudTd DataLabel="UserId">@member.User?.Id</MudTd>
-                    <MudTd DataLabel="HasVotingRights">@(member.HasVotingRights.GetValueOrDefault() ? "Yes" : "No")</MudTd>
-                    <MudTd>
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
-                            OnClick="() => EditMember(member)">
-                        </MudIconButton>
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
-                            OnClick="() => RemoveMember(member)">
-                        </MudIconButton>
-                    </MudTd>
-                </RowTemplate>
-                <LoadingContent>
-                    <MudText>Loading...</MudText>
-                </LoadingContent>
-            </MudTable>
+            <MemberList OrganizationId="@organization.Id" Id="@Id" Members="@Members" />
         </MudPaper>
     </MudItem>
 
@@ -122,16 +88,17 @@
 
     private async Task LoadMeetingGroup() 
     {
-        var meeting = await MeetingGroupsClient.GetMeetingGroupByIdAsync(organization!.Id, Id);
-        Title = meeting.Title;
-        Description = meeting.Description;
-        QuorumRequiredNumber = meeting.Quorum.RequiredNumber;
+        var group = await MeetingGroupsClient.GetMeetingGroupByIdAsync(organization!.Id, Id);
+        Title = group.Title;
+        Description = group.Description;
+        QuorumRequiredNumber = group.Quorum.RequiredNumber;
 
         if(Members.Any()) Members.Clear();
 
-        Members.AddRange(meeting.Members.Select(member => new MemberViewModel ()
+        Members.AddRange(group.Members.Select(member => new MemberViewModel ()
             {
                 Id = member.Id,
+                Order = member.Order,
                 Role = member.Role,
                 Name = member.Name,
                 Email = member.Email,
@@ -194,79 +161,6 @@
         context.MarkAsUnmodified();
 
         isDetailsModified = false;
-    }
-
-    async Task AddMember()
-    {
-        DialogParameters parameters = new();
-        parameters.Add(nameof(AddMemberDialog.OrganizationId), organization.Id);
-
-        var modalRef = DialogService.Show<AddMemberDialog>("Add member", parameters);
-
-        var result = await modalRef.Result;
-
-        if (result.Canceled) return;
-
-        var memberModel = (MemberViewModel)result.Data;
-
-        var dto = new AddMeetingGroupMember
-        {
-            Name = memberModel.Name,
-            Role = memberModel.Role,
-            Email = memberModel.Email,
-            UserId = memberModel.User?.Id,
-            HasVotingRights = memberModel.HasVotingRights,
-        };
-
-        var model = await MeetingGroupsClient.AddMemberAsync(organization.Id, Id, dto);
-
-        memberModel.Id = model.Id;
-
-        Members.Add(memberModel);
-    }
-
-    async Task EditMember(MemberViewModel member)
-    {
-        var originalMember = member;
-
-        DialogParameters parameters = new();
-        parameters.Add(nameof(EditMemberDialog.OrganizationId), organization.Id);
-        parameters.Add(nameof(EditMemberDialog.Model), originalMember.Clone());
-
-        var modalRef = DialogService.Show<EditMemberDialog>("Edit member", parameters);
-
-        var result = await modalRef.Result;
-
-        if (result.Canceled) return;
-
-        var editedModel = (MemberViewModel)result.Data;
-
-        var dto = new EditMeetingGroupMember
-        {
-            Name = editedModel.Name,
-            Role = editedModel.Role,
-            Email = editedModel.Email,
-            UserId = editedModel.User?.Id,
-            HasVotingRights = editedModel.HasVotingRights
-        };
-        
-        await MeetingGroupsClient.EditMemberAsync(organization.Id, Id, member.Id, dto);
-
-        var index = Members.IndexOf(originalMember);
-        Members[index] = editedModel;
-    }
-
-    async Task RemoveMember(MemberViewModel member)
-    {
-        var r = await DialogService.ShowMessageBox("Delete member?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
-
-        if(!r.GetValueOrDefault()) 
-        {
-            return;
-        }
-
-        await MeetingGroupsClient.RemoveMemberAsync(organization.Id, Id, member.Id);
-        Members.Remove(member);
     }
 
     public void Dispose()

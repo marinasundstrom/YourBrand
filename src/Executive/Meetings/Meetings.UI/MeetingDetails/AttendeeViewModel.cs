@@ -25,6 +25,7 @@ public class AttendeeViewModel
     {
         return new AttendeeViewModel
         {
+            Id = Id,
             Name = Name,
             Role = Role,
             Email = Email,

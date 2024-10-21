@@ -139,7 +139,13 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
 
     public bool RemoveAgendaItem(AgendaItem item)
     {
-        return _items.Remove(item);
+        int i = 1;
+        var r = _items.Remove(item);
+        foreach (var item0 in _items)
+        {
+            item0.Order = i++;
+        }
+        return r;
     }
 
     public bool ReorderAgendaItem(AgendaItem agendaItem, int newOrderPosition)

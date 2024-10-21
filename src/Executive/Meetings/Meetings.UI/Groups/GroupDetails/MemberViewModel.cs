@@ -6,6 +6,8 @@ public class MemberViewModel
 {
     public string Id { get; set; }
 
+    public int Order { get; set; }
+
     [Required]
     public string Name { get; set; }
 
@@ -25,6 +27,8 @@ public class MemberViewModel
     {
         return new MemberViewModel
         {
+            Id = Id,
+            Order = Order,
             Name = Name,
             Role = Role,
             Email = Email,

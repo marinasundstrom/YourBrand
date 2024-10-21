@@ -31,7 +31,7 @@ public record EditMember(string OrganizationId, int Id, string MemberId, string 
                 return Errors.MeetingGroups.MeetingGroupNotFound;
             }
 
-            var member = meetingGroup.Members.FirstOrDefault(x => x.Id == request.MemberId);
+            var member = meetingGroup.GetMemberById(request.MemberId);
 
             if(member is  null) 
             {

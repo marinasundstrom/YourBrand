@@ -2,6 +2,7 @@
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
+@inject ISnackbar Snackbar
 @implements IDisposable
 
 @page "/meetings"
@@ -68,7 +69,10 @@
 
         try
         {
-            var result = await MeetingsClient.GetMeetingsAsync(organization.Id, state.Page + 1, state.PageSize, null, null, null);
+            var result = await MeetingsClient.GetMeetingsAsync(organization.Id, state.Page + 1, state.PageSize, null, null, null)
+                .OnThrow<PagedResultOfMeeting, ApiException>(x => {
+                    Snackbar.Add("Failed to load", Severity.Error);
+                }, new PagedResultOfMeeting());
 
             return new TableData<Meeting>() { TotalItems = result.Total, Items = result.Items };
         }

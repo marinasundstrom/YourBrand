@@ -2,25 +2,27 @@ using FluentValidation;
 
 using MediatR;
 
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
+using YourBrand.Meetings.Features.Procedure;
 
 namespace YourBrand.Meetings.Features.Groups.Command;
 
-public record RemoveMember(string OrganizationId, int Id, string MemberId) : IRequest<Result<MeetingGroupDto>>
+public record ReorderMember(string OrganizationId, int Id, string MemberId, int Order ) : IRequest<Result<MeetingGroupMemberDto>>
 {
-    public class Validator : AbstractValidator<RemoveMember>
+    public class Validator : AbstractValidator<ReorderMember>
     {
         public Validator()
         {
-
+            // RuleFor(x => x.Title).NotEmpty().MaximumLength(60);
         }
     }
 
-    public class Handler(IApplicationDbContext context) : IRequestHandler<RemoveMember, Result<MeetingGroupDto>>
+    public class Handler(IApplicationDbContext context) : IRequestHandler<ReorderMember, Result<MeetingGroupMemberDto>>
     {
-        public async Task<Result<MeetingGroupDto>> Handle(RemoveMember request, CancellationToken cancellationToken)
+        public async Task<Result<MeetingGroupMemberDto>> Handle(ReorderMember request, CancellationToken cancellationToken)
         {
             var meetingGroup = await context.MeetingGroups
                 .InOrganization(request.OrganizationId)
@@ -38,7 +40,7 @@ public record RemoveMember(string OrganizationId, int Id, string MemberId) : IRe
                 return Errors.MeetingGroups.MeetingGroupMemberNotFound;
             }
 
-            meetingGroup.RemoveMember(member);
+            meetingGroup.ReorderMember(member, request.Order);
 
             context.MeetingGroups.Update(meetingGroup);
 
@@ -53,7 +55,7 @@ public record RemoveMember(string OrganizationId, int Id, string MemberId) : IRe
                 return Errors.MeetingGroups.MeetingGroupNotFound;
             }
 
-            return meetingGroup.ToDto();
+            return member.ToDto();
         }
     }
 }

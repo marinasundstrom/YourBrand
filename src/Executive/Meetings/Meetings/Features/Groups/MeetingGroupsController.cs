@@ -23,6 +23,9 @@ public sealed record AddMeetingGroupMemberDto(string Name, string? UserId, strin
 
 public sealed record EditMeetingGroupMemberDto(string Name, string? UserId, string Email, AttendeeRole Role, bool? HasSpeakingRights, bool? HasVotingRights);
 
+public sealed record ReorderMeetingGroupMemberDto(int Order);
+
+
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
@@ -103,6 +106,16 @@ public sealed class MeetingGroupsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<MeetingGroupMemberDto>> EditMember(string organizationId, int id, string memberId, EditMeetingGroupMemberDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new EditMember(organizationId, id, memberId, request.Name, request.UserId, request.Email, request.Role, request.HasSpeakingRights, request.HasVotingRights), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPut("{id}/members/{memberId}/order")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingGroupMemberDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<MeetingGroupMemberDto>> ReorderMember(string organizationId, int id, string memberId, ReorderMeetingGroupMemberDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new ReorderMember(organizationId, id, memberId, request.Order), cancellationToken);
         return this.HandleResult(result);
     }
 

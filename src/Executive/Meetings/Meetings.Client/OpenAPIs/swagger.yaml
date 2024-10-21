@@ -2680,6 +2680,59 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/MeetingGroups/{id}/members/{memberId}/order:
+    put:
+      tags:
+      - MeetingGroups
+      operationId: MeetingGroups_ReorderMember
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      - name: memberId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReorderMeetingGroupMember'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingGroupMember'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Agendas:
     get:
       tags:
@@ -3016,7 +3069,7 @@ paths:
     put:
       tags:
       - Agendas
-      operationId: Agendas_MoveAgendaItem
+      operationId: Agendas_ReorderAgendaItem
       parameters:
       - name: organizationId
         in: query
@@ -3041,7 +3094,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MoveAgendaItem'
+              $ref: '#/components/schemas/ReorderAgendaItem'
         required: true
         x-position: 4
       responses:
@@ -3907,6 +3960,9 @@ components:
       properties:
         id:
           type: string
+        order:
+          type: integer
+          format: int32
         name:
           type: string
         role:
@@ -4020,6 +4076,13 @@ components:
         hasVotingRights:
           type: boolean
           nullable: true
+    ReorderMeetingGroupMember:
+      type: object
+      additionalProperties: false
+      properties:
+        order:
+          type: integer
+          format: int32
     PagedResultOfAgenda:
       type: object
       additionalProperties: false
@@ -4084,7 +4147,7 @@ components:
           type: integer
           format: int32
           nullable: true
-    MoveAgendaItem:
+    ReorderAgendaItem:
       type: object
       additionalProperties: false
       properties:
