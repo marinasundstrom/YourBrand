@@ -122,40 +122,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-  /v1/Test/{id}/status:
-    put:
-      tags:
-      - Test
-      operationId: Test_UpdateStatus
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      requestBody:
-        x-name: status
-        content:
-          application/json:
-            schema:
-              type: string
-        required: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
   /v1/Tickets:
     get:
       tags:
@@ -935,38 +901,43 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/TicketStatuses:
+  /v1/Tickets/Statuses:
     get:
       tags:
       - TicketStatuses
       operationId: TicketStatuses_GetStatuses
       parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
       - name: searchTerm
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 1
+        x-position: 2
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 1
-        x-position: 2
+        x-position: 3
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 3
+        x-position: 4
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 4
+        x-position: 5
       - name: sortDirection
         in: query
         schema:
@@ -974,7 +945,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 5
+        x-position: 6
       responses:
         200:
           description: ''
@@ -982,6 +953,168 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PagedResultOfTicketStatus'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - TicketStatuses
+      operationId: TicketStatuses_CreateTicketStatus
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTicketStatus'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketStatus'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Tickets/Statuses/{id}:
+    get:
+      tags:
+      - TicketStatuses
+      operationId: TicketStatuses_GetTicketStatusById
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketStatus'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - TicketStatuses
+      operationId: TicketStatuses_UpdateTicketStatus
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTicketStatus'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketStatus'
+        429:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - TicketStatuses
+      operationId: TicketStatuses_DeleteTicketStatus
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketStatus'
         429:
           description: ''
           content:
@@ -2521,6 +2654,28 @@ components:
         total:
           type: integer
           format: int32
+    CreateTicketStatus:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    UpdateTicketStatus:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
     ItemsResultOfTeam:
       type: object
       additionalProperties: false

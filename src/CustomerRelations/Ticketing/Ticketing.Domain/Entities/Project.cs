@@ -32,16 +32,12 @@ public class Project : AggregateRoot<ProjectId>, IHasTenant, IHasOrganization, I
 
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
+
     public User? CreatedBy { get; set; } = null!;
-
     public UserId? CreatedById { get; set; } = null!;
-
     public DateTimeOffset Created { get; set; }
-
     public User? LastModifiedBy { get; set; }
-
     public UserId? LastModifiedById { get; set; }
-
     public DateTimeOffset? LastModified { get; set; }
 
     public HashSet<TicketType> TicketTypes { get; } = new HashSet<TicketType>();

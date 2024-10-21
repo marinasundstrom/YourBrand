@@ -47,38 +47,33 @@ public static class Seed
             ProjectId = project.Id
         });
 
-        context.TicketStatuses.Add(new TicketStatus(1)
+        context.TicketStatuses.Add(new TicketStatus(1, "New", "new", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Name = "New",
             ProjectId = project.Id
         });
 
-        context.TicketStatuses.Add(new TicketStatus(2)
+        context.TicketStatuses.Add(new TicketStatus(2, "In progress", "in-progress", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Name = "In progress",
             ProjectId = project.Id
         });
 
-        context.TicketStatuses.Add(new TicketStatus(3)
+        context.TicketStatuses.Add(new TicketStatus(3, "On hold", "on-hold", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Name = "On hold",
             ProjectId = project.Id
         });
 
-        context.TicketStatuses.Add(new TicketStatus(4)
+        context.TicketStatuses.Add(new TicketStatus(4, "Resolved", "resolved", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Name = "Resolved",
             ProjectId = project.Id
         });
 
-        context.TicketStatuses.Add(new TicketStatus(5)
+        context.TicketStatuses.Add(new TicketStatus(5, "Closed", "closed", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Name = "Closed",
             ProjectId = project.Id
         });
 

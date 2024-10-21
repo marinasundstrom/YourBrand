@@ -1,0 +1,141 @@
+@page "/tickets/statuses"
+@using Microsoft.AspNetCore.Authorization
+@using YourBrand.Portal.Services
+@attribute [Authorize]
+@inject ITicketStatusesClient TicketStatusesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@attribute [StreamRendering(false)]
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode renderMode
+@inject IOrganizationProvider OrganizationProvider
+
+<AppPageTitle>Ticket Statuses</AppPageTitle>
+
+<MudText Typo="Typo.h3" Class="mb-4">Ticket Statuses</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnTicketStatusClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New Ticket Status
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="TicketStatus" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+              Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+
+            <MudSpacer />
+
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="TicketStatus" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" OnClick="async (e) => await UpdateTicketStatus(context)" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteTicketStatus(context)" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    private static IComponentRenderMode renderMode =
+    new InteractiveWebAssemblyRenderMode(prerender: false);
+    MudTable<TicketStatus> table; 
+    string? searchString;
+
+    public TicketStatus TicketStatus { get; set; }
+
+    private async Task<TableData<TicketStatus>> LoadData(TableState state)
+    {
+        try
+        {
+            var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+            var results = await TicketStatusesClient.GetStatusesAsync(organizationId, searchString, state.Page + 1, state.PageSize, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Ticketing.SortDirection.Ascending : YourBrand.Ticketing.SortDirection.Descending));
+            return new TableData<TicketStatus> { Items = results.Items, TotalItems = results.Total };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<TicketStatus> ev)
+    {
+        var item = ev.Item;
+
+        await OnTicketStatusClicked(item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnTicketStatusChanged(TicketStatus sa)
+    {
+        TicketStatus = sa;
+        await table.ReloadServerData();
+    }
+
+    async Task OnTicketStatusClicked(TicketStatus? dto)
+    {
+        await UpdateTicketStatus(dto);
+    }
+
+    async Task UpdateTicketStatus(TicketStatus? dto)
+    {
+        /*try
+        {*/
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(TicketStatusDialog.TicketStatusId), dto?.Id);
+
+            var dialogReference = DialogService.Show<TicketStatusDialog>(dto is null ? "New Ticket Status" : $"Update {dto.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        /*}
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }*/
+    }
+
+    async Task DeleteTicketStatus(TicketStatus orderStatus)
+    {
+        var modalResult = await DialogService.ShowMessageBox("Delete the order status?", "The order status will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        if (!modalResult.GetValueOrDefault())
+        {
+            return;
+        }
+
+        var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        //await TicketStatusesClient.DeleteTicketStatusAsync(organizationId, orderStatus.Id);
+
+        await table.ReloadServerData();
+    }
+}

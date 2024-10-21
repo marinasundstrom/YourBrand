@@ -38,7 +38,7 @@ public record GetProjectsQuery(string OrganizationId, int Page = 0, int PageSize
             var projects = await query
                 .Include(p => p.Memberships)
                 .OrderBy(p => p.Created)
-                .Skip(request.PageSize * request.Page)
+                .Skip(request.PageSize * (request.Page - 1))
                 .Take(request.PageSize)
                 .ToListAsync();
 

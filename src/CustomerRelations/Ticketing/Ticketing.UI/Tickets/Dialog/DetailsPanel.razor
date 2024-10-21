@@ -107,7 +107,7 @@
         notFound = false;
         error = false;
 
-        ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(null, 1, 100, null, null, cts.Token)).Items);
+        ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(Organization.Id, null, 1, 100, null, null, cts.Token)).Items);
 
         if (Id is null)
         {

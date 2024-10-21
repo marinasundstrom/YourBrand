@@ -1,19 +1,23 @@
 using YourBrand.Tenancy;
 using YourBrand.Domain;
 using YourBrand.Ticketing.Domain.ValueObjects;
+using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class TicketStatus : Entity<int>, IHasTenant, IHasOrganization
+public class TicketStatus : Entity<int>, IHasTenant, IHasOrganization, IAuditable
 {
-    public TicketStatus()
+    protected TicketStatus()
     {
 
     }
 
-    public TicketStatus(int id) 
+    public TicketStatus(int id, string name, string? handle, string? description) 
     {
         Id = id;
+        Name = name;
+        Handle = handle;
+        Description = description;
     }
 
     public TenantId TenantId { get; set; }
@@ -23,4 +27,13 @@ public class TicketStatus : Entity<int>, IHasTenant, IHasOrganization
     public ProjectId ProjectId { get; set; }
 
     public string Name { get; set; } = null!;
+    public string? Handle { get; set; } = null!;
+    public string? Description { get; set; } = null!;
+
+    public User? CreatedBy { get; set; }
+    public UserId? CreatedById { get; set; }
+    public DateTimeOffset Created { get; set; }
+    public User? LastModifiedBy { get; set; }
+    public UserId? LastModifiedById { get; set; }
+    public DateTimeOffset? LastModified { get; set; }
 }

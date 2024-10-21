@@ -59,7 +59,7 @@
     {
         try
         {
-            var results = await ProjectsClient.GetProjectsAsync(OrganizationId, 0, 10, UserId, text, null, null);
+            var results = await ProjectsClient.GetProjectsAsync(OrganizationId, 1, 10, UserId, text, null, null);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)
