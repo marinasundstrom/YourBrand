@@ -86,7 +86,7 @@
 
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             Value = (Project)result.Data;

@@ -60,7 +60,7 @@
             var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
 
-            var results = await ProjectsClient.GetProjectsAsync(organizationId, state.Page, state.PageSize, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Ticketing.SortDirection.Ascending : YourBrand.Ticketing.SortDirection.Descending));
+            var results = await ProjectsClient.GetProjectsAsync(organizationId, state.Page + 1, state.PageSize, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Ticketing.SortDirection.Ascending : YourBrand.Ticketing.SortDirection.Descending));
             return new TableData<Project> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
@@ -114,7 +114,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();

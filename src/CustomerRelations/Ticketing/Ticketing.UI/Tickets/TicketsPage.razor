@@ -18,6 +18,13 @@
 
 <MudText Typo="Typo.h3" GutterBottom="true">@T["Tickets"]</MudText>
 
+<MudButton Variant="Variant.Filled" Color="Color.Default" Href="/tickets/projects" Class="me-2 mb-2">@T["Projects"]
+</MudButton>
+
+<MudButton Variant="Variant.Filled" Color="Color.Default" Href="/tickets/statuses" Class="me-2 mb-2">@T["Statuses"]
+</MudButton>
+
+
 <MudTable T="Ticket" MultiSelection="@selectMultiple" @bind-SelectedItems="selectedItems" ServerData="@(new Func<TableState, Task<TableData<Ticket>>>(ServerReload))" Elevation="25"
           OnRowClick="async (e) => await ShowTicket(e.Item.Id)" Dense="false" Hover="true" @ref="table" SortLabel="@T["SortBy"]" Class="mb-8">
     <ToolBarContent>

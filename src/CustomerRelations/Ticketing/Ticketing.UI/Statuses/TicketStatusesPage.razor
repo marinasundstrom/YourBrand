@@ -113,7 +113,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();
@@ -134,7 +134,7 @@
 
         var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
-        //await TicketStatusesClient.DeleteTicketStatusAsync(organizationId, orderStatus.Id);
+        await TicketStatusesClient.DeleteTicketStatusAsync(organizationId, orderStatus.Id);
 
         await table.ReloadServerData();
     }
