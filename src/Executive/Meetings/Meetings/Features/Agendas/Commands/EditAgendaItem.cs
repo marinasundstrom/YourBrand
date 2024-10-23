@@ -35,11 +35,11 @@ public record EditAgendaItem(string OrganizationId, int Id, string ItemId, Agend
 
             var agendaItem = agenda.Items.FirstOrDefault(x => x.Id == request.ItemId);
 
-            if(agendaItem is  null) 
+            if (agendaItem is null)
             {
                 return Errors.Agendas.AgendaItemNotFound;
             }
-        
+
             agendaItem.Type = request.Type;
             agendaItem.Title = request.Title;
             agendaItem.Description = request.Description;

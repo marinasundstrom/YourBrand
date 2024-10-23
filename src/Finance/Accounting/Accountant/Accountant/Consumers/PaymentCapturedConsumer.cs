@@ -12,7 +12,7 @@ public class PaymentCapturedConsumer(IJournalEntriesClient journalEntriesClient,
     public async Task Consume(ConsumeContext<PaymentCaptured> context)
     {
         string organizationId = "";
-        
+
         CancellationToken cancellationToken = context.CancellationToken;
 
         var capture = context.Message;

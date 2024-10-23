@@ -39,7 +39,7 @@ public class InvoicesBatchConsumer(IJournalEntriesClient journalEntriesClient,
     }
 
     private async Task CreateVerificationFromInvoice(YourBrand.Invoicing.Client.Invoice invoice, CancellationToken cancellationToken)
-    {        
+    {
         var entries = entriesFactory.CreateEntriesFromInvoice(invoice);
 
         var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(invoice.OrganizationId, new CreateJournalEntry

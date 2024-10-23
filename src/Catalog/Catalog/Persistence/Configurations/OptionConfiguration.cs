@@ -25,7 +25,7 @@ public class OptionConfiguration : IEntityTypeConfiguration<Option>
 
         builder.HasOne(o => o.Group).WithMany(x => x.Options)
             .HasForeignKey(o => new { o.OrganizationId, o.GroupId })
-            .OnDelete(DeleteBehavior.ClientNoAction); 
+            .OnDelete(DeleteBehavior.ClientNoAction);
     }
 }
 

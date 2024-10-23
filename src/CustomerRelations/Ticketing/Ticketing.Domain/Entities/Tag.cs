@@ -1,5 +1,5 @@
-using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Tenancy;
 using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;

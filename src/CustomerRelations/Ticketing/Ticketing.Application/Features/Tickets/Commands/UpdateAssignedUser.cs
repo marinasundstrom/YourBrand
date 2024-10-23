@@ -1,6 +1,7 @@
 using FluentValidation;
 
 using MediatR;
+
 using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
@@ -38,7 +39,7 @@ public sealed record UpdateAssignee(string OrganizationId, int Id, string? UserI
 
             var participant = ticket.Participants.FirstOrDefault(x => x.UserId == request.UserId);
 
-            if(participant is null) 
+            if (participant is null)
             {
                 participant = new TicketParticipant
                 {

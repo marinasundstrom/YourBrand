@@ -2,9 +2,9 @@
 
 using MediatR;
 
+using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Ticketing.Application.Features.Organizations;
 using YourBrand.Ticketing.Application.Features.Users;
-using YourBrand.IdentityManagement.Contracts;
 
 namespace YourBrand.Ticketing.Consumers;
 

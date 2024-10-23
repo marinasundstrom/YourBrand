@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Meetings.Features.Command;
 using YourBrand.Meetings.Features.Minutes.Command;
 using YourBrand.Meetings.Features.Minutes.Queries;
-using YourBrand.Meetings.Features.Command;
 using YourBrand.Meetings.Models;
 
 namespace YourBrand.Meetings.Features.Minutes;

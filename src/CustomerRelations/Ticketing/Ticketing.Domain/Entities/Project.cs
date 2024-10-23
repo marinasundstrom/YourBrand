@@ -1,7 +1,7 @@
-using YourBrand.Tenancy;
 using YourBrand.Domain;
-using YourBrand.Ticketing.Domain.ValueObjects;
 using YourBrand.Identity;
+using YourBrand.Tenancy;
+using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 

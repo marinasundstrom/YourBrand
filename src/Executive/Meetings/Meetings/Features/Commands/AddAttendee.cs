@@ -36,7 +36,7 @@ public record AddAttendee(string OrganizationId, int Id, string Name, string? Us
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
-            
+
             return attendee.ToDto();
         }
     }

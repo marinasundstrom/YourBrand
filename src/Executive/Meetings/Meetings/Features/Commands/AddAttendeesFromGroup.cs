@@ -14,7 +14,7 @@ public record AddAttendeesFromGroup(string OrganizationId, int Id, int GroupId) 
     {
         public Validator()
         {
-           //RuleFor(x => x.Name).NotEmpty().MaximumLength(60);
+            //RuleFor(x => x.Name).NotEmpty().MaximumLength(60);
         }
     }
 
@@ -33,7 +33,7 @@ public record AddAttendeesFromGroup(string OrganizationId, int Id, int GroupId) 
 
             var meetingGroup = await context.MeetingGroups
                 .InOrganization(request.OrganizationId)
-                .Include(x => x.Members.OrderBy(x => x.Order ))
+                .Include(x => x.Members.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.GroupId);
 
             if (meetingGroup is null)
@@ -41,7 +41,7 @@ public record AddAttendeesFromGroup(string OrganizationId, int Id, int GroupId) 
                 return Errors.MeetingGroups.MeetingGroupNotFound;
             }
 
-            foreach(var member in meetingGroup.Members) 
+            foreach (var member in meetingGroup.Members)
             {
                 var attendee = meeting.AddAttendee(member.Name, member.UserId, member.Email, member.Role, member.HasSpeakingRights, member.HasVotingRights, member.MeetingGroupId, member.Id);
             }
@@ -49,7 +49,7 @@ public record AddAttendeesFromGroup(string OrganizationId, int Id, int GroupId) 
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
-            
+
             return meeting.ToDto();
         }
     }

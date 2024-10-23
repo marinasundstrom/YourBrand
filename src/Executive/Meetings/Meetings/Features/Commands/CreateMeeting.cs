@@ -43,12 +43,12 @@ public record CreateMeeting(string OrganizationId, string Title, string Descript
             meeting.Location = request.Location ?? string.Empty;
             meeting.Quorum.RequiredNumber = request.Quorum.RequiredNumber;
 
-            if(request.ScheduledAt is not null) 
+            if (request.ScheduledAt is not null)
             {
                 meeting.ScheduledAt = request.ScheduledAt.GetValueOrDefault();
             }
 
-            foreach (var attendee in request.Attendees) 
+            foreach (var attendee in request.Attendees)
             {
                 meeting.AddAttendee(attendee.Name, attendee.UserId, attendee.Email, attendee.Role, attendee.HasSpeakingRights, attendee.HasVotingRights);
             }

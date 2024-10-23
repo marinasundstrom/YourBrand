@@ -2,10 +2,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Meetings.Domain;
 using YourBrand.Meetings.Features;
 using YourBrand.Meetings.Models;
-using YourBrand.Meetings.Domain;
- 
+
 namespace YourBrand.Meetings.Features.Queries;
 
 public record GetMeetings(string OrganizationId, int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<MeetingDto>>
@@ -17,7 +17,7 @@ public record GetMeetings(string OrganizationId, int Page = 1, int PageSize = 10
             var query = context.Meetings
                 .InOrganization(request.OrganizationId)
                 .AsNoTracking()
-                .Include(x => x.Attendees.OrderBy(x => x.Order ))
+                .Include(x => x.Attendees.OrderBy(x => x.Order))
                 .AsQueryable();
 
             if (request.SearchTerm is not null)

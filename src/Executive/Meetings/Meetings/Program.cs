@@ -12,12 +12,12 @@ using Serilog;
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Meetings;
 using YourBrand.Meetings;
-using YourBrand.Meetings.Services;
 using YourBrand.Meetings.Infrastructure.Persistence;
 using YourBrand.Meetings.Middleware;
+using YourBrand.Meetings.Services;
+using YourBrand.Tenancy;
 
 Activity.DefaultIdFormat = ActivityIdFormat.W3C;
 Activity.ForceDefaultIdFormat = true;
@@ -43,7 +43,7 @@ builder.Host.UseSerilog((ctx, cfg) =>
         {
             var (key, value) = header.Split('=') switch
             {
-                [string k, string v] => (k, v),
+            [string k, string v] => (k, v),
                 var v => throw new Exception($"Invalid header format {v}")
             };
 

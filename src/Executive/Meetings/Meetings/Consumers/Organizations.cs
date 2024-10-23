@@ -2,9 +2,9 @@
 
 using MediatR;
 
+using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Meetings.Features.Organizations;
 using YourBrand.Meetings.Features.Users;
-using YourBrand.IdentityManagement.Contracts;
 
 namespace YourBrand.Meetings.Consumers;
 

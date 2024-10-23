@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 
-using YourBrand.Meetings.Exceptions;
 using YourBrand.Meetings.Domain.Exceptions;
+using YourBrand.Meetings.Exceptions;
 
 using ApplicationException = YourBrand.Meetings.Domain.Exceptions.ApplicationException;
 

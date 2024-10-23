@@ -1,11 +1,11 @@
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public enum VotingType 
+public enum VotingType
 {
     Motion,
     Election
@@ -95,4 +95,3 @@ public sealed class VotingSession : AggregateRoot<VotingSessionId>, IAuditable, 
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 }
-

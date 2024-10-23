@@ -2,8 +2,8 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Ticketing.Models;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
+using YourBrand.Ticketing.Models;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Statuses;
 

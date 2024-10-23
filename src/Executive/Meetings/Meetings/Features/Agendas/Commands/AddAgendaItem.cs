@@ -35,7 +35,7 @@ public record AddAgendaItem(string OrganizationId, int Id, AgendaItemType Type, 
 
             var agendaItem = agenda.AddItem(request.Type, request.Title, request.Description);
 
-            if(request.Order is not null) 
+            if (request.Order is not null)
             {
                 agenda.ReorderAgendaItem(agendaItem, request.Order.GetValueOrDefault());
             }

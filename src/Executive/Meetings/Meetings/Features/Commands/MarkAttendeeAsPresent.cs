@@ -33,11 +33,11 @@ public record MarkAttendeeAsPresent(string OrganizationId, int Id, string Attend
 
             var attendee = meeting.GetAttendeeById(request.AttendeeId);
 
-            if(attendee is  null) 
+            if (attendee is null)
             {
                 return Errors.Meetings.AttendeeNotFound;
             }
-        
+
             attendee.IsPresent = request.IsPresent;
 
             context.Meetings.Update(meeting);

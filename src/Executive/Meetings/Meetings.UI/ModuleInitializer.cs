@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 
+using YourBrand.Meetings.Client;
 using YourBrand.Portal;
 using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
 using YourBrand.Portal.Widgets;
-using YourBrand.Meetings.Client;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace YourBrand.Meetings;
 

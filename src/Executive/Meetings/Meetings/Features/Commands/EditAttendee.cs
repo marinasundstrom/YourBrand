@@ -33,11 +33,11 @@ public record EditAttendee(string OrganizationId, int Id, string AttendeeId, str
 
             var attendee = meeting.GetAttendeeById(request.AttendeeId);
 
-            if(attendee is  null) 
+            if (attendee is null)
             {
                 return Errors.Meetings.AttendeeNotFound;
             }
-        
+
             attendee.Name = request.Name;
             attendee.UserId = request.UserId;
             attendee.Email = request.Email;

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 using YourBrand.Ticketing;
 
-public class TicketDetailsForm 
+public class TicketDetailsForm
 {
     public int? Id { get; set; }
 
@@ -30,7 +30,7 @@ public class TicketDetailsForm
 
     public TicketUrgency? Urgency { get; set; }
 
-    public void Populate(Ticket ticket) 
+    public void Populate(Ticket ticket)
     {
         Project = ticket.Project;
         Title = ticket.Subject;

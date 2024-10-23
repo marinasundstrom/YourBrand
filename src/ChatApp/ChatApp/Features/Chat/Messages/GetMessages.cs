@@ -4,11 +4,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Domain;
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Features.Users;
 using YourBrand.ChatApp.Infrastructure.Persistence;
+using YourBrand.Domain;
 using YourBrand.Extensions;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;

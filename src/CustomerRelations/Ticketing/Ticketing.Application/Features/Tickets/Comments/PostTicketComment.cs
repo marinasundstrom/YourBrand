@@ -22,7 +22,7 @@ public sealed record PostTicketComment(string OrganizationId, int Id, string Tex
         }
     }
 
-    public sealed class Handler(IDtoComposer dtoComposer, IApplicationDbContext context, ITicketRepository ticketRepository, IUnitOfWork unitOfWork, 
+    public sealed class Handler(IDtoComposer dtoComposer, IApplicationDbContext context, ITicketRepository ticketRepository, IUnitOfWork unitOfWork,
         ITenantContext tenantContext, IUserContext userContext) : IRequestHandler<PostTicketComment, Result<TicketCommentDto>>
     {
         public async Task<Result<TicketCommentDto>> Handle(PostTicketComment request, CancellationToken cancellationToken)

@@ -1,5 +1,5 @@
-﻿using YourBrand.Ticketing.Domain.Entities;
-using YourBrand.Tenancy;
+﻿using YourBrand.Tenancy;
+using YourBrand.Ticketing.Domain.Entities;
 using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Repositories;

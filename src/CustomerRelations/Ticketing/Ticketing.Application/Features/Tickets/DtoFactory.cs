@@ -1,11 +1,11 @@
-using YourBrand.Ticketing.Domain.ValueObjects;
-using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
-using YourBrand.Ticketing.Application.Features.Users;
+using YourBrand.Identity;
+using YourBrand.Ticketing.Application.Features.Organizations;
 using YourBrand.Ticketing.Application.Features.Projects;
 using YourBrand.Ticketing.Application.Features.Projects.ProjectGroups;
 using YourBrand.Ticketing.Application.Features.Teams;
-using YourBrand.Identity;
-using YourBrand.Ticketing.Application.Features.Organizations;
+using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
+using YourBrand.Ticketing.Application.Features.Users;
+using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Application;
 
@@ -60,13 +60,13 @@ public sealed class DtoFactory : IDtoFactory
 
     public TicketCommentDto CreateTicketCommentDto(TicketComment ticketComment, TicketParticipant addedBy, TicketParticipant editedBy, object value, Dictionary<TicketParticipantId, User> users)
     {
-       return new TicketCommentDto(
-        ticketComment.Id, 
-        ticketComment.Text, 
-        ticketComment.Created,
-        ticketComment.CreatedById is null ? null : CreateParticipantDto(addedBy!, users), 
-        ticketComment.LastModified, 
-        ticketComment.LastModifiedById is null ? null : CreateParticipantDto(editedBy!, users));
+        return new TicketCommentDto(
+         ticketComment.Id,
+         ticketComment.Text,
+         ticketComment.Created,
+         ticketComment.CreatedById is null ? null : CreateParticipantDto(addedBy!, users),
+         ticketComment.LastModified,
+         ticketComment.LastModifiedById is null ? null : CreateParticipantDto(editedBy!, users));
     }
 
     public ProjectDto CreateProjectDto(Project project)

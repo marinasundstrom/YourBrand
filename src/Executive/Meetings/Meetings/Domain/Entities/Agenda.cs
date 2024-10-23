@@ -1,7 +1,7 @@
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
@@ -110,7 +110,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
 
     public IReadOnlyCollection<AgendaItem> Items => _items;
 
-    public AgendaItem AddItem(AgendaItemType type, string title, string description) 
+    public AgendaItem AddItem(AgendaItemType type, string title, string description)
     {
         if (_items.Any(i => i.Title.Equals(title, StringComparison.OrdinalIgnoreCase)))
         {
@@ -124,15 +124,15 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
 
         int order = 1;
 
-        try 
+        try
         {
-            var last = _items.OrderByDescending(x => x.Order ).First();
-            order = last.Order  + 1;
+            var last = _items.OrderByDescending(x => x.Order).First();
+            order = last.Order + 1;
         }
-        catch {}
+        catch { }
 
         var item = new AgendaItem(type, title, description);
-        item.Order  = order;
+        item.Order = order;
         _items.Add(item);
         return item;
     }
@@ -160,7 +160,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
             throw new ArgumentOutOfRangeException(nameof(newOrderPosition), "New order position is out of range.");
         }
 
-        int oldOrderPosition = agendaItem.Order ;
+        int oldOrderPosition = agendaItem.Order;
 
         if (oldOrderPosition == newOrderPosition)
             return false;
@@ -169,29 +169,29 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
         if (newOrderPosition < oldOrderPosition)
         {
             var itemsToIncrement = Items
-                .Where(i => i.Order  >= newOrderPosition && i.Order  < oldOrderPosition)
+                .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
                 .ToList();
 
             foreach (var item in itemsToIncrement)
             {
-                item.Order  += 1;
+                item.Order += 1;
             }
         }
         // Flyttar objektet nedåt i listan
         else
         {
             var itemsToDecrement = Items
-                .Where(i => i.Order  > oldOrderPosition && i.Order  <= newOrderPosition)
+                .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
                 .ToList();
 
             foreach (var item in itemsToDecrement)
             {
-                item.Order  -= 1;
+                item.Order -= 1;
             }
         }
 
         // Uppdatera order för objektet som flyttas
-        agendaItem.Order  = newOrderPosition;
+        agendaItem.Order = newOrderPosition;
 
         return true;
     }

@@ -73,7 +73,7 @@ public static class Seed2
         {
             context.Brands.Add(brand ??= new Brand("My brand", "my-brand"));
         }
-        
+
         brand.OrganizationId = TenantConstants.OrganizationId;
 
         context.Set<VatRate>().AddRange(
@@ -87,7 +87,7 @@ public static class Seed2
 
         if (clothes is null)
         {
-            clothes ??= await productCategoryFactory.CreateProductCategoryAsync(TenantConstants.OrganizationId, new ()
+            clothes ??= await productCategoryFactory.CreateProductCategoryAsync(TenantConstants.OrganizationId, new()
             {
                 Name = "Clothes",
                 OrganizationId = TenantConstants.OrganizationId,
@@ -206,7 +206,7 @@ public static class Seed2
 
         tshirts.AddProduct(product);
 
-        
+
 
         product.AddProductAttribute(new ProductAttribute
         {
@@ -316,7 +316,7 @@ public static class Seed2
         product.AddVariant(variantBlueLarge);
 
         /////
-        
+
         var variantRedSmall = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
             Name = "Red S",
@@ -427,7 +427,7 @@ public static class Seed2
 
         food.AddProduct(product);
 
-        
+
 
         await context.SaveChangesAsync();
 
@@ -471,7 +471,7 @@ public static class Seed2
 
         food.AddProduct(product);
 
-        
+
 
         await context.SaveChangesAsync();
 
@@ -526,7 +526,7 @@ public static class Seed2
 
         food.AddProduct(product);
 
-        
+
 
         await context.SaveChangesAsync();
 
@@ -603,7 +603,7 @@ public static class Seed2
 
         food.AddProduct(product);
 
-        
+
 
         await context.SaveChangesAsync();
 
@@ -724,7 +724,7 @@ public static class Seed2
 
         food.AddProduct(product);
 
-        
+
 
         var baseGroup = new OptionGroup("Bas")
         {

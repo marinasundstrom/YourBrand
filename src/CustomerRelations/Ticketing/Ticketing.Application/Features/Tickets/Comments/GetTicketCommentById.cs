@@ -26,7 +26,7 @@ public record GetTicketCommentById(string OrganizationId, int TicketId, int Id) 
 
             if (ticket is null)
                 return null!;
-                
+
             var ticketComment = await context.TicketComments
                 .AsSplitQuery()
                 .InOrganization(request.OrganizationId)

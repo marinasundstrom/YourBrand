@@ -1,6 +1,7 @@
 using FluentValidation;
 
 using MediatR;
+
 using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;

@@ -6,10 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain;
 using YourBrand.Identity;
-using YourBrand.Tenancy;
-
-using YourBrand.Meetings.Infrastructure.Persistence.ValueConverters;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Meetings.Infrastructure.Persistence.ValueConverters;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Infrastructure.Persistence;
 

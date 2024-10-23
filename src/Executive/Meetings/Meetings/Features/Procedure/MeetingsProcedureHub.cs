@@ -22,7 +22,7 @@ public sealed class MeetingsProcedureHub(IMediator mediator, ISettableUserContex
         {
             var tenantId = httpContext?.User?.FindFirst("tenant_id")?.Value;
 
-            if(httpContext.Request.Query.TryGetValue("organizationId", out var organizationId)) 
+            if (httpContext.Request.Query.TryGetValue("organizationId", out var organizationId))
             {
 
             }

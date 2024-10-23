@@ -17,15 +17,15 @@ public class AddEditMemberViewModel
 
     public bool? HasVotingRights { get; set; }
 
-    public AddEditMemberViewModel Clone() 
+    public AddEditMemberViewModel Clone()
     {
-        return new AddEditMemberViewModel 
-        { 
+        return new AddEditMemberViewModel
+        {
             Name = Name,
             Role = Role,
-            Email = Email, 
-            User = User, 
-            HasVotingRights = HasVotingRights 
+            Email = Email,
+            User = User,
+            HasVotingRights = HasVotingRights
         };
     }
 }

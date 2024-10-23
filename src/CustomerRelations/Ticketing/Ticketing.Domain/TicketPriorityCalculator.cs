@@ -2,7 +2,7 @@ namespace YourBrand.Ticketing.Domain;
 
 using YourBrand.Ticketing.Domain.Enums;
 
-public sealed class TicketPriorityCalculator 
+public sealed class TicketPriorityCalculator
 {
     public TicketPriority[,] priorityMatrix = new TicketPriority[3, 3]
     {

@@ -35,11 +35,11 @@ public record EditMinutesItem(string OrganizationId, int Id, string ItemId, Agen
 
             var minuteItem = minute.Items.FirstOrDefault(x => x.Id == request.ItemId);
 
-            if(minuteItem is  null) 
+            if (minuteItem is null)
             {
                 return Errors.Minutes.MinutesItemNotFound;
             }
-        
+
             minuteItem.Type = request.Type;
             minuteItem.Heading = request.Title;
             minuteItem.Details = request.Description;

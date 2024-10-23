@@ -1,5 +1,5 @@
-using YourBrand.ChatApp.Features.Users;
 using YourBrand.ChatApp.Domain.ValueObjects;
+using YourBrand.ChatApp.Features.Users;
 
 namespace YourBrand.ChatApp.Features.Chat.Channels;
 

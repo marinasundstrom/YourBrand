@@ -22,7 +22,7 @@ public sealed class DiscussionsHub(IMediator mediator, ISettableUserContext user
         {
             var tenantId = httpContext?.User?.FindFirst("tenant_id")?.Value;
 
-            if(httpContext.Request.Query.TryGetValue("organizationId", out var organizationId)) 
+            if (httpContext.Request.Query.TryGetValue("organizationId", out var organizationId))
             {
 
             }
@@ -47,7 +47,7 @@ public sealed class DiscussionsHub(IMediator mediator, ISettableUserContext user
         userContext.SetConnectionId(Context.ConnectionId);
 
         await mediator.Send(
-            new RequestSpeakerTime(s.OrganizationId, s.MeetingId, agendaItemId));    
+            new RequestSpeakerTime(s.OrganizationId, s.MeetingId, agendaItemId));
     }
 
     public async Task RevokeSpeakerTime(string agendaItemId)

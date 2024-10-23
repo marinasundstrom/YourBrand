@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Ticketing.Domain.ValueObjects;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
+using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Application;
 
@@ -101,12 +101,12 @@ public sealed class DtoComposer : IDtoComposer
         HashSet<TicketId> ticketIds = new();
         HashSet<ProjectId> projectIds = new();
 
-        if(tickets.Length == 0) return [];
+        if (tickets.Length == 0) return [];
 
         foreach (var ticket in tickets)
         {
             projectIds.Add(ticket.ProjectId);
-            
+
             ExtractTicketParticipantIds(ticket, participantIds);
         }
 
@@ -162,7 +162,7 @@ public sealed class DtoComposer : IDtoComposer
 
         ExtractTicketParticipantIds(ticket, participantIds);
 
-        foreach(var ev in ticketEvents) 
+        foreach (var ev in ticketEvents)
         {
             participantIds.Add(ev.ParticipantId);
 
@@ -172,7 +172,7 @@ public sealed class DtoComposer : IDtoComposer
             {
                 Console.WriteLine("Foo: " + e2);
 
-                if(e2.OldAssignedParticipantId is not null) 
+                if (e2.OldAssignedParticipantId is not null)
                 {
                     participantIds.Add(e2.OldAssignedParticipantId.GetValueOrDefault());
                 }
@@ -226,13 +226,13 @@ public sealed class DtoComposer : IDtoComposer
         });
     }
 
-    private TicketEventDto ComposeTicketEventDtoInternal(Ticket ticket, TicketEvent ev, Dictionary<ProjectId, Project> projects, Dictionary<TicketParticipantId, TicketParticipant> participants, Dictionary<TicketParticipantId, User> users) 
+    private TicketEventDto ComposeTicketEventDtoInternal(Ticket ticket, TicketEvent ev, Dictionary<ProjectId, Project> projects, Dictionary<TicketParticipantId, TicketParticipant> participants, Dictionary<TicketParticipantId, User> users)
     {
         var @event = System.Text.Json.JsonSerializer.Deserialize<TicketDomainEvent>(ev.Data);
 
         participants.TryGetValue(ev.ParticipantId, out var participant);
 
-        if(@event is TicketAssigneeUpdated e2) 
+        if (@event is TicketAssigneeUpdated e2)
         {
             participants.TryGetValue(e2.NewAssignedParticipantId.GetValueOrDefault(), out var newAssignedParticipant);
 

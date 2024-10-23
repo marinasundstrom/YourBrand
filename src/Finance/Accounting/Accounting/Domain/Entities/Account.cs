@@ -32,7 +32,7 @@ public class Account : AuditableEntity, IHasTenant, IHasOrganization
 
     public IReadOnlyCollection<LedgerEntry> Entries => _entries;
 
-    internal void AddEntry(LedgerEntry ledgerEntry) 
+    internal void AddEntry(LedgerEntry ledgerEntry)
     {
         _entries.Add(ledgerEntry);
 

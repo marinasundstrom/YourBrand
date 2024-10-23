@@ -4,21 +4,20 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Tenancy;
 using YourBrand.Identity;
-
+using YourBrand.Tenancy;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
 
 public sealed record CreateTicket(
-    string OrganizationId, 
+    string OrganizationId,
     int ProjectId,
-    string Title, 
-    string? Description, 
-    int Status, 
-    string? AssigneeUserId, 
-    double? EstimatedHours, double? RemainingHours, 
+    string Title,
+    string? Description,
+    int Status,
+    string? AssigneeUserId,
+    double? EstimatedHours, double? RemainingHours,
     TicketPriorityDto? Priority, TicketImpactDto? Impact, TicketUrgencyDto? Urgency) : IRequest<Result<TicketDto>>
 {
     public sealed class Validator : AbstractValidator<CreateTicket>
@@ -50,7 +49,7 @@ public sealed record CreateTicket(
             ticket.OrganizationId = request.OrganizationId;
             ticket.TypeId = 1;
             ticket.CategoryId = 1;
-            
+
             ticket.ProjectId = request.ProjectId;
 
             ticket.Status = await context.TicketStatuses.FirstAsync(s => s.Id == request.Status, cancellationToken);
@@ -62,7 +61,7 @@ public sealed record CreateTicket(
             ticket.UpdateEstimatedHours(request.EstimatedHours);
             ticket.UpdateRemainingHours(request.RemainingHours);
 
-            var creatorParticipant = new TicketParticipant 
+            var creatorParticipant = new TicketParticipant
             {
                 OrganizationId = request.OrganizationId,
                 Name = null,

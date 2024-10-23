@@ -14,8 +14,8 @@ using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Infrastructure.Persistence;
 using YourBrand.ChatApp.Web.Extensions;
 using YourBrand.ChatApp.Web.Middleware;
-using YourBrand.Extensions;
 using YourBrand.Domain;
+using YourBrand.Extensions;
 using YourBrand.Integration;
 using YourBrand.Tenancy;
 
@@ -37,7 +37,7 @@ builder.Host.UseSerilog((ctx, cfg) =>
         {
             var (key, value) = header.Split('=') switch
             {
-                [string k, string v] => (k, v),
+            [string k, string v] => (k, v),
                 var v => throw new Exception($"Invalid header format {v}")
             };
 

@@ -5,12 +5,12 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 
-using YourBrand.Domain;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
+using YourBrand.ChatApp.Infrastructure.Persistence;
+using YourBrand.Domain;
 
 using Errors = YourBrand.ChatApp.Domain.Errors.Channels;
-using YourBrand.ChatApp.Infrastructure.Persistence;
 
 namespace YourBrand.ChatApp.Features.Chat.Channels;
 

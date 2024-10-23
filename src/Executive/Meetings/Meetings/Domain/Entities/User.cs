@@ -1,6 +1,6 @@
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
 using YourBrand.Tenancy;
-using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
@@ -16,7 +16,7 @@ public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
         Name = name;
         Email = email;
     }
-    
+
     public TenantId TenantId { get; set; }
 
     public string Name { get; set; }

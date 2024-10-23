@@ -1,16 +1,18 @@
-﻿using MediatR;
+﻿using System.Reflection.Metadata;
+
 using Asp.Versioning;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.Ticketing.Models;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
-using YourBrand.Ticketing.Application.Features.Tickets.Statuses.Queries;
 using YourBrand.Ticketing.Application.Features.Tickets.Statuses.Commands;
-using System.Reflection.Metadata;
-using Microsoft.AspNetCore.Http.HttpResults;
+using YourBrand.Ticketing.Application.Features.Tickets.Statuses.Queries;
+using YourBrand.Ticketing.Models;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Statuses;
 
@@ -35,7 +37,7 @@ public sealed class TicketStatusesController(IMediator mediator) : ControllerBas
     public async Task<ActionResult<TicketStatusDto>> GetTicketStatusById(string organizationId, int id, CancellationToken cancellationToken = default)
     {
         var r = await mediator.Send(new GetTicketStatusQuery(organizationId, id), cancellationToken);
-        if(r is null) return NotFound();
+        if (r is null) return NotFound();
         return Ok(r);
     }
 

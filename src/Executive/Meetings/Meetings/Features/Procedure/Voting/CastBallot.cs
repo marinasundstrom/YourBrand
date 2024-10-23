@@ -15,7 +15,7 @@ public sealed record CastBallot(string OrganizationId, int Id, string CandidateI
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
                 .Include(x => x.Agenda)
-                .ThenInclude(x => x.Items.OrderBy(x => x.Order ))
+                .ThenInclude(x => x.Items.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (meeting is null)
@@ -47,7 +47,7 @@ public sealed record CastBallot(string OrganizationId, int Id, string CandidateI
                 return Errors.Meetings.NoOngoingVotingSession;
             }
 
-            agendaItem.VotingSession!.AddVote(new Vote 
+            agendaItem.VotingSession!.AddVote(new Vote
             {
                 OrganizationId = request.OrganizationId,
                 VoterId = attendee.Id,

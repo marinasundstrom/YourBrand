@@ -47,7 +47,7 @@ public record GetTransactions(string OrganizationId, int Page, int PageSize, Tra
             var items = await query.ToArrayAsync(cancellationToken);
 
             return new ItemsResult<TransactionDto>(
-                items.Select(t => new TransactionDto(t.OrganizationId, t.Id,  t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount)),
+                items.Select(t => new TransactionDto(t.OrganizationId, t.Id, t.Date, t.Status, t.From!, t.Reference!, t.Currency, t.Amount)),
                 totalItems);
         }
     }

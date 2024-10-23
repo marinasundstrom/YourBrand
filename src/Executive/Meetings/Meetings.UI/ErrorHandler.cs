@@ -10,7 +10,7 @@ public class ErrorHandler(ISnackbar snackbar) : DelegatingHandler
         {
             return base.SendAsync(request, cancellationToken);
         }
-        catch (ApiException<ProblemDetails> exc) 
+        catch (ApiException<ProblemDetails> exc)
         {
             snackbar.Add(exc.Result.Title, Severity.Error);
 

@@ -1,7 +1,7 @@
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
@@ -22,7 +22,7 @@ public class MeetingGroupMember : Entity<MeetingGroupMemberId>, IAuditable, IHas
     public OrganizationId OrganizationId { get; set; }
     public MeetingGroupId MeetingGroupId { get; set; }
 
-    public int Order  { get; set; }
+    public int Order { get; set; }
 
     public string? Name { get; set; }
     public string? Email { get; set; }

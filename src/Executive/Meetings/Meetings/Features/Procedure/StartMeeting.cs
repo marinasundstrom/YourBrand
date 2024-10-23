@@ -35,7 +35,7 @@ public sealed record StartMeeting(string OrganizationId, int Id) : IRequest<Resu
             }
 
             meeting.StartMeeting();
-            
+
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);

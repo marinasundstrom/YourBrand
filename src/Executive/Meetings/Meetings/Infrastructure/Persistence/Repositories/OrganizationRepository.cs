@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using YourBrand.Meetings.Domain.Specifications;
+
 using YourBrand.Domain;
+using YourBrand.Meetings.Domain.Specifications;
 
 namespace YourBrand.Meetings.Infrastructure.Persistence.Repositories;
 

@@ -10,7 +10,7 @@ using YourBrand.Meetings.Features.Procedure;
 
 namespace YourBrand.Meetings.Features.Groups.Command;
 
-public record ReorderMember(string OrganizationId, int Id, string MemberId, int Order ) : IRequest<Result<MeetingGroupMemberDto>>
+public record ReorderMember(string OrganizationId, int Id, string MemberId, int Order) : IRequest<Result<MeetingGroupMemberDto>>
 {
     public class Validator : AbstractValidator<ReorderMember>
     {

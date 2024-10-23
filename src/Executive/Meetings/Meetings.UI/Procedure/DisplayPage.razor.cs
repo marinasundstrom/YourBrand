@@ -22,7 +22,7 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
 
     [Parameter]
     public int MeetingId { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
@@ -35,7 +35,7 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
 
         await LoadAgenda();
 
-        if (meeting.CurrentAgendaItemIndex is not null) 
+        if (meeting.CurrentAgendaItemIndex is not null)
         {
             await LoadAgendaItem();
         }
@@ -122,8 +122,8 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
     public async Task OnMeetingStateChanged()
     {
         meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
-        
-        if(meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Canceled || meeting.State == MeetingState.Completed)
+
+        if (meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Canceled || meeting.State == MeetingState.Completed)
         {
             agendaItem = null;
         }

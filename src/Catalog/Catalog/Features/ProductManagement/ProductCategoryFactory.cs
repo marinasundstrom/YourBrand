@@ -21,7 +21,8 @@ public class ProductCategoryFactory(CatalogContext catalogContext, ITenantContex
         }
         catch { }
 
-        var productCategory = new ProductCategory(categoryId) {
+        var productCategory = new ProductCategory(categoryId)
+        {
             OrganizationId = organizationId,
             Name = options.Name,
             Handle = options.Handle,

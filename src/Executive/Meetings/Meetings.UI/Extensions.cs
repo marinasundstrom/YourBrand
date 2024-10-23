@@ -1,15 +1,15 @@
 namespace YourBrand.Meetings;
 
-public static class Ext 
+public static class Ext
 {
     public static async Task OnThrow<TException>(this Task task, Action<TException> action)
         where TException : Exception
     {
-        try  
+        try
         {
             await task;
         }
-        catch (TException exc) 
+        catch (TException exc)
         {
             action(exc);
         }

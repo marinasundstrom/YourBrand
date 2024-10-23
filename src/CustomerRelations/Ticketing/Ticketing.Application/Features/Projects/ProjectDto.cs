@@ -1,5 +1,5 @@
-﻿using YourBrand.Ticketing.Application.Features.Teams;
-using YourBrand.Ticketing.Application.Features.Organizations;
+﻿using YourBrand.Ticketing.Application.Features.Organizations;
+using YourBrand.Ticketing.Application.Features.Teams;
 
 namespace YourBrand.Ticketing.Application.Features.Projects;
 

@@ -45,7 +45,7 @@ public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
     {
         entry.OrganizationId = OrganizationId;
         entry.Account.AddEntry(entry);
-        if(entry.Debit > 0)
+        if (entry.Debit > 0)
         {
             Debit += entry.Debit.GetValueOrDefault();
         }

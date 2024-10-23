@@ -17,7 +17,7 @@ public sealed record EndAgendaItemDiscussion(string OrganizationId, int Id) : IR
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
                 .Include(x => x.Agenda)
-                .ThenInclude(x => x.Items.OrderBy(x => x.Order ))
+                .ThenInclude(x => x.Items.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (meeting is null)
@@ -31,19 +31,19 @@ public sealed record EndAgendaItemDiscussion(string OrganizationId, int Id) : IR
             {
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
-     
+
             var agendaItem = meeting.GetCurrentAgendaItem();
 
             if (agendaItem is null)
             {
                 return Errors.Meetings.NoActiveAgendaItem;
             }
-            
+
             if (attendee.Role != AttendeeRole.Chairperson)
             {
                 return Errors.Meetings.OnlyChairpersonCanEndDiscussion;
             }
-            
+
             agendaItem.EndDiscussion();
 
             context.Meetings.Update(meeting);
@@ -58,4 +58,3 @@ public sealed record EndAgendaItemDiscussion(string OrganizationId, int Id) : IR
         }
     }
 }
-

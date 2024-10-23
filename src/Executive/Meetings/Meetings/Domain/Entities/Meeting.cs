@@ -1,7 +1,7 @@
-﻿using YourBrand.Identity;
-using YourBrand.Tenancy;
-using YourBrand.Domain;
+﻿using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
@@ -62,7 +62,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
     public bool IsQuorumMet()
     {
-        if(Quorum.RequiredNumber == 0) 
+        if (Quorum.RequiredNumber == 0)
         {
             throw new InvalidOperationException("Quorum can't be zero");
         }
@@ -70,11 +70,11 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         int presentAttendees = 0;
 
-        if (VotingRightsAccessLevel == AttendeeAccessLevel.Everyone) 
+        if (VotingRightsAccessLevel == AttendeeAccessLevel.Everyone)
         {
             presentAttendees = Attendees.Count(p => p.IsPresent);
         }
-        else 
+        else
         {
             presentAttendees = Attendees.Count(p => p.IsPresent && p.HasVotingRights.GetValueOrDefault());
         }
@@ -125,9 +125,9 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         State = MeetingState.Canceled;
 
-        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order ).ToList();
+        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
 
-        foreach(var item in agendaItems.Skip(CurrentAgendaItemIndex.GetValueOrDefault())) 
+        foreach (var item in agendaItems.Skip(CurrentAgendaItemIndex.GetValueOrDefault()))
         {
             item.Cancel();
         }
@@ -160,7 +160,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
     public AgendaItem MoveToNextAgendaItem()
     {
-        if(Agenda is null) 
+        if (Agenda is null)
         {
             throw new InvalidOperationException("No agenda is set.");
         }
@@ -170,7 +170,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             throw new InvalidOperationException("Meeting is not in progress.");
         }
 
-        var agendaItems = Agenda?.Items.OrderBy(ai => ai.Order ).ToList();
+        var agendaItems = Agenda?.Items.OrderBy(ai => ai.Order).ToList();
         if (agendaItems == null || CurrentAgendaItemIndex >= agendaItems.Count - 1)
         {
             throw new InvalidOperationException("No more agenda items.");
@@ -192,13 +192,13 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
     public AgendaItem? GetCurrentAgendaItem()
     {
-        if(CurrentAgendaItemIndex is null) 
+        if (CurrentAgendaItemIndex is null)
         {
             return null;
         }
 
         return Agenda?.Items
-            .OrderBy(ai => ai.Order )
+            .OrderBy(ai => ai.Order)
             .ElementAtOrDefault(CurrentAgendaItemIndex.GetValueOrDefault());
     }
 
@@ -207,7 +207,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         return Agenda?.Items.FirstOrDefault(x => x.Id == id);
     }
 
-    public MeetingAttendee AddAttendee(string name, string? userId, string email, AttendeeRole role, bool? hasSpeakingRights, bool? hasVotingRights, 
+    public MeetingAttendee AddAttendee(string name, string? userId, string email, AttendeeRole role, bool? hasSpeakingRights, bool? hasVotingRights,
         MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
     {
         if (_attendees.Any(a => (a.UserId != null && a.UserId == userId) || a.Email.Equals(email, StringComparison.OrdinalIgnoreCase)))
@@ -219,8 +219,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         try
         {
-            var last = _attendees.OrderByDescending(x => x.Order ).First();
-            order = last.Order  + 1;
+            var last = _attendees.OrderByDescending(x => x.Order).First();
+            order = last.Order + 1;
         }
         catch { }
 
@@ -238,7 +238,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             MeetingGroupMemberId = meetingGroupMemberId,
             AddedAt = DateTimeOffset.UtcNow
         };
-        attendee.Order  = order;
+        attendee.Order = order;
 
         _attendees.Add(attendee);
 
@@ -257,7 +257,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
         return Attendees.FirstOrDefault(x => x.Id == id);
     }
 
-    public MeetingAttendee? GetAttendeeByUserId(string userId) 
+    public MeetingAttendee? GetAttendeeByUserId(string userId)
     {
         return Attendees.FirstOrDefault(x => x.UserId == userId);
     }
@@ -268,7 +268,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
         CurrentAgendaItemIndex = null;
 
-        foreach (var agendaItem in Agenda!.Items) 
+        foreach (var agendaItem in Agenda!.Items)
         {
             agendaItem.State = AgendaItemState.Pending;
         }
@@ -276,7 +276,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
     public bool IsAttendeeAllowedToSpeak(MeetingAttendee attendee)
     {
-        if(SpeakingRightsAccessLevel == AttendeeAccessLevel.Everyone) 
+        if (SpeakingRightsAccessLevel == AttendeeAccessLevel.Everyone)
         {
             return true;
         }
@@ -291,7 +291,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
             return attendee.HasSpeakingRights.GetValueOrDefault();
         }
 
-        if(SpeakingRightsAccessLevel == AttendeeAccessLevel.Select) 
+        if (SpeakingRightsAccessLevel == AttendeeAccessLevel.Select)
         {
             return attendee.HasSpeakingRights.GetValueOrDefault();
         }
@@ -301,14 +301,14 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
 
     public bool IsAttendeeAllowedToVote(MeetingAttendee attendee)
     {
-        if(VotingRightsAccessLevel == AttendeeAccessLevel.Everyone) 
+        if (VotingRightsAccessLevel == AttendeeAccessLevel.Everyone)
         {
             return true;
         }
 
         if (VotingRightsAccessLevel == AttendeeAccessLevel.Participants && attendee.Role != AttendeeRole.Observer)
         {
-            if(attendee.HasVotingRights is null) 
+            if (attendee.HasVotingRights is null)
             {
                 return true;
             }

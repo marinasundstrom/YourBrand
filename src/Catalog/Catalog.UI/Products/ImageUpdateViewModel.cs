@@ -16,7 +16,7 @@ public class ImageUpdateViewModel(IProductsClient productsClient, ISnackbar snac
         };
     }
 
-    public string OrganizationId { get; set;}
+    public string OrganizationId { get; set; }
 
     public string Image { get; set; }
 

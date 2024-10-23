@@ -1,5 +1,6 @@
-﻿using YourBrand.Tenancy;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence;
 

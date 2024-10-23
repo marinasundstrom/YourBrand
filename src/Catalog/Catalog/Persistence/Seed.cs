@@ -83,7 +83,8 @@ public static class Seed
 
         await context.SaveChangesAsync();
 
-        var biscotti = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new () {
+        var biscotti = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
+        {
             Name = "Biscotti",
             Handle = "biscotti",
             Price = 10

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 
 using MediatR;
+
 using YourBrand.Identity;
 using YourBrand.Ticketing.Domain.Enums;
 

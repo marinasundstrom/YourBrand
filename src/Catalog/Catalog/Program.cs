@@ -41,7 +41,7 @@ builder.Host.UseSerilog((ctx, cfg) =>
         {
             var (key, value) = header.Split('=') switch
             {
-                [string k, string v] => (k, v),
+            [string k, string v] => (k, v),
                 var v => throw new Exception($"Invalid header format {v}")
             };
 
@@ -263,5 +263,5 @@ app.Run();
 
 static async Task SeedData(CatalogContext context, IConfiguration configuration, ILogger<Program> logger)
 {
-    
+
 }

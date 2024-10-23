@@ -1,8 +1,11 @@
 using Duende.IdentityServer;
+
 using IdentityService.Data;
 using IdentityService.Models;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 using Serilog;
 
 namespace IdentityService;

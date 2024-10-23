@@ -76,7 +76,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasMany(x => x.ProductVariantOptions)
             .WithOne(x => x.ProductVariant)
             .HasForeignKey(x => new { x.OrganizationId, x.ProductVariantId })
-            .OnDelete(DeleteBehavior.Cascade); 
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(p => p.Category)

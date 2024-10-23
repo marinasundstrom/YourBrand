@@ -7,9 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
-
-using YourBrand.Ticketing.Infrastructure.Persistence.ValueConverters;
 using YourBrand.Ticketing.Domain.ValueObjects;
+using YourBrand.Ticketing.Infrastructure.Persistence.ValueConverters;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence;
 

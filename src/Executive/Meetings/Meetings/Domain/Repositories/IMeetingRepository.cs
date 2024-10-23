@@ -1,6 +1,6 @@
 ﻿using YourBrand.Meetings.Domain.Entities;
-using YourBrand.Tenancy;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Repositories;
 

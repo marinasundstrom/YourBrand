@@ -1,7 +1,7 @@
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
@@ -47,7 +47,7 @@ public enum AgendaItemState
     Canceled
 }
 
-public enum DiscussionActions 
+public enum DiscussionActions
 {
     None,
     Required,
@@ -70,8 +70,8 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
     {
         if (string.IsNullOrWhiteSpace(title))
             throw new ArgumentException("Title is required.", nameof(title));
-       
-       if (string.IsNullOrWhiteSpace(description))
+
+        if (string.IsNullOrWhiteSpace(description))
             throw new ArgumentException("Description is required.", nameof(description));
 
         Type = type;
@@ -88,7 +88,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
     public string Title { get; set; }
     public string Description { get; set; }
     public AgendaItemState State { get; set; } = AgendaItemState.Pending;
-    public int Order  { get; set; }
+    public int Order { get; set; }
 
     public bool IsMandatory { get; set; }
     public DiscussionActions DiscussionActions { get; set; } = DiscussionActions.Optional;
@@ -202,13 +202,13 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrga
             throw new InvalidOperationException("Cannot perform this action on an agenda item that is postponed or canceled.");
         }
 
-        if (IsVoteCompleted) 
+        if (IsVoteCompleted)
         {
             throw new InvalidOperationException("Already had voting.");
         }
 
-        VotingSession = new VotingSession((Type) switch 
-        {   
+        VotingSession = new VotingSession((Type) switch
+        {
             AgendaItemType.Motion => VotingType.Motion,
             AgendaItemType.Election => VotingType.Election,
             _ => VotingType.Motion //throw new InvalidOperationException("Invalid agenda item type")

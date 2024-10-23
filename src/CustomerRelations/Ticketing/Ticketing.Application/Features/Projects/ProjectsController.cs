@@ -85,7 +85,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<ProjectMembershipDto>> GetProjectMembership(string organizationId, int id, string membershipId, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetProjectMembershipQuery(organizationId, id, membershipId), cancellationToken);
-        
+
         return this.HandleResult(result);
     }
 
@@ -95,7 +95,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     public async Task<ActionResult<ProjectMembershipDto>> CreateProjectMembership(string organizationId, int id, CreateProjectMembershipDto createProjectMembershipDto, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new CreateProjectMembershipCommand(organizationId, id, createProjectMembershipDto.UserId, createProjectMembershipDto.From, createProjectMembershipDto.Thru), cancellationToken);
-            
+
         return this.HandleResult(result);
     }
 

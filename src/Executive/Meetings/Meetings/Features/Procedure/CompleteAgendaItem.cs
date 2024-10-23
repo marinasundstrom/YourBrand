@@ -16,7 +16,7 @@ public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IReques
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
                 .Include(x => x.Agenda)
-                .ThenInclude(x => x.Items.OrderBy(x => x.Order ))
+                .ThenInclude(x => x.Items.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (meeting is null)
@@ -37,7 +37,7 @@ public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IReques
             {
                 return Errors.Meetings.NoActiveAgendaItem;
             }
-            
+
             if (attendee.Role != AttendeeRole.Chairperson)
             {
                 return Errors.Meetings.OnlyChairpersonCanCompleteAgendaItem;

@@ -33,11 +33,11 @@ public record EditMember(string OrganizationId, int Id, string MemberId, string 
 
             var member = meetingGroup.GetMemberById(request.MemberId);
 
-            if(member is  null) 
+            if (member is null)
             {
                 return Errors.MeetingGroups.MeetingGroupMemberNotFound;
             }
-        
+
             member.Name = request.Name;
             member.UserId = request.UserId;
             member.Email = request.Email;

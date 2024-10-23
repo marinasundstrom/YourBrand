@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 
 using MediatR;
-using YourBrand.Identity;
 
 using Microsoft.Extensions.Logging;
+
+using YourBrand.Identity;
 using YourBrand.Meetings.Features;
 
 namespace YourBrand.Meetings.Features.Users;

@@ -1,7 +1,7 @@
-using YourBrand.Meetings.Domain.ValueObjects;
 using YourBrand.Domain;
-using YourBrand.Tenancy;
 using YourBrand.Identity;
+using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 

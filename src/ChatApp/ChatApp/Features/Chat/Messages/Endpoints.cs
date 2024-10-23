@@ -4,10 +4,10 @@ using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.Domain;
 using YourBrand.ChatApp.Common;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
+using YourBrand.Domain;
 using YourBrand.Extensions;
 
 namespace YourBrand.ChatApp.Features.Chat.Messages;

@@ -36,7 +36,7 @@ public class ProductFactory(CatalogContext catalogContext, ITenantContext tenant
 
         product.SetPrice(options.Price);
 
-        if(options.DiscountPrice is not null) 
+        if (options.DiscountPrice is not null)
         {
             product.SetDiscountPrice(options.DiscountPrice.GetValueOrDefault());
         }

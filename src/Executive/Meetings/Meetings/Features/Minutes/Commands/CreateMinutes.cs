@@ -40,7 +40,7 @@ public record CreateMinutes(string OrganizationId, int MeetingId, IEnumerable<Cr
             minute.OrganizationId = request.OrganizationId;
             minute.MeetingId = request.MeetingId;
 
-            foreach (var minuteItem in request.Items) 
+            foreach (var minuteItem in request.Items)
             {
                 minute.AddItem(minuteItem.Type, minuteItem.AgendaId, minuteItem.AgendaItemId, minuteItem.Title, minuteItem.Description);
             }

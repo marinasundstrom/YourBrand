@@ -1,7 +1,7 @@
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
@@ -36,7 +36,7 @@ public class MinutesItem : Entity<MinutesItemId>, IAuditable, IHasTenant, IHasOr
     public string Heading { get; set; }
     public string Details { get; set; }
     public MinutesItemState State { get; set; } = MinutesItemState.Created;
-    public int Order  { get; set; }
+    public int Order { get; set; }
 
     // For motions
     public MotionId? MotionId { get; set; }

@@ -37,7 +37,7 @@ public sealed class MeetingGroupsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
     [ProducesDefaultResponseType]
     public async Task<PagedResult<MeetingGroupDto>> GetMeetingGroups(string organizationId, int page = 1, int pageSize = 10, string? searchTerm = null, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
-        => await mediator.Send(new GetMeetingGroups(organizationId,page, pageSize, searchTerm, sortBy, sortDirection), cancellationToken);
+        => await mediator.Send(new GetMeetingGroups(organizationId, page, pageSize, searchTerm, sortBy, sortDirection), cancellationToken);
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingGroupDto))]

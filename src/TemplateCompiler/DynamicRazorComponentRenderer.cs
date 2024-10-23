@@ -32,7 +32,7 @@ public class DynamicRazorComponentRenderer
         _cache = cache;
         _renderer = renderer;
         _logger = logger;
-        
+
         AssemblyReferences.AddRange(new[]
         {
             typeof(object).Assembly,

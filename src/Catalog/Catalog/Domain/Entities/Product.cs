@@ -45,7 +45,7 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
     }
 
     public void SetId(int id) => Id = id;
-  
+
     public TenantId TenantId { get; set; }
 
     public OrganizationId OrganizationId { get; set; }
@@ -153,7 +153,7 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
     public bool AddVariant(Product variant)
     {
         var x = _variants.Add(variant);
-        if(x) 
+        if (x)
         {
             variant.OrganizationId = OrganizationId;
             variant.Store = this.Store;

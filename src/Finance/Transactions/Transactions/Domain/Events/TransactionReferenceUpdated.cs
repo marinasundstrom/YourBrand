@@ -13,7 +13,7 @@ public record TransactionReferenceUpdated : DomainEvent
     }
 
     public OrganizationId OrganizationId { get; }
-    
+
     public string TransactionId { get; }
 
     public string Reference { get; }

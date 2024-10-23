@@ -1,6 +1,6 @@
-﻿using YourBrand.Identity;
+﻿using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.Domain;
 using YourBrand.Ticketing.Domain.Enums;
 using YourBrand.Ticketing.Domain.Events;
 using YourBrand.Ticketing.Domain.ValueObjects;
@@ -78,7 +78,7 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
             Status = status;
 
             AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
-            AddDomainEvent(new TicketStatusUpdated(TenantId, OrganizationId, Id, 
+            AddDomainEvent(new TicketStatusUpdated(TenantId, OrganizationId, Id,
                 new Domain.Events.TicketStatus2(Status.Id, Status.Name),
                 new Domain.Events.TicketStatus2(oldStatus.Id, oldStatus.Name)));
 
@@ -228,7 +228,7 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
     public HashSet<TicketParticipant> Participants { get; } = new HashSet<TicketParticipant>();
 
     public HashSet<TicketTag> Tags { get; } = new HashSet<TicketTag>();
-    
+
     public HashSet<Attachment> Attachments { get; } = new HashSet<Attachment>();
 
     public HashSet<TicketComment> Comments { get; } = new HashSet<TicketComment>();

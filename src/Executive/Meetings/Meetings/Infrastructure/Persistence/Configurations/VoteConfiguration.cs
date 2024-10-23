@@ -17,7 +17,7 @@ public sealed class VoteConfiguration : IEntityTypeConfiguration<Vote>
         builder.HasOne(x => x.SelectedCandidate)
             .WithOne()
             .HasForeignKey<Vote>(x => new { x.OrganizationId, x.SelectedCandidateId });
-            
+
         builder.Navigation(x => x.SelectedCandidate).AutoInclude();
 
         builder.HasOne(x => x.CreatedBy)

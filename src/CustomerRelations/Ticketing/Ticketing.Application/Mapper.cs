@@ -1,10 +1,10 @@
-﻿using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
-using YourBrand.Ticketing.Application.Features.Users;
-using YourBrand.Ticketing.Application.Features.Organizations;
-using YourBrand.Ticketing.Domain.Enums;
+﻿using YourBrand.Ticketing.Application.Features.Organizations;
 using YourBrand.Ticketing.Application.Features.Projects;
 using YourBrand.Ticketing.Application.Features.Projects.ProjectGroups;
 using YourBrand.Ticketing.Application.Features.Teams;
+using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
+using YourBrand.Ticketing.Application.Features.Users;
+using YourBrand.Ticketing.Domain.Enums;
 
 namespace YourBrand.Ticketing.Application;
 

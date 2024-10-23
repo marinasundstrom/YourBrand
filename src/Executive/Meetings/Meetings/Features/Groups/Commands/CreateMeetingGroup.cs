@@ -42,7 +42,7 @@ public record CreateMeetingGroup(string OrganizationId, string Title, string Des
             meetingGroup.OrganizationId = request.OrganizationId;
             meetingGroup.Quorum.RequiredNumber = request.Quorum.RequiredNumber;
 
-            foreach (var member in request.Members) 
+            foreach (var member in request.Members)
             {
                 meetingGroup.AddMember(member.Name, member.Email, member.Role, member.UserId, member.HasSpeakingRights, member.HasVotingRights);
             }

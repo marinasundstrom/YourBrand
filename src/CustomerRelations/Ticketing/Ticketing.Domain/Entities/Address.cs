@@ -1,6 +1,6 @@
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.Domain;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 

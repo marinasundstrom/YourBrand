@@ -1,6 +1,7 @@
-﻿using YourBrand.Tenancy;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Infrastructure.Persistence;
 
@@ -77,7 +78,7 @@ public static class Seed
             {
                 TenantId = TenantConstants.TenantId,
                 OrganizationId = TenantConstants.OrganizationId,
-                Quorum = new Quorum 
+                Quorum = new Quorum
                 {
                     RequiredNumber = 3
                 }
@@ -137,7 +138,7 @@ public static class Seed
 
             await context.SaveChangesAsync();
         }
-        
+
         if (!await context.Agendas.AnyAsync())
         {
             var agenda = new Agenda(1)

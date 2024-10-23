@@ -15,7 +15,7 @@ public record InvoiceStatusUpdated : DomainEvent
     }
 
     public OrganizationId OrganizationId { get; }
-    
+
     public string InvoiceId { get; }
 
     public int Status { get; }

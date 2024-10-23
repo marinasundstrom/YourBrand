@@ -2,10 +2,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Meetings.Domain;
 using YourBrand.Meetings.Features;
 using YourBrand.Meetings.Models;
-using YourBrand.Meetings.Domain;
- 
+
 namespace YourBrand.Meetings.Features.Motions.Queries;
 
 public record GetMotionById(string OrganizationId, int Id) : IRequest<Result<MotionDto>>
@@ -17,10 +17,10 @@ public record GetMotionById(string OrganizationId, int Id) : IRequest<Result<Mot
             var motion = await context.Motions
                 .InOrganization(request.OrganizationId)
                 .AsNoTracking()
-                .Include(x => x.OperativeClauses.OrderBy(x => x.Order ))
+                .Include(x => x.OperativeClauses.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            if(motion is null) 
+            if (motion is null)
             {
                 return Errors.Motions.MotionNotFound;
             }

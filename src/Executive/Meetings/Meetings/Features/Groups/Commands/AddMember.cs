@@ -36,7 +36,7 @@ public record AddMember(string OrganizationId, int Id, string Name, string? User
             context.MeetingGroups.Update(meetingGroup);
 
             await context.SaveChangesAsync(cancellationToken);
-            
+
             return member.ToDto();
         }
     }

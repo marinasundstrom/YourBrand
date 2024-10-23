@@ -40,7 +40,7 @@ public record CreateMotion(string OrganizationId, string Title, string Text, IEn
             motion.OrganizationId = request.OrganizationId;
             motion.Text = request.Text;
 
-            foreach (var operativeClause in request.Items) 
+            foreach (var operativeClause in request.Items)
             {
                 motion.AddOperativeClause(operativeClause.Action, operativeClause.Text);
             }

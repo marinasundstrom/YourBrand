@@ -1,7 +1,7 @@
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
@@ -39,7 +39,7 @@ public class MotionOperativeClause : Entity<MotionOperativeClauseId>, IAuditable
     public OperativeAction Action { get; set; }
 
     public string? Text { get; set; }
-    public int Order  { get; set; }
+    public int Order { get; set; }
 
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;

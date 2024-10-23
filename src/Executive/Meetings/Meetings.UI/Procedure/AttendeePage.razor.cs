@@ -23,7 +23,7 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
 
     [Parameter]
     public int MeetingId { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;

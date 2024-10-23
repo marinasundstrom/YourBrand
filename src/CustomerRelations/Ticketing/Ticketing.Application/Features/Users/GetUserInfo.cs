@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 
 using MediatR;
-using YourBrand.Identity;
 
 using Microsoft.Extensions.Logging;
+
+using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Application.Features.Users;
 

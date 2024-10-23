@@ -17,7 +17,7 @@ public sealed class ChatHub : Hub<IChatHubClient>, IChatHub
     private readonly IMediator mediator;
     private readonly ISettableUserContext userContext;
     private readonly ISettableTenantContext tenantContext;
-    private readonly static Dictionary<string, ConnectionState> state = new Dictionary<string, ConnectionState>(); 
+    private readonly static Dictionary<string, ConnectionState> state = new Dictionary<string, ConnectionState>();
 
     public ChatHub(IMediator mediator, ISettableUserContext userContext, ISettableTenantContext tenantContext)
     {
@@ -33,7 +33,7 @@ public sealed class ChatHub : Hub<IChatHubClient>, IChatHub
         {
             var tenantId = httpContext?.User?.FindFirst("tenant_id")?.Value;
 
-            if(httpContext.Request.Query.TryGetValue("organizationId", out var organizationId)) 
+            if (httpContext.Request.Query.TryGetValue("organizationId", out var organizationId))
             {
 
             }

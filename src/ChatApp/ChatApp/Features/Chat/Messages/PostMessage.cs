@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.Extensions.Caching.Distributed;
 
-using YourBrand.Domain;
 using YourBrand.ChatApp.Domain;
-using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Domain.Specifications;
+using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Infrastructure.Persistence;
+using YourBrand.Domain;
 
 using static YourBrand.ChatApp.Domain.Errors.Channels;
 
@@ -42,7 +42,7 @@ public sealed record PostMessage(OrganizationId OrganizationId, ChannelId Channe
                 .FirstOrDefaultAsync(x => x.Id == request.ChannelId, cancellationToken);
 
             if (channel is null)
-            { 
+            {
                 return ChannelNotFound;
             }
 

@@ -4,5 +4,5 @@ public interface IHasStore
 {
     public Store Store { get; set; }
 
-    public string StoreId { get; set;}
+    public string StoreId { get; set; }
 }

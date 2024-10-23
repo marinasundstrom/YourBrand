@@ -12,9 +12,9 @@ public class AddEditOperativeClauseViewModel
     [Required]
     public string Text { get; set; }
 
-    public AddEditOperativeClauseViewModel Clone() 
+    public AddEditOperativeClauseViewModel Clone()
     {
-        return new AddEditOperativeClauseViewModel 
+        return new AddEditOperativeClauseViewModel
         {
             Order = Order,
             Action = Action,

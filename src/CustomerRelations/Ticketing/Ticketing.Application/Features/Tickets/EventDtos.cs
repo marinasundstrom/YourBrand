@@ -1,7 +1,7 @@
-using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
-
 using System.Text.Json.Serialization;
+
 using YourBrand.Ticketing.Application.Features.Projects;
+using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 
 namespace YourBrand.Ticketing.Application;
 
@@ -18,7 +18,7 @@ namespace YourBrand.Ticketing.Application;
 [JsonDerivedType(typeof(TicketUrgencyUpdatedDto), "UrgencyUpdated")]
 [JsonDerivedType(typeof(TicketImpactUpdatedDto), "ImpactUpdated")]
 [JsonDerivedType(typeof(TicketCommentAddedDto), "CommentAdded")]
-public abstract record TicketEventDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, TicketParticipantDto Participant) 
+public abstract record TicketEventDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, TicketParticipantDto Participant)
 {
     public string Event => GetType().Name.Replace("Ticket", string.Empty).Replace("Dto", string.Empty);
 }

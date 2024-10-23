@@ -17,7 +17,7 @@ public sealed record StartAgendaItemDiscussion(string OrganizationId, int Id) : 
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
                 .Include(x => x.Agenda)
-                .ThenInclude(x => x.Items.OrderBy(x => x.Order ))
+                .ThenInclude(x => x.Items.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (meeting is null)
@@ -38,7 +38,7 @@ public sealed record StartAgendaItemDiscussion(string OrganizationId, int Id) : 
             {
                 return Errors.Meetings.NoActiveAgendaItem;
             }
-            
+
             if (attendee.Role != AttendeeRole.Chairperson)
             {
                 return Errors.Meetings.OnlyChairpersonCanStartDiscussion;
@@ -58,4 +58,3 @@ public sealed record StartAgendaItemDiscussion(string OrganizationId, int Id) : 
         }
     }
 }
-

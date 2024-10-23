@@ -25,7 +25,7 @@ public class TicketTag : AggregateRoot<string>, IAuditable
 
     public Organization Organization { get; set; }
 
-    public TicketId TicketId  { get; set; }
+    public TicketId TicketId { get; set; }
 
     public Ticket Ticket { get; set; }
 

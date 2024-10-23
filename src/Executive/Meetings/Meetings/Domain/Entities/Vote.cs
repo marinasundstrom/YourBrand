@@ -1,7 +1,7 @@
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
@@ -41,4 +41,3 @@ public sealed class Vote : Entity<VoteId>, IAuditable, IHasTenant, IHasOrganizat
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 }
-

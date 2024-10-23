@@ -1,7 +1,7 @@
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
@@ -21,7 +21,7 @@ public class MinutesAttendee : Entity<MinutesAttendeeId>, IAuditable, IHasTenant
     public string? Name { get; set; }
     public UserId? UserId { get; set; }
 
-    public int Order  { get; set; }
+    public int Order { get; set; }
 
     public MeetingGroupId? MeetingGroupId { get; set; }
     public MeetingGroupMemberId? MeetingGroupMemberId { get; set; }

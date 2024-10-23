@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
+
 using YourBrand.Ticketing.Domain.ValueObjects;
+
 using OrganizationId = YourBrand.Domain.OrganizationId;
 
 

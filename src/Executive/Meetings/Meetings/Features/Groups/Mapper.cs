@@ -1,5 +1,5 @@
-﻿using YourBrand.Meetings.Features.Users;
-using YourBrand.Meetings.Features.Organizations;
+﻿using YourBrand.Meetings.Features.Organizations;
+using YourBrand.Meetings.Features.Users;
 
 namespace YourBrand.Meetings.Features.Groups;
 

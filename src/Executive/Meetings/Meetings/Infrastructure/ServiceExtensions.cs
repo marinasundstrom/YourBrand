@@ -23,7 +23,7 @@ public static class ServiceExtensions
         services.AddScoped<IEmailService, EmailService>();
 
         DecorateDomainEventHandlers(services);
-        
+
         services.AddQuartz(configure =>
         {
             var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));

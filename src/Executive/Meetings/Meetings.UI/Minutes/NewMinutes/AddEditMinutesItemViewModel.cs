@@ -19,9 +19,9 @@ public class AddEditMinutesItemViewModel
 
     public string AgendaItemId { get; set; }
 
-    public AddEditMinutesItemViewModel Clone() 
+    public AddEditMinutesItemViewModel Clone()
     {
-        return new AddEditMinutesItemViewModel 
+        return new AddEditMinutesItemViewModel
         {
             Order = Order,
             Type = Type,

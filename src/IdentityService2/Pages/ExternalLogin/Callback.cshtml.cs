@@ -1,9 +1,13 @@
 using System.Security.Claims;
+
 using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Services;
+
 using IdentityModel;
+
 using IdentityService.Models;
+
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -35,7 +39,7 @@ public class Callback : PageModel
         _logger = logger;
         _events = events;
     }
-        
+
     public async Task<IActionResult> OnGet()
     {
         // read external identity from the temporary cookie
@@ -110,7 +114,7 @@ public class Callback : PageModel
     private async Task<ApplicationUser> AutoProvisionUserAsync(string provider, string providerUserId, IEnumerable<Claim> claims)
     {
         var sub = Guid.NewGuid().ToString();
-            
+
         var user = new ApplicationUser
         {
             Id = sub,
@@ -124,7 +128,7 @@ public class Callback : PageModel
         {
             user.Email = email;
         }
-            
+
         // create a list of claims that we want to transfer into our store
         var filtered = new List<Claim>();
 

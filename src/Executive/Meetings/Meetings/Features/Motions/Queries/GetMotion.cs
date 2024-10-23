@@ -2,10 +2,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Meetings.Domain;
 using YourBrand.Meetings.Features;
 using YourBrand.Meetings.Models;
-using YourBrand.Meetings.Domain;
- 
+
 namespace YourBrand.Meetings.Features.Motions.Queries;
 
 public record GetMotion(string OrganizationId, int? MeetingId = null, int Page = 1, int PageSize = 10, string? SearchTerm = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<MotionDto>>

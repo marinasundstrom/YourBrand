@@ -15,12 +15,12 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
     HubConnection hubConnection = null!;
     IDiscussionsHub hubProxy = default!;
 
-    SpeakerRequest? currentSpeaker;
+    readonly SpeakerRequest? currentSpeaker;
     Queue<SpeakerRequest> speakerQueue = new Queue<SpeakerRequest>();
 
     [Parameter]
     public int MeetingId { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
@@ -29,8 +29,8 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
 
         var currentUserId = await UserContext.GetUserId()!;
 
-       //await LoadAgenda();
-        
+        //await LoadAgenda();
+
         if (hubConnection is not null && hubConnection.State != HubConnectionState.Disconnected)
         {
             await hubConnection.DisposeAsync();
@@ -111,7 +111,7 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
     public async Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId)
     {
         speakerQueue.Enqueue(new SpeakerRequest() { Id = id, AttendeeId = attendeeId, });
-        
+
         Console.WriteLine("Added");
 
         StateHasChanged();

@@ -1,16 +1,17 @@
-using MediatR;
 using Asp.Versioning;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using YourBrand.Ticketing.Models;
 using YourBrand.Ticketing.Application.Features.Tickets.Commands;
 using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 using YourBrand.Ticketing.Application.Features.Tickets.Queries;
 using YourBrand.Ticketing.Application.Tickets.Commands;
 using YourBrand.Ticketing.Domain.Enums;
+using YourBrand.Ticketing.Models;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets;
 

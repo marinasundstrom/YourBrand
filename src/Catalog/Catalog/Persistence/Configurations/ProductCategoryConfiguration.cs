@@ -18,7 +18,7 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
          .HasForeignKey(o => new { o.OrganizationId, o.StoreId });
 
         builder.HasOne(o => o.Parent).WithMany(x => x.SubCategories)
-      .     HasForeignKey(o => new { o.OrganizationId, o.ParentId });
+      .HasForeignKey(o => new { o.OrganizationId, o.ParentId });
 
         builder.HasIndex(x => x.TenantId);
 

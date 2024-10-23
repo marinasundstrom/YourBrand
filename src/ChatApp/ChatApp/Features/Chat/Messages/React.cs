@@ -4,10 +4,10 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using YourBrand.Domain;
 using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.ChatApp.Infrastructure.Persistence;
+using YourBrand.Domain;
 
 using static YourBrand.ChatApp.Domain.Errors.Messages;
 
@@ -33,7 +33,7 @@ public sealed record React(OrganizationId OrganizationId, ChannelId ChannelId, M
                 .Messages
                 .InOrganization(request.OrganizationId)
                 .InChannel(request.ChannelId)
-                .FirstOrDefaultAsync(x => x.Id == request.MessageId,cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.MessageId, cancellationToken);
 
             if (message is null)
             {

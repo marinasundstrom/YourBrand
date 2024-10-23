@@ -33,7 +33,7 @@ public record EditOperativeClause(string OrganizationId, int Id, string ItemId, 
 
             var operativeClause = motion.OperativeClauses.FirstOrDefault(x => x.Id == request.ItemId);
 
-            if(operativeClause is  null) 
+            if (operativeClause is null)
             {
                 return Errors.Motions.OperativeClauseNotFound;
             }

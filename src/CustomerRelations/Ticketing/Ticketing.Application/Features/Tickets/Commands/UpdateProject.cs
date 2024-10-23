@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Application.Tickets.Commands;

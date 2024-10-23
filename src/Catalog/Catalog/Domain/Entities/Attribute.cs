@@ -7,7 +7,7 @@ namespace YourBrand.Catalog.Domain.Entities;
 
 public class Attribute : Entity<string>, IHasTenant, IHasOrganization
 {
-    HashSet<AttributeValue> _values = new HashSet<AttributeValue>();
+    readonly HashSet<AttributeValue> _values = new HashSet<AttributeValue>();
 
     protected Attribute() { }
 
@@ -39,7 +39,7 @@ public class Attribute : Entity<string>, IHasTenant, IHasOrganization
 
     public IReadOnlyCollection<AttributeValue> Values => _values;
 
-    public void AddValue(AttributeValue attributeValue) 
+    public void AddValue(AttributeValue attributeValue)
     {
         _values.Add(attributeValue);
         attributeValue.OrganizationId = OrganizationId;

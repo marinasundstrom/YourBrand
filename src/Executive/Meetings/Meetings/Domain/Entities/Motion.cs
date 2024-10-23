@@ -1,7 +1,7 @@
-using YourBrand.Identity;
-using YourBrand.Tenancy;
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
@@ -42,13 +42,13 @@ public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrgan
 
         try
         {
-            var last = _operativeClauses.OrderByDescending(x => x.Order ).First();
-            order = last.Order  + 1;
+            var last = _operativeClauses.OrderByDescending(x => x.Order).First();
+            order = last.Order + 1;
         }
         catch { }
 
         var clause = new MotionOperativeClause(action, text);
-        clause.Order  = order;
+        clause.Order = order;
         _operativeClauses.Add(clause);
         return clause;
     }

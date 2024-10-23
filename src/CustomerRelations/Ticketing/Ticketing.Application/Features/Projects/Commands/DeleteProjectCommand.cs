@@ -23,7 +23,7 @@ public record DeleteProjectCommand(string OrganizationId, int ProjectId) : IRequ
 
             context.Projects.Remove(project);
 
-            await context.SaveChangesAsync(cancellationToken);       
+            await context.SaveChangesAsync(cancellationToken);
 
             return Result.Success;
         }

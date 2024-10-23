@@ -1,7 +1,7 @@
-using YourBrand.Tenancy;
 using YourBrand.Domain;
-using YourBrand.Ticketing.Domain.ValueObjects;
 using YourBrand.Identity;
+using YourBrand.Tenancy;
+using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
@@ -12,7 +12,7 @@ public class TicketStatus : Entity<int>, IHasTenant, IHasOrganization, IAuditabl
 
     }
 
-    public TicketStatus(int id, string name, string? handle, string? description) 
+    public TicketStatus(int id, string name, string? handle, string? description)
     {
         Id = id;
         Name = name;

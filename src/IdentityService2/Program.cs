@@ -1,7 +1,9 @@
 ﻿using IdentityService;
-using Serilog;
+
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+
+using Serilog;
 
 #if DEBUG
 IdentityModelEventSource.ShowPII = true;
