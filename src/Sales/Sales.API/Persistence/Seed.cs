@@ -36,39 +36,19 @@ public static class Seed
         {
             OrganizationId = TenantConstants.OrganizationId
         });
-        context.SubscriptionStatuses.Add(new SubscriptionStatus(4, "Renewal pending", "renewal-pending", string.Empty)
+        context.SubscriptionStatuses.Add(new SubscriptionStatus(4, "Paused", "paused", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId
         });
-        context.SubscriptionStatuses.Add(new SubscriptionStatus(5, "Renewed", "renewed", string.Empty)
+        context.SubscriptionStatuses.Add(new SubscriptionStatus(5, "Canceled", "canceled", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId
         });
-        context.SubscriptionStatuses.Add(new SubscriptionStatus(6, "Paused", "paused", string.Empty)
+        context.SubscriptionStatuses.Add(new SubscriptionStatus(6, "Expired", "expired", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId
         });
-        context.SubscriptionStatuses.Add(new SubscriptionStatus(7, "Cancellation requested", "cancellation-requested", string.Empty)
-        {
-            OrganizationId = TenantConstants.OrganizationId
-        });
-        context.SubscriptionStatuses.Add(new SubscriptionStatus(8, "Canceled", "canceled", string.Empty)
-        {
-            OrganizationId = TenantConstants.OrganizationId
-        });
-        context.SubscriptionStatuses.Add(new SubscriptionStatus(9, "Expired", "expired", string.Empty)
-        {
-            OrganizationId = TenantConstants.OrganizationId
-        });
-        context.SubscriptionStatuses.Add(new SubscriptionStatus(10, "Suspended", "suspended", string.Empty)
-        {
-            OrganizationId = TenantConstants.OrganizationId
-        });
-        context.SubscriptionStatuses.Add(new SubscriptionStatus(11, "Payment pending", "payment-pending", string.Empty)
-        {
-            OrganizationId = TenantConstants.OrganizationId
-        });
-        context.SubscriptionStatuses.Add(new SubscriptionStatus(12, "Payment failed", "payment-failed", string.Empty)
+        context.SubscriptionStatuses.Add(new SubscriptionStatus(7, "Suspended", "suspended", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId
         });
@@ -169,7 +149,7 @@ public static class Seed
         context.SubscriptionPlans.Add(subscriptionPlan);
 
         var subscriptionPlan2 = SubscriptionPlanFactory
-            .CreateMonthlyPlan(1, 1, DayOfWeek.Tuesday, TimeOnly.Parse("07:30"), null) // , TimeSpan.Parse("00:45"))
+            .CreateMonthlyPlan(1, 1, DayOfWeek.Monday | DayOfWeek.Friday, TimeOnly.Parse("07:30"), null) // , TimeSpan.Parse("00:45"))
             .WithName("Monthly subscription 2");
 
         context.SubscriptionPlans.Add(subscriptionPlan2);

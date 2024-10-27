@@ -12,7 +12,7 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
 
     private Order() : base(Guid.NewGuid().ToString())
     {
-        StatusId = 1;
+        StatusId = (int)OrderStatusEnum.Draft;
         TypeId = 1;
     }
 
@@ -228,6 +228,11 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
         }
     }
 
+    public void Complete()
+    {
+        UpdateStatus((int)OrderStatusEnum.Completed);
+    }
+
     public User? CreatedBy { get; set; }
 
     public UserId? CreatedById { get; set; }
@@ -269,4 +274,24 @@ public sealed class OrderVatAmount
     public decimal Vat { get; set; }
 
     public decimal Total { get; set; }
+}
+
+public enum OrderStatusEnum 
+{
+    Draft = 1,
+    Planned,
+    PendingConfirmation,
+    Confirmed,
+    PaymentProcessing,
+    PaymentFailed,
+    Processing,
+    Shipped,
+    InTransit,
+    OutForDelivery,
+    Delivered,
+    Completed,
+    Canceled,
+    OnHold,
+    Returned,
+    Refunded
 }

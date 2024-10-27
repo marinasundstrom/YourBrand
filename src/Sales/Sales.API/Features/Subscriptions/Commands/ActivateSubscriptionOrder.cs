@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 using YourBrand.Sales.Persistence;
@@ -47,7 +48,7 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
                     order2.OrganizationId = request.OrganizationId;
                     order2.TypeId = 3;
 
-                    order2.UpdateStatus(2);
+                    order2.UpdateStatus((int)OrderStatusEnum.Planned);
                 }
                 catch (InvalidOperationException e)
                 {
@@ -57,10 +58,10 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
                 salesContext.Orders.Add(order2);
             }
 
-            order.UpdateStatus(12);
+            order.Complete();
 
             //order.Subscription.Order = order;
-            subscription.UpdateStatus(2);
+            subscription.Activate();
 
             await salesContext.SaveChangesAsync();
         }
