@@ -20,7 +20,7 @@ paths:
         schema:
           type: string
         x-position: 1
-      - name: status
+      - name: types
         in: query
         style: form
         explode: true
@@ -31,51 +31,62 @@ paths:
             type: integer
             format: int32
         x-position: 2
+      - name: status
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          nullable: true
+          items:
+            type: integer
+            format: int32
+        x-position: 3
       - name: customerId
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 3
+        x-position: 4
       - name: ssn
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 4
+        x-position: 5
       - name: assigneeId
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 5
+        x-position: 6
       - name: subscriptionId
         in: query
         schema:
           type: string
           format: guid
           nullable: true
-        x-position: 6
+        x-position: 7
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 1
-        x-position: 7
+        x-position: 8
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 8
+        x-position: 9
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 9
+        x-position: 10
       - name: sortDirection
         in: query
         schema:
@@ -83,7 +94,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 10
+        x-position: 11
       responses:
         200:
           description: ''
@@ -1011,6 +1022,63 @@ paths:
       - Subscriptions
       - Subscriptions
       operationId: Subscriptions_GetSubscriptions
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: types
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          nullable: true
+          items:
+            type: integer
+            format: int32
+        x-position: 2
+      - name: status
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          nullable: true
+          items:
+            type: integer
+            format: int32
+        x-position: 3
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 4
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
       responses:
         200:
           description: ''
@@ -1706,8 +1774,7 @@ components:
           type: string
           format: date-time
         type:
-          oneOf:
-          - $ref: '#/components/schemas/OrderType'
+          $ref: '#/components/schemas/OrderType'
         parent:
           nullable: true
           oneOf:
@@ -1802,6 +1869,20 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/User'
+    OrderType:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
     ParentOrder:
       type: object
       additionalProperties: false
@@ -1920,6 +2001,20 @@ components:
         duration:
           type: string
           format: duration
+          nullable: true
+    SubscriptionType:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
           nullable: true
     SubscriptionPlanShort:
       type: object
@@ -2446,20 +2541,6 @@ components:
         total:
           type: integer
           format: int32
-    OrderType:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
-        handle:
-          type: string
-        description:
-          type: string
-          nullable: true
     CreateOrderType:
       type: object
       additionalProperties: false
@@ -2588,20 +2669,6 @@ components:
         total:
           type: integer
           format: int32
-    SubscriptionType:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
-        handle:
-          type: string
-        description:
-          type: string
-          nullable: true
     CreateSubscriptionType:
       type: object
       additionalProperties: false

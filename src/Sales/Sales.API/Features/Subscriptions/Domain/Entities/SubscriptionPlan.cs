@@ -5,7 +5,7 @@ using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDeletable, ISubscriptionParameters, IHasTenant
+public class SubscriptionPlan : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISubscriptionParameters, IHasTenant
 {
     public SubscriptionPlan() : base(Guid.NewGuid())
     {
@@ -41,6 +41,13 @@ public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDeletable, ISubscripti
     public Month? InMonth { get; set; }
     public TimeOnly? StartTime { get; set; }
     public TimeSpan? Duration { get; set; }
+
+    public User? CreatedBy { get; set; }
+    public UserId? CreatedById { get; set; }
+    public DateTimeOffset Created { get; set; }
+    public User? LastModifiedBy { get; set; }
+    public UserId? LastModifiedById { get; set; }
+    public DateTimeOffset? LastModified { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }

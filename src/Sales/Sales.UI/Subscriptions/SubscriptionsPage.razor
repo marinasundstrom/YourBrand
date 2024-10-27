@@ -1,8 +1,12 @@
 ﻿@using System.Globalization
 @using YourBrand.Sales
+@using YourBrand.Portal.Services
 @inject ISubscriptionsClient SubscriptionsClient
+@inject ISubscriptionTypesClient SubscriptionTypesClient
+@inject ISubscriptionStatusesClient SubscriptionStatusesClient
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
 
 @page "/subscriptions"
 
@@ -17,14 +21,23 @@
 <MudTable T="Subscription" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
     <ToolBarContent>
-        @* <MudSelect T="SubscriptionType?" Label="Type" MultiSelection="true" @bind-Value="Type"
-        SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
-        @foreach (var type in Enum.GetValues<SubscriptionType>())
-        {
-        <MudSelectItem T="SubscriptionType?" Value="@type">@Enum.GetName(typeof(SubscriptionType), type)</MudSelectItem>
-        }
-        </MudSelect> *@
+        <MudSelect T="SubscriptionType?" Label="Type" MultiSelection="true" @bind-Value="Type"
+        SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" 
+        ToStringFunc="(o) => o.Name" Class="mt-0">
+            @foreach (var type in orderTypes)
+            {
+                <MudSelectItem T="SubscriptionType?" Value="@type">@type.Name</MudSelectItem>
+            }
+        </MudSelect>
         <MudSpacer />
+        <MudSelect T="SubscriptionStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
+            SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedStatusesChanged"
+            ToStringFunc="(o) => o.Name" Class="mt-0">
+            @foreach (var status in orderStatuses)
+            {
+                <MudSelectItem T="SubscriptionStatus?" Value="@status">@status.Name</MudSelectItem>
+            }
+        </MudSelect>
     </ToolBarContent>
 
     <HeaderContent>
@@ -32,7 +45,13 @@
             <MudTableSortLabel T="Subscription" SortLabel="SubscriptionNo">No</MudTableSortLabel>
         </MudTh>
         <MudTh>
+            <MudTableSortLabel T="Subscription" SortLabel="Type">Type</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
             <MudTableSortLabel T="Subscription" SortLabel="Plan">Plan</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Subscription" SortLabel="Status">Status</MudTableSortLabel>
         </MudTh>
         <MudTh>
             <MudTableSortLabel T="Subscription" SortLabel="StartDate">Start Date</MudTableSortLabel>
@@ -44,7 +63,9 @@
     </HeaderContent>
     <RowTemplate Context="subscription">
         <MudTd DataLabel="SubscriptionNo">@subscription.SubscriptionNo</MudTd>
+        <MudTd DataLabel="Type">@subscription.Type.Name</MudTd>
         <MudTd DataLabel="Plan">@subscription.Plan.Name</MudTd>
+        <MudTd DataLabel="Status">@subscription.Status.Name</MudTd>
         <MudTd DataLabel="Start Date">@subscription.StartDate.ToString("o", CultureInfo.InvariantCulture)</MudTd>
         <MudTd DataLabel="End Date">@subscription.EndDate?.ToString("o", CultureInfo.InvariantCulture)</MudTd>
         @*<MudTd>
@@ -69,9 +90,24 @@
     MudTable<YourBrand.Sales.Subscription> table;
     bool loading = false;
 
+    SubscriptionType? Type;
+    IEnumerable<SubscriptionType> orderTypes = new List<SubscriptionType>();
+    IEnumerable<SubscriptionType?> selectedTypes = new List<SubscriptionType?>();
+    SubscriptionStatus? Status;
+    IEnumerable<SubscriptionStatus> orderStatuses = new List<SubscriptionStatus>();
+    IEnumerable<SubscriptionStatus?> selectedStatuses = new List<SubscriptionStatus?>();
+
+    string organizationId;
+
     protected override async Task OnInitializedAsync()
     {
+        organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
+        orderTypes = (await SubscriptionTypesClient.GetSubscriptionTypesAsync(organizationId, 1, 100, null, null,
+        null)).Items.ToList();
+
+        orderStatuses = (await SubscriptionStatusesClient.GetSubscriptionStatusesAsync(organizationId, 1, 100, null, null,
+        null)).Items.ToList();
     }
 
     private async Task<TableData<Subscription>> ServerReload(TableState state)
@@ -80,7 +116,13 @@
 
         try
         {
-            var result = await SubscriptionsClient.GetSubscriptionsAsync(cts.Token);
+            var result = await SubscriptionsClient.GetSubscriptionsAsync(organizationId, selectedTypes?.Select(x => x.Id),
+                selectedStatuses?.Select(x => x.Id), state.Page +
+                1,
+                state.PageSize,
+                state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
+                state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ?
+                YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc), cts.Token);
 
             return new TableData<Subscription>() { TotalItems = result.Total, Items = result.Items };
         }
@@ -101,6 +143,19 @@
         NavigationManager.NavigateTo($"/subscriptions/{subscription.SubscriptionNo}");
     }
 
+    private async Task OnSelectedTypesChanged(IEnumerable<SubscriptionType?> selectedValues)
+    {
+        selectedTypes = selectedValues;
+        await table.ReloadServerData();
+    }
+
+
+    private async Task OnSelectedStatusesChanged(IEnumerable<SubscriptionStatus?> selectedValues)
+    {
+        selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+    }
+
     /*
     private async Task DeleteSubscription(Subscription subscription)
     {
@@ -117,7 +172,7 @@
     private async Task CreateSubscription() 
     {
         var dialogParameters = new DialogParameters();
-        //dialogParameters.Add(nameof(OrderItemDialog.OrderId), order.Id);
+        //dialogParameters.Add(nameof(SubscriptionItemDialog.SubscriptionId), order.Id);
 
         var dialogRef = DialogService.Show<CreateSubscriptionOrder>("New subscription", dialogParameters, new DialogOptions
             {
@@ -139,7 +194,7 @@
     private async Task CreateSubscriptionPlan()
     {
         var dialogParameters = new DialogParameters();
-        //dialogParameters.Add(nameof(OrderItemDialog.OrderId), order.Id);
+        //dialogParameters.Add(nameof(SubscriptionItemDialog.SubscriptionId), order.Id);
 
         var dialogRef = DialogService.Show<Plans.CreateSubscriptionPlan>("New subscription plan", dialogParameters, new DialogOptions
             {
@@ -153,8 +208,8 @@
         if (result.Cancelled)
             return;
 
-        var order = (Order)result.Data;
+        var order = (Subscription)result.Data;
 
-        //NavigationManager.NavigateTo($"/orders/{order.OrderNo}");
+        //NavigationManager.NavigateTo($"/orders/{order.SubscriptionNo}");
     }
 }

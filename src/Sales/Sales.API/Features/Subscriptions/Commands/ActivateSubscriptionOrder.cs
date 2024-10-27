@@ -45,6 +45,7 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
                 {
                     order2.OrderNo = orderNo++;
                     order2.OrganizationId = request.OrganizationId;
+                    order2.TypeId = 3;
 
                     order2.UpdateStatus(2);
                 }

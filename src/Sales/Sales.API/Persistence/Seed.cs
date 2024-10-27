@@ -81,6 +81,14 @@ public static class Seed
         {
             OrganizationId = TenantConstants.OrganizationId
         });
+        context.OrderTypes.Add(new OrderType(3, "Delivery order", "delivery-order", string.Empty)
+        {
+            OrganizationId = TenantConstants.OrganizationId
+        });
+        context.OrderTypes.Add(new OrderType(4, "Subscription renewal", "subscription-renewal", string.Empty)
+        {
+            OrganizationId = TenantConstants.OrganizationId
+        });
 
         context.OrderStatuses.Add(new OrderStatus(1, "Draft", "draft", string.Empty)
         {

@@ -5,7 +5,7 @@ using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class Subscription : AggregateRoot<Guid>, ISoftDeletable, ISubscriptionParameters, IHasTenant, IHasOrganization
+public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISubscriptionParameters, IHasTenant, IHasOrganization
 {
     public Subscription() : base(Guid.NewGuid())
     {
@@ -50,13 +50,31 @@ public class Subscription : AggregateRoot<Guid>, ISoftDeletable, ISubscriptionPa
 
     public DateOnly StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
-    public DateOnly? CancelDate { get; set; }
-    public DateOnly? RenewalDate { get; set; }
+    public DateTime? CancellationDate { get; set; }
+    public DateTime? RenewalDate { get; set; }
     public bool AutoRenew { get; set; }
 
-    public DateOnly? TrialStartDate { get; set; }
-    public DateOnly? TrialEndDate { get; set; }
-    public DateOnly? TrialEndedDate { get; set; }
+
+    // The date when the subscription was canceled (nullable if not canceled)
+
+    // Optional reason code or message explaining why the subscription was canceled
+    public string? CancellationReason { get; set; }
+
+    // Optional information about who or what triggered the cancellation (e.g., customer, system)
+    public string? CancellationInitiator { get; set; }
+
+    // Method to cancel the subscription, setting the relevant properties
+    public void Cancel(string reason, string initiator)
+    {
+        StatusId = 8;
+        CancellationDate = DateTime.Now;
+        CancellationReason = reason;
+        CancellationInitiator = initiator;
+    }
+
+    public DateTime? TrialStartDate { get; set; }
+    public DateTime? TrialEndDate { get; set; }
+    public DateTime? TrialEndedDate { get; set; }
 
     public DateOnly? NextBillingDate { get; set; }
     public BillingStatus BillingStatus { get; set; }
@@ -72,6 +90,13 @@ public class Subscription : AggregateRoot<Guid>, ISoftDeletable, ISubscriptionPa
     public Month? InMonth { get; set; }
     public TimeOnly? StartTime { get; set; }
     public TimeSpan? Duration { get; set; }
+
+    public User? CreatedBy { get; set; }
+    public UserId? CreatedById { get; set; }
+    public DateTimeOffset Created { get; set; }
+    public User? LastModifiedBy { get; set; }
+    public UserId? LastModifiedById { get; set; }
+    public DateTimeOffset? LastModified { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }

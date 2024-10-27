@@ -2,6 +2,8 @@ using Azure.Core;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Http.HttpResults;
+
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
@@ -42,9 +44,9 @@ public static class Endpoints
         return app;
     }
 
-    private static async Task<PagedResult<SubscriptionDto>> GetSubscriptions(IMediator mediator, CancellationToken cancellationToken)
+    private static async Task<PagedResult<SubscriptionDto>> GetSubscriptions(string organizationId, int[]? types, int[]? status, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
-        return await mediator.Send(new GetSubscriptionsQuery(), cancellationToken);
+        return await mediator.Send(new GetSubscriptionsQuery(organizationId, types, status, page, pageSize, sortBy, sortDirection), cancellationToken);
     }
 
     private static async Task<SubscriptionDto> GetSubscriptionById(Guid id, IMediator mediator, CancellationToken cancellationToken)

@@ -52,7 +52,7 @@
 
         try
         {
-            var result = await OrdersClient.GetOrdersAsync(organizationId, new int [] { 2 }, null, null, null, null, state.Page + 1, state.PageSize,
+            var result = await OrdersClient.GetOrdersAsync(organizationId, [], new int [] { 2 }, null, null, null, null, state.Page + 1, state.PageSize,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
             state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ?
             YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc), cts.Token);

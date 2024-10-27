@@ -8,7 +8,7 @@ using YourBrand.Sales.Models;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Queries;
 
-public record GetOrders(string OrganizationId, int[]? Status, string? CustomerId, string? SSN, string? AssigneeId, Guid? SubscriptionId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<Result<PagedResult<OrderDto>>>
+public record GetOrders(string OrganizationId, int[]? Types, int[]? Status, string? CustomerId, string? SSN, string? AssigneeId, Guid? SubscriptionId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<Result<PagedResult<OrderDto>>>
 {
     public class Handler(IOrderRepository orderRepository) : IRequestHandler<GetOrders, Result<PagedResult<OrderDto>>>
     {
@@ -20,10 +20,16 @@ public record GetOrders(string OrganizationId, int[]? Status, string? CustomerId
                 .GetAll()
                 .InOrganization(request.OrganizationId);
 
+            if (request.Types?.Any() ?? false)
+            {
+                var status = request.Types;
+                query = query.Where(x => status.Any(z => z == x.TypeId));
+            }
+
             if (request.Status?.Any() ?? false)
             {
                 var status = request.Status;
-                query = query.Where(x => status.Any(z => z == x.Status.Id));
+                query = query.Where(x => status.Any(z => z == x.StatusId));
             }
 
             if (request.CustomerId is not null)
