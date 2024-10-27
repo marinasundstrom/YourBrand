@@ -50,7 +50,9 @@ else
             @if (subscription.Order is not null)
             {
                 <MudItem xs="12" sm="12" md="6" lg="6">
-                    <a href="@($"/orders/{subscription.Order.OrderNo}")">Order @subscription.Order.OrderNo</a>
+                    <MudField Label="Order" Class="mb-2">                    
+                        <a href="@($"/orders/{subscription.Order.OrderNo}")">Order @subscription.Order.OrderNo</a>
+                    </MudField>
                 </MudItem>
             }
         </MudGrid>

@@ -15,9 +15,11 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Orders</MudText>
 
-<MudButton Variant="Variant.Filled" Link="/orders/new" Class="mb-2 me-2">New order</MudButton>
+<MudButton Variant="Variant.Filled" Href="/orders/new" Class="mb-2 me-2">New order</MudButton>
 
-<MudButton Variant="Variant.Filled" Link="/orders/statuses" Class="mb-2">Statuses</MudButton>
+<MudButton Variant="Variant.Filled" Href="/orders/types" Class="mb-2 me-2">Types</MudButton>
+
+<MudButton Variant="Variant.Filled" Href="/orders/statuses" Class="mb-2">Statuses</MudButton>
 
 <MudTable T="Order" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">

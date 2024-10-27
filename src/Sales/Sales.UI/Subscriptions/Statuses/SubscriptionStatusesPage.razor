@@ -1,0 +1,143 @@
+@page "/subscriptions/statuses"
+@using Microsoft.AspNetCore.Authorization
+@using YourBrand.Portal.Services
+@attribute [Authorize]
+@inject ISubscriptionStatusesClient SubscriptionStatusesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@attribute [StreamRendering(false)]
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode renderMode
+@inject IOrganizationProvider OrganizationProvider
+
+<AppPageTitle>Subscription Statuses</AppPageTitle>
+
+<MudText Typo="Typo.h3" Class="mb-4">Subscription Statuses</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnSubscriptionStatusClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New SubscriptionStatus
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="SubscriptionStatus" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bsubscriptioned="false"
+              Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+
+            <MudSpacer />
+
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="SubscriptionStatus" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="SubscriptionStatus" SortLabel="Handle">Handle</MudTableSortLabel></MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Handle">@context.Handle</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" OnClick="async (e) => await UpdateSubscriptionStatus(context)" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteSubscriptionStatus(context)" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    private static IComponentRenderMode renderMode =
+    new InteractiveWebAssemblyRenderMode(prerender: false);
+    MudTable<SubscriptionStatus> table; 
+    string? searchString;
+
+    public SubscriptionStatus SubscriptionStatus { get; set; }
+
+    private async Task<TableData<SubscriptionStatus>> LoadData(TableState state)
+    {
+        try
+        {
+            var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+            var results = await SubscriptionStatusesClient.GetSubscriptionStatusesAsync(organizationId, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc));
+            return new TableData<SubscriptionStatus> { Items = results.Items, TotalItems = results.Total };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<SubscriptionStatus> ev)
+    {
+        var item = ev.Item;
+
+        await OnSubscriptionStatusClicked(item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnSubscriptionStatusChanged(SubscriptionStatus sa)
+    {
+        SubscriptionStatus = sa;
+        await table.ReloadServerData();
+    }
+
+    async Task OnSubscriptionStatusClicked(SubscriptionStatus? dto)
+    {
+        await UpdateSubscriptionStatus(dto);
+    }
+
+    async Task UpdateSubscriptionStatus(SubscriptionStatus? dto)
+    {
+        /*try
+        {*/
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(SubscriptionStatusDialog.SubscriptionStatusId), dto?.Id);
+
+            var dialogReference = DialogService.Show<SubscriptionStatusDialog>(dto is null ? "New Subscription Status" : $"Update {dto.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        /*}
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }*/
+    }
+
+    async Task DeleteSubscriptionStatus(SubscriptionStatus subscriptionStatus)
+    {
+        var modalResult = await DialogService.ShowMessageBox("Delete the subscription status?", "The subscription status will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        if (!modalResult.GetValueOrDefault())
+        {
+            return;
+        }
+
+        var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        await SubscriptionStatusesClient.DeleteSubscriptionStatusAsync(organizationId, subscriptionStatus.Id);
+
+        await table.ReloadServerData();
+    }
+}

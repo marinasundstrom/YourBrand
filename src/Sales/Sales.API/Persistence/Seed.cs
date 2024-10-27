@@ -186,6 +186,7 @@ public static class Seed
 
         context.SubscriptionPlans.Add(subscriptionPlan4);
 
+        /*
         var subscription = new Subscription()
         {
             TypeId = 1,
@@ -199,5 +200,6 @@ public static class Seed
         subscription.OrganizationId = TenantConstants.OrganizationId;
 
         context.Subscriptions.Add(subscription);
+        */
     }
 }

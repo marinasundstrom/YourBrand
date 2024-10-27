@@ -16,7 +16,11 @@
 
 <MudButton Variant="Variant.Filled" OnClick="CreateSubscription" Class="mb-2 me-2">New subscription</MudButton>
 
-<MudButton Variant="Variant.Filled" OnClick="CreateSubscriptionPlan" Class="mb-2">New subscription plan</MudButton>
+<MudButton Variant="Variant.Filled" OnClick="CreateSubscriptionPlan" Class="mb-2 me-2">New subscription plan</MudButton>
+
+<MudButton Variant="Variant.Filled" Href="/subscriptions/types" Class="mb-2 me-2">Types</MudButton>
+
+<MudButton Variant="Variant.Filled" Href="/subscriptions/statuses" Class="mb-2 me-2">Statuses</MudButton>
 
 <MudTable T="Subscription" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
