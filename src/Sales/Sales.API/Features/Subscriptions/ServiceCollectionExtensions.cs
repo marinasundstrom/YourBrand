@@ -1,6 +1,6 @@
 ﻿using YourBrand.Sales.Features.Orders;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public static class ServiceCollectionExtensions
 {

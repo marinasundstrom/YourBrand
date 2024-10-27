@@ -1,0 +1,96 @@
+@using System.ComponentModel.DataAnnotations
+@using YourBrand.Portal.Services
+@inject ISubscriptionTypesClient SubscriptionTypesClient
+@inject ISnackbar Snackbar
+@inject IOrganizationProvider OrganizationProvider
+
+<EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog DisableSidePadding="true">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
+                    For="@(() => Name)" />
+
+                <MudTextField Label="Handle" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Handle"
+                    For="@(() => Handle)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @if (SubscriptionTypeId is null)
+                {
+                    <text>Add</text>
+                }
+                else
+                {
+                    <text>Update</text>
+                }
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    EditContext context;
+
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = default!;
+
+    [Parameter]
+    public int? SubscriptionTypeId { get; set; } = default!;
+
+    [Required]
+    public string Name { get; set; }
+
+    [Required]
+    public string Handle { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        context = new EditContext(this);
+        
+        if(SubscriptionTypeId is null)
+            return;
+
+        var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        var subscriptionType = await SubscriptionTypesClient.GetSubscriptionTypeByIdAsync(organizationId, SubscriptionTypeId.GetValueOrDefault());
+        Name = subscriptionType.Name;
+        Handle = subscriptionType.Handle;
+    }
+
+    public async Task OnValidSubmit()
+    {
+        var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        if (SubscriptionTypeId is null)
+        {
+
+            var subscriptionType = await SubscriptionTypesClient.CreateSubscriptionTypeAsync(organizationId, new CreateSubscriptionType
+                {
+                    Name = Name,
+                    Handle = Handle
+                });
+
+            Dialog.Close(subscriptionType);
+        }
+        else
+        {
+            if (context.IsModified())
+            {
+                await SubscriptionTypesClient.UpdateSubscriptionTypeAsync(organizationId, SubscriptionTypeId.GetValueOrDefault(), new UpdateSubscriptionType
+                    {
+                        Name = Name,
+                        Handle = Handle,
+                    });
+            }
+
+            Dialog.Close();
+        }
+    }
+}

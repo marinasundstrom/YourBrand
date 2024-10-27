@@ -2,12 +2,13 @@
 
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Features.OrderManagement.Users;
-using YourBrand.Sales.Features.Subscriptions;
+using YourBrand.Sales.Features.SubscriptionManagement;
 
 public sealed record OrderDto(
     string Id,
     int OrderNo,
     DateTime Date,
+    OrderTypeDto Type,
     ParentOrderDto? Parent,
     OrderStatusDto Status,
     UserDto? AssigneeId,

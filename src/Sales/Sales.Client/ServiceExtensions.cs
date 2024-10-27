@@ -10,7 +10,13 @@ public static class ServiceExtensions
 
         services.AddOrderStatusesClient(configureClient, configureBuilder);
 
+        services.AddOrderTypesClient(configureClient, configureBuilder);
+
         services.AddSubscriptionsClient(configureClient, configureBuilder);
+
+        services.AddSubscriptionStatusesClient(configureClient, configureBuilder);
+
+        services.AddSubscriptionTypesClient(configureClient, configureBuilder);
 
         services.AddSubscriptionPlansClient(configureClient, configureBuilder);
 
@@ -45,6 +51,18 @@ public static class ServiceExtensions
         return services;
     }
 
+    public static IServiceCollection AddOrderTypesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? configureBuilder = null)
+    {
+        IHttpClientBuilder builder = services.AddHttpClient("SalesAPI", configureClient);
+
+        configureBuilder?.Invoke(builder);
+
+        services.AddHttpClient<IOrderTypesClient>("SalesAPI")
+            .AddTypedClient<IOrderTypesClient>((http, sp) => new YourBrand.Sales.OrderTypesClient(http));
+
+        return services;
+    }
+
     public static IServiceCollection AddSubscriptionsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? configureBuilder = null)
     {
         IHttpClientBuilder builder = services.AddHttpClient("SalesAPI", configureClient);
@@ -53,6 +71,30 @@ public static class ServiceExtensions
 
         services.AddHttpClient<ISubscriptionsClient>("SalesAPI")
             .AddTypedClient<ISubscriptionsClient>((http, sp) => new YourBrand.Sales.SubscriptionsClient(http));
+
+        return services;
+    }
+
+    public static IServiceCollection AddSubscriptionStatusesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? configureBuilder = null)
+    {
+        IHttpClientBuilder builder = services.AddHttpClient("SalesAPI", configureClient);
+
+        configureBuilder?.Invoke(builder);
+
+        services.AddHttpClient<ISubscriptionStatusesClient>("SalesAPI")
+            .AddTypedClient<ISubscriptionStatusesClient>((http, sp) => new YourBrand.Sales.SubscriptionStatusesClient(http));
+
+        return services;
+    }
+
+    public static IServiceCollection AddSubscriptionTypesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? configureBuilder = null)
+    {
+        IHttpClientBuilder builder = services.AddHttpClient("SalesAPI", configureClient);
+
+        configureBuilder?.Invoke(builder);
+
+        services.AddHttpClient<ISubscriptionTypesClient>("SalesAPI")
+            .AddTypedClient<ISubscriptionTypesClient>((http, sp) => new YourBrand.Sales.SubscriptionTypesClient(http));
 
         return services;
     }

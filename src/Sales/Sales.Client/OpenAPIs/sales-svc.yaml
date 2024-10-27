@@ -1,7 +1,8 @@
-x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))
 openapi: 3.0.0
 info:
-  title: yourbrand-sales-svc
+  title: Sales
+  description: ''
   version: v1
 servers:
 - url: https://localhost:5130
@@ -113,6 +114,7 @@ paths:
         required: true
         x-position: 2
       responses:
+
         201:
           description: ''
           content:
@@ -231,6 +233,7 @@ paths:
         required: true
         x-position: 2
       responses:
+
         201:
           description: ''
           content:
@@ -269,6 +272,7 @@ paths:
         required: true
         x-position: 3
       responses:
+
         201:
           description: ''
           content:
@@ -348,6 +352,7 @@ paths:
         required: true
         x-position: 4
       responses:
+
         201:
           description: ''
           content:
@@ -624,6 +629,175 @@ paths:
           description: ''
         404:
           description: ''
+  /v1/orders/types:
+    get:
+      tags:
+      - OrderTypes
+      - OrderTypes
+      operationId: OrderTypes_GetOrderTypes
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfOrderType'
+    post:
+      tags:
+      - OrderTypes
+      - OrderTypes
+      operationId: OrderTypes_CreateOrder
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderType'
+        required: true
+        x-position: 2
+      responses:
+
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderType'
+        404:
+          description: ''
+  /v1/orders/types/{id}:
+    get:
+      tags:
+      - OrderTypes
+      - OrderTypes
+      operationId: OrderTypes_GetOrderTypeById
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderType'
+        404:
+          description: ''
+    post:
+      tags:
+      - OrderTypes
+      - OrderTypes
+      operationId: OrderTypes_UpdateOrderType
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrderType'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+    delete:
+      tags:
+      - OrderTypes
+      - OrderTypes
+      operationId: OrderTypes_DeleteOrderType
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
   /v1/orders/statuses:
     get:
       tags:
@@ -699,6 +873,7 @@ paths:
         required: true
         x-position: 2
       responses:
+
         201:
           description: ''
           content:
@@ -926,6 +1101,377 @@ paths:
                 $ref: '#/components/schemas/Subscription'
       security:
       - JWT: []
+  /v1/subscriptions/{id}/status:
+    put:
+      tags:
+      - Subscriptions
+      - Subscriptions
+      operationId: Subscriptions_UpdateSubscriptionStatus
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: guid
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSubscriptionStatusRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /v1/subscriptions/types:
+    get:
+      tags:
+      - SubscriptionTypes
+      - SubscriptionTypes
+      operationId: SubscriptionTypes_GetSubscriptionTypes
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfSubscriptionType'
+    post:
+      tags:
+      - SubscriptionTypes
+      - SubscriptionTypes
+      operationId: SubscriptionTypes_CreateSubscriptionType
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubscriptionType'
+        required: true
+        x-position: 2
+      responses:
+
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionType'
+        404:
+          description: ''
+  /v1/subscriptions/types/{id}:
+    get:
+      tags:
+      - SubscriptionTypes
+      - SubscriptionTypes
+      operationId: SubscriptionTypes_GetSubscriptionTypeById
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionType'
+        404:
+          description: ''
+    post:
+      tags:
+      - SubscriptionTypes
+      - SubscriptionTypes
+      operationId: SubscriptionTypes_UpdateSubscriptionType
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSubscriptionType'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+    delete:
+      tags:
+      - SubscriptionTypes
+      - SubscriptionTypes
+      operationId: SubscriptionTypes_DeleteSubscriptionType
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+  /v1/subscriptions/statuses:
+    get:
+      tags:
+      - SubscriptionStatuses
+      - SubscriptionStatuses
+      operationId: SubscriptionStatuses_GetSubscriptionStatuses
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfSubscriptionStatus'
+    post:
+      tags:
+      - SubscriptionStatuses
+      - SubscriptionStatuses
+      operationId: SubscriptionStatuses_CreateSubscriptionStatus
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubscriptionStatus'
+        required: true
+        x-position: 2
+      responses:
+
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionStatus'
+        404:
+          description: ''
+  /v1/subscriptions/statuses/{id}:
+    get:
+      tags:
+      - SubscriptionStatuses
+      - SubscriptionStatuses
+      operationId: SubscriptionStatuses_GetSubscriptionStatusById
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionStatus'
+        404:
+          description: ''
+    post:
+      tags:
+      - SubscriptionStatuses
+      - SubscriptionStatuses
+      operationId: SubscriptionStatuses_UpdateSubscriptionStatus
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSubscriptionStatus'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+    delete:
+      tags:
+      - SubscriptionStatuses
+      - SubscriptionStatuses
+      operationId: SubscriptionStatuses_DeleteSubscriptionStatus
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
   /v1/Users:
     get:
       tags:
@@ -1159,6 +1705,9 @@ components:
         date:
           type: string
           format: date-time
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/OrderType'
         parent:
           nullable: true
           oneOf:
@@ -1387,18 +1936,19 @@ components:
           format: decimal
           nullable: true
     SubscriptionStatus:
-      type: integer
-      description: ''
-      x-enumNames:
-      - Created
-      - Active
-      - Suspended
-      - Canceled
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
     OrderShort:
       type: object
       additionalProperties: false
@@ -1641,6 +2191,11 @@ components:
           type: number
           format: decimal
           nullable: true
+        hasTrial:
+          type: boolean
+        trialLength:
+          type: string
+          format: duration
         autoRenew:
           type: boolean
         recurrence:
@@ -1876,6 +2431,53 @@ components:
         quantity:
           type: number
           format: double
+    PagedResultOfOrderType:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderType'
+        total:
+          type: integer
+          format: int32
+    OrderType:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    CreateOrderType:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    UpdateOrderType:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
     PagedResultOfOrderStatus:
       type: object
       additionalProperties: false
@@ -1964,6 +2566,93 @@ components:
           $ref: '#/components/schemas/ShippingDetails'
         notes:
           type: string
+    UpdateSubscriptionStatusRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        statusId:
+          type: integer
+          format: int32
+    PagedResultOfSubscriptionType:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionType'
+        total:
+          type: integer
+          format: int32
+    SubscriptionType:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    CreateSubscriptionType:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    UpdateSubscriptionType:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    PagedResultOfSubscriptionStatus:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionStatus'
+        total:
+          type: integer
+          format: int32
+    CreateSubscriptionStatus:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    UpdateSubscriptionStatus:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
     PagedResultOfUser:
       type: object
       additionalProperties: false

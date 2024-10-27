@@ -45,6 +45,7 @@ public static class IncludeExtensions
     {
         return source
             .Include(i => i.Parent)
+            .Include(i => i.Type)
             .Include(i => i.Status)
             .Include(i => i.Subscription)
             .ThenInclude(i => i.SubscriptionPlan)

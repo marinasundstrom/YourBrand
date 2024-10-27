@@ -1,6 +1,6 @@
 ﻿using YourBrand.Sales.Domain.Entities;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 static class SubscriptionPlanDumper
 {

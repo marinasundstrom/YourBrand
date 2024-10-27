@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Sales.Models;
 using YourBrand.Sales.Persistence;
 
-namespace YourBrand.Sales.Features.Subscriptions.Plans;
+namespace YourBrand.Sales.Features.SubscriptionManagement.Plans;
 
 public record GetSubscriptionPlansQuery : IRequest<PagedResult<SubscriptionPlanDto>>
 {

@@ -6,7 +6,7 @@ using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 using YourBrand.Sales.Persistence;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) : IRequest
 {
@@ -52,7 +52,8 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
             order.UpdateStatus(2);
 
             //order.Subscription.Order = order;
-            subscription.Status = Domain.Enums.SubscriptionStatus.Active;
+            subscription.StatusId = 1;
+            subscription.StatusDate = DateTimeOffset.UtcNow;
 
             await salesContext.SaveChangesAsync();
         }

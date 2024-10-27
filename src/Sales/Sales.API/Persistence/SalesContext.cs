@@ -125,11 +125,17 @@ public sealed class SalesContext(
 
     public DbSet<OrderItem> OrderItems { get; set; }
 
+    public DbSet<OrderType> OrderTypes { get; set; }
+
     public DbSet<OrderStatus> OrderStatuses { get; set; }
 
     public DbSet<User> Users { get; set; }
 
     public DbSet<Subscription> Subscriptions { get; set; }
+
+    public DbSet<SubscriptionType> SubscriptionTypes { get; set; }
+
+    public DbSet<SubscriptionStatus> SubscriptionStatuses { get; set; }
 
     public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
 

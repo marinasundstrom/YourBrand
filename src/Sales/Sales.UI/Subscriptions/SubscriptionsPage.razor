@@ -84,8 +84,10 @@
 
             return new TableData<Subscription>() { TotalItems = result.Total, Items = result.Items };
         }
-        catch
+        catch (Exception exc)
         {
+            Console.WriteLine(exc);
+
             return new TableData<Subscription>();
         }
         finally

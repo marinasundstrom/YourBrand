@@ -19,6 +19,13 @@ public static class Errors
         public static readonly Error OrderItemNotFound = new Error(nameof(OrderItemNotFound), "Order item not found", string.Empty);
     }
 
+    public static class Subscriptions
+    {
+        public static readonly Error SubscriptionNotFound = new Error(nameof(SubscriptionNotFound), "Subscription not found", string.Empty);
+
+        public static readonly Error SubscriptionItemNotFound = new Error(nameof(SubscriptionItemNotFound), "Subscription item not found", string.Empty);
+    }
+
     public static class Users
     {
         public static readonly Error UserNotFound = new Error(nameof(UserNotFound), "User not found", string.Empty);

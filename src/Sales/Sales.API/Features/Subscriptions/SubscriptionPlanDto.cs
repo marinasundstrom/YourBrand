@@ -1,6 +1,6 @@
 using YourBrand.Sales.Domain.Enums;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public class SubscriptionPlanDto : Domain.Entities.ISubscriptionParameters
 {

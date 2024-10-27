@@ -1,0 +1,143 @@
+@page "/orders/types"
+@using Microsoft.AspNetCore.Authorization
+@using YourBrand.Portal.Services
+@attribute [Authorize]
+@inject IOrderTypesClient OrderTypesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@attribute [StreamRendering(false)]
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode renderMode
+@inject IOrganizationProvider OrganizationProvider
+
+<AppPageTitle>Order types</AppPageTitle>
+
+<MudText Typo="Typo.h3" Class="mb-4">Order types</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnOrderTypeClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New type
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="OrderType" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+              Striped="true" OnRowClick="ItemOnClick">
+        <ToolBarContent>
+
+            <MudSpacer />
+
+            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="OrderType" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="OrderType" SortLabel="Handle">Handle</MudTableSortLabel></MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Handle">@context.Handle</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" OnClick="async (e) => await UpdateOrderType(context)" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteOrderType(context)" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+
+@code {
+    private static IComponentRenderMode renderMode =
+    new InteractiveWebAssemblyRenderMode(prerender: false);
+    MudTable<OrderType> table; 
+    string? searchString;
+
+    public OrderType OrderType { get; set; }
+
+    private async Task<TableData<OrderType>> LoadData(TableState state)
+    {
+        try
+        {
+            var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+            var results = await OrderTypesClient.GetOrderTypesAsync(organizationId, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc));
+            return new TableData<OrderType> { Items = results.Items, TotalItems = results.Total };
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+
+        return null!;
+    }
+
+    private async Task ItemOnClick(TableRowClickEventArgs<OrderType> ev)
+    {
+        var item = ev.Item;
+
+        await OnOrderTypeClicked(item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+    private async Task OnOrderTypeChanged(OrderType sa)
+    {
+        OrderType = sa;
+        await table.ReloadServerData();
+    }
+
+    async Task OnOrderTypeClicked(OrderType? dto)
+    {
+        await UpdateOrderType(dto);
+    }
+
+    async Task UpdateOrderType(OrderType? dto)
+    {
+        /*try
+        {*/
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(OrderTypeDialog.OrderTypeId), dto?.Id);
+
+            var dialogReference = DialogService.Show<OrderTypeDialog>(dto is null ? "New type" : $"Update {dto.Name}", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+            var result = await dialogReference.Result;
+
+            if(result.Cancelled)
+                return;
+
+            await table.ReloadServerData();
+        /*}
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }*/
+    }
+
+    async Task DeleteOrderType(OrderType orderType)
+    {
+        var modalResult = await DialogService.ShowMessageBox("Delete the order type?", "The order type will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        if (!modalResult.GetValueOrDefault())
+        {
+            return;
+        }
+
+        var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        await OrderTypesClient.DeleteOrderTypeAsync(organizationId, orderType.Id);
+
+        await table.ReloadServerData();
+    }
+}

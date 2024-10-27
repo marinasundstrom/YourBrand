@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Sales.Models;
 using YourBrand.Sales.Persistence;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public record GetSubscriptionsQuery : IRequest<PagedResult<SubscriptionDto>>
 {
@@ -14,6 +14,8 @@ public record GetSubscriptionsQuery : IRequest<PagedResult<SubscriptionDto>>
         public async Task<PagedResult<SubscriptionDto>> Handle(GetSubscriptionsQuery request, CancellationToken cancellationToken)
         {
             var subscriptions = await salesContext.Subscriptions
+                .Include(x => x.Type)
+                .Include(x => x.Status)
                 .Include(x => x.SubscriptionPlan)
                 .Include(x => x.Order)
                 .AsNoTracking()

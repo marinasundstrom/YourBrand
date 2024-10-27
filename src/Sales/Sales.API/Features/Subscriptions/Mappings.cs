@@ -1,8 +1,8 @@
 ﻿using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Features.OrderManagement.Orders;
-using YourBrand.Sales.Features.Subscriptions;
+using YourBrand.Sales.Features.SubscriptionManagement;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public static class Mappings
 {
@@ -13,7 +13,7 @@ public static class Mappings
             Id = subscription.Id,
             SubscriptionNo = subscription.SubscriptionNo,
             Plan = ToShortDto(subscription.SubscriptionPlan!),
-            Status = subscription.Status,
+            Status = subscription.Status.ToDto(),
             StartDate = subscription.StartDate,
             EndDate = subscription.EndDate,
             Order = subscription.Order?.ToShortDto(),
@@ -55,4 +55,9 @@ public static class Mappings
             Price = subscriptionPlan.Price
         };
     }
+
+    public static SubscriptionTypeDto ToDto(this SubscriptionType subscriptionType) => new(subscriptionType.Id, subscriptionType.Name, subscriptionType.Handle, subscriptionType.Description);
+
+    public static SubscriptionStatusDto ToDto(this SubscriptionStatus subscriptionStatus) => new(subscriptionStatus.Id, subscriptionStatus.Name, subscriptionStatus.Handle, subscriptionStatus.Description);
+
 }

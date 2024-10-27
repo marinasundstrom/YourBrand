@@ -3,7 +3,7 @@
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Enums;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public static class SubscriptionPlanExtensions
 {

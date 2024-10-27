@@ -2,7 +2,7 @@ using MediatR;
 
 using YourBrand.Sales.Models;
 
-namespace YourBrand.Sales.Features.Subscriptions.Plans;
+namespace YourBrand.Sales.Features.SubscriptionManagement.Plans;
 
 public static class Endpoints
 {

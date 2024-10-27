@@ -9,7 +9,8 @@ public class Subscription : AggregateRoot<Guid>, ISoftDeletable, ISubscriptionPa
 {
     public Subscription() : base(Guid.NewGuid())
     {
-
+        TypeId = 1;
+        StatusId = 1;
     }
 
     public TenantId TenantId { get; set; }
@@ -18,10 +19,21 @@ public class Subscription : AggregateRoot<Guid>, ISoftDeletable, ISubscriptionPa
 
     public int SubscriptionNo { get; set; }
 
+    public SubscriptionType Type { get; set; } = null!;
+    
+    public int TypeId { get; set; }
+
     public int? CustomerId { get; set; }
 
-    public SubscriptionStatus Status { get; set; }
+    public SubscriptionStatus Status { get; set; } = null!;
+    public int StatusId { get; set; }
     public DateTimeOffset StatusDate { get; set; }
+
+    public void UpdateStatus(int statusId)
+    {
+        StatusId = statusId;
+        StatusDate = DateTimeOffset.UtcNow;
+    }
 
     public string? Note { get; set; }
 

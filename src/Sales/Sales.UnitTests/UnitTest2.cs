@@ -1,6 +1,6 @@
 ﻿using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Enums;
-using YourBrand.Sales.Features.Subscriptions;
+using YourBrand.Sales.Features.SubscriptionManagement;
 
 namespace YourBrand.Sales.UnitTests;
 

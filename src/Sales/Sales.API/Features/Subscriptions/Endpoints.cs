@@ -5,10 +5,10 @@ using MediatR;
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
-using YourBrand.Sales.Features.Subscriptions.Plans;
+using YourBrand.Sales.Features.SubscriptionManagement.Plans;
 using YourBrand.Sales.Models;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public static class Endpoints
 {
@@ -35,6 +35,9 @@ public static class Endpoints
 
         group.MapPost("/", CreateSubscriptionOrder)
             .WithName($"Subscriptions_{nameof(CreateSubscriptionOrder)}");
+
+        group.MapPut("/{id}/status", UpdateSubscriptionStatus)
+            .WithName($"Subscriptions_{nameof(UpdateSubscriptionStatus)}");
 
         return app;
     }
@@ -64,8 +67,16 @@ public static class Endpoints
             request.BillingDetails, request.ShippingDetails, request.Notes
         ), cancellationToken);
     }
+
+    private static async Task UpdateSubscriptionStatus(string organizationId, Guid id, UpdateSubscriptionStatusRequest request, IMediator mediator, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new UpdateSubscriptionStatus(organizationId, id, request.StatusId), cancellationToken);
+    }
+
 }
 
 public sealed record CreateSubscriptionRequest(
     string ProductId, string ProductName, decimal Price, decimal? RegularPrice, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, SetCustomerDto Customer,
     BillingDetailsDto BillingDetails, ShippingDetailsDto ShippingDetails, string Notes);
+
+public sealed record UpdateSubscriptionStatusRequest(int StatusId);

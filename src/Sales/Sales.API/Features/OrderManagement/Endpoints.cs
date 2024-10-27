@@ -1,5 +1,6 @@
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Orders.Statuses;
+using YourBrand.Sales.Features.OrderManagement.Orders.Types;
 
 namespace YourBrand.Sales.Features.OrderManagement;
 
@@ -9,6 +10,7 @@ public static class Endpoints
     {
         app
             .MapOrderEndpoints()
+            .MapOrderTypeEndpoints()
             .MapOrderStatusEndpoints();
 
         return app;

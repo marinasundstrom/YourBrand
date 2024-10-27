@@ -3,7 +3,7 @@ using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Organizations;
 using YourBrand.Sales.Features.OrderManagement.Users;
-using YourBrand.Sales.Features.Subscriptions;
+using YourBrand.Sales.Features.SubscriptionManagement;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders;
 
@@ -13,6 +13,7 @@ public static class Mappings
         order.Id,
         order.OrderNo,
         order.Date,
+        order.Type.ToDto(),
         order.Parent?.ToParentDto(),
         order.Status.ToDto(),
         order.Assignee?.ToDto(),
@@ -71,6 +72,8 @@ public static class Mappings
         orderItem.CreatedBy?.ToDto(),
         orderItem.LastModified,
         orderItem.LastModifiedBy?.ToDto());
+
+    public static OrderTypeDto ToDto(this OrderType orderType) => new(orderType.Id, orderType.Name, orderType.Handle, orderType.Description);
 
     public static OrderStatusDto ToDto(this OrderStatus orderStatus) => new(orderStatus.Id, orderStatus.Name, orderStatus.Handle, orderStatus.Description);
 

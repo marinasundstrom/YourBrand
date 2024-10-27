@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Sales.Persistence;
 
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public record GetSubscriptionByNo(string OrganizationId, int SubscriptionNo) : IRequest<Result<SubscriptionDto>>
 {
@@ -25,6 +25,8 @@ public record GetSubscriptionByNo(string OrganizationId, int SubscriptionNo) : I
         {
             var subscription = await salesContext.Subscriptions
                 .Where(x => x.OrganizationId == request.OrganizationId)
+                .Include(x => x.Type)
+                .Include(x => x.Status)
                 .Include(x => x.SubscriptionPlan)
                 .Include(x => x.Order)
                 .FirstOrDefaultAsync(c => c.SubscriptionNo == request.SubscriptionNo);

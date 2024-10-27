@@ -10,7 +10,7 @@ using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Persistence;
 using YourBrand.Sales.Persistence.Repositories.Mocks;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public record CreateSubscriptionOrder(string OrganizationId, string ProductId, string ProductName, decimal Price, decimal? OriginalPrice, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, OrderManagement.Orders.Commands.SetCustomerDto Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, string? Notes) : IRequest<OrderDto>
 {

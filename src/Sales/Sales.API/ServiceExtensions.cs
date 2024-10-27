@@ -4,7 +4,7 @@ using MediatR;
 
 using YourBrand.Sales.Behaviors;
 using YourBrand.Sales.Features.OrderManagement.Orders;
-using YourBrand.Sales.Features.Subscriptions;
+using YourBrand.Sales.Features.SubscriptionManagement;
 
 namespace YourBrand.Sales;
 

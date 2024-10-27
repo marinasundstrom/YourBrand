@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Sales.Persistence;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public record UpdateSubscriptionCommand(Guid SubscriptionId) : IRequest
 {

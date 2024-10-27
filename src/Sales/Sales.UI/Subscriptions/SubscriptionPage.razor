@@ -47,7 +47,7 @@ else
         </MudGrid>
     </MudPaper>
 
-    @if(subscription.Status == 0) 
+    @if(subscription.Status.Id == 1) 
     {
         <MudButton Variant="Variant.Filled" OnClick="ActivateSubscription">Activate</MudButton>
     } 

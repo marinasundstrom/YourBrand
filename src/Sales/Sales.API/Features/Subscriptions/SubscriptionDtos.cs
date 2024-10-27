@@ -1,14 +1,15 @@
+using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Enums;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 
-namespace YourBrand.Sales.Features.Subscriptions;
+namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public class SubscriptionDto : Domain.Entities.ISubscriptionParameters
 {
     public Guid Id { get; set; }
     public int SubscriptionNo { get; set; }
     public SubscriptionPlanShortDto Plan { get; set; }
-    public SubscriptionStatus Status { get; set; }
+    public SubscriptionStatusDto Status { get; set; }
     public DateOnly StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
     public OrderShortDto? Order { get; set; }

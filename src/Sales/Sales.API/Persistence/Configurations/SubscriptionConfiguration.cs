@@ -16,6 +16,12 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 
         builder.HasIndex(x => x.TenantId);
 
+        builder.HasOne(o => o.Type).WithMany()
+    .       HasForeignKey(o => new { o.OrganizationId, o.TypeId });
+
+        builder.HasOne(o => o.Status).WithMany()
+            .HasForeignKey(o => new { o.OrganizationId, o.StatusId });
+
         builder.Ignore(e => e.DomainEvents);
 
         builder.HasQueryFilter(e => e.Deleted == null);

@@ -13,6 +13,7 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
     private Order() : base(Guid.NewGuid().ToString())
     {
         StatusId = 1;
+        TypeId = 1;
     }
 
     public static Order Create(OrganizationId organizationId)
@@ -31,8 +32,10 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
 
     public DateTime Date { get; private set; } = DateTime.Now;
 
-    public OrderStatus Status { get; set; } = null!;
+    public OrderType Type { get; set; } = null!;
+    public int TypeId { get; set; }
 
+    public OrderStatus Status { get; set; } = null!;
     public int StatusId { get; set; }
 
     public DateTimeOffset? StatusDate { get; set; }
@@ -148,6 +151,8 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
 
     public OrderItem AddItem(OrderItem orderItem)
     {
+        orderItem.OrganizationId = OrganizationId;
+        
         _items.Add(orderItem);
 
         Update();
