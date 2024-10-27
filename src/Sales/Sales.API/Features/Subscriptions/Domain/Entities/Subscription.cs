@@ -20,35 +20,35 @@ public class Subscription : AggregateRoot<Guid>, ISoftDeletable, ISubscriptionPa
 
     public int? CustomerId { get; set; }
 
-    public Order? Order { get; set; }
-
-    public string? OrderId { get; set; }
-
-    public OrderItem? OrderItem { get; set; }
-
-    public string? OrderItemId { get; set; }
-
-    public SubscriptionPlan? SubscriptionPlan { get; set; }
-
-    public Guid? SubscriptionPlanId { get; set; }
-
-    public DateOnly StartDate { get; set; }
-
-    public DateOnly? EndDate { get; set; }
-
     public SubscriptionStatus Status { get; set; }
-
     public DateTimeOffset StatusDate { get; set; }
 
     public string? Note { get; set; }
 
-    public List<Order> Orders { get; } = new List<Order>();
+    public Order? Order { get; set; }
+    public string? OrderId { get; set; }
 
+    public OrderItem? OrderItem { get; set; }
+    public string? OrderItemId { get; set; }
+
+    public List<Order> Orders { get; } = new List<Order>();
     public List<OrderItem> OrderItems { get; } = new List<OrderItem>();
 
-    public DateTimeOffset? Deleted { get; set; }
+    public SubscriptionPlan? SubscriptionPlan { get; set; }
+    public Guid? SubscriptionPlanId { get; set; }
 
-    public UserId? DeletedById { get; set; }
+    public DateOnly StartDate { get; set; }
+    public DateOnly? EndDate { get; set; }
+    public DateOnly? CancelDate { get; set; }
+    public DateOnly? RenewalDate { get; set; }
+    public bool AutoRenew { get; set; }
+
+    public DateOnly? TrialStartDate { get; set; }
+    public DateOnly? TrialEndDate { get; set; }
+    public DateOnly? TrialEndedDate { get; set; }
+
+    public DateOnly? NextBillingDate { get; set; }
+    public BillingStatus BillingStatus { get; set; }
 
     public Recurrence Recurrence { get; set; }
     public int? EveryDays { get; set; }
@@ -61,5 +61,7 @@ public class Subscription : AggregateRoot<Guid>, ISoftDeletable, ISubscriptionPa
     public Month? InMonth { get; set; }
     public TimeOnly? StartTime { get; set; }
     public TimeSpan? Duration { get; set; }
-    public bool AutoRenew { get; set; }
+
+    public DateTimeOffset? Deleted { get; set; }
+    public UserId? DeletedById { get; set; }
 }

@@ -13,6 +13,7 @@ public class SubscriptionDto : Domain.Entities.ISubscriptionParameters
     public DateOnly? EndDate { get; set; }
     public OrderShortDto? Order { get; set; }
     public string? OrderItemId { get; set; }
+
     public bool AutoRenew { get; set; }
     public Recurrence Recurrence { get; set; }
     public int? EveryDays { get; set; }

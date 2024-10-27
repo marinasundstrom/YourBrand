@@ -25,36 +25,24 @@ public class SubscriptionPlan : AggregateRoot<Guid>, ISoftDeletable, ISubscripti
 
     public decimal? Price { get; set; }
 
-    //public CurrencyAmount? Price { get; set; }
+    public bool HasTrial { get; set; }
+    public TimeSpan TrialLength { get; set; }
 
     public bool AutoRenew { get; set; }
 
     public Recurrence Recurrence { get; set; }
-
-    //public bool RescheduleWhenOnWeekend { get; set; } = true;
-
     public int? EveryDays { get; set; }
-
     public int? EveryWeeks { get; set; }
-
     public WeekDays? OnWeekDays { get; set; }
-
     public int? EveryMonths { get; set; } // Every two months
-
     public int? EveryYears { get; set; }
-
     public int? OnDay { get; set; } // 3rd of January. If OnDayOfWeek set to i.e. Tuesday, 3rd Tuesday
-
     public DayOfWeek? OnDayOfWeek { get; set; }
-
     public Month? InMonth { get; set; }
-
     public TimeOnly? StartTime { get; set; }
-
     public TimeSpan? Duration { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
-
     public UserId? DeletedById { get; set; }
 
     public SubscriptionPlan WithName(string name)

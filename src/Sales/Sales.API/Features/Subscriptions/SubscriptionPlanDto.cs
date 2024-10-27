@@ -8,6 +8,10 @@ public class SubscriptionPlanDto : Domain.Entities.ISubscriptionParameters
     public string Name { get; set; }
     public string? ProductId { get; set; }
     public decimal? Price { get; set; }
+    
+    public bool HasTrial { get; set; }
+    public TimeSpan TrialLength { get; set; }
+
     public bool AutoRenew { get; set; }
     public Recurrence Recurrence { get; set; }
     public int? EveryDays { get; set; }
