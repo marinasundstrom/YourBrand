@@ -11,6 +11,7 @@ public static class Mappings
         return new SubscriptionDto
         {
             Id = subscription.Id,
+            Type = subscription.Type.ToDto(),
             SubscriptionNo = subscription.SubscriptionNo,
             Plan = ToShortDto(subscription.SubscriptionPlan!),
             Status = subscription.Status.ToDto(),

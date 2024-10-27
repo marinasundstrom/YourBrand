@@ -20,7 +20,6 @@ public class Subscription : AggregateRoot<Guid>, ISoftDeletable, ISubscriptionPa
     public int SubscriptionNo { get; set; }
 
     public SubscriptionType Type { get; set; } = null!;
-    
     public int TypeId { get; set; }
 
     public int? CustomerId { get; set; }

@@ -7,6 +7,7 @@ public static class Mapper
         var model = new OrderViewModel
         {
             Id = dto.OrderNo,
+            Type = dto.Type,
             Date = dto.Date.Date,
             Status = dto.Status,
         };

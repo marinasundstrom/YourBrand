@@ -33,6 +33,8 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
 
             var order = Order.Create(organizationId: request.OrganizationId);
 
+            order.TypeId = 2;
+
             order.OrganizationId = request.OrganizationId;
             order.Customer = new Customer
             {

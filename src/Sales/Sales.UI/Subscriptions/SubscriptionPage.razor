@@ -22,6 +22,15 @@ else
 
     <MudPaper Class="pa-8 mb-8">
         <MudGrid Class="mb-4">
+
+            <MudItem xs="12" sm="12" md="6" lg="6">
+                <MudField Label="Type" Class="mb-2">@subscription.Type?.Name</MudField>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="6" lg="6">
+                <MudField Label="Status" Class="mb-2">@subscription.Status?.Name</MudField>
+            </MudItem>
+
             <MudItem xs="12" sm="12" md="12" lg="12">
                 <MudField Label="Plan" Class="mb-2">
                     <a href="@($"/subscriptions/plans/{subscription.Plan.Id}")">

@@ -1857,6 +1857,8 @@ components:
         subscriptionNo:
           type: integer
           format: int32
+        type:
+          $ref: '#/components/schemas/SubscriptionType'
         plan:
           $ref: '#/components/schemas/SubscriptionPlanShort'
         status:
@@ -1968,12 +1970,14 @@ components:
       - Daily
       - Weekly
       - Monthly
+      - Quarterly
       - Yearly
       enum:
       - 0
       - 1
       - 2
       - 3
+      - 4
     WeekDays:
       type: integer
       description: ''

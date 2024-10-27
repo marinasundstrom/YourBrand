@@ -122,23 +122,27 @@ public static class Seed
         {
             OrganizationId = TenantConstants.OrganizationId
         });
-        context.OrderStatuses.Add(new OrderStatus(11, "Completed", "delivered", string.Empty)
+        context.OrderStatuses.Add(new OrderStatus(11, "Delivered", "delivered", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId
         });
-        context.OrderStatuses.Add(new OrderStatus(12, "Canceled", "canceled", string.Empty)
+        context.OrderStatuses.Add(new OrderStatus(12, "Completed", "completed", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId
         });
-        context.OrderStatuses.Add(new OrderStatus(13, "On hold", "on-hold", string.Empty)
+        context.OrderStatuses.Add(new OrderStatus(13, "Canceled", "canceled", string.Empty)
+        {
+            OrganizationId = TenantConstants.OrganizationId
+        });
+        context.OrderStatuses.Add(new OrderStatus(14, "On hold", "on-hold", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId,
         });
-        context.OrderStatuses.Add(new OrderStatus(14, "Returned", "returned", string.Empty)
+        context.OrderStatuses.Add(new OrderStatus(15, "Returned", "returned", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId
         });
-        context.OrderStatuses.Add(new OrderStatus(15, "Refunded", "refunded", string.Empty)
+        context.OrderStatuses.Add(new OrderStatus(16, "Refunded", "refunded", string.Empty)
         {
             OrganizationId = TenantConstants.OrganizationId
         });

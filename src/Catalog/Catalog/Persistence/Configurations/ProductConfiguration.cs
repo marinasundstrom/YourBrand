@@ -83,5 +83,11 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .WithMany(p => p.Products)
             .HasForeignKey(x => new { x.OrganizationId, x.CategoryId })
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder
+            .HasMany(x => x.SubscriptionPlans)
+            .WithOne()
+            .HasForeignKey(x => new { x.OrganizationId, x.ProductId })
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

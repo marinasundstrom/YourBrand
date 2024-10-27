@@ -301,14 +301,3 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
         _subscriptionPlans.Remove(subscriptionPlan);
     }
 }
-
-public class SubscriptionPlan : Entity<string>, IHasTenant
-{
-    public TenantId TenantId { get; set; }
-
-    public OrganizationId OrganizationId { get; set; }
-
-    public int ProductId { get; set; }
-
-    public string Name { get; set; }
-}

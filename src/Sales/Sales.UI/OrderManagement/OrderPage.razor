@@ -44,6 +44,12 @@
 
                     <MudItem xs="12" sm="12" md="6" lg="6">
                         <div class="d-flex">
+                            <MudField Label="Type">@Model.Type.Name</MudField>
+                        </div>
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="6" lg="6">
+                        <div class="d-flex">
                             <MudField Label="Status">@Model.Status.Name</MudField>
                             <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
                                 OnClick="async () => await UpdateOrderStatus()"></MudIconButton>

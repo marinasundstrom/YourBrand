@@ -14,208 +14,142 @@ public class SubscriptionOrderDateGenerator
     /// </remarks>
     public IEnumerable<(DateTime Start, DateTime? End)> GetOrderDatesFromSubscription(Subscription subscription, DateOnly? startDate = null, DateOnly? endDate = null)
     {
-        DateTime? after = subscription.StartDate.ToDateTime(TimeOnly.MinValue);
-
-        (DateTime Start, DateTime? End)? current = null;
-
-        var generator = GetGenerator(subscription);
+        DateTime after = subscription.StartDate.ToDateTime(TimeOnly.MinValue);
+        var generator = CreateGeneratorFromSubscription(subscription);
 
         while (true)
         {
-            current = GetOrderDate(generator, subscription.SubscriptionPlan!, after.GetValueOrDefault());
-            after = current?.Start;
+            var current = GetOrderNextDate(generator, subscription.SubscriptionPlan!, after);
+            if (current is null) break;
 
-            if (current is null)
-            {
-                break;
-            }
-
-            yield return current.GetValueOrDefault();
+            yield return current.Value;
+            after = current.Value.Start;
         }
     }
 
-    public IRecurring GetGenerator(Subscription subscription)
+    public IRecurring CreateGeneratorFromSubscription(Subscription subscription)
     {
-        IRecurring? recurring = null;
-
-        var subscriptionPlan = subscription.SubscriptionPlan;
-
-        if (subscriptionPlan is null)
-        {
+        if (subscription.SubscriptionPlan is null)
             throw new NullReferenceException("SubscriptionPlan is null");
-        }
-
-        //var startDate = subscription.StartDate.Date;
-        //var endDate = subscription.EndDate?.Date;
 
         if (subscription.StartDate >= subscription.EndDate)
-        {
             throw new Exception("EndDate cannot occur before StartDate.");
-        }
 
-        StartingBuilder? startingBuilder = Recurs.Starting(subscription.StartDate.ToDateTime(TimeOnly.MinValue));
+        var plan = subscription.SubscriptionPlan;
+        var startDateTime = subscription.StartDate.ToDateTime(TimeOnly.MinValue);
+        var startingBuilder = Recurs.Starting(startDateTime);
 
-        Console.WriteLine(subscriptionPlan!.GetDescription());
-
-        if (subscriptionPlan.Recurrence == Recurrence.Daily)
+        return plan.Recurrence switch
         {
-            var dailyBuilder = startingBuilder
-                .Every(subscriptionPlan.EveryDays.GetValueOrDefault())
-                .Days();
-
-            if (subscription.EndDate is not null)
-            {
-                dailyBuilder = dailyBuilder.Ending(subscription.EndDate.GetValueOrDefault().ToDateTime(TimeOnly.MinValue));
-            }
-
-            recurring = dailyBuilder.Build();
-        }
-        else if (subscriptionPlan.Recurrence == Recurrence.Weekly)
-        {
-            var weeklyBuilder = startingBuilder
-                 .Every(subscriptionPlan.EveryWeeks.GetValueOrDefault())
-                 .Weeks()
-                 .OnDays(MapWeekDaysToDays(subscriptionPlan.OnWeekDays.GetValueOrDefault()));
-
-            if (subscription.EndDate is not null)
-            {
-                weeklyBuilder = weeklyBuilder.Ending(subscription.EndDate.GetValueOrDefault().ToDateTime(TimeOnly.MinValue));
-            }
-
-            recurring = weeklyBuilder.Build();
-        }
-        else if (subscriptionPlan.Recurrence == Recurrence.Monthly)
-        {
-            var monthsBuilder = startingBuilder
-                .Every(subscriptionPlan.EveryMonths.GetValueOrDefault())
-                .Months();
-
-            if (subscriptionPlan.OnDay is not null)
-            {
-                if (subscriptionPlan.OnDayOfWeek is null)
-                {
-                    monthsBuilder = monthsBuilder.OnDay(subscriptionPlan.OnDay.GetValueOrDefault());
-                }
-                else
-                {
-                    monthsBuilder = monthsBuilder.OnOrdinalWeek((Ordinal)subscriptionPlan.OnDay.GetValueOrDefault());
-                    monthsBuilder = monthsBuilder.OnDay(subscriptionPlan.OnDayOfWeek.GetValueOrDefault());
-                }
-            }
-            else
-            {
-                throw new Exception($"SubscriptionPlan {subscriptionPlan.Id} lacks OnDay.");
-            }
-
-            if (subscription.EndDate is not null)
-            {
-                monthsBuilder = monthsBuilder.Ending(subscription.EndDate.GetValueOrDefault().ToDateTime(TimeOnly.MinValue));
-            }
-
-            recurring = monthsBuilder.Build();
-        }
-        else if (subscriptionPlan.Recurrence == Recurrence.Yearly)
-        {
-            var yearsBuilder = startingBuilder
-             .Every(subscriptionPlan.EveryYears.GetValueOrDefault())
-             .Years();
-
-            if (subscriptionPlan.OnDay is not null)
-            {
-                if (subscriptionPlan.InMonth is not null)
-                {
-                    if (subscriptionPlan.OnDayOfWeek is null)
-                    {
-                        yearsBuilder = yearsBuilder
-                            .OnMonths((Dates.Recurring.Month)subscriptionPlan.InMonth.GetValueOrDefault())
-                            .OnDay(subscriptionPlan.OnDay.GetValueOrDefault());
-                    }
-                    else
-                    {
-                        yearsBuilder = yearsBuilder
-                            .OnMonths((Dates.Recurring.Month)subscriptionPlan.InMonth.GetValueOrDefault())
-                            .OnOrdinalWeek((Ordinal)subscriptionPlan.OnDay.GetValueOrDefault())
-                            .OnDay(subscriptionPlan.OnDayOfWeek.GetValueOrDefault());
-                    }
-                }
-                else
-                {
-                    throw new Exception($"SubscriptionPlan {subscriptionPlan.Id} lacks InMonth.");
-                }
-            }
-            else
-            {
-                throw new Exception($"SubscriptionPlan {subscriptionPlan.Id} lacks OnDay.");
-            }
-
-            if (subscription.EndDate is not null)
-            {
-                yearsBuilder = yearsBuilder.Ending(subscription.EndDate.GetValueOrDefault().ToDateTime(TimeOnly.MinValue));
-            }
-
-            recurring = yearsBuilder.Build();
-        }
-
-        if (recurring is null)
-            throw new Exception();
-
-        return recurring;
+            Recurrence.Daily => BuildDailyRecurring(startingBuilder, plan, subscription.EndDate),
+            Recurrence.Weekly => BuildWeeklyRecurring(startingBuilder, plan, subscription.EndDate),
+            Recurrence.Monthly => BuildMonthlyRecurring(startingBuilder, plan, subscription.EndDate),
+            Recurrence.Quarterly => BuildQuarterlyRecurring(startingBuilder, plan, subscription.EndDate),
+            Recurrence.Yearly => BuildYearlyRecurring(startingBuilder, plan, subscription.EndDate),
+            _ => throw new NotSupportedException($"Recurrence type {plan.Recurrence} is not supported.")
+        };
     }
 
-    public (DateTime Start, DateTime? End)? GetOrderDate(IRecurring recurring, SubscriptionPlan subscriptionPlan, DateTime? after)
+    private IRecurring BuildDailyRecurring(StartingBuilder builder, SubscriptionPlan plan, DateOnly? endDate)
     {
-        after = recurring.Next(after.GetValueOrDefault());
-
-        if (after is not null)
+        var dailyBuilder = builder.Every(plan.EveryDays ?? 1).Days();
+        if (endDate != null)
         {
-            var startDateTime = after.GetValueOrDefault().Add(subscriptionPlan.StartTime.GetValueOrDefault().ToTimeSpan());
+            dailyBuilder = dailyBuilder.Ending(endDate.Value.ToDateTime(TimeOnly.MinValue));
+        }
+        return dailyBuilder.Build();
+    }
 
-            DateTime? endDateTime = null;
+    private IRecurring BuildWeeklyRecurring(StartingBuilder builder, SubscriptionPlan plan, DateOnly? endDate)
+    {
+        var weeklyBuilder = builder
+            .Every(plan.EveryWeeks ?? 1)
+            .Weeks()
+            .OnDays(MapWeekDaysToDays(plan.OnWeekDays ?? WeekDays.Monday));
 
-            if (subscriptionPlan.Duration is not null)
-            {
-                // Duration might be Null (Unknown)
-
-                endDateTime = startDateTime.Add(subscriptionPlan.Duration.GetValueOrDefault());
-            }
-
-            return (
-                startDateTime,
-                endDateTime);
+        if (endDate != null)
+        {
+            weeklyBuilder = weeklyBuilder.Ending(endDate.Value.ToDateTime(TimeOnly.MinValue));
         }
 
-        return null;
+        return weeklyBuilder.Build();
+    }
+
+    private IRecurring BuildMonthlyRecurring(StartingBuilder builder, SubscriptionPlan plan, DateOnly? endDate)
+    {
+        if (plan.OnDay is null)
+            throw new Exception($"SubscriptionPlan {plan.Id} lacks OnDay.");
+
+        var monthsBuilder = builder.Every(plan.EveryMonths ?? 1).Months();
+
+        monthsBuilder = plan.OnDayOfWeek is null
+            ? monthsBuilder.OnDay(plan.OnDay.Value)
+            : monthsBuilder.OnOrdinalWeek((Ordinal)plan.OnDay.Value).OnDay(plan.OnDayOfWeek.Value);
+
+        if (endDate != null)
+        {
+            monthsBuilder = monthsBuilder.Ending(endDate.Value.ToDateTime(TimeOnly.MinValue));
+        }
+
+        return monthsBuilder.Build();
+    }
+
+    private IRecurring BuildQuarterlyRecurring(StartingBuilder builder, SubscriptionPlan plan, DateOnly? endDate)
+    {
+        if (plan.OnDay is null)
+            throw new Exception($"SubscriptionPlan {plan.Id} lacks OnDay.");
+
+        var quarterlyBuilder = builder.Every(3).Months();
+
+        quarterlyBuilder = plan.OnDayOfWeek is null
+            ? quarterlyBuilder.OnDay(plan.OnDay.Value)
+            : quarterlyBuilder.OnOrdinalWeek((Ordinal)plan.OnDay.Value).OnDay(plan.OnDayOfWeek.Value);
+
+        if (endDate != null)
+        {
+            quarterlyBuilder = quarterlyBuilder.Ending(endDate.Value.ToDateTime(TimeOnly.MinValue));
+        }
+
+        return quarterlyBuilder.Build();
+    }
+
+    private IRecurring BuildYearlyRecurring(StartingBuilder builder, SubscriptionPlan plan, DateOnly? endDate)
+    {
+        if (plan.OnDay is null || plan.InMonth is null)
+            throw new Exception($"SubscriptionPlan {plan.Id} lacks OnDay or InMonth.");
+
+        var yearsBuilder = builder
+            .Every(plan.EveryYears ?? 1)
+            .Years()
+            .OnMonths((Dates.Recurring.Month)plan.InMonth.Value);
+
+        yearsBuilder = plan.OnDayOfWeek is null
+            ? yearsBuilder.OnDay(plan.OnDay.Value)
+            : yearsBuilder.OnOrdinalWeek((Ordinal)plan.OnDay.Value).OnDay(plan.OnDayOfWeek.Value);
+
+        if (endDate != null)
+        {
+            yearsBuilder = yearsBuilder.Ending(endDate.Value.ToDateTime(TimeOnly.MinValue));
+        }
+
+        return yearsBuilder.Build();
+    }
+
+    public (DateTime Start, DateTime? End)? GetOrderNextDate(IRecurring recurring, SubscriptionPlan plan, DateTime after)
+    {
+        var nextDate = recurring.Next(after);
+        if (nextDate is null) return null;
+
+        var startDateTime = nextDate.Value.Add(plan.StartTime?.ToTimeSpan() ?? TimeSpan.Zero);
+        var endDateTime = plan.Duration is not null
+            ? startDateTime.Add(plan.Duration.Value)
+            : (DateTime?)null;
+
+        return (startDateTime, endDateTime);
     }
 
     private static Day MapWeekDaysToDays(WeekDays weekDays)
     {
-        Day day = 0;
-
-        if (weekDays.HasFlag(WeekDays.Monday))
-        {
-            day |= Day.MONDAY;
-        }
-        if (weekDays.HasFlag(WeekDays.Tuesday))
-        {
-            day |= Day.TUESDAY;
-        }
-        if (weekDays.HasFlag(WeekDays.Wednesday))
-        {
-            day |= Day.WEDNESDAY;
-        }
-        if (weekDays.HasFlag(WeekDays.Thursday))
-        {
-            day |= Day.THURSDAY;
-        }
-        if (weekDays.HasFlag(WeekDays.Friday))
-        {
-            day |= Day.FRIDAY;
-        }
-        if (weekDays.HasFlag(WeekDays.Saturday))
-        {
-            day |= Day.SATURDAY;
-        }
-
-        return day;
+        return (Day)weekDays;
     }
 }

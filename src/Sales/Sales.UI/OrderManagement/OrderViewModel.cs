@@ -12,6 +12,9 @@ public class OrderViewModel
     public int Id { get; set; }
 
     [Required]
+    public OrderType Type { get; set; }
+
+    [Required]
     public DateTime? Date { get; set; }
 
     [Required]

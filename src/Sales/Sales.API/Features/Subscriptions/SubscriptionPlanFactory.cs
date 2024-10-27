@@ -28,6 +28,17 @@ public static class SubscriptionPlanFactory
         };
     }
 
+    public static SubscriptionPlan CreateQuarterlyPlan(int onDay, TimeOnly startTime, TimeSpan? duration)
+    {
+        return new SubscriptionPlan
+        {
+            Recurrence = Recurrence.Quarterly,
+            OnDay = onDay,
+            StartTime = startTime,
+            Duration = duration
+        };
+    }
+
     public static SubscriptionPlan CreateMonthlyPlan(int everyMonths, int onDay, TimeOnly startTime, TimeSpan? duration)
     {
         return new SubscriptionPlan
