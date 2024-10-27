@@ -42,7 +42,6 @@
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
         <PackageReference Include="LinqKit" Version="1.2.3" />
         <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.5.1" />
-        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -55,7 +54,7 @@
         <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
         <ProjectReference Include="..\..\Common\Domain.Infrastructure\Domain.Infrastructure.csproj" />
         <ProjectReference Include="..\..\Common\Domain.Persistence\Domain.Persistence.csproj" />
-        <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+        <ProjectReference Include="..\..\YourBrand.ServiceDefaults\YourBrand.ServiceDefaults.csproj" />
         <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
         <ProjectReference
             Include="..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">

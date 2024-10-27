@@ -53,22 +53,13 @@ builder.Host.UseSerilog((ctx, cfg) =>
 
 builder.AddServiceDefaults();
 
-/*
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDiscoveryClient();
-}
-*/
 
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
-    .AddApiVersioningServices();
+builder.AddDefaultOpenApi();
 
 builder.Services
     .AddUserContext()
     .AddTenantContext();
 
-//builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
 builder.Services.AddProblemDetails();
 

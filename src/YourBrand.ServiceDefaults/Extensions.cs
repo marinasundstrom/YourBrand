@@ -1,23 +1,35 @@
+
+using Asp.Versioning;
+
+using HealthChecks.UI.Client;
+
+using MartinCostello.OpenApi;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ServiceDiscovery;
+using Microsoft.OpenApi.Models;
 
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 
+using Serilog;
+
 namespace Microsoft.Extensions.Hosting;
 
-public static class Extensions
+public static partial class Extensions
 {
-    public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddServiceDefaults(this WebApplicationBuilder builder)
     {
+        builder.Services.AddHttpContextAccessor();
+        
         builder.ConfigureOpenTelemetry();
-
-        builder.AddDefaultHealthChecks();
 
         builder.Services.AddServiceDiscovery();
 
@@ -35,6 +47,22 @@ public static class Extensions
         // {
         //     options.AllowedSchemes = ["https"];
         // });
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds the services except for making outgoing HTTP calls.
+    /// </summary>
+    /// <remarks>
+    /// This allows for things like Polly to be trimmed out of the app if it isn't used.
+    /// </remarks>
+    public static IHostApplicationBuilder AddBasicServiceDefaults(this IHostApplicationBuilder builder)
+    {
+        // Default health checks assume the event bus and self health checks
+        builder.AddDefaultHealthChecks();
+
+        builder.ConfigureOpenTelemetry();
 
         return builder;
     }
@@ -124,7 +152,21 @@ public static class Extensions
             {
                 Predicate = r => r.Tags.Contains("live")
             });
+
+            // For the UI
+            app.MapHealthChecks("/healthz", new HealthCheckOptions()
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
         }
+
+        return app;
+    }
+
+    public static WebApplication UseRequestLogging(this WebApplication app)
+    {
+        app.UseSerilogRequestLogging();
 
         return app;
     }

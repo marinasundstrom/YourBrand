@@ -21,7 +21,6 @@
     <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
-    <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,7 +53,7 @@
     <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-    <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+    <ProjectReference Include="..\..\YourBrand.ServiceDefaults\YourBrand.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>

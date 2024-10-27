@@ -54,20 +54,11 @@ builder.Host.UseSerilog((ctx, cfg) =>
     .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
 });
 
-/*
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDiscoveryClient();
-}
-*/
 
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
-    .AddApiVersioningServices();
+builder.AddDefaultOpenApi();
 
 builder.AddServiceDefaults();
 
-//builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 
 builder.Services.AddProblemDetails();
 

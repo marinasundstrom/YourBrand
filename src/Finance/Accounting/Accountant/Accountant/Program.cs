@@ -52,9 +52,7 @@ builder.Host.UseSerilog((ctx, cfg) =>
     .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
 });
 
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
-    .AddApiVersioningServices();
+builder.AddDefaultOpenApi();
 
 builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
 

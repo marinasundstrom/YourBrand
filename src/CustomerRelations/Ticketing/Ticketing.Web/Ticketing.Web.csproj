@@ -28,7 +28,6 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
            Version="9.0.0-*" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0-*" />
-        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -38,7 +37,7 @@
         <ProjectReference
             Include="..\Ticketing.Infrastructure\Ticketing.Infrastructure.csproj" />
         <ProjectReference
-            Include="..\..\..\Extensions\Extensions.csproj" />
+            Include="..\..\..\YourBrand.ServiceDefaults\YourBrand.ServiceDefaults.csproj" />
         <ProjectReference
             Include="..\..\..\Diagnostics\Diagnostics.csproj" />
         <ProjectReference

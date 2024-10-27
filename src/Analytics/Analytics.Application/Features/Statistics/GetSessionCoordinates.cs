@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
@@ -23,4 +25,5 @@ public record GetSessionCoordinates(DateTime? From = null, DateTime? To = null) 
     }
 }
 
+[Description("Represents a session with its geo-coordinates.")]
 public record SessionCoordinates(DateTimeOffset DateTime, string UserAgent, Domain.ValueObjects.Coordinates Coordinates);

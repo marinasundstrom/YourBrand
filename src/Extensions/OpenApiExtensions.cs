@@ -19,15 +19,17 @@ namespace YourBrand.Extensions;
 public static class OpenApiExtensions
 {
     readonly static IEnumerable<ApiVersion> apiVersionDescriptions = [
-        new(1, 0),
-        new(2, 0)
+        new(1, 0)
     ];
 
     public static IServiceCollection AddOpenApi(this IServiceCollection services,
-        string documentTitle,
+        string documentTitle, string documentDescription,
         IEnumerable<ApiVersion>? apiVersions = null,
         Action<AspNetCoreOpenApiDocumentGeneratorSettings>? setting = null)
     {
+        // Fff
+        //return services;
+
         services.AddEndpointsApiExplorer();
 
         apiVersions ??= apiVersionDescriptions;
@@ -43,11 +45,14 @@ public static class OpenApiExtensions
                 {
                     document.Info.Title = documentTitle;
                     document.Info.Version = $"v{GetApiVersion(apiVersion)}";
+                    document.Info.Description = documentDescription;
                 };
                 settings.ApiGroupNames = [GetApiVersion(apiVersion)];
 
                 settings.SchemaSettings.DefaultReferenceTypeNullHandling = ReferenceTypeNullHandling.NotNull;
                 settings.SchemaSettings.SchemaNameGenerator = new CustomSchemaNameGenerator();
+
+                settings.OperationProcessors.Add(new EndpointAttributesProcessor());
 
                 setting?.Invoke(settings);
             });
@@ -109,7 +114,7 @@ public static class OpenApiExtensions
         {
             configureOpenApi?.Invoke(options);
 
-            options.Path = "/openapi/{documentName}/openapi.yaml";
+            options.Path = "/openapi/{documentName}.yaml";
         });
 
         app.UseSwaggerUi(options =>
@@ -124,7 +129,7 @@ public static class OpenApiExtensions
             foreach (var description in descriptions)
             {
                 var name = $"v{description.ApiVersion}";
-                var url = $"/openapi/v{GetApiVersion(description)}/openapi.yaml";
+                var url = $"/openapi/v{GetApiVersion(description)}.yaml";
 
                 options.SwaggerRoutes.Add(new SwaggerUiRoute(name, url));
             }

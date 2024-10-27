@@ -22,10 +22,9 @@
         <PackageReference Include="IronPdf.MacOs" Version="2022.9.9056" />
         <PackageReference Include="MediatR" Version="12.2.0" />
         <PackageReference Include="Azure.Storage.Blobs" Version="12.14.0-beta.1" />
-        <PackageReference Include="Microsoft.Extensions.Azure" Version="1.5.0" />
+        <PackageReference Include="Microsoft.Extensions.Azure" Version="1.7.6" />
         <PackageReference Include="Yarp.ReverseProxy" Version="2.1.0" />
         <PackageReference Include="Scrutor" Version="4.2.0" />    
-        <PackageReference Include="Serilog.Sinks.OpenTelemetry" Version="4.0.0" />
     </ItemGroup>
 
 	<ItemGroup>
@@ -33,7 +32,7 @@
     <ProjectReference Include="..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
     <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
-    <ProjectReference Include="..\..\Extensions\Extensions.csproj" />
+    <ProjectReference Include="..\..\YourBrand.ServiceDefaults\YourBrand.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>

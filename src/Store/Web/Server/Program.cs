@@ -42,12 +42,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-/*
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDiscoveryClient();
-}
-*/
 
 builder.Host.UseSerilog((ctx, cfg) =>
 {
@@ -126,9 +120,7 @@ if (builder.Environment.IsProduction())
         new DefaultAzureCredential());
 }
 
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
-    .AddApiVersioningServices();
+builder.AddDefaultOpenApi();
 
 //builder.Services.AddObservability(serviceName, serviceVersion, builder.Configuration);
 

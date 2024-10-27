@@ -1,3 +1,7 @@
+using System.Reflection;
+
+using Microsoft.AspNetCore.Http;
+
 using NJsonSchema;
 
 using NSwag;
@@ -20,6 +24,18 @@ public class TenantIdHeaderOperationProcessor(bool isRequired) : IOperationProce
                 Description = "The Id of the tenant",
                 Default = null
             });
+
+        return true;
+    }
+}
+
+public class EndpointAttributesProcessor : IOperationProcessor
+{
+    public bool Process(OperationProcessorContext context)
+    {
+        context.OperationDescription.Operation.Summary = context.MethodInfo.GetCustomAttributes<EndpointSummaryAttribute>().FirstOrDefault()?.Summary;
+
+        context.OperationDescription.Operation.Description = context.MethodInfo.GetCustomAttributes<EndpointDescriptionAttribute>().FirstOrDefault()?.Description;
 
         return true;
     }

@@ -11,15 +11,10 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 
-using Serilog;
-
-using YourBrand;
 using YourBrand.Analytics.Application;
-using YourBrand.Analytics.Application.Services;
 using YourBrand.Analytics.Infrastructure.Persistence;
 using YourBrand.Analytics.Web;
 using YourBrand.Analytics.Web.Middleware;
-using YourBrand.Extensions;
 
 using YourBrand.Identity;
 using YourBrand.Tenancy;
@@ -31,52 +26,15 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-string ServiceName = "Analytics";
-string ServiceVersion = "1.0";
-
-// Add services to container
-
-builder.Host.UseSerilog((ctx, cfg) =>
-{
-    cfg.ReadFrom.Configuration(builder.Configuration)
-    .WriteTo.OpenTelemetry(options =>
-    {
-        options.Endpoint = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
-        var headers = builder.Configuration["OTEL_EXPORTER_OTLP_HEADERS"]?.Split(',') ?? [];
-        foreach (var header in headers)
-        {
-            var (key, value) = header.Split('=') switch
-            {
-            [string k, string v] => (k, v),
-                var v => throw new Exception($"Invalid header format {v}")
-            };
-
-            options.Headers.Add(key, value);
-        }
-        options.ResourceAttributes.Add("service.name", ServiceName);
-    })
-    .Enrich.WithProperty("Application", ServiceName)
-    .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName);
-});
-
+builder.AddDefaultLogging();
 
 builder.AddServiceDefaults();
-
-/*
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDiscoveryClient();
-}
-*/
-
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
-    .AddApiVersioningServices();
-
-//builder.Services.AddObservability(ServiceName, ServiceVersion, builder.Configuration);
-
+builder.AddApplicationServices();
 builder.Services.AddProblemDetails();
 
+var withApiVersioning = builder.Services.AddApiVersioning();
+
+builder.AddDefaultOpenApi(withApiVersioning);
 
 var configuration = builder.Configuration;
 
@@ -108,7 +66,7 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddAuthenticationServices(builder.Configuration);
+//builder.Services.AddAuthenticationServices(builder.Configuration);
 
 builder.Services.AddUniverse(builder.Configuration);
 
@@ -163,7 +121,7 @@ var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
-app.UseSerilogRequestLogging();
+app.UseRequestLogging();
 
 //app.MapObservability();
 
@@ -174,7 +132,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 
-    app.UseOpenApiAndSwaggerUi();
+    app.UseDefaultOpenApi();
 }
 
 app.UseCors(MyAllowSpecificOrigins);

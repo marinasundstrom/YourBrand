@@ -13,7 +13,7 @@ public sealed record StartSession : IRequest<string>
     {
         public async Task<string> Handle(StartSession request, CancellationToken cancellationToken)
         {
-            return await sessionClient.InitSessionAsync(userContext.ClientId, new YourBrand.Analytics.SessionData() { IpAddress = userContext.GetRemoteIPAddress() }, cancellationToken);
+            return await sessionClient.InitSessionAsync(userContext.ClientId, new YourBrand.Analytics.SessionRequestData() { IpAddress = userContext.GetRemoteIPAddress() }, cancellationToken);
         }
     }
 }

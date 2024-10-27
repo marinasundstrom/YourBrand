@@ -60,12 +60,6 @@ builder.Host.UseSerilog((ctx, cfg) =>
 
 builder.AddServiceDefaults();
 
-/*
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDiscoveryClient();
-}
-*/
 
 builder.Services.AddCors();
 
@@ -90,9 +84,7 @@ if (builder.Environment.IsProduction())
 
 // Add services to the container.
 
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
-    .AddApiVersioningServices();
+builder.AddDefaultOpenApi();
 
 //builder.Services.AddObservability("StoreFront.API", "1.0", builder.Configuration);
 

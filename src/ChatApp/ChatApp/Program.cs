@@ -83,7 +83,7 @@ builder.Services
 */
 
 builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings =>
+    .AddOpenApi(ServiceName, "", ApiVersions.All, settings =>
     {
         settings.SchemaSettings.TypeMappers.Add(new ObjectTypeMapper(typeof(ChannelId), new NJsonSchema.JsonSchema
         {

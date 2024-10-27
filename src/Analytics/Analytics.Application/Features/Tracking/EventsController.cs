@@ -2,6 +2,7 @@ using MediatR;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
 
 namespace YourBrand.Analytics.Application.Features.Tracking;
 
@@ -10,6 +11,8 @@ namespace YourBrand.Analytics.Application.Features.Tracking;
 [Route("v{version:apiVersion}/[controller]")]
 public class EventsController(IMediator mediator) : ControllerBase
 {
+    [EndpointSummary("Register an event")]
+    [EndpointDescription("Registers an event with data.")]
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

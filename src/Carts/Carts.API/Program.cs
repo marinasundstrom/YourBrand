@@ -74,9 +74,7 @@ if (builder.Environment.IsProduction())
 
 // Add services to the container.
 
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
-    .AddApiVersioningServices();
+builder.AddDefaultOpenApi();
 
 //builder.Services.AddObservability("Carts.API", "1.0", builder.Configuration);
 

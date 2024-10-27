@@ -1,7 +1,8 @@
-﻿x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+﻿x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))
 openapi: 3.0.0
 info:
   title: Analytics
+  description: ''
   version: v1
 servers:
 - url: https://localhost:5091
@@ -10,13 +11,15 @@ paths:
     post:
       tags:
       - Client
+      summary: Initiate the client
+      description: Registers a client for tracking.
       operationId: Client_InitClient
       requestBody:
-        x-name: data
+        x-name: requestData
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClientData'
+              $ref: '#/components/schemas/ClientRegistrationRequestData'
         required: true
         x-position: 1
       responses:
@@ -30,6 +33,8 @@ paths:
     post:
       tags:
       - Events
+      summary: Register an event
+      description: Registers an event with data.
       operationId: Events_RegisterEvent
       parameters:
       - name: X-Client-Id
@@ -65,6 +70,8 @@ paths:
     post:
       tags:
       - Session
+      summary: Initiate session
+      description: Initiates a session for the current client. If the current session has expired a new one will be created and initiated.
       operationId: Session_InitSession
       parameters:
       - name: X-Client-Id
@@ -74,11 +81,11 @@ paths:
           type: string
         x-position: 1
       requestBody:
-        x-name: data
+        x-name: requestData
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SessionData'
+              $ref: '#/components/schemas/SessionRequestData'
         required: true
         x-position: 2
       responses:
@@ -92,6 +99,8 @@ paths:
     post:
       tags:
       - Session
+      summary: Register coordinates
+      description: Registers the geo-coordinates to be attached to the session.
       operationId: Session_RegisterCoordinates
       parameters:
       - name: X-Client-Id
@@ -121,6 +130,8 @@ paths:
     get:
       tags:
       - Statistics
+      summary: Get most viewed items
+      description: Returns the most viewed items over a specific period of time.
       operationId: Statistics_GetMostViewedItems
       parameters:
       - name: From
@@ -154,6 +165,8 @@ paths:
     get:
       tags:
       - Statistics
+      summary: Get sessions count
+      description: Returns the number of sessions over a specific period of time.
       operationId: Statistics_GetSessionsCount
       parameters:
       - name: From
@@ -187,6 +200,8 @@ paths:
     get:
       tags:
       - Statistics
+      summary: Get session coordinates
+      description: Returns the coordinates for sessions.
       operationId: Statistics_GetSessionCoordinates
       parameters:
       - name: From
@@ -214,21 +229,23 @@ paths:
                   $ref: '#/components/schemas/SessionCoordinates'
 components:
   schemas:
-    ClientData:
+    ClientRegistrationRequestData:
       type: object
+      description: The data being passed when registering a client.
       additionalProperties: false
       properties:
         userAgent:
           type: string
     EventData:
       type: object
+      description: Container for data for an event, its type, and additional data, in the form of key-value pairs.
       additionalProperties: false
       properties:
-        eventType:
-          $ref: '#/components/schemas/EventType'
         data:
           type: object
           additionalProperties: {}
+        eventType:
+          $ref: '#/components/schemas/EventType'
     EventType:
       type: string
       description: ''
@@ -238,8 +255,9 @@ components:
       enum:
       - productViewed
       - productGroupViewed
-    SessionData:
+    SessionRequestData:
       type: object
+      description: The data being passed when requesting or renewing a session.
       additionalProperties: false
       properties:
         ipAddress:
@@ -247,6 +265,7 @@ components:
           nullable: true
     Coordinates:
       type: object
+      description: Represents a set of geo-coordinates.
       additionalProperties: false
       properties:
         latitude:
@@ -257,6 +276,7 @@ components:
           format: double
     Data:
       type: object
+      description: Represents the data of a graph, its series, and labels.
       additionalProperties: false
       properties:
         labels:
@@ -269,6 +289,7 @@ components:
             $ref: '#/components/schemas/Series'
     Series:
       type: object
+      description: Represents a named series values.
       additionalProperties: false
       properties:
         name:
@@ -280,6 +301,7 @@ components:
             format: decimal
     SessionCoordinates:
       type: object
+      description: Represents a session with its geo-coordinates.
       additionalProperties: false
       properties:
         dateTime:
@@ -289,3 +311,9 @@ components:
           type: string
         coordinates:
           $ref: '#/components/schemas/Coordinates'
+  securitySchemes:
+    JWT:
+      type: apiKey
+      description: 'Type into the textbox: Bearer {your JWT token}.'
+      name: Authorization
+      in: header

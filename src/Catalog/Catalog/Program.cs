@@ -55,12 +55,6 @@ builder.Host.UseSerilog((ctx, cfg) =>
 
 builder.AddServiceDefaults();
 
-/*
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDiscoveryClient();
-}
-*/
 
 builder.Services.AddOutputCache(options =>
 {
@@ -112,9 +106,7 @@ builder.Services.AddAzureClients(clientBuilder =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings => settings.AddJwtSecurity())
-    .AddApiVersioningServices();
+builder.AddDefaultOpenApi();
 
 builder.Services.AddProductsServices();
 

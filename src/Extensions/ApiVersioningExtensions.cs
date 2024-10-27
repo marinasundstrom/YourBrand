@@ -8,6 +8,9 @@ public static class ApiVersioningExtensions
 {
     public static IServiceCollection AddApiVersioningServices(this IServiceCollection services)
     {
+        // fesds
+        //return services;
+
         services.AddApiVersioning(options =>
         {
             options.AssumeDefaultVersionWhenUnspecified = true;

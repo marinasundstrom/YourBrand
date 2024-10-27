@@ -15,7 +15,7 @@ public sealed record CreateClient : IRequest<string>
         {
             var userAgent = userContext.UserAgent!.ToString();
 
-            return await clientClient.InitClientAsync(new YourBrand.Analytics.ClientData()
+            return await clientClient.InitClientAsync(new YourBrand.Analytics.ClientRegistrationRequestData()
             {
                 UserAgent = userAgent!
             }, cancellationToken);
