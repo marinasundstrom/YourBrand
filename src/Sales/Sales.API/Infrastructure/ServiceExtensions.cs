@@ -1,4 +1,7 @@
-﻿using YourBrand.Domain.Infrastructure;
+﻿using Quartz;
+
+using YourBrand.Domain.Infrastructure;
+using YourBrand.Sales.Infrastructure.Jobs;
 using YourBrand.Sales.Infrastructure.Services;
 
 namespace YourBrand.Sales.Infrastructure;
@@ -13,6 +16,47 @@ public static class ServiceExtensions
         services.AddScoped<IEmailService, EmailService>();
 
         services.AddDomainInfrastructure(configuration);
+
+        services.AddQuartz(configure =>
+        {
+            var jobKey = new JobKey(nameof(SubscriptionCancellationProcessor));
+
+            int interval = 10;
+            
+            configure
+                .AddJob<SubscriptionCancellationProcessor>(jobKey)
+                .AddTrigger(trigger => trigger.ForJob(jobKey)
+                    .WithSimpleSchedule(schedule => schedule
+                        .WithIntervalInSeconds(interval)
+                        .RepeatForever()));
+
+            var jobKey2 = new JobKey(nameof(SubscriptionOrderGenerationProcess));
+
+            configure
+                .AddJob<SubscriptionOrderGenerationProcess>(jobKey2)
+                .AddTrigger(trigger => trigger.ForJob(jobKey2)
+                    .WithSimpleSchedule(schedule => schedule
+                        .WithIntervalInSeconds(interval)
+                        .RepeatForever()));
+
+            var jobKey3 = new JobKey(nameof(SubscriptionPendingRenewalJob));
+
+            configure
+                .AddJob<SubscriptionPendingRenewalJob>(jobKey3)
+                .AddTrigger(trigger => trigger.ForJob(jobKey3)
+                    .WithSimpleSchedule(schedule => schedule
+                        .WithIntervalInSeconds(30)
+                        .RepeatForever()));
+
+            var jobKey4 = new JobKey(nameof(SubscriptionAutoRenewalJob));
+
+            configure
+                .AddJob<SubscriptionAutoRenewalJob>(jobKey4)
+                .AddTrigger(trigger => trigger.ForJob(jobKey4)
+                    .WithSimpleSchedule(schedule => schedule
+                        .WithIntervalInSeconds(60)
+                        .RepeatForever()));
+        });
 
         return services;
     }

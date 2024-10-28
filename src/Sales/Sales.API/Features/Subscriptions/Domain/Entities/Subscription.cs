@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using Humanizer;
+
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Sales.Domain.Enums;
@@ -35,15 +37,21 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
     public int StatusId { get; set; }
     public DateTimeOffset StatusDate { get; set; }
 
-    public void UpdateStatus(SubscriptionStatusEnum statusId, TimeProvider timeProvider)
+    public bool UpdateStatus(SubscriptionStatusEnum statusId, TimeProvider timeProvider)
     {
-        UpdateStatus((int)statusId, timeProvider);
+        return UpdateStatus((int)statusId, timeProvider);
     }
 
-    public void UpdateStatus(int statusId, TimeProvider timeProvider)
+    public bool UpdateStatus(int statusId, TimeProvider timeProvider)
     {
-        StatusId = statusId;
-        StatusDate = timeProvider.GetUtcNow();
+        if(StatusId != statusId) 
+        {
+            StatusId = statusId;
+            StatusDate = timeProvider.GetUtcNow();
+            return true;
+        }
+
+        return false;
     }
 
     public string? Note { get; set; }
@@ -252,7 +260,6 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
 
             // Update the status to active
             SetStatusActive(timeProvider);
-            SetStatusActive(timeProvider);
 
             // Update the next billing and delivery dates
             UpdateNextBillingDate(billingDateCalculator);
@@ -265,38 +272,43 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
     }
 
     private void SetStatusActive(TimeProvider timeProvider)
-    {
-        AddDomainEvent(new SubscriptionActivated(TenantId, OrganizationId, Id));
-        
-        UpdateStatus(SubscriptionStatusEnum.Active, timeProvider);
+    {        
+        if(UpdateStatus(SubscriptionStatusEnum.Active, timeProvider)) 
+        {
+            AddDomainEvent(new SubscriptionActivated(TenantId, OrganizationId, Id));
+        }
     }
 
     private void SetStatusCanceled(TimeProvider timeProvider)
     {
-        AddDomainEvent(new SubscriptionCanceled(TenantId, OrganizationId, Id));
-
-        UpdateStatus(SubscriptionStatusEnum.Canceled, timeProvider);
+        if(UpdateStatus(SubscriptionStatusEnum.Canceled, timeProvider)) 
+        {
+            AddDomainEvent(new SubscriptionCanceled(TenantId, OrganizationId, Id));
+        }
     }
 
     private void SetStatusSuspended(TimeProvider timeProvider)
     {
-        AddDomainEvent(new SubscriptionSuspended(TenantId, OrganizationId, Id));
-
-        UpdateStatus(SubscriptionStatusEnum.Suspended, timeProvider);
+        if(UpdateStatus(SubscriptionStatusEnum.Suspended, timeProvider)) 
+        {
+             AddDomainEvent(new SubscriptionSuspended(TenantId, OrganizationId, Id));
+        }
     }
 
     private void SetStatusExpired(TimeProvider timeProvider)
     {
-        AddDomainEvent(new SubscriptionExpired(TenantId, OrganizationId, Id));
-
-        UpdateStatus(SubscriptionStatusEnum.Expired, timeProvider);
+        if(UpdateStatus(SubscriptionStatusEnum.Expired, timeProvider)) 
+        {
+            AddDomainEvent(new SubscriptionExpired(TenantId, OrganizationId, Id));
+        }
     }
 
     private void SetStatusPaused(TimeProvider timeProvider)
     {
-        AddDomainEvent(new SubscriptionPaused(TenantId, OrganizationId, Id));
-
-        UpdateStatus(SubscriptionStatusEnum.Paused, timeProvider);
+        if(UpdateStatus(SubscriptionStatusEnum.Paused, timeProvider)) 
+        {
+            AddDomainEvent(new SubscriptionPaused(TenantId, OrganizationId, Id));
+        }
     }
 
     /// <summary>
@@ -334,17 +346,55 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
             var currentDate = timeProvider.GetUtcNow();
 
             // Ensure the subscription has a next billing date and it's within the time window
-            if (NextBillingDate.HasValue && NextBillingDate.Value <= currentDate.Add(timeBeforeExpiration))
+            var renewalWindowStart = currentDate.Add(timeBeforeExpiration);
+            var eligibleForRenewal = NextBillingDate.HasValue && NextBillingDate.Value <= renewalWindowStart;
+
+            // If the renewal status is not yet set to pending, indicate it is ready for renewal
+            if (eligibleForRenewal && (RenewalStatus == RenewalStatus.None || RenewalStatus == RenewalStatus.RenewalPending))
             {
-                // If the renewal status is not yet set to pending, indicate it is ready for renewal
-                if (RenewalStatus == RenewalStatus.None || RenewalStatus == RenewalStatus.RenewalPending)
-                {
-                    return true;
-                }
+                return true;
             }
         }
 
         return false;
+    }
+
+    public string? GetIneligibilityReasonForRenewal(TimeSpan timeBeforeExpiration, TimeProvider timeProvider)
+    {
+        // Ensure the subscription is active
+        if (!IsActive)
+        {
+            return "Subscription is not active.";
+        }
+
+        // Check if AutoRenew is enabled
+        if (!AutoRenew)
+        {
+            return "Auto-renew is not enabled.";
+        }
+
+        var currentDate = timeProvider.GetUtcNow();
+
+        // Check if there is a NextBillingDate
+        if (!NextBillingDate.HasValue)
+        {
+            return "Next billing date is not set.";
+        }
+
+        // Check if the renewal is within the eligible time window
+        if (NextBillingDate.Value > currentDate.Add(timeBeforeExpiration))
+        {
+            return $"Renewal is only eligible within {timeBeforeExpiration.Humanize()} before the next billing date.";
+        }
+
+        // Check if the renewal status is already pending or renewed
+        if (RenewalStatus == RenewalStatus.RenewalPending || RenewalStatus == RenewalStatus.Renewed)
+        {
+            return "Renewal is already pending or has been renewed.";
+        }
+
+        // If all conditions are met, return null (indicating eligibility)
+        return null;
     }
 
     public void Suspend(TimeProvider timeProvider)
@@ -673,7 +723,7 @@ public class DefaultDeliveryDateCalculator(TimeProvider timeProvider) : IDeliver
         while (!endDateTimeOffset.HasValue || currentDate < endDateTimeOffset.Value)
         {
             dates.Add(currentDate);
-            currentDate = CalculateNextDeliveryDate(subscription);
+            currentDate = CalculateNextDeliveryDate(subscription, currentDate);
         }
 
         return dates;

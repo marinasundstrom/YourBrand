@@ -5,7 +5,6 @@ using YourBrand.Notifications;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
-using YourBrand.Sales.Features.SubscriptionManagement;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 
@@ -54,7 +53,8 @@ public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderReposit
         var subscription = order.Subscription;
         var subscriptionPlan = subscription.Plan;
 
-        subscription.StartTrial(subscriptionPlan.TrialLength, timeProvider);
+        //subscription.StartTrial(subscriptionPlan.TrialLength, timeProvider);
+        subscription.Activate(timeProvider);
 
         return Task.CompletedTask;
     }

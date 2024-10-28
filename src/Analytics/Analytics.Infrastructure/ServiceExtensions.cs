@@ -40,7 +40,7 @@ public static class ServiceExtensions
                         .RepeatForever()));
         });
 
-        services.AddQuartzHostedService();
+        services.AddQuartzHostedService(x => x.WaitForJobsToComplete = true);
 
         return services;
     }
