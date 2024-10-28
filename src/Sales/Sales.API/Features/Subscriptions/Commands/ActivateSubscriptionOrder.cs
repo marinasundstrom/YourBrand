@@ -11,7 +11,7 @@ namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) : IRequest
 {
-    public class Handler(SalesContext salesContext, OrderNumberFetcher orderNumberFetcher, 
+    public class Handler(SalesContext salesContext, OrderNumberFetcher orderNumberFetcher,
         TimeProvider timeProvider,
         SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<ActivateSubscriptionOrder>
     {
@@ -33,7 +33,7 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
                 throw new System.Exception();
             }
 
-            if(order.StatusId != (int)OrderStatusEnum.Confirmed) 
+            if (order.StatusId != (int)OrderStatusEnum.Confirmed)
             {
                 throw new System.InvalidOperationException("Order not confirmed");
             }
@@ -64,12 +64,12 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
 
             var plan = subscription.Plan;
 
-            if (plan is null && plan.HasTrial) 
+            if (plan is null && plan.HasTrial)
             {
                 // Activate trial
                 subscription.StartTrial(plan.TrialLength, timeProvider);
             }
-            else 
+            else
             {
                 // Activate subscription
                 subscription.Activate(timeProvider);

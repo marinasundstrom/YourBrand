@@ -96,7 +96,7 @@ public class SubscriptionSchedule : IEquatable<SubscriptionSchedule>, ISubscript
         return this;
     }
 
-    public SubscriptionSchedule WithDuration(TimeSpan? timeSpan) 
+    public SubscriptionSchedule WithDuration(TimeSpan? timeSpan)
     {
         Duration = timeSpan;
         return this;

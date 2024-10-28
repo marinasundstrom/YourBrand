@@ -23,7 +23,7 @@ public class SubscriptionPendingRenewalJob(SalesContext salesContext, IDeliveryD
             .Where(x => x.TypeId == 1 && x.StatusId == (int)SubscriptionStatusEnum.Active && x.AutoRenew && (x.RenewalStatus == RenewalStatus.None || x.RenewalStatus == RenewalStatus.RenewalPending))
             .Take(batchSize)
             .ToListAsync(context.CancellationToken);
-            
+
         TimeSpan timeBeforeExpiration = TimeSpan.FromMinutes(5);
 
         foreach (var subscription in subscriptions)
@@ -34,7 +34,7 @@ public class SubscriptionPendingRenewalJob(SalesContext salesContext, IDeliveryD
             {
                 logger.LogInformation("{SubscriptionId} is eligible for renewal", subscription.SubscriptionNo);
             }
-            else 
+            else
             {
                 logger.LogInformation("{SubscriptionId} is NOT eligible for renewal: {Reason}", subscription.SubscriptionNo, subscription.GetIneligibilityReasonForRenewal(timeBeforeExpiration, timeProvider));
             }

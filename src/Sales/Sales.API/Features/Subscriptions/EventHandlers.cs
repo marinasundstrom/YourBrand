@@ -15,9 +15,9 @@ public sealed class SubscriptionActivatedEventHandler(SalesContext salesContext,
             .Include(x => x.Plan)
             .FirstOrDefaultAsync(x => x.Id == notification.SubscriptionId, cancellationToken);
 
-        if (subscription is { Plan: { PlanType: SubscriptionPlanType.RecurringOrder } }) 
+        if (subscription is { Plan: { PlanType: SubscriptionPlanType.RecurringOrder } })
         {
-            
+
         }
 
         logger.LogInformation("Subscription activated");

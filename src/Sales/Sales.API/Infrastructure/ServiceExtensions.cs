@@ -22,7 +22,7 @@ public static class ServiceExtensions
             var jobKey = new JobKey(nameof(SubscriptionCancellationProcessor));
 
             int interval = 10;
-            
+
             configure
                 .AddJob<SubscriptionCancellationProcessor>(jobKey)
                 .AddTrigger(trigger => trigger.ForJob(jobKey)

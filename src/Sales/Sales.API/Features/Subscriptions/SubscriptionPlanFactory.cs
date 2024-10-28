@@ -20,7 +20,7 @@ public static class SubscriptionPlanFactory
         var schedule = SubscriptionSchedule.Weekly(everyWeeks, onWeekDays)
                 .WithStartTime(startTime)
                 .WithDuration(duration);
-                
+
         return new SubscriptionPlan()
             .WithSchedule(schedule);
     }

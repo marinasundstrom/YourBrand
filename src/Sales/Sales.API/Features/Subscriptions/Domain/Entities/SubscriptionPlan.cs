@@ -46,9 +46,10 @@ public class SubscriptionPlan : AggregateRoot<Guid>, IAuditable, ISoftDeletable,
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
 
-    public static SubscriptionPlan Create(SubscriptionPlanType planType, string name, string? description = null) 
+    public static SubscriptionPlan Create(SubscriptionPlanType planType, string name, string? description = null)
     {
-        return new SubscriptionPlan() {
+        return new SubscriptionPlan()
+        {
             PlanType = planType,
             Name = name,
             Description = description

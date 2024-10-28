@@ -152,7 +152,7 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
     public OrderItem AddItem(OrderItem orderItem)
     {
         orderItem.OrganizationId = OrganizationId;
-        
+
         _items.Add(orderItem);
 
         Update();
@@ -276,7 +276,7 @@ public sealed class OrderVatAmount
     public decimal Total { get; set; }
 }
 
-public enum OrderStatusEnum 
+public enum OrderStatusEnum
 {
     Draft = 1,
     Planned,

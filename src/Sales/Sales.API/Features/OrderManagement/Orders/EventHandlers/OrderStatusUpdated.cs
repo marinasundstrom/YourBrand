@@ -29,7 +29,7 @@ public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderReposit
 
         if (order.StatusId == (int)OrderStatusEnum.Confirmed)
         {
-            if(order.Subscription is not null) 
+            if (order.Subscription is not null)
             {
                 await ActivateSubscription(order);
             }

@@ -9,7 +9,7 @@ using YourBrand.Sales.Persistence.Repositories.Mocks;
 namespace YourBrand.Sales.Infrastructure.Jobs;
 
 [DisallowConcurrentExecution]
-public class SubscriptionOrderGenerationProcess(SalesContext salesContext, IDeliveryDateCalculator deliveryDateCalculator, 
+public class SubscriptionOrderGenerationProcess(SalesContext salesContext, IDeliveryDateCalculator deliveryDateCalculator,
     TimeProvider timeProvider, ILogger<SubscriptionOrderGenerationProcess> logger) : IJob
 {
     public async Task Execute(IJobExecutionContext context)
@@ -23,13 +23,13 @@ public class SubscriptionOrderGenerationProcess(SalesContext salesContext, IDeli
             .Take(batchSize)
             .ToListAsync(context.CancellationToken);
 
-        foreach(var subscription in subscriptions) 
+        foreach (var subscription in subscriptions)
         {
             var order = await salesContext.Orders
                 .IncludeAll()
                 .FirstOrDefaultAsync(x => x.Id == subscription.OrderId, context.CancellationToken);
 
-            if(order is not null) 
+            if (order is not null)
             {
                 DateTimeOffset now = timeProvider.GetUtcNow();
 

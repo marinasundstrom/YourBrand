@@ -2,9 +2,9 @@ using YourBrand.Sales.Domain.Enums;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public static class SubscriptionScheduleExtensions 
+public static class SubscriptionScheduleExtensions
 {
-    public static DateTimeOffset GetNextDate(this SubscriptionSchedule schedule, DateTimeOffset fromDate) 
+    public static DateTimeOffset GetNextDate(this SubscriptionSchedule schedule, DateTimeOffset fromDate)
     {
         return schedule.Frequency switch
         {

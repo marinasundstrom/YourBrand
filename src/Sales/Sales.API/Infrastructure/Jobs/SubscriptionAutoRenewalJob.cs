@@ -28,7 +28,7 @@ public class SubscriptionAutoRenewalJob(SalesContext salesContext, IDeliveryDate
         {
             var wasRenewed = subscription.Renew(billingDateCalculator, deliveryDateCalculator, timeProvider);
 
-            if(wasRenewed) 
+            if (wasRenewed)
             {
                 logger.LogInformation("{SubscriptionId} was renewed", subscription.SubscriptionNo);
             }

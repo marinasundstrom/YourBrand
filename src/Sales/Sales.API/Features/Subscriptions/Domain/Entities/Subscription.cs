@@ -44,7 +44,7 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
 
     public bool UpdateStatus(int statusId, TimeProvider timeProvider)
     {
-        if(StatusId != statusId) 
+        if (StatusId != statusId)
         {
             StatusId = statusId;
             StatusDate = timeProvider.GetUtcNow();
@@ -272,8 +272,8 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
     }
 
     private void SetStatusActive(TimeProvider timeProvider)
-    {        
-        if(UpdateStatus(SubscriptionStatusEnum.Active, timeProvider)) 
+    {
+        if (UpdateStatus(SubscriptionStatusEnum.Active, timeProvider))
         {
             AddDomainEvent(new SubscriptionActivated(TenantId, OrganizationId, Id));
         }
@@ -281,7 +281,7 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
 
     private void SetStatusCanceled(TimeProvider timeProvider)
     {
-        if(UpdateStatus(SubscriptionStatusEnum.Canceled, timeProvider)) 
+        if (UpdateStatus(SubscriptionStatusEnum.Canceled, timeProvider))
         {
             AddDomainEvent(new SubscriptionCanceled(TenantId, OrganizationId, Id));
         }
@@ -289,15 +289,15 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
 
     private void SetStatusSuspended(TimeProvider timeProvider)
     {
-        if(UpdateStatus(SubscriptionStatusEnum.Suspended, timeProvider)) 
+        if (UpdateStatus(SubscriptionStatusEnum.Suspended, timeProvider))
         {
-             AddDomainEvent(new SubscriptionSuspended(TenantId, OrganizationId, Id));
+            AddDomainEvent(new SubscriptionSuspended(TenantId, OrganizationId, Id));
         }
     }
 
     private void SetStatusExpired(TimeProvider timeProvider)
     {
-        if(UpdateStatus(SubscriptionStatusEnum.Expired, timeProvider)) 
+        if (UpdateStatus(SubscriptionStatusEnum.Expired, timeProvider))
         {
             AddDomainEvent(new SubscriptionExpired(TenantId, OrganizationId, Id));
         }
@@ -305,7 +305,7 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
 
     private void SetStatusPaused(TimeProvider timeProvider)
     {
-        if(UpdateStatus(SubscriptionStatusEnum.Paused, timeProvider)) 
+        if (UpdateStatus(SubscriptionStatusEnum.Paused, timeProvider))
         {
             AddDomainEvent(new SubscriptionPaused(TenantId, OrganizationId, Id));
         }
