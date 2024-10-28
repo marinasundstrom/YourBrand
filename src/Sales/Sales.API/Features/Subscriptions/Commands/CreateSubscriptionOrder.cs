@@ -22,9 +22,10 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
 
             var subscription = new Subscription()
             {
-                SubscriptionPlan = subscriptionPlan!,
+                Plan = subscriptionPlan!,
+                Schedule = subscriptionPlan!.Schedule.Clone(),
                 StartDate = request.StartDate,
-                StartTime = request.StartTime,
+                //StartTime = request.StartTime, // REVISIT
                 EndDate = request.StartDate.AddMonths(12),
                 OrganizationId = request.OrganizationId
             };
@@ -69,7 +70,7 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
 
             var orderItem = order.AddItem("Foo", request.ProductId, request.Price, request.OriginalPrice, null, null, 1, null, 0.25, request.Notes);
             orderItem.Subscription = subscription;
-            orderItem.SubscriptionPlan = subscription.SubscriptionPlan;
+            orderItem.SubscriptionPlan = subscription.Plan;
 
             salesContext.Orders.Add(order);
 

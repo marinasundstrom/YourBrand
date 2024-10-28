@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 using YourBrand.Sales.Domain.Entities;
 
@@ -41,5 +42,9 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
         builder.HasMany(s => s.OrderItems!)
             .WithOne(x => x.Subscription)
             .HasForeignKey(s => s.SubscriptionId);
+
+        builder.OwnsOne(s => s.Schedule);
+
+        builder.Property(p => p.CancellationFinalizationPeriod).HasConversion(new TimeSpanToTicksConverter());
     }
 }

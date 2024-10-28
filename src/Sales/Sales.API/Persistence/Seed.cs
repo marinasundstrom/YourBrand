@@ -135,51 +135,47 @@ public static class Seed
             OrganizationId = TenantConstants.OrganizationId
         });
 
-        var subscriptionPlan0 = SubscriptionPlanFactory
-                    .CreateWeeklyPlan(1, WeekDays.Tuesday | WeekDays.Thursday, TimeOnly.Parse("16:00"), null)
-                    .WithName("Bi-weekly subscription")
-                    .WithEndTime(TimeOnly.Parse("17:00"));
+        var subscriptionPlan0 = SubscriptionPlan.Create(SubscriptionPlanType.RecurringOrder, "Bi-weekly subscription")
+            .WithSchedule(SubscriptionSchedule.Weekly(1, WeekDays.Tuesday | WeekDays.Thursday)
+                .WithStartTime(TimeOnly.Parse("16:00"))
+                .WithEndTime(TimeOnly.Parse("17:00")));
 
         context.SubscriptionPlans.Add(subscriptionPlan0);
 
-        var subscriptionPlan = SubscriptionPlanFactory
-                   .CreateMonthlyPlan(1, 1, DayOfWeek.Tuesday, TimeOnly.Parse("10:30"), TimeSpan.Parse("00:30"))
-                   .WithName("Monthly subscription 1");
+        var subscriptionPlan1 = SubscriptionPlan.Create(SubscriptionPlanType.RecurringOrder, "Monthly subscription 1")
+            .WithSchedule(SubscriptionSchedule.Monthly(1, 1, DayOfWeek.Tuesday)
+                .WithStartTime(TimeOnly.Parse("10:30"))
+                .WithDuration(TimeSpan.Parse("00:30")));
 
-        context.SubscriptionPlans.Add(subscriptionPlan);
+        context.SubscriptionPlans.Add(subscriptionPlan1);
 
-        var subscriptionPlan2 = SubscriptionPlanFactory
-            .CreateMonthlyPlan(1, 1, DayOfWeek.Monday | DayOfWeek.Friday, TimeOnly.Parse("07:30"), null) // , TimeSpan.Parse("00:45"))
-            .WithName("Monthly subscription 2");
+        var subscriptionPlan2 = SubscriptionPlan.Create(SubscriptionPlanType.RecurringOrder, "Monthly subscription 2")
+            .WithSchedule(SubscriptionSchedule.Monthly(1, 1, DayOfWeek.Monday | DayOfWeek.Friday)
+                .WithStartTime(TimeOnly.Parse("07:30")));
 
         context.SubscriptionPlans.Add(subscriptionPlan2);
 
-        var subscriptionPlan3 = SubscriptionPlanFactory
-                    .CreateYearlyPlan(1, Month.April, 15, TimeOnly.Parse("14:30"), TimeSpan.Parse("00:30"))
-                    .WithName("Yearly subscription 1");
+        var subscriptionPlan3 = SubscriptionPlan.Create(SubscriptionPlanType.RecurringOrder, "Yearly subscription 1")
+            .WithSchedule(SubscriptionSchedule.Yearly(1, Month.April, 15)
+                .WithStartTime(TimeOnly.Parse("14:30"))
+                .WithDuration(TimeSpan.Parse("01:00")));
 
         context.SubscriptionPlans.Add(subscriptionPlan3);
 
-        var subscriptionPlan4 = SubscriptionPlanFactory
-                    .CreateYearlyPlan(1, Month.April, 3, DayOfWeek.Thursday, TimeOnly.Parse("09:00"), TimeSpan.Parse("00:20"))
-                    .WithName("Yearly subscription 2");
+        var subscriptionPlan4 = SubscriptionPlan.Create(SubscriptionPlanType.RecurringOrder, "Yearly subscription 2")
+            .WithSchedule(SubscriptionSchedule.Yearly(1, Month.July, 3, DayOfWeek.Thursday)
+                .WithStartTime(TimeOnly.Parse("09:00"))
+                .WithDuration(TimeSpan.Parse("00:20")));
 
         context.SubscriptionPlans.Add(subscriptionPlan4);
 
-        /*
-        var subscription = new Subscription()
-        {
-            TypeId = 1,
-            SubscriptionPlan = subscriptionPlan,
-            StartDate = DateOnly.FromDateTime(DateTime.Now),
-            EndDate = DateOnly.FromDateTime(DateTime.Now).AddMonths(12),
-            StatusId = 1, //SubscriptionStatus.Active,
-            StatusDate = DateTime.Now
-        };
+        var subscriptionPlan6 = SubscriptionPlan.Create(SubscriptionPlanType.RecurringOrder, "Monthly subscription with 90 days trial and 30 days cancellation finalization")
+            .WithSchedule(SubscriptionSchedule.Monthly(1, 4, DayOfWeek.Tuesday)
+                .WithStartTime(TimeOnly.Parse("10:30"))
+                .WithDuration(TimeSpan.FromMinutes(30)))
+                .WithTrial(90)
+                .WithCancellationFinalizationPeriod(TimeSpan.FromDays(30));
 
-        subscription.OrganizationId = TenantConstants.OrganizationId;
-
-        context.Subscriptions.Add(subscription);
-        */
+        context.SubscriptionPlans.Add(subscriptionPlan6);
     }
 }

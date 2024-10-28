@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 using YourBrand.Sales.Domain.Entities;
 
@@ -17,5 +18,9 @@ public class SubscriptionPlanConfiguration : IEntityTypeConfiguration<Subscripti
         builder.Ignore(e => e.DomainEvents);
 
         builder.HasQueryFilter(e => e.Deleted == null);
+
+        builder.OwnsOne(s => s.Schedule);
+
+        builder.Property(p => p.CancellationFinalizationPeriod).HasConversion(new TimeSpanToTicksConverter());
     }
 }

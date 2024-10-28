@@ -14,14 +14,15 @@
 
                 <MudText Typo="Typo.body1" Class="mb-4">@Model.GetDescription()</MudText>
 
-                <MudSelect T="Recurrence" Label="Recurrence" @bind-Value="Model.Recurrence" Variant="Variant.Outlined" ToStringFunc="x => x.ToString()" For="() => Model.Recurrence" Class="mb-4">
-                    @foreach (var item in Enum.GetValues<Recurrence>())
+                <MudSelect T="TimeInterval" Label="Recurrence" @bind-Value="Model.Frequency" Variant="Variant.Outlined"
+                    ToStringFunc="x => x.ToString()" For="() => Model.Frequency" Class="mb-4">
+                    @foreach (var item in Enum.GetValues<TimeInterval>())
                     {
-                        <MudSelectItem T="Recurrence" Value="@item" />
+                        <MudSelectItem T="TimeInterval" Value="@item" />
                     }
                 </MudSelect>
 
-                @if (Model.Recurrence == Recurrence.Daily) 
+                @if (Model.Frequency == TimeInterval.Daily) 
                 {
                     <MudSelect T="int?" Label="Every" @bind-Value="Model.EveryDays" Variant="Variant.Outlined"
                         ToStringFunc="x => x.ToString()" For="() => Model.EveryDays" Class="mb-4">
@@ -33,7 +34,7 @@
                         }
                     </MudSelect>
                 }
-                else if (Model.Recurrence == Recurrence.Weekly)
+                else if (Model.Frequency == TimeInterval.Weekly)
                 {
                     <MudNumericField Variant="Variant.Outlined" Immediate="true" Label="Every weeks"
                         @bind-Value="Model.EveryWeeks"                      For="() => Model.EveryWeeks" Class="mb-4">
@@ -50,7 +51,7 @@
                     }                          
                     </MudToggleGroup>
                 }
-                else if (Model.Recurrence == Recurrence.Monthly)
+                else if (Model.Frequency == TimeInterval.Monthly)
                 {
                     <MudNumericField Variant="Variant.Outlined" Immediate="true" Label="Every months" @bind-Value="Model.EveryMonths"
                         For="() => Model.EveryMonths" Class="mb-4">
@@ -75,7 +76,7 @@
                         }
                     </MudSelect>
                 }
-                else if (Model.Recurrence == Recurrence.Yearly)
+                else if (Model.Frequency == TimeInterval.Yearly)
                 {
                     <MudNumericField Variant="Variant.Outlined" Immediate="true" Label="Every years" @bind-Value="Model.EveryYears" For="() => Model.EveryMonths"
                         Class="mb-4">

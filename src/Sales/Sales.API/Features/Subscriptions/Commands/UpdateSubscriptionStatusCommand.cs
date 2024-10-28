@@ -18,7 +18,7 @@ public sealed record UpdateSubscriptionStatus(string OrganizationId, Guid Id, in
         }
     }
 
-    public sealed class Handler(SalesContext salesContext) : IRequestHandler<UpdateSubscriptionStatus, Result>
+    public sealed class Handler(SalesContext salesContext, TimeProvider timeProvider) : IRequestHandler<UpdateSubscriptionStatus, Result>
     {
         public async Task<Result> Handle(UpdateSubscriptionStatus request, CancellationToken cancellationToken)
         {
@@ -31,7 +31,7 @@ public sealed record UpdateSubscriptionStatus(string OrganizationId, Guid Id, in
                 return Errors.Subscriptions.SubscriptionNotFound;
             }
 
-            subscription.UpdateStatus(request.StatusId);
+            subscription.UpdateStatus(request.StatusId, timeProvider);
             await salesContext.SaveChangesAsync(cancellationToken);
 
             return Results.Success;

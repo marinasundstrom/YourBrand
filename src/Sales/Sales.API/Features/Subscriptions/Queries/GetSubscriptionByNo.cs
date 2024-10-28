@@ -27,7 +27,7 @@ public record GetSubscriptionByNo(string OrganizationId, int SubscriptionNo) : I
                 .Where(x => x.OrganizationId == request.OrganizationId)
                 .Include(x => x.Type)
                 .Include(x => x.Status)
-                .Include(x => x.SubscriptionPlan)
+                .Include(x => x.Plan)
                 .Include(x => x.Order)
                 .FirstOrDefaultAsync(c => c.SubscriptionNo == request.SubscriptionNo);
 

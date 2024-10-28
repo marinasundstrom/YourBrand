@@ -19,7 +19,7 @@ public class SubscriptionOrderDateGenerator
 
         while (true)
         {
-            var current = GetOrderNextDate(generator, subscription.SubscriptionPlan!, after);
+            var current = GetOrderNextDate(generator, subscription.Plan!, after);
             if (current is null) break;
 
             yield return current.Value;
@@ -29,30 +29,34 @@ public class SubscriptionOrderDateGenerator
 
     public IRecurring CreateGeneratorFromSubscription(Subscription subscription)
     {
-        if (subscription.SubscriptionPlan is null)
+        if (subscription.Plan is null)
             throw new NullReferenceException("SubscriptionPlan is null");
 
         if (subscription.StartDate >= subscription.EndDate)
             throw new Exception("EndDate cannot occur before StartDate.");
 
-        var plan = subscription.SubscriptionPlan;
+        var plan = subscription.Plan;
+        var schedule = plan.Schedule;
+
         var startDateTime = subscription.StartDate.ToDateTime(TimeOnly.MinValue);
         var startingBuilder = Recurs.Starting(startDateTime);
 
-        return plan.Recurrence switch
+        return schedule.Frequency switch
         {
-            Recurrence.Daily => BuildDailyRecurring(startingBuilder, plan, subscription.EndDate),
-            Recurrence.Weekly => BuildWeeklyRecurring(startingBuilder, plan, subscription.EndDate),
-            Recurrence.Monthly => BuildMonthlyRecurring(startingBuilder, plan, subscription.EndDate),
-            Recurrence.Quarterly => BuildQuarterlyRecurring(startingBuilder, plan, subscription.EndDate),
-            Recurrence.Yearly => BuildYearlyRecurring(startingBuilder, plan, subscription.EndDate),
-            _ => throw new NotSupportedException($"Recurrence type {plan.Recurrence} is not supported.")
+            TimeInterval.Daily => BuildDailyRecurring(startingBuilder, plan, subscription.EndDate),
+            TimeInterval.Weekly => BuildWeeklyRecurring(startingBuilder, plan, subscription.EndDate),
+            TimeInterval.Monthly => BuildMonthlyRecurring(startingBuilder, plan, subscription.EndDate),
+            TimeInterval.Quarterly => BuildQuarterlyRecurring(startingBuilder, plan, subscription.EndDate),
+            TimeInterval.Yearly => BuildYearlyRecurring(startingBuilder, plan, subscription.EndDate),
+            _ => throw new NotSupportedException($"Recurrence type {schedule.Frequency} is not supported.")
         };
     }
 
     private IRecurring BuildDailyRecurring(StartingBuilder builder, SubscriptionPlan plan, DateOnly? endDate)
     {
-        var dailyBuilder = builder.Every(plan.EveryDays ?? 1).Days();
+        var schedule = plan.Schedule;
+
+        var dailyBuilder = builder.Every(schedule.EveryDays ?? 1).Days();
         if (endDate != null)
         {
             dailyBuilder = dailyBuilder.Ending(endDate.Value.ToDateTime(TimeOnly.MinValue));
@@ -62,10 +66,12 @@ public class SubscriptionOrderDateGenerator
 
     private IRecurring BuildWeeklyRecurring(StartingBuilder builder, SubscriptionPlan plan, DateOnly? endDate)
     {
+        var schedule = plan.Schedule;
+
         var weeklyBuilder = builder
-            .Every(plan.EveryWeeks ?? 1)
+            .Every(schedule.EveryWeeks ?? 1)
             .Weeks()
-            .OnDays(MapWeekDaysToDays(plan.OnWeekDays ?? WeekDays.Monday));
+            .OnDays(MapWeekDaysToDays(schedule.OnWeekDays ?? WeekDays.Monday));
 
         if (endDate != null)
         {
@@ -77,14 +83,16 @@ public class SubscriptionOrderDateGenerator
 
     private IRecurring BuildMonthlyRecurring(StartingBuilder builder, SubscriptionPlan plan, DateOnly? endDate)
     {
-        if (plan.OnDay is null)
+        var schedule = plan.Schedule;
+
+        if (schedule.OnDay is null)
             throw new Exception($"SubscriptionPlan {plan.Id} lacks OnDay.");
 
-        var monthsBuilder = builder.Every(plan.EveryMonths ?? 1).Months();
+        var monthsBuilder = builder.Every(schedule.EveryMonths ?? 1).Months();
 
-        monthsBuilder = plan.OnDayOfWeek is null
-            ? monthsBuilder.OnDay(plan.OnDay.Value)
-            : monthsBuilder.OnOrdinalWeek((Ordinal)plan.OnDay.Value).OnDay(plan.OnDayOfWeek.Value);
+        monthsBuilder = schedule.OnDayOfWeek is null
+            ? monthsBuilder.OnDay(schedule.OnDay.Value)
+            : monthsBuilder.OnOrdinalWeek((Ordinal)schedule.OnDay.Value).OnDay(schedule.OnDayOfWeek.Value);
 
         if (endDate != null)
         {
@@ -96,14 +104,16 @@ public class SubscriptionOrderDateGenerator
 
     private IRecurring BuildQuarterlyRecurring(StartingBuilder builder, SubscriptionPlan plan, DateOnly? endDate)
     {
-        if (plan.OnDay is null)
+        var schedule = plan.Schedule;
+
+        if (schedule.OnDay is null)
             throw new Exception($"SubscriptionPlan {plan.Id} lacks OnDay.");
 
         var quarterlyBuilder = builder.Every(3).Months();
 
-        quarterlyBuilder = plan.OnDayOfWeek is null
-            ? quarterlyBuilder.OnDay(plan.OnDay.Value)
-            : quarterlyBuilder.OnOrdinalWeek((Ordinal)plan.OnDay.Value).OnDay(plan.OnDayOfWeek.Value);
+        quarterlyBuilder = schedule.OnDayOfWeek is null
+            ? quarterlyBuilder.OnDay(schedule.OnDay.Value)
+            : quarterlyBuilder.OnOrdinalWeek((Ordinal)schedule.OnDay.Value).OnDay(schedule.OnDayOfWeek.Value);
 
         if (endDate != null)
         {
@@ -115,17 +125,19 @@ public class SubscriptionOrderDateGenerator
 
     private IRecurring BuildYearlyRecurring(StartingBuilder builder, SubscriptionPlan plan, DateOnly? endDate)
     {
-        if (plan.OnDay is null || plan.InMonth is null)
+        var schedule = plan.Schedule;
+
+        if (schedule.OnDay is null || schedule.InMonth is null)
             throw new Exception($"SubscriptionPlan {plan.Id} lacks OnDay or InMonth.");
 
         var yearsBuilder = builder
-            .Every(plan.EveryYears ?? 1)
+            .Every(schedule.EveryYears ?? 1)
             .Years()
-            .OnMonths((Dates.Recurring.Month)plan.InMonth.Value);
+            .OnMonths((Dates.Recurring.Month)schedule.InMonth.Value);
 
-        yearsBuilder = plan.OnDayOfWeek is null
-            ? yearsBuilder.OnDay(plan.OnDay.Value)
-            : yearsBuilder.OnOrdinalWeek((Ordinal)plan.OnDay.Value).OnDay(plan.OnDayOfWeek.Value);
+        yearsBuilder = schedule.OnDayOfWeek is null
+            ? yearsBuilder.OnDay(schedule.OnDay.Value)
+            : yearsBuilder.OnOrdinalWeek((Ordinal)schedule.OnDay.Value).OnDay(schedule.OnDayOfWeek.Value);
 
         if (endDate != null)
         {
@@ -140,9 +152,11 @@ public class SubscriptionOrderDateGenerator
         var nextDate = recurring.Next(after);
         if (nextDate is null) return null;
 
-        var startDateTime = nextDate.Value.Add(plan.StartTime?.ToTimeSpan() ?? TimeSpan.Zero);
-        var endDateTime = plan.Duration is not null
-            ? startDateTime.Add(plan.Duration.Value)
+        var schedule = plan.Schedule;
+
+        var startDateTime = nextDate.Value.Add(schedule.StartTime?.ToTimeSpan() ?? TimeSpan.Zero);
+        var endDateTime = schedule.Duration is not null
+            ? startDateTime.Add(schedule.Duration.Value)
             : (DateTime?)null;
 
         return (startDateTime, endDateTime);

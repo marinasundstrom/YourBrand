@@ -15,6 +15,8 @@ public class SubscriptionPlan : AggregateRoot<Guid>, IAuditable, ISoftDeletable,
 
     public TenantId TenantId { get; set; }
 
+    public SubscriptionPlanType PlanType { get; set; }
+
     public string Name { get; set; } = null!;
 
     public string? Description { get; set; }
@@ -25,22 +27,14 @@ public class SubscriptionPlan : AggregateRoot<Guid>, IAuditable, ISoftDeletable,
 
     public decimal? Price { get; set; }
 
+    public TimeSpan? CancellationFinalizationPeriod { get; set; }
+
     public bool HasTrial { get; set; }
-    public TimeSpan TrialLength { get; set; }
+    public int TrialLength { get; set; }
 
     public bool AutoRenew { get; set; }
 
-    public Recurrence Recurrence { get; set; }
-    public int? EveryDays { get; set; }
-    public int? EveryWeeks { get; set; }
-    public WeekDays? OnWeekDays { get; set; }
-    public int? EveryMonths { get; set; } // Every two months
-    public int? EveryYears { get; set; }
-    public int? OnDay { get; set; } // 3rd of January. If OnDayOfWeek set to i.e. Tuesday, 3rd Tuesday
-    public DayOfWeek? OnDayOfWeek { get; set; }
-    public Month? InMonth { get; set; }
-    public TimeOnly? StartTime { get; set; }
-    public TimeSpan? Duration { get; set; }
+    public SubscriptionSchedule Schedule { get; set; }
 
     public User? CreatedBy { get; set; }
     public UserId? CreatedById { get; set; }
@@ -51,6 +45,15 @@ public class SubscriptionPlan : AggregateRoot<Guid>, IAuditable, ISoftDeletable,
 
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
+
+    public static SubscriptionPlan Create(SubscriptionPlanType planType, string name, string? description = null) 
+    {
+        return new SubscriptionPlan() {
+            PlanType = planType,
+            Name = name,
+            Description = description
+        };
+    }
 
     public SubscriptionPlan WithName(string name)
     {
@@ -66,10 +69,45 @@ public class SubscriptionPlan : AggregateRoot<Guid>, IAuditable, ISoftDeletable,
         return this;
     }
 
-    public SubscriptionPlan WithEndTime(TimeOnly value)
+    public SubscriptionPlan WithSchedule(SubscriptionSchedule schedule)
     {
-        Duration = value - StartTime;
+        Schedule = schedule;
 
         return this;
     }
+
+    public SubscriptionPlan WithEndTime(TimeOnly value)
+    {
+        Schedule.Duration = value - Schedule.StartTime;
+
+        return this;
+    }
+
+    public SubscriptionPlan WithTrial(int days)
+    {
+        HasTrial = true;
+        TrialLength = days;
+
+        return this;
+    }
+
+    public SubscriptionPlan WithAutoRenewal()
+    {
+        AutoRenew = true;
+
+        return this;
+    }
+
+    public SubscriptionPlan WithCancellationFinalizationPeriod(TimeSpan timeSpan)
+    {
+        CancellationFinalizationPeriod = timeSpan;
+
+        return this;
+    }
+}
+
+public enum SubscriptionPlanType
+{
+    RecurringOrder = 1,
+    RecurringBilling = 2,
 }

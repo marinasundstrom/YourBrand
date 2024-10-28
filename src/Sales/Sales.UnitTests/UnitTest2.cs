@@ -57,17 +57,17 @@ public class UnitTest2
 
         var item = order.AddItem("Item 1", null, 250m, null, null, null, 2, null, 0.25, null);
 
-        var subscriptionPlan = SubscriptionPlanFactory
-                          .CreateWeeklyPlan(1, WeekDays.Tuesday | WeekDays.Thursday, TimeOnly.Parse("16:00"), null)
-                          .WithName("Bi-weekly subscription")
-                          .WithEndTime(TimeOnly.Parse("17:00"));
+        var subscriptionPlan = SubscriptionPlan.Create(SubscriptionPlanType.RecurringOrder, "Bi-weekly subscription")
+            .WithSchedule(SubscriptionSchedule.Weekly(1, WeekDays.Tuesday | WeekDays.Thursday)
+            .WithStartTime(TimeOnly.Parse("16:00"))
+            .WithEndTime(TimeOnly.Parse("17:00")));
 
         var subscription = new Subscription()
         {
-            SubscriptionPlan = subscriptionPlan,
+            Plan = subscriptionPlan,
             StartDate = DateOnly.FromDateTime(DateTime.Now),
             EndDate = DateOnly.FromDateTime(DateTime.Now).AddMonths(12),
-            Status = SubscriptionStatus.Active,
+            //Status = SubscriptionStatus.Active,
             StatusDate = DateTime.Now
         };
 

@@ -2,7 +2,7 @@ namespace YourBrand.Sales.Subscriptions.Plans;
 
 public class SubscriptionPlanViewModel : ISubscriptionParameters
 {
-    public Recurrence Recurrence { get; set; }
+    public TimeInterval Frequency { get; set; }
 
     public int? EveryDays { get; set; } = 1;
 

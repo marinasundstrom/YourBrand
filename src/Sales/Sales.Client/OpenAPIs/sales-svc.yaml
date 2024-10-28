@@ -1958,50 +1958,14 @@ components:
         orderItemId:
           type: string
           nullable: true
-        autoRenew:
-          type: boolean
-        recurrence:
-          $ref: '#/components/schemas/Recurrence'
-        everyDays:
-          type: integer
-          format: int32
-          nullable: true
-        everyWeeks:
-          type: integer
-          format: int32
-          nullable: true
-        onWeekDays:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/WeekDays'
-        everyMonths:
-          type: integer
-          format: int32
-          nullable: true
-        everyYears:
-          type: integer
-          format: int32
-          nullable: true
-        onDay:
-          type: integer
-          format: int32
-          nullable: true
-        onDayOfWeek:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/DayOfWeek'
-        inMonth:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/Month'
-        startTime:
-          type: string
-          format: time
-          nullable: true
-        duration:
+        cancellationFinalizationPeriod:
           type: string
           format: duration
           nullable: true
+        autoRenew:
+          type: boolean
+        schedule:
+          $ref: '#/components/schemas/SubscriptionSchedule'
     SubscriptionType:
       type: object
       additionalProperties: false
@@ -2058,7 +2022,57 @@ components:
         date:
           type: string
           format: date-time
-    Recurrence:
+    SubscriptionSchedule:
+      type: object
+      additionalProperties: false
+      properties:
+        frequency:
+          $ref: '#/components/schemas/TimeInterval'
+        everyDays:
+          type: integer
+          format: int32
+          nullable: true
+        everyWeeks:
+          type: integer
+          format: int32
+          nullable: true
+        onWeekDays:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/WeekDays'
+        everyMonths:
+          type: integer
+          format: int32
+          nullable: true
+        everyYears:
+          type: integer
+          format: int32
+          nullable: true
+        onDay:
+          type: integer
+          format: int32
+          nullable: true
+        onDayOfWeek:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/DayOfWeek'
+        inMonth:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Month'
+        startTime:
+          type: string
+          format: time
+          nullable: true
+        endTime:
+          type: string
+          format: time
+          nullable: true
+        duration:
+          type: string
+          format: duration
+          nullable: true
+    TimeInterval:
       type: integer
       description: ''
       x-enumNames:
@@ -2290,55 +2304,19 @@ components:
           type: number
           format: decimal
           nullable: true
+        schedule:
+          $ref: '#/components/schemas/SubscriptionSchedule'
         hasTrial:
           type: boolean
         trialLength:
           type: string
           format: duration
-        autoRenew:
-          type: boolean
-        recurrence:
-          $ref: '#/components/schemas/Recurrence'
-        everyDays:
-          type: integer
-          format: int32
-          nullable: true
-        everyWeeks:
-          type: integer
-          format: int32
-          nullable: true
-        onWeekDays:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/WeekDays'
-        everyMonths:
-          type: integer
-          format: int32
-          nullable: true
-        everyYears:
-          type: integer
-          format: int32
-          nullable: true
-        onDay:
-          type: integer
-          format: int32
-          nullable: true
-        onDayOfWeek:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/DayOfWeek'
-        inMonth:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/Month'
-        startTime:
-          type: string
-          format: time
-          nullable: true
-        duration:
+        cancellationFinalizationPeriod:
           type: string
           format: duration
           nullable: true
+        autoRenew:
+          type: boolean
     OrderVatAmount:
       type: object
       additionalProperties: false

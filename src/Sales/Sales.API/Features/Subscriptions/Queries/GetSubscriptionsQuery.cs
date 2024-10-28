@@ -42,7 +42,7 @@ public record GetSubscriptionsQuery(string OrganizationId, int[]? Types, int[]? 
 
             var subscriptions = await query.Include(x => x.Type)
                 .Include(x => x.Status)
-                .Include(x => x.SubscriptionPlan)
+                .Include(x => x.Plan)
                 .Include(x => x.Order)
                 .ToArrayAsync(cancellationToken);
 

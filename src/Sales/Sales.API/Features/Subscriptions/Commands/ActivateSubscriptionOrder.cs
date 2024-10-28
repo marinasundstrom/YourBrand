@@ -11,7 +11,9 @@ namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) : IRequest
 {
-    public class Handler(SalesContext salesContext, OrderNumberFetcher orderNumberFetcher, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<ActivateSubscriptionOrder>
+    public class Handler(SalesContext salesContext, OrderNumberFetcher orderNumberFetcher, 
+        TimeProvider timeProvider,
+        SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<ActivateSubscriptionOrder>
     {
         public async Task Handle(ActivateSubscriptionOrder request, CancellationToken cancellationToken)
         {
@@ -20,10 +22,10 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
 
             var order = await salesContext.Orders
                 .Include(x => x.Subscription)
-                .ThenInclude(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Plan)
                 .Include(x => x.Items)
                 .ThenInclude(x => x.Subscription)
-                .ThenInclude(x => x.SubscriptionPlan)
+                .ThenInclude(x => x.Plan)
                 .FirstOrDefaultAsync(c => c.Id == request.OrderId);
 
             if (order is null)
@@ -31,9 +33,9 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
                 throw new System.Exception();
             }
 
-            if(order.StatusId != 4) 
+            if(order.StatusId != (int)OrderStatusEnum.Confirmed) 
             {
-                throw new System.Exception("Order not confirmed");
+                throw new System.InvalidOperationException("Order not confirmed");
             }
 
             var orders = subscriptionOrderGenerator.GenerateOrders(order, subscription.StartDate, subscription.EndDate);
@@ -58,10 +60,23 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
                 salesContext.Orders.Add(order2);
             }
 
-            order.Complete();
-
             //order.Subscription.Order = order;
-            subscription.Activate();
+
+            var plan = subscription.Plan;
+
+            if (plan is null && plan.HasTrial) 
+            {
+                // Activate trial
+                subscription.StartTrial(plan.TrialLength, timeProvider);
+            }
+            else 
+            {
+                // Activate subscription
+                subscription.Activate(timeProvider);
+            }
+
+            // Complete subscription order
+            order.Complete();
 
             await salesContext.SaveChangesAsync();
         }

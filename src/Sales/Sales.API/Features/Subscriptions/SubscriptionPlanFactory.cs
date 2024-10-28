@@ -9,33 +9,29 @@ public static class SubscriptionPlanFactory
     {
         return new SubscriptionPlan
         {
-            Recurrence = Recurrence.Daily,
-            EveryDays = everyDays,
-            StartTime = startTime,
-            Duration = duration
+            Schedule = SubscriptionSchedule.Daily(everyDays)
+                .WithStartTime(startTime)
+                .WithDuration(duration)
         };
     }
 
     public static SubscriptionPlan CreateWeeklyPlan(int everyWeeks, WeekDays onWeekDays, TimeOnly startTime, TimeSpan? duration)
     {
-        return new SubscriptionPlan
-        {
-            Recurrence = Recurrence.Weekly,
-            EveryWeeks = everyWeeks,
-            OnWeekDays = onWeekDays,
-            StartTime = startTime,
-            Duration = duration
-        };
+        var schedule = SubscriptionSchedule.Weekly(everyWeeks, onWeekDays)
+                .WithStartTime(startTime)
+                .WithDuration(duration);
+                
+        return new SubscriptionPlan()
+            .WithSchedule(schedule);
     }
 
     public static SubscriptionPlan CreateQuarterlyPlan(int onDay, TimeOnly startTime, TimeSpan? duration)
     {
         return new SubscriptionPlan
         {
-            Recurrence = Recurrence.Quarterly,
-            OnDay = onDay,
-            StartTime = startTime,
-            Duration = duration
+            Schedule = SubscriptionSchedule.Quarterly(onDay)
+                .WithStartTime(startTime)
+                .WithDuration(duration)
         };
     }
 
@@ -43,12 +39,9 @@ public static class SubscriptionPlanFactory
     {
         return new SubscriptionPlan
         {
-            Recurrence = Recurrence.Monthly,
-            EveryMonths = everyMonths,
-            OnDay = onDay,
-            //OnDayOfWeek = DayOfWeek.Tuesday,
-            StartTime = startTime,
-            Duration = duration
+            Schedule = SubscriptionSchedule.Monthly(everyMonths, onDay)
+                .WithStartTime(startTime)
+                .WithDuration(duration)
         };
     }
 
@@ -56,12 +49,9 @@ public static class SubscriptionPlanFactory
     {
         return new SubscriptionPlan
         {
-            Recurrence = Recurrence.Monthly,
-            EveryMonths = everyMonths,
-            OnDay = onDay,
-            OnDayOfWeek = onDayOfWeek,
-            StartTime = startTime,
-            Duration = duration
+            Schedule = SubscriptionSchedule.Monthly(everyMonths, onDay, onDayOfWeek)
+                .WithStartTime(startTime)
+                .WithDuration(duration)
         };
     }
 
@@ -69,12 +59,9 @@ public static class SubscriptionPlanFactory
     {
         return new SubscriptionPlan
         {
-            Recurrence = Recurrence.Yearly,
-            EveryYears = everyYears,
-            OnDay = onDay,
-            InMonth = inMonth,
-            StartTime = startTime,
-            Duration = duration
+            Schedule = SubscriptionSchedule.Yearly(everyYears, inMonth, onDay)
+                .WithStartTime(startTime)
+                .WithDuration(duration)
         };
     }
 
@@ -82,13 +69,9 @@ public static class SubscriptionPlanFactory
     {
         return new SubscriptionPlan
         {
-            Recurrence = Recurrence.Yearly,
-            EveryYears = everyYears,
-            OnDay = onDay,
-            OnDayOfWeek = onDayOfWeek,
-            InMonth = inMonth,
-            StartTime = startTime,
-            Duration = duration
+            Schedule = SubscriptionSchedule.Yearly(everyYears, inMonth, onDay, onDayOfWeek)
+                .WithStartTime(startTime)
+                .WithDuration(duration)
         };
     }
 }

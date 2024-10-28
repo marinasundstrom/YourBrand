@@ -16,7 +16,7 @@ public record GetSubscriptionQuery(Guid SubscriptionId) : IRequest<SubscriptionD
             var subscription = await salesContext.Subscriptions
                 .Include(x => x.Type)
                 .Include(x => x.Status)
-                .Include(x => x.SubscriptionPlan)
+                .Include(x => x.Plan)
                 .Include(x => x.Order)
                 .FirstOrDefaultAsync(c => c.Id == request.SubscriptionId);
 

@@ -1,6 +1,6 @@
 ﻿namespace YourBrand.Sales.Domain.Enums;
 
-public enum Recurrence
+public enum TimeInterval
 {
     Daily,
     Weekly,

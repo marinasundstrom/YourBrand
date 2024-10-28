@@ -1,4 +1,5 @@
-﻿using YourBrand.Sales.Features.Orders;
+﻿using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Features.Orders;
 
 namespace YourBrand.Sales.Features.SubscriptionManagement;
 
@@ -8,6 +9,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<SubscriptionOrderDateGenerator>()
                 .AddScoped<SubscriptionOrderGenerator>()
+                .AddScoped<IBillingDateCalculator, DefaultBillingDateCalculator>()
+                .AddScoped<IDeliveryDateCalculator, DefaultDeliveryDateCalculator>()
                 .AddScoped<OrderFactory>();
 
         return services;

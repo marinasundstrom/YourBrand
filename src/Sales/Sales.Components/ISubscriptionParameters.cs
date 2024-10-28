@@ -3,7 +3,7 @@ namespace YourBrand.Sales;
 public interface ISubscriptionParameters
 {
     bool AutoRenew { get; }
-    Recurrence Recurrence { get; }
+    TimeInterval Frequency { get; }
     int? EveryDays { get; }
     int? EveryWeeks { get; }
     WeekDays? OnWeekDays { get; }

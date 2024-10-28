@@ -1,14 +1,18 @@
+using System;
+
 using YourBrand.Domain;
 using YourBrand.Notifications;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Features.SubscriptionManagement;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.EventHandlers;
 
 public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderRepository,
     IOrderNotificationService orderNotificationService,
     INotificationService notificationsService,
+    TimeProvider timeProvider,
     ILogger<OrderStatusUpdatedEventHandler> logger) : IDomainEventHandler<OrderStatusUpdated>
 {
     private readonly IOrderRepository orderRepository = orderRepository;
@@ -24,8 +28,13 @@ public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderReposit
 
         await orderNotificationService.StatusUpdated(order.OrderNo, order.Status.ToDto());
 
-        if (order.StatusId == 2)
+        if (order.StatusId == (int)OrderStatusEnum.Confirmed)
         {
+            if(order.Subscription is not null) 
+            {
+                await ActivateSubscription(order);
+            }
+
             await PostNotification(order);
         }
 
@@ -35,6 +44,19 @@ public sealed class OrderStatusUpdatedEventHandler(IOrderRepository orderReposit
                 $"Status of \"{order.Title}\" [{order.OrderNo}] changed to {notification.NewStatus}.",
                 $"{order.LastModifiedBy!.Name} changed status of \"{order.Title}\" [{order.OrderNo}] from {notification.OldStatus} to {notification.NewStatus}."); */
         }
+    }
+
+    private Task ActivateSubscription(Order order)
+    {
+        if (order.Subscription is null)
+            return Task.CompletedTask;
+
+        var subscription = order.Subscription;
+        var subscriptionPlan = subscription.Plan;
+
+        subscription.StartTrial(subscriptionPlan.TrialLength, timeProvider);
+
+        return Task.CompletedTask;
     }
 
     private async Task PostNotification(Order order)

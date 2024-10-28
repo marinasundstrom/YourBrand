@@ -6,6 +6,6 @@ static class SubscriptionPlanDumper
 {
     public static void Dump(this SubscriptionPlan subscriptionPlan)
     {
-        Console.WriteLine(subscriptionPlan.GetDescription());
+        Console.WriteLine(subscriptionPlan.Schedule.GetDescription());
     }
 }

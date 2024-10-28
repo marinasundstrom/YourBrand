@@ -8,70 +8,72 @@ public static class SubscriptionPlanExtensions
 {
     public static string GetDescription(this SubscriptionPlan subscriptionPlan)
     {
-        if (subscriptionPlan.Recurrence == Recurrence.Daily)
+        var schedule = subscriptionPlan.Schedule;
+
+        if (schedule.Frequency == TimeInterval.Daily)
         {
-            return $"Every {(subscriptionPlan.EveryDays == 1 ? string.Empty : subscriptionPlan.EveryDays.GetValueOrDefault().Ordinalize())} day";
+            return $"Every {(schedule.EveryDays == 1 ? string.Empty : schedule.EveryDays.GetValueOrDefault().Ordinalize())} day";
         }
-        else if (subscriptionPlan.Recurrence == Recurrence.Weekly)
+        else if (schedule.Frequency == TimeInterval.Weekly)
         {
-            return $"Every {(subscriptionPlan.EveryWeeks == 1 ? string.Empty : subscriptionPlan.EveryWeeks.GetValueOrDefault().Ordinalize())} week on {subscriptionPlan.OnWeekDays.GetValueOrDefault()}";
+            return $"Every {(schedule.EveryWeeks == 1 ? string.Empty : schedule.EveryWeeks.GetValueOrDefault().Ordinalize())} week on {schedule.OnWeekDays.GetValueOrDefault()}";
         }
-        else if (subscriptionPlan.Recurrence == Recurrence.Monthly)
+        else if (schedule.Frequency == TimeInterval.Monthly)
         {
-            if (subscriptionPlan.OnDayOfWeek is null)
+            if (schedule.OnDayOfWeek is null)
             {
-                return $"Every {(subscriptionPlan.EveryMonths == 1 ? string.Empty : subscriptionPlan.EveryMonths.GetValueOrDefault().Ordinalize())} month on the {subscriptionPlan.OnDay.GetValueOrDefault().Ordinalize()} day";
+                return $"Every {(schedule.EveryMonths == 1 ? string.Empty : schedule.EveryMonths.GetValueOrDefault().Ordinalize())} month on the {schedule.OnDay.GetValueOrDefault().Ordinalize()} day";
             }
             else
             {
-                return $"Every {(subscriptionPlan.EveryMonths == 1 ? string.Empty : subscriptionPlan.EveryMonths.GetValueOrDefault().Ordinalize())} month on the {subscriptionPlan.OnDay.GetValueOrDefault().Ordinalize()} {subscriptionPlan.OnDayOfWeek}";
+                return $"Every {(schedule.EveryMonths == 1 ? string.Empty : schedule.EveryMonths.GetValueOrDefault().Ordinalize())} month on the {schedule.OnDay.GetValueOrDefault().Ordinalize()} {schedule.OnDayOfWeek}";
             }
         }
-        else if (subscriptionPlan.Recurrence == Recurrence.Yearly)
+        else if (schedule.Frequency == TimeInterval.Yearly)
         {
-            if (subscriptionPlan.OnDayOfWeek is null)
+            if (schedule.OnDayOfWeek is null)
             {
-                return $"Every {(subscriptionPlan.EveryYears == 1 ? string.Empty : subscriptionPlan.EveryYears.GetValueOrDefault().Ordinalize())} year on {subscriptionPlan.InMonth} {subscriptionPlan.OnDay.GetValueOrDefault().Ordinalize()}";
+                return $"Every {(schedule.EveryYears == 1 ? string.Empty : schedule.EveryYears.GetValueOrDefault().Ordinalize())} year on {schedule.InMonth} {schedule.OnDay.GetValueOrDefault().Ordinalize()}";
             }
             else
             {
-                return $"Every {(subscriptionPlan.EveryYears == 1 ? string.Empty : subscriptionPlan.EveryYears.GetValueOrDefault().Ordinalize())} year on the {subscriptionPlan.OnDay.GetValueOrDefault().Ordinalize()} {subscriptionPlan.OnDayOfWeek} in {subscriptionPlan.InMonth}";
+                return $"Every {(schedule.EveryYears == 1 ? string.Empty : schedule.EveryYears.GetValueOrDefault().Ordinalize())} year on the {schedule.OnDay.GetValueOrDefault().Ordinalize()} {schedule.OnDayOfWeek} in {schedule.InMonth}";
             }
         }
 
         throw new Exception();
     }
 
-    public static string GetDescription(this ISubscriptionParameters subscriptionPlan)
+    public static string GetDescription(this ISubscriptionParameters schedule)
     {
-        if (subscriptionPlan.Recurrence == Recurrence.Daily)
+        if (schedule.Frequency == TimeInterval.Daily)
         {
-            return $"Every {(subscriptionPlan.EveryDays == 1 ? string.Empty : subscriptionPlan.EveryDays.GetValueOrDefault().Ordinalize())} day";
+            return $"Every {(schedule.EveryDays == 1 ? string.Empty : schedule.EveryDays.GetValueOrDefault().Ordinalize())} day";
         }
-        else if (subscriptionPlan.Recurrence == Recurrence.Weekly)
+        else if (schedule.Frequency == TimeInterval.Weekly)
         {
-            return $"Every {(subscriptionPlan.EveryWeeks == 1 ? string.Empty : subscriptionPlan.EveryWeeks.GetValueOrDefault().Ordinalize())} week on {subscriptionPlan.OnWeekDays.GetValueOrDefault()}";
+            return $"Every {(schedule.EveryWeeks == 1 ? string.Empty : schedule.EveryWeeks.GetValueOrDefault().Ordinalize())} week on {schedule.OnWeekDays.GetValueOrDefault()}";
         }
-        else if (subscriptionPlan.Recurrence == Recurrence.Monthly)
+        else if (schedule.Frequency == TimeInterval.Monthly)
         {
-            if (subscriptionPlan.OnDayOfWeek is null)
+            if (schedule.OnDayOfWeek is null)
             {
-                return $"Every {(subscriptionPlan.EveryMonths == 1 ? string.Empty : subscriptionPlan.EveryMonths.GetValueOrDefault().Ordinalize())} month on the {subscriptionPlan.OnDay.GetValueOrDefault().Ordinalize()} day";
+                return $"Every {(schedule.EveryMonths == 1 ? string.Empty : schedule.EveryMonths.GetValueOrDefault().Ordinalize())} month on the {schedule.OnDay.GetValueOrDefault().Ordinalize()} day";
             }
             else
             {
-                return $"Every {(subscriptionPlan.EveryMonths == 1 ? string.Empty : subscriptionPlan.EveryMonths.GetValueOrDefault().Ordinalize())} month on the {subscriptionPlan.OnDay.GetValueOrDefault().Ordinalize()} {subscriptionPlan.OnDayOfWeek}";
+                return $"Every {(schedule.EveryMonths == 1 ? string.Empty : schedule.EveryMonths.GetValueOrDefault().Ordinalize())} month on the {schedule.OnDay.GetValueOrDefault().Ordinalize()} {schedule.OnDayOfWeek}";
             }
         }
-        else if (subscriptionPlan.Recurrence == Recurrence.Yearly)
+        else if (schedule.Frequency == TimeInterval.Yearly)
         {
-            if (subscriptionPlan.OnDayOfWeek is null)
+            if (schedule.OnDayOfWeek is null)
             {
-                return $"Every {(subscriptionPlan.EveryYears == 1 ? string.Empty : subscriptionPlan.EveryYears.GetValueOrDefault().Ordinalize())} year on {subscriptionPlan.InMonth} {subscriptionPlan.OnDay.GetValueOrDefault().Ordinalize()}";
+                return $"Every {(schedule.EveryYears == 1 ? string.Empty : schedule.EveryYears.GetValueOrDefault().Ordinalize())} year on {schedule.InMonth} {schedule.OnDay.GetValueOrDefault().Ordinalize()}";
             }
             else
             {
-                return $"Every {(subscriptionPlan.EveryYears == 1 ? string.Empty : subscriptionPlan.EveryYears.GetValueOrDefault().Ordinalize())} year on the {subscriptionPlan.OnDay.GetValueOrDefault().Ordinalize()} {subscriptionPlan.OnDayOfWeek} in {subscriptionPlan.InMonth}";
+                return $"Every {(schedule.EveryYears == 1 ? string.Empty : schedule.EveryYears.GetValueOrDefault().Ordinalize())} year on the {schedule.OnDay.GetValueOrDefault().Ordinalize()} {schedule.OnDayOfWeek} in {schedule.InMonth}";
             }
         }
 
