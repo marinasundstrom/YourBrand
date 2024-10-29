@@ -26,7 +26,11 @@ public record InvoiceDto(
     decimal? Discount,
     decimal Total,
     decimal? Paid,
-    InvoiceDomesticServiceDto? DomesticService);
+    InvoiceDomesticServiceDto? DomesticService,
+    DateTimeOffset Created,
+    string? CreatedBy,
+    DateTimeOffset? LastModified,
+    string? LastModifiedById);
 
 public record InvoiceStatusDto(
     int Id,
@@ -68,7 +72,11 @@ public record InvoiceItemDto(
     decimal Total,
     string? Notes,
     bool IsTaxDeductibleService,
-    InvoiceItemDomesticServiceDto? DomesticService);
+    InvoiceItemDomesticServiceDto? DomesticService,
+    DateTimeOffset Created,
+    string? CreatedBy,
+    DateTimeOffset? LastModified,
+    string? LastModifiedBy);
 
 public record InvoiceItemDomesticServiceDto(
     DomesticServiceKind Kind,

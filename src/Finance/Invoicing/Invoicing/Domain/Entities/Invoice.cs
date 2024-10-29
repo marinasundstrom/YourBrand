@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain;
+using YourBrand.Invoicing.Application;
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Domain.Enums;
 using YourBrand.Invoicing.Domain.Events;
@@ -13,6 +15,16 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
     readonly List<InvoiceItem> _items = new List<InvoiceItem>();
 
     private Invoice() { }
+
+    public Invoice(InvoiceType type = InvoiceType.Invoice)
+    {
+        Id = Guid.NewGuid().ToString();
+
+        Type = type;
+        StatusId = 1;
+
+        AddDomainEvent(new InvoiceCreated(Id));
+    }
 
     public Invoice(DateTimeOffset? date, InvoiceType type = InvoiceType.Invoice, int status = 1, string currency = "SEK", string? note = null)
     {
@@ -33,7 +45,7 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
 
     public OrganizationId OrganizationId { get; set; }
 
-    public int InvoiceNo { get; set; }
+    public int? InvoiceNo { get; private set; }
 
     public DateTimeOffset? IssueDate { get; set; }
 
@@ -68,6 +80,11 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
         var oldStatus = StatusId;
         if (status != oldStatus)
         {
+            if (oldStatus == 1)
+            {
+                IssueDate = timeProvider.GetUtcNow();
+            }
+
             StatusId = status;
             StatusDate = timeProvider.GetUtcNow();
 
@@ -284,6 +301,16 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
         {
             VatRate = null;
         }
+    }
+
+    public async Task AssignInvoiceNo(InvoiceNumberFetcher invoiceNumberFetcher, CancellationToken cancellationToken = default)
+    {
+        if(InvoiceNo is not null)
+        {
+            throw new InvalidOperationException("Invoice number already set");
+        }
+
+        InvoiceNo = await invoiceNumberFetcher.GetNextNumberAsync(OrganizationId, cancellationToken);
     }
 
     public InvoiceDomesticService? DomesticService { get; set; }

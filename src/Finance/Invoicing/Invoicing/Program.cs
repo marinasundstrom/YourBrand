@@ -88,6 +88,8 @@ builder.Services
     .AddUserContext()
     .AddTenantContext();
 
+builder.Services.AddScoped<InvoiceNumberFetcher>();
+
 builder.Services.AddMassTransit(x =>
 {
     x.SetKebabCaseEndpointNameFormatter();
@@ -242,6 +244,12 @@ group.MapPut("/{invoiceId}/Items/{invoiceItemId}/quantity", async (string organi
 group.MapPost("/", async (CreateInvoice command, IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(command, cancellationToken))
     .WithName("Invoices_CreateInvoice")
+    .WithTags("Invoices")
+    .Produces<InvoiceDto>(StatusCodes.Status200OK);
+
+group.MapPost("/draft", async (CreateInvoiceDraft command, IMediator mediator, CancellationToken cancellationToken)
+    => await mediator.Send(command, cancellationToken))
+    .WithName("Invoices_CreateInvoiceDraft")
     .WithTags("Invoices")
     .Produces<InvoiceDto>(StatusCodes.Status200OK);
 

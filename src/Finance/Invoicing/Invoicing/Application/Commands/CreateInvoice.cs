@@ -10,22 +10,18 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, string? Note, SetCustomerDto? Customer) : IRequest<InvoiceDto>
 {
-    public class Handler(IInvoicingContext context, TimeProvider timeProvider) : IRequestHandler<CreateInvoice, InvoiceDto>
+    public class Handler(IInvoicingContext context, TimeProvider timeProvider, InvoiceNumberFetcher invoiceNumberFetcher) : IRequestHandler<CreateInvoice, InvoiceDto>
     {
         public async Task<InvoiceDto> Handle(CreateInvoice request, CancellationToken cancellationToken)
         {
-            var invoice = new YourBrand.Invoicing.Domain.Entities.Invoice(request.Date, note: request.Note);
+            var invoice = new YourBrand.Invoicing.Domain.Entities.Invoice(request.Date, note: request.Note, 
+                type: Domain.Enums.InvoiceType.Invoice);
+
+            invoice.SetCurrency("SEK");
 
             invoice.Id = Guid.NewGuid().ToString();
 
-            try
-            {
-                invoice.InvoiceNo = context.Invoices.Select(x => x.InvoiceNo).ToList().Select(x => x).Max() + 1;
-            }
-            catch
-            {
-                invoice.InvoiceNo = 1;
-            }
+            await invoice.AssignInvoiceNo(invoiceNumberFetcher);
 
             if (request.Status is not null)
             {

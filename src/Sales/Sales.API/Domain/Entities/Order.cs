@@ -34,6 +34,11 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
 
     public async Task AssignOrderNo(OrderNumberFetcher orderNumberFetcher, CancellationToken cancellationToken = default)
     {
+        if (OrderNo is not null)
+        {
+            throw new InvalidOperationException("Order number already set");
+        }
+
         OrderNo = await orderNumberFetcher.GetNextNumberAsync(OrganizationId, cancellationToken);
     }
 

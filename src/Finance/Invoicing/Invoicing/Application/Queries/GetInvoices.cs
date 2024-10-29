@@ -7,7 +7,7 @@ using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Queries;
 
-public record GetInvoices(string OrganizationId, int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, int[]? Status = null, string? Reference = null) : IRequest<ItemsResult<InvoiceDto>>
+public record GetInvoices(string OrganizationId, int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, int[]? Status = null, string? Reference = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<InvoiceDto>>
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<GetInvoices, ItemsResult<InvoiceDto>>
     {
@@ -47,8 +47,30 @@ public record GetInvoices(string OrganizationId, int Page = 1, int PageSize = 10
                 var statuses = request.Status.Select(x => x);
                 query = query.Where(i => statuses.Any(s => s == i.Status.Id));
             }
+            else
+            {
+                query = query.Where(x => x.StatusId != 1);
+            }
 
             int totalItems = await query.CountAsync(cancellationToken);
+
+
+            if (request.SortBy is not null)
+            {
+                query = query.OrderBy(request.SortBy, request.SortDirection);
+            }
+            else
+            {
+                if (!request.Status?.Any() ?? true)
+                {
+                    // For drafts
+                    query = query.OrderByDescending(x => x.Created);
+                }
+                else
+                {
+                    query = query.OrderByDescending(x => x.IssueDate);
+                }
+            }
 
             query = query
                 .Include(i => i.Items)

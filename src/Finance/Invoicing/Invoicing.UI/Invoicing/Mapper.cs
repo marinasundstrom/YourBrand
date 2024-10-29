@@ -11,8 +11,8 @@ public static class Mapper
             Id = dto.Id,
             InvoiceNo = dto.InvoiceNo,
             Status = dto.Status,
-            Date = dto.IssueDate.GetValueOrDefault().Date.Date,
-            DueDate = dto.DueDate.GetValueOrDefault().Date.Date,
+            Date = dto.IssueDate is null ? null : dto.IssueDate.GetValueOrDefault(),
+            DueDate = dto.DueDate is null ? null : dto.DueDate.GetValueOrDefault(),
             Reference = dto.Reference,
             Note = dto.Note,
             Paid = dto.Paid

@@ -1,5 +1,5 @@
 @page "/invoices/new"
-@page "/invoices/{InvoiceNo:int}"
+@page "/invoices/{Id}"
 @using Microsoft.AspNetCore.SignalR.Client;
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Invoicing.Invoicing
@@ -19,9 +19,27 @@
 
 @if (invoice is not null)
 {
-    <AppPageTitle>Invoice #@invoice.InvoiceNo</AppPageTitle>
-
-        <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoice #@invoice.InvoiceNo</MudText>
+    <AppPageTitle>        
+        @if(InvoiceNo is null) 
+        {
+            <text>Draft invoice</text>
+        }
+        else 
+        {
+            <text>Invoice #@InvoiceNo</text>
+        }
+    </AppPageTitle>
+    
+        <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">
+            @if(InvoiceNo is null) 
+            {
+                <text>Draft invoice</text>
+            }
+            else 
+            {
+                <text>Invoice #@InvoiceNo</text>
+            }
+        </MudText>
 
         <div class="mb-4">
             <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/v1/invoices/{invoice.Id}/file")">
@@ -367,51 +385,42 @@
     [Parameter]
     public int? InvoiceNo { get; set; }
 
+    [Parameter]
+    public string Id { get; set; }
+
     [Required]
     public InvoiceViewModel Model { get; set;  }
 
     protected override async Task OnInitializedAsync()
     {
-
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
 
         OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
 
-        if (InvoiceNo is not null)
+        NavigationManager.LocationChanged += OnLocationChanged;
+
+        if(int.TryParse(Id, out var invoiceNo)) 
         {
-            invoice = await InvoicesClient.GetInvoiceByNoAsync(organization.Id, InvoiceNo.GetValueOrDefault());
+            InvoiceNo = invoiceNo;
+            invoiceNoParsed = true;
+        }
 
-            if(invoice.Customer is not null) 
-            {
-                customer = new YourBrand.Customers.Client.Customer {
-                    Id = int.Parse(invoice.Customer.Id),
-                    Name = invoice.Customer.Name
-                };
-            }
-
-            Model = invoice.ToModel();
+        if (InvoiceNo is not null || Id is not null)
+        {
+            await Load();
         }
         else
         {
-            invoice = await InvoicesClient.CreateInvoiceAsync(
-                new CreateInvoice()
+            invoice = await InvoicesClient.CreateInvoiceDraftAsync(
+                new CreateInvoiceDraft()
                 {
-                    OrganizationId = organization.Id,
-                    Status = 1
+                    OrganizationId = organization.Id
                 }
             );
 
-            if(invoice.Customer is not null) 
-            {
-                customer = new YourBrand.Customers.Client.Customer {
-                    Id = int.Parse(invoice.Customer.Id),
-                    Name = invoice.Customer.Name
-                };
-            }
-
             Model = invoice.ToModel();
 
-            NavigationManager.NavigateTo($"/invoices/{Model.InvoiceNo}", replace: true);
+            NavigationManager.NavigateTo($"/invoices/{Model.Id}", replace: true);
 
             Snackbar.Add("Created invoice draft", Severity.Info);
         }
@@ -424,6 +433,47 @@
     private async void OnCurrentOrganizationChanged(object? sender, EventArgs ev) 
     {
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;   
+    }
+
+
+    async void OnLocationChanged(object? sender, LocationChangedEventArgs args) 
+    {
+        if(invoiceNoParsed && replacedUri) 
+        {
+            return;
+        }
+
+        await Load();
+
+        StateHasChanged();
+
+        replacedUri = false;
+    }
+
+    bool invoiceNoParsed = false;
+    bool replacedUri = false;
+
+    async Task Load() 
+    {
+        invoice = InvoiceNo is not null ?
+                await InvoicesClient.GetInvoiceByNoAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, InvoiceNo.GetValueOrDefault())
+                : await InvoicesClient.GetInvoiceAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, Id);
+
+        if(invoice.Customer is not null) 
+        {
+            customer = new YourBrand.Customers.Client.Customer {
+                    Id = int.Parse(invoice.Customer.Id),
+                    Name = invoice.Customer.Name
+             };
+        }
+
+        Model = invoice.ToModel();
+
+        if(invoice.InvoiceNo is not null) 
+        {
+            replacedUri = true;
+            NavigationManager.NavigateTo($"/invoices/{invoice.InvoiceNo}", replace: true);
+        }
     }
 
     Payment? payment;

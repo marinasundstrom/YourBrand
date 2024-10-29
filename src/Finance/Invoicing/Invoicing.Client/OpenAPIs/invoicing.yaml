@@ -399,6 +399,30 @@ paths:
                 $ref: '#/components/schemas/Invoice'
       security:
       - JWT: []
+  /v1/invoices/draft:
+    post:
+      tags:
+      - Invoices
+      - Invoices
+      - Invoices
+      operationId: Invoices_CreateInvoiceDraft
+      requestBody:
+        x-name: command
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInvoiceDraft'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+      security:
+      - JWT: []
   /v1/invoices/{invoiceId}/Status:
     put:
       tags:
@@ -871,6 +895,19 @@ paths:
           type: string
           nullable: true
         x-position: 6
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 7
+      - name: sortDirection
+        in: query
+        schema:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SortDirection'
+        x-position: 8
       responses:
         200:
           description: ''
@@ -961,6 +998,19 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/InvoiceDomesticService'
+        created:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          nullable: true
+        lastModified:
+          type: string
+          format: date-time
+          nullable: true
+        lastModifiedById:
+          type: string
+          nullable: true
     InvoiceType:
       type: string
       description: ''
@@ -1100,6 +1150,19 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/InvoiceItemDomesticService'
+        created:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          nullable: true
+        lastModified:
+          type: string
+          format: date-time
+          nullable: true
+        lastModifiedBy:
+          type: string
+          nullable: true
     ProductType:
       type: string
       description: ''
@@ -1330,6 +1393,12 @@ components:
         id:
           type: string
         name:
+          type: string
+    CreateInvoiceDraft:
+      type: object
+      additionalProperties: false
+      properties:
+        organizationId:
           type: string
     ItemsResultOfInvoiceStatus:
       type: object

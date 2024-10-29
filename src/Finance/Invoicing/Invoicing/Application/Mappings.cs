@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Invoicing.Domain.Entities;
+using YourBrand.Invoicing.Infrastructure.Persistence;
 
 namespace YourBrand.Invoicing.Application;
 
@@ -29,7 +32,11 @@ public static class Mappings
             invoice.Discount,
             invoice.Total,
             invoice.Paid,
-            invoice.DomesticService?.ToDto());
+            invoice.DomesticService?.ToDto(),
+            invoice.Created,
+            invoice.CreatedById,
+            invoice.LastModified,
+            invoice.LastModifiedById);
     }
 
     public static InvoiceDomesticServiceDto ToDto(this Domain.Entities.InvoiceDomesticService domesticService)
@@ -55,7 +62,11 @@ public static class Mappings
             item.Total,
             item.Notes,
             item.IsTaxDeductibleService,
-            item.DomesticService?.ToDto());
+            item.DomesticService?.ToDto(),
+            item.Created,
+            item.CreatedById,
+            item.LastModified,
+            item.LastModifiedById);
     }
 
     public static CustomerDto ToDto(this Customer customer) => new CustomerDto(customer.Id, customer.CustomerNo, customer.Name);
@@ -102,4 +113,26 @@ public static class Mappings
     };
 
     //public static CurrencyAmountDto ToDto(this CurrencyAmount currencyAmount) => new(currencyAmount.Currency, currencyAmount.Amount);
+}
+
+public sealed class InvoiceNumberFetcher(InvoicingContext invoicingContext)
+{
+    public async Task<int> GetNextNumberAsync(string organizationId, CancellationToken cancellationToken)
+    {
+        int invoiceNo;
+
+        try
+        {
+            invoiceNo = (await invoicingContext.Invoices
+                .IgnoreQueryFilters()
+                .InOrganization(organizationId)
+                .MaxAsync(x => x.InvoiceNo.GetValueOrDefault(), cancellationToken: cancellationToken)) + 1;
+        }
+        catch (InvalidOperationException e)
+        {
+            invoiceNo = 1; // Invoice start number
+        }
+
+        return invoiceNo;
+    }
 }
