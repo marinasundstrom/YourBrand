@@ -2,9 +2,9 @@
 
 namespace TemplateCompiler;
 
-class Program 
+sealed class Program
 {
-    public static void Main(string[] args) 
+    public static void Main(string[] args)
     {
         Console.WriteLine("Test");
 

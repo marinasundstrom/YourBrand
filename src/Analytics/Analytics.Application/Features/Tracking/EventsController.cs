@@ -1,8 +1,9 @@
+using Asp.Versioning;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Asp.Versioning;
 
 namespace YourBrand.Analytics.Application.Features.Tracking;
 

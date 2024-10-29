@@ -11,9 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi;
-using YourBrand.Extensions;
 
 using Scalar.AspNetCore;
+
+using YourBrand.Extensions;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -59,7 +60,7 @@ public static partial class Extensions
         builder.Services
             .AddOpenApi(name, description, null, settings => settings.AddJwtSecurity())
             .AddApiVersioningServices();
-            
+
         //NewMethod(apiVersioning);
 
         return builder;

@@ -1,11 +1,14 @@
-﻿using YourBrand.Sales.Domain.Entities;
+﻿using System;
+
+using FluentAssertions;
+
+using NSubstitute;
+
+using Xunit;
+
+using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Enums;
 using YourBrand.Sales.Features.SubscriptionManagement;
-
-using System;
-using Xunit;
-using NSubstitute;
-using FluentAssertions;
 
 namespace YourBrand.Sales.UnitTests;
 

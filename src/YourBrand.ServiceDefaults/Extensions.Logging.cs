@@ -39,7 +39,7 @@ public static partial class Extensions
             //.Enrich.WithProperty("Application", ServiceName)
             //.Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName)
             .ReadFrom.Configuration(builder.Configuration));
-            
+
         return builder;
     }
 }

@@ -25,7 +25,7 @@ public class NullabilityTransformer : IOpenApiOperationTransformer
 
         TransformParameters(operation, context, methodInfo);
 
-       //TransformRequestBody(operation, context, methodInfo);
+        //TransformRequestBody(operation, context, methodInfo);
 
         TransformResponseTypes(operation, context, methodInfo);
 
@@ -34,17 +34,17 @@ public class NullabilityTransformer : IOpenApiOperationTransformer
 
     private static void TransformParameters(OpenApiOperation operation, OpenApiOperationTransformerContext context, MethodInfo methodInfo)
     {
-        foreach(var parameterInfo in methodInfo.GetParameters()) 
+        foreach (var parameterInfo in methodInfo.GetParameters())
         {
             var parameter = operation.Parameters.FirstOrDefault(x => x.Name == parameterInfo.Name);
 
-            if(parameter is null) continue;
-                
-            if(parameterInfo.HasDefaultValue) 
+            if (parameter is null) continue;
+
+            if (parameterInfo.HasDefaultValue)
             {
                 IOpenApiAny? def;
 
-                if(parameterInfo.DefaultValue is string str) 
+                if (parameterInfo.DefaultValue is string str)
                 {
                     def = new OpenApiString(str);
                 }
@@ -63,15 +63,15 @@ public class NullabilityTransformer : IOpenApiOperationTransformer
                 else if (parameterInfo.DefaultValue is null)
                 {
                     def = null;
-                } 
-                else 
+                }
+                else
                 {
                     throw new InvalidOperationException($"Invalid value of type {parameterInfo.DefaultValue?.GetType()}");
                 }
 
                 parameter.Schema.Default = def;
             }
-            else 
+            else
             {
                 parameter.Required = true;
             }
@@ -81,7 +81,7 @@ public class NullabilityTransformer : IOpenApiOperationTransformer
 
             var isNullable = parameterInfo.ParameterType.IsNullable(out var nt) || (nullabilityInfo.ReadState == NullabilityState.Nullable);
 
-            if(isNullable) 
+            if (isNullable)
             {
                 parameter.Schema.Nullable = isNullable;
             }

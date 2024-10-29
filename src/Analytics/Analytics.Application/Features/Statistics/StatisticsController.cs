@@ -1,10 +1,13 @@
-﻿using MediatR;
+﻿using System.ComponentModel;
 
-using Microsoft.AspNetCore.Mvc;
 using Asp.Versioning;
+
+using MediatR;
+
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
 using YourBrand.Analytics.Application.Common.Models;
-using System.ComponentModel;
 
 namespace YourBrand.Analytics.Application.Features.Statistics;
 

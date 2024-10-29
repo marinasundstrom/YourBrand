@@ -28,7 +28,7 @@ public static partial class Extensions
     public static IHostApplicationBuilder AddServiceDefaults(this WebApplicationBuilder builder)
     {
         builder.Services.AddHttpContextAccessor();
-        
+
         builder.ConfigureOpenTelemetry();
 
         builder.Services.AddServiceDiscovery();

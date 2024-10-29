@@ -1,6 +1,6 @@
 namespace Microsoft.Extensions.Hosting;
 
-public static class TypeExtensions 
+public static class TypeExtensions
 {
     public static string GetSchemaName(this Type type)
     {
