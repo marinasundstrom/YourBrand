@@ -72,8 +72,7 @@ services
     .AddClients(configuration);
 
 services
-    .AddControllers()
-    .AddNewtonsoftJson();
+    .AddControllers();
 
 services.AddHttpContextAccessor();
 

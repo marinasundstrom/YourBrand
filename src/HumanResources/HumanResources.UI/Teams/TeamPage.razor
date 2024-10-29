@@ -18,7 +18,7 @@
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnAddMemberClicked">Add member</MudButton>
 
-    <MudTable T="TeamMembershipDto" ServerData="@(new Func<TableState, Task<TableData<TeamMembershipDto>>>(ServerReload))"
+    <MudTable T="TeamMembership" ServerData="@(new Func<TableState, Task<TableData<TeamMembership>>>(ServerReload))"
               Hover="true" Elevation="25" @ref="table" Class="mt-4" OnRowClick="(e) => GotToMember(e.Item)">
         <ToolBarContent>
             <MudSpacer />
@@ -26,7 +26,7 @@
                           AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="TeamMembershipDto" SortLabel="Person.FirstName">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="TeamMembership" SortLabel="Person.FirstName">Name</MudTableSortLabel></MudTh>
             <MudTh></MudTh>
         </HeaderContent>
 
@@ -50,14 +50,14 @@
 }
 
 @code {
-    MudTable<TeamMembershipDto> table;
+    MudTable<TeamMembership> table;
     string searchString;
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
 
     [Parameter] public string Id { get; set; } = null!;
 
-    TeamDto? Team { get; set; }
+    Team? Team { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -69,12 +69,12 @@
         });
     }
 
-    private async Task<TableData<TeamMembershipDto>> ServerReload(TableState state)
+    private async Task<TableData<TeamMembership>> ServerReload(TableState state)
     {
         var page = await TeamsClient.GetMembershipsAsync(Id, state.Page, state.PageSize, /* null,  Person?.Id, */ searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? HumanResources.Client.SortDirection.Desc : HumanResources.Client.SortDirection.Asc);
 
-        return new TableData<TeamMembershipDto>() { TotalItems = page.TotalItems, Items = page.Items };
+        return new TableData<TeamMembership>() { TotalItems = page.TotalItems, Items = page.Items };
     }
 
     private void OnSearch(string text)
@@ -83,7 +83,7 @@
         table.ReloadServerData();
     }
 
-    private async Task<IEnumerable<PersonDto>> Search1(string value)
+    private async Task<IEnumerable<Person>> Search1(string value)
     {
         var page = await PersonsClient.GetPersonsAsync(0, 10, value, null, null);
 
@@ -105,7 +105,7 @@
         await table.ReloadServerData();
     }
 
-    private async Task OnEditMembershipClicked(TeamMembershipDto membership)
+    private async Task OnEditMembershipClicked(TeamMembership membership)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(MembershipDialog.TeamId), Id);
@@ -121,7 +121,7 @@
         await table.ReloadServerData();
     }
 
-    async Task DeleteMembership(TeamMembershipDto membership)
+    async Task DeleteMembership(TeamMembership membership)
     {
         var modalResult = await DialogService.ShowMessageBox($"Remove the membership for {membership.Person.FirstName}?", "If you regret it, you can just add the person back later.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
@@ -134,7 +134,7 @@
         await table.ReloadServerData();
     }
 
-    private void GotToMember(TeamMembershipDto membership)
+    private void GotToMember(TeamMembership membership)
     {
         NavigationManager.NavigateTo($"/teams/{membership.Id}/{membership.Person.Id}");
     }

@@ -44,14 +44,7 @@ builder.Host.UseSerilog((ctx, cfg) =>
 
 builder.AddServiceDefaults();
 
-builder.Services
-    .AddOpenApi(ServiceName, ApiVersions.All, settings =>
-    {
-        settings
-            .AddApiKeySecurity()
-            .AddJwtSecurity();
-    })
-    .AddApiVersioningServices();
+builder.AddDefaultOpenApi();
 
 builder.Services.AddAuthenticationServices(builder.Configuration);
 
@@ -68,8 +61,7 @@ services.AddInfrastructure(configuration);
 services.AddServices();
 
 services
-    .AddControllers()
-    .AddNewtonsoftJson();
+    .AddControllers();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -102,7 +94,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 
-    app.UseOpenApiAndSwaggerUi();
+    app.UseDefaultOpenApi();
 }
 
 app.UseHttpsRedirection();

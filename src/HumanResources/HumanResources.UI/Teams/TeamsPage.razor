@@ -14,10 +14,10 @@
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTeamClicked">New Team</MudButton>
 
-<MudTable T="TeamDto" ServerData="@(new Func<TableState, Task<TableData<TeamDto>>>(ServerReload))"
+<MudTable T="Team" ServerData="@(new Func<TableState, Task<TableData<Team>>>(ServerReload))"
           Hover="true" Elevation="25" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTeam(e.Item)">
     <ToolBarContent>
-        <MudAutocomplete T="PersonDto" Label="Person" Variant="Variant.Text" Dense="true" Value="Person" ValueChanged="OnPersonChanged" SearchFunc="@Search1"
+        <MudAutocomplete T="Person" Label="Person" Variant="Variant.Text" Dense="true" Value="Person" ValueChanged="OnPersonChanged" SearchFunc="@Search1"
                          For="() => Person"
                          ToStringFunc="u => u?.GetDisplayName()"
                          ResetValueOnEmptyText="true"
@@ -28,7 +28,7 @@
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh><MudTableSortLabel T="TeamDto" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Team" SortLabel="Name">Name</MudTableSortLabel></MudTh>
         <MudTh></MudTh>
     </HeaderContent>
 
@@ -51,12 +51,12 @@
 </MudTable>
 
 @code {
-    MudTable<TeamDto> table;
+    MudTable<Team> table;
     string searchString;
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
 
-    PersonDto? Person { get; set; }
+    Person? Person { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -65,12 +65,12 @@
         });
     }
 
-    private async Task<TableData<TeamDto>> ServerReload(TableState state)
+    private async Task<TableData<Team>> ServerReload(TableState state)
     {
         var page = await TeamsClient.GetTeamsAsync(state.Page, state.PageSize, /* null,  Person?.Id, */ searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? HumanResources.Client.SortDirection.Desc : HumanResources.Client.SortDirection.Asc);
 
-        return new TableData<TeamDto>() { TotalItems = page.TotalItems, Items = page.Items };
+        return new TableData<Team>() { TotalItems = page.TotalItems, Items = page.Items };
     }
 
     private void OnSearch(string text)
@@ -79,21 +79,21 @@
         table.ReloadServerData();
     }
 
-    private async Task<IEnumerable<PersonDto>> Search1(string value)
+    private async Task<IEnumerable<Person>> Search1(string value)
     {
         var page = await PersonsClient.GetPersonsAsync(0, 10, value, null, null);
 
         return page.Items;
     }
 
-    void OnPersonChanged(PersonDto person)
+    void OnPersonChanged(Person person)
     {
         Person = person;
 
         table.ReloadServerData();
     }
 
-    private void GotToTeam(TeamDto team)
+    private void GotToTeam(Team team)
     {
         NavigationManager.NavigateTo($"/hr/teams/{team.Id}");
     }
@@ -111,7 +111,7 @@
         table.ReloadServerData();
     }
 
-    private async Task OnEditTeamClicked(TeamDto timeSheet)
+    private async Task OnEditTeamClicked(Team timeSheet)
     {
         /*
     DialogParameters parameters = new();

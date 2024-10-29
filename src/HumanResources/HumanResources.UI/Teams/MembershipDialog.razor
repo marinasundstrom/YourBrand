@@ -10,7 +10,7 @@
             @*@if (MembershipId is null)
             {*@
 
-                <MudAutocomplete T="PersonDto" Label="Person" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Person" SearchFunc="@Search1"
+                <MudAutocomplete T="Person" Label="Person" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Person" SearchFunc="@Search1"
                                  For="() => Person"
                                  ToStringFunc="u => u?.GetDisplayName()"
                                  ResetValueOnEmptyText="true"
@@ -37,7 +37,7 @@
     //[Parameter] public string? MembershipId { get; set; }
 
     [Required]
-    public PersonDto Person { get; set; }
+    public Person Person { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,25 +55,25 @@
 
     async Task OnSubmit()
     {
-        TeamMembershipDto? result = null;
+        TeamMembership? result = null;
 
         /* if (MembershipId is null)
         { */
 
-        await TeamsClient.AddMemberAsync(TeamId, new AddMemberDto {
+        await TeamsClient.AddMemberAsync(TeamId, new AddMember {
             PersonId = Person.Id
         });
 
         /* }
          else
          {
-             result = await TeamsClient.UpdateProjectMembershipAsync(TeamId, PersonId, new UpdateProjectMembershipDto());
+             result = await TeamsClient.UpdateProjectMembershipAsync(TeamId, PersonId, new UpdateProjectMembership());
          } */
 
         Modal.Close(DialogResult.Ok(result));
     }
 
-    private async Task<IEnumerable<PersonDto>> Search1(string value)
+    private async Task<IEnumerable<Person>> Search1(string value)
     {
         var page = await PersonsClient.GetPersonsAsync(0, 10, value, null, null);
 

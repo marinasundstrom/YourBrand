@@ -11,7 +11,7 @@
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewPersonClicked">New Person</MudButton>
 
-<MudTable T="PersonDto" ServerData="@(new Func<TableState, Task<TableData<PersonDto>>>(ServerReload))"
+<MudTable T="Person" ServerData="@(new Func<TableState, Task<TableData<Person>>>(ServerReload))"
           Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToPerson(e.Item)" Elevation="25">
     <ToolBarContent>
         <MudSpacer />
@@ -19,13 +19,13 @@
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="Title">Title</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="ReportsTo">Reports to</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="Ssn">SSN</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel T="PersonDto" SortLabel="Email">Email</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Person" SortLabel="FirstName">First Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Person" SortLabel="LastName">Last Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Person" SortLabel="DisplayName">Display Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Person" SortLabel="Title">Title</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Person" SortLabel="ReportsTo">Reports to</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Person" SortLabel="Ssn">SSN</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel T="Person" SortLabel="Email">Email</MudTableSortLabel></MudTh>
         <MudTh>Role</MudTh>
         <MudTh></MudTh>
     </HeaderContent>
@@ -55,7 +55,7 @@
 </MudTable>
 
 @code {
-    MudTable<PersonDto> table;
+    MudTable<Person> table;
     string searchString;
 
     protected override async Task OnInitializedAsync()
@@ -63,14 +63,14 @@
 
     }
 
-    private async Task<TableData<PersonDto>> ServerReload(TableState state)
+    private async Task<TableData<Person>> ServerReload(TableState state)
     {
         try
         {
             var page = await PersonsClient.GetPersonsAsync(state.Page, state.PageSize, searchString,
                 state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? HumanResources.Client.SortDirection.Desc : HumanResources.Client.SortDirection.Asc);
 
-            return new TableData<PersonDto>() { TotalItems = page.TotalItems, Items = page.Items };
+            return new TableData<Person>() { TotalItems = page.TotalItems, Items = page.Items };
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -86,7 +86,7 @@
         table.ReloadServerData();
     }
 
-    private void GotToPerson(PersonDto person)
+    private void GotToPerson(Person person)
     {
         NavigationManager.NavigateTo($"/hr/persons/{person.Id}"); ;
     }
@@ -96,12 +96,12 @@
         NavigationManager.NavigateTo($"/hr/persons/new");
     }
 
-    private async Task OnEditPersonClicked(PersonDto person)
+    private async Task OnEditPersonClicked(Person person)
     {
         NavigationManager.NavigateTo($"/hr/persons/{person.Id}/edit");
     }
 
-    private async Task DeletePerson(PersonDto person)
+    private async Task DeletePerson(Person person)
     {
         try
         {

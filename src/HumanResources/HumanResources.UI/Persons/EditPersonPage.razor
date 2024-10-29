@@ -71,9 +71,9 @@
 
     public string Role { get; set; } = null!;
 
-    public Person2Dto? ReportsTo { get; set; }
+    public Person2? ReportsTo { get; set; }
 
-    PersonDto? person;
+    Person? person;
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,7 +95,7 @@
     {
         try
         {
-            PersonDto result = await PersonsClient.UpdatePersonAsync(PersonId, new UpdatePersonDetailsDto
+            Person result = await PersonsClient.UpdatePersonAsync(PersonId, new UpdatePersonDetails
             {
                 FirstName = FirstName,
                 LastName = LastName,
@@ -115,14 +115,14 @@
     }
 
 
-    async Task<IEnumerable<Person2Dto>> SearchPerson(string text)
+    async Task<IEnumerable<Person2>> SearchPerson(string text)
     {
         try
         {
             var results = await PersonsClient.GetPersonsAsync(0, 10, text, null, null);
 
             return results.Items.Where(x => x.Id != PersonId).Select(
-                p => new Person2Dto()  
+                p => new Person2()  
                 {
                     Id = p.Id,
                     FirstName = p.FirstName,

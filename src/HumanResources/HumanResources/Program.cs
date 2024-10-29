@@ -72,8 +72,7 @@ builder.Services
 
 
 services
-    .AddControllers()
-    .AddNewtonsoftJson();
+    .AddControllers();
 
 services.AddHttpContextAccessor();
 

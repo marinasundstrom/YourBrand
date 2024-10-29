@@ -75,8 +75,7 @@ builder.Services
     .AddTenantContext();
 
 services
-    .AddControllers()
-    .AddNewtonsoftJson();
+    .AddControllers();
 
 services.AddHttpContextAccessor();
 
@@ -150,7 +149,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 
-    app.UseOpenApiAndSwaggerUi();
+    app.UseDefaultOpenApi();
 }
 
 app.UseHttpsRedirection();

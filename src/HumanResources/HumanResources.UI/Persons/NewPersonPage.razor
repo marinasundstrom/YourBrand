@@ -78,9 +78,9 @@
     public string SSN { get; set; } = null!;
 
     [Required]
-    public RoleDto Role { get; set; } = null!;
+    public Role Role { get; set; } = null!;
     
-    public PersonDto? ReportsTo { get; set; } = null!;
+    public Person? ReportsTo { get; set; } = null!;
 
     [Required]
     [EmailAddress]
@@ -108,7 +108,7 @@
     {
         try
         {
-            PersonDto result = await PersonsClient.CreatePersonAsync(new CreatePersonDto
+            Person result = await PersonsClient.CreatePersonAsync(new CreatePerson
             {
                 FirstName = FirstName,
                 LastName = LastName,
@@ -129,7 +129,7 @@
         }
     }
 
-    async Task<IEnumerable<RoleDto>> SearchRole(string text)
+    async Task<IEnumerable<Role>> SearchRole(string text)
     {
         try
         {
@@ -144,7 +144,7 @@
         return null;
     }
 
-    async Task<IEnumerable<PersonDto>> SearchPerson(string text)
+    async Task<IEnumerable<Person>> SearchPerson(string text)
     {
         try
         {

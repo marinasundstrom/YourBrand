@@ -70,8 +70,7 @@ builder.Services
     .AddTenantContext();
 
 services
-    .AddControllers()
-    .AddNewtonsoftJson();
+    .AddControllers();
 
 services.AddHttpContextAccessor();
 
