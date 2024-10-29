@@ -9,13 +9,15 @@ public class OrderViewModel
     private readonly List<OrderItemViewModel> _items = new List<OrderItemViewModel>();
     private readonly List<OrderVatAmountViewModel> _vatAmounts = new List<OrderVatAmountViewModel>();
 
-    public int Id { get; set; }
+    public string Id { get; set; }
+
+    public int? OrderNo { get; set; }
 
     [Required]
     public OrderType Type { get; set; }
 
     [Required]
-    public DateTime? Date { get; set; }
+    public DateTimeOffset? Date { get; set; }
 
     [Required]
     public TimeSpan? Time { get; set; }
@@ -27,7 +29,7 @@ public class OrderViewModel
 
     public string? Notes { get; set; }
 
-    public DateTime? DueDate { get; set; }
+    public DateTimeOffset? DueDate { get; set; }
 
     public bool VatIncluded { get; set; } = true;
 

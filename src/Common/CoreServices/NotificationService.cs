@@ -4,12 +4,12 @@ namespace YourBrand.Notifications;
 
 public interface INotificationService
 {
-    Task PublishNotificationAsync(Notification notification);
+    Task PublishNotificationAsync(Notification notification, CancellationToken cancellationToken = default);
 }
 
 public sealed class NotificationService(INotificationsClient notificationClients) : INotificationService
 {
-    public async Task PublishNotificationAsync(Notification notification)
+    public async Task PublishNotificationAsync(Notification notification, CancellationToken cancellationToken = default)
     {
         await notificationClients.CreateNotificationAsync(new CreateNotification
         {
@@ -17,7 +17,7 @@ public sealed class NotificationService(INotificationsClient notificationClients
             Link = notification.Link,
             UserId = notification.UserId,
             ScheduledFor = notification.ScheduledFor
-        });
+        }, cancellationToken);
     }
 }
 

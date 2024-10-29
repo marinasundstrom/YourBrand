@@ -11,7 +11,9 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         builder.ToTable("Orders");
 
-        builder.HasAlternateKey(o => new { o.OrganizationId, o.OrderNo });
+        builder.HasKey(o => new { o.OrganizationId, o.Id });
+
+        builder.HasIndex(o => new { o.OrganizationId, o.OrderNo });
 
         builder.HasOne(o => o.Type).WithMany()
             .HasForeignKey(o => new { o.OrganizationId, o.TypeId });
@@ -23,6 +25,7 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.HasMany(order => order.Items)
             .WithOne(orderItem => orderItem.Order)
+            .HasForeignKey(o => new { o.OrganizationId, o.OrderId })
             .IsRequired()
             .OnDelete(DeleteBehavior.ClientCascade);
 

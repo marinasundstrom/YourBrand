@@ -1770,9 +1770,11 @@ components:
         orderNo:
           type: integer
           format: int32
+          nullable: true
         date:
           type: string
           format: date-time
+          nullable: true
         type:
           $ref: '#/components/schemas/OrderType'
         parent:
@@ -1892,9 +1894,11 @@ components:
         orderNo:
           type: integer
           format: int32
+          nullable: true
         date:
           type: string
           format: date-time
+          nullable: true
     OrderStatus:
       type: object
       additionalProperties: false
@@ -2019,9 +2023,11 @@ components:
         orderNo:
           type: integer
           format: int32
+          nullable: true
         date:
           type: string
           format: date-time
+          nullable: true
     SubscriptionSchedule:
       type: object
       additionalProperties: false

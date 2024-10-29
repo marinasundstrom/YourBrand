@@ -13,7 +13,9 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
     {
         builder.ToTable("Subscriptions");
 
-        builder.HasAlternateKey(o => new { o.OrganizationId, o.SubscriptionNo });
+        builder.HasKey(o => new { o.OrganizationId, o.Id });
+
+        builder.HasIndex(o => new { o.OrganizationId, o.SubscriptionNo });
 
         builder.HasIndex(x => x.TenantId);
 
@@ -29,19 +31,19 @@ public class SubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 
         builder.HasOne(s => s.Order!)
             .WithOne()
-            .HasForeignKey<Subscription>(s => s.OrderId);
+            .HasForeignKey<Subscription>(s => new { s.OrganizationId, s.OrderId });
 
         builder.HasOne(s => s.OrderItem!)
             .WithOne()
-            .HasForeignKey<Subscription>(s => s.OrderItemId);
+            .HasForeignKey<Subscription>(s => new { s.OrganizationId, s.OrderId, s.OrderItemId });
 
         builder.HasMany(s => s.Orders!)
             .WithOne(x => x.Subscription)
-            .HasForeignKey(s => s.SubscriptionId);
+            .HasForeignKey(s => new { s.OrganizationId, s.SubscriptionId });
 
         builder.HasMany(s => s.OrderItems!)
             .WithOne(x => x.Subscription)
-            .HasForeignKey(s => s.SubscriptionId);
+            .HasForeignKey(s => new { s.OrganizationId, s.SubscriptionId });
 
         builder.OwnsOne(s => s.Schedule);
 

@@ -2,7 +2,7 @@
 
 namespace YourBrand.Sales.Features.Orders;
 
-public class OrderFactory
+public class OrderFactory(TimeProvider timeProvider)
 {
     public Order CreateOrder(Order order)
     {
@@ -29,8 +29,7 @@ public class OrderFactory
 
     public void UpdateOrder(Order targetOrder, Order order)
     {
-        targetOrder.UpdateStatus((int)OrderStatusEnum.Draft);
-        targetOrder.StatusDate = DateTimeOffset.UtcNow;
+        targetOrder.UpdateStatus((int)OrderStatusEnum.Draft, timeProvider);
 
         if (order?.Customer is not null)
         {
@@ -52,8 +51,7 @@ public class OrderFactory
 
     public void UpdateOrder(Order targetOrder, OrderItem orderItem)
     {
-        targetOrder.UpdateStatus((int)OrderStatusEnum.Draft);
-        targetOrder.StatusDate = DateTimeOffset.UtcNow;
+        targetOrder.UpdateStatus((int)OrderStatusEnum.Draft, timeProvider);
 
         if (orderItem.Order?.Customer is not null)
         {

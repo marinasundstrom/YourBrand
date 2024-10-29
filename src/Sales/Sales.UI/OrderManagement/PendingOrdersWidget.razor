@@ -19,7 +19,7 @@
     <RowTemplate Context="order">
         <MudTd DataLabel="Id">@order.OrderNo</MudTd>
         @*<MudTd DataLabel="Type">@order.Type</MudTd>*@
-        <MudTd DataLabel="Date">@order.Date.ToString("yyyy-MM-dd")</MudTd> 
+        <MudTd DataLabel="Date">@order.Date?.ToString("yyyy-MM-dd")</MudTd> 
         <MudTd DataLabel="Status">@order.Status.Name</MudTd>
         <MudTd DataLabel="Sub Total">@order.SubTotal.FormatCurrency(order.Currency)</MudTd>
         <MudTd DataLabel="VAT">@order.Vat.FormatCurrency(order.Currency)</MudTd>

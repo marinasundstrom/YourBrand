@@ -42,6 +42,8 @@ public class OrderItem : Entity<string>, IAuditable, IHasTenant
 
     public Order? Order { get; internal set; }
 
+    public string? OrderId { get; internal set; }
+
     public string Description { get; set; } = null!;
 
     public string? ProductId { get; set; }

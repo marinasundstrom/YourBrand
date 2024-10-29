@@ -18,7 +18,7 @@ public sealed record UpdateStatus(string OrganizationId, string Id, int StatusId
         }
     }
 
-    public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateStatus, Result>
+    public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork, TimeProvider timeProvider) : IRequestHandler<UpdateStatus, Result>
     {
         public async Task<Result> Handle(UpdateStatus request, CancellationToken cancellationToken)
         {
@@ -32,7 +32,7 @@ public sealed record UpdateStatus(string OrganizationId, string Id, int StatusId
                 return Errors.Orders.OrderNotFound;
             }
 
-            order.UpdateStatus(request.StatusId);
+            order.UpdateStatus(request.StatusId, timeProvider);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Results.Success;

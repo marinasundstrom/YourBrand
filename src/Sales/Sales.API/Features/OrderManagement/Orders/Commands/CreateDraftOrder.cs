@@ -9,6 +9,8 @@ using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
+using YourBrand.Sales.Persistence;
+using YourBrand.Sales.Persistence.Repositories.Mocks;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Commands;
 
@@ -24,17 +26,13 @@ public sealed record CreateDraftOrder(string OrganizationId) : IRequest<Result<O
         }
     }
 
-    public sealed class Handler(ISalesContext salesContext, IOrderRepository orderRepository, OrderNumberFetcher orderNumberFetcher, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateDraftOrder, Result<OrderDto>>
+    public sealed class Handler(SalesContext salesContext, IOrderRepository orderRepository, TimeProvider timeProvider, OrderNumberFetcher orderNumberFetcher, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateDraftOrder, Result<OrderDto>>
     {
         public async Task<Result<OrderDto>> Handle(CreateDraftOrder request, CancellationToken cancellationToken)
         {
             var order = Order.Create(organizationId: request.OrganizationId);
 
-            order.OrderNo = await orderNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
-
-            order.Status = await salesContext.OrderStatuses.FirstOrDefaultAsync(cancellationToken);
-
-            //order.UpdateStatus(1);
+            //order.UpdateStatus(1, timeProvider);
 
             order.VatIncluded = true;
 
@@ -44,10 +42,9 @@ public sealed record CreateDraftOrder(string OrganizationId) : IRequest<Result<O
 
             await domainEventDispatcher.Dispatch(new OrderCreated(order.Id), cancellationToken);
 
-            order = await orderRepository.GetAll()
-                .Include(i => i.CreatedBy)
-                .Include(i => i.LastModifiedBy)
-                .FirstAsync(x => x.OrderNo == order.OrderNo, cancellationToken);
+            order = await salesContext.Orders
+                .IncludeAll()
+                .FirstAsync(x => x.Id == order.Id, cancellationToken);
 
             return order!.ToDto();
         }

@@ -1,5 +1,5 @@
 @page "/orders/new"
-@page "/orders/{OrderNo:int}"
+@page "/orders/{Id}"
 @using Microsoft.AspNetCore.SignalR.Client;
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Portal.Services
@@ -16,9 +16,27 @@
 
 @if (order is not null)
 {
-    <AppPageTitle>Order #@OrderNo</AppPageTitle>
+    <AppPageTitle>        
+        @if(OrderNo is null) 
+        {
+            <text>Draft order</text>
+        }
+        else 
+        {
+            <text>Order #@OrderNo</text>
+        }
+    </AppPageTitle>
 
-    <MudText Typo="Typo.h3" GutterBottom="true" Class="mt-4 mb-8">Order #@OrderNo</MudText>
+    <MudText Typo="Typo.h3" GutterBottom="true" Class="mt-4 mb-8">
+        @if(OrderNo is null) 
+        {
+            <text>Draft order</text>
+        }
+        else 
+        {
+            <text>Order #@OrderNo</text>
+        }
+    </MudText>
 
     <div class="mb-4">
         <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/orders/{Id}/file")">
@@ -425,11 +443,10 @@ Delete
     bool loading = false;
     bool isExpanded = true;
 
-    [Parameter]
     public int? OrderNo { get; set; }
 
     [Parameter]
-    public string? Id { get; set; }
+    public string Id { get; set; }
 
     [Required]
     public OrderViewModel Model { get; set; }
@@ -440,7 +457,13 @@ Delete
     {
         NavigationManager.LocationChanged += OnLocationChanged;
 
-        if (OrderNo is not null)
+        if(int.TryParse(Id, out var orderNo)) 
+        {
+            OrderNo = orderNo;
+            orderNoParsed = true;
+        }
+
+        if (OrderNo is not null || Id is not null)
         {
             await Load();
         }
@@ -466,24 +489,49 @@ Delete
 
     async void OnLocationChanged(object? sender, LocationChangedEventArgs args) 
     {
+        if(orderNoParsed && replacedUri) 
+        {
+            return;
+        }
+
         await Load();
 
         StateHasChanged();
+
+        replacedUri = false;
     }
+
+    bool orderNoParsed = false;
+    bool replacedUri = false;
 
     async Task Load() 
     {
-        order = await OrdersClient.GetOrderByNoAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, OrderNo.GetValueOrDefault());
-
-        if(order.Customer is not null) 
+        try 
         {
-            customer = new YourBrand.Customers.Client.Customer {
-                Id = int.Parse(order.Customer.Id),
-                Name = order.Customer.Name
-            };
-        }
+            order = OrderNo is not null ?
+                await OrdersClient.GetOrderByNoAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, OrderNo.GetValueOrDefault())
+                : await OrdersClient.GetOrderByIdAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, Id);
 
-        Model = order.ToModel();
+            if(order.Customer is not null) 
+            {
+                customer = new YourBrand.Customers.Client.Customer {
+                    Id = int.Parse(order.Customer.Id),
+                    Name = order.Customer.Name
+                };
+            }
+
+            Model = order.ToModel();
+            
+            if(order.OrderNo is not null) 
+            {
+                replacedUri = true;
+                NavigationManager.NavigateTo($"/orders/{order.OrderNo}", replace: true);
+            }
+        }
+        catch(Exception) 
+        {
+            
+        }
     }
 
     private async Task Submit()

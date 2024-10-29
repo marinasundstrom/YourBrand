@@ -35,7 +35,7 @@ public sealed record DeleteOrder(string OrganizationId, string Id) : IRequest<Re
 
             orderRepository.Remove(order);
 
-            order.AddDomainEvent(new OrderDeleted(order.OrderNo));
+            order.AddDomainEvent(new OrderDeleted(order.OrderNo.GetValueOrDefault()));
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

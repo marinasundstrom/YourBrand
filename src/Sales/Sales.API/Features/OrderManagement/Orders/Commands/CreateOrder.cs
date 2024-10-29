@@ -25,17 +25,17 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
         }
     }
 
-    public sealed class Handler(OrderNumberFetcher orderNumberFetcher, ISalesContext salesContext, IOrderRepository orderRepository, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateOrder, Result<OrderDto>>
+    public sealed class Handler(OrderNumberFetcher orderNumberFetcher, ISalesContext salesContext, TimeProvider timeProvider, IOrderRepository orderRepository, IUnitOfWork unitOfWork, IDomainEventDispatcher domainEventDispatcher) : IRequestHandler<CreateOrder, Result<OrderDto>>
     {
         public async Task<Result<OrderDto>> Handle(CreateOrder request, CancellationToken cancellationToken)
         {
             var order = Order.Create(organizationId: request.OrganizationId);
 
-            order.OrderNo = await orderNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
+            await order.AssignOrderNo(orderNumberFetcher, cancellationToken);
 
             const int OrderStatusDraft = 1;
 
-            order.UpdateStatus(request.Status ?? OrderStatusDraft);
+            order.UpdateStatus(request.Status ?? OrderStatusDraft, timeProvider);
 
             if (request.Customer is not null)
             {
@@ -98,7 +98,7 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
             order = await orderRepository.GetAll()
                 .Include(i => i.CreatedBy)
                 .Include(i => i.LastModifiedBy)
-                .FirstAsync(x => x.OrderNo == order.OrderNo, cancellationToken);
+                .FirstAsync(x => x.Id == order.Id, cancellationToken);
 
             return order!.ToDto();
         }

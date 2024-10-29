@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Domain.ValueObjects;
+using YourBrand.Sales.Features.OrderManagement.Orders;
 
 namespace YourBrand.Sales.Domain.Entities;
 
@@ -28,25 +30,35 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
 
     public OrganizationId OrganizationId { get; set; }
 
-    public int OrderNo { get; set; }
+    public int? OrderNo { get; private set; }
 
-    public DateTime Date { get; private set; } = DateTime.Now;
+    public async Task AssignOrderNo(OrderNumberFetcher orderNumberFetcher, CancellationToken cancellationToken = default)
+    {
+        OrderNo = await orderNumberFetcher.GetNextNumberAsync(OrganizationId, cancellationToken);
+    }
+
+    public DateTimeOffset? Date { get; private set; }
 
     public OrderType Type { get; set; } = null!;
     public int TypeId { get; set; }
 
-    public OrderStatus Status { get; set; } = null!;
-    public int StatusId { get; set; }
+    public OrderStatus Status { get; private set; } = null!;
+    public int StatusId { get; private set; } = 1;
 
-    public DateTimeOffset? StatusDate { get; set; }
+    public DateTimeOffset? StatusDate { get; private set; }
 
-    public bool UpdateStatus(int status)
+    public bool UpdateStatus(int status, TimeProvider timeProvider)
     {
         var oldStatus = StatusId;
         if (status != oldStatus)
         {
+            if (oldStatus == 1)
+            {
+                Date = timeProvider.GetUtcNow();
+            }
+
             StatusId = status;
-            StatusDate = DateTimeOffset.UtcNow;
+            StatusDate = timeProvider.GetUtcNow();
 
             AddDomainEvent(new OrderUpdated(Id));
             AddDomainEvent(new OrderStatusUpdated(Id, status, oldStatus));
@@ -80,12 +92,12 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
     public Subscription? Subscription { get; set; }
     public Guid? SubscriptionId { get; set; }
 
-    public DateTime? PlannedStartDate { get; set; }
-    public DateTime? PlannedEndDate { get; set; }
-    public DateTime? ActualStartDate { get; set; }
-    public DateTime? ActualEndDate { get; set; }
+    public DateTimeOffset?PlannedStartDate { get; set; }
+    public DateTimeOffset?PlannedEndDate { get; set; }
+    public DateTimeOffset?ActualStartDate { get; set; }
+    public DateTimeOffset?ActualEndDate { get; set; }
 
-    public Order SetPlannedDates(DateTime start, DateTime? end)
+    public Order SetPlannedDates(DateTime start, DateTimeOffset?end)
     {
         this.PlannedStartDate = start;
         this.PlannedEndDate = end;
@@ -228,9 +240,9 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
         }
     }
 
-    public void Complete()
+    public void Complete(TimeProvider timeProvider)
     {
-        UpdateStatus((int)OrderStatusEnum.Completed);
+        UpdateStatus((int)OrderStatusEnum.Completed, timeProvider);
     }
 
     public User? CreatedBy { get; set; }

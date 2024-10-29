@@ -40,22 +40,16 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
 
             var orders = subscriptionOrderGenerator.GenerateOrders(order, subscription.StartDate, subscription.EndDate);
 
-            var orderNo = await orderNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
+            await order.AssignOrderNo(orderNumberFetcher, cancellationToken);
 
             foreach (var order2 in orders)
             {
-                try
-                {
-                    order2.OrderNo = orderNo++;
-                    order2.OrganizationId = request.OrganizationId;
-                    order2.TypeId = 3;
+                await order2.AssignOrderNo(orderNumberFetcher, cancellationToken);
 
-                    order2.UpdateStatus((int)OrderStatusEnum.Planned);
-                }
-                catch (InvalidOperationException e)
-                {
-                    order2.OrderNo = 1; // Order start number
-                }
+                order2.OrganizationId = request.OrganizationId;
+                order2.TypeId = 3;
+
+                order2.UpdateStatus((int)OrderStatusEnum.Planned, timeProvider);
 
                 salesContext.Orders.Add(order2);
             }
@@ -76,7 +70,7 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
             }
 
             // Complete subscription order
-            order.Complete();
+            order.Complete(timeProvider);
 
             await salesContext.SaveChangesAsync();
         }

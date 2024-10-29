@@ -6,8 +6,8 @@ using YourBrand.Sales.Features.SubscriptionManagement;
 
 public sealed record OrderDto(
     string Id,
-    int OrderNo,
-    DateTime Date,
+    int? OrderNo,
+    DateTimeOffset? Date,
     OrderTypeDto Type,
     ParentOrderDto? Parent,
     OrderStatusDto Status,
@@ -17,10 +17,10 @@ public sealed record OrderDto(
     string? Reference,
     string? Note,
     SubscriptionDto? Subscription,
-    DateTime? PlannedStartDate,
-    DateTime? PlannedEndDate,
-    DateTime? ActualStartDate,
-    DateTime? ActualEndDate,
+    DateTimeOffset?PlannedStartDate,
+    DateTimeOffset?PlannedEndDate,
+    DateTimeOffset?ActualStartDate,
+    DateTimeOffset?ActualEndDate,
     BillingDetailsDto? BillingDetails,
     ShippingDetailsDto? ShippingDetails,
     IEnumerable<OrderItemDto> Items,
@@ -38,14 +38,14 @@ public sealed record OrderDto(
 
 public record ParentOrderDto(
     string Id,
-    int OrderNo,
-    DateTime Date
+    int? OrderNo,
+    DateTimeOffset? Date
 );
 
 public record OrderShortDto(
     string Id,
-    int OrderNo,
-    DateTime Date
+    int? OrderNo,
+    DateTimeOffset? Date
 );
 
 public record CustomerDto(
