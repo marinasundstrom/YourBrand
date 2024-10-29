@@ -11,7 +11,9 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
     {
         builder.ToTable("Invoices");
 
-        builder.HasAlternateKey(o => new { o.OrganizationId, o.InvoiceNo });
+        builder.HasKey(o => new { o.OrganizationId, o.Id });
+
+        builder.HasIndex(o => new { o.OrganizationId, o.InvoiceNo });
 
         builder.HasOne(o => o.Status).WithMany()
             .HasForeignKey(o => new { o.OrganizationId, o.StatusId });
@@ -20,6 +22,7 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
 
         builder.HasMany(invoice => invoice.Items)
             .WithOne(invoiceItem => invoiceItem.Invoice)
+            .HasForeignKey(o => new { o.OrganizationId, o.InvoiceId })
             .IsRequired()
             .OnDelete(DeleteBehavior.ClientCascade);
 

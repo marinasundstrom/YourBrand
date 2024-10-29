@@ -9,7 +9,7 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record SetInvoiceStatus(string OrganizationId, string InvoiceId, int Status) : IRequest
 {
-    public class Handler(IInvoicingContext context) : IRequestHandler<SetInvoiceStatus>
+    public class Handler(IInvoicingContext context, TimeProvider timeProvider) : IRequestHandler<SetInvoiceStatus>
     {
         public async Task Handle(SetInvoiceStatus request, CancellationToken cancellationToken)
         {
@@ -17,7 +17,7 @@ public record SetInvoiceStatus(string OrganizationId, string InvoiceId, int Stat
                 .InOrganization(request.OrganizationId)
                 .FirstAsync(x => x.Id == request.InvoiceId, cancellationToken);
 
-            invoice.UpdateStatus(request.Status);
+            invoice.UpdateStatus(request.Status, timeProvider);
 
             await context.SaveChangesAsync(cancellationToken);
 

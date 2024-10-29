@@ -4,7 +4,7 @@ namespace YourBrand.Invoicing.Domain.Events;
 
 public record InvoiceDateChanged : DomainEvent
 {
-    public InvoiceDateChanged(string invoiceId, DateTime? date)
+    public InvoiceDateChanged(string invoiceId, DateTimeOffset? date)
     {
         InvoiceId = invoiceId;
         Date = date;
@@ -12,5 +12,5 @@ public record InvoiceDateChanged : DomainEvent
 
     public string InvoiceId { get; }
 
-    public DateTime? Date { get; }
+    public DateTimeOffset? Date { get; }
 }

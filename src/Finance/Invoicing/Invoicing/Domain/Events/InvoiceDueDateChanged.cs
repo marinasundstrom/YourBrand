@@ -4,7 +4,7 @@ namespace YourBrand.Invoicing.Domain.Events;
 
 public record InvoiceDueDateChanged : DomainEvent
 {
-    public InvoiceDueDateChanged(string invoiceId, DateTime? dueDate)
+    public InvoiceDueDateChanged(string invoiceId, DateTimeOffset? dueDate)
     {
         InvoiceId = invoiceId;
         DueDate = dueDate;
@@ -12,5 +12,5 @@ public record InvoiceDueDateChanged : DomainEvent
 
     public string InvoiceId { get; }
 
-    public DateTime? DueDate { get; }
+    public DateTimeOffset? DueDate { get; }
 }

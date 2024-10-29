@@ -10,7 +10,7 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, string? Note, SetCustomerDto? Customer) : IRequest<InvoiceDto>
 {
-    public class Handler(IInvoicingContext context) : IRequestHandler<CreateInvoice, InvoiceDto>
+    public class Handler(IInvoicingContext context, TimeProvider timeProvider) : IRequestHandler<CreateInvoice, InvoiceDto>
     {
         public async Task<InvoiceDto> Handle(CreateInvoice request, CancellationToken cancellationToken)
         {
@@ -29,7 +29,7 @@ public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, 
 
             if (request.Status is not null)
             {
-                invoice.UpdateStatus(request.Status.GetValueOrDefault());
+                invoice.UpdateStatus(request.Status.GetValueOrDefault(), timeProvider);
             }
 
             if (request.Customer is not null)

@@ -14,7 +14,7 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
 
     private Invoice() { }
 
-    public Invoice(DateTime? date, InvoiceType type = InvoiceType.Invoice, int status = 1, string currency = "SEK", string? note = null)
+    public Invoice(DateTimeOffset? date, InvoiceType type = InvoiceType.Invoice, int status = 1, string currency = "SEK", string? note = null)
     {
         Id = Guid.NewGuid().ToString();
 
@@ -35,9 +35,9 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
 
     public int InvoiceNo { get; set; }
 
-    public DateTime? IssueDate { get; set; }
+    public DateTimeOffset? IssueDate { get; set; }
 
-    public void SetIssueDate(DateTime? date)
+    public void SetIssueDate(DateTimeOffset? date)
     {
         if (IssueDate != date)
         {
@@ -63,13 +63,13 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
 
     public DateTimeOffset? StatusDate { get; set; }
 
-    public bool UpdateStatus(int status)
+    public bool UpdateStatus(int status, TimeProvider timeProvider)
     {
         var oldStatus = StatusId;
         if (status != oldStatus)
         {
             StatusId = status;
-            StatusDate = DateTimeOffset.UtcNow;
+            StatusDate = timeProvider.GetUtcNow();
 
             //AddDomainEvent(new OrderUpdated(Id));
             AddDomainEvent(new InvoiceStatusUpdated(OrganizationId, Id, status, oldStatus));
@@ -80,9 +80,9 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
         return false;
     }
 
-    public DateTime? DeliveryDate { get; private set; }
+    public DateTimeOffset? DeliveryDate { get; private set; }
 
-    public void SetDeliveryDate(DateTime deliveryDate)
+    public void SetDeliveryDate(DateTimeOffset deliveryDate)
     {
         if (DeliveryDate != deliveryDate)
         {
@@ -91,9 +91,9 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
         }
     }
 
-    public DateTime? DueDate { get; private set; }
+    public DateTimeOffset? DueDate { get; private set; }
 
-    public void SetDueDate(DateTime dueDate)
+    public void SetDueDate(DateTimeOffset dueDate)
     {
         if (DueDate != dueDate)
         {
@@ -198,6 +198,7 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
         double quantity)
     {
         var invoiceItem = new InvoiceItem(this, productType, description, productId, unitPrice, unit, discount, vatRate, quantity);
+        invoiceItem.OrganizationId = OrganizationId;
         _items.Add(invoiceItem);
 
         Update();
