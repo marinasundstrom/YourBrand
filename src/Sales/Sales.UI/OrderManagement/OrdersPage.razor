@@ -78,7 +78,7 @@
         <MudTd DataLabel="Discount">@order.Discount?.FormatCurrency(order.Currency)</MudTd>
         <MudTd DataLabel="Total">@order.Total.FormatCurrency(order.Currency)</MudTd>
         <MudTd DataLabel="Created">@order.Created.ToString("yyyy-MM-dd")</MudTd>
-        <MudTd DataLabel="LastModified">@order.LastModified.?ToString("yyyy-MM-dd")</MudTd>
+        <MudTd DataLabel="LastModified">@order.LastModified?.ToString("yyyy-MM-dd")</MudTd>
         <MudTd>
             @*
             <MudIconButton Icon="@Icons.Filled.FileDownload" Size="Size.Small"
