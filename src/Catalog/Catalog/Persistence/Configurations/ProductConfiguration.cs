@@ -21,7 +21,12 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
            .HasForeignKey(o => new { o.OrganizationId, o.StoreId });
 
         builder.HasOne(o => o.Brand).WithMany()
-            .HasForeignKey(o => new { o.OrganizationId, o.BrandId });
+            .HasForeignKey(o => new { o.OrganizationId, o.BrandId })
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(o => o.Producer).WithMany()
+            .HasForeignKey(x => new { x.OrganizationId, x.ProducerId })
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(p => p.Image)

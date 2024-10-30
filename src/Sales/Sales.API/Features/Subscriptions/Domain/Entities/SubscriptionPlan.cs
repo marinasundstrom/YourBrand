@@ -23,18 +23,48 @@ public class SubscriptionPlan : AggregateRoot<Guid>, IAuditable, ISoftDeletable,
 
     public int? CustomerId { get; set; } // This Subscription belongs to a Customer
 
+    public int? ProductId { get; set; } // This Subscription belongs to a Product
+
     public string? ItemId { get; set; } // This Subscription belongs to a Product
 
-    public decimal? Price { get; set; }
+    public SubscriptionSchedule Schedule { get; set; }
+    
+    public RenewalOption RenewalOption { get; set; }
+    public RenewalInterval RenewalCycle { get; set; } = RenewalInterval.Months;
+    public int RenewalPeriod { get; set; } = 12; // 12 months for yearly renewals, for example
 
     public TimeSpan? CancellationFinalizationPeriod { get; set; }
 
-    public bool HasTrial { get; set; }
-    public int TrialLength { get; set; }
+    public double? DiscountPercentage { get; } // Discount percentage
+    public decimal? FixedDiscountAmount { get; } // Fixed discount amount
 
-    public bool AutoRenew { get; set; }
+    // Add TrialPeriod as an owned type
+    public TrialPeriod Trial { get; private set; } = new TrialPeriod(false, 0);
 
-    public SubscriptionSchedule Schedule { get; set; }
+    public decimal GetSubscriptionPrice(decimal basePrice)
+    {
+        if (FixedDiscountAmount.HasValue)
+        {
+            return Math.Max(basePrice - FixedDiscountAmount.Value, 0);
+        }
+        else if (DiscountPercentage.HasValue)
+        {
+            return basePrice * (1 - (decimal)DiscountPercentage.Value / 100);
+        }
+
+        return basePrice;
+    }
+
+    public decimal GetSavings(decimal basePrice)
+    {
+        return basePrice - GetSubscriptionPrice(basePrice);
+    }
+
+    // Delegate trial price calculation to the TrialPeriod owned type
+    public decimal GetTrialPrice(decimal basePrice)
+    {
+        return Trial.GetTrialPrice(basePrice);
+    }
 
     public User? CreatedBy { get; set; }
     public UserId? CreatedById { get; set; }
@@ -84,17 +114,15 @@ public class SubscriptionPlan : AggregateRoot<Guid>, IAuditable, ISoftDeletable,
         return this;
     }
 
-    public SubscriptionPlan WithTrial(int days)
+    public SubscriptionPlan WithTrial(int days, decimal? trialDiscountPercentage = null, decimal? trialFixedDiscountAmount = null)
     {
-        HasTrial = true;
-        TrialLength = days;
-
+        Trial = new TrialPeriod(true, days, trialDiscountPercentage, trialFixedDiscountAmount);
         return this;
     }
 
     public SubscriptionPlan WithAutoRenewal()
     {
-        AutoRenew = true;
+        RenewalOption = RenewalOption.Automatic;
 
         return this;
     }
@@ -111,4 +139,57 @@ public enum SubscriptionPlanType
 {
     RecurringOrder = 1,
     RecurringBilling = 2,
+}
+
+public enum RenewalOption
+{
+    Automatic = 1,
+    Manual = 0
+}
+
+public enum RenewalInterval
+{
+    Days,
+    Weeks,
+    Months,
+    Years
+}
+
+public class TrialPeriod
+{
+    private TrialPeriod() { }
+
+    public TrialPeriod(bool hasTrial, int length, decimal? discountPercentage = null, decimal? fixedDiscountAmount = null)
+    {
+        HasTrial = hasTrial;
+        Length = length;
+        DiscountPercentage = discountPercentage;
+        FixedDiscountAmount = fixedDiscountAmount;
+    }
+
+    public bool HasTrial { get; private set; }
+    public int Length { get; private set; } // Trial length in days
+    public decimal? DiscountPercentage { get; private set; }
+    public decimal? FixedDiscountAmount { get; private set; }
+
+    // Calculate the trial price based on base price and trial discounts
+    public decimal GetTrialPrice(decimal basePrice)
+    {
+        if (!HasTrial)
+        {
+            return basePrice; // No trial discount if HasTrial is false
+        }
+
+        if (FixedDiscountAmount.HasValue)
+        {
+            return Math.Max(basePrice - FixedDiscountAmount.Value, 0);
+        }
+
+        if (DiscountPercentage.HasValue)
+        {
+            return basePrice * (1 - DiscountPercentage.Value / 100);
+        }
+
+        return basePrice; // No discount applied if both values are null
+    }
 }

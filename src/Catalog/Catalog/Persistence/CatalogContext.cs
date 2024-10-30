@@ -139,6 +139,8 @@ public sealed class CatalogContext(
 
     public DbSet<Brand> Brands { get; set; } = null!;
 
+    public DbSet<Producer> Producers { get; set; } = null!;
+
     public DbSet<ProductCategoryAttribute> ProductCategoryAttributes { get; set; } = null!;
 
     public DbSet<ProductAttribute> ProductAttributes { get; set; } = null!;

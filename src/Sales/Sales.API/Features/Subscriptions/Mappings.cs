@@ -13,7 +13,7 @@ public static class Mappings
 
     public static SubscriptionPlanDto ToDto(this SubscriptionPlan subscriptionPlan)
     {
-        return new SubscriptionPlanDto(subscriptionPlan.Id, subscriptionPlan.Name, subscriptionPlan.ItemId, subscriptionPlan.Price, subscriptionPlan.Schedule.ToDto(), default, default, null, subscriptionPlan.AutoRenew);
+        return new SubscriptionPlanDto(subscriptionPlan.Id, subscriptionPlan.Name, subscriptionPlan.ItemId, subscriptionPlan.Schedule.ToDto(), default, default, null, subscriptionPlan.RenewalOption);
     }
 
     public static SubscriptionSchedule ToDto(this SubscriptionSchedule schedule)
@@ -35,7 +35,7 @@ public static class Mappings
     }
     public static SubscriptionPlanShortDto ToShortDto(this SubscriptionPlan subscriptionPlan)
     {
-        return new SubscriptionPlanShortDto(subscriptionPlan.Id, subscriptionPlan.Name, subscriptionPlan.ItemId, subscriptionPlan.Price);
+        return new SubscriptionPlanShortDto(subscriptionPlan.Id, subscriptionPlan.Name, subscriptionPlan.ItemId);
     }
 
     public static SubscriptionTypeDto ToDto(this SubscriptionType subscriptionType) => new(subscriptionType.Id, subscriptionType.Name, subscriptionType.Handle, subscriptionType.Description);

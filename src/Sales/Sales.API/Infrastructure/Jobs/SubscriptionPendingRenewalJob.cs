@@ -20,7 +20,7 @@ public class SubscriptionPendingRenewalJob(SalesContext salesContext, IDeliveryD
         var subscriptions = await salesContext.Subscriptions
             .IgnoreQueryFilters()
             .Include(x => x.Plan)
-            .Where(x => x.TypeId == 1 && x.StatusId == (int)SubscriptionStatusEnum.Active && x.AutoRenew && (x.RenewalStatus == RenewalStatus.None || x.RenewalStatus == RenewalStatus.RenewalPending))
+            .Where(x => x.TypeId == 1 && x.StatusId == (int)SubscriptionStatusEnum.Active && x.RenewalOption == RenewalOption.Automatic && (x.RenewalStatus == RenewalStatus.None || x.RenewalStatus == RenewalStatus.RenewalPending))
             .Take(batchSize)
             .ToListAsync(context.CancellationToken);
 

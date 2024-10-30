@@ -1,5 +1,6 @@
 using YourBrand.Catalog.Features.Brands;
 using YourBrand.Catalog.Features.Currencies;
+using YourBrand.Catalog.Features.Producers;
 using YourBrand.Catalog.Features.ProductManagement;
 using YourBrand.Catalog.Features.ProductManagement.Attributes;
 using YourBrand.Catalog.Features.ProductManagement.Options;
@@ -20,6 +21,11 @@ public static class Mappings
     public static BrandDto ToDto(this Domain.Entities.Brand brand)
     {
         return new(brand.Id, brand.Name, brand.Handle);
+    }
+
+    public static ProducerDto ToDto(this Domain.Entities.Producer producer)
+    {
+        return new(producer.Id, producer.Name, producer.Handle);
     }
 
     public static ProductDto ToDto(this Domain.Entities.Product product)

@@ -14,7 +14,7 @@ namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public record CreateSubscriptionOrder(string OrganizationId, string ProductId, string ProductName, decimal Price, decimal? OriginalPrice, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, OrderManagement.Orders.Commands.SetCustomerDto Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, string? Notes) : IRequest<OrderDto>
 {
-    public class Handler(SalesContext salesContext, OrderNumberFetcher orderNumberFetcher, SubscriptionNumberFetcher subscriptionNumberFetcher, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<CreateSubscriptionOrder, OrderDto>
+    public class Handler(SalesContext salesContext, TimeProvider timeProvider, OrderNumberFetcher orderNumberFetcher, SubscriptionNumberFetcher subscriptionNumberFetcher, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<CreateSubscriptionOrder, OrderDto>
     {
         public async Task<OrderDto> Handle(CreateSubscriptionOrder request, CancellationToken cancellationToken)
         {
@@ -67,6 +67,8 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
             }
 
             await order.AssignOrderNo(orderNumberFetcher, cancellationToken);
+
+            order.UpdateStatus((int)OrderStatusEnum.PendingConfirmation, timeProvider);
 
             var orderItem = order.AddItem("Foo", request.ProductId, request.Price, request.OriginalPrice, null, null, 1, null, 0.25, request.Notes);
             orderItem.Subscription = subscription;

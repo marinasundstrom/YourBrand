@@ -58,10 +58,10 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
 
             var plan = subscription.Plan;
 
-            if (plan is null && plan.HasTrial)
+            if (plan is null && plan.Trial.HasTrial)
             {
                 // Activate trial
-                subscription.StartTrial(plan.TrialLength, timeProvider);
+                subscription.StartTrial(plan.Trial.Length, timeProvider);
             }
             else
             {

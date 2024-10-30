@@ -1,4 +1,6 @@
-﻿using YourBrand.Sales.Domain.Entities;
+﻿using NSubstitute;
+
+using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Enums;
 using YourBrand.Sales.Features.SubscriptionManagement;
 
@@ -9,6 +11,8 @@ public class UnitTest2
     [Fact]
     public void GenerateSubscriptions()
     {
+        var timeProvider = Substitute.For<TimeProvider>();
+        timeProvider.GetUtcNow().Returns(DateTimeOffset.UtcNow);
 
         Organization organization = new Organization("id", "TestOrg");
 
@@ -74,7 +78,7 @@ public class UnitTest2
         item.Subscription = subscription;
 
         var subscriptionOrderGenerator = new SubscriptionOrderGenerator(
-            new Sales.Features.Orders.OrderFactory(),
+            new Sales.Features.Orders.OrderFactory(timeProvider),
             new SubscriptionOrderDateGenerator()
         );
 

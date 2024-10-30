@@ -3,6 +3,6 @@ using YourBrand.Sales.Domain.Enums;
 
 namespace YourBrand.Sales.Features.SubscriptionManagement;
 
-public record SubscriptionPlanDto(Guid Id, string Name, string? ProductId, decimal? Price, SubscriptionSchedule Schedule, bool HasTrial, TimeSpan TrialLength, TimeSpan? CancellationFinalizationPeriod, bool AutoRenew) : Domain.Entities.ISubscriptionParameters;
+public record SubscriptionPlanDto(Guid Id, string Name, string? ProductId, SubscriptionSchedule Schedule, bool HasTrial, TimeSpan TrialLength, TimeSpan? CancellationFinalizationPeriod, RenewalOption RenewalOption) : Domain.Entities.ISubscriptionParameters;
 
-public record SubscriptionPlanShortDto(Guid Id, string Name, string? ProductId, decimal? Price);
+public record SubscriptionPlanShortDto(Guid Id, string Name, string? ProductId);

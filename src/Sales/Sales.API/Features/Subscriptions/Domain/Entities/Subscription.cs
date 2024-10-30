@@ -71,11 +71,17 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
     public DateOnly StartDate { get; set; } // The start date of the subscription
     public DateOnly? EndDate { get; set; } // Nullable, only set when the subscription ends
 
-
     public PaymentStatus PaymentStatus { get; set; } // Current payment status
+
     public RenewalStatus RenewalStatus { get; set; } // Current renewal status
-    public DateTimeOffset? RenewalDate { get; set; }
-    public bool AutoRenew { get; set; }
+    public RenewalOption RenewalOption { get; set; }
+    //public TimeInterval RenewalFrequency { get; set; } = TimeInterval.Yearly;
+    //public int RenewalPeriod { get; set; } = 12; // 12 months for yearly renewals, for example
+    public DateTimeOffset? NextRenewalDate { get; set; }
+    public DateTimeOffset? LastRenewalDate { get; set; }
+
+    public bool HasManualRenewal => RenewalOption == RenewalOption.Manual;
+    public bool HasAutoRenewal => RenewalOption == RenewalOption.Automatic;
 
     public CancellationStatus CancellationStatus { get; set; } // Current cancellation status    
 
@@ -114,6 +120,16 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
         UpdateStatus(SubscriptionStatusEnum.Trial, timeProvider);
     }
 
+    public bool IsTrialAboutToEnd(TimeProvider timeProvider, int daysBeforeEnd = 3)
+    {
+        if (TrialEndDate.HasValue)
+        {
+            var thresholdDate = TrialEndDate.Value.AddDays(-daysBeforeEnd);
+            return timeProvider.GetUtcNow() >= thresholdDate && IsTrial;
+        }
+        return false;
+    }
+
     public void EndTrial(TimeProvider timeProvider)
     {
         if (!IsTrial)
@@ -128,6 +144,11 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
 
         // End the trial period
         TrialEndedDate = timeProvider.GetUtcNow();
+
+        // Set initial renewal date to the end of the trial period
+        NextRenewalDate = LastRenewalDate.HasValue
+            ? CalculateNextRenewalDate(LastRenewalDate.Value, Plan)
+            : null;
 
         // Transition to the next state based on payment status
         if (HasPaymentSucceeded)
@@ -154,7 +175,7 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
         HasUsedTrial = true;
     }
 
-    private bool ShouldCancelOnTrialEnd()
+    public bool ShouldCancelOnTrialEnd()
     {
         // Business logic to determine whether to cancel when a trial ends and payment fails.
         // This can be a simple flag or a more complex condition.
@@ -177,6 +198,15 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
         else if (!IsActive)
         {
             SetStatusActive(timeProvider);
+
+            // Set NextRenewalDate on activation based on renewal period
+            if (NextRenewalDate == null)
+            {
+                // Calculate the next renewal date based on the renewal frequency and period
+                NextRenewalDate = LastRenewalDate.HasValue
+                    ? CalculateNextRenewalDate(LastRenewalDate.Value, Plan)
+                    : null;
+            }
         }
     }
 
@@ -201,6 +231,8 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
 
         CancellationRequestedDate = timeProvider.GetUtcNow();
         CancellationStatus = CancellationStatus.CancellationRequested;
+
+        NextRenewalDate = null;
     }
 
     public void FinalizeCancellation(TimeProvider timeProvider)
@@ -220,6 +252,8 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
             CancellationStatus = CancellationStatus.Canceled;
             CancellationDate = currentDate;
             EndDate = DateOnly.FromDateTime(currentDate.DateTime);
+
+            NextRenewalDate = null;
         }
         else
         {
@@ -247,28 +281,44 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
             CancellationStatus = CancellationStatus.Canceled;
             CancellationDate = timeProvider.GetUtcNow();
             EndDate = DateOnly.FromDateTime(timeProvider.GetUtcNow().DateTime);
+
+            NextRenewalDate = null;
         }
     }
 
     public bool Renew(IBillingDateCalculator billingDateCalculator, IDeliveryDateCalculator deliveryDateCalculator, TimeProvider timeProvider)
     {
-        // Check if the subscription is eligible for renewal right now
         if (IsEligibleForRenewal(TimeSpan.Zero, timeProvider))
         {
-            // Transition the renewal status to indicate that it has been renewed
             RenewalStatus = RenewalStatus.Renewed;
-
-            // Update the status to active
             SetStatusActive(timeProvider);
 
-            // Update the next billing and delivery dates
             UpdateNextBillingDate(billingDateCalculator);
             UpdateNextDeliveryDate(deliveryDateCalculator);
+
+            LastRenewalDate = timeProvider.GetUtcNow();
+
+            // Calculate the next renewal date based on the renewal frequency and period
+            NextRenewalDate = LastRenewalDate.HasValue
+                ? CalculateNextRenewalDate(LastRenewalDate.Value, Plan)
+                : null;
 
             return true;
         }
 
         return false;
+    }
+
+    private DateTimeOffset CalculateNextRenewalDate(DateTimeOffset lastRenewalDate, SubscriptionPlan plan)
+    {
+        return plan.RenewalCycle switch
+        {
+            RenewalInterval.Days => lastRenewalDate.AddDays(plan.RenewalPeriod),
+            RenewalInterval.Weeks => lastRenewalDate.AddDays(7 * plan.RenewalPeriod),
+            RenewalInterval.Months => lastRenewalDate.AddMonths(plan.RenewalPeriod),
+            RenewalInterval.Years => lastRenewalDate.AddYears(plan.RenewalPeriod),
+            _ => throw new InvalidOperationException("Unsupported renewal frequency.")
+        };
     }
 
     private void SetStatusActive(TimeProvider timeProvider)
@@ -300,6 +350,9 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
         if (UpdateStatus(SubscriptionStatusEnum.Expired, timeProvider))
         {
             AddDomainEvent(new SubscriptionExpired(TenantId, OrganizationId, Id));
+
+            // Set NextRenewalDate to null as the subscription is no longer renewable
+            NextRenewalDate = null;
         }
     }
 
@@ -314,86 +367,73 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
     /// <summary>
     /// Checks if the subscription is eligible for renewal within the specified time window and sets the status to RenewalPending if it is.
     /// </summary>
-    /// <param name="timeBeforeExpiration">The time window within which the subscription is considered eligible for renewal.</param>
+    /// <param name="timeBeforeRenewal">The time window within which the subscription is considered eligible for renewal.</param>
     /// <param name="billingDateCalculator">The billing date calculator used to calculate the next billing date.</param>
     /// <param name="deliveryDateCalculator">The delivery date calculator used to calculate the next delivery date.</param>
     /// <param name="timeProvider">The time provider used to get the current date and time.</param>
     /// <returns>True if the renewal status was set to pending, otherwise false.</returns>
-    public bool SetRenewalPendingIfEligible(TimeSpan timeBeforeExpiration, IBillingDateCalculator billingDateCalculator, IDeliveryDateCalculator deliveryDateCalculator, TimeProvider timeProvider)
+    public bool SetRenewalPendingIfEligible(TimeSpan timeBeforeRenewal, IBillingDateCalculator billingDateCalculator, IDeliveryDateCalculator deliveryDateCalculator, TimeProvider timeProvider)
     {
-        if (IsEligibleForRenewal(timeBeforeExpiration, timeProvider))
+        if (IsEligibleForRenewal(timeBeforeRenewal, timeProvider))
         {
-            // Update renewal status to indicate pending renewal
             RenewalStatus = RenewalStatus.RenewalPending;
-
             return true;
         }
-
         return false;
     }
 
     /// <summary>
     /// Determines whether the subscription is eligible for renewal based on the specified time window.
     /// </summary>
-    /// <param name="timeBeforeExpiration">The time window within which the subscription is considered eligible for renewal.</param>
+    /// <param name="timeBeforeRenewal">The time window within which the subscription is considered eligible for renewal.</param>
     /// <param name="timeProvider">The time provider used to get the current date and time.</param>
     /// <returns>True if the subscription is eligible for renewal, otherwise false.</returns>
-    public bool IsEligibleForRenewal(TimeSpan timeBeforeExpiration, TimeProvider timeProvider)
+    public bool IsEligibleForRenewal(TimeSpan timeBeforeRenewal, TimeProvider timeProvider)
     {
-        // Ensure the subscription is active and AutoRenew is enabled
-        if (IsActive && AutoRenew)
+        // Check if the subscription is active and auto-renew is enabled
+        if (IsActive && HasAutoRenewal)
         {
             var currentDate = timeProvider.GetUtcNow();
+            var renewalWindowStart = currentDate.Add(timeBeforeRenewal);
 
-            // Ensure the subscription has a next billing date and it's within the time window
-            var renewalWindowStart = currentDate.Add(timeBeforeExpiration);
-            var eligibleForRenewal = NextBillingDate.HasValue && NextBillingDate.Value <= renewalWindowStart;
+            // Ensure NextRenewalDate exists and is within the renewal window
+            var eligibleForRenewal = NextRenewalDate.HasValue && NextRenewalDate.Value <= renewalWindowStart;
 
-            // If the renewal status is not yet set to pending, indicate it is ready for renewal
-            if (eligibleForRenewal && (RenewalStatus == RenewalStatus.None || RenewalStatus == RenewalStatus.RenewalPending))
-            {
-                return true;
-            }
+            return eligibleForRenewal && (RenewalStatus == RenewalStatus.None || RenewalStatus == RenewalStatus.RenewalPending);
         }
 
         return false;
     }
 
-    public string? GetIneligibilityReasonForRenewal(TimeSpan timeBeforeExpiration, TimeProvider timeProvider)
+    public string? GetIneligibilityReasonForRenewal(TimeSpan timeBeforeRenewal, TimeProvider timeProvider)
     {
-        // Ensure the subscription is active
         if (!IsActive)
         {
             return "Subscription is not active.";
         }
 
-        // Check if AutoRenew is enabled
-        if (!AutoRenew)
+        if (!HasAutoRenewal)
         {
             return "Auto-renew is not enabled.";
         }
 
         var currentDate = timeProvider.GetUtcNow();
 
-        // Check if there is a NextBillingDate
-        if (!NextBillingDate.HasValue)
+        if (!NextRenewalDate.HasValue)
         {
-            return "Next billing date is not set.";
+            return "Next renewal date is not set.";
         }
 
-        // Check if the renewal is within the eligible time window
-        if (NextBillingDate.Value > currentDate.Add(timeBeforeExpiration))
+        if (NextRenewalDate.Value > currentDate.Add(timeBeforeRenewal))
         {
-            return $"Renewal is only eligible within {timeBeforeExpiration.Humanize()} before the next billing date.";
+            return $"Renewal is only eligible within {timeBeforeRenewal.Humanize()} before the next renewal date.";
         }
 
-        // Check if the renewal status is already pending or renewed
         if (RenewalStatus == RenewalStatus.RenewalPending || RenewalStatus == RenewalStatus.Renewed)
         {
             return "Renewal is already pending or has been renewed.";
         }
 
-        // If all conditions are met, return null (indicating eligibility)
         return null;
     }
 
@@ -407,6 +447,18 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
         else
         {
             throw new InvalidOperationException("Subscription cannot be suspended in its current state.");
+        }
+    }
+
+    public void ReactivateAfterSuspension(TimeProvider timeProvider)
+    {
+        if (IsSuspended)
+        {
+            SetStatusActive(timeProvider);
+
+            // Adjust the renewal date by pushing it forward based on suspension length (?)
+            var suspensionPeriod = timeProvider.GetUtcNow() - (LastRenewalDate ?? timeProvider.GetUtcNow());
+            NextRenewalDate = NextRenewalDate?.Add(suspensionPeriod);
         }
     }
 
@@ -485,7 +537,7 @@ public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISu
     public DateTimeOffset? TrialEndDate { get; set; }
     public DateTimeOffset? TrialEndedDate { get; set; }
 
-    public TimeInterval BillingFrequency { get; set; } = TimeInterval.Monthly; // New property for billing frequency
+    public TimeInterval BillingCycle { get; set; } = TimeInterval.Monthly; // New property for billing frequency
     public DateTimeOffset? NextBillingDate { get; set; }
     public BillingStatus BillingStatus { get; set; }
 
@@ -670,7 +722,7 @@ public class DefaultBillingDateCalculator(TimeProvider timeProvider) : IBillingD
     {
         var baseDate = subscription.NextBillingDate ?? timeProvider.GetUtcNow();
         var schedule = subscription.Schedule;
-        return subscription.BillingFrequency switch
+        return subscription.BillingCycle switch
         {
             TimeInterval.Daily => baseDate.AddDays(schedule.EveryDays ?? 1),
             TimeInterval.Weekly => baseDate.AddDays((schedule.EveryWeeks ?? 1) * 7),

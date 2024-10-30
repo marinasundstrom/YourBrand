@@ -1,76 +1,105 @@
+using Microsoft.EntityFrameworkCore;
+
 using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class SubscriptionPlan : Entity<string>, IHasTenant
+public class SubscriptionPlan : Entity<string>, IHasTenant, IAuditable, ISoftDeletable
 {
+    private SubscriptionPlan() {}
+
+    public SubscriptionPlan(
+        string title,
+        string? description,
+        TimeInterval subscriptionCycle,
+        TimeInterval billingCycle,
+        RenewalOption renewal,
+        RenewalInterval renewalCycle,
+        int renewalPeriod,
+        TimeSpan? cancellationFinalizationPeriod,
+        double? discountPercentage = null,
+        decimal? fixedDiscountAmount = null,
+        TrialPeriod? trialPeriod = null) : base(Guid.NewGuid().ToString())
+    {
+        Title = title ?? throw new ArgumentNullException(nameof(title));
+        SubscriptionCycle = subscriptionCycle;
+        BillingCycle = billingCycle;
+        RenewalCycle = renewalCycle;
+        RenewalPeriod = renewalPeriod;
+        RenewalOption = renewal;
+        CancellationFinalizationPeriod = cancellationFinalizationPeriod;
+        DiscountPercentage = discountPercentage;
+        FixedDiscountAmount = fixedDiscountAmount;
+        Trial = trialPeriod ?? new TrialPeriod(false, 0);
+
+        if (DiscountPercentage < 0 || DiscountPercentage > 100)
+            throw new ArgumentOutOfRangeException(nameof(DiscountPercentage), "Must be between 0 and 100");
+
+        if (FixedDiscountAmount < 0)
+            throw new ArgumentOutOfRangeException(nameof(FixedDiscountAmount), "Cannot be negative");
+    }
+
     public TenantId TenantId { get; set; }
 
     public OrganizationId OrganizationId { get; set; }
 
-    public int ProductId { get; set; }
+    public int ProductId { get; private set; }
 
-    public string Title { get; set; }
-    public string? Description { get; set; }
+    public string Title { get; private set; }
+    public string? Description { get; private set; }
 
-    public decimal? DiscountPercentage { get; set; } // Discount percentage
-    public decimal? FixedDiscountAmount { get; set; } // Fixed discount amount
-    public BillingFrequency BillingFrequency { get; set; } // E.g., Monthly, Quarterly, Yearly
-    public int DurationInMonths { get; set; } // Length of the subscription in months
-    public RenewalType RenewalType { get; set; } // E.g., Automatic or Manual
-    public bool IsActive { get; set; }
+    public bool IsActive { get; private set; }
 
-    // Trial-related properties
-    public bool HasTrial { get; set; } // Indicates if the plan includes a trial period
-    public int TrialDurationInDays { get; set; } // Duration of the trial in days
-    public decimal? TrialPrice { get; set; } // Price during the trial period (could be free)
+    public TimeInterval SubscriptionCycle { get; private set; } // E.g., Monthly, Quarterly, Yearly
+    public TimeInterval BillingCycle { get; private set; } // E.g., Monthly, Quarterly, Yearly
+    public RenewalOption RenewalOption { get; private set; } // E.g., Automatic or Manual
+    public RenewalInterval RenewalCycle { get; set; } = RenewalInterval.Months;
+    public int RenewalPeriod { get; set; } = 12; // 12 months for yearly renewals, for example
 
-    // Calculate the subscription price based on base price and discount
+    public TimeSpan? CancellationFinalizationPeriod { get; set; }
+
+    public double? DiscountPercentage { get; private set; } // Discount percentage
+    public decimal? FixedDiscountAmount { get; private set; } // Fixed discount amount
+    
+    public TrialPeriod Trial { get; private set; } = new TrialPeriod(false, 0);
+
     public decimal GetSubscriptionPrice(decimal basePrice)
     {
-        if (DiscountPercentage.HasValue)
+        if (FixedDiscountAmount.HasValue)
         {
-            return basePrice - (basePrice * (DiscountPercentage.Value / 100));
+            return Math.Max(basePrice - FixedDiscountAmount.Value, 0);
         }
-        else if (FixedDiscountAmount.HasValue)
+        else if (DiscountPercentage.HasValue)
         {
-            return basePrice - FixedDiscountAmount.Value;
+            return basePrice * (1 - (decimal)DiscountPercentage.Value / 100);
         }
-        else
-        {
-            return basePrice; // If no discount is provided, use the base price
-        }
+
+        return basePrice;
     }
 
-    // Calculate savings based on base price and discount
     public decimal GetSavings(decimal basePrice)
     {
         return basePrice - GetSubscriptionPrice(basePrice);
     }
 
-    // Get trial price (returns 0 if it's a free trial or the defined trial price)
-    public decimal GetTrialPrice()
+    // Delegate trial price calculation to the TrialPeriod owned type
+    public decimal GetTrialPrice(decimal basePrice)
     {
-        return TrialPrice ?? 0m; // Return 0 if TrialPrice is null, indicating a free trial
+        return Trial.GetTrialPrice(basePrice);
     }
 
-    // Constructor
-    /*
-    public SubscriptionPlan(int subscriptionPlanId, int productId, string billingFrequency, int durationInMonths, string renewalType, bool isActive, decimal? discountPercentage = null, decimal? fixedDiscountAmount = null)
-    {
-        SubscriptionPlanId = subscriptionPlanId;
-        ProductId = productId;
-        BillingFrequency = billingFrequency;
-        DurationInMonths = durationInMonths;
-        RenewalType = renewalType;
-        IsActive = isActive;
-        DiscountPercentage = discountPercentage;
-        FixedDiscountAmount = fixedDiscountAmount;
-    } */
+    public UserId? CreatedById { get; set; }
+    public DateTimeOffset Created { get; set; }
+    public UserId? LastModifiedById { get; set; }
+    public DateTimeOffset? LastModified { get; set; }
+
+    public DateTimeOffset? Deleted { get; set; }
+    public UserId? DeletedById { get; set; }
 }
 
-public enum BillingFrequency
+public enum TimeInterval
 {
     Daily,
     Weekly,
@@ -79,8 +108,57 @@ public enum BillingFrequency
     Yearly
 }
 
-public enum RenewalType
+public enum RenewalOption
 {
-    Automatic,
-    Manual
+    Automatic = 1,
+    Manual = 0
+}
+
+public enum RenewalInterval
+{
+    Days,
+    Weeks,
+    Months,
+    Years
+}
+
+
+public class TrialPeriod
+{
+    private TrialPeriod() {}
+
+    public TrialPeriod(bool hasTrial, int length, decimal? discountPercentage = null, decimal? fixedDiscountAmount = null)
+    {
+        HasTrial = hasTrial;
+        Length = length;
+        DiscountPercentage = discountPercentage;
+        FixedDiscountAmount = fixedDiscountAmount;
+    }
+
+    public bool HasTrial { get; private set; }
+    public int Length { get; private set; } // Trial length in days
+    public decimal? DiscountPercentage { get; private set; }
+    public decimal? FixedDiscountAmount { get; private set; }
+
+
+    // Calculate the trial price based on base price and trial discounts
+    public decimal GetTrialPrice(decimal basePrice)
+    {
+        if (!HasTrial)
+        {
+            return basePrice; // No trial discount if HasTrial is false
+        }
+
+        if (FixedDiscountAmount.HasValue)
+        {
+            return Math.Max(basePrice - FixedDiscountAmount.Value, 0);
+        }
+
+        if (DiscountPercentage.HasValue)
+        {
+            return basePrice * (1 - DiscountPercentage.Value / 100);
+        }
+
+        return basePrice; // No discount applied if both values are null
+    }
 }

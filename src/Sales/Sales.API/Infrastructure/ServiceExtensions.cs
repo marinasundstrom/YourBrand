@@ -45,7 +45,7 @@ public static class ServiceExtensions
                 .AddJob<SubscriptionPendingRenewalJob>(jobKey3)
                 .AddTrigger(trigger => trigger.ForJob(jobKey3)
                     .WithSimpleSchedule(schedule => schedule
-                        .WithIntervalInSeconds(30)
+                        .WithIntervalInSeconds(15)
                         .RepeatForever()));
 
             var jobKey4 = new JobKey(nameof(SubscriptionAutoRenewalJob));
@@ -54,7 +54,16 @@ public static class ServiceExtensions
                 .AddJob<SubscriptionAutoRenewalJob>(jobKey4)
                 .AddTrigger(trigger => trigger.ForJob(jobKey4)
                     .WithSimpleSchedule(schedule => schedule
-                        .WithIntervalInSeconds(60)
+                        .WithIntervalInSeconds(20)
+                        .RepeatForever()));
+
+            var jobKey5 = new JobKey(nameof(SubscriptionActivationJob));
+
+            configure
+                .AddJob<SubscriptionActivationJob>(jobKey5)
+                .AddTrigger(trigger => trigger.ForJob(jobKey5)
+                    .WithSimpleSchedule(schedule => schedule
+                        .WithIntervalInSeconds(10)
                         .RepeatForever()));
         });
 

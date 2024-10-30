@@ -230,6 +230,9 @@ using (var scope = app.Services.CreateScope())
 
     if (args.Contains("--seed"))
     {
+        var userContext = scope.ServiceProvider.GetRequiredService<ISettableUserContext>();
+        //userContext.SetCurrentUser(TenantConstants.UserAliceId);
+
         var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
         tenantContext.SetTenantId(TenantConstants.TenantId);
 

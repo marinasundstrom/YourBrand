@@ -16,6 +16,7 @@ public static class Seed2
     private static ProductCategory? food;
     private static ProductCategory? tshirts;
     private static ProductCategory? clothes;
+    private static ProductCategory? services;
 
     private static ProductImage? PlaceholderImage;
     private static Currency? currency;
@@ -148,6 +149,22 @@ public static class Seed2
             }, cancellationToken);
         }
 
+        services = await context.ProductCategories.FirstOrDefaultAsync(x => x.Handle == "services");
+
+        if (services is null)
+        {
+            services ??= await productCategoryFactory.CreateProductCategoryAsync(TenantConstants.OrganizationId, new()
+            {
+                Name = "Services",
+                OrganizationId = TenantConstants.OrganizationId,
+                Handle = "services",
+                Path = "services",
+                Description = null,
+                CanAddProducts = true,
+                StoreId = store.Id,
+            }, cancellationToken);
+        }
+
         await context.SaveChangesAsync();
 
         //await CreateTShirt(context, productFactory, cancellationToken);
@@ -161,6 +178,8 @@ public static class Seed2
         await CreatePizza(context, productFactory, cancellationToken);
 
         await CreateSalad(context, productFactory, cancellationToken);
+
+        await CreateHouseCleaningService(context, productFactory, cancellationToken);
     }
 
     public static async Task CreateTShirt(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
@@ -205,7 +224,6 @@ public static class Seed2
         }, cancellationToken);
 
         tshirts.AddProduct(product);
-
 
 
         product.AddProductAttribute(new ProductAttribute
@@ -471,8 +489,6 @@ public static class Seed2
 
         food.AddProduct(product);
 
-
-
         await context.SaveChangesAsync();
 
         var optionDoneness = new ChoiceOption("Stekning");
@@ -525,8 +541,6 @@ public static class Seed2
         }, cancellationToken);
 
         food.AddProduct(product);
-
-
 
         await context.SaveChangesAsync();
 
@@ -602,8 +616,6 @@ public static class Seed2
         }, cancellationToken);
 
         food.AddProduct(product);
-
-
 
         await context.SaveChangesAsync();
 
@@ -723,8 +735,6 @@ public static class Seed2
         product.SetPrice(52);
 
         food.AddProduct(product);
-
-
 
         var baseGroup = new OptionGroup("Bas")
         {
@@ -918,6 +928,31 @@ public static class Seed2
         };
 
         product.AddOption(optionCitronLime);
+
+        await context.SaveChangesAsync();
+    }
+
+    public static async Task CreateHouseCleaningService(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
+    {
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
+        {
+            Name = "House cleaning",
+            Handle = "house-cleaning",
+            Description = "",
+            Headline = "Cleaning your house",
+            ListingState = Domain.Enums.ProductListingState.Listed,
+            BrandId = brand.Id,
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id
+        }, cancellationToken);
+
+        var subscriptionPlan1 = new SubscriptionPlan("Weekly cleaning", "Coming to your house weekly", TimeInterval.Weekly, TimeInterval.Monthly, RenewalOption.Manual, RenewalInterval.Months, 3, TimeSpan.FromDays(14), discountPercentage: 0.1);
+        product.AddSubscriptionPlan(subscriptionPlan1);
+
+        var subscriptionPlan2 = new SubscriptionPlan("Monthly cleaning", "Coming to your house monthly", TimeInterval.Monthly, TimeInterval.Monthly, RenewalOption.Manual, RenewalInterval.Years, 1, TimeSpan.FromDays(30), discountPercentage: 0.3);
+        product.AddSubscriptionPlan(subscriptionPlan2);
+
+        services.AddProduct(product);
 
         await context.SaveChangesAsync();
     }

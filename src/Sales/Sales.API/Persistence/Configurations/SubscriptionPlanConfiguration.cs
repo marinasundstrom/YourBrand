@@ -21,6 +21,8 @@ public class SubscriptionPlanConfiguration : IEntityTypeConfiguration<Subscripti
 
         builder.OwnsOne(s => s.Schedule);
 
+        builder.OwnsOne(s => s.Trial);
+
         builder.Property(p => p.CancellationFinalizationPeriod).HasConversion(new TimeSpanToTicksConverter());
     }
 }

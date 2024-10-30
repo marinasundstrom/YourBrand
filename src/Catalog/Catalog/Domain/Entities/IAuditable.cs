@@ -4,7 +4,7 @@ namespace YourBrand.Catalog.Domain.Entities;
 
 public interface IAuditable
 {
-    UserId CreatedById { get; set; }
+    UserId? CreatedById { get; set; }
     DateTimeOffset Created { get; set; }
 
     UserId? LastModifiedById { get; set; }

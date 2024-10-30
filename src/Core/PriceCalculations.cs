@@ -60,13 +60,22 @@ public static class PriceCalculations
         return total * 0.5m;
     }
 
-    public static double CalculateDiscountPercent(decimal discountPrice, decimal regularPrice)
+    public static double CalculateDiscountPercentage(decimal discountPrice, decimal regularPrice)
     {
-        return Math.Round((double)((regularPrice - discountPrice) / regularPrice * 100), 0, MidpointRounding.AwayFromZero);
+        if (regularPrice == 0) throw new DivideByZeroException("Regular price cannot be zero.");
+
+        return Math.Round((double)((regularPrice - discountPrice) / regularPrice * 100), 2, MidpointRounding.AwayFromZero);
     }
 
     public static double CalculateDiscountRate(decimal discountPrice, decimal regularPrice)
     {
-        return CalculateDiscountPercent(discountPrice, regularPrice) / 100;
+        if (regularPrice == 0) throw new DivideByZeroException("Regular price cannot be zero.");
+
+        return (double)((regularPrice - discountPrice) / regularPrice);
+    }
+
+    public static decimal CalculateDiscountedPrice(decimal regularPrice, double percentage)
+    {
+        return regularPrice * (1 - (decimal)(percentage / 100));
     }
 }

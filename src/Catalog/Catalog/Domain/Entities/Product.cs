@@ -33,8 +33,8 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
 
     public Product(string name, string handle)
     {
-        Name = name;
-        Handle = handle;
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        Handle = handle ?? throw new ArgumentNullException(nameof(handle));
     }
 
     public Product(OrganizationId organizationId, int id, string name)
@@ -42,6 +42,36 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
         OrganizationId = organizationId;
         Id = id;
         Name = name;
+    }
+
+    public Product(
+        OrganizationId organizationId,
+        Store store,
+        string storeId,
+        string name,
+        string handle,
+        decimal price,
+        ProductType? type = ProductType.Good,
+        string description = "",
+        decimal? regularPrice = null,
+        Brand? brand = null,
+        ProductCategory? category = null)
+    {
+        OrganizationId = organizationId;
+        Store = store;
+        StoreId = storeId ?? throw new ArgumentNullException(nameof(storeId));
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        Handle = handle ?? throw new ArgumentNullException(nameof(handle));
+        Price = price;
+        Type = type;
+        Description = description;
+        RegularPrice = regularPrice;
+        Brand = brand;
+        Category = category;
+
+        // Validate that price is not higher than regular price if regular price is set
+        if (regularPrice.HasValue && price >= regularPrice)
+            throw new ArgumentException("Price cannot be greater than or equal to Regular Price.");
     }
 
     public void SetId(int id) => Id = id;
@@ -58,9 +88,13 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
 
     public int? BrandId { get; set; }
 
+    public Producer? Producer { get; set; }
+
+    public int? ProducerId { get; set; }
+
     public string Name { get; set; } = default!;
 
-    public ProductType? Type { get; set; } = ProductType.Physical;
+    public ProductType? Type { get; set; } = ProductType.Good;
 
     public ProductCategory? Category { get; internal set; }
 
@@ -79,10 +113,8 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
         get => _price;
         internal set
         {
-            if (RegularPrice is not null && value >= RegularPrice.GetValueOrDefault())
-            {
-                throw new Exception("Price can not be greater than or equal to Regular Price");
-            }
+            if (RegularPrice is not null && value >= RegularPrice)
+                throw new ArgumentException("Price cannot exceed or equal the Regular Price.");
 
             _price = value;
         }
@@ -104,9 +136,7 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
         internal set
         {
             if (value is not null && value < Price)
-            {
-                throw new Exception("Regular Price can not be less than or equal to Price");
-            }
+                throw new ArgumentException("Regular Price cannot be less than Price.");
 
             _regularPrice = value;
         }
@@ -152,20 +182,20 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
 
     public bool AddVariant(Product variant)
     {
-        var x = _variants.Add(variant);
-        if (x)
+        if (_variants.Add(variant))
         {
             variant.OrganizationId = OrganizationId;
-            variant.Store = this.Store;
-            variant.Category = this.Category;
+            variant.Store = Store;
+            variant.Category = Category;
             variant.Parent = this;
+            return true;
         }
-        return x;
+        return false;
     }
 
     public bool RemoveVariant(Product variant)
     {
-        return _variants.Add(variant);
+        return _variants.Remove(variant);
     }
 
     public bool AddProductAttribute(ProductAttribute productAttribute)
@@ -181,8 +211,13 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
 
     public bool AddOptionGroup(OptionGroup group)
     {
-        group.OrganizationId = OrganizationId;
-        return _optionGroups.Add(group);
+        if (_optionGroups.Add(group))
+        {
+            group.OrganizationId = OrganizationId;
+            return true;
+        }
+
+        return false;
     }
 
     public bool RemoveOptionGroup(OptionGroup group)
@@ -271,33 +306,56 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
 
     public void SetDiscountPrice(decimal discountPrice)
     {
-        var originalPrice = Price;
+        if (discountPrice >= Price)
+            throw new ArgumentException("Discount price must be less than the base price.");
 
+        RegularPrice = Price;
         Price = discountPrice;
-        RegularPrice = originalPrice;
         DiscountRate = PriceCalculations.CalculateDiscountRate(Price, RegularPrice.GetValueOrDefault());
+        Discount = RegularPrice - Price;
+    }
+
+    public void ApplyPercentageDiscount(double percentage)
+    {
+        if (percentage < 0 || percentage > 100)
+            throw new ArgumentOutOfRangeException(nameof(percentage), "Discount percentage must be between 0 and 100.");
+
+        if (!RegularPrice.HasValue)
+            throw new InvalidOperationException("Regular Price must be set before applying a discount percentage.");
+
+        DiscountRate = percentage;
+        Price = PriceCalculations.CalculateDiscountedPrice(RegularPrice.GetValueOrDefault(), percentage);
         Discount = RegularPrice - Price;
     }
 
     public void RestoreRegularPrice()
     {
-        var regularPrice = RegularPrice.GetValueOrDefault();
-
-        RegularPrice = null;
-        Price = regularPrice;
-        DiscountRate = null;
-        Discount = null;
+        if (RegularPrice.HasValue)
+        {
+            Price = RegularPrice.Value;
+            RegularPrice = null;
+            DiscountRate = null;
+            Discount = null;
+        }
     }
 
     public IReadOnlyCollection<SubscriptionPlan> SubscriptionPlans => _subscriptionPlans;
 
-    public bool AddSubscriptionPlan(SubscriptionPlan subscriptionPlan)
+    // Add or remove subscription plans
+    public bool AddSubscriptionPlan(SubscriptionPlan subscriptionPlan) => _subscriptionPlans.Add(subscriptionPlan);
+    public void RemoveSubscriptionPlan(SubscriptionPlan subscriptionPlan) => _subscriptionPlans.Remove(subscriptionPlan);
+
+    // Calculate final price based on subscription
+    public decimal GetSubscriptionPrice(bool isSubscribed)
     {
-        return _subscriptionPlans.Add(subscriptionPlan);
+        if (isSubscribed && _subscriptionPlans.Any())
+            return _subscriptionPlans.Min(plan => plan.GetSubscriptionPrice(Price));
+
+        return Price;
     }
 
-    public void RemoveSubscriptionPlan(SubscriptionPlan subscriptionPlan)
+    public decimal GetSavingsWithSubscription(decimal basePrice)
     {
-        _subscriptionPlans.Remove(subscriptionPlan);
+        return basePrice - GetSubscriptionPrice(true);
     }
 }

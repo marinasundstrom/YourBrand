@@ -17,15 +17,9 @@ public class BrandConfiguration : IEntityTypeConfiguration<Brand>
 
         builder.HasOne(o => o.Parent).WithMany(x => x.SubBrands)
             .HasForeignKey(o => new { o.OrganizationId, o.ParentId });
-    }
-}
 
-/*
-public class MerchantConfiguration : IEntityTypeConfiguration<Merchant>
-{
-    public void Configure(EntityTypeBuilder<Merchant> builder)
-    {
-        builder.ToTable("Merchants");
+        /* builder.HasMany(o => o.SubBrands).WithOne(x => x.Parent)
+            .HasForeignKey(o => new { o.OrganizationId, o.ParentId })
+            .OnDelete(DeleteBehavior.Cascade); */
     }
 }
-*/

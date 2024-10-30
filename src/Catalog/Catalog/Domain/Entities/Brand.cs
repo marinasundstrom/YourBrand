@@ -23,23 +23,13 @@ public sealed class Brand : AggregateRoot<int>, IHasTenant, IHasOrganization
 
     public string Handle { get; set; } = null!;
 
+    public Producer? Producer { get; set; }
+
+    public int? ProducerId { get; set; }
+
     public Brand? Parent { get; set; }
 
     public int? ParentId { get; set; }
 
     public IReadOnlyCollection<Brand> SubBrands => _subBrands;
 }
-
-/*
-public sealed class Merchant : AggregateRoot<string>
-{
-    private Merchant() { }
-
-    public Merchant(string id, string name) : base(id)
-    {
-        Name = name;
-    }
-
-    public string Name { get; set; } = null!;
-}
-*/
