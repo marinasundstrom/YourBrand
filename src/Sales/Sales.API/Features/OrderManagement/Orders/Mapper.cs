@@ -22,10 +22,7 @@ public static class Mappings
         order.Reference,
         order.Notes,
         order.Subscription?.ToDto(),
-        order.PlannedStartDate,
-        order.PlannedEndDate,
-        order.ActualStartDate,
-        order.ActualEndDate,
+        order.Schedule?.ToDto(),
         order.BillingDetails?.ToDto(),
         order.ShippingDetails?.ToDto(),
         order.Items.Select(x => x.ToDto()),
@@ -33,13 +30,28 @@ public static class Mappings
         order.VatAmounts.Select(x => new OrderVatAmountDto(x.Name, x.VatRate, x.SubTotal, x.Vat, x.Total)),
         order.VatRate,
         order.Vat.GetValueOrDefault(),
-        order.Discounts.Select(x => new OrderDiscountDto(x.Amount, x.Description)),
+        order.Discounts.Select(x => x.ToDto()),
         order.Discount,
         order.Total,
         order.Created,
         order.CreatedBy?.ToDto(),
         order.LastModified,
         order.LastModifiedBy?.ToDto());
+
+
+    public static OrderScheduleDto ToDto(this OrderSchedule schedule) => new(
+        schedule.PlannedStartDate,
+        schedule.PlannedEndDate,
+        schedule.ActualStartDate,
+        schedule.ActualEndDate);
+
+    public static OrderDiscountDto ToDto(this Discount discount) => new(
+        discount.Description,
+        discount.Rate,
+        discount.Amount,
+        discount.Total,
+        discount.EffectiveDate,
+        discount.ExpiryDate);
 
     public static ParentOrderDto ToParentDto(this Order order) => new(
         order.Id,
@@ -61,7 +73,7 @@ public static class Mappings
         orderItem.Subscription?.ToDto(),
         orderItem.Price,
         orderItem.Unit,
-        orderItem.Discount,
+        orderItem.DirectDiscount,
         orderItem.RegularPrice,
         orderItem.VatRate,
         orderItem.Quantity,
@@ -83,17 +95,7 @@ public static class Mappings
 
     public static UserInfoDto ToDto2(this User user) => new(user.Id, user.Name);
 
-    public static AddressDto ToDto(this Domain.ValueObjects.Address address) => new()
-    {
-        Thoroughfare = address.Thoroughfare,
-        Premises = address.Premises,
-        SubPremises = address.SubPremises,
-        PostalCode = address.PostalCode,
-        Locality = address.Locality,
-        SubAdministrativeArea = address.SubAdministrativeArea,
-        AdministrativeArea = address.AdministrativeArea,
-        Country = address.Country
-    };
+    public static AddressDto ToDto(this Domain.ValueObjects.Address address) => address.ToDto();
 
     public static BillingDetailsDto ToDto(this BillingDetails billingDetails) => new()
     {

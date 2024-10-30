@@ -152,32 +152,36 @@
                 </TitleContent>
 
                 <ChildContent>
+
+                    @if(order.Schedule is not null) 
+                    {
                     <MudGrid Class="mb-4">
 
                         <MudItem xs="12" sm="12" md="6" lg="6">
-                            <MudDatePicker Label="Planned Start" Date="@order.PlannedStartDate?.DateTime" Class="mb-2">
+                            <MudDatePicker Label="Planned Start" Date="@order.Schedule.PlannedStartDate?.DateTime" Class="mb-2">
 
                             </MudDatePicker>
                         </MudItem>
 
                         <MudItem xs="12" sm="12" md="6" lg="6">
-                            <MudDatePicker Label="Planned End" Date="@order.PlannedEndDate?.DateTime" Class="mb-2">
+                            <MudDatePicker Label="Planned End" Date="@order.Schedule.PlannedEndDate?.DateTime" Class="mb-2">
 
                             </MudDatePicker>
                         </MudItem>
 
                         <MudItem xs="12" sm="12" md="6" lg="6">
-                            <MudDatePicker Label="Actual Start" Date="@order.ActualStartDate?.DateTime" Class="mb-2">
+                            <MudDatePicker Label="Actual Start" Date="@order.Schedule.ActualStartDate?.DateTime" Class="mb-2">
 
                             </MudDatePicker>
                         </MudItem>
 
                         <MudItem xs="12" sm="12" md="6" lg="6">
-                            <MudDatePicker Label="Actual End" Date="@order.ActualEndDate?.DateTime" Class="mb-2">
+                            <MudDatePicker Label="Actual End" Date="@order.Schedule.ActualEndDate?.DateTime" Class="mb-2">
 
                             </MudDatePicker>
                                    </MudItem>
                         </MudGrid>
+                    }
                     </ChildContent>
                         </MudExpansionPanel>
                 </MudExpansionPanels>

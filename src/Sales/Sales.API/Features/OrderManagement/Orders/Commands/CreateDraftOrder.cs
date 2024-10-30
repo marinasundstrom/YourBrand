@@ -30,11 +30,13 @@ public sealed record CreateDraftOrder(string OrganizationId) : IRequest<Result<O
     {
         public async Task<Result<OrderDto>> Handle(CreateDraftOrder request, CancellationToken cancellationToken)
         {
-            var order = Order.Create(organizationId: request.OrganizationId);
+            var order = new Order(
+                request.OrganizationId,
+                typeId: 1,
+                true
+            );
 
             //order.UpdateStatus(1, timeProvider);
-
-            order.VatIncluded = true;
 
             orderRepository.Add(order);
 

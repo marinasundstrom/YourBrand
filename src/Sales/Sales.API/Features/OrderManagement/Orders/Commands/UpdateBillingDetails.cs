@@ -41,25 +41,11 @@ public sealed record UpdateBillingDetails(string OrganizationId, string Id, Bill
             billingDetails.SSN = request.BillingDetails.SSN;
             billingDetails.Email = request.BillingDetails.Email;
             billingDetails.PhoneNumber = request.BillingDetails.PhoneNumber;
-            billingDetails.Address = Map(billingDetails.Address ??= new Address(), request.BillingDetails.Address);
+            billingDetails.Address = request.BillingDetails.Address.MapOntoAddress(billingDetails.Address ??= new Address());
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Results.Success;
-        }
-
-        private Domain.ValueObjects.Address Map(Domain.ValueObjects.Address a, AddressDto address)
-        {
-            a.Thoroughfare = address.Thoroughfare;
-            a.Premises = address.Premises;
-            a.SubPremises = address.SubPremises;
-            a.PostalCode = address.PostalCode;
-            a.Locality = address.Locality;
-            a.SubAdministrativeArea = address.SubAdministrativeArea;
-            a.AdministrativeArea = address.AdministrativeArea;
-            a.Country = address.Country;
-
-            return a;
         }
     }
 }

@@ -31,13 +31,21 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.OwnsOne(x => x.Customer);
 
+        builder.OwnsOne(x => x.Schedule);
+
         builder.OwnsOne(x => x.BillingDetails, x => x.OwnsOne(z => z.Address));
 
         builder.OwnsOne(x => x.ShippingDetails, x => x.OwnsOne(z => z.Address));
 
         builder.OwnsMany(x => x.VatAmounts, x => x.ToJson());
 
-        builder.OwnsMany(x => x.Discounts, x => x.ToJson());
+        builder.HasMany(order => order.Discounts)
+             .WithOne()
+             .HasForeignKey(o => new { o.OrganizationId, o.OrderItemId })
+             .IsRequired()
+             .OnDelete(DeleteBehavior.ClientCascade);
+
+        builder.Navigation(x => x.Discounts).AutoInclude();
 
         // builder.HasOne(s => s.Subscription!)
         //     .WithOne()

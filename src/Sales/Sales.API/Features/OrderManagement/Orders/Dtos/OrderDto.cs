@@ -17,10 +17,7 @@ public sealed record OrderDto(
     string? Reference,
     string? Note,
     SubscriptionDto? Subscription,
-    DateTimeOffset?PlannedStartDate,
-    DateTimeOffset?PlannedEndDate,
-    DateTimeOffset?ActualStartDate,
-    DateTimeOffset?ActualEndDate,
+    OrderScheduleDto? Schedule,
     BillingDetailsDto? BillingDetails,
     ShippingDetailsDto? ShippingDetails,
     IEnumerable<OrderItemDto> Items,
@@ -35,6 +32,13 @@ public sealed record OrderDto(
     UserDto? CreatedBy,
     DateTimeOffset? LastModified,
     UserDto? LastModifiedBy);
+
+public record OrderScheduleDto(
+    DateTimeOffset? PlannedStartDate,
+    DateTimeOffset? PlannedEndDate,
+    DateTimeOffset? ActualStartDate,
+    DateTimeOffset? ActualEndDate
+);
 
 public record ParentOrderDto(
     string Id,
@@ -61,8 +65,13 @@ public sealed record OrderVatAmountDto(
     decimal Total);
 
 public sealed record OrderDiscountDto(
-    decimal Amount,
-    string Description);
+    string Description,
+    double? Rate,
+    decimal? Amount,
+    decimal? Total,
+    DateTimeOffset? EffectiveDate,
+    DateTimeOffset? ExpiryDate
+);
 
 public sealed record OrderItemDto(
     string Id,

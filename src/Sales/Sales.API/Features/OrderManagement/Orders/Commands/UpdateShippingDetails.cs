@@ -41,25 +41,11 @@ public sealed record UpdateShippingDetails(string OrganizationId, string Id, Shi
             //SSN = request.ShippingDetails.SSN,
             //Email = request.ShippingDetails.Email,
             //PhoneNumber = request.ShippingDetails.PhoneNumber,
-            shippingDetails.Address = Map(shippingDetails.Address ??= new Address(), request.ShippingDetails.Address);
+            shippingDetails.Address = request.ShippingDetails.Address.MapOntoAddress(shippingDetails.Address ??= new Address());
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Results.Success;
-        }
-
-        private Domain.ValueObjects.Address Map(Domain.ValueObjects.Address a, AddressDto address)
-        {
-            a.Thoroughfare = address.Thoroughfare;
-            a.Premises = address.Premises;
-            a.SubPremises = address.SubPremises;
-            a.PostalCode = address.PostalCode;
-            a.Locality = address.Locality;
-            a.SubAdministrativeArea = address.SubAdministrativeArea;
-            a.AdministrativeArea = address.AdministrativeArea;
-            a.Country = address.Country;
-
-            return a;
         }
     }
 }

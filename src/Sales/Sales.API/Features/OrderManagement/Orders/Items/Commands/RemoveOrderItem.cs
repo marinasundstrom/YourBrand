@@ -23,7 +23,7 @@ public sealed record RemoveOrderItem(string OrganizationId, string OrderId, stri
         }
     }
 
-    public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork) : IRequestHandler<RemoveOrderItem, Result>
+    public sealed class Handler(TimeProvider timeProvider, IOrderRepository orderRepository, IUnitOfWork unitOfWork) : IRequestHandler<RemoveOrderItem, Result>
     {
         public async Task<Result> Handle(RemoveOrderItem request, CancellationToken cancellationToken)
         {
@@ -46,7 +46,7 @@ public sealed record RemoveOrderItem(string OrganizationId, string OrderId, stri
 
             order.RemoveOrderItem(orderItem);
 
-            order.Update();
+            order.Update(timeProvider);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain.Infrastructure;
 using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Domain.Entities.Builders;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
@@ -29,54 +30,63 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
     {
         public async Task<Result<OrderDto>> Handle(CreateOrder request, CancellationToken cancellationToken)
         {
-            var order = Order.Create(organizationId: request.OrganizationId);
-
-            await order.AssignOrderNo(orderNumberFetcher, cancellationToken);
-
-            const int OrderStatusDraft = 1;
-
-            order.UpdateStatus(request.Status ?? OrderStatusDraft, timeProvider);
-
-            if (request.Customer is not null)
-            {
-                if (order.Customer is null)
+            var orderBuilder = OrderBuilder.NewOrder(request.OrganizationId, typeId: 1, "SEK", true)
+                .WithCustomer(new Customer
                 {
-                    order.Customer = new Domain.Entities.Customer();
-                }
+                    Id = request.Customer!.Id,
+                    CustomerNo = 0,
+                    Name = request.Customer.Name
+                })
+                .WithInitialStatus(request.Status ?? (int)OrderStatusEnum.Draft);
 
-                order.Customer.Id = request.Customer.Id;
-                order.Customer.Name = request.Customer.Name;
-            }
-
-            order.VatIncluded = true;
-
-            order.BillingDetails = request.BillingDetails is null ? null : new BillingDetails
+            if (request.BillingDetails is not null)
             {
-                FirstName = request.BillingDetails.FirstName,
-                LastName = request.BillingDetails.LastName,
-                SSN = request.BillingDetails.SSN,
-                Email = request.BillingDetails.Email,
-                PhoneNumber = request.BillingDetails.PhoneNumber,
-                Address = Map(request.BillingDetails.Address)
-            };
+                var billingDetails = new BillingDetails
+                {
+                    FirstName = request.BillingDetails.FirstName,
+                    LastName = request.BillingDetails.LastName,
+                    SSN = request.BillingDetails.SSN,
+                    Email = request.BillingDetails.Email,
+                    PhoneNumber = request.BillingDetails.PhoneNumber,
+                    Address = request.BillingDetails.Address.ToAddress()
+                };
+
+                orderBuilder.WithBillingDetails(billingDetails); 
+            }
 
             if (request.ShippingDetails is not null)
             {
-                order.ShippingDetails = new ShippingDetails
+                var shippingDetails = new ShippingDetails
                 {
                     FirstName = request.ShippingDetails.FirstName,
                     LastName = request.ShippingDetails.LastName,
-                    CareOf = request.ShippingDetails.CareOf,
-                    Address = Map(request.ShippingDetails.Address),
+                    Address = request.ShippingDetails.Address.ToAddress()
                 };
+
+                orderBuilder.WithShippingDetails(shippingDetails);
             }
+
+            var order = orderBuilder.Build();
+
+            await order.AssignOrderNo(orderNumberFetcher, cancellationToken);
 
             foreach (var orderItem in request.Items)
             {
-                order.AddItem(orderItem.Description, orderItem.ItemId, orderItem.UnitPrice, orderItem.RegularPrice, null, null, orderItem.Quantity, orderItem.Unit, orderItem.VatRate, orderItem.Notes);
+                order.AddItem(
+                    orderItem.Description, 
+                    orderItem.ItemId, 
+                    orderItem.UnitPrice, 
+                    orderItem.RegularPrice, 
+                    null, 
+                    null, 
+                    orderItem.Quantity, 
+                    orderItem.Unit, 
+                    orderItem.VatRate,
+                    orderItem.Notes, 
+                    timeProvider);
             }
 
-            order.Update();
+            order.Update(timeProvider);
 
             orderRepository.Add(order);
 
@@ -101,21 +111,6 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
                 .FirstAsync(x => x.Id == order.Id, cancellationToken);
 
             return order!.ToDto();
-        }
-
-        private Domain.ValueObjects.Address Map(AddressDto address)
-        {
-            return new Domain.ValueObjects.Address
-            {
-                Thoroughfare = address.Thoroughfare,
-                Premises = address.Premises,
-                SubPremises = address.SubPremises,
-                PostalCode = address.PostalCode,
-                Locality = address.Locality,
-                SubAdministrativeArea = address.SubAdministrativeArea,
-                AdministrativeArea = address.AdministrativeArea,
-                Country = address.Country
-            };
         }
     }
 }

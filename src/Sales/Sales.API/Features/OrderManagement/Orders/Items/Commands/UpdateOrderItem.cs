@@ -21,7 +21,7 @@ public sealed record UpdateOrderItem(string OrganizationId, string OrderId, stri
         }
     }
 
-    public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateOrderItem, Result<OrderItemDto>>
+    public sealed class Handler(TimeProvider timeProvider, IOrderRepository orderRepository, IUnitOfWork unitOfWork) : IRequestHandler<UpdateOrderItem, Result<OrderItemDto>>
     {
         public async Task<Result<OrderItemDto>> Handle(UpdateOrderItem request, CancellationToken cancellationToken)
         {
@@ -48,13 +48,16 @@ public sealed record UpdateOrderItem(string OrganizationId, string OrderId, stri
             orderItem.Unit = request.Unit;
             orderItem.Price = request.UnitPrice;
             orderItem.RegularPrice = request.RegularPrice;
-            orderItem.Discount = request.RegularPrice - request.UnitPrice;
+
+            // Foo
+            //orderItem.Discount = request.RegularPrice - request.UnitPrice;
+
             orderItem.VatRate = request.VatRate;
             orderItem.Quantity = request.Quantity;
             orderItem.Notes = request.Notes;
 
-            orderItem.Update();
-            order.Update();
+            orderItem.Update(timeProvider);
+            order.Update(timeProvider);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 

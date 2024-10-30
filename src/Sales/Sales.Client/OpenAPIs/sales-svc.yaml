@@ -1803,22 +1803,10 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/Subscription'
-        plannedStartDate:
-          type: string
-          format: date-time
+        schedule:
           nullable: true
-        plannedEndDate:
-          type: string
-          format: date-time
-          nullable: true
-        actualStartDate:
-          type: string
-          format: date-time
-          nullable: true
-        actualEndDate:
-          type: string
-          format: date-time
-          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/OrderSchedule'
         billingDetails:
           nullable: true
           oneOf:
@@ -1966,8 +1954,8 @@ components:
           type: string
           format: duration
           nullable: true
-        autoRenew:
-          type: boolean
+        renewalOption:
+          $ref: '#/components/schemas/RenewalOption'
         schedule:
           $ref: '#/components/schemas/SubscriptionSchedule'
     SubscriptionType:
@@ -1995,10 +1983,6 @@ components:
           type: string
         productId:
           type: string
-          nullable: true
-        price:
-          type: number
-          format: decimal
           nullable: true
     SubscriptionStatus:
       type: object
@@ -2028,6 +2012,15 @@ components:
           type: string
           format: date-time
           nullable: true
+    RenewalOption:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Manual
+      - Automatic
+      enum:
+      - 0
+      - 1
     SubscriptionSchedule:
       type: object
       additionalProperties: false
@@ -2163,6 +2156,26 @@ components:
       - 512
       - 1024
       - 2048
+    OrderSchedule:
+      type: object
+      additionalProperties: false
+      properties:
+        plannedStartDate:
+          type: string
+          format: date-time
+          nullable: true
+        plannedEndDate:
+          type: string
+          format: date-time
+          nullable: true
+        actualStartDate:
+          type: string
+          format: date-time
+          nullable: true
+        actualEndDate:
+          type: string
+          format: date-time
+          nullable: true
     BillingDetails:
       type: object
       additionalProperties: false
@@ -2306,10 +2319,6 @@ components:
         productId:
           type: string
           nullable: true
-        price:
-          type: number
-          format: decimal
-          nullable: true
         schedule:
           $ref: '#/components/schemas/SubscriptionSchedule'
         hasTrial:
@@ -2321,8 +2330,8 @@ components:
           type: string
           format: duration
           nullable: true
-        autoRenew:
-          type: boolean
+        renewalOption:
+          $ref: '#/components/schemas/RenewalOption'
     OrderVatAmount:
       type: object
       additionalProperties: false
@@ -2346,11 +2355,28 @@ components:
       type: object
       additionalProperties: false
       properties:
+        description:
+          type: string
+        rate:
+          type: number
+          format: double
+          nullable: true
         amount:
           type: number
           format: decimal
-        description:
+          nullable: true
+        total:
+          type: number
+          format: decimal
+          nullable: true
+        effectiveDate:
           type: string
+          format: date-time
+          nullable: true
+        expiryDate:
+          type: string
+          format: date-time
+          nullable: true
     SortDirection:
       type: string
       description: ''

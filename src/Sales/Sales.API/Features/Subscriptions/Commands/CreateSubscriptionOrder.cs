@@ -3,6 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Sales.Domain.Entities;
+using YourBrand.Sales.Domain.Entities.Builders;
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders;
 using YourBrand.Sales.Features.OrderManagement.Orders.Commands;
@@ -32,45 +33,51 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
 
             subscription.SubscriptionNo = await subscriptionNumberFetcher.GetNextNumberAsync(request.OrganizationId, cancellationToken);
 
-            var order = Order.Create(organizationId: request.OrganizationId);
+            var orderBuilder = OrderBuilder.NewOrder(request.OrganizationId, typeId: 2, "SEK", true)
+                .WithCustomer(new Customer
+                {
+                    Id = request.Customer!.Id,
+                    CustomerNo = 0,
+                    Name = request.Customer.Name
+                })
+                .WithInitialStatus((int)OrderStatusEnum.PendingConfirmation)
+                .WithSubscription(subscription);
 
-            order.TypeId = 2;
-
-            order.OrganizationId = request.OrganizationId;
-            order.Customer = new Customer
+            if (request.BillingDetails is not null)
             {
-                Id = request.Customer.Id,
-                CustomerNo = 0,
-                Name = request.Customer.Name
-            };
-            order.Subscription = subscription;
+                var billingDetails = new BillingDetails
+                {
+                    FirstName = request.BillingDetails.FirstName,
+                    LastName = request.BillingDetails.LastName,
+                    SSN = request.BillingDetails.SSN,
+                    Email = request.BillingDetails.Email,
+                    PhoneNumber = request.BillingDetails.PhoneNumber,
+                    Address = request.BillingDetails.Address.ToAddress()
+                };
 
-            order.BillingDetails = request.BillingDetails is null ? null : new BillingDetails
-            {
-                FirstName = request.BillingDetails.FirstName,
-                LastName = request.BillingDetails.LastName,
-                SSN = request.BillingDetails.SSN,
-                Email = request.BillingDetails.Email,
-                PhoneNumber = request.BillingDetails.PhoneNumber,
-                Address = Map(request.BillingDetails.Address)
-            };
+                orderBuilder.WithBillingDetails(billingDetails);
+            }
 
             if (request.ShippingDetails is not null)
             {
-                order.ShippingDetails = new ShippingDetails
+                var shippingDetails = new ShippingDetails
                 {
                     FirstName = request.ShippingDetails.FirstName,
                     LastName = request.ShippingDetails.LastName,
-                    CareOf = request.ShippingDetails.CareOf,
-                    Address = Map(request.ShippingDetails.Address),
+                    Address = request.ShippingDetails.Address.ToAddress()
                 };
+
+                orderBuilder.WithShippingDetails(shippingDetails);
             }
+
+            var order = orderBuilder.Build();
 
             await order.AssignOrderNo(orderNumberFetcher, cancellationToken);
 
-            order.UpdateStatus((int)OrderStatusEnum.PendingConfirmation, timeProvider);
-
-            var orderItem = order.AddItem("Foo", request.ProductId, request.Price, request.OriginalPrice, null, null, 1, null, 0.25, request.Notes);
+            var orderItem = order.AddItem(
+                "Foo", request.ProductId, request.Price, request.OriginalPrice, null, null, 1, null, 0.25, request.Notes, 
+                timeProvider);
+         
             orderItem.Subscription = subscription;
             orderItem.SubscriptionPlan = subscription.Plan;
 
@@ -87,21 +94,6 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
                 .FirstAsync(x => x.Id == order.Id, cancellationToken);
 
             return order.ToDto();
-        }
-
-        private Sales.Domain.ValueObjects.Address Map(AddressDto address)
-        {
-            return new Sales.Domain.ValueObjects.Address()
-            {
-                Thoroughfare = address.Thoroughfare,
-                Premises = address.Premises,
-                SubPremises = address.SubPremises,
-                PostalCode = address.PostalCode,
-                Locality = address.Locality,
-                SubAdministrativeArea = address.SubAdministrativeArea,
-                AdministrativeArea = address.AdministrativeArea,
-                Country = address.Country
-            };
         }
     }
 }

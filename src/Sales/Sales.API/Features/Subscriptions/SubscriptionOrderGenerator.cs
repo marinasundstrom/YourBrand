@@ -5,7 +5,8 @@ namespace YourBrand.Sales.Features.SubscriptionManagement;
 
 public class SubscriptionOrderGenerator(
     OrderFactory orderFactory,
-    SubscriptionOrderDateGenerator orderDateGenerator)
+    SubscriptionOrderDateGenerator orderDateGenerator,
+    TimeProvider timeProvider)
 {
     public IEnumerable<Order> GenerateOrders(Order order, DateOnly? startDate = null, DateOnly? endDate = null)
     {
@@ -38,10 +39,14 @@ public class SubscriptionOrderGenerator(
                     {
                         var subOrder2 = orderFactory
                             .CreateOrderFromOrderItem(orderItem)
-                            .SetPlannedDates(date.Start, date.End);
+                            .AssignSchedule(schedule =>
+                            {
+                                schedule.SetPlannedStartDate(date.Start);
+                                schedule.SetPlannedEndDate(date.End);
+                            });
 
                         subOrder2.AddItem(
-                            orderFactory.CreateOrderItem(orderItem));
+                            orderFactory.CreateOrderItem(orderItem), timeProvider);
 
                         yield return subOrder2;
                     }
@@ -72,7 +77,10 @@ public class SubscriptionOrderGenerator(
             foreach (var date in dates)
             {
                 var subOrder = orderFactory.CreateOrder(order)
-                    .SetPlannedDates(date.Start, date.End);
+                    .AssignSchedule(schedule => {
+                        schedule.SetPlannedStartDate(date.Start);
+                        schedule.SetPlannedEndDate(date.End);
+                    });
 
                 foreach (var orderItem in order.Items)
                 {
@@ -103,7 +111,7 @@ public class SubscriptionOrderGenerator(
 
                     var targetOrderItem = orderFactory.CreateOrderItem(orderItem);
 
-                    subOrder.AddItem(targetOrderItem);
+                    subOrder.AddItem(targetOrderItem, timeProvider);
                     //}
                 }
 

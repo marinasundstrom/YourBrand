@@ -23,7 +23,7 @@ public sealed record CreateOrderItem(string OrganizationId, string OrderId, stri
         }
     }
 
-    public sealed class Handler(IOrderRepository orderRepository, IUnitOfWork unitOfWork)
+    public sealed class Handler(TimeProvider timeProvider, IOrderRepository orderRepository, IUnitOfWork unitOfWork)
         : IRequestHandler<CreateOrderItem, Result<OrderItemDto>>
     {
         public async Task<Result<OrderItemDto>> Handle(CreateOrderItem request, CancellationToken cancellationToken)
@@ -38,11 +38,22 @@ public sealed record CreateOrderItem(string OrganizationId, string OrderId, stri
                 return OrderNotFound;
             }
 
-            var orderItem = order.AddItem(request.Description, request.ProductId, request.UnitPrice, request.RegularPrice, null, request.Discount, request.Quantity, request.Unit, request.VatRate, request.Notes);
+            var orderItem = order.AddItem(
+                request.Description, 
+                request.ProductId,
+                request.UnitPrice,
+                request.RegularPrice, 
+                null, 
+                request.Discount, 
+                request.Quantity,
+                request.Unit, 
+                request.VatRate, 
+                request.Notes, 
+                timeProvider);
 
             orderItem.SubscriptionPlanId = request.SubscriptionPlanId;
 
-            order.Update();
+            order.Update(timeProvider);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
