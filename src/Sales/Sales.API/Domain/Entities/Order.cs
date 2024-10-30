@@ -42,6 +42,16 @@ public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganiza
         OrderNo = await orderNumberFetcher.GetNextNumberAsync(OrganizationId, cancellationToken);
     }
 
+    public void AssignOrderNo(int orderNo)
+    {
+        if (OrderNo is not null)
+        {
+            throw new InvalidOperationException("Order number already set");
+        }
+
+        OrderNo = orderNo;
+    }
+
     public DateTimeOffset? Date { get; private set; }
 
     public OrderType Type { get; set; } = null!;

@@ -48,7 +48,7 @@ public sealed class OrderStatusUpdatedEventHandler(
             logger.LogInformation("Order number was assigned");
         }
 
-        if (order.StatusId == (int)OrderStatusEnum.Confirmed)
+       /* if (order.StatusId == (int)OrderStatusEnum.Confirmed)
         {
             if (order.Subscription is not null)
             {
@@ -58,7 +58,7 @@ public sealed class OrderStatusUpdatedEventHandler(
             }
 
             await PostNotification(order, cancellationToken);
-        }
+        } */
 
         if (order.AssigneeId is not null && order.LastModifiedById != order.AssigneeId)
         {/*
