@@ -3,14 +3,13 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using YourBrand.Domain;
-using YourBrand.Sales.Domain.Entities;
+using YourBrand.Identity;
 
-namespace YourBrand.Sales.Persistence.Interceptors;
+namespace YourBrand.Auditability;
 
 public sealed class AuditableEntitySaveChangesInterceptor(
     IUserContext userContext,
-    IDateTime dateTime,
-    ITenantContext tenantContext) : SaveChangesInterceptor
+    TimeProvider timeProvider) : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
@@ -30,32 +29,24 @@ public sealed class AuditableEntitySaveChangesInterceptor(
     {
         if (context == null) return;
 
-        foreach (var entry in context.ChangeTracker.Entries<IHasTenant>())
-        {
-            if (entry.State == EntityState.Added)
-            {
-                entry.Entity.TenantId = tenantContext.TenantId.GetValueOrDefault();
-            }
-        }
-
-        foreach (var entry in context.ChangeTracker.Entries<IAuditable>())
+        foreach (var entry in context.ChangeTracker.Entries<IAuditableEntity>())
         {
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.CreatedById = userContext.UserId!;
-                entry.Entity.Created = dateTime.Now;
+                entry.Entity.Created = timeProvider.GetUtcNow();
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
                 entry.Entity.LastModifiedById = userContext.UserId;
-                entry.Entity.LastModified = dateTime.Now;
+                entry.Entity.LastModified = timeProvider.GetUtcNow();
             }
             else if (entry.State == EntityState.Deleted)
             {
                 if (entry.Entity is ISoftDeletable softDelete)
                 {
                     softDelete.DeletedById = userContext.UserId;
-                    softDelete.Deleted = dateTime.Now;
+                    softDelete.Deleted = timeProvider.GetUtcNow();
 
                     entry.State = EntityState.Modified;
                 }

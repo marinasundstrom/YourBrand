@@ -60,6 +60,7 @@
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference> -->
     <ProjectReference Include="..\..\Common\CoreServices\CoreServices.csproj" />
+    <ProjectReference Include="..\..\Common\Domain.Auditability.EFCore\Domain.Auditability.EFCore.csproj" />
   </ItemGroup>
 
 </Project>

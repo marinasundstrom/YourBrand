@@ -13,11 +13,11 @@ public class Result
         this.error = error;
     }
 
-    public static Result Success() => new Result();
+    public static Result Success => new Result();
 
     public static Result Failure(Error error) => new Result(error);
 
-    public static Result<T> Success<T>(T data) => new(data);
+    public static Result<T> SuccessWith<T>(T data) => new(data);
 
     public static Result<T> Failure<T>(Error error) => new(error);
 
@@ -36,6 +36,9 @@ public class Result
     public static implicit operator Error(Result result) =>
         !result.IsFailure
         ? throw new InvalidOperationException() : result.error!;
+
+    public static implicit operator Result(Error error) =>
+        Result.Failure(error);
 }
 
 public class Result<T> : Result
@@ -56,4 +59,10 @@ public class Result<T> : Result
     public static implicit operator T(Result<T> result) =>
         result.IsFailure
         ? throw new InvalidOperationException() : result.data!;
+
+    public static implicit operator Result<T>(T result) =>
+        Result.SuccessWith(result);
+
+    public static implicit operator Result<T>(Error error) =>
+        Result.Failure<T>(error);
 }

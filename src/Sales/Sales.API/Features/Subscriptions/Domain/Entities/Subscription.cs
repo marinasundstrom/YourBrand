@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Humanizer;
 
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Sales.Domain.Enums;
@@ -10,7 +11,7 @@ using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class Subscription : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISubscriptionParameters, IHasTenant, IHasOrganization
+public class Subscription : AggregateRoot<Guid>, IAuditableEntity<Guid, User>, ISoftDeletable, ISubscriptionParameters, IHasTenant, IHasOrganization
 {
     public Subscription() : base(Guid.NewGuid())
     {

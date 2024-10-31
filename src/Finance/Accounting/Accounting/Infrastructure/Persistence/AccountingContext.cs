@@ -45,74 +45,20 @@ public class AccountingContext(DbContextOptions<AccountingContext> options,
 
             var entityTypeBuilder = modelBuilder.Entity(clrType);
 
-            if (clrType.IsAssignableTo(typeof(IHasTenant)))
-            {
-                entityTypeBuilder.HasIndex(nameof(IHasTenant.TenantId));
-            }
+            entityTypeBuilder.AddTenantIndex();
 
-            if (clrType.IsAssignableTo(typeof(IHasOrganization)))
-            {
-                entityTypeBuilder.HasIndex(nameof(IHasOrganization.OrganizationId));
-            }
+            entityTypeBuilder.AddOrganizationIndex();
 
             try
             {
-                var parameter = Expression.Parameter(clrType, "entity");
-
-                List<Expression> queryFilters = new();
-
-                if (TenancyQueryFilter.CanApplyTo(clrType))
+                entityTypeBuilder.RegisterQueryFilters(builder =>
                 {
-                    var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId);
-
-                    queryFilters.Add(
-                        Expression.Invoke(tenantFilter, Expression.Convert(parameter, typeof(IHasTenant))));
-                }
-
-                if (SoftDeleteQueryFilter.CanApplyTo(clrType))
-                {
-                    var softDeleteFilter = SoftDeleteQueryFilter.GetFilter();
-
-                    queryFilters.Add(
-                        Expression.Invoke(softDeleteFilter, Expression.Convert(parameter, typeof(ISoftDeletable))));
-                }
-
-                Expression? queryFilter = null;
-
-                foreach (var qf in queryFilters)
-                {
-                    if (queryFilter is null)
-                    {
-                        queryFilter = qf;
-                    }
-                    else
-                    {
-                        queryFilter = Expression.AndAlso(
-                            queryFilter,
-                            qf)
-                            .Expand();
-                    }
-                }
-
-                if (queryFilters.Count == 0)
-                {
-                    continue;
-                }
-
-                var queryFilterLambda = Expression.Lambda(queryFilter.Expand(), parameter);
-
-                entityTypeBuilder.HasQueryFilter(queryFilterLambda);
+                    builder.AddTenancyFilter(tenantContext);
+                    builder.AddSoftDeleteFilter();
+                });
             }
-            catch (InvalidOperationException exc)
-                when (exc.Message.Contains("cannot be configured as non-owned because it has already been configured as a owned"))
-            {
-                Console.WriteLine("Skipping previously configured owned type");
-            }
-            catch (InvalidOperationException exc)
-                when (exc.Message.Contains("cannot be added to the model because its CLR type has been configured as a shared type"))
-            {
-                Console.WriteLine("Skipping previously configured shared type");
-            }
+            catch(InvalidOperationException exc)
+                when (exc.MatchQueryFilterExceptions(clrType)) {}
         }
     }
 

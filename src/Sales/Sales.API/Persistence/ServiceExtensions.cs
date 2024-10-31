@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain.Persistence;
-using YourBrand.Domain.Persistence.Interceptors;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
-using YourBrand.Sales.Persistence.Interceptors;
 using YourBrand.Sales.Persistence.Repositories.Mocks;
+using YourBrand.Auditability;
 
 namespace YourBrand.Sales.Persistence;
 
@@ -19,13 +18,14 @@ public static class ServiceExtensions
 
         services.AddDomainPersistence<SalesContext>(configuration);
 
-        services.AddDbContext<SalesContext>((sp, options) =>
+        services.AddDbContext<SalesContext>((serviceProvider, options) =>
         {
             options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
 
-            options.AddInterceptors(
-                sp.GetRequiredService<OutboxSaveChangesInterceptor>(),
-                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+            options
+                .UseDomainInterceptors(serviceProvider)
+                .UseTenancyInterceptor(serviceProvider)
+                .UseAuditabilityInterceptor(serviceProvider);
 
 #if DEBUG
             options
@@ -36,7 +36,7 @@ public static class ServiceExtensions
 
         services.AddScoped<ISalesContext>(sp => sp.GetRequiredService<SalesContext>());
 
-        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+        services.AddAuditabilityInterceptor();
 
         RegisterRepositories(services);
 

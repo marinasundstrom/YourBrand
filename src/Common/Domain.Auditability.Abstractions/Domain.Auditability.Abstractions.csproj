@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>YourBrand.Domain</RootNamespace>
+    <RootNamespace>Domain.Auditability.Abstractions</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +14,8 @@
   <ItemGroup>
     <ProjectReference Include="..\SoftDelete.Abstractions\SoftDelete.Abstractions.csproj" />
     <ProjectReference Include="..\QueryFilters\QueryFilters.csproj" />
+    <ProjectReference Include="..\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
 </Project>

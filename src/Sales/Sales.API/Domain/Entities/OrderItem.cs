@@ -1,12 +1,13 @@
 using Core;
 
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class OrderItem : Entity<string>, IAuditable, IHasTenant
+public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTenant
 {
     private readonly HashSet<Discount> _discounts = new HashSet<Discount>();
 

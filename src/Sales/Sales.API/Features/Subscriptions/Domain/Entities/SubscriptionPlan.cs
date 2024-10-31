@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Sales.Domain.Enums;
@@ -5,7 +6,7 @@ using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class SubscriptionPlan : AggregateRoot<Guid>, IAuditable, ISoftDeletable, ISubscriptionParameters, IHasTenant
+public class SubscriptionPlan : AggregateRoot<Guid>, IAuditableEntity<Guid, User>, ISoftDeletable, ISubscriptionParameters, IHasTenant
 {
     public SubscriptionPlan() : base(Guid.NewGuid())
     {

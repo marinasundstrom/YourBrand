@@ -1,10 +1,11 @@
+using YourBrand.Auditability;
 using YourBrand.Sales.Domain.ValueObjects;
 
 using YourBrand.Tenancy;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
+public class User : AggregateRoot<UserId>, IAuditableEntity<UserId, User>, IHasTenant
 {
     public User(UserId id, string name, string email)
         : base(id)

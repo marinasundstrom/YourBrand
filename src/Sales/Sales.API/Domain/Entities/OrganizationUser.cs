@@ -1,8 +1,9 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class OrganizationUser : AggregateRoot<string>, IAuditable
+public class OrganizationUser : AggregateRoot<string>, IAuditableEntity<string, User>
 {
     public OrganizationUser()
         : base(Guid.NewGuid().ToString())

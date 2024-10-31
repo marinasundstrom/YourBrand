@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\QueryFilters\QueryFilters.csproj" />
   </ItemGroup>
 
 </Project>

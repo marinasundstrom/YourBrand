@@ -1,11 +1,12 @@
-﻿using YourBrand.Domain;
+﻿using YourBrand.Auditability;
+using YourBrand.Domain;
 using YourBrand.Sales.Domain.ValueObjects;
 
 using YourBrand.Tenancy;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public sealed class SubscriptionType : Entity<int>, IAuditable, IHasTenant
+public sealed class SubscriptionType : Entity<int>, IAuditableEntity<int, User>, IHasTenant
 {
     protected SubscriptionType()
     {

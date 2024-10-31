@@ -3,6 +3,7 @@ using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Domain.ValueObjects;
@@ -10,7 +11,7 @@ using YourBrand.Sales.Features.OrderManagement.Orders;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class Order : AggregateRoot<string>, IAuditable, IHasTenant, IHasOrganization
+public class Order : AggregateRoot<string>, IAuditableEntity<string, User>, IHasTenant, IHasOrganization
 {
     readonly HashSet<OrderItem> _items = new HashSet<OrderItem>();
 

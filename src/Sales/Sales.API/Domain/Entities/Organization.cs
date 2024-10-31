@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Sales.Domain.ValueObjects;
 
@@ -5,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAuditable, IHasTenant
+public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAuditableEntity<OrganizationId, User>, IHasTenant
 {
     public Organization(OrganizationId id, string name)
         : base(id)

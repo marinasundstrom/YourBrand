@@ -4,7 +4,7 @@ using YourBrand.Domain;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
+public abstract class Entity<TId> : IEquatable<Entity<TId>>, IEntity<TId>, IHasDomainEvents
     where TId : notnull
 {
     private readonly HashSet<DomainEvent> domainEvents = new HashSet<DomainEvent>();

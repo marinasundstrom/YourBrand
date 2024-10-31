@@ -1,8 +1,9 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class Discount : Entity<string>, IAuditable, IHasTenant
+public class Discount : Entity<string>, IAuditableEntity<string, User>, IHasTenant
 {
     public Discount() : base(Guid.NewGuid().ToString())
     {

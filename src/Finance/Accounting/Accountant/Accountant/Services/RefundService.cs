@@ -12,7 +12,7 @@ public class RefundService(IInvoicesClient invoicesClient, IJournalEntriesClient
 
         logger.LogInformation("Querying for invoices");
 
-        var results = await invoicesClient.GetInvoicesAsync(organizationId, 0, 100, null, new[] { (int)InvoiceStatuses.Overpaid }, null);
+        var results = await invoicesClient.GetInvoicesAsync(organizationId, 0, 100, null, new[] { (int)InvoiceStatuses.Overpaid }, null, null, null);
 
         foreach (var invoice in results.Items)
         {
