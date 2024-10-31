@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using YourBrand.Domain.Persistence.Interceptors;
 
@@ -12,7 +13,7 @@ public static class ServiceExtensions
     {
         services.AddScoped<DomainDbContext>(sp => sp.GetRequiredService<TContext>());
 
-        services.AddScoped<OutboxSaveChangesInterceptor>();
+        services.TryAddScoped<OutboxSaveChangesInterceptor>();
 
         return services;
     }
