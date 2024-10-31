@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -9,10 +10,8 @@ namespace YourBrand.Domain.Persistence;
 public static class ServiceExtensions
 {
     public static IServiceCollection AddDomainPersistence<TContext>(this IServiceCollection services, IConfiguration configuration)
-        where TContext : DomainDbContext
+        where TContext : DbContext
     {
-        services.AddScoped<DomainDbContext>(sp => sp.GetRequiredService<TContext>());
-
         services.TryAddScoped<OutboxSaveChangesInterceptor>();
 
         return services;

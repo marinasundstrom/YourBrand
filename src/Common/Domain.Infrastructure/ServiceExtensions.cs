@@ -1,7 +1,9 @@
 ﻿using MediatR;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using Quartz;
 
@@ -12,27 +14,38 @@ namespace YourBrand.Domain.Infrastructure;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddDomainInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDomainInfrastructure<TDbContext>(this IServiceCollection services, IConfiguration configuration)
+        where TDbContext : DbContext
     {
+        services.AddScoped<IDomainDbContextAccessor>(sp => new DomainDbContextAccessor(sp.GetRequiredService<TDbContext>()));
+
         DecorateDomainEventHandlers(services);
 
-        SetUpProcessOutboxMessagesJob(services, configuration);
+        SetUpProcessOutboxMessagesJob<TDbContext>(services, configuration);
 
-        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+        services.AddDomainEventDispatcher();
 
         return services;
     }
 
-    private static void SetUpProcessOutboxMessagesJob(IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddDomainEventDispatcher(this IServiceCollection services)
+    {
+        services.TryAddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+
+        return services;
+    }
+
+    private static void SetUpProcessOutboxMessagesJob<TDbContext>(IServiceCollection services, IConfiguration configuration)
+        where TDbContext : DbContext
     {
         services.AddQuartz(configure =>
         {
-            var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
+            var jobKey = new JobKey(typeof(ProcessOutboxMessagesJob<TDbContext>).Name);
 
             int interval = configuration.GetValue<int?>("ProcessOutboxMessagesJob:Interval") ?? 10;
 
             configure
-                .AddJob<ProcessOutboxMessagesJob>(jobKey)
+                .AddJob<ProcessOutboxMessagesJob<TDbContext>>(jobKey)
                 .AddTrigger(trigger => trigger.ForJob(jobKey)
                     .WithSimpleSchedule(schedule => schedule
                         .WithIntervalInSeconds(interval)

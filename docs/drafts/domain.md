@@ -62,7 +62,8 @@ public sealed class ApplicationDbContext : DomainDbContext
 
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
-        ITenantContext tenantContext) : base(options)
+        ITenantContext tenantContext,
+        ILogger<ApplicationDbContext> logger) : base(options)
     {
         this.tenantContext = tenantContext;
     }
@@ -76,36 +77,40 @@ public sealed class ApplicationDbContext : DomainDbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder
+            .ApplyDomainEntityConfigurations()
+            .ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         ConfigQueryFilterForEntity(modelBuilder);
+
+        // Or:
+        // modelBuilder.ConfigQueryFilterForModel(tenantContext);
     }
 
     private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
     {
-        foreach (var clrType in modelBuilder.Model
-            .GetEntityTypes()
-            .Select(entityType => entityType.ClrType))
+        foreach (var type in modelBuilder.Model
+            .GetEntityTypes())
         {
-            // Customize this for the particular service
+            var clrType = type.ClrType;
+
+            if (type.IsOwned())
+            {
+                logger.LogInformation("Skipping type {ClrType} because it is defined as owned.", clrType);
+                continue;
+            }
 
             if (!clrType.IsAssignableTo(typeof(IEntity)))
             {
-                Console.WriteLine($"Skipping type {clrType} because it is not implementing IEntity.");
+                logger.LogInformation("Skipping type {ClrType} because it is not implementing IEntity.", clrType);
                 continue;
             }
 
             var entityTypeBuilder = modelBuilder.Entity(clrType);
 
-
-            // Add indexes
-
-            entityTypeBuilder.AddTenantIndex();
-
-            entityTypeBuilder.AddOrganizationIndex();
-
-
-            // Create query filter
+            entityTypeBuilder
+                .AddTenantIndex()
+                .AddOrganizationIndex();
 
             try
             {
@@ -116,19 +121,21 @@ public sealed class ApplicationDbContext : DomainDbContext
                 });
             }
             catch (InvalidOperationException exc)
-            when (exc.MatchQueryFilterExceptions(clrType))
+                when (exc.MatchQueryFilterExceptions(clrType))
             { }
         }
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
-        // Converters for Ids
+        // Converters for common Ids
 
         configurationBuilder.AddTenantIdConverter();
         configurationBuilder.AddOrganizationIdConverter();
         configurationBuilder.AddUserIdConverter();
 
+        // Your own converters
+        
         configurationBuilder.Properties<ItemId>().HaveConversion<ItemIdConverter>();
     }
 
@@ -160,9 +167,9 @@ public static class ServiceExtensions
         var connectionString = configuration.GetConnectionString("db");
 
         // Required for Transactional Outbox pattern to work (DbContext must inherit DomainDbContext)
-        services.AddDomainPersistence<SalesContext>(configuration);
+        services.AddDomainPersistence<ApplicationDbContext>(configuration);
 
-        services.AddDbContext<SalesContext>((serviceProvider, options) =>
+        services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
         {
             options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
 
@@ -192,7 +199,17 @@ Project: Domain.Infrastructure
 This will add services used for the transactional outbox pattern, such as the background job.
 
 ```csharp
-service.AddDomainInfrastructure(builder.Configuration);
+service.AddDomainInfrastructure<ApplicationDbContext>(builder.Configuration);
+```
+
+Add this to ``appSettings.json``:
+
+```json
+{
+  "ProcessOutboxMessagesJob": {
+    "Interval": 20
+  }
+}
 ```
 
 ## Asynchronous messaging

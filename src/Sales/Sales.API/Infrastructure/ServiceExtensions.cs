@@ -3,6 +3,7 @@
 using YourBrand.Domain.Infrastructure;
 using YourBrand.Sales.Infrastructure.Jobs;
 using YourBrand.Sales.Infrastructure.Services;
+using YourBrand.Sales.Persistence;
 
 namespace YourBrand.Sales.Infrastructure;
 
@@ -14,7 +15,7 @@ public static class ServiceExtensions
 
         services.AddScoped<IEmailService, EmailService>();
 
-        services.AddDomainInfrastructure(configuration);
+        services.AddDomainInfrastructure<SalesContext>(configuration);
 
         services.AddQuartz(configure =>
         {

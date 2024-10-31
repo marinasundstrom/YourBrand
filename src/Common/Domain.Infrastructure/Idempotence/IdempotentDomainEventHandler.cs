@@ -7,11 +7,13 @@ namespace YourBrand.Domain.Infrastructure.Idempotence;
 
 public sealed class IdempotentDomainEventHandler<TDomainEvent>(
     IDomainEventHandler<TDomainEvent> decorated,
-    DomainDbContext dbContext) : IDomainEventHandler<TDomainEvent>
+    IDomainDbContextAccessor domainDbContextAccessor) : IDomainEventHandler<TDomainEvent>
     where TDomainEvent : DomainEvent
 {
     public async Task Handle(TDomainEvent notification, CancellationToken cancellationToken)
     {
+        var dbContext = domainDbContextAccessor.DbContext;
+        
         string consumer = decorated.GetType().Name;
 
         if (await dbContext.Set<OutboxMessageConsumer>()
