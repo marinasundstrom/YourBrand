@@ -19,24 +19,27 @@ Projects:
 
 Some guidelines for implementing entity types.
 
-Entities should implement ``IEntity`` or derived interfaces, such as ``IAuditableEntity``(for basic auditability).
+Entities should implement ``IEntity`` or derived interfaces, such as ``IAuditableEntity`` (for basic auditability).
 
 Entities that emit domain events implement ``IHasDomainEvents``. This makes it so that the background job picks them up.
 
-Users are represented by unique ``UserId``, that converts to a string.
+A User is represented by a unique ``UserId``. Maps to a string in Database.
 
-Entities that belong to a particular tenant implements ``IHasTenant``. This works with ``ITenantContext`` and the value is set when the entities are saved.
+Entities that belong to a particular tenant implement ``IHasTenant``. This works with ``ITenantContext``, and the ``TenantId`` is automatically set when the entities are persisted. And objects are automatically filtered out when queries are run, based on the user's tenant.
 
 You can of course create base classes that implement these.
 
 ## Tenancy and Identity
 
-Both TenantId and UserId are passed as claims in the JWT.
+A core concept is Tenant, and it has Users. It may also have Organizations to which Users belong, but that we are saving for another time.
 
+Both TenantId and UserId are passed as claims in the JWT.
 
 This adds ``ITenantContext`` and ``IUserContext``:
 
 ```csharp
+builder.Services.AddHttpContextAccessor();
+
 builder.Services
     .AddUserContext()
     .AddTenantContext();
