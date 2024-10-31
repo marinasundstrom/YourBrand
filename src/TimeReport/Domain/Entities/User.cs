@@ -34,7 +34,7 @@ public class User : AuditableEntity, ISoftDeletable, IHasTenant
 
     public IReadOnlyCollection<TeamMembership> TeamMemberships => _teamMemberships;
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

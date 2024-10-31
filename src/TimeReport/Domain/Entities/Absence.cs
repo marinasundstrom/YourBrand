@@ -36,7 +36,7 @@ public class Absence : AuditableEntity, IHasTenant, IHasOrganization, ISoftDelet
 
     public string? Note { get; set; }
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

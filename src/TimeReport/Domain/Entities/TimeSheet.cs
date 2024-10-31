@@ -60,7 +60,7 @@ public class TimeSheet : AuditableEntity, IHasTenant, IHasOrganization, ISoftDel
 
     public IReadOnlyCollection<Entry> Entries => _entries;
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
 
     public IEnumerable<Entry> GetEntriesByActivityId(string activityId)

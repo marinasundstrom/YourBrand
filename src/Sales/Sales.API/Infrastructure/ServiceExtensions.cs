@@ -12,7 +12,6 @@ public static class ServiceExtensions
     {
         services.AddCoreServices();
 
-        services.AddScoped<IDateTime, DateTimeService>();
         services.AddScoped<IEmailService, EmailService>();
 
         services.AddDomainInfrastructure(configuration);

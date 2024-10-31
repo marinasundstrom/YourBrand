@@ -33,8 +33,6 @@ public static class ServiceCollectionExtensions
             Console.WriteLine(exc);
         }
 
-        services.AddTransient<IDateTime, DateTimeService>();
-
         services.AddQuartz(configure =>
             {
                 var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));

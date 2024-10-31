@@ -20,7 +20,7 @@ public class OrganizationUser : AuditableEntity, IHasTenant, ISoftDeletable
 
     public UserId UserId { get; set; } = null!;
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

@@ -45,7 +45,7 @@ public class TimeSheetActivity : AuditableEntity, IHasTenant, IHasOrganization, 
 
     // public decimal? HourlyRate { get; set; }
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 

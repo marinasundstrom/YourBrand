@@ -23,7 +23,7 @@ public class ExpenseType : AuditableEntity, IHasTenant, IHasOrganization, ISoftD
 
     public List<Project> Projects { get; set; } = new List<Project>();
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

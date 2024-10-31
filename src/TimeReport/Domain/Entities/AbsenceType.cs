@@ -21,7 +21,7 @@ public class AbsenceType : AuditableEntity, IHasTenant, IHasOrganization, ISoftD
 
     public List<Absence> Absences { get; set; } = new List<Absence>();
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

@@ -56,7 +56,7 @@ public class Team : AuditableEntity, ISoftDeletable, IHasTenant, IHasOrganizatio
 
     public IReadOnlyCollection<ProjectTeam> ProjectTeams => _projectTeams;
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

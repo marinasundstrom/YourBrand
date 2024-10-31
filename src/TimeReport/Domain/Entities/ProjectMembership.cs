@@ -35,7 +35,7 @@ public class ProjectMembership : AuditableEntity, IHasTenant, IHasOrganization, 
     /// </summary>
     public double? RequiredHoursWeekly { get; set; }
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

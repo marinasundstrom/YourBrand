@@ -53,7 +53,7 @@ public class Activity : AuditableEntity, IHasTenant, IHasOrganization, ISoftDele
     /// </summary>
     public decimal? HourlyRate { get; set; }
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

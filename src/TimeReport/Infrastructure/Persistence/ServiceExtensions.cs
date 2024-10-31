@@ -55,8 +55,6 @@ public static class ServiceExtensions
             Console.WriteLine(exc);
         }
 
-        services.AddTransient<IDateTime, DateTimeService>();
-
         return services;
     }
 }

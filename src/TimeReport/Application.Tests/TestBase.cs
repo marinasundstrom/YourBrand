@@ -17,7 +17,7 @@ public class TestBase
     protected readonly IDomainEventDispatcher fakeDomainEventDispatcher;
     protected readonly IUserContext fakeUserContext;
     protected readonly ITenantContext fakeTenantContext;
-    protected readonly IDateTime fakeDateTimeService;
+    protected readonly TimeProvider fakeTimeProvider;
     protected readonly IApiApplicationContext fakeApiApplicationContext;
 
     public TestBase()
@@ -28,8 +28,8 @@ public class TestBase
 
         fakeTenantContext = Substitute.For<ITenantContext>();
 
-        fakeDateTimeService = Substitute.For<IDateTime>();
-        fakeDateTimeService.Now.Returns(x => DateTime.Now);
+        fakeTimeProvider = Substitute.For<TimeProvider>();
+        fakeTimeProvider.GetUtcNow().Returns(x => DateTime.Now);
 
         fakeApiApplicationContext = Substitute.For<IApiApplicationContext>();
         fakeApiApplicationContext.AppId.Returns(x => "Test");

@@ -42,7 +42,7 @@ public class ActivityType : AuditableEntity, IHasTenant, IHasOrganization, ISoft
 
     public List<Activity> Activities { get; set; } = new List<Activity>();
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

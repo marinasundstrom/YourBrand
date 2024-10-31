@@ -13,7 +13,7 @@ namespace YourBrand.Notifications.Infrastructure.Persistence.Interceptors;
 public class AuditableEntitySaveChangesInterceptor(
     ITenantContext tenantContext,
     IUserContext userContext,
-    IDateTime dateTime) : SaveChangesInterceptor
+    TimeProvider timeProvider) : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
@@ -47,19 +47,19 @@ public class AuditableEntitySaveChangesInterceptor(
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.CreatedById = userContext.UserId.GetValueOrDefault();
-                entry.Entity.Created = dateTime.Now;
+                entry.Entity.Created = timeProvider.GetUtcNow();
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
                 entry.Entity.LastModifiedById = userContext.UserId;
-                entry.Entity.LastModified = dateTime.Now;
+                entry.Entity.LastModified = timeProvider.GetUtcNow();
             }
             else if (entry.State == EntityState.Deleted)
             {
                 if (entry.Entity is ISoftDeletable softDelete)
                 {
                     softDelete.DeletedById = userContext.UserId;
-                    softDelete.Deleted = dateTime.Now;
+                    softDelete.Deleted = timeProvider.GetUtcNow();
 
                     entry.State = EntityState.Modified;
                 }

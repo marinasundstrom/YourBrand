@@ -17,7 +17,6 @@ public static class ServiceExtensions
     {
         services.AddPersistence(configuration);
 
-        services.AddScoped<IDateTime, DateTimeService>();
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         services.AddScoped<IEmailService, EmailService>();
 

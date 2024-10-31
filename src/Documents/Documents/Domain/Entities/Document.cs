@@ -62,7 +62,7 @@ public class Document : AuditableEntity, ISoftDeletable, IDeletable, IItem
 
     public DomainEvent GetDeleteEvent() => new DocumentDeleted(Id, string.Empty);
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 }

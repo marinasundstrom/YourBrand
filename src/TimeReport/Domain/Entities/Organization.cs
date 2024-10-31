@@ -74,7 +74,7 @@ public class Organization : AuditableEntity, IOrganization, ISoftDeletable, IHas
 
     public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

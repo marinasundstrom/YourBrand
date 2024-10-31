@@ -27,7 +27,7 @@ public class Expense : AuditableEntity, IHasTenant, IHasOrganization, ISoftDelet
 
     public string? Attachment { get; set; }
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

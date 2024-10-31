@@ -14,7 +14,6 @@ using YourBrand.Carts;
 using YourBrand.Carts.Features.CartsManagement;
 using YourBrand.Carts.Persistence;
 using YourBrand.Carts.Persistence.Interceptors;
-using YourBrand.Carts.Services;
 using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Integration;
@@ -148,8 +147,6 @@ builder.Services
 builder.Services
     .AddUserContext()
     .AddTenantContext();
-
-builder.Services.AddScoped<IDateTime, DateTimeService>();
 
 var app = builder.Build();
 

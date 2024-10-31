@@ -72,7 +72,7 @@ public class Project : AuditableEntity, ISoftDeletable, IHasTenant, IHasOrganiza
 
     public void RemoveTeam(Team team) => _teams.Remove(team);
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

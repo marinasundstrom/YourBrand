@@ -19,7 +19,7 @@ public class User : AuditableEntity, ISoftDeletable, IHasTenant
 
     public string Email { get; set; } = null!;
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 

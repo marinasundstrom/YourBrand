@@ -88,7 +88,7 @@ public class Person : AuditableEntity, ISoftDeletable
 
     public BankAccount? BankAccount { get; set; }
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public string? DeletedBy { get; set; }
 }

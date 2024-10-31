@@ -5,7 +5,7 @@ namespace YourBrand.Domain.Common;
 
 public interface ISoftDeletable
 {
-    DateTime? Deleted { get; set; }
+    DateTimeOffset? Deleted { get; set; }
 
     UserId? DeletedById { get; set; }
 

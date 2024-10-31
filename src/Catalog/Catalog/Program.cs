@@ -20,7 +20,6 @@ using YourBrand.Catalog.Features.ProductManagement.Products;
 using YourBrand.Catalog.Features.ProductManagement.Products.Variants;
 using YourBrand.Catalog.Persistence;
 using YourBrand.Catalog.Persistence.Interceptors;
-using YourBrand.Catalog.Services;
 using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Integration;
@@ -180,8 +179,6 @@ builder.Services.AddScoped<ProductVariantsService>();
 builder.Services
     .AddUserContext()
     .AddTenantContext();
-
-builder.Services.AddScoped<IDateTime, DateTimeService>();
 
 builder.Services.AddAuthenticationServices(builder.Configuration);
 

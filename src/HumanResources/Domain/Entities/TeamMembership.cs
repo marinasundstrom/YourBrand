@@ -25,7 +25,7 @@ public class TeamMembership : AuditableEntity, ISoftDeletable
 
     public string PersonId { get; set; } = null!;
 
-    public DateTime? Deleted { get; set; }
+    public DateTimeOffset? Deleted { get; set; }
 
     public string? DeletedBy { get; set; }
 }
