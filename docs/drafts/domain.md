@@ -2,6 +2,8 @@
 
 This outlines how to add the domain services to your service:
 
+Has not been implemented by all services.
+
 Reference: Sales service
 
 Projects: 
@@ -13,7 +15,24 @@ Projects:
 * SoftDelete*
 * Tenancy*
 
+## Domain objects
+
+Some guidelines for implementing entity types.
+
+Entities should implement ``IEntity`` or derived interfaces, such as ``IAuditableEntity``(for basic auditability).
+
+Entities that emit domain events implement ``IHasDomainEvents``. This makes it so that the background job picks them up.
+
+Users are represented by unique ``UserId``, that converts to a string.
+
+Entities that belong to a particular tenant implements ``IHasTenant``. This works with ``ITenantContext`` and the value is set when the entities are saved.
+
+You can of course create base classes that implement these.
+
 ## Tenancy and Identity
+
+Both TenantId and UserId are passed as claims in the JWT.
+
 
 This adds ``ITenantContext`` and ``IUserContext``:
 
@@ -204,7 +223,7 @@ On the receiving end, the ``ITenantContext`` and ``IUserContext`` services will 
 
 ## SignalR
 
-In the case of SignalR, Tenancy and Identity is not transiently passed. You need to set it manually.
+In the case of SignalR, Tenancy and Identity is not transiently passed. You need to set it manually using the ``ISettableTenantContext`` and ``ISettableUserContext`` services.
 
 Example also shows how to persist data about a connection.
 
