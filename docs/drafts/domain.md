@@ -320,14 +320,30 @@ public sealed class TestHub : Hub<ITestHubClient>, ITestHub
 Also event handler execute outside of a tenant context:
 
 ```csharp
-public record Test(TenantId TenantId, UserId UserId, string Other) : DomainEvent; 
+public record Test(TenantId TenantId, UserId UserId, string Other) : DomainEvent;
 
-public sealed class TestEventHandler(ISettableTenantContext tenantContext, ISettableUserContext userContext, ILogger<TestEventHandler> logger) : IDomainEventHandler<Test>
+public sealed class TestEventHandler : IDomainEventHandler<Test>
 {
+    private readonly ISettableTenantContext _tenantContext;
+    private readonly ISettableUserContext _userContext;
+    private readonly ILogger<TestEventHandler> _logger;
+
+    public TestEventHandler(
+        ISettableTenantContext tenantContext,
+        ISettableUserContext userContext,
+        ILogger<TestEventHandler> logger)
+    {
+        _tenantContext = tenantContext;
+        _userContext = userContext;
+        _logger = logger;
+    }
+
     public async Task Handle(Test notification, CancellationToken cancellationToken)
     {
-tenantContext.SetTenantId(notification.TenantId);
-userContext.SetCurrentUser(notification.User!);
-}
+        _logger.LogInformation("Handling Test event for TenantId: {TenantId} and UserId: {UserId}", notification.TenantId, notification.UserId);
+        
+        _tenantContext.SetTenantId(notification.TenantId);
+        _userContext.SetCurrentUser(notification.UserId);
+    }
 }
 ```
