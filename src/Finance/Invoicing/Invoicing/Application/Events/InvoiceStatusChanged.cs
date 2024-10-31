@@ -29,7 +29,7 @@ public class InvoiceStatusChangedHandler(IInvoicingContext context, InvoiceNumbe
 
         if (invoice is not null)
         {
-            if(notification.OldStatus == 1) 
+            if (notification.OldStatus == 1)
             {
                 await invoice.AssignInvoiceNo(invoiceNumberFetcher, cancellationToken);
 

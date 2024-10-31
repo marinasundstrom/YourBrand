@@ -56,7 +56,8 @@ public sealed class CartsContext(DbContextOptions options, ITenantContext tenant
                 });
             }
             catch (InvalidOperationException exc)
-                when (exc.MatchQueryFilterExceptions(clrType)) {}
+                when (exc.MatchQueryFilterExceptions(clrType))
+            { }
         }
     }
 

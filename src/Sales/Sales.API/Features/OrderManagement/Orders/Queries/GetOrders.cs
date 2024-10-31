@@ -31,7 +31,7 @@ public record GetOrders(string OrganizationId, int[]? Types, int[]? Status, stri
                 var status = request.Status;
                 query = query.Where(x => status.Any(z => z == x.StatusId));
             }
-            else 
+            else
             {
                 query = query.Where(x => x.StatusId != 1);
             }
@@ -69,7 +69,7 @@ public record GetOrders(string OrganizationId, int[]? Types, int[]? Status, stri
                     // For drafts
                     query = query.OrderByDescending(x => x.Created);
                 }
-                else 
+                else
                 {
                     query = query.OrderByDescending(x => x.Date);
                 }

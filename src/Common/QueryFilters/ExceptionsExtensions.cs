@@ -4,7 +4,7 @@ public static class ExceptionsExtensions
 {
     public static bool MatchQueryFilterExceptions(this InvalidOperationException exc, Type clrType)
     {
-        if(exc.Message.Contains("cannot be configured as non-owned because it has already been configured as a owned"))
+        if (exc.Message.Contains("cannot be configured as non-owned because it has already been configured as a owned"))
         {
             Console.WriteLine($"Skipping previously configured owned type: {clrType}");
 

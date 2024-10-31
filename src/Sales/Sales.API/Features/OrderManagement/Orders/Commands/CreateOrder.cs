@@ -51,7 +51,7 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
                     Address = request.BillingDetails.Address.ToAddress()
                 };
 
-                orderBuilder.WithBillingDetails(billingDetails); 
+                orderBuilder.WithBillingDetails(billingDetails);
             }
 
             if (request.ShippingDetails is not null)
@@ -73,16 +73,16 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
             foreach (var orderItem in request.Items)
             {
                 order.AddItem(
-                    orderItem.Description, 
-                    orderItem.ItemId, 
-                    orderItem.UnitPrice, 
-                    orderItem.RegularPrice, 
-                    null, 
-                    null, 
-                    orderItem.Quantity, 
-                    orderItem.Unit, 
+                    orderItem.Description,
+                    orderItem.ItemId,
+                    orderItem.UnitPrice,
+                    orderItem.RegularPrice,
+                    null,
+                    null,
+                    orderItem.Quantity,
+                    orderItem.Unit,
                     orderItem.VatRate,
-                    orderItem.Notes, 
+                    orderItem.Notes,
                     timeProvider);
             }
 

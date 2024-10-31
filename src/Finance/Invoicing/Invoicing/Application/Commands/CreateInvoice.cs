@@ -14,7 +14,7 @@ public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, 
     {
         public async Task<InvoiceDto> Handle(CreateInvoice request, CancellationToken cancellationToken)
         {
-            var invoice = new YourBrand.Invoicing.Domain.Entities.Invoice(request.Date, note: request.Note, 
+            var invoice = new YourBrand.Invoicing.Domain.Entities.Invoice(request.Date, note: request.Note,
                 type: Domain.Enums.InvoiceType.Invoice);
 
             invoice.SetCurrency("SEK");

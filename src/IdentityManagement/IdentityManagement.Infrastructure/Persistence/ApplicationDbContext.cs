@@ -60,7 +60,8 @@ public class ApplicationDbContext(
                 });
             }
             catch (InvalidOperationException exc)
-                when (exc.MatchQueryFilterExceptions(clrType)) {}
+                when (exc.MatchQueryFilterExceptions(clrType))
+            { }
         }
     }
 

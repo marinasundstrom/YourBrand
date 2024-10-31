@@ -57,7 +57,8 @@ public class MarketingContext(
                 });
             }
             catch (InvalidOperationException exc)
-                when (exc.MatchQueryFilterExceptions(clrType)) {}
+                when (exc.MatchQueryFilterExceptions(clrType))
+            { }
         }
     }
 

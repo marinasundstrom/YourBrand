@@ -68,7 +68,8 @@ public class TimeReportContext : DbContext, ITimeReportContext
                 });
             }
             catch (InvalidOperationException exc)
-                when (exc.MatchQueryFilterExceptions(clrType)) {}
+                when (exc.MatchQueryFilterExceptions(clrType))
+            { }
         }
     }
 

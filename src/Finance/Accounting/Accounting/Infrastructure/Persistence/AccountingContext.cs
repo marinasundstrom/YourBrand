@@ -57,8 +57,9 @@ public class AccountingContext(DbContextOptions<AccountingContext> options,
                     builder.AddSoftDeleteFilter();
                 });
             }
-            catch(InvalidOperationException exc)
-                when (exc.MatchQueryFilterExceptions(clrType)) {}
+            catch (InvalidOperationException exc)
+                when (exc.MatchQueryFilterExceptions(clrType))
+            { }
         }
     }
 

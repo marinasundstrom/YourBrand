@@ -41,51 +41,51 @@ var order = OrderBuilder.NewOrder(new OrganizationId("YourOrganization"), true)
 */
 
 public class ShippingDetailsBuilder
+{
+    private readonly string _firstName;
+    private readonly string _lastName;
+    private Address _address = new Address();
+
+    private ShippingDetailsBuilder(string firstName, string lastName)
     {
-        private readonly string _firstName;
-        private readonly string _lastName;
-        private Address _address = new Address();
-
-        private ShippingDetailsBuilder(string firstName, string lastName)
+        if (string.IsNullOrEmpty(firstName))
         {
-            if (string.IsNullOrEmpty(firstName))
-            {
-                throw new ArgumentException($"'{nameof(firstName)}' cannot be null or empty.", nameof(firstName));
-            }
-
-            if (string.IsNullOrEmpty(lastName))
-            {
-                throw new ArgumentException($"'{nameof(lastName)}' cannot be null or empty.", nameof(lastName));
-            }
-
-            _firstName = firstName;
-            _lastName = lastName;
+            throw new ArgumentException($"'{nameof(firstName)}' cannot be null or empty.", nameof(firstName));
         }
 
-        public static ShippingDetailsBuilder NewShippingDetails(string firstName, string lastName)
-            => new ShippingDetailsBuilder(firstName, lastName);
-
-        public ShippingDetailsBuilder WithAddress(Address address)
+        if (string.IsNullOrEmpty(lastName))
         {
-            _address = address ?? throw new ArgumentNullException(nameof(address));
-            return this;
+            throw new ArgumentException($"'{nameof(lastName)}' cannot be null or empty.", nameof(lastName));
         }
 
-        public ShippingDetails Build()
-        {
-            if(_address is null) 
-            {
-                throw new ArgumentNullException(nameof(_address));
-            }
-
-            return new ShippingDetails
-            {
-                FirstName = _firstName,
-                LastName = _lastName,
-                Address = _address
-            };
-        }
+        _firstName = firstName;
+        _lastName = lastName;
     }
+
+    public static ShippingDetailsBuilder NewShippingDetails(string firstName, string lastName)
+        => new ShippingDetailsBuilder(firstName, lastName);
+
+    public ShippingDetailsBuilder WithAddress(Address address)
+    {
+        _address = address ?? throw new ArgumentNullException(nameof(address));
+        return this;
+    }
+
+    public ShippingDetails Build()
+    {
+        if (_address is null)
+        {
+            throw new ArgumentNullException(nameof(_address));
+        }
+
+        return new ShippingDetails
+        {
+            FirstName = _firstName,
+            LastName = _lastName,
+            Address = _address
+        };
+    }
+}
 
 public class AddressBuilder
 {

@@ -1,9 +1,9 @@
 using YourBrand.Catalog.Features.Brands;
 using YourBrand.Catalog.Features.Currencies;
+using YourBrand.Catalog.Features.Producers;
 using YourBrand.Catalog.Features.ProductManagement;
 using YourBrand.Catalog.Features.Stores;
 using YourBrand.Catalog.Features.VatRates;
-using YourBrand.Catalog.Features.Producers;
 
 namespace YourBrand.Catalog.Features;
 

@@ -6,7 +6,7 @@ namespace YourBrand;
 
 public class QueryFilterBuilder
 {
-    List<Expression> _queryFilters = new List<Expression>();
+    readonly List<Expression> _queryFilters = new List<Expression>();
 
     /// <summary>
     /// Constructs a QueryFilterBuilder.

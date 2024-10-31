@@ -305,7 +305,7 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
 
     public async Task AssignInvoiceNo(InvoiceNumberFetcher invoiceNumberFetcher, CancellationToken cancellationToken = default)
     {
-        if(InvoiceNo is not null)
+        if (InvoiceNo is not null)
         {
             throw new InvalidOperationException("Invoice number already set");
         }

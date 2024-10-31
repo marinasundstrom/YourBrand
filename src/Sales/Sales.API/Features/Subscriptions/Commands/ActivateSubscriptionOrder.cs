@@ -40,11 +40,11 @@ public record ActivateSubscriptionOrder(string OrganizationId, string OrderId) :
 
             var orders = subscriptionOrderGenerator.GenerateOrders(order, subscription.StartDate, subscription.EndDate);
 
-            if(order.OrderNo is null) 
+            if (order.OrderNo is null)
             {
                 await order.AssignOrderNo(orderNumberFetcher, cancellationToken);
             }
-            
+
             var orderNo = order.OrderNo.GetValueOrDefault();
 
             foreach (var order2 in orders)

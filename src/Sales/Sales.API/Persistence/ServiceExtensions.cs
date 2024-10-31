@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Auditability;
 using YourBrand.Domain.Persistence;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 using YourBrand.Sales.Persistence.Repositories.Mocks;
-using YourBrand.Auditability;
 
 namespace YourBrand.Sales.Persistence;
 

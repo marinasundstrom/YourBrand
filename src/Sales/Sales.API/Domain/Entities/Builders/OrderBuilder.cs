@@ -39,7 +39,7 @@ public class OrderBuilder
         _typeId = typeId;
         return this;
     }
-    
+
     public OrderBuilder WithCurrency(string currency)
     {
         _currency = currency ?? throw new ArgumentNullException(nameof(currency));

@@ -39,16 +39,16 @@ public sealed record CreateOrderItem(string OrganizationId, string OrderId, stri
             }
 
             var orderItem = order.AddItem(
-                request.Description, 
+                request.Description,
                 request.ProductId,
                 request.UnitPrice,
-                request.RegularPrice, 
-                null, 
-                request.Discount, 
+                request.RegularPrice,
+                null,
+                request.Discount,
                 request.Quantity,
-                request.Unit, 
-                request.VatRate, 
-                request.Notes, 
+                request.Unit,
+                request.VatRate,
+                request.Notes,
                 timeProvider);
 
             orderItem.SubscriptionPlanId = request.SubscriptionPlanId;

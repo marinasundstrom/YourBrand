@@ -29,7 +29,7 @@ public class SubscriptionPlan : AggregateRoot<Guid>, IAuditableEntity<Guid, User
     public string? ItemId { get; set; } // This Subscription belongs to a Product
 
     public SubscriptionSchedule Schedule { get; set; }
-    
+
     public RenewalOption RenewalOption { get; set; }
     public RenewalInterval RenewalCycle { get; set; } = RenewalInterval.Months;
     public int RenewalPeriod { get; set; } = 12; // 12 months for yearly renewals, for example

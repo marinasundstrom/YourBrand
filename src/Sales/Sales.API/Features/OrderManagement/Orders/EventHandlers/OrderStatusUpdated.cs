@@ -48,17 +48,17 @@ public sealed class OrderStatusUpdatedEventHandler(
             logger.LogInformation("Order number was assigned");
         }
 
-       /* if (order.StatusId == (int)OrderStatusEnum.Confirmed)
-        {
-            if (order.Subscription is not null)
-            {
-                logger.LogInformation("Attempting to activate subscription");
+        /* if (order.StatusId == (int)OrderStatusEnum.Confirmed)
+         {
+             if (order.Subscription is not null)
+             {
+                 logger.LogInformation("Attempting to activate subscription");
 
-                await ActivateSubscription(order, cancellationToken);
-            }
+                 await ActivateSubscription(order, cancellationToken);
+             }
 
-            await PostNotification(order, cancellationToken);
-        } */
+             await PostNotification(order, cancellationToken);
+         } */
 
         if (order.AssigneeId is not null && order.LastModifiedById != order.AssigneeId)
         {/*

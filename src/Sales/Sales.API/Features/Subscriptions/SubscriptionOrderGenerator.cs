@@ -77,7 +77,8 @@ public class SubscriptionOrderGenerator(
             foreach (var date in dates)
             {
                 var subOrder = orderFactory.CreateOrder(order)
-                    .AssignSchedule(schedule => {
+                    .AssignSchedule(schedule =>
+                    {
                         schedule.SetPlannedStartDate(date.Start);
                         schedule.SetPlannedEndDate(date.End);
                     });

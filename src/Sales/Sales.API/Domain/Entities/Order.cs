@@ -31,7 +31,7 @@ public class Order : AggregateRoot<string>, IAuditableEntity<string, User>, IHas
         int initialStatus = (int)OrderStatusEnum.Draft,
         Customer? customer = null,
         BillingDetails? billingDetails = null,
-        ShippingDetails? shippingDetails = null, 
+        ShippingDetails? shippingDetails = null,
         Subscription? subscription = null,
         OrderSchedule? schedule = null) : this()
     {
@@ -133,9 +133,9 @@ public class Order : AggregateRoot<string>, IAuditableEntity<string, User>, IHas
 
     public OrderSchedule? Schedule { get; private set; }
 
-    public Order AssignSchedule(Action<OrderSchedule> config) 
+    public Order AssignSchedule(Action<OrderSchedule> config)
     {
-        if(Schedule is not null) 
+        if (Schedule is not null)
         {
             throw new InvalidOperationException("A Schedule has already been assigned. Modify it through the Schedule property.");
         }
@@ -386,7 +386,7 @@ public class Order : AggregateRoot<string>, IAuditableEntity<string, User>, IHas
 
     public DateTimeOffset? LastModified { get; set; }
 
-    public void CopyTo(Order targetOrder, TimeProvider timeProvider, 
+    public void CopyTo(Order targetOrder, TimeProvider timeProvider,
         bool copySubscription = false, bool makeChild = false)
     {
         var order = this;
@@ -403,12 +403,12 @@ public class Order : AggregateRoot<string>, IAuditableEntity<string, User>, IHas
             };
         }
 
-        if(makeChild) 
+        if (makeChild)
         {
             targetOrder.Parent = order;
         }
 
-        if(copySubscription) 
+        if (copySubscription)
         {
             targetOrder.Subscription = this.Subscription;
         }

@@ -75,9 +75,9 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
             await order.AssignOrderNo(orderNumberFetcher, cancellationToken);
 
             var orderItem = order.AddItem(
-                "Foo", request.ProductId, request.Price, request.OriginalPrice, null, null, 1, null, 0.25, request.Notes, 
+                "Foo", request.ProductId, request.Price, request.OriginalPrice, null, null, 1, null, 0.25, request.Notes,
                 timeProvider);
-         
+
             orderItem.Subscription = subscription;
             orderItem.SubscriptionPlan = subscription.Plan;
 

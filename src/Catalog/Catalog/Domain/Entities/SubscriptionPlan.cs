@@ -8,7 +8,7 @@ namespace YourBrand.Catalog.Domain.Entities;
 
 public class SubscriptionPlan : Entity<string>, IHasTenant, IAuditable, ISoftDeletable
 {
-    private SubscriptionPlan() {}
+    private SubscriptionPlan() { }
 
     public SubscriptionPlan(
         string title,
@@ -62,7 +62,7 @@ public class SubscriptionPlan : Entity<string>, IHasTenant, IAuditable, ISoftDel
 
     public double? DiscountPercentage { get; private set; } // Discount percentage
     public decimal? FixedDiscountAmount { get; private set; } // Fixed discount amount
-    
+
     public TrialPeriod Trial { get; private set; } = new TrialPeriod(false, 0);
 
     public decimal GetSubscriptionPrice(decimal basePrice)
@@ -125,7 +125,7 @@ public enum RenewalInterval
 
 public class TrialPeriod
 {
-    private TrialPeriod() {}
+    private TrialPeriod() { }
 
     public TrialPeriod(bool hasTrial, int length, decimal? discountPercentage = null, decimal? fixedDiscountAmount = null)
     {

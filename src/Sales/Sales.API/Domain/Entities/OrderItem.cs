@@ -28,7 +28,7 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
                        string? notes,
                        TimeProvider timeProvider)
     {
-        var orderItem = new OrderItem 
+        var orderItem = new OrderItem
         {
             ProductId = productId,
             Description = description,
@@ -124,7 +124,7 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
         }
         return false;
     }
-    
+
     public double? DiscountRate { get; set; }
 
     public double Quantity { get; set; }
