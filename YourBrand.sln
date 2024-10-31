@@ -467,6 +467,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Auditability.Abstrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Auditability.EFCore", "src\Common\Domain.Auditability.EFCore\Domain.Auditability.EFCore.csproj", "{886579F1-D570-4A9D-AF28-E8DE16F77279}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Addresses", "src\Common\Domain.Addresses\Domain.Addresses.csproj", "{C2E0AEC5-8BDF-49B7-B1FA-AB97A4710BE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1217,6 +1219,10 @@ Global
 		{886579F1-D570-4A9D-AF28-E8DE16F77279}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{886579F1-D570-4A9D-AF28-E8DE16F77279}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{886579F1-D570-4A9D-AF28-E8DE16F77279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2E0AEC5-8BDF-49B7-B1FA-AB97A4710BE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2E0AEC5-8BDF-49B7-B1FA-AB97A4710BE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2E0AEC5-8BDF-49B7-B1FA-AB97A4710BE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2E0AEC5-8BDF-49B7-B1FA-AB97A4710BE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1418,6 +1424,7 @@ Global
 		{4001F7FD-8029-4CB7-A007-C53DDC364613} = {FD153471-710E-48BB-9254-3D8797101BD3}
 		{41DC297D-E41D-40E0-AD11-849783AD0C0E} = {4E115640-4574-4383-9488-F3865DE9D7E9}
 		{886579F1-D570-4A9D-AF28-E8DE16F77279} = {4E115640-4574-4383-9488-F3865DE9D7E9}
+		{C2E0AEC5-8BDF-49B7-B1FA-AB97A4710BE0} = {4E115640-4574-4383-9488-F3865DE9D7E9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F844EC9E-6AEE-4238-921B-05A9DCE3EE16}

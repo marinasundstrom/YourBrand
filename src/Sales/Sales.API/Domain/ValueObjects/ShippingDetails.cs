@@ -1,4 +1,6 @@
 ﻿
+using YourBrand.Domain;
+
 namespace YourBrand.Sales.Domain.ValueObjects;
 
 public record ShippingDetails

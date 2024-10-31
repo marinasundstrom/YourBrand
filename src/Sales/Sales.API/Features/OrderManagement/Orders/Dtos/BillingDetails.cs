@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
+﻿using YourBrand.Domain;
+
+namespace YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 
 public class BillingDetailsDto
 {

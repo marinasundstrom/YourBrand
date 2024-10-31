@@ -36,6 +36,7 @@ public static class ServiceExtensions
 
         services.AddScoped<ISalesContext>(sp => sp.GetRequiredService<SalesContext>());
 
+        services.AddTenancyInterceptor();
         services.AddAuditabilityInterceptor();
 
         RegisterRepositories(services);

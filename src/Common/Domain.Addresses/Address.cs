@@ -1,4 +1,4 @@
-namespace YourBrand.Sales.Domain.ValueObjects;
+namespace YourBrand.Domain;
 
 public record Address
 {

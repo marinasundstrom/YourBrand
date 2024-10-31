@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Domain.Entities.Builders;

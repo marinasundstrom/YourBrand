@@ -13,12 +13,3 @@ public static class DbContextOptionsBuilderExtensions
         return options;
     }
 }
-
-public static class ServiceExtensions
-{
-    public static IServiceCollection AddAuditabilityInterceptor(this IServiceCollection services)
-    {
-        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
-        return services;
-    }
-}

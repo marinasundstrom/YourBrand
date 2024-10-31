@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Sales.Domain.ValueObjects;
+﻿using YourBrand.Domain;
+
+namespace YourBrand.Sales.Domain.ValueObjects;
 
 public record BillingDetails
 {

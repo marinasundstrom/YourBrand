@@ -4,6 +4,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Repositories;

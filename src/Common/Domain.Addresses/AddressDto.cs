@@ -1,7 +1,4 @@
-﻿using YourBrand.Sales.Domain.ValueObjects;
-
-namespace YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
-
+﻿namespace YourBrand.Domain;
 
 // Required Fields
 // Optional Fields

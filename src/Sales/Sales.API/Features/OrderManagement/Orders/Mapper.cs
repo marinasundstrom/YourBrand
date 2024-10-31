@@ -1,4 +1,5 @@
-﻿using YourBrand.Sales.Domain.Entities;
+﻿using YourBrand.Domain;
+using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.ValueObjects;
 using YourBrand.Sales.Features.OrderManagement.Orders.Dtos;
 using YourBrand.Sales.Features.OrderManagement.Organizations;
@@ -95,7 +96,7 @@ public static class Mappings
 
     public static UserInfoDto ToDto2(this User user) => new(user.Id, user.Name);
 
-    public static AddressDto ToDto(this Domain.ValueObjects.Address address) => address.ToDto();
+    public static AddressDto ToDto(this YourBrand.Domain.Address address) => address.ToDto();
 
     public static BillingDetailsDto ToDto(this BillingDetails billingDetails) => new()
     {
