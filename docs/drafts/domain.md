@@ -314,3 +314,18 @@ public sealed class TestHub : Hub<ITestHubClient>, ITestHub
     }
 }
 ```
+
+## Event handlers
+
+Also event handler execute outside of a tenant context:
+
+```csharp
+public sealed class TestEventHandler(ISettableTenantContext tenantContext, ISettableUserContext userContext, ILogger<OrderCreatedEventHandler> logger) : IDomainEventHandler<Test>
+{
+    public async Task Handle(Test notification, CancellationToken cancellationToken)
+    {
+tenantContext.SetTenantId(connectionState.TenantId);
+userContext.SetCurrentUser(Context.User!);
+
+}
+```
