@@ -3,6 +3,7 @@
 using YourBrand.Analytics.Application.Common;
 using YourBrand.Analytics.Infrastructure.Persistence;
 using YourBrand.Analytics.Infrastructure.Persistence.Outbox;
+using YourBrand.Domain;
 
 namespace YourBrand.Analytics.Infrastructure.Idempotence;
 

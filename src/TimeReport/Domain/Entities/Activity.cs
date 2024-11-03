@@ -3,15 +3,13 @@ using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Activity : AuditableEntity, IHasTenant, IHasOrganization, ISoftDeletable
+public class Activity : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
 {
-    protected Activity()
+    public Activity() : base(Guid.NewGuid().ToString())
     {
-
     }
 
     public Activity(string name, ActivityType activityType, string? description)
@@ -52,6 +50,8 @@ public class Activity : AuditableEntity, IHasTenant, IHasOrganization, ISoftDele
     /// Hourly rate. Positive value = Revenue and Negative value = Cost
     /// </summary>
     public decimal? HourlyRate { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

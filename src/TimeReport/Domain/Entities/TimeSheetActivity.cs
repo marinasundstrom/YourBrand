@@ -5,18 +5,16 @@ using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class TimeSheetActivity : AuditableEntity, IHasTenant, IHasOrganization, ISoftDeletable
+public class TimeSheetActivity : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
 {
     private readonly HashSet<Entry> _entries = new HashSet<Entry>();
 
-    public TimeSheetActivity(TimeSheet timeSheet, Project project, Activity activity)
+    public TimeSheetActivity(TimeSheet timeSheet, Project project, Activity activity) : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
         TimeSheet = timeSheet;
         Project = project;
         Activity = activity;
@@ -28,8 +26,6 @@ public class TimeSheetActivity : AuditableEntity, IHasTenant, IHasOrganization, 
     {
 
     }
-
-    public string Id { get; private set; } = null!;
 
     public TenantId TenantId { get; set; }
 
@@ -45,6 +41,7 @@ public class TimeSheetActivity : AuditableEntity, IHasTenant, IHasOrganization, 
 
     // public decimal? HourlyRate { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

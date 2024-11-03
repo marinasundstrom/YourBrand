@@ -25,7 +25,8 @@ public static class ServiceExtensions
             options
                 .UseDomainInterceptors(serviceProvider)
                 .UseTenancyInterceptor(serviceProvider)
-                .UseAuditabilityInterceptor(serviceProvider);
+                .UseAuditabilityInterceptor(serviceProvider)
+                .UseSoftDeleteInterceptor(serviceProvider);
 
 #if DEBUG
             options
@@ -38,6 +39,7 @@ public static class ServiceExtensions
 
         services.AddTenancyInterceptor();
         services.AddAuditabilityInterceptor();
+        services.AddSoftDeleteInterceptor();
 
         RegisterRepositories(services);
 

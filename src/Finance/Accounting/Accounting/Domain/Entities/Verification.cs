@@ -7,10 +7,16 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class Verification : AuditableEntity, IHasTenant, IHasOrganization
+public class Verification : AuditableEntity<string>, IHasTenant, IHasOrganization
 {
-    [Key]
-    public string Id { get; set; } = null!;
+    protected Verification()
+    {
+    }
+
+    public Verification(string id) : base(id)
+    {
+
+    }
 
     public TenantId TenantId { get; set; }
 
@@ -22,9 +28,11 @@ public class Verification : AuditableEntity, IHasTenant, IHasOrganization
 
     public AttachmentType Type { get; set; }
 
+    public int JournalEntryId { get; set; }
+
     public JournalEntry JournalEntry { get; set; } = null!;
 
-    public DateTime Date { get; set; }
+    public DateTimeOffset Date { get; set; }
 
     public string? Description { get; set; }
 

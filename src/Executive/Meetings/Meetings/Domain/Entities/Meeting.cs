@@ -1,4 +1,5 @@
-﻿using YourBrand.Domain;
+﻿using YourBrand.Auditability;
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
 using YourBrand.Tenancy;
@@ -21,7 +22,7 @@ public enum AttendeeAccessLevel
     Select
 }
 
-public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrganization
+public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IHasTenant, IHasOrganization
 {
     readonly HashSet<MeetingAttendee> _attendees = new HashSet<MeetingAttendee>();
 
@@ -29,9 +30,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditable, IHasTenant, IHasOrg
     {
     }
 
-    public Meeting(MeetingId id, string title)
+    public Meeting(MeetingId id, string title) : base(id)
     {
-        Id = id;
         Title = title;
     }
 

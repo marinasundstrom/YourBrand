@@ -10,7 +10,6 @@ public class User : AggregateRoot<UserId>, IAuditableEntity<UserId, User>, IHasT
     public User(UserId id, string name, string email)
         : base(id)
     {
-        Id = id;
         Name = name;
         Email = email;
     }

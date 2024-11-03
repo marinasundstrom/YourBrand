@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.Tenancy;
 using YourBrand.Ticketing.Application.Common;
 

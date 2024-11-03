@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -12,7 +13,7 @@ public enum MinutesState
     Approved          // Minute is finalized and approved for the meeting.
 }
 
-public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrganization
+public class Minutes : AggregateRoot<MinutesId>, IAuditableEntity<MinutesId>, IHasTenant, IHasOrganization
 {
     readonly HashSet<MinutesItem> _items = new HashSet<MinutesItem>();
     readonly HashSet<MinutesAttendee> _attendees = new HashSet<MinutesAttendee>();
@@ -23,9 +24,9 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditable, IHasTenant, IHasOrg
     {
     }
 
-    public Minutes(int id)
+    public Minutes(int id) : base(id)
     {
-        Id = id;
+
     }
 
     public TenantId TenantId { get; set; }

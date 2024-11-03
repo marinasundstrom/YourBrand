@@ -10,6 +10,7 @@ using Quartz;
 
 using YourBrand.Analytics.Infrastructure.Persistence;
 using YourBrand.Analytics.Infrastructure.Persistence.Outbox;
+using YourBrand.Domain;
 
 namespace YourBrand.Analytics.Infrastructure.BackgroundJobs;
 

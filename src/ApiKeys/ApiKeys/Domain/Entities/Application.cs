@@ -5,15 +5,24 @@ using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class Application : AuditableEntity, ISoftDeletable
+public class Application : AuditableEntity<string>, ISoftDeletable
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    protected Application()
+    {
+    }
 
-    public string Name { get; set; } = null!;
-    public string? Description { get; set; } = null!;
+    public Application(string name, string? description) : base(Guid.NewGuid().ToString())
+    {
+        Name = name;
+        Description = description;
+    }
+
+    public string Name { get; private set; } = null!;
+    public string? Description { get; private set; } = null!;
 
     public List<ApiKey> ApiKeys { get; } = new List<ApiKey>();
 
+    public bool IsDeleted { get; set; } = false;
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

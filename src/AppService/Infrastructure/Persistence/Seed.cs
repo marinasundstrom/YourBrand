@@ -22,9 +22,8 @@ public static class Seed
 
         if (!context.Users.Any())
         {
-            context.Users.Add(new User
+            context.Users.Add(new User("api")
             {
-                Id = "api",
                 FirstName = "API",
                 LastName = "User",
                 SSN = "213",
@@ -60,15 +59,7 @@ public static class Seed
 
         foreach (var module in modules)
         {
-            context.Modules.Add(new Module
-            {
-                Id = module.Id,
-                Name = module.Name,
-                Assembly = module.Assembly,
-                Enabled = module.Enabled,
-                Index = i++,
-                DependantOn = module.DependantOn?.ToList() ?? new List<string>()
-            });
+            context.Modules.Add(new Module(module.Id, module.Name, module.Assembly, module.Enabled, i++, module.DependantOn?.ToList() ?? new List<string>()));
         }
 
         await context.SaveChangesAsync();

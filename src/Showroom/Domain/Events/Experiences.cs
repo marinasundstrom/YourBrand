@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.Showroom.Domain.Common;
 
 namespace YourBrand.Showroom.Events.Enums;

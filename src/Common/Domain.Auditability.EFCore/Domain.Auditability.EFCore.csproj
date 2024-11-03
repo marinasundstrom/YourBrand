@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>YourBrand.Auditability</RootNamespace>
+    <AssemblyName>YourBrand.Domain.Auditability.EFCore</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

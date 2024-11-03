@@ -6,9 +6,13 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class PersonProfile : AuditableEntity, IHasTenant, ISoftDeletable
+public class PersonProfile : AuditableEntity<string>, IHasTenant, ISoftDeletable
 {
-    public string Id { get; set; }
+    public PersonProfile()
+        : base(Guid.NewGuid().ToString())
+    {
+
+    }
 
     public TenantId TenantId { get; set; } = null!;
 
@@ -70,6 +74,7 @@ public class PersonProfile : AuditableEntity, IHasTenant, ISoftDeletable
 
     public List<Employment> Employments { get; set; } = new List<Employment>();
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

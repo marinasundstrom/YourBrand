@@ -8,6 +8,7 @@ using Polly.Retry;
 
 using Quartz;
 
+using YourBrand.Domain;
 using YourBrand.Ticketing.Infrastructure.Persistence;
 using YourBrand.Ticketing.Infrastructure.Persistence.Outbox;
 

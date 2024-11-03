@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -61,7 +62,7 @@ public enum VoteActions
     Optional
 }
 
-public class AgendaItem : Entity<AgendaItemId>, IAuditable, IHasTenant, IHasOrganization
+public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, IHasTenant, IHasOrganization
 {
     readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
 

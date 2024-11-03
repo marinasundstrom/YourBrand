@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Domain.Enums;
 

@@ -1,4 +1,5 @@
 ﻿using YourBrand.Customers.Domain.Common;
+using YourBrand.Domain;
 
 namespace YourBrand.Customers.Application.Common.Interfaces;
 

@@ -4,21 +4,18 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Domain.Entities;
 
-public class BrandProfile : AuditableEntity, ISoftDeletable, IHasTenant
+public class BrandProfile : AuditableEntity<string>, ISoftDeletable, IHasTenant
 {
     protected BrandProfile()
     {
 
     }
 
-    public BrandProfile(string name, string? description = null)
+    public BrandProfile(string name, string? description = null) : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
         Name = name;
         Description = description;
     }
-
-    public string Id { get; set; } = null!;
 
     public TenantId TenantId { get; set; } = null!;
 
@@ -30,6 +27,7 @@ public class BrandProfile : AuditableEntity, ISoftDeletable, IHasTenant
 
     public BrandColors Colors { get; set; }
 
+    public bool IsDeleted { get; set; } = false;
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

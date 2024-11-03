@@ -2,11 +2,10 @@ using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Organization : AuditableEntity, IOrganization, ISoftDeletable, IHasTenant
+public class Organization : AuditableEntity<OrganizationId>, IOrganization, ISoftDeletable, IHasTenant
 {
     readonly HashSet<User> _users = new HashSet<User>();
     readonly HashSet<Organization> _subOrganizations = new HashSet<Organization>();
@@ -19,9 +18,8 @@ public class Organization : AuditableEntity, IOrganization, ISoftDeletable, IHas
 
     }
 
-    public Organization(OrganizationId id, string name, string? description)
+    public Organization(OrganizationId id, string name, string? description) : base(id)
     {
-        Id = id;
         Name = name;
         Description = description;
     }
@@ -47,8 +45,6 @@ public class Organization : AuditableEntity, IOrganization, ISoftDeletable, IHas
         project.Organization = this;
     }
 
-    public OrganizationId Id { get; private set; }
-
     public TenantId TenantId { get; set; }
 
     public string Name { get; set; } = null!;
@@ -73,6 +69,8 @@ public class Organization : AuditableEntity, IOrganization, ISoftDeletable, IHas
     public IReadOnlyCollection<ActivityType> ActivityTypes => _activityTypes;
 
     public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

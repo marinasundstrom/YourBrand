@@ -1,4 +1,5 @@
-﻿using YourBrand.Invoicing.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.Invoicing.Domain.Common;
 
 namespace YourBrand.Invoicing.Application.Common.Interfaces;
 

@@ -16,7 +16,6 @@ public record CreateCaseCommand(string? Description, CasePricing? Pricing) : IRe
         {
             var @case = new Domain.Entities.Case
             {
-                Id = Guid.NewGuid().ToString(),
                 Status = Domain.Enums.CaseStatus.Created,
                 Description = request.Description
             };

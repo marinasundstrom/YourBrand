@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using YourBrand.Accounting.Domain.Common;
+using YourBrand.Domain;
 
 namespace YourBrand.Accounting.Application.Common.Models;
 

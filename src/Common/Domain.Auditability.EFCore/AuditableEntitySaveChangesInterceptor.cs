@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 using YourBrand.Domain;
 using YourBrand.Identity;
@@ -9,7 +10,8 @@ namespace YourBrand.Auditability;
 
 public sealed class AuditableEntitySaveChangesInterceptor(
     IUserContext userContext,
-    TimeProvider timeProvider) : SaveChangesInterceptor
+    TimeProvider timeProvider,
+    ILogger<AuditableEntitySaveChangesInterceptor> logger) : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
@@ -35,21 +37,15 @@ public sealed class AuditableEntitySaveChangesInterceptor(
             {
                 entry.Entity.CreatedById = userContext.UserId!;
                 entry.Entity.Created = timeProvider.GetUtcNow();
+
+                logger.LogInformation("Added audit to added entity of type {Type} with id {Id}", entry.Metadata.ClrType.Name, entry.Member("Id").CurrentValue);
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
                 entry.Entity.LastModifiedById = userContext.UserId;
                 entry.Entity.LastModified = timeProvider.GetUtcNow();
-            }
-            else if (entry.State == EntityState.Deleted)
-            {
-                if (entry.Entity is ISoftDeletable softDelete)
-                {
-                    softDelete.DeletedById = userContext.UserId;
-                    softDelete.Deleted = timeProvider.GetUtcNow();
 
-                    entry.State = EntityState.Modified;
-                }
+                logger.LogInformation("Added audit to modified entity of type {Type} with id {Id}", entry.Metadata.ClrType.Name, entry.Member("Id").CurrentValue);
             }
         }
     }

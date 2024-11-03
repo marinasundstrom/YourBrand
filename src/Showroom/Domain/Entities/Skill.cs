@@ -4,9 +4,13 @@ using YourBrand.Showroom.Domain.Common;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class Skill : AuditableEntity, ISoftDeletable
+public class Skill : AuditableEntity<string>, ISoftDeletable
 {
-    public string Id { get; set; } = null!;
+    public Skill()
+        : base(Guid.NewGuid().ToString())
+    {
+
+    }
 
     public SkillArea Area { get; set; } = null!;
 
@@ -15,6 +19,7 @@ public class Skill : AuditableEntity, ISoftDeletable
 
     public string? Description { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

@@ -3,6 +3,7 @@ using Hangfire;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Domain.Events;
 

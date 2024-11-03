@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
@@ -5,7 +6,7 @@ using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class TicketParticipant : Entity<TicketParticipantId>, IAuditable, IHasTenant, IHasOrganization
+public class TicketParticipant : Entity<TicketParticipantId>, IAuditableEntity<TicketParticipantId>, IHasTenant, IHasOrganization
 {
     public TicketParticipant()
         : base(new TicketParticipantId())

@@ -8,6 +8,7 @@ using Polly.Retry;
 
 using Quartz;
 
+using YourBrand.Domain;
 using YourBrand.Meetings.Infrastructure.Persistence;
 using YourBrand.Meetings.Infrastructure.Persistence.Outbox;
 

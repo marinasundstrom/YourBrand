@@ -10,14 +10,17 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
     public void Configure(EntityTypeBuilder<Account> builder)
     {
         builder.ToTable("Accounts");
-        //builder.HasQueryFilter(i => i.Deleted == null);
 
-        builder.HasKey(x => x.AccountNo);
+        builder.HasKey(x => new { x.OrganizationId, x.AccountNo });
 
         builder
             .Property(x => x.AccountNo)
             .ValueGeneratedNever();
 
         builder.HasIndex(x => x.TenantId);
+
+        builder.HasMany(x => x.Entries)
+            .WithOne(x => x.Account)
+            .HasForeignKey(x => new { x.OrganizationId, x.AccountNo });
     }
 }

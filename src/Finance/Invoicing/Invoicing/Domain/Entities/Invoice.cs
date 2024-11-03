@@ -10,16 +10,14 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Invoicing.Domain.Entities;
 
-public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
+public class Invoice : AuditableEntity<string>, IHasTenant, IHasOrganization
 {
     readonly List<InvoiceItem> _items = new List<InvoiceItem>();
 
     private Invoice() { }
 
-    public Invoice(InvoiceType type = InvoiceType.Invoice)
+    public Invoice(InvoiceType type = InvoiceType.Invoice) : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
-
         Type = type;
         StatusId = 1;
 
@@ -27,9 +25,8 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
     }
 
     public Invoice(DateTimeOffset? date, InvoiceType type = InvoiceType.Invoice, int status = 1, string currency = "SEK", string? note = null)
+        : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
-
         IssueDate = date ?? DateTime.Now;
         Type = type;
         StatusId = status;
@@ -38,8 +35,6 @@ public class Invoice : AuditableEntity, IHasTenant, IHasOrganization
 
         AddDomainEvent(new InvoiceCreated(Id));
     }
-
-    public string Id { get; set; }
 
     public TenantId TenantId { get; set; }
 

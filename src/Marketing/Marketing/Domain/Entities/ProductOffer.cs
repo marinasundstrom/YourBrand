@@ -1,8 +1,9 @@
 ﻿using YourBrand.Identity;
+using YourBrand.Marketing.Domain.Common;
 
 namespace YourBrand.Marketing.Domain.Entities;
 
-public class ProductOffer : Entity<string>, IAuditable
+public class ProductOffer : AuditableEntity<string>
 {
 #nullable disable
 

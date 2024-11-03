@@ -7,14 +7,15 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class LedgerEntry : AuditableEntity, IHasTenant, IHasOrganization
+public class LedgerEntry : AuditableEntity<int>, IHasTenant, IHasOrganization
 {
     public LedgerEntry()
     {
 
     }
 
-    public LedgerEntry(DateTime date, Account account, decimal? debit, decimal? credit, string? description)
+    public LedgerEntry(int id, DateTimeOffset date, Account account, decimal? debit, decimal? credit, string? description)
+        : base(id)
     {
         Date = date;
         Account = account;
@@ -23,23 +24,18 @@ public class LedgerEntry : AuditableEntity, IHasTenant, IHasOrganization
         Description = description;
     }
 
-    [Key]
-    public int Id { get; set; }
-
     public TenantId TenantId { get; set; }
 
     public OrganizationId OrganizationId { get; set; }
 
-    public DateTime Date { get; set; } = DateTime.Now;
+    public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;
 
-    public int JournalEntryId { get; set; }
+    public int? JournalEntryId { get; set; }
 
-    [ForeignKey(nameof(JournalEntryId))]
-    public JournalEntry JournalEntry { get; set; } = null!;
+    public JournalEntry? JournalEntry { get; set; }
 
     public int AccountNo { get; set; }
 
-    [ForeignKey(nameof(AccountNo))]
     public Account Account { get; set; } = null!;
 
     public string? Description { get; set; } = null!;

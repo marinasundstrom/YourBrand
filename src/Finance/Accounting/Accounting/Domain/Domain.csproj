@@ -15,9 +15,11 @@
 
   <ItemGroup>
     <ProjectReference
-      Include="..\..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" /><ProjectReference
-      Include="..\..\..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
+      Include="..\..\..\..\Common\Domain\Domain.csproj" />
+
+    <ProjectReference Include="..\..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" /><ProjectReference Include="..\..\..\..\Common\Domain.Auditability.Abstractions\Domain.Auditability.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

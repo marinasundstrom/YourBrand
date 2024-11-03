@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Quartz.Xml.JobSchedulingData20;
 
+using YourBrand.Domain;
 using YourBrand.Invoicing.Application.Common.Interfaces;
 using YourBrand.Invoicing.Contracts;
 using YourBrand.Invoicing.Domain;
@@ -38,10 +39,10 @@ public class InvoiceStatusChangedHandler(IInvoicingContext context, InvoiceNumbe
 
             if (invoice.Status.Id == (int)Domain.Enums.InvoiceStatus.Sent)
             {
-                await publishEndpoint.Publish(new InvoicesBatch(invoice.OrganizationId, new[]
-                {
+                await publishEndpoint.Publish(new InvoicesBatch(invoice.OrganizationId,
+                [
                     new Contracts.Invoice(invoice.OrganizationId, invoice.Id)
-                }));
+                ]));
 
                 var dueDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now.AddDays(30), TimeZoneInfo.Local);
 

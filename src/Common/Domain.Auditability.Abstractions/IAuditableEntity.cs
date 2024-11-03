@@ -18,7 +18,7 @@ public interface IAuditableEntity<TId> : IAuditableEntity, IEntity<TId>
 }
 
 public interface IAuditableEntity<TId, TUser> : IAuditableEntity<TId>
-    where TUser : IEntity<UserId>
+    where TUser : class, IEntity<UserId>
 {
     TUser? CreatedBy { get; set; }
     TUser? LastModifiedBy { get; set; }

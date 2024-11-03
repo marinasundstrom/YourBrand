@@ -42,5 +42,6 @@
     <ProjectReference Include="..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\Domain.Auditability.Abstractions\Domain.Auditability.Abstractions.csproj" />
   </ItemGroup>
 </Project>

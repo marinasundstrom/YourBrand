@@ -8,6 +8,7 @@ using Polly.Retry;
 
 using Quartz;
 
+using YourBrand.Domain;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Showroom.Infrastructure.Persistence;

@@ -6,7 +6,7 @@ using YourBrand.Transactions.Domain.Events;
 
 namespace YourBrand.Transactions.Domain.Entities;
 
-public class Transaction : Entity, IHasTenant, IHasOrganization
+public class Transaction : Entity<string>, IHasTenant, IHasOrganization
 {
     private Transaction()
     {
@@ -14,13 +14,13 @@ public class Transaction : Entity, IHasTenant, IHasOrganization
     }
 
     public Transaction(string? id, OrganizationId organizationId, DateTime date, TransactionStatus status, string? from, string? reference, string currency, decimal amount)
+        : base(id ?? Guid.NewGuid().ToUrlFriendlyString())   
     {
         if (amount <= 0)
         {
             throw new ArgumentException("Amount must be greater than 0.");
         }
 
-        Id = id ?? Guid.NewGuid().ToUrlFriendlyString();
         OrganizationId = organizationId;
         Date = date;
         Status = status;
@@ -31,8 +31,6 @@ public class Transaction : Entity, IHasTenant, IHasOrganization
 
         AddDomainEvent(new TransactionRegistered(Id));
     }
-
-    public string Id { get; set; } = null!;
 
     public TenantId TenantId { get; set; }
 

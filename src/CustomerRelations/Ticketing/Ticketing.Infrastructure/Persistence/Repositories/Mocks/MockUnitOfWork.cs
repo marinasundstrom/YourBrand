@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Ticketing.Infrastructure.Persistence.Repositories.Mocks;
+﻿using YourBrand.Domain;
+
+namespace YourBrand.Ticketing.Infrastructure.Persistence.Repositories.Mocks;
 
 public sealed class MockUnitOfWork(IDomainEventDispatcher domainEventDispatcher) : IUnitOfWork
 {

@@ -22,9 +22,8 @@ public record ReportAbsenceCommand(string OrganizationId, string ProjectId, Date
                 throw new Exception();
             }
 
-            var absence = new Domain.Entities.Absence
+            var absence = new Domain.Entities.Absence()
             {
-                Id = Guid.NewGuid().ToString(),
                 Date = DateOnly.FromDateTime(request.Date),
                 Note = request.Description,
                 Project = project

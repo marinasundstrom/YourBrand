@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.RotRutService.Domain.Common;
 
 namespace YourBrand.RotRutService.Domain.Events;

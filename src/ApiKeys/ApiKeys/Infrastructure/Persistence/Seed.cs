@@ -15,9 +15,8 @@ public static class Seed
 
         if (!context.Users.Any())
         {
-            context.Users.Add(new User
+            context.Users.Add(new User("api")
             {
-                Id = "api",
                 FirstName = "API",
                 LastName = "User",
                 Email = "test@foo.com",
@@ -29,49 +28,35 @@ public static class Seed
 
         if (!context.ApiKeys.Any())
         {
-            var service = new Service
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "IdentityService",
-                Url = "https://localhost:5040/",
-                Secret = "dfEKJnHVikyDT9em6QQZAg"
-            };
+            var service = new Service(
+                "IdentityService",
+                null,
+                "https://localhost:5040/",
+                "dfEKJnHVikyDT9em6QQZAg"
+            );
 
             context.Services.Add(service);
 
-            var service2 = new Service
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "TimeReport",
-                Url = "https://localhost:5174/api/timereport/",
-                Secret = "r9qkLo5BikSwPdhMKNx4EA"
-            };
+            var service2 = new Service(
+                "TimeReport",
+                null,
+                "https://localhost:5174/api/timereport/",
+                "r9qkLo5BikSwPdhMKNx4EA"
+            );
 
             context.Services.Add(service2);
 
-            var service3 = new Service
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "Showroom",
-                Url = "https://localhost:5174/api/showroom/",
-                Secret = "ai9JxJ0Cck+VQPSeoLewlQ"
-            };
+            var service3 = new Service("Showroom", null, "https://localhost:5174/api/showroom/", "secret");
 
             context.Services.Add(service3);
 
-            var application = new Domain.Entities.Application
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "YourBrand"
-            };
+            var application = new Domain.Entities.Application("YourBrand", null);
 
             context.Applications.Add(application);
 
-            var apiKey = new ApiKey
+            var apiKey = new ApiKey("asdsr34#34rswert35234aedae?2!", null)
             {
-                Id = "myKey",
                 Application = application,
-                Key = "asdsr34#34rswert35234aedae?2!",
             };
 
             apiKey.ApiKeyServices.Add(new ApiKeyService

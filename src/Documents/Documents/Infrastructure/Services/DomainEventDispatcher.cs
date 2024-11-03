@@ -2,6 +2,7 @@
 
 using YourBrand.Documents.Application.Common.Interfaces;
 using YourBrand.Documents.Domain.Common;
+using YourBrand.Domain;
 
 namespace YourBrand.Documents.Infrastructure.Services;
 

@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
@@ -5,12 +6,11 @@ using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAuditable, IHasTenant
+public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAuditableEntity<OrganizationId, User>, IHasTenant
 {
     public Organization(OrganizationId id, string name)
         : base(id)
     {
-        Id = id;
         Name = name;
     }
 

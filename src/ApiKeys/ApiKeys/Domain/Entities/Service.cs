@@ -5,9 +5,19 @@ using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class Service : AuditableEntity, ISoftDeletable
+public class Service : AuditableEntity<string>, ISoftDeletableWithAudit<User>
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    protected Service()
+    {
+    }
+
+    public Service(string name, string? description, string url, string secret) : base(Guid.NewGuid().ToString())
+    {
+        Name = name;
+        Description = description;
+        Url = url;
+        Secret = secret;
+    }
 
     public string Name { get; set; } = null!;
     public string? Description { get; set; } = null!;
@@ -18,6 +28,7 @@ public class Service : AuditableEntity, ISoftDeletable
 
     public List<Resource> Resources { get; set; } = new List<Resource>();
 
+    public bool IsDeleted { get; set;}
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

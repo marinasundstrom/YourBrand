@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -5,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenant, IHasOrganization
+public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditableEntity<MeetingGroupId>, IHasTenant, IHasOrganization
 {
     readonly HashSet<MeetingGroupMember> _members = new HashSet<MeetingGroupMember>();
 
@@ -13,9 +14,8 @@ public class MeetingGroup : AggregateRoot<MeetingGroupId>, IAuditable, IHasTenan
     {
     }
 
-    public MeetingGroup(MeetingGroupId id, string name, string? description)
+    public MeetingGroup(MeetingGroupId id, string name, string? description) : base(id)
     {
-        Id = id;
         Name = name;
         Description = description;
     }

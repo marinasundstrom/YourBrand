@@ -1,4 +1,5 @@
 ﻿using YourBrand.Documents.Domain.Common;
+using YourBrand.Domain;
 
 namespace YourBrand.Documents.Domain.Events;
 

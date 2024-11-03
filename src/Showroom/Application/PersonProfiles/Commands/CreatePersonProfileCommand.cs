@@ -18,7 +18,6 @@ public record CreatePersonProfileCommand(CreatePersonProfileDto PersonProfile) :
         {
             var personProfile = new PersonProfile
             {
-                Id = Guid.NewGuid().ToString(),
                 FirstName = request.PersonProfile.FirstName,
                 LastName = request.PersonProfile.LastName,
                 DisplayName = request.PersonProfile.DisplayName,

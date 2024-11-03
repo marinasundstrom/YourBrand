@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -13,7 +14,7 @@ public enum AttendeeRole
     Observer
 }
 
-public class MeetingAttendee : Entity<MeetingAttendeeId>, IAuditable, IHasTenant, IHasOrganization
+public class MeetingAttendee : Entity<MeetingAttendeeId>, IAuditableEntity<MeetingAttendeeId>, IHasTenant, IHasOrganization
 {
     public MeetingAttendee()
         : base(new MeetingAttendeeId())

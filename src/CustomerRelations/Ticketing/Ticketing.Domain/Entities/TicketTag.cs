@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
@@ -5,7 +6,7 @@ using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class TicketTag : AggregateRoot<string>, IAuditable
+public class TicketTag : AggregateRoot<string>, IAuditableEntity<string>
 {
     public TicketTag()
         : base(Guid.NewGuid().ToString())
@@ -16,7 +17,7 @@ public class TicketTag : AggregateRoot<string>, IAuditable
     public TicketTag(string id)
         : base(id)
     {
-        Id = id;
+
     }
 
     public TenantId TenantId { get; set; }

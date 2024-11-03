@@ -36,7 +36,7 @@ public sealed class CartsContext(DbContextOptions options, ITenantContext tenant
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if (!clrType.IsAssignableTo(typeof(Domain.Entities.IAuditable)))
+            if (!clrType.IsAssignableTo(typeof(IEntity)))
             {
                 continue;
             }

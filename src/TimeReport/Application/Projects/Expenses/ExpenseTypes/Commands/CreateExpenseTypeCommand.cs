@@ -25,7 +25,6 @@ public record CreateExpenseTypeCommand(string OrganizationId, string Name, strin
 
             var expenseType = new ExpenseType
             {
-                Id = Guid.NewGuid().ToString(),
                 OrganizationId = request.OrganizationId,
                 Name = request.Name,
                 Description = request.Description,

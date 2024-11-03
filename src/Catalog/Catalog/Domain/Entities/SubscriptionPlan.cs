@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class SubscriptionPlan : Entity<string>, IHasTenant, IAuditable, ISoftDeletable
+public class SubscriptionPlan : Entity<string>, IHasTenant, IAuditableEntity<string>, ISoftDeletable
 {
     private SubscriptionPlan() { }
 
@@ -95,6 +96,7 @@ public class SubscriptionPlan : Entity<string>, IHasTenant, IAuditable, ISoftDel
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 
+    public bool IsDeleted { get; set; } = false;
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
 }

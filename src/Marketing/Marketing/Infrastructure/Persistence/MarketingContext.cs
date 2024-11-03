@@ -37,7 +37,7 @@ public class MarketingContext(
             .GetEntityTypes()
             .Select(entityType => entityType.ClrType))
         {
-            if (!clrType.IsAssignableTo(typeof(Entity)))
+            if (!clrType.IsAssignableTo(typeof(IEntity)))
             {
                 continue;
             }
@@ -81,7 +81,7 @@ public class MarketingContext(
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entities = ChangeTracker
-                        .Entries<Entity>()
+                        .Entries<IHasDomainEvents>()
                         .Where(e => e.Entity.DomainEvents.Any())
                         .Select(e => e.Entity);
 

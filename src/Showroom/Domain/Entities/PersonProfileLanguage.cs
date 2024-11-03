@@ -6,10 +6,8 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class PersonProfileLanguage : AuditableEntity, IHasTenant, ISoftDeletable
+public class PersonProfileLanguage : AuditableEntity<string>, IHasTenant, ISoftDeletable
 {
-    public string Id { get; set; } = null!;
-
     public TenantId TenantId { get; set; } = null!;
 
     //public OrganizationId OrganizationId { get; set; } = null!;
@@ -22,6 +20,7 @@ public class PersonProfileLanguage : AuditableEntity, IHasTenant, ISoftDeletable
 
     public LanguageProficiency LanguageProficiency { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

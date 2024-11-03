@@ -1,9 +1,10 @@
 using YourBrand.Identity;
+using YourBrand.Marketing.Domain.Common;
 using YourBrand.Marketing.Domain.Enums;
 
 namespace YourBrand.Marketing.Domain.Entities;
 
-public class Discount : Entity<string>, IAuditable
+public class Discount : AuditableEntity<string>
 {
 
 #nullable disable

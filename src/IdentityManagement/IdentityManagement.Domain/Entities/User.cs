@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-using YourBrand.IdentityManagement.Domain.Common.Interfaces;
+using YourBrand.Auditability;
+using YourBrand.Domain;
+using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Domain.Entities;
 
 // Add profile data for application persons by adding properties to the ApplicationUser class
-public class User : IdentityUser, IAuditableEntity, ISoftDeletable, IHasTenant
+public class User : IdentityUser, IAuditableEntity, ISoftDeletableWithAudit, IHasTenant
 {
     readonly HashSet<Role> _roles = new HashSet<Role>();
     readonly HashSet<UserRole> _userRoles = new HashSet<UserRole>();
@@ -44,15 +46,17 @@ public class User : IdentityUser, IAuditableEntity, ISoftDeletable, IHasTenant
 
     public DateTimeOffset Created { get; set; }
 
-    public string? CreatedBy { get; set; }
+    public UserId? CreatedById { get; set; }
 
     public DateTimeOffset? LastModified { get; set; }
 
-    public string? LastModifiedBy { get; set; }
+    public UserId? LastModifiedById { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 
-    public string? DeletedBy { get; set; }
+    public UserId? DeletedById { get; set; }
 
     public IReadOnlyCollection<Role> Roles => _roles;
 

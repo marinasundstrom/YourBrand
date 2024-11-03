@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>YourBrand.Tenancy</RootNamespace>
+    <AssemblyName>YourBrand.Tenancy.AspNetCore</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

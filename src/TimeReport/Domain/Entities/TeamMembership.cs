@@ -3,23 +3,19 @@ using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class TeamMembership : AuditableEntity, IHasTenant, IHasOrganization, ISoftDeletable
+public class TeamMembership : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
 {
     protected TeamMembership()
     {
-
     }
 
-    internal TeamMembership(User user)
+    internal TeamMembership(User user) : base(Guid.NewGuid().ToString())
     {
         User = user;
     }
-
-    public string Id { get; set; } = Guid.NewGuid().ToString();
 
     public TenantId TenantId { get; set; }
 
@@ -32,6 +28,8 @@ public class TeamMembership : AuditableEntity, IHasTenant, IHasOrganization, ISo
     public User User { get; set; } = null!;
 
     public UserId UserId { get; set; } = null!;
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

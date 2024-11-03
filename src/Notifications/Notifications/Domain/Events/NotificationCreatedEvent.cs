@@ -1,4 +1,5 @@
-﻿using YourBrand.Notifications.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.Notifications.Domain.Common;
 
 namespace YourBrand.Notifications.Domain.Events;
 

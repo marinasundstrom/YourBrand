@@ -27,7 +27,6 @@ public record UpdateSkillExperiencesCommand(string Id, string PersonProfileSkill
                     {
                         exp.Skills.Add(new Domain.Entities.PersonProfileExperienceSkill()
                         {
-                            Id = Guid.NewGuid().ToString(),
                             PersonProfileExperience = exp,
                             PersonProfileSkill = await context.PersonProfileSkills.FirstAsync(x => x.Id == request.PersonProfileSkillId, cancellationToken),
                         });

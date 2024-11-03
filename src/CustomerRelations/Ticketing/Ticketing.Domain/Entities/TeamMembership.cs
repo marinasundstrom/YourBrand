@@ -1,11 +1,12 @@
 ﻿
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class TeamMembership : Entity<string>, IAuditable, IHasTenant, IHasOrganization, ISoftDeletable
+public class TeamMembership : Entity<string>, IAuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
 {
     protected TeamMembership()
     {
@@ -36,6 +37,7 @@ public class TeamMembership : Entity<string>, IAuditable, IHasTenant, IHasOrgani
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

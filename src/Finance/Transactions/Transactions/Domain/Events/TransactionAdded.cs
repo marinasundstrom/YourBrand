@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.Transactions.Domain.Common;
 
 namespace YourBrand.Transactions.Domain.Events;

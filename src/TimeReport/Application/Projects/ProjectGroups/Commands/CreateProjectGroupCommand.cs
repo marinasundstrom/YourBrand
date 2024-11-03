@@ -23,9 +23,8 @@ public record CreateProjectGroupCommand(string OrganizationId, string Name, stri
             }
             */
 
-            var projectGroup = new ProjectGroup
+            var projectGroup = new ProjectGroup()
             {
-                Id = Guid.NewGuid().ToString(),
                 OrganizationId = request.OrganizationId,
                 Name = request.Name,
                 Description = request.Description,

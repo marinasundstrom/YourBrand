@@ -1,31 +1,31 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
+using YourBrand.Domain;
+
 namespace YourBrand.Analytics.Domain.Entities;
 
-public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
+public abstract class Entity<TId> : IEntity<TId>, IEquatable<Entity<TId>>,  IHasDomainEvents
     where TId : notnull
 {
-    private readonly HashSet<DomainEvent> domainEvents = new HashSet<DomainEvent>();
+    private readonly List<DomainEvent> domainEvents = new List<DomainEvent>();
 
-#nullable disable
+ #nullable disable
 
-    protected Entity()
-    {
-
-    }
+    protected Entity() { }
 
 #nullable restore
 
     protected Entity(TId id)
     {
-        Id = id;
+        Id = id ?? throw new ArgumentNullException(nameof(id), "Id cannot be null.");
     }
 
-    public TId Id { get; protected set; }
+    public TId Id { get; private set; }
 
     public override bool Equals(object? obj)
     {
-        return obj is Entity<TId> entity && Id.Equals(entity.Id);
+        if (obj is not Entity<TId> entity) return false;
+        return Id.Equals(entity.Id);
     }
 
     public static bool operator ==(Entity<TId>? left, Entity<TId>? right)
@@ -40,20 +40,34 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
 
     public bool Equals(Entity<TId>? other)
     {
-        return Equals((object?)other);
+        if (other is null) return false;
+        return Id.Equals(other.Id);
     }
 
     public override int GetHashCode()
     {
-        return Id.GetHashCode();
+        return Id?.GetHashCode() ?? 0;
     }
 
     [NotMapped]
-    public IReadOnlyCollection<DomainEvent> DomainEvents => domainEvents;
+    public IReadOnlyCollection<DomainEvent> DomainEvents => domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(DomainEvent domainEvent) => domainEvents.Add(domainEvent);
+    public void AddDomainEvent(DomainEvent domainEvent)
+    {
+        if (domainEvent == null) throw new ArgumentNullException(nameof(domainEvent), "Domain event cannot be null.");
+        domainEvents.Add(domainEvent);
+    }
 
-    public void RemoveDomainEvent(DomainEvent domainEvent) => domainEvents.Remove(domainEvent);
+    public void RemoveDomainEvent(DomainEvent domainEvent)
+    {
+        if (domainEvent == null) throw new ArgumentNullException(nameof(domainEvent), "Domain event cannot be null.");
+        domainEvents.Remove(domainEvent);
+    }
 
     public void ClearDomainEvents() => domainEvents.Clear();
+
+    public override string ToString()
+    {
+        return $"{GetType().Name} [Id={Id}]";
+    }
 }

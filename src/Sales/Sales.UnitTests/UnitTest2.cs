@@ -1,5 +1,6 @@
 ﻿using NSubstitute;
 
+using YourBrand.Domain;
 using YourBrand.Sales.Domain.Entities;
 using YourBrand.Sales.Domain.Entities.Builders;
 using YourBrand.Sales.Domain.Enums;
@@ -30,7 +31,7 @@ public class UnitTest2
                 LastName = "Testsson",
                 SSN = "12345",
                 Email = "test@email.com",
-                Address = new Sales.Domain.ValueObjects.Address
+                Address = new Address
                 {
                     Street = "Testgatan 1",
                     PostalCode = "12345",
@@ -41,7 +42,7 @@ public class UnitTest2
             {
                 FirstName = "Test",
                 LastName = "Testsson",
-                Address = new Sales.Domain.ValueObjects.Address
+                Address = new Address
                 {
                     Street = "Testgatan 1",
                     PostalCode = "12345",

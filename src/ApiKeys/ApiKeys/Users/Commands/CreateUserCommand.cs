@@ -21,9 +21,8 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
                 return new UserDto(user.Id, user.FirstName, user.LastName, user.DisplayName, user.Email, user.Created, user.LastModified);
             }
 
-            user = new User
+            user = new User(request.Id ?? Guid.NewGuid().ToString())
             {
-                Id = request.Id ?? Guid.NewGuid().ToString(),
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 DisplayName = request.DisplayName,

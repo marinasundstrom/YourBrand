@@ -60,14 +60,16 @@ public record CreateProductVariant(string OrganizationId, int ProductId, CreateP
             }
             catch { }
 
-            var variant = new Domain.Entities.Product()
+            var variant = new Domain.Entities.Product
+                (request.OrganizationId,
+                productId,
+                request.Data.Name)
             {
                 OrganizationId = request.OrganizationId,
                 Name = request.Data.Name,
                 Handle = request.Data.Handle,
                 Description = request.Data.Description ?? string.Empty
             };
-            variant.SetId(productId);
 
             product.AddVariant(variant);
 

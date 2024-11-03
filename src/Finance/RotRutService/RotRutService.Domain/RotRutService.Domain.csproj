@@ -11,7 +11,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Invoicing\Invoicing.Client\Invoicing.Client.csproj" />
     <ProjectReference Include="..\..\Formulas\Formulas.csproj" />
+    <ProjectReference Include="..\..\..\Common\Domains\Domain.csproj" />
     <ProjectReference Include="..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Common\Domain.Auditability.Abstractions\Domain.Auditability.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

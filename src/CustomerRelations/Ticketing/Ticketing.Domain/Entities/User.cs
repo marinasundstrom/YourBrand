@@ -1,10 +1,11 @@
+using YourBrand.Auditability;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
+public class User : AggregateRoot<UserId>, IAuditableEntity<UserId>, IHasTenant
 {
     readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
     readonly HashSet<TeamMembership> _teamMemberships = new HashSet<TeamMembership>();
@@ -14,7 +15,6 @@ public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
     public User(UserId id, string name, string email)
         : base(id)
     {
-        Id = id;
         Name = name;
         Email = email;
     }

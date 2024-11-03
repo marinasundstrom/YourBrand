@@ -3,9 +3,13 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class Employment : AuditableEntity, IHasTenant
+public class Employment : AuditableEntity<string>, IHasTenant
 {
-    public string Id { get; set; } = null!;
+    public Employment()
+        : base(Guid.NewGuid().ToString())
+    {
+
+    }
 
     public TenantId TenantId { get; set; } = null!;
 

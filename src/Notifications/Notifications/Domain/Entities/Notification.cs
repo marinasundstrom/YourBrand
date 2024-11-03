@@ -5,20 +5,22 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Notifications.Domain.Entities;
 
-public class Notification : AuditableEntity, IHasTenant, ISoftDeletable
+public class Notification : AuditableEntity<string>, IHasTenant, ISoftDeletable
 {
     public Notification()
     {
 
     }
 
-    public Notification(string title, string text)
+    public Notification(string id) : base(id)
     {
-        Id = Guid.NewGuid().ToString();
-        Content = text;
+
     }
 
-    public string Id { get; set; } = null!;
+    public Notification(string title, string text) : base(Guid.NewGuid().ToString())
+    {
+        Content = text;
+    }
 
     public TenantId TenantId { get; set; }
 
@@ -42,6 +44,7 @@ public class Notification : AuditableEntity, IHasTenant, ISoftDeletable
 
     public string? ScheduledJobId { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
 }

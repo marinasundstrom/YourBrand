@@ -23,7 +23,6 @@ public record CreateUserCommand(string? Id, string FirstName, string LastName, s
 
             user = new User
             {
-                Id = request.Id ?? Guid.NewGuid().ToString(),
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 DisplayName = request.DisplayName,

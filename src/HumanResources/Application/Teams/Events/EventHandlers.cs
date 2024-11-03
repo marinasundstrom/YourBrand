@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Events;
 

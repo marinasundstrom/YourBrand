@@ -4,6 +4,7 @@ using YourBrand.Customers.Application.Common.Interfaces;
 using YourBrand.Customers.Domain.Common;
 using YourBrand.Customers.Infrastructure.Persistence;
 using YourBrand.Customers.Infrastructure.Persistence.Outbox;
+using YourBrand.Domain;
 
 namespace YourBrand.Customers.Infrastructure.Idempotence;
 

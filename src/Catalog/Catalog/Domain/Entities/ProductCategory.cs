@@ -10,9 +10,9 @@ public sealed class ProductCategory : Entity<int>, IHasTenant, IHasOrganization,
 
     public ProductCategory() { }
 
-    public ProductCategory(int id)
+    public ProductCategory(int id) : base(id)
     {
-        Id = id;
+
     }
 
     public ProductCategory(string name)

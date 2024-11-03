@@ -3,21 +3,19 @@ using YourBrand.Inventory.Domain.Enums;
 
 namespace YourBrand.Inventory.Domain.Entities;
 
-public class Item : AuditableEntity
+public class Item : AuditableEntity<string>
 {
     protected Item() { }
 
     public Item(string id, string name, ItemType type, string gtin, string groupId, string unit)
+        : base(id)
     {
-        Id = id;
         Name = name;
         Type = type;
         GTIN = gtin;
         GroupId = groupId;
         Unit = unit;
     }
-
-    public string Id { get; set; }
 
     public string Name { get; set; } = null!;
 

@@ -11,7 +11,7 @@ using YourBrand.Sales.Domain.ValueObjects;
 
 namespace YourBrand.Sales.Domain.Entities;
 
-public class Subscription : AggregateRoot<Guid>, IAuditableEntity<Guid, User>, ISoftDeletable, ISubscriptionParameters, IHasTenant, IHasOrganization
+public class Subscription : AggregateRoot<Guid>, IAuditableEntity<Guid, User>, ISoftDeletableWithAudit<User>, ISubscriptionParameters, IHasTenant, IHasOrganization
 {
     public Subscription() : base(Guid.NewGuid())
     {
@@ -654,8 +654,11 @@ public class Subscription : AggregateRoot<Guid>, IAuditableEntity<Guid, User>, I
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
+    public User? DeletedBy { get; set; }
+
 }
 
 public sealed record SubscriptionActivated(TenantId TenantId, OrganizationId OrganizationId, Guid SubscriptionId) : DomainEvent;

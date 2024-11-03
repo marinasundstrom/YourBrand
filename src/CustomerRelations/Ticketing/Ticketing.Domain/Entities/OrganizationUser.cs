@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
@@ -5,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class OrganizationUser : AggregateRoot<string>, IAuditable
+public class OrganizationUser : AggregateRoot<string>, IAuditableEntity<string>
 {
     public OrganizationUser()
         : base(Guid.NewGuid().ToString())
@@ -16,7 +17,7 @@ public class OrganizationUser : AggregateRoot<string>, IAuditable
     public OrganizationUser(string id)
         : base(id)
     {
-        Id = id;
+
     }
 
     public OrganizationId OrganizationId { get; set; }

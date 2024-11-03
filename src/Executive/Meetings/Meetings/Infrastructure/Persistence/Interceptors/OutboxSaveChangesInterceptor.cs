@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using Newtonsoft.Json;
 
+using YourBrand.Domain;
 using YourBrand.Meetings.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Meetings.Infrastructure.Persistence.Interceptors;

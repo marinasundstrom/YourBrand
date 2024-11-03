@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>YourBrand.Domain</RootNamespace>
+    <AssemblyName>YourBrand.SoftDelete.EFCore</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

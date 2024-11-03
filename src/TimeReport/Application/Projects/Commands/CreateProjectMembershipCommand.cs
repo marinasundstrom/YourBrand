@@ -45,7 +45,6 @@ public record CreateProjectMembershipCommand(string OrganizationId, string Proje
 
             var m = new ProjectMembership()
             {
-                Id = Guid.NewGuid().ToString(),
                 OrganizationId = request.OrganizationId,
                 Project = project,
                 User = user,

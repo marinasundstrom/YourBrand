@@ -1,4 +1,5 @@
-﻿using YourBrand.RotRutService.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.RotRutService.Domain.Common;
 
 namespace YourBrand.RotRutService.Application.Common.Interfaces;
 

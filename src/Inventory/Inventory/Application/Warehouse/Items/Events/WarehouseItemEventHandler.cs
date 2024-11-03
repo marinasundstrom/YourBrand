@@ -2,6 +2,7 @@ using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Inventory.Application.Common.Interfaces;
 using YourBrand.Inventory.Contracts;

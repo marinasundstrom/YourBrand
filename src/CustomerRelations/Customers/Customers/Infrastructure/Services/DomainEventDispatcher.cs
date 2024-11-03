@@ -2,6 +2,7 @@
 
 using YourBrand.Customers.Application.Common.Interfaces;
 using YourBrand.Customers.Domain.Common;
+using YourBrand.Domain;
 
 namespace YourBrand.Customers.Infrastructure.Services;
 

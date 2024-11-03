@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
+using YourBrand.Domain;
+
 namespace YourBrand.Customers.Domain.Common;
 
 public abstract class Entity

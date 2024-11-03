@@ -6,9 +6,17 @@ using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class ApiKey : AuditableEntity, ISoftDeletable
+public class ApiKey : AuditableEntity<string>, ISoftDeletable
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    protected ApiKey()
+    {
+    }
+
+    public ApiKey(string key, string? description) : base(Guid.NewGuid().ToString())
+    {
+        Key = key;
+        Description = description;
+    }
 
     public string Key { get; set; } = null!;
     public string? Description { get; set; } = null!;
@@ -19,6 +27,7 @@ public class ApiKey : AuditableEntity, ISoftDeletable
 
     public ApiKeyStatus Status { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

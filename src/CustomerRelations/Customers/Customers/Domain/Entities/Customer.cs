@@ -1,17 +1,13 @@
-﻿using YourBrand.Customers.Domain.Enums;
+﻿using YourBrand.Customers.Domain.Common;
+using YourBrand.Customers.Domain.Enums;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Customers.Domain.Entities;
 
-public abstract class Customer : AggregateRoot<int>, IAuditable, IHasTenant
+public abstract class Customer : AuditableEntity<int>, IHasTenant
 {
     readonly HashSet<Address> _addresses = new HashSet<Address>();
-
-    public Customer() : base()
-    {
-
-    }
 
     public TenantId TenantId { get; set; }
 

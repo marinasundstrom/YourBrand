@@ -5,9 +5,13 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class PersonProfileIndustryExperiences : AuditableEntity, IHasTenant, ISoftDeletable
+public class PersonProfileIndustryExperiences : AuditableEntity<string>, IHasTenant, ISoftDeletable
 {
-    public string Id { get; set; } = null!;
+    public PersonProfileIndustryExperiences()
+        : base(Guid.NewGuid().ToString())
+    {
+
+    }
 
     public TenantId TenantId { get; set; } = null!;
 
@@ -20,6 +24,8 @@ public class PersonProfileIndustryExperiences : AuditableEntity, IHasTenant, ISo
     public int IndustryId { get; set; }
 
     public int Years { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     public UserId? DeletedById { get; set; }
 

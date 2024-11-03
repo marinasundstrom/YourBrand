@@ -13,9 +13,8 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
     {
     }
 
-    public Ticket(int id, string subject, string? description)
+    public Ticket(int id, string subject, string? description) : base(id)
     {
-        Id = id;
         Subject = subject;
         Description = description;
     }

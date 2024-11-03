@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>YourBrand.Integration</RootNamespace>
+    <AssemblyName>YourBrand.Integration.MassTransit</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

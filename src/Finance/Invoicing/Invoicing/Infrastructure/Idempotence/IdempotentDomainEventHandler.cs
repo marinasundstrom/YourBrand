@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Invoicing.Application.Common.Interfaces;
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Infrastructure.Persistence;

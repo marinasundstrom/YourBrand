@@ -26,7 +26,6 @@ public record CreateExpenseCommand(string OrganizationId, string ProjectId, Date
 
             var expense = new Expense
             {
-                Id = Guid.NewGuid().ToString(),
                 OrganizationId = request.OrganizationId,
                 ExpenseType = await context.ExpenseTypes.FirstAsync(et => et.Id == request.ExpenseTypeId),
                 Date = DateOnly.FromDateTime(request.Date),

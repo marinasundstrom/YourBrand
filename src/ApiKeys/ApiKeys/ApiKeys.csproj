@@ -42,10 +42,12 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\YourBrand.ServiceDefaults\YourBrand.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
     <ProjectReference Include="..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
     <ProjectReference Include="..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
+    <ProjectReference Include="..\..\Common\Domain.Auditability.Abstractions\Domain.Auditability.Abstractions.csproj" />
     
   </ItemGroup>
 

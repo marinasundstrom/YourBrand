@@ -3,26 +3,16 @@ using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ActivityType : AuditableEntity, IHasTenant, IHasOrganization, ISoftDeletable
+public class ActivityType : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
 {
-
-    protected ActivityType()
+    public ActivityType(string name, string? description) : base(Guid.NewGuid().ToString())
     {
-
-    }
-
-    public ActivityType(string name, string? description)
-    {
-        Id = Guid.NewGuid().ToString();
         Name = name;
         Description = description;
     }
-
-    public string Id { get; set; } = null!;
 
     public TenantId TenantId { get; set; }
 
@@ -41,6 +31,8 @@ public class ActivityType : AuditableEntity, IHasTenant, IHasOrganization, ISoft
     public bool ExcludeHours { get; set; }
 
     public List<Activity> Activities { get; set; } = new List<Activity>();
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

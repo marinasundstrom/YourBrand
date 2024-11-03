@@ -1,5 +1,6 @@
 //using YourBrand.RotRutService.Domain.Events;
 
+using YourBrand.Domain;
 using YourBrand.RotRutService.Application.Common.Interfaces;
 //using YourBrand.RotRutService.Contracts;
 using YourBrand.RotRutService.Domain.Events;

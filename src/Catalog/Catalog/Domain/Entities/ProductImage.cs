@@ -7,9 +7,8 @@ public class ProductImage : Entity<string>, IHasTenant, IHasOrganization, IHasSt
 {
     public ProductImage() { }
 
-    public ProductImage(string title, string text, string url)
+    public ProductImage(string title, string text, string url) : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
         Title = title;
         Text = text;
         Url = url;

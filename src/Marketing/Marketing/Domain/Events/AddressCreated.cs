@@ -1,3 +1,5 @@
+using YourBrand.Domain;
+
 namespace YourBrand.Marketing.Domain.Events;
 
 public record AddressCreated : DomainEvent

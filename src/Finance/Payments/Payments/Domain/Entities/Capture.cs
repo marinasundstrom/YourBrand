@@ -4,7 +4,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Payments.Domain.Entities;
 
-public class Capture : Entity, IHasTenant, IHasOrganization
+public class Capture : Entity<string>, IHasTenant, IHasOrganization
 {
     private Capture()
     {
@@ -12,14 +12,12 @@ public class Capture : Entity, IHasTenant, IHasOrganization
     }
 
     public Capture(DateTime date, decimal amount, string? transactionId)
+     : base(Guid.NewGuid().ToString())
     {
-        Id = Guider.ToUrlFriendlyString(Guid.NewGuid());
         Date = date;
         Amount = amount;
         TransactionId = transactionId;
     }
-
-    public string Id { get; private set; } = null!;
 
     public TenantId TenantId { get; set; }
 

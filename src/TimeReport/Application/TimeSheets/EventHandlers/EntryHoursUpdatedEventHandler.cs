@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
+using YourBrand.Domain;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Events;
 

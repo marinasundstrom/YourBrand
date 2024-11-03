@@ -13,9 +13,8 @@ public sealed class TicketCategory : Entity<int>, IHasTenant, IHasOrganization
 
     }
 
-    public TicketCategory(int id, string name) : base()
+    public TicketCategory(int id, string name) : base(id)
     {
-        Id = id;
         Name = name;
     }
 

@@ -6,9 +6,13 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class Case : AuditableEntity, IHasTenant, ISoftDeletable
+public class Case : AuditableEntity<string>, IHasTenant, ISoftDeletable
 {
-    public string Id { get; set; } = null!;
+    public Case()
+        : base(Guid.NewGuid().ToString())
+    {
+
+    }
 
     public TenantId TenantId { get; set; } = null!;
 
@@ -22,19 +26,19 @@ public class Case : AuditableEntity, IHasTenant, ISoftDeletable
 
     public CasePricing Pricing { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }
 }
 
-public class Location : AuditableEntity, ISoftDeletable
+public class Location : AuditableEntity<string>, ISoftDeletable
 {
-    public string Id { get; set; } = null!;
-
     public string? CityOrDistrict { get; set; }
 
     public string? Country { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

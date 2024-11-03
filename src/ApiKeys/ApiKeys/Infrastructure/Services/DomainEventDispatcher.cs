@@ -3,6 +3,7 @@ using MediatR;
 
 using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Domain.Common;
+using YourBrand.Domain;
 
 namespace YourBrand.ApiKeys.Infrastructure.Services;
 

@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -23,7 +24,7 @@ public enum OperativeAction
     Elects
 }
 
-public class MotionOperativeClause : Entity<MotionOperativeClauseId>, IAuditable, IHasTenant, IHasOrganization
+public class MotionOperativeClause : Entity<MotionOperativeClauseId>, IAuditableEntity<MotionOperativeClauseId>, IHasTenant, IHasOrganization
 {
     public MotionOperativeClause(OperativeAction action, string text)
     : base(new MotionOperativeClauseId())

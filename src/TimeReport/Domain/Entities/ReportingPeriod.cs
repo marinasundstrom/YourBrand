@@ -6,13 +6,12 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ReportingPeriod : AuditableEntity, IHasTenant, IHasOrganization
+public class ReportingPeriod : AuditableEntity<string>, IHasTenant, IHasOrganization
 {
     private readonly HashSet<Entry> _entries = new HashSet<Entry>();
 
-    public ReportingPeriod(User user, int year, int month)
+    public ReportingPeriod(User user, int year, int month) : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
         User = user;
         Year = year;
         Month = month;
@@ -22,8 +21,6 @@ public class ReportingPeriod : AuditableEntity, IHasTenant, IHasOrganization
     internal ReportingPeriod()
     {
     }
-
-    public string Id { get; set; } = null!;
 
     public TenantId TenantId { get; set; }
 

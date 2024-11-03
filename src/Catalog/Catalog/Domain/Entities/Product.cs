@@ -37,10 +37,9 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
         Handle = handle ?? throw new ArgumentNullException(nameof(handle));
     }
 
-    public Product(OrganizationId organizationId, int id, string name)
+    public Product(OrganizationId organizationId, int id, string name) : base(id)
     {
         OrganizationId = organizationId;
-        Id = id;
         Name = name;
     }
 
@@ -73,8 +72,6 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
         if (regularPrice.HasValue && price >= regularPrice)
             throw new ArgumentException("Price cannot be greater than or equal to Regular Price.");
     }
-
-    public void SetId(int id) => Id = id;
 
     public TenantId TenantId { get; set; }
 

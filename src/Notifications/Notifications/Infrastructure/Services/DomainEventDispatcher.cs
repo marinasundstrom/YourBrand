@@ -1,5 +1,6 @@
 ﻿using MediatR;
 
+using YourBrand.Domain;
 using YourBrand.Notifications.Application.Common.Interfaces;
 using YourBrand.Notifications.Domain.Common;
 

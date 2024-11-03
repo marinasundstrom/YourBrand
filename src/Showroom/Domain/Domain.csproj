@@ -15,6 +15,8 @@
     <ProjectReference Include="..\..\Common\SoftDelete.Abstractions\SoftDelete.Abstractions.csproj" />
     <ProjectReference
       Include="..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
+    <ProjectReference
+      Include="..\..\Common\Domain.Auditability.Abstractions\Domain.Auditability.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

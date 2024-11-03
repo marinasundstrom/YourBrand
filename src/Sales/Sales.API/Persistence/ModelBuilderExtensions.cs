@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Auditability;
 using YourBrand.Domain;
 
 namespace YourBrand.Sales.Persistence;
@@ -29,7 +30,8 @@ public static class ModelBuilderExtensions
 
             entityTypeBuilder
                 .AddTenantIndex()
-                .AddOrganizationIndex();
+                .AddOrganizationIndex()
+                .AddSoftDeleteIndex();
 
             try
             {

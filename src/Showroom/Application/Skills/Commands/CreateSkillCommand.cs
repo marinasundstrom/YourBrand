@@ -18,7 +18,6 @@ public record CreateSkillCommand(string Name, string SkillAreaId) : IRequest<Ski
 
             skill = new Domain.Entities.Skill
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = request.Name,
                 Slug = "",
                 Area = await context.SkillAreas.FirstAsync(x => x.Id == request.SkillAreaId, cancellationToken)

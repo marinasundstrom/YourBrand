@@ -1,4 +1,5 @@
-﻿using YourBrand.Marketing.Domain;
+﻿using YourBrand.Domain;
+using YourBrand.Marketing.Domain;
 
 namespace YourBrand.Marketing.Application.Common.Interfaces;
 

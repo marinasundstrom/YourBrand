@@ -1,14 +1,14 @@
+using YourBrand.Auditability;
 using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Domain.Entities;
 
-public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
+public class User : AggregateRoot<UserId>, IAuditableEntity<UserId>, IHasTenant
 {
     public User(UserId id, string name, string email)
         : base(id)
     {
-        Id = id;
         Name = name;
         Email = email;
     }

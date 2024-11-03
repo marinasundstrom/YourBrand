@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Events.Enums;
 
@@ -48,7 +49,6 @@ public class ExperienceHandler(IShowroomContext context) : IDomainEventHandler<E
         {
             pfie = new Domain.Entities.PersonProfileIndustryExperiences()
             {
-                Id = Guid.NewGuid().ToString(),
                 PersonProfile = await context.PersonProfiles.FirstAsync(x => x.Id == personProfileId, cancellationToken)
             };
             context.PersonProfileIndustryExperiences.Add(pfie);

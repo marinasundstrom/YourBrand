@@ -1,5 +1,6 @@
 ﻿using MediatR;
 
+using YourBrand.Domain;
 using YourBrand.RotRutService.Application.Common.Interfaces;
 using YourBrand.RotRutService.Domain.Common;
 

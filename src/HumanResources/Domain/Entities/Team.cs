@@ -3,7 +3,7 @@ using YourBrand.HumanResources.Domain.Events;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 
-public class Team : AuditableEntity
+public class Team : AuditableEntity<string>
 {
     readonly HashSet<Person> _members = new HashSet<Person>();
     readonly HashSet<TeamMembership> _memberships = new HashSet<TeamMembership>();
@@ -12,16 +12,14 @@ public class Team : AuditableEntity
     {
     }
 
-    public Team(string name, string? description)
+    public Team(string name, string? description) 
+        : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
         Name = name;
         Description = description;
 
         AddDomainEvent(new TeamCreated(Id));
     }
-
-    public string Id { get; private set; }
 
     public string Name { get; private set; }
 

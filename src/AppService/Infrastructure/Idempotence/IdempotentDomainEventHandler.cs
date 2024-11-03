@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain;
 using YourBrand.Domain.Common;
 using YourBrand.Infrastructure.Persistence;
 using YourBrand.Infrastructure.Persistence.Outbox;

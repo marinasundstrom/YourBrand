@@ -31,9 +31,8 @@ public record AddSkillCommand(string PersonProfileId, string SkillId, SkillLevel
 
             if (personProfileSkill is not null) throw new Exception();
 
-            personProfileSkill = new Domain.Entities.PersonProfileSkill
+            personProfileSkill = new Domain.Entities.PersonProfileSkill()
             {
-                Id = Guid.NewGuid().ToString(),
                 PersonProfileId = personProfile.Id,
                 Skill = skill,
                 Level = request.Level,

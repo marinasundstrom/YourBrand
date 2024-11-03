@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -11,7 +12,7 @@ public enum VotingType
     Election
 }
 
-public sealed class VotingSession : AggregateRoot<VotingSessionId>, IAuditable, IHasTenant, IHasOrganization
+public sealed class VotingSession : AggregateRoot<VotingSessionId>, IAuditableEntity<VotingSessionId>, IHasTenant, IHasOrganization
 {
     readonly HashSet<Vote> _votes = new HashSet<Vote>();
 

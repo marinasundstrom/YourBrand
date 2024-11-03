@@ -16,9 +16,8 @@ public record CreateOrganizationCommand(string Id, string Name) : IRequest
 
             if (organization is not null) throw new Exception();
 
-            organization = new Domain.Entities.Organization
+            organization = new Domain.Entities.Organization(request.Id ?? request.Name.ToLower().Replace(' ', '-'))
             {
-                Id = request.Id ?? request.Name.ToLower().Replace(' ', '-'),
                 Name = request.Name
             };
 

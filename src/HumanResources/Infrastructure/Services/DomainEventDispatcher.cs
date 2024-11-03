@@ -2,6 +2,7 @@
 
 using Microsoft.Extensions.Logging;
 
+using YourBrand.Domain;
 using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Common;
 

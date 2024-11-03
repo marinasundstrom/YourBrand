@@ -36,8 +36,7 @@
 		<ProjectReference Include="..\..\Formulas\Formulas.csproj">
 		  <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
 		</ProjectReference>
-    <ProjectReference
-      Include="..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
     <ProjectReference Include="..\..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
@@ -48,8 +47,8 @@
     <ProjectReference Include="..\..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
     <ProjectReference Include="..\..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
-    <ProjectReference
-      Include="..\..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Common\Domain.Auditability.Abstractions\Domain.Auditability.Abstractions.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Calculations.cs">

@@ -7,6 +7,7 @@ using Polly.Retry;
 
 using Quartz;
 
+using YourBrand.Domain;
 using YourBrand.Payments.Application.Common.Interfaces;
 using YourBrand.Payments.Domain.Common;
 using YourBrand.Payments.Infrastructure.Persistence;

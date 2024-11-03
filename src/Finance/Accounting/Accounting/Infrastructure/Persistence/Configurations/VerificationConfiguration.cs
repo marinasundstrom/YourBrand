@@ -11,6 +11,8 @@ public class VerificationConfiguration : IEntityTypeConfiguration<Verification>
     {
         builder.ToTable("Verifications");
 
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
         builder.HasIndex(x => x.TenantId);
     }
 }

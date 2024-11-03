@@ -23,6 +23,8 @@ Entities should implement ``IEntity`` or derived interfaces, such as ``IAuditabl
 
 Entities that emit domain events implement ``IHasDomainEvents``. This makes it so that the background job picks them up.
 
+For "soft-delete", the entity type should implement ``ISoftDeletable``, in addition to ``IEntity`` (or derived type). Keep in mind that soft-delete can be an anti-pattern.
+
 A User is represented by a unique ``UserId``. Maps to a string in Database.
 
 Entities that belong to a particular tenant implement ``IHasTenant``. This works with ``ITenantContext``, and the ``TenantId`` is automatically set when the entities are persisted. And objects are automatically filtered out when queries are run, based on the user's tenant.
@@ -110,7 +112,8 @@ public sealed class ApplicationDbContext : DomainDbContext
 
             entityTypeBuilder
                 .AddTenantIndex()
-                .AddOrganizationIndex();
+                .AddOrganizationIndex()
+                .AddSoftDeleteIndex();
 
             try
             {
@@ -135,7 +138,7 @@ public sealed class ApplicationDbContext : DomainDbContext
         configurationBuilder.AddUserIdConverter();
 
         // Your own converters
-        
+
         configurationBuilder.Properties<ItemId>().HaveConversion<ItemIdConverter>();
     }
 
@@ -179,13 +182,15 @@ public static class ServiceExtensions
             options
                 .UseDomainInterceptors(serviceProvider)
                 .UseTenancyInterceptor(serviceProvider)
-                .UseAuditabilityInterceptor(serviceProvider);
+                .UseAuditabilityInterceptor(serviceProvider)
+                .UseSoftDeleteInterceptor(serviceProvider);
         });
 
         // Add interceptors
 
         services.AddTenancyInterceptor();
         services.AddAuditabilityInterceptor();
+        services.AddSoftDeleteInterceptor();
 
         return services;
     }

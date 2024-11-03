@@ -4,16 +4,15 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 
-public class Organization : AuditableEntity
+public class Organization : AuditableEntity<string>
 {
     private readonly HashSet<Team> _teams = new HashSet<Team>();
     private readonly HashSet<Person> _persons = new HashSet<Person>();
 
     private Organization() { }
 
-    public Organization(string id, string name, string friendlyName)
+    public Organization(string id, string name, string friendlyName) : base(id)
     {
-        Id = id;
         Name = name;
         FriendlyName = friendlyName;
 
@@ -24,8 +23,6 @@ public class Organization : AuditableEntity
     {
 
     }
-
-    public string Id { get; private set; }
 
     public string Name { get; private set; }
 

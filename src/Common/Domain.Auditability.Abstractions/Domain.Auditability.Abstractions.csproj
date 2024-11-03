@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Domain.Auditability.Abstractions</RootNamespace>
+    <AssemblyName>YourBrand.Domain.Auditability.Abstractions</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

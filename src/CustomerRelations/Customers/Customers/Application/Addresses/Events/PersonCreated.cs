@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Customers.Application.Common.Interfaces;
 using YourBrand.Customers.Domain;
 using YourBrand.Customers.Domain.Events;
+using YourBrand.Domain;
 
 namespace YourBrand.Customers.Application.Addresses.Events;
 

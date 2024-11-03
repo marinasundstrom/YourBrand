@@ -46,7 +46,7 @@ public class ReminderService(IInvoicesClient invoicesClient, IJournalEntriesClie
                 }
                 else if (invoice.Status.Id == (int)InvoiceStatuses.Sent || invoice.Status.Id == (int)InvoiceStatuses.Reminder)
                 {
-                    if (DateTime.Now > invoice.DueDate)
+                    if (DateTimeOffset.UtcNow > invoice.DueDate)
                     {
                         logger.LogDebug($"Notify customer about forgotten invoice {invoice.Id}");
 

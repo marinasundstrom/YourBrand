@@ -1,4 +1,5 @@
-﻿using YourBrand.Transactions.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.Transactions.Domain.Common;
 
 namespace YourBrand.Transactions.Application.Common.Interfaces;
 

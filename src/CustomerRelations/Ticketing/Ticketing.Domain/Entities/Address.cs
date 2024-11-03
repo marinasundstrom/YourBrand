@@ -1,14 +1,15 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class Address : Entity<string>, IAuditable, IHasTenant, IHasOrganization
+public class Address : Entity<string>, IAuditableEntity<string>, IHasTenant, IHasOrganization
 {
-    public Address()
+    public Address() : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
+
     }
 
     public TenantId TenantId { get; set; }

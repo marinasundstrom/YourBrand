@@ -19,7 +19,7 @@ public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, 
 
             invoice.SetCurrency("SEK");
 
-            invoice.Id = Guid.NewGuid().ToString();
+            //invoice.Id = Guid.NewGuid().ToString();
 
             await invoice.AssignInvoiceNo(invoiceNumberFetcher);
 

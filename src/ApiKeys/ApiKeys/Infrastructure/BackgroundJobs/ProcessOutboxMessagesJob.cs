@@ -11,6 +11,7 @@ using YourBrand.ApiKeys.Application.Common.Interfaces;
 using YourBrand.ApiKeys.Domain.Common;
 using YourBrand.ApiKeys.Infrastructure.Persistence;
 using YourBrand.ApiKeys.Infrastructure.Persistence.Outbox;
+using YourBrand.Domain;
 
 namespace YourBrand.ApiKeys.Infrastructure.BackgroundJobs;
 

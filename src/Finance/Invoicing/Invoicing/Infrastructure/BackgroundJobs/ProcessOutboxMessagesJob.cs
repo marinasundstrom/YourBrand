@@ -7,6 +7,7 @@ using Polly.Retry;
 
 using Quartz;
 
+using YourBrand.Domain;
 using YourBrand.Invoicing.Application.Common.Interfaces;
 using YourBrand.Invoicing.Domain.Common;
 using YourBrand.Invoicing.Infrastructure.Persistence;

@@ -1,15 +1,19 @@
 
+using System.Data.SqlTypes;
+
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class AbsenceType : AuditableEntity, IHasTenant, IHasOrganization, ISoftDeletable
+public class AbsenceType : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
 {
-    public string Id { get; set; } = null!;
+
+    public AbsenceType() : base(Guid.NewGuid().ToString())
+    {
+    }
 
     public TenantId TenantId { get; set; }
 
@@ -20,6 +24,8 @@ public class AbsenceType : AuditableEntity, IHasTenant, IHasOrganization, ISoftD
     public bool FullDays { get; set; }
 
     public List<Absence> Absences { get; set; } = new List<Absence>();
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

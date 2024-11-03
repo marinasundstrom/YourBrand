@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Transactions.Application.Common.Interfaces;
 using YourBrand.Transactions.Domain.Common;
 using YourBrand.Transactions.Infrastructure.Persistence;

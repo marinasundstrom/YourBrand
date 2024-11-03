@@ -5,10 +5,8 @@ using YourBrand.Identity;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Tenancy;
 
-public class PersonProfileEducation : AuditableEntity, IHasTenant, ISoftDeletable
+public class PersonProfileEducation : AuditableEntity<string>, IHasTenant, ISoftDeletable
 {
-    public string Id { get; set; } = null!;
-
     public TenantId TenantId { get; set; } = null!;
 
     //public OrganizationId OrganizationId { get; set; } = null!;
@@ -28,6 +26,7 @@ public class PersonProfileEducation : AuditableEntity, IHasTenant, ISoftDeletabl
 
     public string? Description { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

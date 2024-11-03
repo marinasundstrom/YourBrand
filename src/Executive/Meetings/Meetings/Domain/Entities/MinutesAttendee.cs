@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -5,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public class MinutesAttendee : Entity<MinutesAttendeeId>, IAuditable, IHasTenant, IHasOrganization
+public class MinutesAttendee : Entity<MinutesAttendeeId>, IAuditableEntity<MinutesAttendeeId>, IHasTenant, IHasOrganization
 {
     public MinutesAttendee()
         : base(new MinutesAttendeeId())

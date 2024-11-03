@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Meetings.Common;
 using YourBrand.Meetings.Infrastructure.Persistence;
 using YourBrand.Meetings.Infrastructure.Persistence.Outbox;

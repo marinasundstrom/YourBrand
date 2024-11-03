@@ -7,12 +7,16 @@ using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Entry : AuditableEntity, IHasTenant, IHasOrganization
+public class Entry : AuditableEntity<string>, IHasTenant, IHasOrganization
 {
-    public Entry(User user, Project project, Activity activity, TimeSheet timeSheet, TimeSheetActivity timeSheetActivity,
-        DateOnly date, double? hours, string? description)
+
+    protected Entry()
     {
-        Id = Guid.NewGuid().ToString();
+    }
+
+    public Entry(User user, Project project, Activity activity, TimeSheet timeSheet, TimeSheetActivity timeSheetActivity,
+        DateOnly date, double? hours, string? description) : base(Guid.NewGuid().ToString())
+    {
         User = user;
         Project = project;
         Activity = activity;
@@ -24,13 +28,6 @@ public class Entry : AuditableEntity, IHasTenant, IHasOrganization
 
         AddDomainEvent(new EntryCreatedEvent(project.Id, timeSheet.Id, activity.Id, Id, hours));
     }
-
-    internal Entry()
-    {
-
-    }
-
-    public string Id { get; private set; } = null!;
 
     public TenantId TenantId { get; set; }
 

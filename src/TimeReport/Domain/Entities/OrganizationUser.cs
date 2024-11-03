@@ -2,13 +2,15 @@
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class OrganizationUser : AuditableEntity, IHasTenant, ISoftDeletable
+public class OrganizationUser : AuditableEntity<string>, IHasTenant, ISoftDeletable
 {
-    public string Id { get; private set; } = Guid.NewGuid().ToString();
+    public OrganizationUser() : base(Guid.NewGuid().ToString())
+    {
+    }
+
 
     public TenantId TenantId { get; set; }
 
@@ -19,6 +21,8 @@ public class OrganizationUser : AuditableEntity, IHasTenant, ISoftDeletable
     public User User { get; set; } = null!;
 
     public UserId UserId { get; set; } = null!;
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

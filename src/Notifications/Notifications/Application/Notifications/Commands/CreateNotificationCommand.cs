@@ -53,8 +53,7 @@ public record CreateNotificationCommand(string? Content, string? Link, string? U
 
         private static Notification CreateNotificationDO(CreateNotificationCommand request, string? userId)
         {
-            var notification = new Notification();
-            notification.Id = Guid.NewGuid().ToString();
+            var notification = new Notification(Guid.NewGuid().ToString());
             notification.Content = request.Content;
             notification.Link = request.Link;
             notification.UserId = userId ?? request.UserId;

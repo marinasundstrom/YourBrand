@@ -10,6 +10,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>YourBrand.Domain.Infrastructure</RootNamespace>
+    <AssemblyName>YourBrand.Domain.Infrastructure</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

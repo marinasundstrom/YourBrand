@@ -11,6 +11,13 @@ public class LedgerEntryConfiguration : IEntityTypeConfiguration<LedgerEntry>
     {
         builder.ToTable("LedgerEntries");
 
+        builder.HasKey(x => new { x.OrganizationId, x.Id });
+
         builder.HasIndex(x => x.TenantId);
+
+        builder.HasOne(x => x.Account)
+            .WithMany(x => x.Entries)
+            .HasForeignKey(x => new { x.OrganizationId, x.AccountNo })
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

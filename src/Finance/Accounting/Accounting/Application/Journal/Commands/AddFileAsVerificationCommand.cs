@@ -29,9 +29,8 @@ public record AddFileAsVerificationCommand(string OrganizationId, int JournalEnt
 
             await blobService.UploadBloadAsync(blobName, request.Stream);
 
-            var verification = new Verification();
+            var verification = new Verification(blobName);
 
-            verification.Id = blobName;
             verification.OrganizationId = request.OrganizationId;
             verification.Name = request.Name;
             verification.ContentType = request.ContentType;

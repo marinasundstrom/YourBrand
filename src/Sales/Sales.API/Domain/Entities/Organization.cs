@@ -11,7 +11,6 @@ public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAudit
     public Organization(OrganizationId id, string name)
         : base(id)
     {
-        Id = id;
         Name = name;
     }
 

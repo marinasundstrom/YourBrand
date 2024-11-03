@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Payments.Domain.Entities;
 
-public class Payment : AuditableEntity, IHasTenant, IHasOrganization
+public class Payment : AuditableEntity<string>, IHasTenant, IHasOrganization
 {
     readonly HashSet<Capture> _captures = new HashSet<Capture>();
 
@@ -16,13 +16,13 @@ public class Payment : AuditableEntity, IHasTenant, IHasOrganization
     }
 
     public Payment(string organizationId, string invoiceId, PaymentStatus status, string currency, decimal amount, DateTime dueDate, PaymentMethod paymentMethod, string? reference = null, string? message = null)
+        : base(Guid.NewGuid().ToString())
     {
         if (amount <= 0)
         {
             throw new ArgumentException("Amount must be greater than 0.");
         }
 
-        Id = Guid.NewGuid().ToUrlFriendlyString();
         OrganizationId = organizationId;
         InvoiceId = invoiceId;
         Status = status;
@@ -45,8 +45,6 @@ public class Payment : AuditableEntity, IHasTenant, IHasOrganization
             AddDomainEvent(new PaymentStatusChanged(Id, status));
         }
     }
-
-    public string Id { get; private set; } = null!;
 
     public TenantId TenantId { get; set; }
 

@@ -2,9 +2,10 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Auditability;
+using YourBrand.Domain;
 using YourBrand.HumanResources.Application.Common.Interfaces;
 using YourBrand.HumanResources.Domain.Common;
-using YourBrand.HumanResources.Domain.Common.Interfaces;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
@@ -12,7 +13,7 @@ namespace YourBrand.HumanResources.Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntitySaveChangesInterceptor(
     ITenantContext tenantContext,
-    IUserContext currentPersonService,
+    IUserContext userContext,
     TimeProvider timeProvider) : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -33,34 +34,47 @@ public class AuditableEntitySaveChangesInterceptor(
     {
         if (context == null) return;
 
-        foreach (var entry in context.ChangeTracker.Entries<AuditableEntity>())
+        foreach (var entry in context.ChangeTracker.Entries<IHasTenant>())
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedBy = currentPersonService.UserId;
-                entry.Entity.Created = timeProvider.GetUtcNow();
+                entry.Entity.TenantId = tenantContext.TenantId.GetValueOrDefault();
+            }
+        }
 
-                if (entry.Entity is IHasTenant hasTenant)
-                {
-                    hasTenant.TenantId = tenantContext.TenantId.GetValueOrDefault();
-                }
+        foreach (var entry in context.ChangeTracker.Entries<IAuditableEntity>())
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedById = userContext.UserId;
+                entry.Entity.Created = timeProvider.GetUtcNow();
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.LastModifiedBy = currentPersonService.UserId;
+                entry.Entity.LastModifiedById = userContext.UserId;
                 entry.Entity.LastModified = timeProvider.GetUtcNow();
             }
-            else if (entry.State == EntityState.Deleted)
+        }
+
+        foreach (var entry in context.ChangeTracker.Entries<ISoftDeletable>())
+        {
+            if (entry.State == EntityState.Deleted)
             {
                 if (entry.Entity is ISoftDeletable softDelete)
                 {
-                    softDelete.DeletedBy = currentPersonService.UserId;
-                    softDelete.Deleted = timeProvider.GetUtcNow();
+                    softDelete.IsDeleted = true;
+
+                    if (entry.Entity is ISoftDeletableWithAudit softDelete2)
+                    {
+                        softDelete2.DeletedById = userContext.UserId;
+                        softDelete2.Deleted = timeProvider.GetUtcNow();
+                    }
 
                     entry.State = EntityState.Modified;
                 }
             }
         }
+
     }
 }
 

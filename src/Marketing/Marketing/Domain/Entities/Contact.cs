@@ -1,9 +1,10 @@
 ﻿using YourBrand.Identity;
+using YourBrand.Marketing.Domain.Common;
 using YourBrand.Marketing.Domain.Enums;
 
 namespace YourBrand.Marketing.Domain.Entities;
 
-public class Contact : Entity<string>, IAuditable
+public class Contact : AuditableEntity<string>
 {
     private readonly HashSet<Discount> discounts = new HashSet<Discount>();
 

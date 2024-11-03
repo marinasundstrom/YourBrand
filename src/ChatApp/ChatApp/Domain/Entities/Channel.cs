@@ -1,10 +1,11 @@
+using YourBrand.Auditability;
 using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.Domain;
 using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Domain.Entities;
 
-public sealed class Channel : AggregateRoot<ChannelId>, IAuditable, IHasTenant, IHasOrganization
+public sealed class Channel : AggregateRoot<ChannelId>, IAuditableEntity<ChannelId>, IHasTenant, IHasOrganization
 {
     private Channel() : base(new ChannelId(Guid.NewGuid().ToString()))
     {

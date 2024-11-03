@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -12,7 +13,7 @@ public enum MinutesItemState
     Approved
 }
 
-public class MinutesItem : Entity<MinutesItemId>, IAuditable, IHasTenant, IHasOrganization
+public class MinutesItem : Entity<MinutesItemId>, IAuditableEntity<MinutesItemId>, IHasTenant, IHasOrganization
 {
     readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
 

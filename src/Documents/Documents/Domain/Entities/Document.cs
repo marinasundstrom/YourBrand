@@ -1,26 +1,24 @@
 using YourBrand.Documents.Domain.Common;
 using YourBrand.Documents.Domain.Events;
+using YourBrand.Domain;
 using YourBrand.Identity;
 
 namespace YourBrand.Documents.Domain.Entities;
 
-public class Document : AuditableEntity, ISoftDeletable, IDeletable, IItem
+public class Document : AuditableEntity<string>, ISoftDeletable, IDeletable, IItem
 {
     private Document()
     {
     }
 
-    public Document(string name, string contentType)
+    public Document(string name, string contentType) : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
         Name = Path.GetFileNameWithoutExtension(name);
         Extension = Path.GetExtension(name).Trim('.');
         ContentType = contentType;
 
         AddDomainEvent(new DocumentCreated(Id));
     }
-
-    public string Id { get; private set; } = null!;
 
     public Directory? Directory { get; private set; }
 
@@ -61,6 +59,8 @@ public class Document : AuditableEntity, ISoftDeletable, IDeletable, IItem
     public DateTime? Expiration { get; private set; }
 
     public DomainEvent GetDeleteEvent() => new DocumentDeleted(Id, string.Empty);
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

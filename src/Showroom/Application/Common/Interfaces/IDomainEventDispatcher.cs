@@ -1,4 +1,5 @@
-﻿using YourBrand.Showroom.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.Showroom.Domain.Common;
 
 namespace YourBrand.Showroom.Application.Common.Interfaces;
 

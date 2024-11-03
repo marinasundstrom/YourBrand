@@ -3,11 +3,10 @@ using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Project : AuditableEntity, ISoftDeletable, IHasTenant, IHasOrganization
+public class Project : AuditableEntity<string>, ISoftDeletable, IHasTenant, IHasOrganization
 {
     readonly HashSet<Team> _teams = new HashSet<Team>();
     readonly HashSet<Expense> _expenses = new HashSet<Expense>();
@@ -16,19 +15,11 @@ public class Project : AuditableEntity, ISoftDeletable, IHasTenant, IHasOrganiza
     readonly HashSet<ProjectMembership> _memberships = new HashSet<ProjectMembership>();
     readonly HashSet<ProjectTeam> _projectTeams = new HashSet<ProjectTeam>();
 
-    protected Project()
+    public Project(string name, string? description) : base(Guid.NewGuid().ToString())
     {
-
-    }
-
-    public Project(string name, string? description)
-    {
-        Id = Guid.NewGuid().ToString();
         Name = name;
         Description = description;
     }
-
-    public string Id { get; set; } = null!;
 
     public TenantId TenantId { get; set; } = null!;
 
@@ -71,6 +62,8 @@ public class Project : AuditableEntity, ISoftDeletable, IHasTenant, IHasOrganiza
     public void AddTeam(Team team) => _projectTeams.Add(new ProjectTeam(team));
 
     public void RemoveTeam(Team team) => _teams.Remove(team);
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

@@ -18,7 +18,6 @@ public record CreateSkillAreaCommand(string Name, int? IndustryId) : IRequest
 
             skillArea = new Domain.Entities.SkillArea
             {
-                Id = Guid.NewGuid().ToString(),
                 Slug = "",
                 Name = request.Name,
                 Industry = await context.Industries.FirstAsync(x => x.Id == request.IndustryId, cancellationToken)

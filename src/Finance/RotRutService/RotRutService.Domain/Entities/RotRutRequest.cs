@@ -3,11 +3,9 @@ using YourBrand.RotRutService.Domain.Common;
 
 namespace YourBrand.RotRutService.Domain.Entities;
 
-public class RotRutRequest : AuditableEntity
+public class RotRutRequest : AuditableEntity<int>
 {
     private readonly List<RotRutCase> _cases = new List<RotRutCase>();
-
-    public int Id { get; private set; }
 
     public string Description { get; private set; } = null!;
 

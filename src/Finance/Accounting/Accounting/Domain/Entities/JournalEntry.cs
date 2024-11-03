@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
+public class JournalEntry : AuditableEntity<int>, IHasTenant, IHasOrganization
 {
     private readonly HashSet<LedgerEntry> _entries = new();
     private readonly HashSet<Verification> _verifications = new HashSet<Verification>();
@@ -16,7 +16,8 @@ public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
 
     }
 
-    public JournalEntry(DateTime date, string description, int? invoiceNo = null, int? receiptId = null)
+    public JournalEntry(int id, DateTimeOffset date, string description, int? invoiceNo = null, int? receiptId = null)
+     : base(id)
     {
         Date = date;
         Description = description;
@@ -24,14 +25,11 @@ public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
         ReceiptId = receiptId;
     }
 
-    [Key]
-    public int Id { get; private set; }
-
     public TenantId TenantId { get; set; }
 
     public OrganizationId OrganizationId { get; set; }
 
-    public DateTime Date { get; private set; }
+    public DateTimeOffset Date { get; private set; }
 
     public string Description { get; private set; } = null!;
 
@@ -56,9 +54,10 @@ public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
         _entries.Add(entry);
     });
 
-    public LedgerEntry AddDebitEntry(Account account, decimal debit, string? description = null)
+    public async Task<LedgerEntry> AddDebitEntry(Account account, decimal debit, string? description, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
-        var entry = new LedgerEntry(Date, account, debit, null, description);
+        var id = await ledgerEntryIdGenerator.GetIdAsync(OrganizationId);
+        var entry = new LedgerEntry(id, Date, account, debit, null, description);
         entry.OrganizationId = OrganizationId;
         account.AddEntry(entry);
         _entries.Add(entry);
@@ -66,9 +65,10 @@ public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
         return entry;
     }
 
-    public LedgerEntry AddCreditEntry(Account account, decimal credit, string? description = null)
+    public async Task<LedgerEntry> AddCreditEntry(Account account, decimal credit, string? description, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
-        var entry = new LedgerEntry(Date, account, null, credit, description);
+        var id = await ledgerEntryIdGenerator.GetIdAsync(OrganizationId);
+        var entry = new LedgerEntry(id, Date, account, null, credit, description);
         entry.OrganizationId = OrganizationId;
         account.AddEntry(entry);
         _entries.Add(entry);
@@ -92,4 +92,9 @@ public class JournalEntry : AuditableEntity, IHasTenant, IHasOrganization
 
     public bool IsValid => Sum == 0;
 
+}
+
+public interface ILedgerEntryIdGenerator
+{
+    Task<int> GetIdAsync(OrganizationId organizationId, CancellationToken cancellationToken = default);
 }

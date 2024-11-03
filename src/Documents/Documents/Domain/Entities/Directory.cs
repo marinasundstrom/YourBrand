@@ -1,10 +1,11 @@
 ﻿using YourBrand.Documents.Domain.Common;
 using YourBrand.Documents.Domain.Events;
+using YourBrand.Domain;
 using YourBrand.Identity;
 
 namespace YourBrand.Documents.Domain.Entities;
 
-public class Directory : AuditableEntity, ISoftDeletable, IDeletable, IItem
+public class Directory : AuditableEntity<string>, ISoftDeletable, IDeletable, IItem
 {
     private readonly HashSet<Document> _documents = new HashSet<Document>();
     private readonly HashSet<Directory> _directories = new HashSet<Directory>();
@@ -13,15 +14,12 @@ public class Directory : AuditableEntity, ISoftDeletable, IDeletable, IItem
     {
     }
 
-    public Directory(string name)
+    public Directory(string name) : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
         Name = name;
 
         AddDomainEvent(new DirectoryCreated(Id));
     }
-
-    public string Id { get; private set; } = null!;
 
     public Directory? Parent { get; private set; }
 
@@ -70,6 +68,8 @@ public class Directory : AuditableEntity, ISoftDeletable, IDeletable, IItem
     }
 
     public DomainEvent GetDeleteEvent() => new DirectoryDeleted(Id, string.Empty);
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

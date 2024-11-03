@@ -3,14 +3,15 @@ using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Domain.Common;
-using YourBrand.TimeReport.Domain.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Enums;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Absence : AuditableEntity, IHasTenant, IHasOrganization, ISoftDeletable
+public class Absence : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
 {
-    public string Id { get; set; } = null!;
+    public Absence() : base(Guid.NewGuid().ToString())
+    {
+    }
 
     public TenantId TenantId { get; set; }
 
@@ -35,6 +36,8 @@ public class Absence : AuditableEntity, IHasTenant, IHasOrganization, ISoftDelet
     public DateTime? To { get; set; }
 
     public string? Note { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

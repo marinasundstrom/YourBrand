@@ -3,7 +3,7 @@ using YourBrand.RotRutService.Domain.Enums;
 
 namespace YourBrand.RotRutService.Domain.Entities;
 
-public class RotRutCase : AuditableEntity
+public class RotRutCase : AuditableEntity<int>
 {
     private RotRutCase()
     {
@@ -24,8 +24,6 @@ public class RotRutCase : AuditableEntity
         MaterialCost = materialCost;
         ReceivedAmount = receivedAmount;
     }
-
-    public int Id { get; private set; }
 
     public RotRutRequest? Request { get; private set; }
 

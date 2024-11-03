@@ -7,7 +7,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Invoicing.Domain.Entities;
 
-public class InvoiceItem : AuditableEntity, IHasTenant
+public class InvoiceItem : AuditableEntity<string>, IHasTenant
 {
     private InvoiceItem()
     {
@@ -15,8 +15,8 @@ public class InvoiceItem : AuditableEntity, IHasTenant
     }
 
     public InvoiceItem(Invoice invoice, ProductType productType, string description, string? productId, decimal unitPrice, string unit, decimal? discount, double vatRate, double quantity)
+     : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
         Invoice = invoice;
         ProductType = productType;
         Description = description;
@@ -26,8 +26,6 @@ public class InvoiceItem : AuditableEntity, IHasTenant
         UpdateVatRate(unitPrice, vatRate);
         UpdateQuantity(quantity);
     }
-
-    public string Id { get; private set; }
 
     public TenantId TenantId { get; set; }
 

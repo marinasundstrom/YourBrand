@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Analytics.Application.Common.Interfaces;
+﻿using YourBrand.Domain;
+
+namespace YourBrand.Analytics.Application.Common.Interfaces;
 
 public interface IDomainEventDispatcher
 {

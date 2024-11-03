@@ -1,4 +1,5 @@
 ﻿using YourBrand.ApiKeys.Domain.Common;
+using YourBrand.Domain;
 
 namespace YourBrand.ApiKeys.Application.Common.Interfaces;
 

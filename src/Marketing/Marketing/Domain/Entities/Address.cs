@@ -1,18 +1,23 @@
 using YourBrand.Identity;
+using YourBrand.Marketing.Domain.Common;
 using YourBrand.Marketing.Domain.Enums;
 
 namespace YourBrand.Marketing.Domain.Entities;
 
-public class Address : Entity<string>, IAuditable
+public class Address : AuditableEntity<string>
 {
 #nullable disable
 
     protected Address() : base() { }
 
 #nullable restore
+    public Address(string id)
+    : base(id)
+    {
 
-    public Address(AddressType addressType)
-    : base(Guid.NewGuid().ToString())
+    }
+
+    public Address(AddressType addressType) : base(Guid.NewGuid().ToString())
     {
         Type = addressType;
 

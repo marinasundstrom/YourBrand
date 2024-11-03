@@ -19,9 +19,8 @@ public sealed class OrderType : Entity<int>, IAuditableEntity<int, User>, IHasTe
         Description = description;
     }
 
-    public OrderType(int id, string name, string handle, string? description)
+    public OrderType(int id, string name, string handle, string? description) : base(id)
     {
-        Id = id;
         Name = name;
         Handle = handle;
         Description = description;

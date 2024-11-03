@@ -3,6 +3,7 @@
 using Newtonsoft.Json;
 
 using YourBrand.Analytics.Infrastructure.Persistence.Outbox;
+using YourBrand.Domain;
 
 namespace YourBrand.Analytics.Infrastructure.Persistence.Interceptors;
 

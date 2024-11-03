@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Domain;
 using YourBrand.Payments.Application.Common.Interfaces;
 using YourBrand.Payments.Domain;
 using YourBrand.Payments.Domain.Events;

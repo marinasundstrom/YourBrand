@@ -4,6 +4,7 @@ using YourBrand.Accounting.Application.Common.Interfaces;
 using YourBrand.Accounting.Domain.Common;
 using YourBrand.Accounting.Infrastructure.Persistence;
 using YourBrand.Accounting.Infrastructure.Persistence.Outbox;
+using YourBrand.Domain;
 
 namespace YourBrand.Accounting.Infrastructure.Idempotence;
 

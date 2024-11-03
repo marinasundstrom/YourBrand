@@ -9,7 +9,7 @@ namespace YourBrand.Accounting.Application.Journal.Commands;
 
 public record CreateJournalEntryCommand(string OrganizationId, string Description, int? InvoiceNo, List<CreateEntry> Entries) : IRequest<int>
 {
-    public class CreateJournalEntryCommandHandler(IAccountingContext context) : IRequestHandler<CreateJournalEntryCommand, int>
+    public class CreateJournalEntryCommandHandler(IAccountingContext context, ILedgerEntryIdGenerator ledgerEntryIdGenerator) : IRequestHandler<CreateJournalEntryCommand, int>
     {
         public async Task<int> Handle(CreateJournalEntryCommand request, CancellationToken cancellationToken)
         {
@@ -18,9 +18,21 @@ public record CreateJournalEntryCommand(string OrganizationId, string Descriptio
                 throw new Exception("The sum of all entries must be 0.");
             }
 
+            int id = 0;
+
+            try 
+            {
+                id = (await context.JournalEntries.InOrganization(request.OrganizationId).MaxAsync(x => x.Id, cancellationToken)) + 1;
+            } 
+            catch(Exception) 
+            {
+                id = 1;
+            }
+
             var journalEntry = new Domain.Entities.JournalEntry
             (
-                DateTime.Now,
+                id,
+                DateTimeOffset.UtcNow,
                 request.Description,
                 invoiceNo: request.InvoiceNo
             );
@@ -41,11 +53,11 @@ public record CreateJournalEntryCommand(string OrganizationId, string Descriptio
 
                 if (entryDto.Credit is not null)
                 {
-                    entry = journalEntry.AddCreditEntry(account, entryDto.Credit.GetValueOrDefault(), entryDto.Description);
+                    entry = await journalEntry.AddCreditEntry(account, entryDto.Credit.GetValueOrDefault(), entryDto.Description, ledgerEntryIdGenerator);
                 }
                 else
                 {
-                    entry = journalEntry.AddDebitEntry(account, entryDto.Debit.GetValueOrDefault(), entryDto.Description);
+                    entry = await journalEntry.AddDebitEntry(account, entryDto.Debit.GetValueOrDefault(), entryDto.Description, ledgerEntryIdGenerator);
                 }
 
                 //entry.AddDomainEvent(new EntryCreatedEvent(entry.Id));

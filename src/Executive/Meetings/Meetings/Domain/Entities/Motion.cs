@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -13,7 +14,7 @@ public enum MotionStatus
     Amended
 }
 
-public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrganization
+public class Motion : AggregateRoot<MotionId>, IAuditableEntity<MotionId>, IHasTenant, IHasOrganization
 {
     readonly HashSet<MotionOperativeClause> _operativeClauses = new HashSet<MotionOperativeClause>();
 
@@ -21,9 +22,8 @@ public class Motion : AggregateRoot<MotionId>, IAuditable, IHasTenant, IHasOrgan
     {
     }
 
-    public Motion(MotionId id, string title)
+    public Motion(MotionId id, string title) : base(id)
     {
-        Id = id;
         Title = title;
     }
 

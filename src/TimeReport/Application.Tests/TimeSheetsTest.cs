@@ -86,7 +86,6 @@ public class TimeSheetsTest : TestBase
     {
         return new YourBrand.TimeReport.Domain.Entities.User
         {
-            Id = Guid.NewGuid().ToString(),
             FirstName = "Test",
             LastName = "Testsson",
             SSN = "dfsdf",

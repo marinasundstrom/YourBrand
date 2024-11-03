@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Analytics.Application.Services;
+﻿using YourBrand.Domain;
+
+namespace YourBrand.Analytics.Application.Services;
 
 public interface IDomainEventDispatcher
 {

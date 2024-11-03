@@ -2,6 +2,8 @@
 
 using Microsoft.Extensions.Logging;
 
+using YourBrand.Domain;
+
 namespace YourBrand.Analytics.Infrastructure.Services;
 
 sealed class DomainEventDispatcher(ILogger<DomainEventDispatcher> logger, IPublisher mediator) : IDomainEventDispatcher

@@ -3,6 +3,7 @@
 using Microsoft.Extensions.Logging;
 
 using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain;
 using YourBrand.Domain.Common;
 
 namespace YourBrand.Infrastructure.Services;

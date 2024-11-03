@@ -4,7 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>YourBrand.Domain</RootNamespace>
+    <RootNamespace>YourBrand.Organizations</RootNamespace>
+    <AssemblyName>YourBrand.Organizations.Abstractions</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

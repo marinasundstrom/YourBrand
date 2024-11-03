@@ -10,7 +10,9 @@ using YourBrand.ApiKeys.Authentication;
 using YourBrand.ApiKeys.Infrastructure;
 using YourBrand.ApiKeys.Infrastructure.Persistence;
 using YourBrand.Extensions;
+using YourBrand.Identity;
 using YourBrand.Integration;
+using YourBrand.Tenancy;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +61,10 @@ var services = builder.Services;
 services.AddApplication(configuration);
 services.AddInfrastructure(configuration);
 services.AddServices();
+
+services
+    .AddTenantContext()
+    .AddUserContext();
 
 services
     .AddControllers();

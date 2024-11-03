@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -12,7 +13,7 @@ public enum VoteOption
     Abstain
 }
 
-public sealed class Vote : Entity<VoteId>, IAuditable, IHasTenant, IHasOrganization
+public sealed class Vote : Entity<VoteId>, IAuditableEntity<VoteId>, IHasTenant, IHasOrganization
 {
     public Vote()
         : base(new VoteId())

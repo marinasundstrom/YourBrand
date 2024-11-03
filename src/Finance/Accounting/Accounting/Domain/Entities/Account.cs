@@ -7,16 +7,16 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class Account : AuditableEntity, IHasTenant, IHasOrganization
+public class Account : IHasTenant, IHasOrganization
 {
+    public int AccountNo { get; set; }
+
     readonly List<LedgerEntry> _entries = new List<LedgerEntry>();
 
     public TenantId TenantId { get; set; }
 
     public OrganizationId OrganizationId { get; set; }
 
-    [Key]
-    public int AccountNo { get; set; }
 
     public AccountClass Class { get; set; }
 

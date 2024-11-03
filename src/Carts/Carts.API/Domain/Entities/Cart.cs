@@ -1,9 +1,11 @@
+using YourBrand.Auditability;
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Carts.Domain.Entities;
 
-public sealed class Cart : IAuditable, IHasTenant
+public sealed class Cart : IEntity<string>, IAuditableEntity<string>, IHasTenant
 {
     private readonly HashSet<CartItem> _cartItems = new HashSet<CartItem>();
 
@@ -12,7 +14,7 @@ public sealed class Cart : IAuditable, IHasTenant
         Tag = tag;
     }
 
-    internal Cart(string id, string tag)
+    internal Cart(string id, string tag) : base()
     {
         Id = id;
         Tag = tag;
@@ -97,7 +99,7 @@ public sealed class Cart : IAuditable, IHasTenant
     }
 }
 
-public sealed class CartItem : IAuditable, IHasTenant
+public sealed class CartItem : IEntity<string>, IAuditableEntity<string>, IHasTenant
 {
     private CartItem()
     {

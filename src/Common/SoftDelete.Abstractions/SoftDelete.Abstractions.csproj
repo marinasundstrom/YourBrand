@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>YourBrand.Domain</RootNamespace>
+    <AssemblyName>YourBrand.SoftDelete.Abstractions</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Identity.Abstractions\Identity.Abstractions.csproj" />
   </ItemGroup>
 

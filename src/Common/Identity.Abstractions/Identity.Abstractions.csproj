@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>YourBrand.Identity</RootNamespace>
+    <AssemblyName>YourBrand.Identity.Abstractions</AssemblyName>
   </PropertyGroup>
 
 </Project>

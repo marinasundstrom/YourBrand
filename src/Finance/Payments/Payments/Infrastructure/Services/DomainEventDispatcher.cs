@@ -1,5 +1,6 @@
 ﻿using MediatR;
 
+using YourBrand.Domain;
 using YourBrand.Payments.Application.Common.Interfaces;
 using YourBrand.Payments.Domain.Common;
 

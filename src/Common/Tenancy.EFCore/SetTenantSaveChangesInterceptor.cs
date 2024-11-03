@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace YourBrand.Tenancy;
 
-public sealed class SetTenantSaveChangesInterceptor(ITenantContext tenantContext) : SaveChangesInterceptor
+public sealed class SetTenantSaveChangesInterceptor(
+    ITenantContext tenantContext,
+    ILogger<SetTenantSaveChangesInterceptor> logger) : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
@@ -28,6 +31,8 @@ public sealed class SetTenantSaveChangesInterceptor(ITenantContext tenantContext
             if (entry.State == EntityState.Added)
             {
                 entry.Entity.TenantId = tenantContext.TenantId.GetValueOrDefault();
+
+                logger.LogInformation("Tenant was assigned to entity of type {Type} with id {Id}", entry.Metadata.ClrType.Name, entry.Member("Id").CurrentValue);
             }
         }
     }

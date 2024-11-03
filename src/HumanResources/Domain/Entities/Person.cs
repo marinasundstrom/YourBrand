@@ -1,11 +1,11 @@
-﻿using YourBrand.HumanResources.Domain.Common;
-using YourBrand.HumanResources.Domain.Common.Interfaces;
+﻿using YourBrand.Domain;
+using YourBrand.HumanResources.Domain.Common;
 using YourBrand.HumanResources.Domain.Events;
 
 namespace YourBrand.HumanResources.Domain.Entities;
 
 // Add profile data for application persons by adding properties to the ApplicationPerson class
-public class Person : AuditableEntity, ISoftDeletable
+public class Person : AuditableEntity<string>, ISoftDeletable
 {
     readonly HashSet<Team> _teams = new HashSet<Team>();
     readonly HashSet<TeamMembership> _teamMemberships = new HashSet<TeamMembership>();
@@ -17,9 +17,9 @@ public class Person : AuditableEntity, ISoftDeletable
     internal Person() { }
 
     public Person(Organization organization, string firstName, string lastName, string? displayName, string title, string? ssn, string email)
+        : base(Guid.NewGuid().ToString())
     {
         Organization = organization;
-        Id = Guid.NewGuid().ToString();
         FirstName = firstName;
         LastName = lastName;
         DisplayName = displayName;
@@ -29,8 +29,6 @@ public class Person : AuditableEntity, ISoftDeletable
 
         AddDomainEvent(new UserCreated(Id));
     }
-
-    public string Id { get; set; } = null!;
 
     public string FirstName { get; set; } = null!;
 
@@ -87,6 +85,8 @@ public class Person : AuditableEntity, ISoftDeletable
     public void AddContract(Contract contract) => _contracts.Add(contract);
 
     public BankAccount? BankAccount { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
 

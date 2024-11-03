@@ -20,8 +20,8 @@ public sealed class SubscriptionType : Entity<int>, IAuditableEntity<int, User>,
     }
 
     public SubscriptionType(int id, string name, string handle, string? description)
+         : base(id)
     {
-        Id = id;
         Name = name;
         Handle = handle;
         Description = description;

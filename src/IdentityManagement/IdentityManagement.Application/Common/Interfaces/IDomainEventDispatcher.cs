@@ -1,4 +1,5 @@
-﻿using YourBrand.IdentityManagement.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.IdentityManagement.Domain.Common;
 
 namespace YourBrand.IdentityManagement.Application.Common.Interfaces;
 

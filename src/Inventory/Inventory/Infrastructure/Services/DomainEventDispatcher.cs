@@ -1,5 +1,6 @@
 ﻿using MediatR;
 
+using YourBrand.Domain;
 using YourBrand.Inventory.Application.Common.Interfaces;
 using YourBrand.Inventory.Domain.Common;
 

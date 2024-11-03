@@ -1,4 +1,5 @@
-﻿using YourBrand.Inventory.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.Inventory.Domain.Common;
 
 namespace YourBrand.Inventory.Application.Common.Interfaces;
 

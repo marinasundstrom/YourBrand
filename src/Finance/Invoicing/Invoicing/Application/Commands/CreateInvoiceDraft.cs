@@ -17,7 +17,7 @@ public record CreateInvoiceDraft(string OrganizationId) : IRequest<InvoiceDto>
 
             invoice.SetCurrency("SEK");
 
-            invoice.Id = Guid.NewGuid().ToString();
+            //invoice.Id = Guid.NewGuid().ToString();
 
             invoice.OrganizationId = request.OrganizationId;
 

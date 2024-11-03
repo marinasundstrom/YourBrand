@@ -1,12 +1,27 @@
-﻿namespace YourBrand.HumanResources.Domain.Common;
+﻿using YourBrand.Auditability;
+using YourBrand.Identity;
 
-public abstract class AuditableEntity : Entity
+namespace YourBrand.HumanResources.Domain.Common;
+
+public abstract class AuditableEntity<TId> : Entity<TId>, IAuditableEntity<TId>
+    where TId : notnull
 {
+    #nullable disable
+
+    protected AuditableEntity() : base() {}
+
+    #nullable restore
+
+    public AuditableEntity(TId id) : base(id) 
+    {
+
+    }
+
     public DateTimeOffset Created { get; set; }
 
-    public string? CreatedBy { get; set; } = null!;
+    public UserId? CreatedById { get; set; } = null!;
 
     public DateTimeOffset? LastModified { get; set; }
 
-    public string? LastModifiedBy { get; set; }
+    public UserId? LastModifiedById { get; set; }
 }

@@ -15,9 +15,9 @@ public record GetAccountHistoryQuery(string OrganizationId, int[] AccountNo) : I
         {
             List<(int Year, int Month)> months = new();
 
-            DateTime startDate = DateTime.Today.Subtract(TimeSpan.FromDays(365));
-            DateTime endDate = DateTime.Today;
-            for (DateTime dt = startDate; dt <= endDate; dt = dt.AddMonths(1))
+            DateTimeOffset startDate = DateTime.Today.Subtract(TimeSpan.FromDays(365));
+            DateTimeOffset endDate = DateTime.Today;
+            for (DateTimeOffset dt = startDate; dt <= endDate; dt = dt.AddMonths(1))
             {
                 months.Add((dt.Year, dt.Month));
             }

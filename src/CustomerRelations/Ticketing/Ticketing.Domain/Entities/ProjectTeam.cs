@@ -1,4 +1,5 @@
 ﻿
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
@@ -6,7 +7,7 @@ using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class ProjectTeam : Entity<string>, IAuditable, IHasTenant, IHasOrganization, ISoftDeletable
+public class ProjectTeam : Entity<string>, IAuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
 {
     private ProjectTeam()
     {
@@ -36,6 +37,7 @@ public class ProjectTeam : Entity<string>, IAuditable, IHasTenant, IHasOrganizat
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

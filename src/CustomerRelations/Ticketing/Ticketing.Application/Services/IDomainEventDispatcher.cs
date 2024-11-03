@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Ticketing.Application.Services;
+﻿using YourBrand.Domain;
+
+namespace YourBrand.Ticketing.Application.Services;
 
 public interface IDomainEventDispatcher
 {

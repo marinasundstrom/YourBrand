@@ -6,21 +6,18 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Domain.Entities;
 
-public sealed class Widget : AuditableEntity, IHasTenant
+public sealed class Widget : AuditableEntity<Guid>, IHasTenant
 {
     private Widget()
     {
 
     }
 
-    public Widget(string widgetId, string? userId)
+    public Widget(string widgetId, string? userId) : base(Guid.NewGuid())
     {
-        Id = Guid.NewGuid();
         WidgetId = widgetId;
         UserId = userId;
     }
-
-    public Guid Id { get; set; } = default!;
 
     public TenantId TenantId { get; set; }
 
@@ -48,7 +45,7 @@ public sealed class Widget : AuditableEntity, IHasTenant
 }
 
 
-public sealed class WidgetArea : AuditableEntity
+public sealed class WidgetArea : AuditableEntity<string>
 {
     readonly HashSet<Widget> widgets = new HashSet<Widget>();
 

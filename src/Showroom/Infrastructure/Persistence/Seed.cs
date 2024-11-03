@@ -52,9 +52,8 @@ public static class Seed
 
         if (!context.Users.Any())
         {
-            context.Users.Add(new User
+            context.Users.Add(new User("api")
             {
-                Id = "api",
                 FirstName = "API",
                 LastName = "User",
                 SSN = "213",
@@ -69,7 +68,6 @@ public static class Seed
         {
             context.Organizations.Add(new Organization
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = "Organization",
                 Address = new Address
                 {
@@ -90,31 +88,26 @@ public static class Seed
         {
             context.CompetenceAreas.Add(new CompetenceArea
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = "Electrical Engineering"
             });
 
             context.CompetenceAreas.Add(new CompetenceArea
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = "Mechanical Engineering"
             });
 
             context.CompetenceAreas.Add(new CompetenceArea
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = "Project Management"
             });
 
             context.CompetenceAreas.Add(new CompetenceArea
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = "Quality Assurance (QA)"
             });
 
             context.CompetenceAreas.Add(new CompetenceArea
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = "Software Engineering"
             });
 
@@ -191,7 +184,6 @@ public static class Seed
 
         PersonProfile personProfile = new PersonProfile()
         {
-            Id = Guid.NewGuid().ToString(),
             OrganizationId = TenantConstants.OrganizationId,
             FirstName = "Marina",
             LastName = "Sundström",
@@ -231,7 +223,6 @@ My career began back in 2014, when I was working as a software developer for a l
         {
             var skillArea = new Domain.Entities.SkillArea()
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = skillGroup.Key,
                 Slug = NewMethod(skillGroup.Key),
                 Industry = await context.Industries.FirstAsync(x => x.Name == "Software Development"),
@@ -244,7 +235,6 @@ My career began back in 2014, when I was working as a software developer for a l
 
                 var skill = new Domain.Entities.Skill()
                 {
-                    Id = Guid.NewGuid().ToString(),
                     Name = skillName,
                     Slug = NewMethod(skillName),
                 };
@@ -253,7 +243,6 @@ My career began back in 2014, when I was working as a software developer for a l
 
                 personProfile.PersonProfileSkills.Add(new PersonProfileSkill
                 {
-                    Id = Guid.NewGuid().ToString(),
                     Skill = skill,
                     //Years = skillInfo.Years,
                     Level = (Domain.Enums.SkillLevel?)skillInfo.Level,
@@ -299,7 +288,6 @@ My career began back in 2014, when I was working as a software developer for a l
             {
                 employment = new Employment()
                 {
-                    Id = Guid.NewGuid().ToString(),
                     Employer = await context.Companies.FirstAsync(x => x.Name == experience.Employer),
                     Title = experience.Title, // Incorrect
                     StartDate = resume.Experience.OrderBy(x => x.StartDate).First(x => x.Company == experience.Company).StartDate,
@@ -322,7 +310,6 @@ My career began back in 2014, when I was working as a software developer for a l
 
             var experience2 = new Domain.Entities.PersonProfileExperience()
             {
-                Id = Guid.NewGuid().ToString(),
                 PersonProfile = personProfile,
                 Current = experience.Current,
                 Highlight = experience.Highlight,
@@ -352,7 +339,6 @@ My career began back in 2014, when I was working as a software developer for a l
 
                     sk = new PersonProfileSkill()
                     {
-                        Id = Guid.NewGuid().ToString(),
                         PersonProfile = personProfile,
                         Skill = sk2!
                     };
@@ -362,7 +348,6 @@ My career began back in 2014, when I was working as a software developer for a l
 
                 experience2.Skills.Add(new PersonProfileExperienceSkill()
                 {
-                    Id = Guid.NewGuid().ToString(),
                     PersonProfileExperience = experience2,
                     PersonProfileSkill = sk
                 });

@@ -4,22 +4,20 @@ using YourBrand.Inventory.Domain.Events;
 
 namespace YourBrand.Inventory.Domain.Entities;
 
-public class WarehouseItem : AuditableEntity
+public class WarehouseItem : AuditableEntity<string>
 {
     protected WarehouseItem() { }
 
     public WarehouseItem(string itemId, string warehouseId, string location, int quantityOnHand, int quantityThreshold = 10)
+        : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
         ItemId = itemId;
         WarehouseId = warehouseId;
         Location = location;
         QuantityOnHand = quantityOnHand;
         QuantityThreshold = quantityThreshold;
     }
-
-    public string Id { get; set; }
-
+    
     public Item Item { get; set; } = null!;
 
     public string ItemId { get; set; } = null!;

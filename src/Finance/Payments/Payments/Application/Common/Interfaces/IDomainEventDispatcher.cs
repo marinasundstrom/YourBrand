@@ -1,4 +1,5 @@
-﻿using YourBrand.Payments.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.Payments.Domain.Common;
 
 namespace YourBrand.Payments.Application.Common.Interfaces;
 

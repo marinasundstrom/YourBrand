@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.Transactions.Domain.Common;
 using YourBrand.Transactions.Domain.Enums;
 

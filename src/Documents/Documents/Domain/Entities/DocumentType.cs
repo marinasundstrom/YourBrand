@@ -2,9 +2,7 @@
 
 namespace YourBrand.Documents.Domain.Entities;
 
-public class DocumentType : AuditableEntity
+public class DocumentType : AuditableEntity<string>
 {
-    public string Id { get; set; } = null!;
-
     public string Name { get; set; } = null!;
 }

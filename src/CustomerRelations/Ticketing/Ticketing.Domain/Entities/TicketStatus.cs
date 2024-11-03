@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
@@ -5,7 +6,7 @@ using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class TicketStatus : Entity<int>, IHasTenant, IHasOrganization, IAuditable
+public class TicketStatus : Entity<int>, IHasTenant, IHasOrganization, IAuditableEntity<int>
 {
     protected TicketStatus()
     {
@@ -13,8 +14,8 @@ public class TicketStatus : Entity<int>, IHasTenant, IHasOrganization, IAuditabl
     }
 
     public TicketStatus(int id, string name, string? handle, string? description)
+    : base(id)
     {
-        Id = id;
         Name = name;
         Handle = handle;
         Description = description;

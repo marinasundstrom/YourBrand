@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 using Newtonsoft.Json;
 
+using YourBrand.Domain;
 using YourBrand.Ticketing.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.Ticketing.Infrastructure.Persistence.Interceptors;

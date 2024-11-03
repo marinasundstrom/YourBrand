@@ -2,9 +2,10 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Auditability;
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.IdentityManagement.Application.Common.Interfaces;
-using YourBrand.IdentityManagement.Domain.Common.Interfaces;
 using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Infrastructure.Persistence.Interceptors;
@@ -44,20 +45,29 @@ public class AuditableEntitySaveChangesInterceptor(
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedBy = userContext.UserId;
+                entry.Entity.CreatedById = userContext.UserId;
                 entry.Entity.Created = timeProvider.GetUtcNow();
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
-                entry.Entity.LastModifiedBy = userContext.UserId;
+                entry.Entity.LastModifiedById = userContext.UserId;
                 entry.Entity.LastModified = timeProvider.GetUtcNow();
             }
-            else if (entry.State == EntityState.Deleted)
+        }
+
+        foreach (var entry in context.ChangeTracker.Entries<ISoftDeletable>())
+        {
+            if (entry.State == EntityState.Deleted)
             {
                 if (entry.Entity is ISoftDeletable softDelete)
                 {
-                    softDelete.DeletedBy = userContext.UserId;
-                    softDelete.Deleted = timeProvider.GetUtcNow();
+                    softDelete.IsDeleted = true;
+
+                    if (entry.Entity is ISoftDeletableWithAudit softDelete2)
+                    {
+                        softDelete2.DeletedById = userContext.UserId;
+                        softDelete2.Deleted = timeProvider.GetUtcNow();
+                    }
 
                     entry.State = EntityState.Modified;
                 }

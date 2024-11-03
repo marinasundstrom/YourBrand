@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
@@ -5,7 +6,7 @@ using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class Project : AggregateRoot<ProjectId>, IHasTenant, IHasOrganization, IAuditable
+public class Project : AggregateRoot<ProjectId>, IHasTenant, IHasOrganization, IAuditableEntity<ProjectId>
 {
     readonly HashSet<Team> _teams = new HashSet<Team>();
     readonly HashSet<ProjectMembership> _memberships = new HashSet<ProjectMembership>();
@@ -19,9 +20,8 @@ public class Project : AggregateRoot<ProjectId>, IHasTenant, IHasOrganization, I
     {
     }
 
-    public Project(ProjectId id, string name, string? description)
+    public Project(ProjectId id, string name, string? description) : base(id)
     {
-        Id = id;
         Name = name;
         Description = description;
     }

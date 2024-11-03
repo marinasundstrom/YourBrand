@@ -11,9 +11,8 @@ public sealed class TicketType : Entity<int>, IHasTenant, IHasOrganization
 
     }
 
-    public TicketType(int id, string name) : base()
+    public TicketType(int id, string name) : base(id)
     {
-        Id = id;
         Name = name;
     }
 

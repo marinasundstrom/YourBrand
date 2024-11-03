@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.IdentityManagement.Domain.Common;
 
 namespace YourBrand.IdentityManagement.Domain.Events;

@@ -1,15 +1,20 @@
+using YourBrand.Auditability;
 using YourBrand.ChatApp.Domain.ValueObjects;
 using YourBrand.Domain;
 using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Domain.Entities;
 
-public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAuditable, IHasTenant
+public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAuditableEntity<OrganizationId>, IHasTenant
 {
+    protected Organization()
+    {
+
+    }
+
     public Organization(OrganizationId id, string name)
         : base(id)
     {
-        Id = id;
         Name = name;
     }
 

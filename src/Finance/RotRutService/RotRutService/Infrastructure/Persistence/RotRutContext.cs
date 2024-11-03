@@ -37,7 +37,7 @@ public class RotRutContext(
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entities = ChangeTracker
-                        .Entries<Entity>()
+                        .Entries<IHasDomainEvents>()
                         .Where(e => e.Entity.DomainEvents.Any())
                         .Select(e => e.Entity);
 

@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.Invoicing.Domain.Common;
 
 namespace YourBrand.Invoicing.Domain.Events;

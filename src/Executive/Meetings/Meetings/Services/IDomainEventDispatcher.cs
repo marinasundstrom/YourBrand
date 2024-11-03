@@ -1,4 +1,6 @@
-﻿namespace YourBrand.Meetings.Services;
+﻿using YourBrand.Domain;
+
+namespace YourBrand.Meetings.Services;
 
 public interface IDomainEventDispatcher
 {

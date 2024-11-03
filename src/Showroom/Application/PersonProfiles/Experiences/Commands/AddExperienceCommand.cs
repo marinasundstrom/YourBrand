@@ -33,7 +33,6 @@ public record AddExperienceCommand(
 
             var experience = new PersonProfileExperience
             {
-                Id = Guid.NewGuid().ToString(),
                 PersonProfile = personProfile,
                 Title = request.Title,
                 CompanyId = request.CompanyId,

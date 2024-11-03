@@ -11,6 +11,7 @@ using YourBrand.Documents.Application.Common.Interfaces;
 using YourBrand.Documents.Domain.Common;
 using YourBrand.Documents.Infrastructure.Persistence;
 using YourBrand.Documents.Infrastructure.Persistence.Outbox;
+using YourBrand.Domain;
 
 namespace YourBrand.Documents.Infrastructure.BackgroundJobs;
 

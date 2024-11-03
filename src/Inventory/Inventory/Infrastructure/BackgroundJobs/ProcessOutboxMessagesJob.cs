@@ -7,6 +7,7 @@ using Polly.Retry;
 
 using Quartz;
 
+using YourBrand.Domain;
 using YourBrand.Inventory.Application.Common.Interfaces;
 using YourBrand.Inventory.Domain.Common;
 using YourBrand.Inventory.Infrastructure.Persistence;

@@ -18,7 +18,6 @@ public record CreateCompetenceAreaCommand(string Name) : IRequest<CompetenceArea
 
             competenceArea = new Domain.Entities.CompetenceArea
             {
-                Id = Guid.NewGuid().ToString(),
                 Name = request.Name
             };
 

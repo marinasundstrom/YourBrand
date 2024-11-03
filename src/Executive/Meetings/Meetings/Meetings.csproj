@@ -49,6 +49,8 @@
         <ProjectReference Include="..\..\..\IdentityManagement\IdentityManagement.Contracts\IdentityManagement.Contracts.csproj" />
 
         <ProjectReference Include="..\Meetings.Shared\Meetings.Shared.csproj" />
+
+        <ProjectReference Include="..\..\..\Common\Domain.Auditability.Abstractions\Domain.Auditability.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

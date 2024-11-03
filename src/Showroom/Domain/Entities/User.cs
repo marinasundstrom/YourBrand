@@ -6,12 +6,21 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class User : AuditableEntity, IHasTenant, ISoftDeletable
+public class User : AuditableEntity<UserId>, IHasTenant, ISoftDeletable
 {
     readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
     readonly HashSet<Organization> _organization = new HashSet<Organization>();
 
-    public UserId Id { get; set; } = null!;
+    public User()
+        : base(Guid.NewGuid().ToString())
+    {
+
+    }
+
+    public User(UserId id) : base(id)
+    {
+
+    }
 
     public TenantId TenantId { get; set; } = null!;
 
@@ -28,6 +37,7 @@ public class User : AuditableEntity, IHasTenant, ISoftDeletable
     public IReadOnlyCollection<Organization> Organization => _organization;
     public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

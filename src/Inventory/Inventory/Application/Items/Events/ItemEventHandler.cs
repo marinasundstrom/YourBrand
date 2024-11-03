@@ -1,3 +1,4 @@
+using YourBrand.Domain;
 using YourBrand.Inventory.Application.Common.Interfaces;
 using YourBrand.Inventory.Domain;
 using YourBrand.Inventory.Domain.Events;

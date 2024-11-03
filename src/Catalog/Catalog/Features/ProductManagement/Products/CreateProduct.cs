@@ -38,16 +38,13 @@ public sealed record CreateProduct(string OrganizationId, string Name, string St
             }
             catch { }
 
-            var product = new Domain.Entities.Product()
+            var product = new Domain.Entities.Product(request.OrganizationId, productId, request.Name)
             {
-                OrganizationId = request.OrganizationId,
-                Name = request.Name,
                 Description = request.Description,
                 HasVariants = request.IsGroupedProduct,
                 Handle = request.Handle,
                 Store = store
             };
-            product.SetId(productId);
 
             if (request.VatRateId is not null)
             {

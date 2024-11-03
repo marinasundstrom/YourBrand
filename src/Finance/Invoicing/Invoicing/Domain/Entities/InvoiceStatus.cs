@@ -4,7 +4,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Invoicing.Domain.Entities;
 
-public sealed class InvoiceStatus : AuditableEntity, IHasTenant, IHasOrganization
+public sealed class InvoiceStatus : AuditableEntity<int>, IHasTenant, IHasOrganization
 {
     protected InvoiceStatus()
     {
@@ -18,14 +18,12 @@ public sealed class InvoiceStatus : AuditableEntity, IHasTenant, IHasOrganizatio
     }
 
     public InvoiceStatus(int id, string name, string handle, string? description)
+        : base(id)
     {
-        Id = id;
         Name = name;
         Handle = handle;
         Description = description;
     }
-
-    public int Id { get; set; }
 
     public TenantId TenantId { get; set; }
 

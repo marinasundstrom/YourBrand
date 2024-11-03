@@ -4,9 +4,9 @@ public sealed class OutboxMessage
 {
     public Guid Id { get; set; }
 
-    public DateTime OccurredOnUtc { get; set; }
+    public DateTimeOffset OccurredOnUtc { get; set; }
 
-    public DateTime? ProcessedOnUtc { get; set; }
+    public DateTimeOffset? ProcessedOnUtc { get; set; }
 
     public string Type { get; set; } = null!;
 

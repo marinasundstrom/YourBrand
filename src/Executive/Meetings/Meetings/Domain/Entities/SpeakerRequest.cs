@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -5,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public sealed class SpeakerRequest : Entity<SpeakerRequestId>, IAuditable, IHasTenant, IHasOrganization
+public sealed class SpeakerRequest : Entity<SpeakerRequestId>, IAuditableEntity<SpeakerRequestId>, IHasTenant, IHasOrganization
 {
     public SpeakerRequest()
         : base(new SpeakerRequestId())

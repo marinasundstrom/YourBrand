@@ -19,9 +19,8 @@ public sealed class OrderStatus : Entity<int>, IAuditableEntity<int, User>, IHas
         Description = description;
     }
 
-    public OrderStatus(int id, string name, string handle, string? description)
+    public OrderStatus(int id, string name, string handle, string? description) : base(id)
     {
-        Id = id;
         Name = name;
         Handle = handle;
         Description = description;

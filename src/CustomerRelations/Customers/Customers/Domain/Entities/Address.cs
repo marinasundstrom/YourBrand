@@ -1,14 +1,14 @@
+using YourBrand.Customers.Domain.Common;
 using YourBrand.Customers.Domain.Enums;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Customers.Domain.Entities;
 
-public class Address : Entity<string>, IAuditable, IHasTenant
+public class Address : AuditableEntity<string>, IHasTenant
 {
-    public Address()
+    public Address() : base(Guid.NewGuid().ToString())
     {
-        Id = Guid.NewGuid().ToString();
         //AddDomainEvent(new AddressCreated(Id));
     }
 

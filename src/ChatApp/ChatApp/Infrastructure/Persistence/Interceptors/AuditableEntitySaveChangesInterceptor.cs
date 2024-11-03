@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
+using YourBrand.Auditability;
 using YourBrand.ChatApp.Domain.Entities;
 using YourBrand.Domain;
 using YourBrand.Tenancy;
@@ -38,49 +39,33 @@ public sealed class AuditableEntitySaveChangesInterceptor(
                 entry.Entity.TenantId = tenantContext.TenantId.GetValueOrDefault();
             }
         }
-
-        foreach (var entry in context.ChangeTracker.Entries<IAuditable>())
+        foreach (var entry in context.ChangeTracker.Entries<IAuditableEntity>())
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedById = userContext.UserId!;
+                entry.Entity.CreatedById = userContext.UserId;
                 entry.Entity.Created = timeProvider.GetUtcNow();
             }
             else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
             {
                 entry.Entity.LastModifiedById = userContext.UserId;
                 entry.Entity.LastModified = timeProvider.GetUtcNow();
-            }
-            else if (entry.State == EntityState.Deleted)
-            {
-                if (entry.Entity is ISoftDeletable softDelete)
-                {
-                    softDelete.DeletedById = userContext.UserId;
-                    softDelete.Deleted = timeProvider.GetUtcNow();
-
-                    entry.State = EntityState.Modified;
-                }
             }
         }
 
-        foreach (var entry in context.ChangeTracker.Entries<IAuditable>())
+        foreach (var entry in context.ChangeTracker.Entries<ISoftDeletable>())
         {
-            if (entry.State == EntityState.Added)
-            {
-                entry.Entity.CreatedById = userContext.UserId!;
-                entry.Entity.Created = timeProvider.GetUtcNow();
-            }
-            else if (entry.State == EntityState.Modified || entry.HasChangedOwnedEntities())
-            {
-                entry.Entity.LastModifiedById = userContext.UserId;
-                entry.Entity.LastModified = timeProvider.GetUtcNow();
-            }
-            else if (entry.State == EntityState.Deleted)
+            if (entry.State == EntityState.Deleted)
             {
                 if (entry.Entity is ISoftDeletable softDelete)
                 {
-                    softDelete.DeletedById = userContext.UserId;
-                    softDelete.Deleted = timeProvider.GetUtcNow();
+                    softDelete.IsDeleted = true;
+
+                    if (entry.Entity is ISoftDeletableWithAudit softDelete2)
+                    {
+                        softDelete2.DeletedById = userContext.UserId;
+                        softDelete2.Deleted = timeProvider.GetUtcNow();
+                    }
 
                     entry.State = EntityState.Modified;
                 }

@@ -1,6 +1,4 @@
-﻿
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Text.Json.Serialization;
 
 namespace YourBrand.Application.Search;
 
@@ -8,7 +6,7 @@ public class SearchResultItem
 {
     public string Title { get; set; } = null!;
 
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public SearchResultItemType ResultType { get; set; }
 
     public string? Description { get; set; }

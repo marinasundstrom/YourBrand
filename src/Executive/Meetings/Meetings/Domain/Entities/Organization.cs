@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -5,12 +6,11 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAuditable, IHasTenant
+public class Organization : AggregateRoot<OrganizationId>, IOrganization, IAuditableEntity<OrganizationId>, IHasTenant
 {
     public Organization(OrganizationId id, string name)
         : base(id)
     {
-        Id = id;
         Name = name;
     }
 

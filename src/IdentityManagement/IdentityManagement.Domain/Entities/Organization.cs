@@ -6,16 +6,15 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Domain.Entities;
 
-public class Organization : AuditableEntity, IOrganization, IHasTenant
+public class Organization : AuditableEntity<OrganizationId>, IOrganization, IHasTenant
 {
     private readonly HashSet<User> _users = new HashSet<User>();
     private readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
 
     private Organization() { }
 
-    public Organization(OrganizationId id, string name, string? friendlyName)
+    public Organization(OrganizationId id, string name, string? friendlyName) : base(id)
     {
-        Id = id;
         Name = name;
         FriendlyName = friendlyName;
 
@@ -26,8 +25,6 @@ public class Organization : AuditableEntity, IOrganization, IHasTenant
     {
 
     }
-
-    public OrganizationId Id { get; private set; }
 
     public string Name { get; private set; }
 

@@ -5,10 +5,8 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class CaseProfile : AuditableEntity, IHasTenant, ISoftDeletable
+public class CaseProfile : AuditableEntity<string>, IHasTenant, ISoftDeletable
 {
-    public string Id { get; set; } = null!;
-
     public TenantId TenantId { get; set; } = null!;
 
     public OrganizationId OrganizationId { get; set; } = null!;
@@ -17,6 +15,7 @@ public class CaseProfile : AuditableEntity, IHasTenant, ISoftDeletable
 
     public string? Presentation { get; set; }
 
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

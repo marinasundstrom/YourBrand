@@ -1,4 +1,5 @@
-﻿using YourBrand.HumanResources.Domain.Common;
+﻿using YourBrand.Domain;
+using YourBrand.HumanResources.Domain.Common;
 
 namespace YourBrand.HumanResources.Application.Common.Interfaces;
 

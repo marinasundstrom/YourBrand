@@ -14,12 +14,13 @@
 	<ItemGroup>
 		<PackageReference Include="LinqKit" Version="1.2.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-*" />
-		<PackageReference Include="MediatR.Contracts" Version="1.0.1" />
+		<PackageReference Include="MediatR.Contracts" Version="2.0.1" />
 	</ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\Common\Identity.Abstractions\Identity.Abstractions.csproj" />
         <ProjectReference Include="..\..\Common\Tenancy.Abstractions\Tenancy.Abstractions.csproj" />
+        <ProjectReference Include="..\..\Common\Domain.Auditability.Abstractions\Domain.Auditability.Abstractions.csproj" />
     </ItemGroup>
 	
 </Project>

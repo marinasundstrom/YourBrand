@@ -6,15 +6,17 @@ namespace YourBrand.Domain;
 public static class SoftDeleteQueryFilter
 {
     static readonly Type softDeleteInterface = typeof(ISoftDeletable);
-    static readonly PropertyInfo deletedProperty = softDeleteInterface.GetProperty(nameof(ISoftDeletable.Deleted));
+    static readonly PropertyInfo deletedProperty = softDeleteInterface.GetProperty(nameof(ISoftDeletable.IsDeleted));
     private static Expression<Func<ISoftDeletable, bool>> expression;
 
     public static Expression<Func<ISoftDeletable, bool>>? GetFilter()
     {
         if (expression is null)
         {
+            // IsDeleted == false
+
             var param = Expression.Parameter(softDeleteInterface, "entity");
-            var body = Expression.Equal(Expression.Property(param, deletedProperty!), Expression.Constant(null));
+            var body = Expression.Equal(Expression.Property(param, deletedProperty!), Expression.Constant(false));
             expression = Expression.Lambda<Func<ISoftDeletable, bool>>(body, param);
         }
 

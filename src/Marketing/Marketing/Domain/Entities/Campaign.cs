@@ -1,8 +1,9 @@
 ﻿using YourBrand.Identity;
+using YourBrand.Marketing.Domain.Common;
 
 namespace YourBrand.Marketing.Domain.Entities;
 
-public class Campaign : Entity<string>, IAuditable
+public class Campaign : AuditableEntity<string>
 {
     readonly HashSet<ProductOffer> _productOffers = new HashSet<ProductOffer>();
 

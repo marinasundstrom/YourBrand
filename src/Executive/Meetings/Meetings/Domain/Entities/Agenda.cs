@@ -1,3 +1,4 @@
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -19,7 +20,7 @@ public enum ApprovalStatus
     Rejected           // Agenda has been rejected.
 }
 
-public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrganization
+public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasTenant, IHasOrganization
 {
     readonly HashSet<AgendaItem> _items = new HashSet<AgendaItem>();
 
@@ -27,9 +28,8 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditable, IHasTenant, IHasOrgan
     {
     }
 
-    public Agenda(AgendaId id)
+    public Agenda(AgendaId id) : base(id)
     {
-        Id = id ?? throw new ArgumentNullException(nameof(id));
         _items = new HashSet<AgendaItem>();
     }
 

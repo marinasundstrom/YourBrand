@@ -1,10 +1,11 @@
+using YourBrand.Auditability;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
+public class User : AggregateRoot<UserId>, IAuditableEntity<UserId>, IHasTenant
 {
     readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
     readonly HashSet<Organization> _organizations = new HashSet<Organization>();
@@ -12,7 +13,6 @@ public class User : AggregateRoot<UserId>, IAuditable, IHasTenant
     public User(UserId id, string name, string email)
         : base(id)
     {
-        Id = id;
         Name = name;
         Email = email;
     }

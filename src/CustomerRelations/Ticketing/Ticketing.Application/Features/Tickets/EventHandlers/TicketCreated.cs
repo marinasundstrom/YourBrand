@@ -1,4 +1,5 @@
-﻿using YourBrand.Tenancy;
+﻿using YourBrand.Domain;
+using YourBrand.Tenancy;
 using YourBrand.Ticketing.Application.Common;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
