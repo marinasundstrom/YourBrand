@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Domain.Enums;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class Absence : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
+public class Absence : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletableWithAudit<User>
 {
     public Absence() : base(Guid.NewGuid().ToString())
     {

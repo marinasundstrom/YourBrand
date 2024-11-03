@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class User : AuditableEntity<UserId>, IHasTenant, ISoftDeletable
+public class User : AuditableEntity<UserId>, IHasTenant, ISoftDeletableWithAudit<User>
 {
     readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
     readonly HashSet<Organization> _organization = new HashSet<Organization>();

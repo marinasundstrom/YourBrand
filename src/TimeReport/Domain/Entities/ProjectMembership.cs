@@ -6,7 +6,7 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ProjectMembership : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
+public class ProjectMembership : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletableWithAudit<User>
 {
     public ProjectMembership() : base(Guid.NewGuid().ToString())
     {

@@ -5,7 +5,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class CaseProfile : AuditableEntity<string>, IHasTenant, ISoftDeletable
+public class CaseProfile : AuditableEntity<string>, IHasTenant, ISoftDeletableWithAudit<User>
 {
     public TenantId TenantId { get; set; } = null!;
 

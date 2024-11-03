@@ -20,6 +20,7 @@ public class Person : AuditableEntity<string>, ISoftDeletable
         : base(Guid.NewGuid().ToString())
     {
         Organization = organization;
+
         FirstName = firstName;
         LastName = lastName;
         DisplayName = displayName;

@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class Team : Entity<string>, IAuditableEntity<string>, ISoftDeletable, IHasTenant, IHasOrganization
+public class Team : Entity<string>, IAuditableEntity<string>, ISoftDeletableWithAudit<User>, IHasTenant, IHasOrganization
 {
     readonly HashSet<User> _members = new HashSet<User>();
     readonly HashSet<TeamMembership> _memberships = new HashSet<TeamMembership>();

@@ -4,7 +4,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class ApiKeyService : AuditableEntity<string>, ISoftDeletable
+public class ApiKeyService : AuditableEntity<string>, ISoftDeletableWithAudit<User>
 {
     public ApiKeyService() : base(Guid.NewGuid().ToString())
     {

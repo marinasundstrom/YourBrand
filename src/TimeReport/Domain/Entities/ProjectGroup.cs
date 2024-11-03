@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ProjectGroup : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
+public class ProjectGroup : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletableWithAudit<User>
 {
     public ProjectGroup() : base(Guid.NewGuid().ToString())
     {

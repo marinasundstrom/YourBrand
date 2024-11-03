@@ -6,7 +6,7 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class ProjectTeam : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
+public class ProjectTeam : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletableWithAudit<User>
 {
     protected ProjectTeam()
     {

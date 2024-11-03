@@ -9,7 +9,7 @@ using YourBrand.TimeReport.Domain.Events;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class TimeSheet : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
+public class TimeSheet : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletableWithAudit<User>
 {
     private readonly HashSet<TimeSheetActivity> _activities = new HashSet<TimeSheetActivity>();
     private readonly HashSet<Entry> _entries = new HashSet<Entry>();

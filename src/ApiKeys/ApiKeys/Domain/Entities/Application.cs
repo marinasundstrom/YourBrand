@@ -5,7 +5,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class Application : AuditableEntity<string>, ISoftDeletable
+public class Application : AuditableEntity<string>, ISoftDeletableWithAudit<User>
 {
     protected Application()
     {

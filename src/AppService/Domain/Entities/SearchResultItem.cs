@@ -3,7 +3,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Domain.Entities;
 
-public class SearchResultItem : AuditableEntity<string>, ISoftDeletable
+public class SearchResultItem : AuditableEntity<string>, ISoftDeletableWithAudit<User>
 {
     protected SearchResultItem()
     {

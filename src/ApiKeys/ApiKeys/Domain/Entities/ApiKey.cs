@@ -6,7 +6,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class ApiKey : AuditableEntity<string>, ISoftDeletable
+public class ApiKey : AuditableEntity<string>, ISoftDeletableWithAudit
 {
     protected ApiKey()
     {

@@ -7,7 +7,7 @@ using YourBrand.Ticketing.Domain.ValueObjects;
 
 namespace YourBrand.Ticketing.Domain.Entities;
 
-public class ProjectTeam : Entity<string>, IAuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
+public class ProjectTeam : Entity<string>, IAuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletableWithAudit<User>
 {
     private ProjectTeam()
     {

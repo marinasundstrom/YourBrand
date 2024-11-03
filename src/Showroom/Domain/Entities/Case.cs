@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class Case : AuditableEntity<string>, IHasTenant, ISoftDeletable
+public class Case : AuditableEntity<string>, IHasTenant, ISoftDeletableWithAudit<User>
 {
     public Case()
         : base(Guid.NewGuid().ToString())
@@ -32,7 +32,7 @@ public class Case : AuditableEntity<string>, IHasTenant, ISoftDeletable
     public User? DeletedBy { get; set; }
 }
 
-public class Location : AuditableEntity<string>, ISoftDeletable
+public class Location : AuditableEntity<string>, ISoftDeletableWithAudit<User>
 {
     public string? CityOrDistrict { get; set; }
 

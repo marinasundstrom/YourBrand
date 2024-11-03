@@ -5,7 +5,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class PersonProfileExperienceSkill : AuditableEntity<string>, IHasTenant, ISoftDeletable
+public class PersonProfileExperienceSkill : AuditableEntity<string>, IHasTenant, ISoftDeletableWithAudit<User>
 {
     public PersonProfileExperienceSkill()
         : base(Guid.NewGuid().ToString())

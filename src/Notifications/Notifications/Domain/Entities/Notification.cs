@@ -5,7 +5,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Notifications.Domain.Entities;
 
-public class Notification : AuditableEntity<string>, IHasTenant, ISoftDeletable
+public class Notification : AuditableEntity<string>, IHasTenant, ISoftDeletableWithAudit
 {
     public Notification()
     {

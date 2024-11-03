@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
-public class AbsenceType : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletable
+public class AbsenceType : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletableWithAudit<User>
 {
 
     public AbsenceType() : base(Guid.NewGuid().ToString())

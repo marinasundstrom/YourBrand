@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class PersonProfile : AuditableEntity<string>, IHasTenant, ISoftDeletable
+public class PersonProfile : AuditableEntity<string>, IHasTenant, ISoftDeletableWithAudit<User>
 {
     public PersonProfile()
         : base(Guid.NewGuid().ToString())

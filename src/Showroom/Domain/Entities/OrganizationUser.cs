@@ -5,7 +5,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class OrganizationUser : AuditableEntity<string>, IHasTenant, ISoftDeletable
+public class OrganizationUser : AuditableEntity<string>, IHasTenant, ISoftDeletableWithAudit<User>
 {
     //public string Id { get; private set; } = Guid.NewGuid().ToString();
 

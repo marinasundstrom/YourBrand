@@ -7,7 +7,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class SubscriptionPlan : Entity<string>, IHasTenant, IAuditableEntity<string>, ISoftDeletable
+public class SubscriptionPlan : Entity<string>, IHasTenant, IAuditableEntity<string>, ISoftDeletableWithAudit
 {
     private SubscriptionPlan() { }
 

@@ -4,7 +4,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Domain.Entities;
 
-public class BrandProfile : AuditableEntity<string>, ISoftDeletable, IHasTenant
+public class BrandProfile : AuditableEntity<string>, ISoftDeletableWithAudit<User>, IHasTenant
 {
     protected BrandProfile()
     {

@@ -4,7 +4,7 @@ using YourBrand.Showroom.Domain.Common;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class Skill : AuditableEntity<string>, ISoftDeletable
+public class Skill : AuditableEntity<string>, ISoftDeletableWithAudit<User>
 {
     public Skill()
         : base(Guid.NewGuid().ToString())

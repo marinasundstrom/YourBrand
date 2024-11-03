@@ -5,7 +5,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Documents.Domain.Entities;
 
-public class Directory : AuditableEntity<string>, ISoftDeletable, IDeletable, IItem
+public class Directory : AuditableEntity<string>, ISoftDeletableWithAudit, IDeletable, IItem
 {
     private readonly HashSet<Document> _documents = new HashSet<Document>();
     private readonly HashSet<Directory> _directories = new HashSet<Directory>();
