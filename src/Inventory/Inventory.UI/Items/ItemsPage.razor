@@ -8,11 +8,11 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Items</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     New Item
 </MudButton>
 
-<MudButton Variant="Variant.Filled" Href="/inventory/items/groups" StartIcon="@Icons.Filled.List" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" Href="/inventory/items/groups" StartIcon="@Icons.Material.Filled.List" Color="Color.Default" Class="mb-2 me-2">
     Groups
 </MudButton>
 
@@ -28,7 +28,7 @@
 
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
        <HeaderContent>
             <MudTh><MudTableSortLabel T="Item" SortLabel="Id">Id</MudTableSortLabel></MudTh>
@@ -59,11 +59,11 @@
 
     public ItemGroup ItemGroup { get; set; }
 
-    private async Task<TableData<Item>> LoadData(TableState state)
+    private async Task<TableData<Item>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await ItemsClient.GetItemsAsync(state.Page + 1, state.PageSize, ItemGroup?.Id, Warehouse?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
+            var results = await ItemsClient.GetItemsAsync(state.Page + 1, state.PageSize, ItemGroup?.Id, Warehouse?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc), cancellationToken);
             return new TableData<Item> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
@@ -124,7 +124,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();

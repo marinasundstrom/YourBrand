@@ -1,7 +1,7 @@
 @using MudBlazor.Services
+@implements IBrowserViewportObserver
 @implements IAsyncDisposable
 @inject IAppBarTrayService AppBarTrayService
-@inject IBreakpointService BreakpointListener
 
 @foreach (var item in AppBarTrayService.Items)
 {
@@ -28,6 +28,9 @@
 
 @code 
 {
+    [Inject]
+    private IBrowserViewportService BrowserViewportService { get; set; }
+
     private Guid _subscriptionId;
 	private Breakpoint _start;
 
@@ -42,22 +45,26 @@
 	{
 		if (firstRender)
 		{
-			var subscriptionResult = await BreakpointListener.Subscribe((breakpoint) =>
-			{
-				InvokeAsync(StateHasChanged);
-			}, new ResizeOptions
-			{
-				ReportRate = 250,
-				NotifyOnBreakpointOnly = true,
-			});
+            await BrowserViewportService.SubscribeAsync(this, fireImmediately: true);
 
-			_start = subscriptionResult.Breakpoint;
-			_subscriptionId = subscriptionResult.SubscriptionId;
 			StateHasChanged();
 		}
 
 		await base.OnAfterRenderAsync(firstRender);
 	}
+
+    Guid IBrowserViewportObserver.Id { get; } = Guid.NewGuid();
+
+    ResizeOptions IBrowserViewportObserver.ResizeOptions { get; } = new()
+        {
+            ReportRate = 250,
+            NotifyOnBreakpointOnly = true
+        };
+
+    async Task IBrowserViewportObserver.NotifyBrowserViewportChangeAsync(BrowserViewportEventArgs browserViewportEventArgs) 
+    {
+        await InvokeAsync(StateHasChanged);
+    }
 
     private void AppBarTrayUpdated(object? sender, EventArgs e) 
     {
@@ -66,7 +73,7 @@
 
     public async ValueTask DisposeAsync() 
     {
-        await BreakpointListener.Unsubscribe(_subscriptionId);
+        await BrowserViewportService.UnsubscribeAsync(_subscriptionId);
         
         AppBarTrayService.ItemAdded -= AppBarTrayUpdated;
         AppBarTrayService.ItemRemoved -= AppBarTrayUpdated;

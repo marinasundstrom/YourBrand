@@ -12,7 +12,7 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Discounts</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     New Discount
 </MudButton>
 
@@ -22,7 +22,7 @@
         <ToolBarContent>
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
 
      <HeaderContent>
@@ -45,13 +45,13 @@
     bool loading = false;
     string? searchString;
 
-    private async Task<TableData<Discount>> ServerReload(TableState state)
+    private async Task<TableData<Discount>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await DiscountsClient.GetDiscountsAsync(state.Page, state.PageSize, null, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Marketing.Client.SortDirection.Asc : YourBrand.Marketing.Client.SortDirection.Desc));
+            var result = await DiscountsClient.GetDiscountsAsync(state.Page, state.PageSize, null, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Marketing.Client.SortDirection.Asc : YourBrand.Marketing.Client.SortDirection.Desc), cancellationToken);
 
             return new TableData<Discount>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -85,11 +85,11 @@
                 //FullScreen = true,
                 FullWidth = true,
                 MaxWidth = MaxWidth.Small,
-                DisableBackdropClick = true
+                BackdropClick = false
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();

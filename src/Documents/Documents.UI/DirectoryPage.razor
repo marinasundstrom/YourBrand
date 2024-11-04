@@ -44,7 +44,7 @@
                 }
                 else if (item.Type == ItemType.Document)
                 {
-                    <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@item.Document.Url" Target="_blank" @onclick:stopPropagation />
+                    <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Href="@item.Document.Url" Target="_blank" @onclick:stopPropagation />
                     <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await EditDocumentDetails(item.Document)" />
                     <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteDocument(item.Document)" />
                 }
@@ -95,7 +95,7 @@
 
         var result = await dialogRef.Result;
 
-        //if (result.Cancelled) return;
+        //if (result.Canceled) return;
 
         var i = await DocumentsClient.GetDocumentAsync((string)result.Data);
 
@@ -113,7 +113,7 @@
 
         var result = await dialogRef.Result;
 
-        //if (result.Cancelled) return;
+        //if (result.Canceled) return;
 
         //await table.ReloadServerData();
 

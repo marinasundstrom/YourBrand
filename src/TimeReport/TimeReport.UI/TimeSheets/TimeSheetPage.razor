@@ -29,8 +29,8 @@
     <MudText Typo="Typo.h3" GutterBottom="true">Week @Week - @Year</MudText>
 
     <div class="mb-4">
-        <MudButton Variant="@Variant.Filled" Class="me-2" StartIcon="@Icons.Material.Filled.ChevronLeft" Link="@PreviousWeekLink()">Previous week</MudButton>
-        <MudButton Variant="@Variant.Filled" EndIcon="@Icons.Material.Filled.ChevronRight" Link="@NextWeekLink()">Next week</MudButton>
+        <MudButton Variant="@Variant.Filled" Class="me-2" StartIcon="@Icons.Material.Filled.ChevronLeft" Href="@PreviousWeekLink()">Previous week</MudButton>
+        <MudButton Variant="@Variant.Filled" EndIcon="@Icons.Material.Filled.ChevronRight" Href="@NextWeekLink()">Next week</MudButton>
     </div>
 
     <EditForm Model="@this">
@@ -317,7 +317,7 @@ else
         var dialogRef = DialogService.Show<NewTimeSheetActivityDialog>("New activity", parameters);
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         var obj = (ActivityModel)dialogResult.Data; ;

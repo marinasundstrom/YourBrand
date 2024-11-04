@@ -8,9 +8,9 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Accounts</MudText>
 
-<MudCheckBox Checked="includeBlankAccounts" CheckedChanged="new Func<bool, Task>(OnIncludeBlankAccountsChecked)" Label="Show blank accounts" Class="mb-4"></MudCheckBox>
+<MudCheckBox Value="includeBlankAccounts" ValueChanged="new Func<bool, Task>(OnIncludeBlankAccountsChecked)" Label="Show blank accounts" Class="mb-4"></MudCheckBox>
 
-<MudCheckBox Checked="includeUnusedAccounts" CheckedChanged="new Func<bool, Task>(OnIncludeUnusedAccountsChecked)" Label="Show unused accounts" Class="mb-4"></MudCheckBox>
+<MudCheckBox Value="includeUnusedAccounts" ValueChanged="new Func<bool, Task>(OnIncludeUnusedAccountsChecked)" Label="Show unused accounts" Class="mb-4"></MudCheckBox>
 
 <MudTable T="Account" Items="accounts" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@(accounts is null)" LoadingProgressColor="Color.Info" Filter="new Func<Account, bool>(FilterFunc)" OnRowClick="(TableRowClickEventArgs<Account> e) => ItemClicked(e)" RowStyle="cursor: pointer;">
     <ToolBarContent>

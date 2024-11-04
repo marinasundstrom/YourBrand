@@ -12,7 +12,7 @@
 
 @* <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTimeSheetClicked">New TimeSheet</MudButton> *@
 
-<MudTable T="TimeSheet" ServerData="@(new Func<TableState, Task<TableData<TimeSheet>>>(ServerReload))" Elevation="25"
+<MudTable T="TimeSheet" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<TimeSheet>>>(ServerReload))" Elevation="25"
           Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTimeSheet(e.Item)" GroupBy="@_groupDefinition">
     <ToolBarContent>
         <MudSpacer />
@@ -81,13 +81,13 @@
 
     }
 
-    private async Task<TableData<TimeSheet>> ServerReload(TableState state)
+    private async Task<TableData<TimeSheet>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         var user = (await authenticationStateTask).User;
         var userId = user.FindFirst(x => x.Type.Contains("sub")).Value;
 
         var page = await TimeSheetsClient.GetTimeSheetsAsync(Organization.Id, state.Page, state.PageSize, null, userId, searchString,
-        state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+        state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc, cancellationToken);
 
         return new TableData<TimeSheet>() { TotalItems = page.TotalItems, Items = page.Items };
     }
@@ -126,7 +126,7 @@
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         searchString = null;
@@ -144,7 +144,7 @@
 
     var dialogResult = await dialogRef.Result;
 
-    if (dialogResult.Cancelled)
+    if (dialogResult.Canceled)
         return;
 
     table.ReloadServerData();

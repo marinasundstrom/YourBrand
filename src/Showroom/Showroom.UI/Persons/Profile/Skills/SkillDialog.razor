@@ -5,7 +5,7 @@
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-    <MudDialog DisableSidePadding="true">
+    <MudDialog Gutters="false">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 @if(PersonProfileSkillId is null) 
@@ -23,7 +23,7 @@
 
                 @foreach (var experience in experiences)
                 {
-                    <MudCheckBox @bind-Checked="experience.Checked">@experience.Title at @experience.Company.Name</MudCheckBox>
+                    <MudCheckBox @bind-Value="experience.Checked">@experience.Title at @experience.Company.Name</MudCheckBox>
                 }
             </MudContainer>
         </DialogContent>

@@ -45,11 +45,11 @@
     [Parameter]
     public DateTime? AvailableFrom { get; set; }
 
-    async Task<IEnumerable<PersonProfile>> SearchPersonProfiles(string text)
+    async Task<IEnumerable<PersonProfile>> SearchPersonProfiles(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await PersonProfilesClient.GetPersonProfilesAsync(1, 10, OrganizationId, CompetenceAreaId, AvailableFrom, text, null, null);
+            var results = await PersonProfilesClient.GetPersonProfilesAsync(1, 10, OrganizationId, CompetenceAreaId, AvailableFrom, text, null, null, cancellationToken);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

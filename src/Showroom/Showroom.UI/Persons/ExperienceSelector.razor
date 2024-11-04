@@ -7,18 +7,18 @@
 
                 <MudNumericField Label="Min. Years" Variant="Variant.Outlined" @bind-Value="Model.Years" For="() => Model.Years" />
 
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
                     Add experience
                 </MudButton>
             </EditForm>
 
-            <MudList>
+            <MudList T="string">
                 @foreach (var industry in Model.Industries)
                 {
                     <MudListItem Class="pa-0">
                         <div class="d-flex flex-grow-1 gap-1">
-                            <MudCheckBox Dense="true" T="bool" Checked="industry.Selected" CheckedChanged="async (e) => { industry.Selected = e; await OnUpdated.InvokeAsync(); } " class="flex-1 d-flex" Label="@($"{industry.Industry.Name} ({industry.Years} years)")" />
-                            <MudIconButton Class="flex-none" Icon="@Icons.Filled.Remove" OnClick="() => RemoveIndustry(industry)"></MudIconButton>
+                            <MudCheckBox Dense="true" T="bool" Value="industry.Selected" ValueChanged="async (e) => { industry.Selected = e; await OnUpdated.InvokeAsync(); } " class="flex-1 d-flex" Label="@($"{industry.Industry.Name} ({industry.Years} years)")" />
+                            <MudIconButton Class="flex-none" Icon="@Icons.Material.Filled.Remove" OnClick="() => RemoveIndustry(industry)"></MudIconButton>
                         </div>
                     </MudListItem>
                 }      

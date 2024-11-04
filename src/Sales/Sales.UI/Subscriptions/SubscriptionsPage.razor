@@ -75,7 +75,7 @@
         @*<MudTd>
             @if (subscription.Status.Id == 1)
             {
-                <MudIconButton Icon="@Icons.Filled.Delete" Size="Size.Small"
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
                     OnClick="async (e) => await DeleteSubscription(subscription)" />
             }
         </MudTd>*@
@@ -114,7 +114,7 @@
         null)).Items.ToList();
     }
 
-    private async Task<TableData<Subscription>> ServerReload(TableState state)
+    private async Task<TableData<Subscription>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
@@ -187,7 +187,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled)
+        if (result.Canceled)
             return;
 
         var order = (Order)result.Data;
@@ -209,7 +209,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled)
+        if (result.Canceled)
             return;
 
         var order = (Subscription)result.Data;

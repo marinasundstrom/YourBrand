@@ -8,7 +8,7 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Attributes</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="async () => await OnAttributeClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnAttributeClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     New Attribute
 </MudButton>
 
@@ -19,7 +19,7 @@
 
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
 
         <HeaderContent>
@@ -48,11 +48,11 @@
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization? Organization { get; set; }
 
-    private async Task<TableData<YourBrand.Catalog.Attribute>> LoadData(TableState state)
+    private async Task<TableData<YourBrand.Catalog.Attribute>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await AttributesClient.GetAttributesAsync(Organization.Id, null, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc));
+            var results = await AttributesClient.GetAttributesAsync(Organization.Id, null, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc), cancellationToken);
             return new TableData<YourBrand.Catalog.Attribute> { Items = results.Items, TotalItems = results.Total };
         }
         /*catch (ApiException exc)
@@ -95,7 +95,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();

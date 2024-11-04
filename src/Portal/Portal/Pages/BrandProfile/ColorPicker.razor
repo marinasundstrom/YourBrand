@@ -23,5 +23,5 @@
     [Parameter]
     public string Class { get; set; }
 
-    void OnColorDisplayClicked() => colorPicker.Open();
+    async Task OnColorDisplayClicked() => await colorPicker.OpenAsync();
 }

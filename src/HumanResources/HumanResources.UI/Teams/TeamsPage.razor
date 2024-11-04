@@ -14,7 +14,7 @@
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTeamClicked">New Team</MudButton>
 
-<MudTable T="Team" ServerData="@(new Func<TableState, Task<TableData<Team>>>(ServerReload))"
+<MudTable T="Team" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Team>>>(ServerReload))"
           Hover="true" Elevation="25" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTeam(e.Item)">
     <ToolBarContent>
         <MudAutocomplete T="Person" Label="Person" Variant="Variant.Text" Dense="true" Value="Person" ValueChanged="OnPersonChanged" SearchFunc="@Search1"
@@ -65,10 +65,10 @@
         });
     }
 
-    private async Task<TableData<Team>> ServerReload(TableState state)
+    private async Task<TableData<Team>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         var page = await TeamsClient.GetTeamsAsync(state.Page, state.PageSize, /* null,  Person?.Id, */ searchString,
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? HumanResources.Client.SortDirection.Desc : HumanResources.Client.SortDirection.Asc);
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? HumanResources.Client.SortDirection.Desc : HumanResources.Client.SortDirection.Asc, cancellationToken);
 
         return new TableData<Team>() { TotalItems = page.TotalItems, Items = page.Items };
     }
@@ -79,9 +79,9 @@
         table.ReloadServerData();
     }
 
-    private async Task<IEnumerable<Person>> Search1(string value)
+    private async Task<IEnumerable<Person>> Search1(string value, CancellationToken cancellationToken)
     {
-        var page = await PersonsClient.GetPersonsAsync(0, 10, value, null, null);
+        var page = await PersonsClient.GetPersonsAsync(0, 10, value, null, null, cancellationToken);
 
         return page.Items;
     }
@@ -104,7 +104,7 @@
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         searchString = null;
@@ -121,7 +121,7 @@
 
     var dialogResult = await dialogRef.Result;
 
-    if (dialogResult.Cancelled)
+    if (dialogResult.Canceled)
         return;
 
     table.ReloadServerData();

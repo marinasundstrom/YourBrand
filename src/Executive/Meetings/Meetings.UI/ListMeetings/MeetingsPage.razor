@@ -63,13 +63,13 @@
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
     }
 
-    private async Task<TableData<Meeting>> ServerReload(TableState state)
+    private async Task<TableData<Meeting>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await MeetingsClient.GetMeetingsAsync(organization.Id, state.Page + 1, state.PageSize, null, null, null)
+            var result = await MeetingsClient.GetMeetingsAsync(organization.Id, state.Page + 1, state.PageSize, null, null, null, cancellationToken)
                 .OnThrow<PagedResultOfMeeting, ApiException>(x => {
                     Snackbar.Add("Failed to load", Severity.Error);
                 }, new PagedResultOfMeeting());

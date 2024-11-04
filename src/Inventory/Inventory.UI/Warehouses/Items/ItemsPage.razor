@@ -8,7 +8,7 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Items</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     Add item to warehouse
 </MudButton>
 
@@ -21,7 +21,7 @@
 
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
        <HeaderContent>
             <MudTh>Id</MudTh>
@@ -37,13 +37,13 @@
             <MudTd DataLabel="Id">@item.Id</MudTd>
             <MudTd DataLabel="Name">@item.Item.Name</MudTd>
             <MudTd DataLabel="Warehouse">@item.Warehouse.Name</MudTd>
-            <MudTd DataLabel="Qt on hand">@item.QuantityOnHand <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
-            <MudTd DataLabel="Qt on hand">@item.QuantityPicked <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
-            <MudTd DataLabel="Qt on hand">@item.QuantityReserved <MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>
+            <MudTd DataLabel="Qt on hand">@item.QuantityOnHand <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
+            <MudTd DataLabel="Qt on hand">@item.QuantityPicked <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
+            <MudTd DataLabel="Qt on hand">@item.QuantityReserved <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>
             <MudTd DataLabel="Qt on hand">@item.QuantityAvailable</MudTd>
             <MudTd>
-                <MudIconButton Size="Size.Small" Icon="@Icons.Filled.LocalShipping" OnClick="async () => OnShipItems(item)" />
-                <MudIconButton Size="Size.Small" Icon="@Icons.Filled.CallReceived" OnClick="async () => OnReceiveItems(item)" />
+                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.LocalShipping" OnClick="async () => OnShipItems(item)" />
+                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.CallReceived" OnClick="async () => OnReceiveItems(item)" />
             </MudTd>
         </RowTemplate>
         <PagerContent>
@@ -59,11 +59,11 @@
 
     public Warehouse Warehouse { get; set; }
 
-    private async Task<TableData<WarehouseItem>> LoadData(TableState state)
+    private async Task<TableData<WarehouseItem>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await WarehouseItemsClient.GetItemsAsync(Warehouse?.Id, state.Page + 1, state.PageSize, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
+            var results = await WarehouseItemsClient.GetItemsAsync(Warehouse?.Id, state.Page + 1, state.PageSize, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc), cancellationToken);
             return new TableData<WarehouseItem> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
@@ -113,7 +113,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();
@@ -136,7 +136,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
            var tableData = GetTableData();
@@ -169,7 +169,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
            var tableData = GetTableData();
@@ -202,7 +202,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
            var tableData = GetTableData();
@@ -235,7 +235,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
            var tableData = GetTableData();
@@ -268,7 +268,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
            var tableData = GetTableData();

@@ -7,7 +7,7 @@
 @using YourBrand.Portal.Services
 @using YourBrand.Catalog
 
-<MudTable T="Product" ServerData="@(new Func<TableState, Task<TableData<Product>>>(ServerReload))"
+<MudTable T="Product" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Product>>>(ServerReload))"
 Dense="true" Hover="true" @ref="table" OnRowClick="(e) => ShowProduct(e.Item)" Elevation="25">
     @*<ToolBarContent>
     <MudText Typo="Typo.h6">Products</MudText>
@@ -120,7 +120,7 @@ Dense="true" Hover="true" @ref="table" OnRowClick="(e) => ShowProduct(e.Item)" E
         
     }
 
-    private async Task<TableData<Product>> ServerReload(TableState state)
+    private async Task<TableData<Product>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         store = StoreProvider.CurrentStore;
 
@@ -129,7 +129,7 @@ Dense="true" Hover="true" @ref="table" OnRowClick="(e) => ShowProduct(e.Item)" E
 
         var result = await ProductsClient.GetProductsAsync(Organization?.Id, StoreId, BrandId, true, true, null, Path, state.Page + 1,
         state.PageSize, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ?
-        YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc);
+        YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc, cancellationToken);
 
         return new TableData<Product>() { TotalItems = result.Total, Items = result.Items };
     }

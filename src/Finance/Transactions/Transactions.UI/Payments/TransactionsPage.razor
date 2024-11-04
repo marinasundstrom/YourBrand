@@ -63,13 +63,13 @@
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }
 
-    private async Task<TableData<Transaction>> ServerReload(TableState state)
+    private async Task<TableData<Transaction>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await TransactionsClient.GetTransactionsAsync(Organization.Id, state.Page, state.PageSize, selectedStatuses.Select(s => (TransactionStatus)s!));
+            var result = await TransactionsClient.GetTransactionsAsync(Organization.Id, state.Page, state.PageSize, selectedStatuses.Select(s => (TransactionStatus)s!), cancellationToken);
 
             return new TableData<Transaction>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -88,7 +88,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         await table.ReloadServerData();
     }
@@ -104,7 +104,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         await table.ReloadServerData();
     }

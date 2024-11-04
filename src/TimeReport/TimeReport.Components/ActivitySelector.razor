@@ -20,7 +20,7 @@
     
     @if(ShowAddButton) 
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddActivity" />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddActivity" />
     }
 </div>
 
@@ -58,11 +58,11 @@
     [Parameter]
     public bool ShowAddButton { get; set; }
 
-    async Task<IEnumerable<Activity>> SearchActivitys(string text)
+    async Task<IEnumerable<Activity>> SearchActivitys(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await ActivitiesClient.GetActivitiesAsync(OrganizationId, 0, 10, ProjectId, UserId, text, null, null);
+            var results = await ActivitiesClient.GetActivitiesAsync(OrganizationId, 0, 10, ProjectId, UserId, text, null, null, cancellationToken);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)
@@ -89,7 +89,7 @@
 
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             Value = (Activity)result.Data;

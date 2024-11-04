@@ -8,7 +8,7 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Sites</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="async () => await OnSiteClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnSiteClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     New Site
 </MudButton>
 
@@ -19,7 +19,7 @@
 
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
 
         <HeaderContent>
@@ -41,11 +41,11 @@
     MudTable<Site> table; 
     string? searchString;
 
-    private async Task<TableData<Site>> LoadData(TableState state)
+    private async Task<TableData<Site>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await SitesClient.GetSitesAsync(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
+            var results = await SitesClient.GetSitesAsync(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc), cancellationToken);
             return new TableData<Site> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
@@ -88,7 +88,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();

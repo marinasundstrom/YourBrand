@@ -99,10 +99,10 @@
             <MudText Typo="Typo.h6">Drag and drop files here or click</MudText>
             @foreach (var file in files)
             {
-                <MudChip Color="Color.Dark" Text="@file.Name" OnClose="() => RemoveFile(file)" />
+                <MudChip T="string" Color="Color.Dark" Text="@file.Name" OnClose="() => RemoveFile(file)" />
             }
         </MudPaper>
-        <MudToolBar DisableGutters="true" Class="gap-4">
+        <MudToolBar Gutters="false" Class="gap-4">
             @if (files.Any())
             {
                 <MudButton OnClick="Clear" Color="Color.Error" Variant="Variant.Filled">Clear</MudButton>
@@ -235,7 +235,7 @@
             NavigationManager.NavigateTo("/journal");
         }
 
-        private Task<IEnumerable<Account>> Search(string value)
+        private Task<IEnumerable<Account>> Search(string value, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(value))
             {

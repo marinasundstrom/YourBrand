@@ -41,13 +41,13 @@
     MudTable<Person> table = null!;
     bool loading = false;
 
-    private async Task<TableData<Person>> ServerReload(TableState state)
+    private async Task<TableData<Person>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await PersonsClient.GetPersonsAsync(state.Page, state.PageSize);
+            var result = await PersonsClient.GetPersonsAsync(state.Page, state.PageSize, cancellationToken);
 
             return new TableData<Person>() { TotalItems = result.TotalItems, Items = result.Items };
         }

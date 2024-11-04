@@ -20,7 +20,7 @@
     
     @if(ShowAddButton) 
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddProductVariant" />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddProductVariant" />
     }
 </div>
 
@@ -55,11 +55,11 @@
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }
 
-    async Task<IEnumerable<Product>> SearchProductVariants(string text)
+    async Task<IEnumerable<Product>> SearchProductVariants(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var result = await ProductsClient.GetVariantsAsync(Organization.Id, ProductId, 1, 10, null, null, null);
+            var result = await ProductsClient.GetVariantsAsync(Organization.Id, ProductId, 1, 10, null, null, null, cancellationToken);
 
             return result.Items;
         }
@@ -87,7 +87,7 @@
 
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             Value = (Product)result.Data;

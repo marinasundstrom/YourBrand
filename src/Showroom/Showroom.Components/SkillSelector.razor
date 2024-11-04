@@ -20,7 +20,7 @@
     
     @if(ShowAddButton) 
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddSkill" />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddSkill" />
     }
 </div>
 
@@ -52,11 +52,11 @@
     [Parameter]
     public bool ShowAddButton { get; set; }
 
-    async Task<IEnumerable<Skill>> SearchSkills(string text)
+    async Task<IEnumerable<Skill>> SearchSkills(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await SkillsClient.GetSkillsAsync(1, 10, SkillAreaId, text, null, null);
+            var results = await SkillsClient.GetSkillsAsync(1, 10, SkillAreaId, text, null, null, cancellationToken);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)
@@ -83,7 +83,7 @@
 
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             Value = (Skill)result.Data;

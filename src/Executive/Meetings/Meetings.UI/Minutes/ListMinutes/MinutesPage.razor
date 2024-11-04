@@ -58,13 +58,13 @@
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
     }
 
-    private async Task<TableData<Minutes>> ServerReload(TableState state)
+    private async Task<TableData<Minutes>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await MinutesClient.GetMinutesAsync(organization.Id, null, state.Page + 1, state.PageSize, null, null, null);
+            var result = await MinutesClient.GetMinutesAsync(organization.Id, null, state.Page + 1, state.PageSize, null, null, null, cancellationToken);
 
             return new TableData<Minutes>() { TotalItems = result.Total, Items = result.Items };
         }

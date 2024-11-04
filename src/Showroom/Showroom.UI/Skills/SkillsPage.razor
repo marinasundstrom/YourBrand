@@ -9,11 +9,11 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Skills</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="async () => await OnSkillClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnSkillClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     New skill
 </MudButton>
 
-<MudButton Variant="Variant.Filled" Href="/skills/areas" StartIcon="@Icons.Filled.List" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" Href="/skills/areas" StartIcon="@Icons.Material.Filled.List" Color="Color.Default" Class="mb-2 me-2">
     Areas
 </MudButton>
 
@@ -25,7 +25,7 @@
 
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel T="Skill" SortLabel="Name">Name</MudTableSortLabel></MudTh>
@@ -50,11 +50,11 @@
 
     public SkillArea SkillArea { get; set; }
 
-    private async Task<TableData<Skill>> LoadData(TableState state)
+    private async Task<TableData<Skill>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await SkillsClient.GetSkillsAsync(state.Page + 1, state.PageSize, SkillArea?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
+            var results = await SkillsClient.GetSkillsAsync(state.Page + 1, state.PageSize, SkillArea?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc), cancellationToken);
             return new TableData<Skill> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)
@@ -103,7 +103,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();

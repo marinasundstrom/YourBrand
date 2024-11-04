@@ -93,9 +93,9 @@
         Modal.Close(DialogResult.Ok(result));
     }
 
-    private async Task<IEnumerable<ActivityType>> Search1(string value)
+    private async Task<IEnumerable<ActivityType>> Search1(string value, CancellationToken cancellationToken)
     {
-        var page = await ActivityTypesClient.GetActivityTypesAsync(Organization.Id, 0, 10, null!, value, null, null);
+        var page = await ActivityTypesClient.GetActivityTypesAsync(Organization.Id, 0, 10, null!, value, null, null, cancellationToken);
 
         return page.Items;
     }

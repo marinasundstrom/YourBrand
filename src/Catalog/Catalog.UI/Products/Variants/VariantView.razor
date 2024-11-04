@@ -4,7 +4,7 @@
 @inject IDialogService DialogService
 
 <MudPaper Elevation="2" Class="pa-4">
-    <MudTable T="Product" ServerData="@(new Func<TableState, Task<TableData<Product>>>(ServerReload))" Dense="true"
+    <MudTable T="Product" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Product>>>(ServerReload))" Dense="true"
         Elevation="0" Hover="true" @ref="table" OnRowClick="@OnItemClicked">
         <ToolBarContent>
             <MudText Typo="Typo.h6">Variants</MudText>
@@ -64,12 +64,12 @@
     /// <summary>
     /// Here we simulate getting the paged, filtered and ordered data from the server
     /// </summary>
-    private async Task<TableData<Product>> ServerReload(TableState state)
+    private async Task<TableData<Product>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         var result = await ProductsClient.GetVariantsAsync(Organization.Id, ProductId.ToString(), state.Page + 1, state.PageSize,
         searchString,
         state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection ==
-        MudBlazor.SortDirection.Descending ? YourBrand.Catalog.SortDirection.Desc : YourBrand.Catalog.SortDirection.Asc));
+        MudBlazor.SortDirection.Descending ? YourBrand.Catalog.SortDirection.Desc : YourBrand.Catalog.SortDirection.Asc), cancellationToken);
         return new TableData<Product>() { TotalItems = result.Total, Items = result.Items };
     }
 

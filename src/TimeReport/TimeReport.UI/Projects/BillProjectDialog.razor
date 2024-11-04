@@ -46,9 +46,9 @@
         Modal.Close();
     }
 
-    private async Task<IEnumerable<Project>> Search(string value)
+    private async Task<IEnumerable<Project>> Search(string value, CancellationToken cancellationToken)
     {
-        var page = await ProjectsClient.GetProjectsAsync(Organization.Id, 0, 10, null, value, null, null);
+        var page = await ProjectsClient.GetProjectsAsync(Organization.Id, 0, 10, null, value, null, null, cancellationToken);
 
         return page.Items;
     }

@@ -20,7 +20,7 @@
 
     @if (ShowAddButton)
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddBrands" />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddBrands" />
     }
 </div>
 
@@ -56,13 +56,13 @@
     [Parameter]
     public bool ShowAddButton { get; set; }
 
-    async Task<IEnumerable<Brand>> SearchBrands(string text)
+    async Task<IEnumerable<Brand>> SearchBrands(string text, CancellationToken cancellationToken)
     {
         /*
         try
         {
         */
-        var results = await BrandsClient.GetBrandsAsync(OrganizationId, null, 1, 10, text, null, null);
+        var results = await BrandsClient.GetBrandsAsync(OrganizationId, null, 1, 10, text, null, null, cancellationToken);
         return results.Items;
 
         /*

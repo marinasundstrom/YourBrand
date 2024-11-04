@@ -9,11 +9,11 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Journal</MudText>
 
-<MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/journal/new" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
+<MudButton StartIcon="@Icons.Material.Outlined.Add" Href="/journal/new" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
     Create entry
 </MudButton>
 
-<MudButton StartIcon="@Icons.Material.Outlined.Add" Link="/journal/sale" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
+<MudButton StartIcon="@Icons.Material.Outlined.Add" Href="/journal/sale" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
     Register sale
 </MudButton>
 
@@ -71,13 +71,13 @@
         table.ReloadServerData();
     }
 
-    private async Task<TableData<JournalEntry>> ServerReload(TableState state)
+    private async Task<TableData<JournalEntry>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await JournalEntriesClient.GetJournalEntriesAsync(Organization.Id, state.Page, state.PageSize, invoiceNo);
+            var result = await JournalEntriesClient.GetJournalEntriesAsync(Organization.Id, state.Page, state.PageSize, invoiceNo, cancellationToken);
 
             return new TableData<JournalEntry>() { TotalItems = result.TotalItems, Items = result.Verifications };
         }
@@ -100,7 +100,7 @@
 
         var result = await dialogReference.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         Snackbar.Add("The reactor is running at optimum temperature", Severity.Success);
         */

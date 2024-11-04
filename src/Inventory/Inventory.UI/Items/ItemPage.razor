@@ -26,11 +26,11 @@ else
 
     <MudText Typo="Typo.h3" Class="mb-4">@Item?.Id - @Item?.Name</MudText>
 
-    <MudButton Variant="Variant.Filled" OnClick="UpdateItem" StartIcon="@Icons.Filled.Edit" Color="Color.Default" Class="mb-2 me-2">
+    <MudButton Variant="Variant.Filled" OnClick="UpdateItem" StartIcon="@Icons.Material.Filled.Edit" Color="Color.Default" Class="mb-2 me-2">
         Edit details
     </MudButton>
 
-    <MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    <MudButton Variant="Variant.Filled" OnClick="async () => await OnItemClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
         Add item to warehouse
     </MudButton>
 
@@ -49,7 +49,7 @@ else
 
                 <MudSpacer />
 
-                <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+                <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
             </ToolBarContent>
         <HeaderContent>
                 <MudTh><MudTableSortLabel T="WarehouseItem" SortLabel="Warehouse.Site">Site</MudTableSortLabel></MudTh>
@@ -66,14 +66,14 @@ else
                 <MudTd DataLabel="Site">@item.Warehouse.Site.Name</MudTd>
                 <MudTd DataLabel="Warehouse">@item.Warehouse.Name</MudTd>
                 <MudTd DataLabel="Location">@item.Location</MudTd>
-                <MudTd DataLabel="Qty on hand">@item.QuantityOnHand<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
-                <MudTd DataLabel="Qty picked">@item.QuantityPicked<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
-                <MudTd DataLabel="Qty reserved">@item.QuantityReserved<MudIconButton Size="Size.Small" Icon="@Icons.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>
+                <MudTd DataLabel="Qty on hand">@item.QuantityOnHand<MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" OnClick="async () => OnItemAdjustQuantityOnHand(item)" /></MudTd>
+                <MudTd DataLabel="Qty picked">@item.QuantityPicked<MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" OnClick="async () => OnPickItems(item)" /></MudTd>
+                <MudTd DataLabel="Qty reserved">@item.QuantityReserved<MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" OnClick="async () => OnReserveItems(item)" /></MudTd>
                 <MudTd DataLabel="Qty available">@item.QuantityAvailable</MudTd>
                 <MudTd DataLabel="Qty threshold">@item.QuantityThreshold</MudTd>
                 <MudTd>
-                    <MudIconButton Size="Size.Small" Icon="@Icons.Filled.LocalShipping" OnClick="async () => OnShipItems(item)" />
-                    <MudIconButton Size="Size.Small" Icon="@Icons.Filled.CallReceived" OnClick="async () => OnReceiveItems(item)" />
+                    <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.LocalShipping" OnClick="async () => OnShipItems(item)" />
+                    <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.CallReceived" OnClick="async () => OnReceiveItems(item)" />
                 </MudTd>
             </RowTemplate>
             <PagerContent>
@@ -100,11 +100,11 @@ else
         Item = await ItemsClient.GetItemAsync(Id);
     }
 
-    private async Task<TableData<WarehouseItem>> LoadData(TableState state)
+    private async Task<TableData<WarehouseItem>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await ItemsClient.GetWarehouseItemsAsync(Id, state.Page + 1, state.PageSize, Warehouse?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc));
+            var results = await ItemsClient.GetWarehouseItemsAsync(Id, state.Page + 1, state.PageSize, Warehouse?.Id, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc), cancellationToken);
             return new TableData<WarehouseItem> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)
@@ -154,7 +154,7 @@ else
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             Item = await ItemsClient.GetItemAsync(Id);   
@@ -180,7 +180,7 @@ else
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();
@@ -204,7 +204,7 @@ else
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
            var tableData = GetTableData();
@@ -238,7 +238,7 @@ else
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
            var tableData = GetTableData();
@@ -272,7 +272,7 @@ else
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
            var tableData = GetTableData();
@@ -306,7 +306,7 @@ else
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
            var tableData = GetTableData();
@@ -340,7 +340,7 @@ else
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
            var tableData = GetTableData();

@@ -1,7 +1,7 @@
 @inject IUsersClient UsersClient
 @inject NavigationManager NavigationManager
 
-<MudTable T="ProjectMembership" ServerData="@(new Func<TableState, Task<TableData<ProjectMembership>>>(ServerReload2))"
+<MudTable T="ProjectMembership" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<ProjectMembership>>>(ServerReload2))"
             Hover="true" @ref="table2" Class="mt-4" OnRowClick="(e) => GotToProject(e.Item)" Elevation="25">
     <HeaderContent>
         <MudTh><MudTableSortLabel T="ProjectMembership" SortLabel="Project.Name">Project</MudTableSortLabel></MudTh>
@@ -30,10 +30,10 @@
     [EditorRequired]
     public string UserId { get; set; } = null!;
 
-    private async Task<TableData<ProjectMembership>> ServerReload2(TableState state)
+    private async Task<TableData<ProjectMembership>> ServerReload2(TableState state, CancellationToken cancellationToken)
     {
         var result = await UsersClient.GetProjectMembershipsAsync(UserId, state.Page, state.PageSize,
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc, cancellationToken);
 
         return new TableData<ProjectMembership>() { TotalItems = result.TotalItems, Items = result.Items };
     }

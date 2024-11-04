@@ -12,7 +12,7 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Invoices</MudText>
 
-<MudButton Variant="Variant.Filled" Link="/invoices/new" Class="mb-2">New invoice</MudButton>
+<MudButton Variant="Variant.Filled" Href="/invoices/new" Class="mb-2">New invoice</MudButton>
 
 <MudTable T="Invoice" @ref="table" ServerData="ServerReload" Dense="true" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
@@ -73,10 +73,10 @@
         <MudTd DataLabel="Paid">@invoice.Created.ToString("yyyy-MM-dd")</MudTd>
         <MudTd DataLabel="Paid">@invoice.LastModified?.ToString("yyyy-MM-dd")</MudTd>
         <MudTd>
-            <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/invoices/{invoice.Id}/file")" @onclick:stopPropagation />
+            <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Href="@($"/api/invoicing/invoices/{invoice.Id}/file")" @onclick:stopPropagation />
             @if(invoice.Status.Id == 1) 
             {
-                <MudIconButton Icon="@Icons.Filled.Delete" Size="Size.Small" OnClick="async (e) => await DeleteInvoice(invoice)" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async (e) => await DeleteInvoice(invoice)" />
             }
         </MudTd>
     </RowTemplate>
@@ -115,7 +115,7 @@
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
     }
 
-    private async Task<TableData<Invoice>> ServerReload(TableState state)
+    private async Task<TableData<Invoice>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         if(organization is null)
             return new TableData<Invoice>();
@@ -126,7 +126,7 @@
         {
             var result = await InvoicesClient.GetInvoicesAsync(organization.Id, state.Page, state.PageSize, selectedTypes.Select(s =>
             (InvoiceType)s!), selectedStatuses.Select(s => s.Id), null, 
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? (Client.SortDirection?)null! : (state.SortDirection == MudBlazor.SortDirection.Ascending ? Client.SortDirection.Asc : Client.SortDirection.Desc));
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? (Client.SortDirection?)null! : (state.SortDirection == MudBlazor.SortDirection.Ascending ? Client.SortDirection.Asc : Client.SortDirection.Desc), cancellationToken);
 
             return new TableData<Invoice>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -142,7 +142,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         await table.ReloadServerData();
     }

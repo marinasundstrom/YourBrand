@@ -11,20 +11,21 @@
 <OrganizationProviderWrap>
 
     <MudThemeProvider IsDarkMode="@(ThemeManager.CurrentColorScheme == ColorScheme.Dark)" Theme="ThemeManager.Theme" />
+    <MudPopoverProvider />
     <MudDialogProvider />
     <MudSnackbarProvider />
 
     <MudLayout>
         <AppBar DrawerToggleCallback="DrawerToggle" />
         <MudDrawer Open="_drawerOpen" OpenChanged="OpenChanged" ClipMode="DrawerClipMode.Always"
-            DisableOverlay="_disableOverlay" Elevation="25" Variant="DrawerVariant.Responsive">
+            Overlay="@(!_disableOverlay)" Elevation="25" Variant="DrawerVariant.Responsive">
             <NavMenu />
         </MudDrawer>
         <MudMainContent>
             @Body
 
             <MudScrollToTop>
-                <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
+                <MudFab Color="Color.Tertiary" Icon="@Icons.Material.Filled.ArrowCircleUp" />
             </MudScrollToTop>
         </MudMainContent>
     </MudLayout>
@@ -32,7 +33,7 @@
 </OrganizationProviderWrap>
 
 <MudScrollToTop>
-    <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
+    <MudFab Color="Color.Tertiary" Icon="@Icons.Material.Filled.ArrowCircleUp" />
 </MudScrollToTop>
 
 @code {
@@ -75,7 +76,7 @@
 
     void OnThemeChanged(object? sender, EventArgs ea)
     {
-        Console.WriteLine(ThemeManager.Theme.Palette.AppbarBackground);
+        Console.WriteLine(ThemeManager.Theme.PaletteLight.AppbarBackground);
 
         StateHasChanged();
     }

@@ -13,6 +13,7 @@
     <MudItem xs="12" sm="5" md="5" lg="3" xl="2">
         @if (productGroupTreeNodes is not null)
         {
+            @*
                 <MudPaper Elevation="25" Class="pa-4">
                     <MudTreeView T="ProductCategoryTreeNode"
                         Items="(new HashSet<ProductCategoryTreeNode>(productGroupTreeNodes))" Hover="true"
@@ -27,6 +28,7 @@
                         OnClick="async () => { productGroupTreeNode = null; GroupId = null; }">Clear selection
                     </MudButton>
                 </MudPaper>
+            *@
         }
 
         <MudPaper Elevation="25" Class="mt-4 pa-4">

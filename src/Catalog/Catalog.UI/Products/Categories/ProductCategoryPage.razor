@@ -28,12 +28,13 @@ else
             <MudItem xs="12" sm="5" md="5" lg="3" xl="2">
             @if (productCategoryTreeNodes is not null)
             {
+                @*
                         <MudPaper Elevation="25" Class="pa-4">
                             <MudTreeView T="ProductCategoryTreeNode"
-                            Items="(new HashSet<ProductCategoryTreeNode>(productCategoryTreeNodes))" Hover="true"
+                            Items="(new List<ProductCategoryTreeNode>(productCategoryTreeNodes)).AsReadOnly()" Hover="true"
                                 SelectedValueChanged="async (e) => await SetCategory(e)">
                                 <ItemTemplate>
-                                    <MudTreeViewItem Items="@(new HashSet<ProductCategoryTreeNode>(context.SubCategories))" Value="@context"
+                                    <MudTreeViewItem Items="@(new List<ProductCategoryTreeNode>(context.SubCategories))" Value="@context"
                                     Text="@context.Name" EndText="@context.ProductsCount.ToString()" EndTextTypo="@Typo.caption" />
                                 </ItemTemplate>
                             </MudTreeView>
@@ -42,6 +43,7 @@ else
                             OnClick="async () => { productCategoryTreeNode = null; await SetCategory(productCategoryTreeNode); productCategory = null; Path = null; await LoadData(); }">Clear selection
                             </MudButton>
                         </MudPaper>
+                *@
             }
             </MudItem>
 
@@ -251,7 +253,7 @@ else
         NavigationManager.NavigateTo($"/products/categories/{Path}", replace: true);
     }
 
-    private async Task<TableData<ProductCategory>> ServerReload(TableState state)
+    private async Task<TableData<ProductCategory>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
@@ -260,7 +262,7 @@ else
 
         var result = await ProductCategoriesClient.GetProductCategoriesAsync(Organization.Id, store.Id, productCategory?.Id, true, true,
         state.Page + 1, state.PageSize, null, state.SortLabel, state.SortDirection == MudBlazor.SortDirection.Ascending ?
-        YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc);
+        YourBrand.Catalog.SortDirection.Asc : YourBrand.Catalog.SortDirection.Desc, cancellationToken);
 
         loading = false;
 

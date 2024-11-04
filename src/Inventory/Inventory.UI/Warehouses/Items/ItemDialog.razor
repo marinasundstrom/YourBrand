@@ -4,7 +4,7 @@
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-    <MudDialog DisableSidePadding="true">
+    <MudDialog Gutters="false">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <WarehouseSelector Label="Warehouse" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Warehouse" For="@(() => Warehouse)" />
@@ -14,10 +14,10 @@
 
                 @if(Id is null) 
                 {
-                    <MudNumericField Label="Quantity on Hand" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="QuantityOnHand"
+                    <MudNumericField Label="Quantity on Hand" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuantityOnHand"
                               For="@(() => QuantityOnHand)" />
 
-                    <MudNumericField Label="Quantity Threshold" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="QuantityThreshold"
+                    <MudNumericField Label="Quantity Threshold" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuantityThreshold"
                               For="@(() => QuantityThreshold)" />
                 }
             </MudContainer>

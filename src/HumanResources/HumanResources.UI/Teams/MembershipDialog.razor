@@ -73,9 +73,9 @@
         Modal.Close(DialogResult.Ok(result));
     }
 
-    private async Task<IEnumerable<Person>> Search1(string value)
+    private async Task<IEnumerable<Person>> Search1(string value, CancellationToken cancellationToken)
     {
-        var page = await PersonsClient.GetPersonsAsync(0, 10, value, null, null);
+        var page = await PersonsClient.GetPersonsAsync(0, 10, value, null, null, cancellationToken);
 
         return page.Items;
     }

@@ -14,7 +14,7 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Ticket Statuses</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="async () => await OnTicketStatusClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnTicketStatusClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     New Ticket Status
 </MudButton>
 
@@ -25,7 +25,7 @@
 
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel T="TicketStatus" SortLabel="Name">Name</MudTableSortLabel></MudTh>
@@ -53,13 +53,13 @@
 
     public TicketStatus TicketStatus { get; set; }
 
-    private async Task<TableData<TicketStatus>> LoadData(TableState state)
+    private async Task<TableData<TicketStatus>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
             var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
-            var results = await TicketStatusesClient.GetStatusesAsync(organizationId, searchString, state.Page + 1, state.PageSize, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Ticketing.SortDirection.Ascending : YourBrand.Ticketing.SortDirection.Descending));
+            var results = await TicketStatusesClient.GetStatusesAsync(organizationId, searchString, state.Page + 1, state.PageSize, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Ticketing.SortDirection.Ascending : YourBrand.Ticketing.SortDirection.Descending), cancellationToken);
             return new TableData<TicketStatus> { Items = results.Items, TotalItems = results.Total };
         }
         /*catch (ApiException exc)

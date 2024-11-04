@@ -12,7 +12,7 @@
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewUserClicked">New User</MudButton>
 
-<MudTable T="User" ServerData="@(new Func<TableState, Task<TableData<User>>>(ServerReload))"
+<MudTable T="User" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<User>>>(ServerReload))"
           Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToUser(e.Item)" Elevation="25">
     <ToolBarContent>
         <MudSpacer />
@@ -56,12 +56,12 @@
 
     }
 
-    private async Task<TableData<User>> ServerReload(TableState state)
+    private async Task<TableData<User>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         try
         {
             var page = await UsersClient.GetUsersAsync(state.Page, state.PageSize, searchString,
-                state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? IdentityManagement.Client.SortDirection.Desc : IdentityManagement.Client.SortDirection.Asc);
+                state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? IdentityManagement.Client.SortDirection.Desc : IdentityManagement.Client.SortDirection.Asc, cancellationToken);
 
             return new TableData<User>() { TotalItems = page.TotalItems, Items = page.Items };
         }

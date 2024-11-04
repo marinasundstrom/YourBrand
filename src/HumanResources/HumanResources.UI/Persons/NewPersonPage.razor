@@ -129,11 +129,11 @@
         }
     }
 
-    async Task<IEnumerable<Role>> SearchRole(string text)
+    async Task<IEnumerable<Role>> SearchRole(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await RolesClient.GetRolesAsync(0, 10, text, null, null, default);
+            var results = await RolesClient.GetRolesAsync(0, 10, text, null, null, cancellationToken);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)
@@ -144,11 +144,11 @@
         return null;
     }
 
-    async Task<IEnumerable<Person>> SearchPerson(string text)
+    async Task<IEnumerable<Person>> SearchPerson(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await PersonsClient.GetPersonsAsync(0, 10, text, null, null);
+            var results = await PersonsClient.GetPersonsAsync(0, 10, text, null, null, cancellationToken);
 
             return results.Items;
         }

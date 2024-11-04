@@ -20,7 +20,7 @@
     
     @if(ShowAddButton) 
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddTeam" />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddTeam" />
     }
 </div>
 
@@ -52,11 +52,11 @@
     [Parameter]
     public string? OrganizationId { get; set; }
 
-    async Task<IEnumerable<Team>> SearchTeams(string text)
+    async Task<IEnumerable<Team>> SearchTeams(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await TeamsClient.GetTeamsAsync(OrganizationId, 0, 10, text, null, null);
+            var results = await TeamsClient.GetTeamsAsync(OrganizationId, 0, 10, text, null, null, cancellationToken);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)
@@ -83,7 +83,7 @@
 
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             Value = (Team)result.Data;

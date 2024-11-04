@@ -52,7 +52,7 @@ else
     <article itemscope itemtype="http://schema.org/Product" class="row gx-5 pt-md-4">
         <div class="col-md-4 mb-4">
             <div>
-                <Badge BadgeClass="top-0 start-100" BadgeStyle="" IsVisible="@(productViewModel.RegularPrice is not null)">
+                <Badge BadgeClass="top-0 start-100" BadgeStyle="" Visible="@(productViewModel.RegularPrice is not null)">
                     <ChildContent>
                         <img class="bd-placeholder-img card-img-top img-border-rounded shadow" itemprop="image"
                             style="object-fit: cover; aspect-ratio: 1 / 1;" src="@productViewModel.Image" />

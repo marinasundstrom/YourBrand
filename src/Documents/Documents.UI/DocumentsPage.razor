@@ -24,7 +24,7 @@
         <MudTd DataLabel="Date">@document.Created.ToString("g")</MudTd>
         <MudTd DataLabel="Content Type">@document.ContentType</MudTd>
         <MudTd>
-            <MudIconButton Icon="@Icons.Filled.FileDownload" Link="@document.Url" Target="_blank" @onclick:stopPropagation />
+            <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Href="@document.Url" Target="_blank" @onclick:stopPropagation />
             <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await EditDocumentDetails(document)" />
             <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteDocument(document)" />
         </MudTd>
@@ -42,13 +42,13 @@
     MudTable<DocumentDto> table = null!;
     bool loading = false;
 
-    private async Task<TableData<DocumentDto>> ServerReload(TableState state)
+    private async Task<TableData<DocumentDto>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await DocumentsClient.GetDocumentsAsync(state.Page, state.PageSize);
+            var result = await DocumentsClient.GetDocumentsAsync(state.Page, state.PageSize, cancellationToken);
 
             return new TableData<DocumentDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }
@@ -64,7 +64,7 @@
 
         var result = await dialogRef.Result;
 
-        //if (result.Cancelled) return;
+        //if (result.Canceled) return;
 
         await table.ReloadServerData();
     }
@@ -78,7 +78,7 @@
 
         var result = await dialogRef.Result;
 
-        //if (result.Cancelled) return;
+        //if (result.Canceled) return;
 
         await table.ReloadServerData();
     }

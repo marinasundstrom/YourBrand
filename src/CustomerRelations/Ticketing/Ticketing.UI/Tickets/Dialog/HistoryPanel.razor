@@ -8,7 +8,7 @@
 @inject Portal.Services.IAccessTokenProvider AccessTokenProvider
 @inject IStringLocalizer<TicketDialog> T
 
-<MudTable T="TicketEvent" Context="c" ServerData="@(new Func<TableState, Task<TableData<TicketEvent>>>(ServerReload))"
+<MudTable T="TicketEvent" Context="c" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<TicketEvent>>>(ServerReload))"
     Elevation="205" Dense="false" Hover="true" SortLabel="@T["SortBy"]">
     <HeaderContent>
         <MudTh>
@@ -124,7 +124,7 @@
 
     [Parameter] public int? Id { get; set; }
 
-    private async Task<TableData<TicketEvent>> ServerReload(TableState state)
+    private async Task<TableData<TicketEvent>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         try
         {

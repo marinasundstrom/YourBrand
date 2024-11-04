@@ -42,13 +42,13 @@
         </MudText>
 
         <div class="mb-4">
-            <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/invoicing/v1/invoices/{invoice.Id}/file")">
+            <MudButton StartIcon="@Icons.Material.Filled.FileDownload" Href="@($"/api/invoicing/v1/invoices/{invoice.Id}/file")">
                 Download
             </MudButton>
 
         @if (invoice.Status.Id == 1)
         {
-                    <MudButton StartIcon="@Icons.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">
+                    <MudButton StartIcon="@Icons.Material.Filled.Delete" OnClick="async (e) => await DeleteInvoice(invoice)">
                         Delete
                     </MudButton>
         }
@@ -74,7 +74,7 @@
                 <MudItem xs="12" sm="12" md="6" lg="6">
                     <div class="d-flex">
                         <MudField Label="Status">@Model.Status.Name</MudField>
-                        <MudIconButton Icon="@Icons.Filled.Edit" Class="justify-end"
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Class="justify-end"
                                    OnClick="async () => await UpdateInvoiceStatus()"></MudIconButton>
                     </div>
                 </MudItem>
@@ -283,7 +283,7 @@
 </MudGrid>
 
  <MudExpansionPanels MultiExpansion="true" Class="mt-4" Elevation="25">
-        <MudExpansionPanel @bind-IsExpanded="isExpanded">
+        <MudExpansionPanel @bind-Expanded="isExpanded">
             <TitleContent>
                   <div class="d-flex flex-grow-1 gap-1">
                     <MudText Typo="Typo.h5" Class="mb-1">Items</MudText>
@@ -293,7 +293,7 @@
             <ChildContent>
                     @if (Model.Status.Id == 1)
         {
-            <MudButton StartIcon="@Icons.Filled.Add" Variant="Variant.Text" OnClick="AddItem" Class="mb-2">Add item</MudButton>
+            <MudButton StartIcon="@Icons.Material.Filled.Add" Variant="Variant.Text" OnClick="AddItem" Class="mb-2">Add item</MudButton>
         }
 
         <MudTable T="InvoiceItemViewModel" @ref="table" Dense="true" Items="Model.Items" Hover="true" Elevation="0"
@@ -338,7 +338,7 @@
             @if (Model.Status.Id == 1)
             {
                         <MudTd>
-                            <MudIconButton Icon="@Icons.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteItem(invoiceItem)" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" OnClick="async () => await DeleteItem(invoiceItem)" />
                         </MudTd>
             }
             </RowTemplate>
@@ -509,7 +509,7 @@
         var dialogRef = DialogService.Show<ActivateRotOrRutDialog>("Activate deduction for domestic services", parameters);
         var result = await dialogRef.Result;
 
-        if (result.Cancelled)
+        if (result.Canceled)
         {
             return;
         }
@@ -602,7 +602,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled)
+        if (result.Canceled)
             return;
 
         var vm = (InvoiceItemViewModel)result.Data;
@@ -625,7 +625,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled)
+        if (result.Canceled)
             return;
 
         Model.Update();
@@ -645,7 +645,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         Model.Status = (InvoiceStatus)result.Data;
 
@@ -761,7 +761,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         invoice.BillingDetails = (BillingDetails)result.Data;
     }
@@ -776,7 +776,7 @@
 
         var result = await dialogRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         invoice.ShippingDetails = (ShippingDetails)result.Data;
     }

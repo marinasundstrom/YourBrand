@@ -7,7 +7,7 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Cases</MudText>
 
-<MudButton Link="/cases/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2">
+<MudButton Href="/cases/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2">
     New case
 </MudButton>
 
@@ -15,7 +15,7 @@
     <MudTable @ref="table" T="Case" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string"  Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel T="Case" SortLabel="Id">Id</MudTableSortLabel></MudTh>

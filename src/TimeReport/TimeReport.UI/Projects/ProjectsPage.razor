@@ -23,7 +23,7 @@
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewProjectClicked">New project</MudButton>
 
-<MudTable T="Project" ServerData="@(new Func<TableState, Task<TableData<Project>>>(ServerReload))"
+<MudTable T="Project" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Project>>>(ServerReload))"
           Hover="true" @ref="table" OnRowClick="(TableRowClickEventArgs<Project> project) => GotToProject(project.Item)" Class="mt-4 mb-4" Elevation="25">
     <ToolBarContent>
         <MudSpacer />
@@ -99,10 +99,10 @@
         statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync(Organization.Id);
     }
 
-    private async Task<TableData<Project>> ServerReload(TableState state)
+    private async Task<TableData<Project>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         var page = await ProjectsClient.GetProjectsAsync(Organization.Id, state.Page, state.PageSize, null, searchString,
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc, cancellationToken);
 
         return new TableData<Project>() { TotalItems = page.TotalItems, Items = page.Items };
     }
@@ -124,7 +124,7 @@
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         table.ReloadServerData();
@@ -139,7 +139,7 @@
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         searchString = null;
@@ -151,7 +151,7 @@
         var dialogReference = DialogService.Show<BillProjectDialog>("Bill project");
         var result = await dialogReference.Result;
 
-        if (result.Cancelled)
+        if (result.Canceled)
             return;
     }
 }

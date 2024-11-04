@@ -102,7 +102,7 @@
         var dialogReference = DialogService.Show<ExperienceDialog>(experience is null ? "New experience" : "Update experience", parameters);
         var result = await dialogReference.Result;
 
-        if (result.Cancelled)
+        if (result.Canceled)
             return;
 
         page = 1;

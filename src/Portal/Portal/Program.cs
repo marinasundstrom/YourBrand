@@ -88,7 +88,14 @@ async Task LoadBrandProfile(IServiceCollection services)
         .BuildServiceProvider()
         .GetRequiredService<IBrandProfileClient>();
 
-    themeManager.SetTheme(Themes.AppTheme);
+    try 
+    {
+        themeManager.SetTheme(Themes.AppTheme);
+    }
+    catch(Exception exc) 
+    {
+        Console.WriteLine(exc);
+    }
 
     try
     {

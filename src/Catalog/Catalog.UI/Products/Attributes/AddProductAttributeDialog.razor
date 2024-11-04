@@ -8,7 +8,7 @@
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
 
-    <MudDialog DisableSidePadding="true">
+    <MudDialog Gutters="false">
         <DialogContent>
             <MudContainer Style="max-height: 300px; overflow-y: scroll">
 
@@ -18,9 +18,9 @@
 
                 @if (!IsVariant)
                 {
-                    <MudCheckBox Label="For variant" @bind-Checked="ForVariant" />
+                    <MudCheckBox Label="For variant" @bind-Value="ForVariant" />
 
-                    <MudCheckBox Label="Is Main Attribute" @bind-Checked="IsMainAttribute" />
+                    <MudCheckBox Label="Is Main Attribute" @bind-Value="IsMainAttribute" />
                 }
 
                 <MudAutocomplete T="AttributeValue" Class="mb-6" Variant="Variant.Outlined" Label="Value"

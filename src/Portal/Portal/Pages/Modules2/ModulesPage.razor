@@ -13,7 +13,7 @@
 
 <MudButton Variant="@Variant.Filled" Class="mb-4" OnClick="Reload">Reload app</MudButton>
 
-<MudTable T="Module" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<Module>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
+<MudTable T="Module" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Module>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
     <HeaderContent>
         <MudTh>
             <MudTableSortLabel T="Module" SortLabel="Enabled">@T["Enabled"]</MudTableSortLabel>
@@ -26,9 +26,9 @@
         </MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTh DataLabel="@T["Enabled"]">
+        <MudTd DataLabel="@T["Enabled"]">
             <MudCheckBox Value="context.Enabled" ValueChanged="async (bool e) => await ToggleModule(context)" />
-        </MudTh>
+        </MudTd>
         <MudTd DataLabel="@T["Name"]">@context.Name</MudTd>
         <MudTd DataLabel="@T["Assembly"]">@context.Assembly</MudTd>
     </RowTemplate>
@@ -46,11 +46,11 @@
 @code {
     MudTable<Module> table;
 
-    private async Task<TableData<Module>> ServerReload(TableState state)
+    private async Task<TableData<Module>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await ModulesClient.GetModulesAsync(); //false, state.Page + 1, state.PageSize, state.SortLabel,
+            var results = await ModulesClient.GetModulesAsync(cancellationToken); //false, state.Page + 1, state.PageSize, state.SortLabel,
                 //state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.AppService.Client.SortDirection.Asc : YourBrand.AppService.Client.SortDirection.Desc);
 
             return new TableData<Module>() { TotalItems = results.Count, Items = results }; //  { TotalItems = results.TotalCount, Items = results.Items };

@@ -6,7 +6,7 @@
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
 
-    <MudDialog DisableSidePadding="true">
+    <MudDialog Gutters="false">
         <DialogContent>
             <MudContainer Style="max-height: 450px; overflow-y: scroll">
                 <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name"

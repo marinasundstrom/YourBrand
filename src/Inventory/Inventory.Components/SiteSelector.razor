@@ -35,11 +35,11 @@
     [Parameter]
     public Variant Variant { get; set; }
 
-    async Task<IEnumerable<Site>> SearchSites(string text)
+    async Task<IEnumerable<Site>> SearchSites(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await SitesClient.GetSitesAsync(1, 10, text, null, null);
+            var results = await SitesClient.GetSitesAsync(1, 10, text, null, null, cancellationToken);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

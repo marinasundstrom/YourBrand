@@ -44,7 +44,7 @@
 
     string organizationId;
 
-    private async Task<TableData<Order>> ServerReload(TableState state)
+    private async Task<TableData<Order>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 

@@ -130,11 +130,11 @@ else
                 <MudTd DataLabel="Created">@order.Created.ToString("yyyy-MM-dd")</MudTd>
                 <MudTd>
                     @*
-                    <MudIconButton Icon="@Icons.Filled.FileDownload" Size="Size.Small"
-                    Link="@($"/api/invoicing/orders/{order.OrderNo}/file")" @onclick:stopPropagation /> *@
+                    <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Size="Size.Small"
+                    Href="@($"/api/invoicing/orders/{order.OrderNo}/file")" @onclick:stopPropagation /> *@
                     @if (order.Status.Id == 1)
                     {
-                        <MudIconButton Icon="@Icons.Filled.Delete" Size="Size.Small"
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
                             OnClick="async (e) => await DeleteOrder(order)" />
                     }
                 </MudTd>
@@ -174,7 +174,7 @@ else
         orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(organizationId, 1, 100, null, null, null)).Items.ToList();
     }
 
-    private async Task<TableData<Order>> ServerReload(TableState state)
+    private async Task<TableData<Order>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 

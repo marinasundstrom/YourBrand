@@ -7,7 +7,7 @@
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <ObjectGraphDataAnnotationsValidator />
 
-    <MudDialog DisableSidePadding="true">
+    <MudDialog Gutters="false">
         <DialogContent>
             <MudContainer Style="max-height: 450px; overflow-y: scroll">
 
@@ -43,7 +43,7 @@
                     <MudNumericField Label="Price" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Price"
                         For="() => Price" />
 
-                    <MudCheckBox Label="Is selected" Class="mb-6" Variant="Variant.Outlined" @bind-Checked="IsSelected"
+                    <MudCheckBox Label="Is selected" Class="mb-6" Variant="Variant.Outlined" @bind-Value="IsSelected"
                         For="() => IsSelected" />
                 }
 
@@ -104,7 +104,7 @@
                         }
                     </MudSelect>
 
-                    <MudCheckBox Label="Is required" Class="mb-6" Variant="Variant.Outlined" @bind-Checked="IsRequired"
+                    <MudCheckBox Label="Is required" Class="mb-6" Variant="Variant.Outlined" @bind-Value="IsRequired"
                         For="() => IsRequired" />
                 }
                 else if (OptionType == OptionType.TextValue)

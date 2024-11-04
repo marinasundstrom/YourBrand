@@ -191,7 +191,7 @@ else
         var dialogReference = DialogService.Show<DetailsDialog>("Update details", parameters);
         var result = await dialogReference.Result;
 
-        if (result.Cancelled)
+        if (result.Canceled)
             return;
 
         Snackbar.Add("Details updated.", Severity.Success);

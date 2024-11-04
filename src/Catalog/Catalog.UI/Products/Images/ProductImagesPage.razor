@@ -16,25 +16,29 @@
 else
 {
     <MudFileUpload T="IBrowserFile" Accept="*.jpg, *.jpeg, *.png" FilesChanged="UploadProductImage" Class="mb-4">
-        <ButtonTemplate>
-            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
-                StartIcon="@Icons.Material.Filled.CloudUpload" for="@context">
+        <ActivatorContent>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                StartIcon="@Icons.Material.Filled.CloudUpload">
                 Upload image
             </MudButton>
-        </ButtonTemplate>
+        </ActivatorContent>
     </MudFileUpload>
 
     <MudTable T="ProductImage" Items="productImages"
               Dense="true" Hover="true" Elevation="25">
+              
         <HeaderContent>
             <MudTh></MudTh>
             <MudTh>Title</MudTh>
             <MudTh>Text</MudTh>
             <MudTh></MudTh>
         </HeaderContent>
+
         <RowTemplate Context="productImage">
-              <MudTd><MudImage Src="@productImage.Url" ObjectFit="ObjectFit.Cover" Height="150" Width="150" Alt="Product image"
-                    Elevation="25" Class="rounded-lg"></MudImage></MudTd>
+            <MudTd>
+                <MudImage Src="@productImage.Url" ObjectFit="ObjectFit.Cover" Height="150" Width="150" Alt="Product image"
+                    Elevation="25" Class="rounded-lg" />
+            </MudTd>
             <MudTd DataLabel="Title">@productImage.Title</MudTd>
             <MudTd DataLabel="Text">@productImage.Text</MudTd>
             <MudTd>
@@ -42,9 +46,11 @@ else
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteProductImage(productImage)" />
             </MudTd>
         </RowTemplate>
+
         <NoRecordsContent>
             <MudText>No matching records found</MudText>
         </NoRecordsContent>
+
         <LoadingContent>
             <MudText>Loading...</MudText>
         </LoadingContent>
@@ -96,7 +102,7 @@ else
 
         var result = await modalRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         var index = productImages!.IndexOf(productImage);
 

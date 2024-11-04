@@ -21,7 +21,7 @@
     
     @if(ShowAddButton) 
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddUser" />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddUser" />
     }
 </div>
 
@@ -61,9 +61,9 @@
         UserSearchProvider = ServiceProvider.GetRequiredKeyedService<IUserSearchProvider>(ServiceKey);
     }
 
-    async Task<IEnumerable<User>> SearchUsers(string text)
+    async Task<IEnumerable<User>> SearchUsers(string text, CancellationToken cancellationToken)
     {
-        return await UserSearchProvider.QueryUsersAsync(text);
+        return await UserSearchProvider.QueryUsersAsync(text, cancellationToken);
     }
 
     async Task AddUser() 
@@ -82,7 +82,7 @@
 
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             Value = (User)result.Data;

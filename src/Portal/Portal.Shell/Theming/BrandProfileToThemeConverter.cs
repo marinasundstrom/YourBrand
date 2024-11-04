@@ -14,19 +14,19 @@ public static class BrandProfileToThemeConverter
         {
             if (colorPalette.BackgroundColor is not null)
             {
-                theme.Palette.Background = colorPalette.BackgroundColor;
+                theme.PaletteLight.Background = colorPalette.BackgroundColor;
             }
             if (colorPalette.AppbarBackgroundColor is not null)
             {
-                theme.Palette.AppbarBackground = colorPalette.AppbarBackgroundColor;
+                theme.PaletteLight.AppbarBackground = colorPalette.AppbarBackgroundColor;
             }
             if (colorPalette.PrimaryColor is not null)
             {
-                theme.Palette.Primary = colorPalette.PrimaryColor;
+                theme.PaletteLight.Primary = colorPalette.PrimaryColor;
             }
             if (colorPalette.SecondaryColor is not null)
             {
-                theme.Palette.Secondary = colorPalette.SecondaryColor;
+                theme.PaletteLight.Secondary = colorPalette.SecondaryColor;
             }
         }
 

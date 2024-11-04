@@ -4,13 +4,13 @@
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-    <MudDialog DisableSidePadding="true">
+    <MudDialog Gutters="false">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudNumericField Label="Quantity to ship" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Quantity"
                               For="@(() => Quantity)" />
 
-                <MudCheckBox Label="Remove from picked" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="FromPicked"
+                <MudCheckBox Label="Remove from picked" Variant="Variant.Outlined" Class="mt-4" @bind-Value="FromPicked"
                               For="@(() => FromPicked)" />
             </MudContainer>
         </DialogContent>

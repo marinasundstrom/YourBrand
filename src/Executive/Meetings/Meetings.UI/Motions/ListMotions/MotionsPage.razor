@@ -57,13 +57,13 @@
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
     }
 
-    private async Task<TableData<Motion>> ServerReload(TableState state)
+    private async Task<TableData<Motion>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await MotionsClient.GetMotionsAsync(organization.Id, null, state.Page + 1, state.PageSize, null, null, null);
+            var result = await MotionsClient.GetMotionsAsync(organization.Id, null, state.Page + 1, state.PageSize, null, null, null, cancellationToken);
 
             return new TableData<Motion>() { TotalItems = result.Total, Items = result.Items };
         }

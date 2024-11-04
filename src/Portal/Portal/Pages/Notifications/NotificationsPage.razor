@@ -10,7 +10,7 @@
 
 <MudText Typo="Typo.h3" GutterBottom="true">@T["Notifications"]</MudText>
 
-<MudTable T="Notification" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, Task<TableData<Notification>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
+<MudTable T="Notification" Dense="true" @ref="table" SortLabel="Sort By" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Notification>>>(ServerReload))" OnRowClick="RowClickEvent" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="25">
     <HeaderContent>
         <MudTh></MudTh>
         <MudTh><MudTableSortLabel T="Notification" SortLabel="Text">@T["Header_Text"]</MudTableSortLabel></MudTh>
@@ -40,12 +40,12 @@
 @code {
     MudTable<Notification> table;
 
-    private async Task<TableData<Notification>> ServerReload(TableState state)
+    private async Task<TableData<Notification>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         try
         {
             var results = await NotificationsClient.GetNotificationsAsync(false, state.Page + 1, state.PageSize, state.SortLabel,
-                state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.AppService.Client.SortDirection.Asc : YourBrand.AppService.Client.SortDirection.Desc);
+                state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.AppService.Client.SortDirection.Asc : YourBrand.AppService.Client.SortDirection.Desc, cancellationToken);
 
             return new TableData<Notification>() { TotalItems = results.TotalCount, Items = results.Items };
         }

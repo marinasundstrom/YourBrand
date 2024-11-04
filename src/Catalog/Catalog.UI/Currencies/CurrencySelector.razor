@@ -41,9 +41,9 @@
     [Parameter]
     public Variant Variant { get; set; }
 
-    async Task<IEnumerable<Currency>> SearchCurrencies(string text)
+    async Task<IEnumerable<Currency>> SearchCurrencies(string text, CancellationToken cancellationToken)
     {
-        var results = await CurrenciesClient.GetCurrenciesAsync(1, 10, text, null, null);
+        var results = await CurrenciesClient.GetCurrenciesAsync(1, 10, text, null, null, cancellationToken);
         return results.Items;
     }
 }

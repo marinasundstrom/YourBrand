@@ -27,7 +27,7 @@
 
                 <MudSpacer />
 
-                <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+                <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
             </ToolBarContent>
             <HeaderContent>
                 <MudTh></MudTh>
@@ -61,15 +61,15 @@
         
         <MudItem sm="12" md="3">
             <MudExpansionPanels Class="mb-10" Elevation="25" MultiExpansion="true">
-                <MudExpansionPanel Text="Industry" Class="pa-2" @bind-IsExpanded="industryVisible">
+                <MudExpansionPanel Text="Industry" Class="pa-2" @bind-Expanded="industryVisible">
                     <IndustrySelector Label="Industry" Variant="Variant.Outlined" Value="Industry" ValueChanged="async (i) => { Industry = i; await OnSelectorUpdate(); }"  />
                 </MudExpansionPanel>
             
-                <MudExpansionPanel Text="Skills" Class="pa-2" @bind-IsExpanded="skillsVisible">
+                <MudExpansionPanel Text="Skills" Class="pa-2" @bind-Expanded="skillsVisible">
                     <SkillsSelector Model="Model" OnUpdated="OnSelectorUpdate" />
                 </MudExpansionPanel>
 
-                <MudExpansionPanel Text="Experiences" Class="pa-2" @bind-IsExpanded="experiencesVisible">
+                <MudExpansionPanel Text="Experiences" Class="pa-2" @bind-Expanded="experiencesVisible">
                     <ExperienceSelector Model="Model2" OnUpdated="OnSelectorUpdate" />
                 </MudExpansionPanel>
             
@@ -100,7 +100,7 @@
         await table.ReloadServerData();
     }
 
-    private async Task<TableData<PersonProfile>> LoadData(TableState state)
+    private async Task<TableData<PersonProfile>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
@@ -120,7 +120,7 @@
                 }).ToList()
             };
 
-            var results = await PersonProfilesClient.FindPersonProfilesAsync(state.Page + 1, state.PageSize, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc), query);
+            var results = await PersonProfilesClient.FindPersonProfilesAsync(state.Page + 1, state.PageSize, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc), query, cancellationToken);
             return new TableData<PersonProfile> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)

@@ -47,11 +47,11 @@
         OrganizationSearchProvider = ServiceProvider.GetRequiredKeyedService<IOrganizationSearchProvider>(ServiceKey);
     }
 
-    async Task<IEnumerable<Organization>> SearchOrganizations(string text)
+    async Task<IEnumerable<Organization>> SearchOrganizations(string text, CancellationToken cancellationToken)
     {
         try
         {
-            return await OrganizationSearchProvider.QueryOrganizationsAsync(text);
+            return await OrganizationSearchProvider.QueryOrganizationsAsync(text, cancellationToken);
         }
         catch (AccessTokenNotAvailableException exception)
         {

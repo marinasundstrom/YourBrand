@@ -29,7 +29,7 @@ else
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewActivityClicked">New activity</MudButton>
 
-    <MudTable T="Activity" ServerData="@(new Func<TableState, Task<TableData<Activity>>>(ServerReload))"
+    <MudTable T="Activity" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Activity>>>(ServerReload))"
               Hover="true" @ref="table" Class="mt-4" Elevation="25">
         <HeaderContent>
             <MudTh><MudTableSortLabel T="Activity" SortLabel="Name">Name</MudTableSortLabel></MudTh>
@@ -63,7 +63,7 @@ else
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnAddExpenseClicked">New expense</MudButton>
 
-    <MudTable T="Expense" ServerData="@(new Func<TableState, Task<TableData<Expense>>>(ServerReload3))"
+    <MudTable T="Expense" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Expense>>>(ServerReload3))"
               Hover="true" @ref="table3" Class="mt-4 mb-2" OnRowClick="e => GotToExpense(e.Item)" Elevation="25">
         <HeaderContent>
             <MudTh><MudTableSortLabel T="Expense" SortLabel="Date">Date</MudTableSortLabel></MudTh>
@@ -102,7 +102,7 @@ else
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnAddMembershipClicked">New member</MudButton>
 
-    <MudTable T="ProjectMembership" ServerData="@(new Func<TableState, Task<TableData<ProjectMembership>>>(ServerReload2))"
+    <MudTable T="ProjectMembership" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<ProjectMembership>>>(ServerReload2))"
               Hover="true" @ref="table2" Class="mt-4 mb-2" OnRowClick="e => GotToMember(e.Item)" Elevation="25">
         <HeaderContent>
             <MudTh>Name</MudTh>
@@ -178,26 +178,26 @@ else
         statisticsSummary = await ProjectsClient.GetStatisticsSummary2Async(Organization.Id, ProjectId);
     }
 
-    private async Task<TableData<Activity>> ServerReload(TableState state)
+    private async Task<TableData<Activity>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         var result = await ActivitiesClient.GetActivitiesAsync(Organization.Id, state.Page, state.PageSize, ProjectId, null, null,
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc, cancellationToken);
 
         return new TableData<Activity>() { TotalItems = result.TotalItems, Items = result.Items };
     }
 
-    private async Task<TableData<ProjectMembership>> ServerReload2(TableState state)
+    private async Task<TableData<ProjectMembership>> ServerReload2(TableState state, CancellationToken cancellationToken)
     {
         var result = await ProjectsClient.GetProjectMembershipsAsync(Organization.Id, ProjectId, state.Page, state.PageSize,
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc, cancellationToken);
 
         return new TableData<ProjectMembership>() { TotalItems = result.TotalItems, Items = result.Items };
     }
 
-    private async Task<TableData<Expense>> ServerReload3(TableState state)
+    private async Task<TableData<Expense>> ServerReload3(TableState state, CancellationToken cancellationToken)
     {
         var result = await ExpensesClient.GetExpensesAsync(Organization.Id, state.Page, state.PageSize, ProjectId, null,
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc, cancellationToken);
 
         return new TableData<Expense>() { TotalItems = result.TotalItems, Items = result.Items };
     }
@@ -211,7 +211,7 @@ else
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         table.ReloadServerData();
@@ -226,7 +226,7 @@ else
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         table.ReloadServerData();
@@ -241,7 +241,7 @@ else
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         table2.ReloadServerData();
@@ -257,7 +257,7 @@ else
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         table2.ReloadServerData();
@@ -290,7 +290,7 @@ else
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         table3.ReloadServerData();
@@ -308,7 +308,7 @@ else
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         table3.ReloadServerData();

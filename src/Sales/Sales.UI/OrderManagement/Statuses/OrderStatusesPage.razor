@@ -14,7 +14,7 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Order Statuses</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="async () => await OnOrderStatusClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnOrderStatusClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     New OrderStatus
 </MudButton>
 
@@ -25,7 +25,7 @@
 
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel T="OrderStatus" SortLabel="Name">Name</MudTableSortLabel></MudTh>
@@ -55,13 +55,13 @@
 
     public OrderStatus OrderStatus { get; set; }
 
-    private async Task<TableData<OrderStatus>> LoadData(TableState state)
+    private async Task<TableData<OrderStatus>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
             var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
-            var results = await OrderStatusesClient.GetOrderStatusesAsync(organizationId, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc));
+            var results = await OrderStatusesClient.GetOrderStatusesAsync(organizationId, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc), cancellationToken);
             return new TableData<OrderStatus> { Items = results.Items, TotalItems = results.Total };
         }
         /*catch (ApiException exc)
@@ -115,7 +115,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();

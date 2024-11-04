@@ -14,18 +14,18 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Subscription Statuses</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="async () => await OnSubscriptionStatusClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnSubscriptionStatusClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     New SubscriptionStatus
 </MudButton>
 
 <MudPaper Class="pa-4" Elevation="25">
-    <MudTable @ref="table" T="SubscriptionStatus" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bsubscriptioned="false"
+    <MudTable @ref="table" T="SubscriptionStatus" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
               Striped="true" OnRowClick="ItemOnClick">
         <ToolBarContent>
 
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel T="SubscriptionStatus" SortLabel="Name">Name</MudTableSortLabel></MudTh>
@@ -55,13 +55,13 @@
 
     public SubscriptionStatus SubscriptionStatus { get; set; }
 
-    private async Task<TableData<SubscriptionStatus>> LoadData(TableState state)
+    private async Task<TableData<SubscriptionStatus>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
             var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
-            var results = await SubscriptionStatusesClient.GetSubscriptionStatusesAsync(organizationId, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc));
+            var results = await SubscriptionStatusesClient.GetSubscriptionStatusesAsync(organizationId, state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc), cancellationToken);
             return new TableData<SubscriptionStatus> { Items = results.Items, TotalItems = results.Total };
         }
         /*catch (ApiException exc)
@@ -115,7 +115,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await table.ReloadServerData();

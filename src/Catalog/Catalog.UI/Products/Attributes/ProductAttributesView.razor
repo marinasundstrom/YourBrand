@@ -21,7 +21,7 @@
 
 <MudPaper Elevation="2" Class="pa-4">
     <MudTable @ref="productAttributesTable"
-        ServerData="@(new Func<TableState, Task<TableData<ProductAttribute>>>(ServerReload))" Dense="false" Hover="true"
+        ServerData="@(new Func<TableState, CancellationToken, Task<TableData<ProductAttribute>>>(ServerReload))" Dense="false" Hover="true"
         Elevation="0" ReadOnly="false" CanCancelEdit="true"
         Filter="new Func<ProductAttribute,bool>(FilterAttributesFunc)" @bind-SelectedItem="selectedProductAttribute"
         SortLabel="Sort By" CommitEditTooltip="Commit Edit"
@@ -62,10 +62,10 @@
             @if (HasVariants)
             {
                 <MudTd DataLabel="For variant">
-                    <MudCheckBox @bind-Checked="@context.ForVariant" ReadOnly></MudCheckBox>
+                    <MudCheckBox @bind-Value="@context.ForVariant" ReadOnly></MudCheckBox>
                 </MudTd>
                 <MudTd DataLabel="Is Main Attribute">
-                    <MudCheckBox @bind-Checked="@context.IsMainAttribute" ReadOnly></MudCheckBox>
+                    <MudCheckBox @bind-Value="@context.IsMainAttribute" ReadOnly></MudCheckBox>
                 </MudTd>
             }
             <MudTd DataLabel="Value">
@@ -81,10 +81,10 @@
             @if (HasVariants)
             {
                 <MudTd DataLabel="For variant">
-                    <MudCheckBox @bind-Checked="@context.ForVariant"></MudCheckBox>
+                    <MudCheckBox @bind-Value="@context.ForVariant"></MudCheckBox>
                 </MudTd>
                 <MudTd DataLabel="Is Main Attribute">
-                    <MudCheckBox @bind-Checked="@context.IsMainAttribute"></MudCheckBox>
+                    <MudCheckBox @bind-Value="@context.IsMainAttribute"></MudCheckBox>
                 </MudTd>
             }
             <MudTd DataLabel="Value">

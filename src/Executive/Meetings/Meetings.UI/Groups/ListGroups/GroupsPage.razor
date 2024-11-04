@@ -58,13 +58,13 @@
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
     }
 
-    private async Task<TableData<MeetingGroup>> ServerReload(TableState state)
+    private async Task<TableData<MeetingGroup>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await MeetingGroupsClient.GetMeetingGroupsAsync(organization.Id, state.Page + 1, state.PageSize, null, null, null);
+            var result = await MeetingGroupsClient.GetMeetingGroupsAsync(organization.Id, state.Page + 1, state.PageSize, null, null, null, cancellationToken);
 
             return new TableData<MeetingGroup>() { TotalItems = result.Total, Items = result.Items };
         }

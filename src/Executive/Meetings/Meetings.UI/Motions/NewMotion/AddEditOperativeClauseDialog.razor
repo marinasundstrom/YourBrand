@@ -4,7 +4,7 @@
 
 <EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-    <MudDialog DisableSidePadding="true">
+    <MudDialog Gutters="false">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudSelect T="OperativeAction" Label="Action" Variant="Variant.Outlined" @bind-Value="Model.Action"

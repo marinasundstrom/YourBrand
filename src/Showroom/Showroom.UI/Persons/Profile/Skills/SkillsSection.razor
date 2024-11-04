@@ -14,7 +14,7 @@
                 
             @if (IsEditing)
             {
-                <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddSkillClicked" />
+                <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddSkillClicked" />
             }
 
             <MudIconButton Icon="@(IsEditing ? Icons.Material.Filled.Close : Icons.Material.Filled.Edit)" OnClick="ToggleEdit" />
@@ -28,18 +28,18 @@
                     @skillGroup.Name
                 </MudText>
 
-                <MudChipSet Class="mt-2">
+                <MudChip T="string" Class="mt-2">
                     @foreach (var skill in skillGroup.Skills)
                     {
                         @if (IsEditing)
                         {
-                            <MudChip OnClose="async () => await RemoveSkill(skillGroup, skill)">@skill.Skill.Name</MudChip>
+                            <MudChip T="string"  OnClose="async () => await RemoveSkill(skillGroup, skill)">@skill.Skill.Name</MudChip>
                         }
                         else
                         {
                             <MudTooltip>
                                 <ChildContent>
-                                    <MudChip Size="Size.Medium" OnClick="async () => await OnSkillClicked(skill)">@skill.Skill.Name</MudChip>
+                                    <MudChip T="string"  Size="Size.Medium" OnClick="async () => await OnSkillClicked(skill)">@skill.Skill.Name</MudChip>
                                 </ChildContent>
                                 <TooltipContent>
                                     <MudText Typo="Typo.h6">@skill.Skill.Name</MudText>
@@ -47,7 +47,7 @@
                             </MudTooltip>
                         }
                     }
-                </MudChipSet>
+                </MudChip>
             </section>
         }
 
@@ -182,7 +182,7 @@
             });
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             await AddSkill((PersonProfileSkill)result.Data);

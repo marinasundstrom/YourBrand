@@ -4,14 +4,14 @@
 
 <EditForm EditContext="@context" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-    <MudDialog DisableSidePadding="true">
+    <MudDialog Gutters="false">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
                               For="@(() => Name)" />
                 @if(SiteId is null) 
                 {
-                    <MudCheckBox Label="Create warehouse" Variant="Variant.Outlined" Class="mt-4" @bind-Checked="CreateWarehouse"
+                    <MudCheckBox Label="Create warehouse" Variant="Variant.Outlined" Class="mt-4" @bind-Value="CreateWarehouse"
                                 For="@(() => CreateWarehouse)" />
                 }
             </MudContainer>

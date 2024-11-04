@@ -8,7 +8,7 @@
 <MudPaper Elevation="25" Class="pa-8">
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Viewed items</MudText>
 
-    <MudCheckBox Checked="DistinctByClient" CheckedChanged="new Func<bool, Task>(DistinctByClientChanged)" Label="Distinct by clients" />
+    <MudCheckBox Value="DistinctByClient" ValueChanged="new Func<bool, Task>(DistinctByClientChanged)" Label="Distinct by clients" />
 
     <Chart Series="@Series" XAxisLabels="@XAxisLabels" />
 </MudPaper>
@@ -16,7 +16,7 @@
 <MudPaper Elevation="25" Class="pa-8 mt-8">
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Sessions</MudText>
 
-    <MudCheckBox Checked="DistinctByClient2" CheckedChanged="new Func<bool, Task>(DistinctByClientChanged2)" Label="Distinct by clients" />
+    <MudCheckBox Value="DistinctByClient2" ValueChanged="new Func<bool, Task>(DistinctByClientChanged2)" Label="Distinct by clients" />
 
     <Chart Series="@Series2" XAxisLabels="@XAxisLabels2" />
 </MudPaper>

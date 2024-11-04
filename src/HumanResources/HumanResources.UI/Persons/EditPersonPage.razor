@@ -115,11 +115,11 @@
     }
 
 
-    async Task<IEnumerable<Person2>> SearchPerson(string text)
+    async Task<IEnumerable<Person2>> SearchPerson(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await PersonsClient.GetPersonsAsync(0, 10, text, null, null);
+            var results = await PersonsClient.GetPersonsAsync(0, 10, text, null, null, cancellationToken);
 
             return results.Items.Where(x => x.Id != PersonId).Select(
                 p => new Person2()  

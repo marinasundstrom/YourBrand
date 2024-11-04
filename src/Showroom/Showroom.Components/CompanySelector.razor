@@ -20,7 +20,7 @@
     
     @if(ShowAddButton) 
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddCompany" />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddCompany" />
     }
 </div>
 
@@ -52,11 +52,11 @@
     [Parameter]
     public bool ShowAddButton { get; set; }
 
-    async Task<IEnumerable<Company>> SearchCompanies(string text)
+    async Task<IEnumerable<Company>> SearchCompanies(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await CompaniesClient.GetCompaniesAsync(1, 10, IndustryId, text, null, null);
+            var results = await CompaniesClient.GetCompaniesAsync(1, 10, IndustryId, text, null, null, cancellationToken);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)
@@ -83,7 +83,7 @@
 
             var result = await dialogReference.Result;
 
-            if(result.Cancelled)
+            if(result.Canceled)
                 return;
 
             Value = (Company)result.Data;

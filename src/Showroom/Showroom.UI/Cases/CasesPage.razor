@@ -7,7 +7,7 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Cases</MudText>
 
-<MudButton Link="/cases/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2">
+<MudButton Href="/cases/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2">
     New case
 </MudButton>
 
@@ -17,7 +17,7 @@
         <ToolBarContent>
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string"  Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel T="Case" SortLabel="Id">Id</MudTableSortLabel></MudTh>
@@ -43,11 +43,11 @@
     public Organization? Organization { get; set; }
     public CompetenceArea? CompetenceArea { get; set; }
 
-    private async Task<TableData<Case>> LoadData(TableState state)
+    private async Task<TableData<Case>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await CasesClient.GetCasesAsync(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
+            var results = await CasesClient.GetCasesAsync(state.Page + 1, state.PageSize, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc), cancellationToken);
             return new TableData<Case> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)

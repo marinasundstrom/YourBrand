@@ -22,7 +22,7 @@
 @if (loaded)
 {
     <MudPaper Elevation="25">
-        <MudToolBar DisableGutters="true" Class="mt-2">
+        <MudToolBar Gutters="false" Class="mt-2">
             <MudSpacer />
             <MudSpacer />
             <ProjectSelector Label="@T["Project"]" OrganizationId="@(Organization?.Id)" Variant="Variant.Outlined"
@@ -46,7 +46,7 @@
                                     <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight"
                                     TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column"
                                     PopoverClass="mud-elevation-25">
-                                    <MudButton Size="Size.Small" Color="Color.Error" StartIcon="@Icons.Outlined.Delete" OnClick="@( ()
+                                    <MudButton Size="Size.Small" Color="Color.Error" StartIcon="@Icons.Material.Outlined.Delete" OnClick="@( ()
                                     => { })">Delete Section</MudButton>
                                     <MudButton Size="Size.Small" Color="Color.Default" StartIcon="@Icons.Rounded.Edit">Rename
                                     Section</MudButton>
@@ -55,7 +55,7 @@
                             </MudToolBar>
                             <MudDropZone T="Ticket" Identifier="@($"{status.Id}")" Class="mud-height-full" />
                             @*
-                                <MudButton OnClick="@(() => {})" Color="Color.Inherit" StartIcon="@Icons.Filled.Add" FullWidth="true"
+                                <MudButton OnClick="@(() => {})" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.Add" FullWidth="true"
                                 Class="py-2" Style="background-color: inherit;">Add Task</MudButton>
                             *@
                         </MudPaper>

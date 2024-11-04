@@ -39,7 +39,7 @@
         StateHasChanged();
     }
 
-    private async Task<IEnumerable<SearchResultItem>> Search1(string searchText)
+    private async Task<IEnumerable<SearchResultItem>> Search1(string searchText, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(searchText))
             return Array.Empty<SearchResultItem>();
@@ -53,7 +53,7 @@
 
         try
         {
-            var results = await SearchClient.SearchAsync(searchText, 1, 10, null, null);
+            var results = await SearchClient.SearchAsync(searchText, 1, 10, null, null, cancellationToken);
             return results.Items;
         }
         catch (Exception e)

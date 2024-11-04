@@ -22,7 +22,7 @@
                 <MudAutocomplete Label="Category" SearchFunc="Search" @bind-Value="Category" ToStringFunc="x => x.Name"
                     Variant="Variant.Outlined" For="() => Category" Class="mb-4" Strict="false" />
 
-                <MudCheckBox Label="Is grouped product" Lines="5" @bind-Checked="IsGroupedProduct"
+                <MudCheckBox Label="Is grouped product" Lines="5" @bind-Value="IsGroupedProduct"
                     Variant="Variant.Outlined" For="() => IsGroupedProduct" Class="mb-4"></MudCheckBox>
 
                 <MudNumericField Label="Price" @bind-Value="Price" Variant="Variant.Outlined" For="() => Price"
@@ -104,12 +104,12 @@
 
     void Cancel() => MudDialog.Close(DialogResult.Cancel());
 
-    private async Task<IEnumerable<ParentProductCategory>> Search(string value)
+    private async Task<IEnumerable<ParentProductCategory>> Search(string value, CancellationToken cancellationToken)
     {
         var store = StoreProvider.CurrentStore;
 
         var result = await ProductCategoriesClient.GetProductCategoriesAsync(Organization.Id, store.Id, null, true, true, 1, 20, value, null,
-        null);
+        null, cancellationToken);
         return result.Items
         .Where(x => x.CanAddProducts)
         .Select(x => new ParentProductCategory

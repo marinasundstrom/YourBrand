@@ -14,7 +14,7 @@
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTeamClicked">New Team</MudButton>
 
-<MudTable T="Team" ServerData="@(new Func<TableState, Task<TableData<Team>>>(ServerReload))"
+<MudTable T="Team" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Team>>>(ServerReload))"
           Hover="true" @ref="table" Class="mt-4" OnRowClick="(e) => GotToTeam(e.Item)" Elevation="25">
     <ToolBarContent>
         <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey" Label="User" Variant="Variant.Outlined"
@@ -64,10 +64,10 @@
         });
     }
 
-    private async Task<TableData<Team>> ServerReload(TableState state)
+    private async Task<TableData<Team>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         var page = await TeamsClient.GetTeamsAsync(Organization.Id, state.Page, state.PageSize, /* null,  User?.Id, */ searchString,
-            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc);
+            state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc, cancellationToken);
 
         return new TableData<Team>() { TotalItems = page.TotalItems, Items = page.Items };
     }
@@ -96,7 +96,7 @@
 
         var dialogResult = await dialogRef.Result;
 
-        if (dialogResult.Cancelled)
+        if (dialogResult.Canceled)
             return;
 
         searchString = null;
@@ -113,7 +113,7 @@
 
     var dialogResult = await dialogRef.Result;
 
-    if (dialogResult.Cancelled)
+    if (dialogResult.Canceled)
         return;
 
     table.ReloadServerData();

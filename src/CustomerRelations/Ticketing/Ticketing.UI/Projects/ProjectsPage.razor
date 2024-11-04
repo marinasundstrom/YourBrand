@@ -14,7 +14,7 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Projects</MudText>
 
-<MudButton Variant="Variant.Filled" OnClick="async () => await OnProjectClicked(null)" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnProjectClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     New Project
 </MudButton>
 
@@ -53,14 +53,14 @@
 
     public Project Project { get; set; }
 
-    private async Task<TableData<Project>> LoadData(TableState state)
+    private async Task<TableData<Project>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
             var organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
 
 
-            var results = await ProjectsClient.GetProjectsAsync(organizationId, state.Page + 1, state.PageSize, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Ticketing.SortDirection.Ascending : YourBrand.Ticketing.SortDirection.Descending));
+            var results = await ProjectsClient.GetProjectsAsync(organizationId, state.Page + 1, state.PageSize, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Ticketing.SortDirection.Ascending : YourBrand.Ticketing.SortDirection.Descending), cancellationToken);
             return new TableData<Project> { Items = results.Items, TotalItems = results.TotalItems };
         }
         /*catch (ApiException exc)

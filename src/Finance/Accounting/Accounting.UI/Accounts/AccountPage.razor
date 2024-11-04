@@ -40,7 +40,7 @@
 
     <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Entries</MudText>
 
-    <MudTable ServerData="@(new Func<TableState, Task<TableData<LedgerEntry>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
+    <MudTable ServerData="@(new Func<TableState, CancellationToken, Task<TableData<LedgerEntry>>>(ServerReload))" Elevation="25" Hover="true" Breakpoint="Breakpoint.Sm" Loading="@loading" LoadingProgressColor="Color.Info">
         <HeaderContent>
             <MudTh>Date</MudTh>
             <MudTh>Journal Entry</MudTh>
@@ -105,13 +105,13 @@
         StateHasChanged();
     }
 
-    private async Task<TableData<LedgerEntry>> ServerReload(TableState state)
+    private async Task<TableData<LedgerEntry>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await LedgerEntriesClient.GetLedgerEntriesAsync(Organization.Id, AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc);
+            var result = await LedgerEntriesClient.GetLedgerEntriesAsync(Organization.Id, AccountNo, null, state.Page, state.PageSize, ResultDirection.Desc, cancellationToken);
 
             return new TableData<LedgerEntry>() { TotalItems = result.TotalItems, Items = result.Entries };
         }

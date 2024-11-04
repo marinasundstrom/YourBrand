@@ -1,6 +1,6 @@
 @inject IStatisticsClient StatisticsClient
 
-<MudCheckBox Checked="DistinctByClient2" CheckedChanged="new Func<bool, Task>(DistinctByClientChanged2)" Label="Distinct by clients" />
+<MudCheckBox Value="DistinctByClient2" ValueChanged="new Func<bool, Task>(DistinctByClientChanged2)" Label="Distinct by clients" />
 
 <Chart Series="@Series2" XAxisLabels="@XAxisLabels2" />
 

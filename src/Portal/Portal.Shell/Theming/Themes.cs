@@ -13,7 +13,7 @@ public static class Themes
                 FontFamily = new[] { "Roboto", "sans-serif" }
             }
         },
-        Palette = new Palette
+        PaletteLight = new PaletteLight
         {
             Background = "rgb(248, 249, 250)",
             AppbarBackground = "#137cdf",
@@ -31,7 +31,7 @@ public static class Themes
                 FontFamily = new[] { "Roboto", "sans-serif" }
             }
         },
-        Palette = new Palette
+        PaletteLight = new PaletteLight
         {
             Background = "#22FFDD",
             AppbarBackground = "#FF44BB",

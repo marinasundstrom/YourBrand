@@ -10,7 +10,7 @@
 
 
             <div class="mb-4">
-                <MudButton StartIcon="@Icons.Filled.FileDownload" Link="@($"/api/rotrut/rutfile")">
+                <MudButton StartIcon="@Icons.Material.Filled.FileDownload" Href="@($"/api/rotrut/rutfile")">
                     Download
                 </MudButton>
                 </div>
@@ -84,13 +84,13 @@
     RotRutCaseStatus? Status;
     IEnumerable<RotRutCaseStatus?> selectedStatuses = new List<RotRutCaseStatus?>();
 
-    private async Task<TableData<RotRutCaseDto>> ServerReload(TableState state)
+    private async Task<TableData<RotRutCaseDto>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await CasesClient.GetCasesAsync(state.Page, state.PageSize, kind, selectedStatuses.Select(s => (RotRutCaseStatus)s!));
+            var result = await CasesClient.GetCasesAsync(state.Page, state.PageSize, kind, selectedStatuses.Select(s => (RotRutCaseStatus)s!), cancellationToken);
 
             return new TableData<RotRutCaseDto>() { TotalItems = result.TotalItems, Items = result.Items };
         }

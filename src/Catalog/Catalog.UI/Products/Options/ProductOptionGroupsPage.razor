@@ -69,7 +69,7 @@ else
 
         var result = await modalRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         optionGroups.Add((OptionGroup)result.Data);
     }
@@ -84,7 +84,7 @@ else
 
         var result = await modalRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         var index = optionGroups!.IndexOf(optionGroup);
 

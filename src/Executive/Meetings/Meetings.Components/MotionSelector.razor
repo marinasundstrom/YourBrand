@@ -18,7 +18,7 @@
     
     @if(ShowAddButton) 
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddMotion" />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddMotion" />
     }
 </div>
 
@@ -53,7 +53,7 @@
     [Parameter]
     public bool ShowAddButton { get; set; }
 
-    async Task<IEnumerable<Motion>> SearchMotions(string text)
+    async Task<IEnumerable<Motion>> SearchMotions(string text, CancellationToken cancellationToken)
     {
         try
         {

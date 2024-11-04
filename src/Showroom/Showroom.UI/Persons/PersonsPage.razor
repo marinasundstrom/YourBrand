@@ -8,13 +8,13 @@
 
 <MudText Typo="Typo.h3" Class="mb-4">Profiles</MudText>
 
-<MudButton Link="/profiles" Variant="Variant.Filled" StartIcon="@Icons.Filled.Dashboard" Color="Color.Default" Class="mb-2 me-2">Profiles</MudButton>
+<MudButton Href="/profiles" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Dashboard" Color="Color.Default" Class="mb-2 me-2">Profiles</MudButton>
 
-<MudButton Link="/profiles/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+<MudButton Href="/profiles/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
     New profile
 </MudButton>
 
-<MudButton Link="/profiles/find" Variant="Variant.Filled" StartIcon="@Icons.Filled.Search" Color="Color.Default" Class="mb-2">
+<MudButton Href="/profiles/find" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Search" Color="Color.Default" Class="mb-2">
     Find profile
 </MudButton>
 
@@ -30,7 +30,7 @@
 
             <MudSpacer />
 
-            <MudTextField T="string" Dense="true" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh></MudTh>
@@ -68,11 +68,11 @@
     public Organization? Organization { get; set; }
     public CompetenceArea? CompetenceArea { get; set; }
 
-    private async Task<TableData<PersonProfile>> LoadData(TableState state)
+    private async Task<TableData<PersonProfile>> LoadData(TableState state, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await PersonProfilesClient.GetPersonProfilesAsync(state.Page + 1, state.PageSize, Organization?.Id, CompetenceArea?.Id, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc));
+            var results = await PersonProfilesClient.GetPersonProfilesAsync(state.Page + 1, state.PageSize, Organization?.Id, CompetenceArea?.Id, null, searchString, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Showroom.Client.SortDirection.Asc : YourBrand.Showroom.Client.SortDirection.Desc), cancellationToken);
             return new TableData<PersonProfile> { Items = results.Items, TotalItems = results.TotalCount };
         }
         /*catch (ApiException exc)

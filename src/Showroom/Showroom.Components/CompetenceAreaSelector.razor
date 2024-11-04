@@ -35,11 +35,11 @@
     [Parameter]
     public Variant Variant { get; set; }
 
-    async Task<IEnumerable<CompetenceArea>> SearchCompetenceAreas(string text)
+    async Task<IEnumerable<CompetenceArea>> SearchCompetenceAreas(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null);
+            var results = await CompetenceAreasClient.GetCompetenceAreasAsync(1, 10, text, null, null, cancellationToken);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

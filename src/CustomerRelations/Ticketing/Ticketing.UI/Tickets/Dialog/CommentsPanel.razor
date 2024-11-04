@@ -17,7 +17,7 @@
     </EditForm>
 
     <MudTable @ref="table" T="TicketComment" Context="c"
-        ServerData="@(new Func<TableState, Task<TableData<TicketComment>>>(ServerReload))" Elevation="205" Dense="false" Hover="true" SortLabel="@T["SortBy"]">
+        ServerData="@(new Func<TableState, CancellationToken, Task<TableData<TicketComment>>>(ServerReload))" Elevation="205" Dense="false" Hover="true" SortLabel="@T["SortBy"]">
         <HeaderContent>
             <MudTh>
                 <MudTableSortLabel SortLabel="OccurredAt" T="TicketComment">@T["PostedAt"]</MudTableSortLabel>
@@ -68,7 +68,7 @@
 
     [Required] public string? Text { get; set; }
 
-    private async Task<TableData<TicketComment>> ServerReload(TableState state)
+    private async Task<TableData<TicketComment>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         try
         {

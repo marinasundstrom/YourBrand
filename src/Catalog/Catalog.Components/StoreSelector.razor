@@ -20,7 +20,7 @@
 
     @if (ShowAddButton)
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddStores" />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddStores" />
     }
 </div>
 
@@ -55,11 +55,11 @@
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }
 
-    async Task<IEnumerable<Store>> SearchStores(string text)
+    async Task<IEnumerable<Store>> SearchStores(string text, CancellationToken cancellationToken)
     {
         //try
         //{
-        var results = await StoresClient.GetStoresAsync(Organization.Id, 0, 10, text, null, null);
+        var results = await StoresClient.GetStoresAsync(Organization.Id, 0, 10, text, null, null, cancellationToken);
         return results.Items;
         /*}
         catch (AccessTokenNotAvailableException exception)
@@ -87,7 +87,7 @@
 
         var result = await dialogReference.Result;
 
-        if (result.Cancelled)
+        if (result.Canceled)
             return;
 
         Value = (Store)result.Data;

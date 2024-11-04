@@ -3,12 +3,12 @@
 
 <div>
     <MudFileUpload T="IBrowserFile" Accept="*.jpg, *.jpeg, *.png" FilesChanged="Model.UploadProductImage">
-        <ButtonTemplate>
-            <MudButton HtmlTag="label" Variant="Variant.Filled" Color="Color.Primary"
-                StartIcon="@Icons.Material.Filled.CloudUpload" for="@context">
+        <ActivatorContent>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                StartIcon="@Icons.Material.Filled.CloudUpload">
                 Upload image
             </MudButton>
-        </ButtonTemplate>
+        </ActivatorContent>
     </MudFileUpload>
 
     <MudButton Variant="Variant.Filled" Class="mt-2 ms-2" StartIcon="@Icons.Material.Filled.List"

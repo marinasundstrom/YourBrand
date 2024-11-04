@@ -27,11 +27,11 @@ public class BrandUpdateViewModel(IProductsClient productsClient, IBrandsClient 
 
     public int ProductId { get; private set; }
 
-    public async Task<IEnumerable<Brand>> Search(string value)
+    public async Task<IEnumerable<Brand>> Search(string value, CancellationToken cancellationToken)
     {
         var store = storeProvider.CurrentStore;
 
-        var result = await brandsClient.GetBrandsAsync(OrganizationId, null, 1, 20, value, null, null);
+        var result = await brandsClient.GetBrandsAsync(OrganizationId, null, 1, 20, value, null, null, cancellationToken);
 
         return result.Items;
     }

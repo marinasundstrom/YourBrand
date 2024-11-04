@@ -11,15 +11,15 @@
 
 <MudFileUpload T="IReadOnlyList<IBrowserFile>" Accept=".zip" OnFilesChanged="UploadArchive" Hidden="false" Class="flex-1" InputClass="absolute mud-width-full mud-height-full overflow-hidden z-20" InputStyle="opacity:0"
                    @ondragenter="@SetDragClass" @ondragleave="@ClearDragClass" @ondragend="@ClearDragClass">
-    <ButtonTemplate>       
+    <ActivatorContent>       
         <MudPaper Height="300px" Outlined="true" Class="@DragClass">
             <MudText Typo="Typo.h6">Zip file</MudText>
             <MudText Typo="Typo.body1">@(archiveFile is null ? "Drag and drop files here or click" : archiveFile.Name)</MudText>
         </MudPaper>
-    </ButtonTemplate>
+    </ActivatorContent>
 </MudFileUpload>
 
-<MudButton OnClick="Upload" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Filled.CloudUpload" Class="mt-4" Disabled="@(!CanUpload)">
+<MudButton OnClick="Upload" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload" Class="mt-4" Disabled="@(!CanUpload)">
     Upload
 </MudButton>
 

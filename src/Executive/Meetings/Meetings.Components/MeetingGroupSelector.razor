@@ -18,7 +18,7 @@
     
     @if(ShowAddButton) 
     {
-        <MudIconButton Icon="@Icons.Filled.Add" OnClick="AddMeetingGroup" />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddMeetingGroup" />
     }
 </div>
 
@@ -53,11 +53,11 @@
     [Parameter]
     public bool ShowAddButton { get; set; }
 
-    async Task<IEnumerable<MeetingGroup>> SearchMeetingGroups(string text)
+    async Task<IEnumerable<MeetingGroup>> SearchMeetingGroups(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await MeetingGroupsClient.GetMeetingGroupsAsync(OrganizationId, 1, 10, text, null, null);
+            var results = await MeetingGroupsClient.GetMeetingGroupsAsync(OrganizationId, 1, 10, text, null, null, cancellationToken);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

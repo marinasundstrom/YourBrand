@@ -25,16 +25,16 @@
 </MudButton>
 
 
-<MudTable T="Ticket" MultiSelection="@selectMultiple" @bind-SelectedItems="selectedItems" ServerData="@(new Func<TableState, Task<TableData<Ticket>>>(ServerReload))" Elevation="25"
+<MudTable T="Ticket" MultiSelection="@selectMultiple" @bind-SelectedItems="selectedItems" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Ticket>>>(ServerReload))" Elevation="25"
           OnRowClick="async (e) => await ShowTicket(e.Item.Id)" Dense="false" Hover="true" @ref="table" SortLabel="@T["SortBy"]" Class="mb-8">
     <ToolBarContent>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="async () => await CreateTicket()">@T["CreateTicket"]</MudButton>
 
-        <MudCheckBox Label="@T["SelectMultiple"]" Checked="selectMultiple" CheckedChanged="new Func<bool, Task>(OnSelectMultipleChanged)" />
+        <MudCheckBox Label="@T["SelectMultiple"]" Value="selectMultiple" ValueChanged="new Func<bool, Task>(OnSelectMultipleChanged)" />
 
         @if (selectedItems.Count > 0)
         {
-            <MudButton @onclick="DeleteSelectedItems" Variant="Variant.Filled" StartIcon="@Icons.Filled.Delete" Color="Color.Default" Class="ms-4 me-2">
+            <MudButton @onclick="DeleteSelectedItems" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Default" Class="ms-4 me-2">
                 @T["DeleteSelectedTickets"]
             </MudButton>
         }
@@ -277,7 +277,7 @@
         return Task.CompletedTask;
     }
 
-    private async Task<TableData<Ticket>> ServerReload(TableState state)
+    private async Task<TableData<Ticket>> ServerReload(TableState state, CancellationToken cancellationToken)
     {        
         try
         {

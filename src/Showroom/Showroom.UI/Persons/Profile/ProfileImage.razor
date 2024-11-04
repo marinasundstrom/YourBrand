@@ -6,7 +6,7 @@
     <InputFile id="fileInput" OnChange="UploadFiles" Class="mt-3" hidden accept=".jpg, .jpeg, .png" />
 
     <label for="fileInput">
-        <MudBadge Color="Color.Primary" Visible="IsEditable" Icon="@Icons.Filled.CloudUpload">
+        <MudBadge Color="Color.Primary" Visible="IsEditable" Icon="@Icons.Material.Filled.CloudUpload">
             @if(isUploading) 
             {
                 <div style="height: @(Height + "px"); width: @(Width + "px"); margin-left: auto; margin-right: auto; background-color: lightgray; object-fit: cover;" class="rounded-circle">

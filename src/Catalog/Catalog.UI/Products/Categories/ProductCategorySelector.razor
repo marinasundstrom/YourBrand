@@ -3,6 +3,7 @@
 
 @if (tree is not null)
 {
+    @*
     <div @onclick:stopPropagation @onclick:preventDefault>
     <MudTreeView @ref="treeView" T="ProductCategoryTreeNode" Items="(new HashSet<ProductCategoryTreeNode>(tree))"
         Hover="true" Expanded="@Expanded" ActivatedValue="ProductCategoryTreeNode"
@@ -12,7 +13,8 @@
                 Text="@context.Name" EndText="@context.ProductsCount.ToString()" EndTextTypo="@Typo.caption" />
         </ItemTemplate>
     </MudTreeView>
-</div>
+    </div>
+    *@
 }
 
 @code

@@ -11,7 +11,7 @@
 @inject Portal.Services.IAccessTokenProvider AccessTokenProvider
 @inject IStringLocalizer<TicketsPage> T
 
-<MudTable T="Ticket" MultiSelection="@selectMultiple" @bind-SelectedItems="selectedItems" ServerData="@(new Func<TableState, Task<TableData<Ticket>>>(ServerReload))" Elevation="0"
+<MudTable T="Ticket" MultiSelection="@selectMultiple" @bind-SelectedItems="selectedItems" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Ticket>>>(ServerReload))" Elevation="0"
           OnRowClick="async (e) => await ShowTicket(e.Item.Id)" Breakpoint="Breakpoint.Sm" Dense="false" Hover="true" @ref="table" SortLabel="@T["SortBy"]">
     <ToolBarContent>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="async () => await CreateTicket()">@T["CreateTicket"]</MudButton>
@@ -196,7 +196,7 @@
         return Task.CompletedTask;
     }
 
-    private async Task<TableData<Ticket>> ServerReload(TableState state)
+    private async Task<TableData<Ticket>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         try
         {

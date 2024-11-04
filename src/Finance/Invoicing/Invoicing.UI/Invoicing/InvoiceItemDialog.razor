@@ -73,15 +73,15 @@
             </MudTextField>
 
             <MudCheckBox T="bool" Label="For tax deduction (ROT/RUT)"
-                         @bind-Checked="Model.IsTaxDeductibleService" Class="mt-4"></MudCheckBox>
+                         @bind-Value="Model.IsTaxDeductibleService" Class="mt-4"></MudCheckBox>
 
             @if (Model.ProductType == ProductType.Service)
             {
                 @if (Model.IsTaxDeductibleService)
                 {
-                    <MudRadioGroup @bind-SelectedOption="Model.DomesticService.Kind" Class="mt-4">
-                        <MudRadio T="DomesticServiceKind?" Option="DomesticServiceKind.HomeRepairAndMaintenanceServiceType" Dense="true">ROT</MudRadio>
-                        <MudRadio T="DomesticServiceKind?" Option="DomesticServiceKind.HouseholdService" Dense="false">RUT</MudRadio>
+                    <MudRadioGroup @bind-Value="Model.DomesticService.Kind" Class="mt-4">
+                        <MudRadio T="DomesticServiceKind?" Value="DomesticServiceKind.HomeRepairAndMaintenanceServiceType" Dense="true">ROT</MudRadio>
+                        <MudRadio T="DomesticServiceKind?" Value="DomesticServiceKind.HouseholdService" Dense="false">RUT</MudRadio>
                     </MudRadioGroup>
 
                     @if (Model.DomesticService.Kind == DomesticServiceKind.HomeRepairAndMaintenanceServiceType)

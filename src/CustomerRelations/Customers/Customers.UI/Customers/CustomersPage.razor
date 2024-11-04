@@ -9,7 +9,7 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Customers</MudText>
 
-<MudButton Link="/customers/create" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-2">
+<MudButton Href="/customers/create" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2">
     New customer
 </MudButton>
 
@@ -50,13 +50,13 @@
     bool loading = false;
     string? searchString;
 
-    private async Task<TableData<Customer>> ServerReload(TableState state)
+    private async Task<TableData<Customer>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await CustomersClient.GetCustomersAsync(state.Page, state.PageSize, searchString);
+            var result = await CustomersClient.GetCustomersAsync(state.Page, state.PageSize, searchString, cancellationToken);
 
             return new TableData<Customer>() { TotalItems = result.TotalItems, Items = result.Items };
         }

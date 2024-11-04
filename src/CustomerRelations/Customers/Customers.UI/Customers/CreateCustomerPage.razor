@@ -8,9 +8,9 @@
 <MudPaper Class="pa-4" Elevation="25">
     <MudText>Customer type</MudText>
 
-    <MudRadioGroup @bind-SelectedOption="IsPerson" Class="mb-4">
-        <MudRadio Option="true" Color="Color.Primary" Dense="true">Person</MudRadio>
-        <MudRadio Option="false" Color="Color.Secondary" Dense="false">Organization</MudRadio>
+    <MudRadioGroup @bind-Value="IsPerson" Class="mb-4">
+        <MudRadio Value="true" Color="Color.Primary" Dense="true">Person</MudRadio>
+        <MudRadio Value="false" Color="Color.Secondary" Dense="false">Organization</MudRadio>
     </MudRadioGroup>
 
     @if(IsPerson) 

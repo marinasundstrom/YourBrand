@@ -40,11 +40,11 @@
     [Parameter]
     public string? SiteId { get; set; }
 
-    async Task<IEnumerable<Warehouse>> SearchWarehouses(string text)
+    async Task<IEnumerable<Warehouse>> SearchWarehouses(string text, CancellationToken cancellationToken)
     {
         try
         {
-            var results = await WarehousesClient.GetWarehousesAsync(1, 10, SiteId, text, null, null);
+            var results = await WarehousesClient.GetWarehousesAsync(1, 10, SiteId, text, null, null, cancellationToken);
             return results.Items;
         }
         catch (AccessTokenNotAvailableException exception)

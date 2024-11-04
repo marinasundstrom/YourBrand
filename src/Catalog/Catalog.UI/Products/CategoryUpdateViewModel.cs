@@ -25,11 +25,11 @@ public class CategoryUpdateViewModel(IProductsClient productsClient, IProductCat
 
     public int ProductId { get; private set; }
 
-    public async Task<IEnumerable<ProductCategory>> Search(string value)
+    public async Task<IEnumerable<ProductCategory>> Search(string value, CancellationToken cancellationToken)
     {
         var store = storeProvider.CurrentStore;
 
-        var result = await productCategoriesClient.GetProductCategoriesAsync(OrganizationId, store.Id, null, true, true, 1, 20, value, null, null);
+        var result = await productCategoriesClient.GetProductCategoriesAsync(OrganizationId, store.Id, null, true, true, 1, 20, value, null, null, cancellationToken);
 
         return result.Items
             .Where(x => x.CanAddProducts)

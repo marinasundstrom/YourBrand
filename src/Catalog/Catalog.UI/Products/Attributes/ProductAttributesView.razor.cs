@@ -39,9 +39,9 @@ sealed partial class ProductAttributesView : ComponentBase
     /// <summary>
     /// Here we simulate getting the paged, filtered and ordered data from the server
     /// </summary>
-    private async Task<TableData<ProductAttribute>> ServerReload(TableState state)
+    private async Task<TableData<ProductAttribute>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
-        var result = await ProductsClient.GetProductAttributesAsync(Organization.Id, ProductId); /*, state.Page + 1, state.PageSize,
+        var result = await ProductsClient.GetProductAttributesAsync(Organization.Id, ProductId, cancellationToken); /*, state.Page + 1, state.PageSize,
         searchString,
         state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection ==
         MudBlazor.SortDirection.Descending ? YourBrand.Catalog.SortDirection.Desc : YourBrand.Catalog.SortDirection.Asc)); */

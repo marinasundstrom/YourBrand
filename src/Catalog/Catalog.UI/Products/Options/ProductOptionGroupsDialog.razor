@@ -4,7 +4,7 @@
 @inject IDialogService DialogService
 @using YourBrand.Catalog
 
-    <MudDialog DisableSidePadding="true">
+    <MudDialog Gutters="false">
         <DialogContent>
             <MudContainer Style="max-height: 450px; overflow-y: scroll">
 
@@ -71,7 +71,7 @@
 
         var result = await modalRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         optionGroups.Add((OptionGroup)result.Data);
     }
@@ -86,7 +86,7 @@
 
         var result = await modalRef.Result;
 
-        if (result.Cancelled) return;
+        if (result.Canceled) return;
 
         var index = optionGroups!.IndexOf(optionGroup);
 

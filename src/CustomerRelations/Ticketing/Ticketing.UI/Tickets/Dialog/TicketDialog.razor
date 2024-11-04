@@ -33,7 +33,7 @@ else
             <AppPageTitle>@ticket?.Id - @ticket?.Subject</AppPageTitle>
         }
 
-            <MudDialog DisableSidePadding="true">
+            <MudDialog Gutters="false">
                 <TitleContent>
                      <EditForm EditContext="editContext" OnValidSubmit="Submit">
                         <DataAnnotationsValidator />

@@ -6,18 +6,18 @@
                 <SkillLevelSelector Label="Skill level" Variant="Variant.Outlined" @bind-Value="Model.SkillLevel"
                            For="@(() => Model.SkillLevel)" Class="mt-4" />
 
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-4 mt-4 me-2">
                     Add skill
                 </MudButton>
             </EditForm>
 
-            <MudList>
+            <MudList T="string">
                 @foreach (var skill in Model.Skills)
                 {
                     <MudListItem Class="pa-0">
                         <div class="d-flex flex-grow-1 gap-1">
-                            <MudCheckBox Dense="true" T="bool" Checked="skill.Selected" CheckedChanged="async (e) => { skill.Selected = e; await OnUpdated.InvokeAsync(); } " class="flex-1 d-flex" Label="@($"{skill.Skill.Name} ({skill.Level})")" />
-                            <MudIconButton Class="flex-none" Icon="@Icons.Filled.Remove" OnClick="() => RemoveSkill(skill)"></MudIconButton>
+                            <MudCheckBox Dense="true" T="bool" Value="skill.Selected" ValueChanged="async (e) => { skill.Selected = e; await OnUpdated.InvokeAsync(); } " class="flex-1 d-flex" Label="@($"{skill.Skill.Name} ({skill.Level})")" />
+                            <MudIconButton Class="flex-none" Icon="@Icons.Material.Filled.Remove" OnClick="() => RemoveSkill(skill)"></MudIconButton>
                         </div>
                     </MudListItem>
                 }      

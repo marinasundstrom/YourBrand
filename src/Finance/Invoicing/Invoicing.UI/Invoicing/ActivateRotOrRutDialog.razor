@@ -9,9 +9,9 @@
     <MudDialog>
         <DialogContent>
 
-            <MudRadioGroup @bind-SelectedOption="Kind" Class="mt-4">
-                <MudRadio Option="DomesticServiceKind.HomeRepairAndMaintenanceServiceType" Dense="true">ROT</MudRadio>
-                <MudRadio Option="DomesticServiceKind.HouseholdService" Dense="false">RUT</MudRadio>
+            <MudRadioGroup @bind-Value="Kind" Class="mt-4">
+                <MudRadio Value="DomesticServiceKind.HomeRepairAndMaintenanceServiceType" Dense="true">ROT</MudRadio>
+                <MudRadio Value="DomesticServiceKind.HouseholdService" Dense="false">RUT</MudRadio>
             </MudRadioGroup>
 
             <MudTextField Label="Description" @bind-Value="Description" For="() => Description" Lines="5"></MudTextField>

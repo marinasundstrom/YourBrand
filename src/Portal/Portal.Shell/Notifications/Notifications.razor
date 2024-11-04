@@ -15,14 +15,14 @@
     <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" PopoverClass="docs-layout-menu-shadow rounded-lg" ListClass="notifications-menu-list" LockScroll="true">
         
         <ActivatorContent>
-            <MudIconButton class="me-1" Color="Color.Inherit" Icon="@(unreadNotificationsCount > 0 ? Icons.Filled.Notifications : Icons.Outlined.Notifications)" />
+            <MudIconButton class="me-1" Color="Color.Inherit" Icon="@(unreadNotificationsCount > 0 ? Icons.Material.Filled.Notifications : Icons.Material.Outlined.Notifications)" />
         </ActivatorContent>
         
         <ChildContent>
 
         <div class="d-flex justify-space-between align-center px-3">
             <MudText Typo="Typo.h6" Style="font-size: medium;"><b>@T["Notifications"]</b></MudText>
-            <MudIconButton Icon="@Icons.Outlined.Settings" Variant="Variant.Text" Color="Color.Inherit" Class="pa-2"></MudIconButton> 
+            <MudIconButton Icon="@Icons.Material.Outlined.Settings" Variant="Variant.Text" Color="Color.Inherit" Class="pa-2"></MudIconButton> 
         </div>
 
         <MudDivider Class="mt-1" />

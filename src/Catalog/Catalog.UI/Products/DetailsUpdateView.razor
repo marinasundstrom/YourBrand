@@ -5,7 +5,7 @@
 
     @if (Model.CanInheritProperties)
     {
-        <MudCheckBox T="bool" Label="Inherit name" @bind-Checked="Model.InheritName" />
+        <MudCheckBox T="bool" Label="Inherit name" @bind-Value="Model.InheritName" />
     }
 
     @if (!Model.InheritName)
@@ -16,7 +16,7 @@
 
     @if (Model.CanInheritProperties)
     {
-        <MudCheckBox T="bool" Label="Inherit description" Class="mt-4" @bind-Checked="Model.InheritDescription" />
+        <MudCheckBox T="bool" Label="Inherit description" Class="mt-4" @bind-Value="Model.InheritDescription" />
     }
 
     @if (!Model.InheritDescription)
