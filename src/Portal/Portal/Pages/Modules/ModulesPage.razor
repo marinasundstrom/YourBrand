@@ -45,7 +45,10 @@
     </PagerContent>
 </MudTable>
 
-<MudButton Variant="Variant.Filled" OnClick="PopulateModules" Class="mt-4">Populate modules</MudButton>
+@if (table is not null && !table.Items.Any())
+{
+    <MudButton Variant="Variant.Filled" OnClick="PopulateModules" Class="mt-4">Populate modules</MudButton>
+}
 
 @code {
     MudTable<TenantModule> table;
@@ -100,6 +103,12 @@
 
     private async Task PopulateModules()
     {
+        if(table is null)
+            return;
+
+        @if(table.Items.Any()) 
+            return;
+
         await ModulesClient.PopulateModulesAsync();
 
         NavigationManager.Refresh(true);
