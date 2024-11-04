@@ -66,10 +66,11 @@ public static class Config
                 RequirePkce = true,
                 RequireClientSecret = false,
                 AllowedCorsOrigins = { "https://localhost:5174" },
-                AllowedScopes = ["openid", "profile", "email", "myapi", "tenant"],
+                AllowedScopes = ["openid", "profile", "email", "myapi"],
                 RedirectUris = ["https://localhost:5174/authentication/login-callback"],
                 PostLogoutRedirectUris = ["https://localhost:5174/"],
-                Enabled = true
+                Enabled = true,
+                AllowAccessTokensViaBrowser = true
             },
                 new Duende.IdentityServer.Models.Client
                 {

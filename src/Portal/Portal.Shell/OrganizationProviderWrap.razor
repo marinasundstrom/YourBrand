@@ -4,10 +4,7 @@
 
 <CascadingValue Name="Organization" Value="organization">
 
-    @if (organization is not null) 
-    {
-        @ChildContent
-    }
+    @ChildContent
     
 </CascadingValue>
 
@@ -15,11 +12,24 @@
 {
     Organization? organization;
 
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+        if (authenticationState is not null)
+        {
+            var authState = await authenticationState;
+            var user = authState?.User;
 
-        OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+            if (!user?.Identity?.IsAuthenticated ?? false)
+                return;
+
+
+            organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
+            OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+        }
     }
 
     async void OnCurrentOrganizationChanged(object? sender, EventArgs eventArgs)

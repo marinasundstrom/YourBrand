@@ -20,7 +20,14 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddOidcAuthentication(options =>
 {
-    builder.Configuration.Bind("Local", options.ProviderOptions);
+    builder.Configuration.Bind("Oidc", options.ProviderOptions);
+
+    options.ProviderOptions.ResponseType = "code";
+    options.ProviderOptions.DefaultScopes.Clear();
+    options.ProviderOptions.DefaultScopes.Add("openid");
+    options.ProviderOptions.DefaultScopes.Add("profile");
+    options.ProviderOptions.DefaultScopes.Add("email");
+    options.ProviderOptions.DefaultScopes.Add("myapi");
 
     options.UserOptions.NameClaim = "name";
     options.UserOptions.RoleClaim = "role";
@@ -52,16 +59,23 @@ await app.RunAsync();
 
 async Task LoadModules(IServiceCollection services)
 {
-    var modulesClient = builder.Services
-        .BuildServiceProvider()
-        .GetRequiredService<ITenantModulesClient>();
+    try 
+    {
+        var modulesClient = builder.Services
+            .BuildServiceProvider()
+            .GetRequiredService<ITenantModulesClient>();
 
-    var moduleEntries = await modulesClient.GetModulesAsync();
+        var moduleEntries = await modulesClient.GetModulesAsync();
 
-    moduleEntries!.Where(x => x.Enabled).ToList().ForEach(x =>
-        ModuleLoader.LoadModule(x.Module.Name, Assembly.Load(x.Module.Assembly), x.Enabled));
+        moduleEntries!.Where(x => x.Enabled).ToList().ForEach(x =>
+            ModuleLoader.LoadModule(x.Module.Name, Assembly.Load(x.Module.Assembly), x.Enabled));
 
-    ModuleLoader.AddServices(builder.Services);
+        ModuleLoader.AddServices(builder.Services);
+    }
+    catch(Exception exc) 
+    {
+        Console.WriteLine("Modules did not load");
+    }
 }
 
 async Task LoadBrandProfile(IServiceCollection services)

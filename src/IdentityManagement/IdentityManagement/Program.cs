@@ -107,6 +107,11 @@ services.AddMassTransit(x =>
     });
 });
 
+services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+});
 
 #if DEBUG
 IdentityModelEventSource.ShowPII = true;
