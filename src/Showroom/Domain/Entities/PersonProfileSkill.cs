@@ -36,7 +36,7 @@ public class PersonProfileSkill : AuditableEntity<string>, IHasTenant, ISoftDele
 
     public List<PersonProfile> PersonProfiles { get; set; } = new List<PersonProfile>();
 
-    public bool IsDeleted { get; set;}
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

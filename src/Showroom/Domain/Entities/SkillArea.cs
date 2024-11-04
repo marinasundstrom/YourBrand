@@ -11,7 +11,7 @@ public class SkillArea : AuditableEntity<string>, ISoftDeletableWithAudit<User>
     {
 
     }
-    
+
     public Industry Industry { get; set; } = null!;
 
     public CompetenceArea? CompetenceArea { get; set; } = null!;

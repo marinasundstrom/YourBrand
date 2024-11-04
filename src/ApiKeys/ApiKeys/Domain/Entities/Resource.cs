@@ -4,7 +4,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.ApiKeys.Domain.Entities;
 
-public class Resource : AuditableEntity<string>, ISoftDeletableWithAudit<User> 
+public class Resource : AuditableEntity<string>, ISoftDeletableWithAudit<User>
 {
     protected Resource()
     {

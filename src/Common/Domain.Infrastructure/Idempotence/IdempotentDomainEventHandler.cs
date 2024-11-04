@@ -13,7 +13,7 @@ public sealed class IdempotentDomainEventHandler<TDomainEvent>(
     public async Task Handle(TDomainEvent notification, CancellationToken cancellationToken)
     {
         var dbContext = domainDbContextAccessor.DbContext;
-        
+
         string consumer = decorated.GetType().Name;
 
         if (await dbContext.Set<OutboxMessageConsumer>()

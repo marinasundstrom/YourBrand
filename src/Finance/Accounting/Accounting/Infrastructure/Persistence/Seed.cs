@@ -138,7 +138,7 @@ public static class Seed
 
         context.JournalEntries.Add(journalEntry);
 
-        await journalEntry.AddDebitEntry(await context.GetAccount(2440), 5000m, null,  ledgerEntryIdGenerator);
+        await journalEntry.AddDebitEntry(await context.GetAccount(2440), 5000m, null, ledgerEntryIdGenerator);
         await journalEntry.AddCreditEntry(await context.GetAccount(1930), 5000m, null, ledgerEntryIdGenerator);
 
         await context.SaveChangesAsync();

@@ -14,7 +14,7 @@ public class Transaction : Entity<string>, IHasTenant, IHasOrganization
     }
 
     public Transaction(string? id, OrganizationId organizationId, DateTime date, TransactionStatus status, string? from, string? reference, string currency, decimal amount)
-        : base(id ?? Guid.NewGuid().ToUrlFriendlyString())   
+        : base(id ?? Guid.NewGuid().ToUrlFriendlyString())
     {
         if (amount <= 0)
         {

@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Quartz;
 
-using YourBrand.Domain.Infrastructure;
 using YourBrand.Analytics.Infrastructure.Persistence;
 using YourBrand.Analytics.Infrastructure.Services;
+using YourBrand.Domain.Infrastructure;
 
 namespace YourBrand.Analytics.Infrastructure;
 

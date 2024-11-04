@@ -6,12 +6,12 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Customers.Domain.Entities;
 
-public abstract class Entity<TId> : IEntity<TId>, IEquatable<Entity<TId>>,  IHasDomainEvents
+public abstract class Entity<TId> : IEntity<TId>, IEquatable<Entity<TId>>, IHasDomainEvents
     where TId : notnull
 {
     private readonly List<DomainEvent> domainEvents = new List<DomainEvent>();
 
- #nullable disable
+#nullable disable
 
     protected Entity() { }
 

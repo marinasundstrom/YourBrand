@@ -7,17 +7,17 @@ namespace YourBrand.Domain.Common;
 public abstract class AuditableEntity<TId> : Entity<TId>, IAuditableEntity<TId, User>
     where TId : notnull
 {
-    #nullable disable
+#nullable disable
 
-    protected AuditableEntity() : base() {}
+    protected AuditableEntity() : base() { }
 
-    #nullable restore
+#nullable restore
 
-    public AuditableEntity(TId id) : base(id) 
+    public AuditableEntity(TId id) : base(id)
     {
 
     }
-    
+
     public DateTimeOffset Created { get; set; }
 
     public UserId? CreatedById { get; set; }

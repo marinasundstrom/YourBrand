@@ -17,7 +17,7 @@ public class WarehouseItem : AuditableEntity<string>
         QuantityOnHand = quantityOnHand;
         QuantityThreshold = quantityThreshold;
     }
-    
+
     public Item Item { get; set; } = null!;
 
     public string ItemId { get; set; } = null!;

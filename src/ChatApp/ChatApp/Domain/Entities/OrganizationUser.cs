@@ -17,7 +17,7 @@ public class OrganizationUser : AggregateRoot<string>, IAuditableEntity<string>
     public OrganizationUser(string id)
         : base(id)
     {
-        
+
     }
 
     public OrganizationId OrganizationId { get; set; }

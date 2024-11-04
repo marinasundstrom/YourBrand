@@ -13,7 +13,7 @@ public class LedgerEntryIdGenerator(IAccountingContext accountingContext) : ILed
 
     public async Task<int> GetIdAsync(OrganizationId organizationId, CancellationToken cancellationToken = default)
     {
-        if(isSet)
+        if (isSet)
         {
             return ++id;
         }
@@ -22,7 +22,7 @@ public class LedgerEntryIdGenerator(IAccountingContext accountingContext) : ILed
         {
             id = (await accountingContext.JournalEntries.InOrganization(organizationId).MaxAsync(x => x.Id, cancellationToken)) + 1;
         }
-        catch (Exception) 
+        catch (Exception)
         {
             id = 1;
         }

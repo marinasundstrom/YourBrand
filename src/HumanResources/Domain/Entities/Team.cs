@@ -12,7 +12,7 @@ public class Team : AuditableEntity<string>
     {
     }
 
-    public Team(string name, string? description) 
+    public Team(string name, string? description)
         : base(Guid.NewGuid().ToString())
     {
         Name = name;

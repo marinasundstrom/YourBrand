@@ -28,7 +28,7 @@ public class Service : AuditableEntity<string>, ISoftDeletableWithAudit<User>
 
     public List<Resource> Resources { get; set; } = new List<Resource>();
 
-    public bool IsDeleted { get; set;}
+    public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
     public User? DeletedBy { get; set; }

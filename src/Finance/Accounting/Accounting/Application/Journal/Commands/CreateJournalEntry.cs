@@ -20,11 +20,11 @@ public record CreateJournalEntryCommand(string OrganizationId, string Descriptio
 
             int id = 0;
 
-            try 
+            try
             {
                 id = (await context.JournalEntries.InOrganization(request.OrganizationId).MaxAsync(x => x.Id, cancellationToken)) + 1;
-            } 
-            catch(Exception) 
+            }
+            catch (Exception)
             {
                 id = 1;
             }

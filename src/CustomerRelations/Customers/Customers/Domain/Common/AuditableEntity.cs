@@ -7,13 +7,13 @@ namespace YourBrand.Customers.Domain.Common;
 public abstract class AuditableEntity<TId> : Entity<TId>, IAuditableEntity<TId>
     where TId : notnull
 {
-    #nullable disable
+#nullable disable
 
-    protected AuditableEntity() : base() {}
+    protected AuditableEntity() : base() { }
 
-    #nullable restore
+#nullable restore
 
-    public AuditableEntity(TId id) : base(id) 
+    public AuditableEntity(TId id) : base(id)
     {
 
     }
