@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference
+      Include="..\Domain.Auditability.EFCore\Domain.Auditability.EFCore.csproj" />
+    <ProjectReference Include="..\Domain.Persistence\Domain.Persistence.csproj" />
+    <ProjectReference Include="..\Tenancy.EFCore\Tenancy.EFCore.csproj" />
+    <ProjectReference Include="..\Organizations.EFCore\Organizations.EFCore.csproj" />
+    <ProjectReference Include="..\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
+
+  </ItemGroup>
+</Project>

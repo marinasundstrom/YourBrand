@@ -2,8 +2,9 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Auditability;
 using YourBrand.Domain;
+using YourBrand.Tenancy;
 
-namespace YourBrand.Sales.Persistence;
+namespace YourBrand;
 
 public static class ModelBuilderExtensions
 {

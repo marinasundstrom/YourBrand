@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.Analytics.Infrastructure.Persistence.Interceptors;
+using YourBrand.Auditability;
+using YourBrand.Domain.Persistence;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Analytics.Infrastructure.Persistence;
 
@@ -15,13 +17,17 @@ public static class ServiceExtensions
         var connectionString = Infrastructure.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "Analytics")
             ?? configuration.GetConnectionString("DefaultConnection");
 
-        services.AddDbContext<ApplicationDbContext>((sp, options) =>
+        services.AddDomainPersistence<ApplicationDbContext>(configuration);
+
+        services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
         {
             options.UseSqlServer(connectionString!, o => o.EnableRetryOnFailure());
 
-            options.AddInterceptors(
-                sp.GetRequiredService<OutboxSaveChangesInterceptor>(),
-                sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+            options
+                .UseDomainInterceptors(serviceProvider)
+                .UseTenancyInterceptor(serviceProvider)
+                .UseAuditabilityInterceptor(serviceProvider)
+                .UseSoftDeleteInterceptor(serviceProvider);
 
 #if DEBUG
             options
@@ -31,8 +37,9 @@ public static class ServiceExtensions
 
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
-        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
-        services.AddScoped<OutboxSaveChangesInterceptor>();
+        services.AddTenancyInterceptor();
+        services.AddAuditabilityInterceptor();
+        services.AddSoftDeleteInterceptor();
 
         return services;
     }

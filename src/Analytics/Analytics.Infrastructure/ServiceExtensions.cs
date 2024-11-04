@@ -5,8 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Quartz;
 
-using YourBrand.Analytics.Infrastructure.BackgroundJobs;
-using YourBrand.Analytics.Infrastructure.Idempotence;
+using YourBrand.Domain.Infrastructure;
 using YourBrand.Analytics.Infrastructure.Persistence;
 using YourBrand.Analytics.Infrastructure.Services;
 
@@ -18,25 +17,13 @@ public static class ServiceExtensions
     {
         services.AddPersistence(configuration);
 
-        services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
         services.AddScoped<IBlobStorageService, BlobStorageService>();
 
-        try
-        {
-            services.Decorate(typeof(INotificationHandler<>), typeof(IdempotentDomainEventHandler<>));
-        }
-        catch { }
+        services.AddDomainInfrastructure<ApplicationDbContext>(configuration);
 
         services.AddQuartz(configure =>
         {
-            var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
 
-            configure
-                .AddJob<ProcessOutboxMessagesJob>(jobKey)
-                .AddTrigger(trigger => trigger.ForJob(jobKey)
-                    .WithSimpleSchedule(schedule => schedule
-                        .WithIntervalInSeconds(10)
-                        .RepeatForever()));
         });
 
         services.AddQuartzHostedService(x => x.WaitForJobsToComplete = true);
