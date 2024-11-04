@@ -117,6 +117,9 @@
 
     private async Task<TableData<Invoice>> ServerReload(TableState state)
     {
+        if(organization is null)
+            return new TableData<Invoice>();
+
         loading = true;
 
         try

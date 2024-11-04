@@ -129,6 +129,9 @@
 
         organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync())?.Id;
 
+        if(organizationId is null)
+            return new TableData<Order>();
+
         try
         {
             var result = await OrdersClient.GetOrdersAsync(organizationId, selectedTypes?.Select(x => x.Id), selectedStatuses?.Select(x => x.Id), null, null, null, null, state.Page +
