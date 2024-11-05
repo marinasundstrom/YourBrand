@@ -44,8 +44,6 @@ public sealed record CreateDraftOrder(string OrganizationId) : IRequest<Result<O
 
             await domainEventDispatcher.Dispatch(new OrderCreated(order.Id), cancellationToken);
 
-            Console.WriteLine("Foo: " + order.Id);
-
             order = await salesContext.Orders
                 .IncludeAll()
                 .FirstAsync(x => x.Id == order.Id, cancellationToken);

@@ -1,5 +1,6 @@
 ﻿@page "/modules"
 @using System.Reflection
+@using System.Collections.Generic
 @using YourBrand.AppService.Client
 @attribute [Authorize]
 @inject IStringLocalizer<ModulesPage> T
@@ -41,9 +42,6 @@
     <LoadingContent>
         <MudText>@T["Loading"]</MudText>
     </LoadingContent>
-    <PagerContent>
-        <MudTablePager RowsPerPageString="@T["RowsPerPage"]" />
-    </PagerContent>
 </MudTable>
 
 @if (table is not null && !table.GetServerData().Items.Any())
@@ -77,9 +75,11 @@
         {
             var items = table.GetServerData().Items;
 
+            System.Collections.Generic.IEnumerable<TenantModule>? dependantOn = null;
+
             if(!module.Enabled && module.Module.DependantOn.Any())
             {
-                var dependantOn = items.Where(m => module.Module.DependantOn.Any(m2 => m2 == m.Module.Assembly));
+                dependantOn = items.Where(m => module.Module.DependantOn.Any(m2 => m2 == m.Module.Assembly));
                 var str = string.Join(", ", dependantOn.Select(x => x.Module.Name));
 
                 var r = await DialogService.ShowMessageBox("Activate module?", $"This will also activate the following modules: {str}", "Yes", "No");
@@ -90,18 +90,27 @@
 
             if(module.Enabled) 
             {
-                var dependantOn = items.Where(m => m.Module.DependantOn.Any(moduleAssemblyName => moduleAssemblyName == module.Module.Assembly));
-                var str = string.Join(", ", dependantOn.Select(x => x.Module.Name));
+                var dependants = items.Where(m => m.Enabled && m.Module.DependantOn.Any(moduleAssemblyName => moduleAssemblyName == module.Module.Assembly));
 
-                var r = await DialogService.ShowMessageBox("Deactivate module?", $"This will affect these dependant modules, that will remain activated: {str}", "Yes", "No");
+                if(dependants.Any())
+                {
+                    var str = string.Join(", ", dependants.Select(x => x.Module.Name));
 
-                if(!r.GetValueOrDefault())
-                    return;
+                    var r = await DialogService.ShowMessageBox("Deactivate module?", $"This will affect these dependant modules, that will remain active: {str}", "Yes", "No");
+
+                    if(!r.GetValueOrDefault())
+                        return;
+                }
             }
 
             await ModulesClient.ToggleModuleAsync(module.Id);
 
             module.Enabled = !module.Enabled;
+            
+            if(dependantOn is not null) 
+            {
+                dependantOn.ToList().ForEach(x => x.Enabled = true);
+            }
 
             Snackbar.Add("Module was successfully toggled.\nReload your browser to reflect the changes.", Severity.Info, config => { config.Onclick = async (Snackbar snackbar) => await Reload(); });
         }

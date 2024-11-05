@@ -170,8 +170,6 @@ public sealed class DtoComposer : IDtoComposer
 
             if (@event is TicketAssigneeUpdated e2)
             {
-                Console.WriteLine("Foo: " + e2);
-
                 if (e2.OldAssignedParticipantId is not null)
                 {
                     participantIds.Add(e2.OldAssignedParticipantId.GetValueOrDefault());
@@ -185,8 +183,6 @@ public sealed class DtoComposer : IDtoComposer
 
             if (@event is TicketProjectUpdated e3)
             {
-                Console.WriteLine("Foo: " + e3);
-
                 if (e3.OldProjectId is not null)
                 {
                     projectIds.Add(e3.OldProjectId);
