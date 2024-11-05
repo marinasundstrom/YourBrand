@@ -1,10 +1,10 @@
 ﻿@inject ISnackbar Snackbar
-@inject YourBrand.Portal.Modules.ModuleLoader ModuleLoader
+@inject YourBrand.Portal.Modules.IModuleRegistry ModuleRegistry
 
 @using System.Reflection
 
 <CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="ModuleLoader.GetAssemblies()">
+    <Router AppAssembly="@typeof(Program).Assembly" AdditionalAssemblies="ModuleRegistry.GetEnabledAssemblies()">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>

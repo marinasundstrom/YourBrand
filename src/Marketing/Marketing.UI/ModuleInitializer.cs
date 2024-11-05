@@ -26,7 +26,7 @@ public class ModuleInitializer : IModuleInitializer
         });
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         var navManager = services
             .GetRequiredService<NavManager>();
@@ -44,5 +44,7 @@ public class ModuleInitializer : IModuleInitializer
         group.CreateItem("campaigns", () => resources["Campaigns"], MudBlazor.Icons.Material.Filled.ListAlt, "/marketing/campaigns");
 
         group.CreateItem("discounts", () => resources["Discounts"], MudBlazor.Icons.Material.Filled.Discount, "/marketing/discounts");
+
+        return Task.CompletedTask;
     }
 }

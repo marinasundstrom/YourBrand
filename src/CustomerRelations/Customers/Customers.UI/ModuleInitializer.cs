@@ -26,7 +26,7 @@ public class ModuleInitializer : IModuleInitializer
         });
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         var navManager = services
             .GetRequiredService<NavManager>();
@@ -37,5 +37,7 @@ public class ModuleInitializer : IModuleInitializer
         group.RequiresAuthorization = true;
 
         group.CreateItem("customers", () => resources["Customers"], MudBlazor.Icons.Material.Filled.Person, "/customers");
+
+        return Task.CompletedTask;
     }
 }

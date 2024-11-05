@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Portal.Modules\Portal.Modules.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
+      Version="9.0.0-*" />
   </ItemGroup>
+
 </Project>

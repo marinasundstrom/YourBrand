@@ -26,7 +26,7 @@ public class ModuleInitializer : IModuleInitializer
         });
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         var navManager = services
             .GetRequiredService<NavManager>();
@@ -41,5 +41,7 @@ public class ModuleInitializer : IModuleInitializer
         group2.CreateItem("accounts", () => resources["Accounts"], MudBlazor.Icons.Material.Filled.List, "/accounts");
         group2.CreateItem("ledger", () => resources["General ledger"], MudBlazor.Icons.Material.Filled.List, "/ledger");
         group2.CreateItem("journal", () => resources["Journal"], MudBlazor.Icons.Material.Filled.List, "/journal");
+
+        return Task.CompletedTask;
     }
 }

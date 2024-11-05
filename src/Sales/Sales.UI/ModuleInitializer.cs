@@ -28,10 +28,12 @@ public class ModuleInitializer : IModuleInitializer
         services.AddKeyedScoped<IOrganizationSearchProvider, OrganizationSearchProvider>(ServiceKeys.OrganizationSearchProviderKey);
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         services.UseOrderManagement();
         services.UseSubscriptions();
+
+        return Task.CompletedTask;
     }
 }
 

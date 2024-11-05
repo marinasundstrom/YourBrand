@@ -31,7 +31,7 @@ public class ModuleInitializer : IModuleInitializer
         services.AddScoped<IStoreProvider, StoreProvider>();
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         var navManager = services
                    .GetRequiredService<NavManager>();
@@ -58,6 +58,8 @@ public class ModuleInitializer : IModuleInitializer
         catalogItem.CreateItem("stores", () => t["Stores"], MudBlazor.Icons.Material.Filled.Store, "/stores");
 
         InitAppBarTray(services);
+
+        return Task.CompletedTask;
     }
 
     private static void InitAppBarTray(IServiceProvider services)

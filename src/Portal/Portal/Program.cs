@@ -1,18 +1,13 @@
-﻿using System.Net.Http.Json;
-using System.Reflection;
+﻿using System.Reflection;
 
 using Blazored.LocalStorage;
 
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
-using MudBlazor;
-using MudBlazor.Utilities;
-
-using YourBrand.AppService.Client;
 using YourBrand.Portal;
+using YourBrand.Portal.Branding;
 using YourBrand.Portal.Modules;
-using YourBrand.Portal.Theming;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -37,79 +32,26 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddBlazoredLocalStorage();
 
-builder.Services
-    .AddServices()
+builder.Services.AddServices()
     .AddShellServices()
-    .AddScoped<ModuleLoader>();
-
-await LoadModules(builder.Services);
+    .AddModuleServices()
+    .AddScoped<BrandProfileService>();
+    
+// Load and configure modules
+ await builder.LoadModules();
 
 var app = builder.Build();
 
-var moduleBuilder = app.Services.GetRequiredService<ModuleLoader>();
-moduleBuilder.ConfigureServices();
+await app.Services.ConfigureModuleServices();
 
 app.Services.UseShell();
 
 await app.Services.Localize();
 
-await LoadBrandProfile(builder.Services);
+// Load brand profile
+await app.Services.LoadBrandProfileAsync();
 
 await app.RunAsync();
-
-async Task LoadModules(IServiceCollection services)
-{
-    try 
-    {
-        var modulesClient = builder.Services
-            .BuildServiceProvider()
-            .GetRequiredService<ITenantModulesClient>();
-
-        var moduleEntries = await modulesClient.GetModulesAsync();
-
-        moduleEntries!.Where(x => x.Enabled).ToList().ForEach(x =>
-            ModuleLoader.LoadModule(x.Module.Name, Assembly.Load(x.Module.Assembly), x.Enabled));
-
-        ModuleLoader.AddServices(builder.Services);
-    }
-    catch(Exception exc) 
-    {
-        Console.WriteLine("Modules did not load");
-    }
-}
-
-async Task LoadBrandProfile(IServiceCollection services)
-{
-    var themeManager = builder.Services
-        .BuildServiceProvider()
-        .GetRequiredService<IThemeManager>();
-
-    var brandProfileClient = builder.Services
-        .BuildServiceProvider()
-        .GetRequiredService<IBrandProfileClient>();
-
-    try 
-    {
-        themeManager.SetTheme(Themes.AppTheme);
-    }
-    catch(Exception exc) 
-    {
-        Console.WriteLine(exc);
-    }
-
-    try
-    {
-        var brandProfile = await brandProfileClient.GetBrandProfileAsync();
-
-        if (brandProfile is not null)
-        {
-            var theme = BrandProfileToThemeConverter.Convert(brandProfile);
-
-            themeManager.SetTheme(theme);
-        }
-    }
-    catch (Exception) { }
-}
 
 sealed record ModuleEntry(Assembly Assembly, bool Enabled);
 

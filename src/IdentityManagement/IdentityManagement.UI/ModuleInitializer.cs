@@ -26,7 +26,7 @@ public class ModuleInitializer : IModuleInitializer
         });
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         var navManager = services
             .GetRequiredService<NavManager>();
@@ -41,5 +41,7 @@ public class ModuleInitializer : IModuleInitializer
         group.CreateItem("organization", () => resources["Organization"], MudBlazor.Icons.Material.Filled.House, "/usermanagement/organization");
 
         group.CreateItem("sync-data", () => resources["Sync data"], MudBlazor.Icons.Material.Filled.Sync, "/sync-data");
+
+        return Task.CompletedTask;
     }
 }

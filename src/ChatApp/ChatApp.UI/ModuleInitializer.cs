@@ -37,7 +37,7 @@ public class ModuleInitializer : IModuleInitializer
         }, builder => builder.AddHttpMessageHandler<CustomAuthorizationMessageHandler>());
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         var navManager = services
             .GetRequiredService<NavManager>();
@@ -54,6 +54,8 @@ public class ModuleInitializer : IModuleInitializer
 
         //group.CreateItem("new-channel", () => resources["New channel"], MudBlazor.Icons.Material.Filled.Add, async () => await CreateChannel(services));
         //group.CreateItem("channels", () => resources["Channels"], MudBlazor.Icons.Material.Filled.Chat, "/channels");
+
+        return Task.CompletedTask;
     }
 
     static async Task CreateChannel(IServiceProvider services)

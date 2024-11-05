@@ -253,7 +253,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Services", "src\Port
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Modules", "src\Portal\Portal.Modules\Portal.Modules.csproj", "{9D14EE36-DD39-4D0D-AFD5-E1A1426FE469}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Modules.Loader", "src\Portal\Portal.Modules.Loader\Portal.Modules.Loader.csproj", "{7A53A3EC-E1B6-4742-8C90-11DB2F19477D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Modules.Abstractions", "src\Portal\Portal.Modules.Abstractions\Portal.Modules.Abstractions.csproj", "{7A53A3EC-E1B6-4742-8C90-11DB2F19477D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{BA04A700-B35F-4147-9C10-6928E2B4E72E}"
 EndProject

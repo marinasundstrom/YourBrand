@@ -25,7 +25,7 @@ public class ModuleInitializer : IModuleInitializer
         });
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         var resources = services.GetRequiredService<IStringLocalizer<Resources>>();
 
@@ -36,5 +36,7 @@ public class ModuleInitializer : IModuleInitializer
         var group = navManager.GetGroup("finance") ?? navManager.CreateGroup("finance", "Finance");
         group.CreateItem("payments", "Payments", MudBlazor.Icons.Material.Filled.List, "/payments");
         */
+
+                return Task.CompletedTask;
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "/modules"
+@using System.Reflection
 @using YourBrand.AppService.Client
 @attribute [Authorize]
 @inject IStringLocalizer<ModulesPage> T
@@ -45,7 +46,7 @@
     </PagerContent>
 </MudTable>
 
-@if (table is not null && !table.Items.Any())
+@if (table is not null && !table.GetServerData().Items.Any())
 {
     <MudButton Variant="Variant.Filled" OnClick="PopulateModules" Class="mt-4">Populate modules</MudButton>
 }
@@ -74,6 +75,30 @@
     {
         try 
         {
+            var items = table.GetServerData().Items;
+
+            if(!module.Enabled && module.Module.DependantOn.Any())
+            {
+                var dependantOn = items.Where(m => module.Module.DependantOn.Any(m2 => m2 == m.Module.Assembly));
+                var str = string.Join(", ", dependantOn.Select(x => x.Module.Name));
+
+                var r = await DialogService.ShowMessageBox("Activate module?", $"This will also activate the following modules: {str}", "Yes", "No");
+
+                if(!r.GetValueOrDefault())
+                    return;
+            }
+
+            if(module.Enabled) 
+            {
+                var dependantOn = items.Where(m => m.Module.DependantOn.Any(moduleAssemblyName => moduleAssemblyName == module.Module.Assembly));
+                var str = string.Join(", ", dependantOn.Select(x => x.Module.Name));
+
+                var r = await DialogService.ShowMessageBox("Deactivate module?", $"This will affect these dependant modules, that will remain activated: {str}", "Yes", "No");
+
+                if(!r.GetValueOrDefault())
+                    return;
+            }
+
             await ModulesClient.ToggleModuleAsync(module.Id);
 
             module.Enabled = !module.Enabled;
@@ -83,6 +108,12 @@
         catch(Exception) 
         {
             Snackbar.Add("Failed to toggle module", Severity.Error);
+
+            #if DEBUG
+
+            throw;
+
+            #endif
         }
     }
 
@@ -103,10 +134,9 @@
 
     private async Task PopulateModules()
     {
-        if(table is null)
-            return;
+        var items = table.GetServerData().Items;
 
-        @if(table.Items.Any()) 
+        @if (items.Any())
             return;
 
         await ModulesClient.PopulateModulesAsync();

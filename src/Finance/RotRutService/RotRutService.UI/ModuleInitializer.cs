@@ -26,7 +26,7 @@ public class ModuleInitializer : IModuleInitializer
         });
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         var navManager = services
             .GetRequiredService<NavManager>();
@@ -39,5 +39,7 @@ public class ModuleInitializer : IModuleInitializer
         var group2 = group.GetGroup("accounting") ?? group.CreateGroup("accounting", () => resources["Accounting"]);
 
         group2.CreateItem("rotrut", () => resources["Rot & Rut ärenden"], MudBlazor.Icons.Material.Filled.InsertDriveFile, "/rotrut");
+
+        return Task.CompletedTask;
     }
 }

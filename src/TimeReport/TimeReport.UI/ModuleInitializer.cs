@@ -29,7 +29,7 @@ public class ModuleInitializer : IModuleInitializer
         services.AddKeyedScoped<IOrganizationSearchProvider, OrganizationSearchProvider>(ServiceKeys.OrganizationSearchProviderKey);
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         var navManager = services
             .GetRequiredService<NavManager>();
@@ -50,6 +50,8 @@ public class ModuleInitializer : IModuleInitializer
             options.Roles = ["Administrator"];
         });
         group.CreateItem("generate-reports", () => resources["GenerateReport"], MudBlazor.Icons.Material.Filled.ListAlt, "/reports");
+
+        return Task.CompletedTask;
     }
 }
 

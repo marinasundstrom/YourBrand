@@ -25,7 +25,7 @@ public class ModuleInitializer : IModuleInitializer
         });
     }
 
-    public static void ConfigureServices(IServiceProvider services)
+    public static Task ConfigureServices(IServiceProvider services)
     {
         var navManager = services
             .GetRequiredService<NavManager>();
@@ -44,5 +44,7 @@ public class ModuleInitializer : IModuleInitializer
         group.CreateItem("competenceAreas", () => resources["CompetenceAreas"], MudBlazor.Icons.Material.Filled.List, "/competenceareas");
         group.CreateItem("companies", () => resources["Companies"], MudBlazor.Icons.Material.Filled.List, "/companies");
         group.CreateItem("industries", () => resources["Industries"], MudBlazor.Icons.Material.Filled.List, "/industries");
+
+        return Task.CompletedTask;
     }
 }
