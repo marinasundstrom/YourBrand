@@ -58,22 +58,9 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.MyService.Infrastructure.Persistence;
 
-public sealed class ApplicationDbContext : DomainDbContext
+public sealed class ApplicationDbContext(ITenantContext tenantContext, ILogger<ApplicationDbContext> logger) : DomainDbContext
 {
-    private readonly ITenantContext tenantContext;
-
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options,
-        ITenantContext tenantContext,
-        ILogger<ApplicationDbContext> logger) : base(options)
-    {
-        this.tenantContext = tenantContext;
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-    }
+    private TenantId? TenantId => tenantContext.TenantId;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -83,50 +70,11 @@ public sealed class ApplicationDbContext : DomainDbContext
             .ApplyDomainEntityConfigurations()
             .ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-        ConfigQueryFilterForEntity(modelBuilder);
-
-        // Or:
-        // modelBuilder.ConfigQueryFilterForModel(tenantContext);
-    }
-
-    private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
-    {
-        foreach (var type in modelBuilder.Model
-            .GetEntityTypes())
+        modelBuilder.ConfigureDomainModel(configurator =>
         {
-            var clrType = type.ClrType;
-
-            if (type.IsOwned())
-            {
-                logger.LogInformation("Skipping type {ClrType} because it is defined as owned.", clrType);
-                continue;
-            }
-
-            if (!clrType.IsAssignableTo(typeof(IEntity)))
-            {
-                logger.LogInformation("Skipping type {ClrType} because it is not implementing IEntity.", clrType);
-                continue;
-            }
-
-            var entityTypeBuilder = modelBuilder.Entity(clrType);
-
-            entityTypeBuilder
-                .AddTenantIndex()
-                .AddOrganizationIndex()
-                .AddSoftDeleteIndex();
-
-            try
-            {
-                entityTypeBuilder.RegisterQueryFilters(builder =>
-                {
-                    builder.AddTenancyFilter(tenantContext);
-                    builder.AddSoftDeleteFilter();
-                });
-            }
-            catch (InvalidOperationException exc)
-                when (exc.MatchQueryFilterExceptions(clrType))
-            { }
-        }
+            configurator.AddTenancyFilter(() => TenantId);
+            configurator.AddSoftDeleteFilter();
+        });
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

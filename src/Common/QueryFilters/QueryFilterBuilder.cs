@@ -1,34 +1,68 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections;
+using System.Linq.Expressions;
 
 using LinqKit;
 
 namespace YourBrand;
 
-public class QueryFilterBuilder
+public interface IQueryFilter
 {
-    readonly List<Expression> _queryFilters = new List<Expression>();
+    bool CanApplyTo(Type entityType);
+    Expression ApplyTo(ParameterExpression parameter);
+}
 
+public interface IQueryFilterCollection : IEnumerable<IQueryFilter>
+{
     /// <summary>
-    /// Constructs a QueryFilterBuilder.
+    /// Add query filter to builder.
     /// </summary>
-    /// <param name="entityType">The type of the parameter.</param>
-    public QueryFilterBuilder(Type entityType)
+    /// <param name="expression"></param>
+    /// <returns>This QueryFilterBuilder.</returns>
+    IQueryFilterCollection Add(IQueryFilter queryFilter);
+}
+
+public class QueryFilterCollection : IQueryFilterCollection
+{
+    private readonly List<IQueryFilter> _items = new List<IQueryFilter>();
+
+    public IQueryFilterCollection Add(IQueryFilter queryFilter)
     {
-        Parameter = Expression.Parameter(entityType, "entity");
-        EntityType = entityType;
+        _items.Add(queryFilter);
+
+        return this;
     }
 
-    /// <summary>
-    /// Gets the entity type
-    /// </summary>
-    /// <value></value>
-    public Type EntityType { get; private set; }
+    public IEnumerator<IQueryFilter> GetEnumerator()
+    {
+        return _items.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+}
+
+public interface IQueryFilterBuilder : IQueryFilterCollection
+{
+    public Type EntityType { get; }
 
     /// <summary>
-    /// Gets the parameter used for the LambdaExpression.
+    /// Builds a LambdaExpression from combining the query filters.
     /// </summary>
-    /// <value>A LambdaExpression</value>
-    public ParameterExpression Parameter { get; private set; }
+    /// <returns>If there are query filters, a lambda expression, otherwise null.</returns>
+    LambdaExpression? Build();
+}
+
+public sealed class QueryFilterBuilder : IQueryFilterBuilder
+{
+    readonly List<IQueryFilter> _queryFilters = new List<IQueryFilter>();
+
+    public QueryFilterBuilder(Type entityType)
+    {
+        EntityType = entityType;
+    }
+    public Type EntityType { get; }
 
     /// <summary>
     /// Builds a LambdaExpression from combining the query filters.
@@ -36,34 +70,52 @@ public class QueryFilterBuilder
     /// <returns>If there are query filters, a lambda expression, otherwise null.</returns>
     public LambdaExpression? Build()
     {
-        Expression? queryFilter = null;
+        var parameter = Expression.Parameter(EntityType, "entity");
+
+        Expression? queryFilterExpression = null;
 
         if (_queryFilters.Count == 0)
         {
             return null;
         }
 
-        foreach (var qf in _queryFilters)
+        foreach (var queryFilter in _queryFilters)
         {
-            queryFilter = queryFilter is null
-                ? qf
+            queryFilterExpression = queryFilterExpression is null
+                ? queryFilter.ApplyTo(parameter)
                 : Expression.AndAlso(
-                    queryFilter,
-                    qf)
+                    queryFilterExpression,
+                    queryFilter.ApplyTo(parameter))
                     .Expand();
         }
 
-        return Expression.Lambda(queryFilter.Expand(), Parameter);
+        return Expression.Lambda(queryFilterExpression.Expand(), parameter);
     }
 
     /// <summary>
     /// Add query filter to builder.
     /// </summary>
-    /// <param name="expression"></param>
+    /// <param name="queryFilter"></param>
     /// <returns>This QueryFilterBuilder.</returns>
-    public QueryFilterBuilder AddFilter(Expression expression)
+    public IQueryFilterBuilder Add(IQueryFilter queryFilter)
     {
-        _queryFilters.Add(expression);
+        _queryFilters.Add(queryFilter);
         return this;
+    }
+
+    IQueryFilterCollection IQueryFilterCollection.Add(IQueryFilter queryFilter)
+    {
+        Add(queryFilter);
+        return this;
+    }
+
+    public IEnumerator<IQueryFilter> GetEnumerator()
+    {
+        return _queryFilters.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

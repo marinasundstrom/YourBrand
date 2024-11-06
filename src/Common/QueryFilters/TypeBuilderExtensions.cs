@@ -4,7 +4,7 @@ namespace YourBrand;
 
 public static class TypeBuilderExtensions
 {
-    public static EntityTypeBuilder RegisterQueryFilters(this EntityTypeBuilder entityTypeBuilder, Action<QueryFilterBuilder> config)
+    public static EntityTypeBuilder RegisterQueryFilters(this EntityTypeBuilder entityTypeBuilder, Action<IQueryFilterCollection> config)
     {
         var entityType = entityTypeBuilder.Metadata.ClrType;
 

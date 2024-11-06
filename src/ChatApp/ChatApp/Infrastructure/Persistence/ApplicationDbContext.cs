@@ -9,16 +9,11 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Infrastructure.Persistence;
 
-public sealed class ApplicationDbContext : DbContext, IUnitOfWork
+public sealed class ApplicationDbContext(
+    DbContextOptions<ApplicationDbContext> options,
+    ITenantContext tenantContext) : DbContext(options), IUnitOfWork
 {
-    private readonly ITenantContext tenantContext;
-
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options,
-        ITenantContext tenantContext) : base(options)
-    {
-        this.tenantContext = tenantContext;
-    }
+    public TenantId? TenantId => tenantContext.TenantId;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -31,39 +26,11 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-        ConfigQueryFilterForEntity(modelBuilder);
-    }
-
-    private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
-    {
-        foreach (var clrType in modelBuilder.Model
-            .GetEntityTypes()
-            .Select(entityType => entityType.ClrType))
+        modelBuilder.ConfigureDomainModel(configurator =>
         {
-            if (!clrType.IsAssignableTo(typeof(IEntity)))
-            {
-                Console.WriteLine($"Skipping type {clrType} because it is not implementing IEntity.");
-                continue;
-            }
-
-            var entityTypeBuilder = modelBuilder.Entity(clrType);
-
-            entityTypeBuilder.AddTenantIndex();
-
-            entityTypeBuilder.AddOrganizationIndex();
-
-            try
-            {
-                entityTypeBuilder.RegisterQueryFilters(builder =>
-                {
-                    builder.AddTenancyFilter(tenantContext);
-                    builder.AddSoftDeleteFilter();
-                });
-            }
-            catch (InvalidOperationException exc)
-                            when (exc.MatchQueryFilterExceptions(clrType))
-            { }
-        }
+            configurator.AddTenancyFilter(() => TenantId);
+            configurator.AddSoftDeleteFilter();
+        });
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

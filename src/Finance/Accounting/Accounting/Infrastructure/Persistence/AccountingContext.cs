@@ -21,6 +21,8 @@ namespace YourBrand.Accounting.Infrastructure.Persistence;
 public class AccountingContext(DbContextOptions<AccountingContext> options,
     ITenantContext tenantContext) : DbContext(options), IAccountingContext
 {
+    public TenantId? TenantId => tenantContext.TenantId;
+    
     public async Task<Account?> GetAccount(int number, CancellationToken cancellationToken = default) => await Accounts.FirstOrDefaultAsync(x => x.AccountNo == number, cancellationToken);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,38 +31,11 @@ public class AccountingContext(DbContextOptions<AccountingContext> options,
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AccountConfiguration).Assembly);
 
-        ConfigQueryFilterForEntity(modelBuilder);
-    }
-
-    private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
-    {
-        foreach (var clrType in modelBuilder.Model
-                    .GetEntityTypes()
-                    .Select(entityType => entityType.ClrType))
+        modelBuilder.ConfigureDomainModel(configurator =>
         {
-            if (!clrType.IsAssignableTo(typeof(IEntity)))
-            {
-                continue;
-            }
-
-            var entityTypeBuilder = modelBuilder.Entity(clrType);
-
-            entityTypeBuilder.AddTenantIndex();
-
-            entityTypeBuilder.AddOrganizationIndex();
-
-            try
-            {
-                entityTypeBuilder.RegisterQueryFilters(builder =>
-                {
-                    builder.AddTenancyFilter(tenantContext);
-                    builder.AddSoftDeleteFilter();
-                });
-            }
-            catch (InvalidOperationException exc)
-                when (exc.MatchQueryFilterExceptions(clrType))
-            { }
-        }
+            configurator.AddTenancyFilter(() => TenantId);
+            configurator.AddSoftDeleteFilter();
+        });
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

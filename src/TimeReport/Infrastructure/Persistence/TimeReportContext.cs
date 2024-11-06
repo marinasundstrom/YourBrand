@@ -1,37 +1,23 @@
-﻿
-using System.Linq.Expressions;
-
-using LinqKit;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
 
-using YourBrand.ApiKeys;
 using YourBrand.Domain;
+using YourBrand.Domain.Persistence;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
-using YourBrand.TimeReport.Infrastructure.Persistence.Interceptors;
 using YourBrand.TimeReport.Infrastructure.Persistence.Outbox;
 
 namespace YourBrand.TimeReport.Infrastructure.Persistence;
 
-public class TimeReportContext : DbContext, ITimeReportContext
+public class TimeReportContext(
+    DbContextOptions<TimeReportContext> options,
+    ITenantContext tenantContext) : DbContext(options), ITimeReportContext
 {
-    private readonly ITenantContext _tenantContext;
-    private readonly string _tenantId;
-
-    public TimeReportContext(
-        DbContextOptions<TimeReportContext> options,
-        ITenantContext tenantContext) : base(options)
-    {
-        _tenantContext = tenantContext;
-        _tenantId = _tenantContext.TenantId!;
-    }
+    public TenantId? TenantId => tenantContext.TenantId;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -39,38 +25,11 @@ public class TimeReportContext : DbContext, ITimeReportContext
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
 
-        ConfigQueryFilterForEntity(modelBuilder);
-    }
-
-    private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
-    {
-        foreach (var clrType in modelBuilder.Model
-            .GetEntityTypes()
-            .Select(entityType => entityType.ClrType))
+        modelBuilder.ConfigureDomainModel(configurator =>
         {
-            if (!clrType.IsAssignableTo(typeof(IEntity)))
-            {
-                continue;
-            }
-
-            var entityTypeBuilder = modelBuilder.Entity(clrType);
-
-            entityTypeBuilder.AddTenantIndex();
-
-            entityTypeBuilder.AddOrganizationIndex();
-
-            try
-            {
-                entityTypeBuilder.RegisterQueryFilters(builder =>
-                {
-                    builder.AddTenancyFilter(_tenantContext);
-                    builder.AddSoftDeleteFilter();
-                });
-            }
-            catch (InvalidOperationException exc)
-                when (exc.MatchQueryFilterExceptions(clrType))
-            { }
-        }
+            configurator.AddTenancyFilter(() => TenantId);
+            configurator.AddSoftDeleteFilter();
+        });
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

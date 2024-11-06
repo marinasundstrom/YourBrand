@@ -25,7 +25,8 @@
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
         <PackageReference Include="Scrutor" Version="4.2.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
-           Version="9.0.0-*" />
+            Version="9.0.0-*" />
+        <ProjectReference Include="..\..\..\Common\Domain.EFCore\Domain.EFCore.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -9,10 +9,15 @@ namespace YourBrand.TimeReport.Application.Organizations.Commands;
 
 public record AddUserToOrganization(string OrganizationId, string UserId) : IRequest<OrganizationDto>
 {
-    public class Handler(IOrganizationRepository organizationRepository, IUserRepository userRepository, IUnitOfWork unitOfWork) : IRequestHandler<AddUserToOrganization, OrganizationDto>
+    public class Handler(IOrganizationRepository organizationRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITenantContext tenantContext) : IRequestHandler<AddUserToOrganization, OrganizationDto>
     {
         public async Task<OrganizationDto> Handle(AddUserToOrganization request, CancellationToken cancellationToken)
         {
+
+            Console.WriteLine("Foo: " + tenantContext.TenantId);
+
+            return new OrganizationDto("", "");
+
             var organization = await organizationRepository.GetOrganizationById(request.OrganizationId!, cancellationToken);
 
             if (organization is null)

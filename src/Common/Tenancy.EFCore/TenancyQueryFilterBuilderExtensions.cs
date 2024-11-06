@@ -8,17 +8,17 @@ public static class TenancyQueryFilterBuilderExtensions
     /// Adds query filter for filtering by tenancy. If applicable to the current entity type.
     /// </summary>
     /// <param name="queryFilterBuilder"></param>
-    /// <param name="tenantContext"></param>
+    /// <param name="tenantIdAccessor"></param>
     /// <returns></returns>
-    public static QueryFilterBuilder AddTenancyFilter(this QueryFilterBuilder queryFilterBuilder, ITenantContext tenantContext)
+    public static IQueryFilterCollection AddTenancyFilter(this IQueryFilterBuilder queryFilterBuilder,
+        Expression<Func<TenantId?>> tenantIdAccessor)
     {
-        if (TenancyQueryFilter.CanApplyTo(queryFilterBuilder.EntityType))
-        {
-            var tenantFilter = TenancyQueryFilter.GetFilter(() => tenantContext.TenantId);
+        var queryFilter = new TenancyQueryFilter(tenantIdAccessor);
 
-            queryFilterBuilder.AddFilter(
-                Expression.Invoke(tenantFilter, Expression.Convert(queryFilterBuilder.Parameter, typeof(IHasTenant))));
-        }
+        if (!queryFilter.CanApplyTo(queryFilterBuilder.EntityType))
+            return queryFilterBuilder;
+
+        queryFilterBuilder.Add(queryFilter);
 
         return queryFilterBuilder;
     }

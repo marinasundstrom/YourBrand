@@ -9,15 +9,14 @@ public static class SoftDeleteFilterQueryBuilderExtensions
     /// </summary>
     /// <param name="queryFilterBuilder"></param>
     /// <returns></returns>
-    public static QueryFilterBuilder AddSoftDeleteFilter(this QueryFilterBuilder queryFilterBuilder)
+    public static IQueryFilterCollection AddSoftDeleteFilter(this IQueryFilterBuilder queryFilterBuilder)
     {
-        if (SoftDeleteQueryFilter.CanApplyTo(queryFilterBuilder.EntityType))
-        {
-            var softDeleteFilter = SoftDeleteQueryFilter.GetFilter();
+        var queryFilter = new SoftDeleteQueryFilter();
 
-            queryFilterBuilder.AddFilter(
-                Expression.Invoke(softDeleteFilter, Expression.Convert(queryFilterBuilder.Parameter, typeof(ISoftDeletable))));
-        }
+        if (!queryFilter.CanApplyTo(queryFilterBuilder.EntityType))
+            return queryFilterBuilder;
+
+        queryFilterBuilder.Add(new SoftDeleteQueryFilter());
 
         return queryFilterBuilder;
     }

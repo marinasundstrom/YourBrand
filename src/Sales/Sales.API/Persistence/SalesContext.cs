@@ -9,6 +9,8 @@ namespace YourBrand.Sales.Persistence;
 public sealed class SalesContext(
     DbContextOptions<SalesContext> options, ITenantContext tenantContext) : DbContext(options), IUnitOfWork, ISalesContext
 {
+    public TenantId? TenantId => tenantContext.TenantId;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -17,7 +19,11 @@ public sealed class SalesContext(
             .ApplyDomainEntityConfigurations()
             .ApplyConfigurationsFromAssembly(typeof(SalesContext).Assembly);
 
-        modelBuilder.ConfigQueryFilterForModel(tenantContext);
+        modelBuilder.ConfigureDomainModel(configurator =>
+        {
+            configurator.AddTenancyFilter(() => TenantId);
+            configurator.AddSoftDeleteFilter();
+        });
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

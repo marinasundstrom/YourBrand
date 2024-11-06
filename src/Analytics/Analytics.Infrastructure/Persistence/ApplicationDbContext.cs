@@ -12,6 +12,8 @@ namespace YourBrand.Analytics.Infrastructure.Persistence;
 public sealed class ApplicationDbContext(
     DbContextOptions<ApplicationDbContext> options, ITenantContext tenantContext) : DbContext(options), IApplicationDbContext
 {
+    public TenantId? TenantId => tenantContext.TenantId;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -20,7 +22,11 @@ public sealed class ApplicationDbContext(
             .ApplyDomainEntityConfigurations()
             .ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-        modelBuilder.ConfigQueryFilterForModel(tenantContext);
+        modelBuilder.ConfigureDomainModel(configurator =>
+        {
+            configurator.AddTenancyFilter(() => TenantId);
+            configurator.AddSoftDeleteFilter();
+        });
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

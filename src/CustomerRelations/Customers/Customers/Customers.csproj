@@ -20,7 +20,7 @@
         <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
         <PackageReference Include="Scrutor" Version="4.2.0" />
         <PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
-        <PackageReference Include="Microsoft.Extensions.Azure" Version="1.6.0" />      
+        <PackageReference Include="Microsoft.Extensions.Azure" Version="1.6.0" />
     </ItemGroup>
 
 	<ItemGroup>
@@ -33,7 +33,8 @@
 		</ProjectReference>
         <ProjectReference Include="..\..\..\Common\Identity.AspNetCore\Identity.AspNetCore.csproj" />
         <ProjectReference Include="..\..\..\Common\Tenancy.AspNetCore\Tenancy.AspNetCore.csproj" />
-        <ProjectReference Include="..\..\..\YourBrand.ServiceDefaults\YourBrand.ServiceDefaults.csproj" />
+        <ProjectReference
+            Include="..\..\..\YourBrand.ServiceDefaults\YourBrand.ServiceDefaults.csproj" />
         <ProjectReference Include="..\..\..\Diagnostics\Diagnostics.csproj" />
         <ProjectReference Include="..\..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
         <ProjectReference Include="..\..\..\Common\Tenancy.EFCore\Tenancy.EFCore.csproj" />
@@ -42,6 +43,7 @@
         <ProjectReference Include="..\..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
             <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
         </ProjectReference>
+        <ProjectReference Include="..\..\..\Common\Domain.EFCore\Domain.EFCore.csproj" />   
 
         <ProjectReference Include="..\..\..\Common\SoftDelete.EFCore\SoftDelete.EFCore.csproj" />
         <ProjectReference Include="..\..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />

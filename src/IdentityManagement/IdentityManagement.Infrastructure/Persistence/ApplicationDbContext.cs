@@ -22,47 +22,22 @@ using YourBrand.Tenancy;
 namespace YourBrand.IdentityManagement.Infrastructure.Persistence;
 
 public class ApplicationDbContext(
-    DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>(options), IApplicationDbContext
+    DbContextOptions<ApplicationDbContext> options,
+    ITenantContext tenantContext) : IdentityDbContext<User, Role, string, IdentityUserClaim<string>, UserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>(options), IApplicationDbContext
 {
+    public TenantId? TenantId => tenantContext.TenantId;
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserConfiguration).Assembly);
 
-        ConfigQueryFilterForEntity(modelBuilder);
-    }
-
-    private void ConfigQueryFilterForEntity(ModelBuilder modelBuilder)
-    {
-        foreach (var clrType in modelBuilder.Model
-            .GetEntityTypes()
-            .Select(entityType => entityType.ClrType))
+        modelBuilder.ConfigureDomainModel(configurator =>
         {
-            /*
-            if (!clrType.IsAssignableTo(typeof(IEntity)))
-            {
-                continue;
-            }
-            */
-
-            var entityTypeBuilder = modelBuilder.Entity(clrType);
-
-            entityTypeBuilder.AddTenantIndex();
-
-            entityTypeBuilder.AddOrganizationIndex();
-
-            try
-            {
-                entityTypeBuilder.RegisterQueryFilters(builder =>
-                {
-                    builder.AddSoftDeleteFilter();
-                });
-            }
-            catch (InvalidOperationException exc)
-                when (exc.MatchQueryFilterExceptions(clrType))
-            { }
-        }
+            //configurator.AddTenancyFilter(() => TenantId);
+            configurator.AddSoftDeleteFilter();
+        });
     }
 
     public DbSet<Tenant> Tenants { get; set; } = default!;

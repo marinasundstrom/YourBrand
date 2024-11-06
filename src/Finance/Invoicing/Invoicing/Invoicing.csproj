@@ -47,8 +47,11 @@
     <ProjectReference Include="..\..\..\Diagnostics\Diagnostics.csproj" />
     <ProjectReference Include="..\..\..\Common\Identity.EFCore\Identity.EFCore.csproj" />
     <ProjectReference Include="..\..\..\Common\Organizations.EFCore\Organizations.EFCore.csproj" />
-    <ProjectReference Include="..\..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\Common\Domain.Auditability.Abstractions\Domain.Auditability.Abstractions.csproj" />
+    <ProjectReference
+      Include="..\..\..\Common\Organizations.Abstractions\Organizations.Abstractions.csproj" />
+    <ProjectReference
+      Include="..\..\..\Common\Domain.Auditability.Abstractions\Domain.Auditability.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Common\Domain.EFCore\Domain.EFCore.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Calculations.cs">

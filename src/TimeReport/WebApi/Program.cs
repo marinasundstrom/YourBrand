@@ -56,9 +56,7 @@ builder.Host.UseSerilog((ctx, cfg) =>
 
 builder.AddServiceDefaults();
 
-
 builder.AddDefaultOpenApi();
-
 
 builder.Services.AddProblemDetails();
 

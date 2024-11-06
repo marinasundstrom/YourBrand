@@ -42,6 +42,7 @@
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
         <PackageReference Include="LinqKit" Version="1.2.3" />
         <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.5.1" />
+        <ProjectReference Include="..\..\Common\Domain.EFCore\Domain.EFCore.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
