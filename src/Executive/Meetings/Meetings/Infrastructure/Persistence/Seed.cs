@@ -89,53 +89,13 @@ public static class Seed
             await context.SaveChangesAsync();
         }
 
+        MeetingGroup housingCooperative = default!;
+
         if (!await context.MeetingGroups.AnyAsync())
         {
-            // Create a new MeetingGroup
-            var meetingGroup = new MeetingGroup(1, "Board of directors", "Group for members of board of directors")
-            {
-                TenantId = TenantConstants.TenantId,
-                OrganizationId = TenantConstants.OrganizationId,
-                Quorum = new Quorum
-                {
-                    RequiredNumber = 3
-                }
-            };
+            Board(context);
 
-            // Add Alice Smith
-            meetingGroup.AddMember(
-                name: "Alice Smith",
-                email: "alice.smith@example.com",
-                role: AttendeeRole.Chairperson,
-                userId: TenantConstants.UserAliceId,
-                hasSpeakingRights: true,
-                hasVotingRights: true
-            );
-
-            // Add Bob Smith
-            meetingGroup.AddMember(
-                name: "Bob Smith",
-                email: "bob.smith@example.com",
-                role: AttendeeRole.Attendee,
-                userId: TenantConstants.UserBobId,
-                hasSpeakingRights: true,
-                hasVotingRights: true
-            );
-
-            // Add 5 additional members
-            for (int i = 1; i <= 5; i++)
-            {
-                meetingGroup.AddMember(
-                    name: $"Member {i}",
-                    email: $"member{i}@example.com",
-                    role: AttendeeRole.Attendee,
-                    userId: null,
-                    hasSpeakingRights: true,
-                    hasVotingRights: true
-                );
-            }
-
-            context.MeetingGroups.Add(meetingGroup);
+            housingCooperative = HousingCooperative(context);
 
             await context.SaveChangesAsync();
         }
@@ -166,6 +126,8 @@ public static class Seed
                 State = MeetingState.Scheduled
             };
 
+            await annualGeneralMeeting.AddAttendeesFromGroup(housingCooperative, context);
+
             context.Meetings.Add(annualGeneralMeeting);
 
             await context.SaveChangesAsync();
@@ -177,6 +139,109 @@ public static class Seed
 
             await AnnualGeneralMeeting(context, annualGeneralMeeting);
         }
+    }
+
+    private static MeetingGroup Board(ApplicationDbContext context)
+    {
+        // Create a new MeetingGroup
+        var meetingGroup = new MeetingGroup(1, "Board of directors", "Group for members of board of directors")
+        {
+            TenantId = TenantConstants.TenantId,
+            OrganizationId = TenantConstants.OrganizationId,
+            Quorum = new Quorum
+            {
+                RequiredNumber = 3
+            }
+        };
+
+        // Add Alice Smith
+        meetingGroup.AddMember(
+            name: "Alice Smith",
+            email: "alice.smith@example.com",
+            role: AttendeeRole.Chairperson,
+            userId: TenantConstants.UserAliceId,
+            hasSpeakingRights: true,
+            hasVotingRights: true
+        );
+
+        // Add Bob Smith
+        meetingGroup.AddMember(
+            name: "Bob Smith",
+            email: "bob.smith@example.com",
+            role: AttendeeRole.Attendee,
+            userId: TenantConstants.UserBobId,
+            hasSpeakingRights: true,
+            hasVotingRights: true
+        );
+
+        // Add 5 additional members
+        for (int i = 1; i <= 5; i++)
+        {
+            meetingGroup.AddMember(
+                name: $"Member {i}",
+                email: $"member{i}@example.com",
+                role: AttendeeRole.Attendee,
+                userId: null,
+                hasSpeakingRights: true,
+                hasVotingRights: true
+            );
+        }
+
+        context.MeetingGroups.Add(meetingGroup);
+
+        return meetingGroup;
+    }
+
+    private static MeetingGroup HousingCooperative(ApplicationDbContext context)
+    {
+        // Create a new MeetingGroup
+        var meetingGroup = new MeetingGroup(2, "Housing Cooperative Board", "Board responsible for overseeing the management and operations of the housing cooperative, ensuring a safe and well-maintained community.")
+        {
+            TenantId = TenantConstants.TenantId,
+            OrganizationId = TenantConstants.OrganizationId,
+            Quorum = new Quorum
+            {
+                RequiredNumber = 6
+            }
+        };
+
+        // Add Alice Smith
+        meetingGroup.AddMember(
+            name: "Alice Smith",
+            email: "alice.smith@example.com",
+            role: AttendeeRole.Attendee,
+            userId: TenantConstants.UserAliceId,
+            hasSpeakingRights: true,
+            hasVotingRights: true
+        );
+
+        // Add Bob Smith
+        meetingGroup.AddMember(
+            name: "Bob Smith",
+            email: "bob.smith@example.com",
+            role: AttendeeRole.Attendee,
+            userId: TenantConstants.UserBobId,
+            hasSpeakingRights: true,
+            hasVotingRights: true
+        );
+
+        // Add 18 additional members to make a total of 20 members
+        for (int i = 1; i <= 18; i++)
+        {
+            meetingGroup.AddMember(
+                name: $"Member {i}",
+                email: $"member{i}@example.com",
+                role: AttendeeRole.Attendee,
+                userId: null,
+                hasSpeakingRights: true,
+                hasVotingRights: true
+            );
+        }
+
+        // Add the meeting group to the context
+        context.MeetingGroups.Add(meetingGroup);
+
+        return meetingGroup;
     }
 
     private static async Task BoardMeeting(ApplicationDbContext context)
@@ -405,53 +470,65 @@ public static class Seed
             description: "Election of the Chairperson of the board as per organizational bylaws."
         );
 
+        electionOfChairperson.AddCandidate(meeting.Attendees.First(x => x.Order == 1), null);
+        electionOfChairperson.AddCandidate(meeting.Attendees.First(x => x.Order == 10), null);
+
         boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Vice Chairperson",
             description: "Election of the Vice Chairperson of the board as per organizational bylaws."
-        );
+        )
+        .AddCandidate(meeting.Attendees.First(x => x.Order == 2), null);
 
         boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Secretary",
             description: "Election of the Secretary of the board as per organizational bylaws."
-        );
+        )
+        .AddCandidate(meeting.Attendees.First(x => x.Order == 3), null);
 
         boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Treasurer",
             description: "Election of the Treasurer of the board as per organizational bylaws."
-        );
+        )
+        .AddCandidate(meeting.Attendees.First(x => x.Order == 4), null);
 
         boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Member (Position 1)",
             description: "Election of a board member for Position 1 as per organizational bylaws."
-        );
+        )
+        .AddCandidate(meeting.Attendees.First(x => x.Order == 5), null);
+
 
         boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Member (Position 2)",
             description: "Election of a board member for Position 2 as per organizational bylaws."
-        );
+        )
+        .AddCandidate(meeting.Attendees.First(x => x.Order == 6), null);
 
-        var x = boardMemberElection.AddItem(
+        boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Member (Position 3)",
             description: "Election of a board member for Position 3 as per organizational bylaws."
-        );
+        )
+        .AddCandidate(meeting.Attendees.First(x => x.Order == 7), null);
 
         boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Alternate (Position 1)",
             description: "Election of an alternate board member for Position 1 as per organizational bylaws."
-        );
+        )
+        .AddCandidate(meeting.Attendees.First(x => x.Order == 8), null);
 
         boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Alternate (Position 2)",
             description: "Election of an alternate board member for Position 2 as per organizational bylaws."
-        );
+        )
+        .AddCandidate(meeting.Attendees.First(x => x.Order == 9), null);
 
         agenda.AddItem(
             type: AgendaItemType.Election,
@@ -463,8 +540,7 @@ public static class Seed
         agenda.AddItem(
             type: AgendaItemType.OldBusiness,
             title: "Old Business",
-            description: "Discussion of unresolved issues from previous meetings."
-        );
+            description: "Discussion of unresolved issues from previous meetings.");
 
         agenda.AddItem(
             type: AgendaItemType.NewBusiness,

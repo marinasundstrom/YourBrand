@@ -16,6 +16,7 @@ public sealed record MoveToNextAgendaItem(string OrganizationId, int Id) : IRequ
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
+                .AsSplitQuery()
                 .Include(x => x.Agenda)
                 .ThenInclude(x => x.Items.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);

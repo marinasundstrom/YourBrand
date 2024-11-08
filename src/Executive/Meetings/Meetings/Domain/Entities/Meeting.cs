@@ -1,4 +1,6 @@
-﻿using YourBrand.Auditability;
+﻿using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
@@ -334,6 +336,21 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         return attendee;
     }
 
+    public async Task AddAttendeesFromGroup(MeetingGroup meetingGroup, IApplicationDbContext context, CancellationToken cancellationToken = default)
+    {
+        foreach (var member in meetingGroup.Members)
+        {
+            var role = await context.AttendeeRoles.FirstOrDefaultAsync(x => x.Id == member.Role.Id, cancellationToken);
+
+            if (role is null)
+            {
+                throw new Exception("Invalid role");
+            }
+
+            var attendee = AddAttendee(member.Name, member.UserId, member.Email, role, member.HasSpeakingRights, member.HasVotingRights, member.MeetingGroupId, member.Id);
+        }
+    }
+
     public bool RemoveAttendee(MeetingAttendee attendee)
     {
 
@@ -418,6 +435,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
         return false;
     }
+
 
     // Determines if the meeting can be started
     public bool CanStart =>

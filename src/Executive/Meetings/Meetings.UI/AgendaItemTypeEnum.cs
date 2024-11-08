@@ -3,7 +3,8 @@ namespace YourBrand.Meetings;
 public enum AgendaItemTypeEnum
 {
     CallToOrder = 1,     // Opening the meeting formally
-    RollCall,            // Attendance check for quorum
+    RollCall,            // Attendance check
+    QuorumCheck,         // Verification of quorum
     ApprovalOfMinutes,   // Approval of previous meeting's minutes
     ApprovalOfAgenda,    // Approval of the current meeting's agenda
     ConsentAgenda,       // Routine items grouped for a single vote

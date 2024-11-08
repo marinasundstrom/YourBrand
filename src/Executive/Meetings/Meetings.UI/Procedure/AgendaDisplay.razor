@@ -11,24 +11,32 @@
                 {
                     <text>@item.Order. @item.Title</text>
                 }
-            </MudText>
-            <ul class="ms-4">
-                @foreach (var item2 in item.SubItems)
+                @*
+                @if (item.SubItems.Any())
                 {
-                    <li class="mb-2">
-                        <MudText @key="item2.Id" Typo="@Typo.body1" Class="mb-2">
-                            @if (item2.Id == AgendaSubItemId)
-                            {
-                                <b>@item2.Order. @item2.Title</b>
-                            }
-                            else
-                            {
-                                <text>@item2.Order. @item2.Title</text>
-                            }
-                        </MudText>
-                    </li>
-                }
-            </ul>
+                    <MudIcon Icon="@Icons.Material.Filled.ChevronRight" />
+                }*@
+            </MudText>
+            @if (item.Id == AgendaItemId && item.SubItems.Any() || DisplaySubItems) 
+            {
+                <ul class="ms-4">
+                    @foreach (var item2 in item.SubItems)
+                    {
+                        <li class="mb-2">
+                            <MudText @key="item2.Id" Typo="@Typo.body1" Class="mb-2">
+                                @if (item2.Id == AgendaSubItemId)
+                                {
+                                    <b>@item2.Order. @item2.Title</b>
+                                }
+                                else
+                                {
+                                    <text>@item2.Order. @item2.Title</text>
+                                }
+                            </MudText>
+                        </li>
+                    }
+                </ul>
+            }
         </li>
     }
 </ul>
@@ -43,4 +51,7 @@
 
     [Parameter]
     public string? AgendaSubItemId { get; set; }
+
+    [Parameter]
+    public bool DisplaySubItems { get; set; }
 }

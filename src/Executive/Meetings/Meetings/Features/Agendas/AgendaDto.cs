@@ -16,6 +16,9 @@ public sealed record AgendaItemDto(
     bool IsDiscussionCompleted,
     bool IsVoteCompleted,
     int? MotionId,
-    IEnumerable<AgendaItemDto> SubItems);
+    IEnumerable<AgendaItemDto> SubItems,
+    IEnumerable<ElectionCandidateDto> Candidates);
 
 public sealed record AgendaItemTypeDto(int Id, string Name, string? Description);
+
+public sealed record ElectionCandidateDto(string Id, string Name, string? NomineeId, string? Statement);

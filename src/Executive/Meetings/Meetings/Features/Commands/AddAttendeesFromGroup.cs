@@ -41,17 +41,7 @@ public record AddAttendeesFromGroup(string OrganizationId, int Id, int GroupId) 
                 return Errors.MeetingGroups.MeetingGroupNotFound;
             }
 
-            foreach (var member in meetingGroup.Members)
-            {
-                var role = await context.AttendeeRoles.FirstOrDefaultAsync(x => x.Id == member.Role.Id, cancellationToken);
-
-                if (role is null)
-                {
-                    throw new Exception("Invalid role");
-                }
-
-                var attendee = meeting.AddAttendee(member.Name, member.UserId, member.Email, role, member.HasSpeakingRights, member.HasVotingRights, member.MeetingGroupId, member.Id);
-            }
+            await meeting.AddAttendeesFromGroup(meetingGroup, context, cancellationToken);
 
             context.Meetings.Update(meeting);
 

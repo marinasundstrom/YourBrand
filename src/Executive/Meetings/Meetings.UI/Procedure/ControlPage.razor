@@ -141,9 +141,22 @@ else
                     && currentAgendaItem?.State != AgendaItemState.Completed)
                 {
                     <MudPaper Class="pa-8 mb-4" Elevation="25">
-                        <MudText Typo="@Typo.h4" GutterBottom="true">Roll call</MudText>
+                        <MudText Typo="@Typo.h4" GutterBottom="true" Class="mb-4">Roll call</MudText>
 
                         <YourBrand.Meetings.Procedure.RollCall.RollCallDisplay OrganizationId="@organization.Id" Meeting="@meeting" />
+
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="CompleteAgendaItem">Complete Agenda Item</MudButton>
+                    </MudPaper>
+                }
+
+                @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
+                    && currentAgendaItem?.State != AgendaItemState.Voting 
+                    && currentAgendaItem?.State != AgendaItemState.Completed)
+                {
+                    <MudPaper Class="pa-8 mb-4" Elevation="25">
+                        <MudText Typo="@Typo.h4" GutterBottom="true" Class="mb-4">Candidates</MudText>
+
+                        <YourBrand.Meetings.Procedure.Election.CandidatesView Meeting="@meeting" AgendaItem="@currentAgendaItem" />
 
                         <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="CompleteAgendaItem">Complete Agenda Item</MudButton>
                     </MudPaper>
@@ -161,7 +174,7 @@ else
             @if(agenda is not null) 
             {
             <MudPaper Class="pa-8 mb-4" Elevation="25">
-                <MudText Typo="@Typo.h4" GutterBottom="true">Agenda</MudText>
+                <MudText Typo="@Typo.h4" GutterBottom="true" Class="mb-4">Agenda</MudText>
 
                 @{
                     string? currentItemId = null;

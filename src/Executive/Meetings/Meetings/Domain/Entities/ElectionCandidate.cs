@@ -14,9 +14,11 @@ public sealed class ElectionCandidate : Entity<ElectionCandidateId>, IAuditableE
 
     }
 
-    public ElectionCandidate(MeetingAttendeeId id, string statement)
+    public ElectionCandidate(MeetingAttendeeId id, string? statement)
         : base(new ElectionCandidateId())
     {
+        NomineeId = id;
+        Statement = statement;
     }
 
     public TenantId TenantId { get; set; }

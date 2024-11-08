@@ -103,10 +103,12 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
             throw new ArgumentNullException(nameof(candidate));
         }
 
+        /*
         if (string.IsNullOrWhiteSpace(statement))
         {
             throw new ArgumentException("Candidate statement is required.", nameof(statement));
         }
+        */
 
         if (Type != AgendaItemType.Election)
         {

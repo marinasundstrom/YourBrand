@@ -3715,6 +3715,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AgendaItem'
+        candidates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ElectionCandidate'
     AgendaItemState:
       type: integer
       description: ''
@@ -3756,6 +3760,20 @@ components:
       - 0
       - 1
       - 2
+    ElectionCandidate:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        nomineeId:
+          type: string
+          nullable: true
+        statement:
+          type: string
+          nullable: true
     ProposeCandidate:
       type: object
       additionalProperties: false

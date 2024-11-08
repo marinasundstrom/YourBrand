@@ -1,0 +1,27 @@
+<MudGrid>
+    @foreach (var candidate in AgendaItem.Candidates)
+    {
+        <MudItem xs="12" sm="12" md="6" lg="4">
+            <MudCard>
+                <MudCardHeader>
+                    @candidate.Name
+                </MudCardHeader>
+                <MudCardContent>
+                    
+                </MudCardContent>
+                <MudCardActions>
+
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
+
+@code 
+{
+    [Parameter]
+    public Meeting Meeting { get; set; }
+
+    [Parameter]
+    public AgendaItem AgendaItem { get; set; }
+}

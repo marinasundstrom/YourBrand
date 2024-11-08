@@ -14,9 +14,13 @@ public static partial class Mappings
         item.IsDiscussionCompleted,
         item.IsVoteCompleted,
         item.MotionId,
-        item.SubItems.Select(x => x.ToDto()));
+        item.SubItems.Select(x => x.ToDto()),
+        item.Candidates.Select(x => x.ToDto()));
 
 
     public static AgendaItemTypeDto ToDto(this AgendaItemType type) =>
         new(type.Id, type.Name, type.Description);
+
+    public static ElectionCandidateDto ToDto(this ElectionCandidate candidate) =>
+        new(candidate.Id, $"Attendee {candidate.NomineeId}", candidate.NomineeId, candidate.Statement);
 }
