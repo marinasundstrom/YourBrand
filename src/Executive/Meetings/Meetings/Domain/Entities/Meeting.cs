@@ -111,6 +111,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         State = MeetingState.InProgress;
 
         CurrentAgendaItemIndex = 0;
+        CurrentAgendaSubItemIndex = null;
     }
 
     public void CancelMeeting()
@@ -124,14 +125,20 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
         State = MeetingState.Canceled;
 
-        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
+        // Skip remaining agenda items and their sub-items
+        var remainingItems = Agenda.Items
+            .OrderBy(ai => ai.Order)
+            .Skip(CurrentAgendaItemIndex.GetValueOrDefault() + 1);
 
-        foreach (var item in agendaItems.Skip(CurrentAgendaItemIndex.GetValueOrDefault()))
+        foreach (var item in remainingItems)
         {
             item.Cancel();
-        }
 
-        CurrentAgendaItemIndex = null;
+            foreach (var subItem in item.SubItems.OrderBy(si => si.Order))
+            {
+                subItem.Cancel();
+            }
+        }
     }
 
     public void EndMeeting()
@@ -142,19 +149,22 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         }
 
         EndedAt = DateTimeOffset.UtcNow;
-
         State = MeetingState.Completed;
 
+        // Skip remaining agenda items and their sub-items
         var remainingItems = Agenda.Items
             .OrderBy(ai => ai.Order)
             .Skip(CurrentAgendaItemIndex.GetValueOrDefault() + 1);
 
         foreach (var item in remainingItems)
         {
-            item.State = AgendaItemState.Skipped;
-        }
+            item.Skip();
 
-        CurrentAgendaItemIndex = null;
+            foreach (var subItem in item.SubItems.OrderBy(si => si.Order))
+            {
+                subItem.Skip();
+            }
+        }
     }
 
     public AgendaItem MoveToNextAgendaItem()
@@ -269,11 +279,11 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
             return null;
         }
 
-        // If we are processing sub-items, return the current sub-item
-        if (CurrentAgendaSubItemIndex.HasValue && CurrentAgendaSubItemIndex >= 0)
+        // If we are processing sub-items, return the current sub-item directly
+        if (CurrentAgendaSubItemIndex.HasValue)
         {
             var subItems = currentItem.SubItems.OrderBy(si => si.Order).ToList();
-            return subItems.ElementAtOrDefault(CurrentAgendaSubItemIndex.Value - 1); // Adjust for sub-item index
+            return subItems.ElementAtOrDefault(CurrentAgendaSubItemIndex.Value); // No need for -1 adjustment
         }
 
         // Otherwise, return the main item
@@ -346,10 +356,16 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         State = MeetingState.Scheduled;
 
         CurrentAgendaItemIndex = null;
+        CurrentAgendaSubItemIndex = null;
 
         foreach (var agendaItem in Agenda!.Items)
         {
-            agendaItem.State = AgendaItemState.Pending;
+            agendaItem.Reset();
+
+            foreach (var subItem in agendaItem.SubItems.OrderBy(si => si.Order))
+            {
+                subItem.Reset();
+            }
         }
     }
 
@@ -425,7 +441,15 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
                 return false;
             }
 
-            // Allow moving to the next item only if the current item's state allows it
+            // Check if all sub-items are in a terminal state before moving to the next main item
+            if (currentItem.SubItems.Any(subItem =>
+                subItem.State != AgendaItemState.Completed &&
+                subItem.State != AgendaItemState.Skipped &&
+                subItem.State != AgendaItemState.Canceled))
+            {
+                return false;
+            }
+
             return (currentItem.State == AgendaItemState.Completed ||
                     currentItem.State == AgendaItemState.Skipped ||
                     currentItem.State == AgendaItemState.Canceled) &&

@@ -229,6 +229,16 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         State = AgendaItemState.Completed;
     }
 
+    public void Skip()
+    {
+        if (IsMandatory)
+        {
+            throw new InvalidOperationException("Mandatory agenda items cannot be postponed.");
+        }
+
+        State = AgendaItemState.Skipped;
+    }
+
     public void Postpone()
     {
         if (IsMandatory)
@@ -365,6 +375,11 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         agendaItem.Order = newOrderPosition;
 
         return true;
+    }
+
+    public void Reset()
+    {
+        State = AgendaItemState.Pending;
     }
 
     public User? CreatedBy { get; set; } = null!;
