@@ -8,10 +8,13 @@ public static class ServiceExtensions
     {
         services
             .AddMeetingsClient(configureClient, builder)
+            .AddAttendeeRolesClient(configureClient, builder)
             .AddAgendasClient(configureClient, builder)
+            .AddAgendaItemTypesClient(configureClient, builder)
             .AddMotionsClient(configureClient, builder)
             .AddMinutesClient(configureClient, builder)
             .AddMeetingGroupsClient(configureClient, builder)
+            //.AddMemberRolesClient(configureClient, builder)
             .AddUsersClient(configureClient, builder);
 
         return services;
@@ -27,11 +30,33 @@ public static class ServiceExtensions
         return services;
     }
 
+    public static IServiceCollection AddAttendeeRolesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(AttendeeRolesClient) + "MS", configureClient)
+            .AddTypedClient<IAttendeeRolesClient>((http, sp) => new AttendeeRolesClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
     public static IServiceCollection AddAgendasClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
             .AddHttpClient(nameof(AgendasClient) + "MS", configureClient)
             .AddTypedClient<IAgendasClient>((http, sp) => new AgendasClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddAgendaItemTypesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(AgendaItemTypesClient) + "MS", configureClient)
+            .AddTypedClient<IAgendaItemTypesClient>((http, sp) => new AgendaItemTypesClient(http));
 
         builder?.Invoke(b);
 
@@ -70,6 +95,19 @@ public static class ServiceExtensions
 
         return services;
     }
+
+    /*
+    public static IServiceCollection AddMemberRolesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(MemberRolesClient) + "MS", configureClient)
+            .AddTypedClient<IMemberRolesClient>((http, sp) => new MemberRolesClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+    */
 
     public static IServiceCollection AddUsersClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {

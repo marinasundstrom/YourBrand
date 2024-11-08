@@ -43,7 +43,14 @@ public record AddAttendeesFromGroup(string OrganizationId, int Id, int GroupId) 
 
             foreach (var member in meetingGroup.Members)
             {
-                var attendee = meeting.AddAttendee(member.Name, member.UserId, member.Email, member.Role, member.HasSpeakingRights, member.HasVotingRights, member.MeetingGroupId, member.Id);
+                var role = await context.AttendeeRoles.FirstOrDefaultAsync(x => x.Id == member.Role.Id, cancellationToken);
+
+                if (role is null)
+                {
+                    throw new Exception("Invalid role");
+                }
+
+                var attendee = meeting.AddAttendee(member.Name, member.UserId, member.Email, role, member.HasSpeakingRights, member.HasVotingRights, member.MeetingGroupId, member.Id);
             }
 
             context.Meetings.Update(meeting);

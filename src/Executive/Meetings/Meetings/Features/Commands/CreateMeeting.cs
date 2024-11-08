@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Command;
 
-public sealed record CreateMeetingAttendeeDto(string Name, string? UserId, string Email, AttendeeRole Role, bool? HasSpeakingRights, bool? HasVotingRights);
+public sealed record CreateMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
 
 public sealed record CreateMeetingQuorumDto(int RequiredNumber);
 
@@ -50,7 +50,14 @@ public record CreateMeeting(string OrganizationId, string Title, string Descript
 
             foreach (var attendee in request.Attendees)
             {
-                meeting.AddAttendee(attendee.Name, attendee.UserId, attendee.Email, attendee.Role, attendee.HasSpeakingRights, attendee.HasVotingRights);
+                var role = await context.AttendeeRoles.FirstOrDefaultAsync(x => x.Id == attendee.Role);
+
+                if (role is null)
+                {
+                    throw new Exception("Invalid role");
+                }
+
+                meeting.AddAttendee(attendee.Name, attendee.UserId, attendee.Email, role, attendee.HasSpeakingRights, attendee.HasVotingRights);
             }
 
             context.Meetings.Add(meeting);

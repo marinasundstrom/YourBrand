@@ -13,7 +13,6 @@ using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Meetings;
-using YourBrand.Meetings;
 using YourBrand.Meetings.Infrastructure.Persistence;
 using YourBrand.Meetings.Middleware;
 using YourBrand.Meetings.Services;

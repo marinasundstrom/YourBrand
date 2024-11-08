@@ -7,14 +7,8 @@
     <MudDialog Gutters="false">
         <DialogContent>
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
-                <MudSelect T="AgendaItemType" Label="Type" Variant="Variant.Outlined" @bind-Value="Model.Type"
-                    Class="mt-4">
-                    @foreach (var type in Enum.GetValues<AgendaItemType>())
-                    {
-                        <MudSelectItem T="AgendaItemType" Value="@type">@Enum.GetName(typeof(AgendaItemType), type)
-                        </MudSelectItem>
-                    }
-                </MudSelect>
+                <AgendaItemTypeSelector OrganizationId="OrganizationId" Class="mt-4" Label="Type"
+                    Variant="Variant.Outlined" @bind-Value="Model.Type" For="() => Model.Type" />
                 <MudTextField Label="Title" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Title"
                     For="@(() => Model.Title)" />
                 <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4"

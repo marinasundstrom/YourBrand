@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Minutes.Command;
 
-public sealed record CreateMinutesItemDto(int? AgendaId, string? AgendaItemId, AgendaItemType Type, string Title, string Description);
+public sealed record CreateMinutesItemDto(int? AgendaId, string? AgendaItemId, int Type, string Title, string Description);
 
 public record CreateMinutes(string OrganizationId, int MeetingId, IEnumerable<CreateMinutesItemDto> Items) : IRequest<Result<MinutesDto>>
 {
@@ -42,7 +42,14 @@ public record CreateMinutes(string OrganizationId, int MeetingId, IEnumerable<Cr
 
             foreach (var minuteItem in request.Items)
             {
-                minute.AddItem(minuteItem.Type, minuteItem.AgendaId, minuteItem.AgendaItemId, minuteItem.Title, minuteItem.Description);
+                var type = AgendaItemType.AllTypes.FirstOrDefault(x => x.Id == minuteItem.Type);
+
+                if (type is null)
+                {
+                    throw new Exception("Invalid type");
+                }
+
+                minute.AddItem(type, minuteItem.AgendaId, minuteItem.AgendaItemId, minuteItem.Title, minuteItem.Description);
             }
 
             context.Minutes.Add(minute);

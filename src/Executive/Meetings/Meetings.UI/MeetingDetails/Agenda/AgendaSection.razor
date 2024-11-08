@@ -34,7 +34,7 @@
             <RowTemplate Context="item">
                 <MudTd DataLabel="Order">@item.Order</MudTd>
                 <MudTd DataLabel="Title">@item.Title</MudTd>
-                <MudTd DataLabel="Type">@item.Type</MudTd>
+                <MudTd DataLabel="Type">@item.Type.Name</MudTd>
                 <MudTd DataLabel="State">@item.State</MudTd>
                 <MudTd DataLabel="Description">@item.Description</MudTd>
                 <MudTd DataLabel="Motion">@item.Motion?.Id</MudTd>
@@ -62,6 +62,66 @@
                     </MudIconButton>
                 </MudTd>
             </RowTemplate>
+            <ChildRowContent Context="item">
+                <td colspan="9">
+                @if(item.SubItems.Any()) 
+                {
+                <MudTable T="AgendaItemViewModel" @ref="table" Items="@item.SubItems" Dense="true" Hover="true" Elevation="0"
+                    Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await EditItem(e.Item)">
+                    <ToolBarContent>
+                        <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Add" OnClick="AddItem" Class="mb-2">Add
+                            Item</MudButton>
+                    </ToolBarContent>
+
+                    <HeaderContent>
+                        <MudTh>#</MudTh>
+                        <MudTh>Title</MudTh>
+                        <MudTh>Type</MudTh>
+                        <MudTh>State</MudTh>
+                        <MudTh>Description</MudTh>
+                        <MudTh>Motion</MudTh>
+                        <MudTh></MudTh>
+                        <MudTh></MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="subItem">
+                        <MudTd DataLabel="Order">@($"{item.Order}.{subItem.Order}")</MudTd>
+                        <MudTd DataLabel="Title">@subItem.Title</MudTd>
+                        <MudTd DataLabel="Type">@subItem.Type.Name</MudTd>
+                        <MudTd DataLabel="State">@subItem.State</MudTd>
+                        <MudTd DataLabel="Description">@subItem.Description</MudTd>
+                        <MudTd DataLabel="Motion">@subItem.Motion?.Id</MudTd>
+                        <MudTd>
+                            @if (subItem.Order > 1)
+                            {
+                                <MudIconButton Icon="@Icons.Material.Filled.MoveUp" Size="Size.Small"
+                                    OnClick="async () => await MoveUp(item)">
+                                </MudIconButton>
+                            }
+                        </MudTd>
+                        <MudTd>
+                            @if (subItem.Order != Items.Last().Order)
+                            {
+                                <MudIconButton Icon="@Icons.Material.Filled.MoveDown" Size="Size.Small"
+                                    OnClick="async () => await MoveDown(subItem)">
+                                </MudIconButton>
+                            }
+                        </MudTd>
+                        <MudTd>
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" OnClick="() => EditItem(subItem)">
+                            </MudIconButton>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
+                                OnClick="async () => await RemoveItem(subItem)">
+                            </MudIconButton>
+                        </MudTd>
+                    </RowTemplate>
+                    <LoadingContent>
+                        <MudText>Loading...</MudText>
+                    </LoadingContent>
+                </MudTable>
+                }
+                </td>
+            </ChildRowContent>
             <LoadingContent>
                 <MudText>Loading...</MudText>
             </LoadingContent>
@@ -103,9 +163,20 @@
                 Title = item.Title,
                 Type = item.Type,
                 State = item.State,
-                Description = item.Description
-                //Motion = item.Motion
-            }));
+                Description = item.Description,
+                //Motion = item.Motion,
+                SubItems = item.SubItems.Select(x => new AgendaItemViewModel()
+                {
+                    Id = x.Id,
+                    Order = x.Order,
+                    Title = x.Title,
+                    Type = x.Type,
+                    State = x.State,
+                    Description = x.Description,
+                    //Motion = x.Motion
+                }).ToList()
+            }
+        ));
 
         await InvokeAsync(StateHasChanged);
     }
@@ -131,7 +202,7 @@
         var dto = new AddAgendaItem
             {
                 Title = agendaItemModel.Title,
-                Type = agendaItemModel.Type,
+                Type = agendaItemModel.Type.Id,
                 Description = agendaItemModel.Description,
                 MotionId = agendaItemModel.Motion?.Id
             };
@@ -253,7 +324,7 @@
         var dto = new EditAgendaItem
             {
                 Title = editedModel.Title,
-                Type = editedModel.Type,
+                Type = editedModel.Type.Id,
                 Description = editedModel.Description,
                 MotionId = editedModel.Motion?.Id
             };

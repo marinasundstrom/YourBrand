@@ -44,6 +44,9 @@ public static partial class Errors
 
         public static readonly Error OnlyChairpersonCanEndVotingSession = new Error(nameof(OnlyChairpersonCanEndVotingSession), "Only the Chairperson can end a voting session.", string.Empty);
 
+        public static readonly Result NotAnAttendantOfMeeting = new Error(nameof(NotAnAttendantOfMeeting), "Not an attendee of this meeting.", string.Empty);
+
+        public static readonly Result CandidateAlreadyProposed = new Error(nameof(CandidateAlreadyProposed), "Attendee has already been proposed as a candidate.", string.Empty);
     }
 
     public static class Agendas

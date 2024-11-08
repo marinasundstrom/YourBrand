@@ -17,9 +17,9 @@ public sealed record CreateAgendaDto(IEnumerable<CreateAgendaItemDto> Items);
 
 public sealed record EditAgendaDetailsDto();
 
-public sealed record AddAgendaItemDto(AgendaItemType Type, string Title, string Description, int? MotionId, int? Order);
+public sealed record AddAgendaItemDto(int Type, string Title, string Description, int? MotionId, int? Order);
 
-public sealed record EditAgendaItemDto(AgendaItemType Type, string Title, string Description, int? MotionId);
+public sealed record EditAgendaItemDto(int Type, string Title, string Description, int? MotionId);
 
 public sealed record ReorderAgendaItemDto(int Order);
 

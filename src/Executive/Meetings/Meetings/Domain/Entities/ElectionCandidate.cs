@@ -24,7 +24,7 @@ public sealed class ElectionCandidate : Entity<ElectionCandidateId>, IAuditableE
     public AgendaItemId AgendaItemId { get; set; }
 
     public MeetingAttendeeId NomineeId { get; set; }
-    public string Statement { get; set; }
+    public string? Statement { get; set; }
 
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;

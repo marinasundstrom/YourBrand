@@ -6,37 +6,6 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public enum AgendaItemType
-{
-    CallToOrder,         // Opening the meeting formally
-    RollCall,            // Attendance check for quorum
-    ApprovalOfMinutes,   // Approval of previous meeting's minutes
-    ApprovalOfAgenda,    // Approval of the current meeting's agenda
-    ConsentAgenda,       // Routine items grouped for a single vote
-    ChairpersonRemarks,  // Opening remarks or statements by the chairperson
-    PublicComment,       // Time allocated for public comments (if applicable)
-    Reports,             // Presentation of reports (e.g., financial, committee reports)
-    FinancialReport,     // Specific item for financial reports
-    SpecialPresentations,// Formal presentations by guests or special contributors
-    OldBusiness,         // Items carried over from previous meetings
-    UnfinishedBusiness,  // Ongoing items from previous meetings
-    NewBusiness,         // Introduction of new topics for discussion or decision
-    Announcements,       // Formal announcements to the assembly
-    Motion,              // Proposals requiring a decision or vote
-    Discussion,          // Structured discussion on specific agenda topics
-    StrategicDiscussion, // Forward-looking strategy sessions or brainstorming
-    Voting,              // Formal voting on motions or decisions
-    Election,            // Formal election
-    ExecutiveSession,    // Private session for confidential matters
-    RecognitionAwards,   // Formal recognition or award announcements
-    ActionItemsReview,   // Review of action items from previous meetings
-    Recess,              // Planned break or recess during the meeting
-    GuestSpeakers,       // Slot for invited guest speakers
-    FollowUpItems,       // Review of follow-up actions and decisions
-    Adjournment,         // Formal closing of the meeting
-    ClosingRemarks       // Concluding remarks by key figures
-}
-
 public enum AgendaItemState
 {
     Pending,
@@ -62,9 +31,19 @@ public enum VoteActions
     Optional
 }
 
+public enum PostponementType
+{
+    LaterInMeeting,
+    NextMeeting,
+    Indefinite
+}
+
 public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, IHasTenant, IHasOrganization
 {
     readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
+    private HashSet<AgendaItem> _subItems = new HashSet<AgendaItem>();
+
+    protected AgendaItem() {}
 
     public AgendaItem(AgendaItemType type, string title, string description)
     : base(new AgendaItemId())
@@ -83,6 +62,8 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
     public AgendaId AgendaId { get; set; }
+
+    public AgendaItemId? ParentId { get; set; }
 
     public AgendaItemType Type { get; set; }
 
@@ -115,7 +96,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     public string? Position { get; set; }
     public IReadOnlyCollection<ElectionCandidate> Candidates => _candidates;
 
-    public void AddCandidate(MeetingAttendee candidate, string statement)
+    public void AddCandidate(MeetingAttendee candidate, string? statement)
     {
         if (candidate == null)
         {
@@ -138,6 +119,16 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         }
 
         _candidates.Add(new ElectionCandidate(candidate.Id, statement));
+    }
+
+    public void WithdrawCandidate(ElectionCandidate candidate)
+    {
+        if (!_candidates.Contains(candidate))
+        {
+            throw new InvalidOperationException("Is not a candidate.");
+        }
+
+        _candidates.Remove(candidate);
     }
 
     public void StartDiscussion()
@@ -208,12 +199,13 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
             throw new InvalidOperationException("Already had voting.");
         }
 
-        VotingSession = new VotingSession((Type) switch
+        VotingSession = new VotingSession(Type.Id switch
         {
-            AgendaItemType.Motion => VotingType.Motion,
-            AgendaItemType.Election => VotingType.Election,
-            _ => VotingType.Motion //throw new InvalidOperationException("Invalid agenda item type")
+            16 => VotingType.Motion,       // AgendaItemType.Motion Id
+            20 => VotingType.Election,     // AgendaItemType.Election Id
+            _ => throw new InvalidOperationException("Invalid agenda item type")
         });
+
         VotingSession.OrganizationId = OrganizationId;
 
         VotingStartedAt = DateTimeOffset.UtcNow;
@@ -229,14 +221,9 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     public void Complete()
     {
-        if (DiscussionActions == DiscussionActions.Required && !IsDiscussionCompleted)
+        if (!CanComplete)
         {
-            throw new InvalidOperationException("Discussion is required and has not been completed.");
-        }
-
-        if (VoteActions == VoteActions.Required && !IsVoteCompleted)
-        {
-            throw new InvalidOperationException("Voting is required and has not been completed.");
+            throw new InvalidOperationException("Agenda item cannot be completed.");
         }
 
         State = AgendaItemState.Completed;
@@ -269,6 +256,115 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
             throw new InvalidOperationException("Motion items must have voting actions.");
         }
         // Add similar validations for other types as needed
+    }
+
+    // Determines if the item can start discussion
+    public bool CanStartDiscussion =>
+        (State == AgendaItemState.Pending || State == AgendaItemState.Postponed) &&
+        DiscussionActions != DiscussionActions.None &&
+        !IsDiscussionCompleted;
+
+    // Determines if the item can start voting
+    public bool CanStartVoting =>
+        State == AgendaItemState.UnderDiscussion &&
+        VoteActions != VoteActions.None &&
+        (DiscussionActions != DiscussionActions.Required || IsDiscussionCompleted) &&
+        !IsVoteCompleted;
+
+    // Determines if the item can be marked as completed
+    public bool CanComplete =>
+        (DiscussionActions != DiscussionActions.Required || IsDiscussionCompleted) &&
+        (VoteActions != VoteActions.Required || IsVoteCompleted) &&
+        (State != AgendaItemState.Completed && State != AgendaItemState.Canceled && State != AgendaItemState.Skipped);
+
+    public IReadOnlyCollection<AgendaItem> SubItems => _subItems;
+
+    public AgendaItem AddItem(AgendaItemType type, string title, string description)
+    {
+        if (_subItems.Any(i => i.Title.Equals(title, StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new InvalidOperationException("An agenda item with the same title already exists.");
+        }
+
+        /*
+        if (State != AgendaState.InDraft && State != AgendaState.Published)
+        {
+            throw new InvalidOperationException("Cannot add agenda items unless the agenda is in draft or under review.");
+        } */
+
+        int order = 1;
+
+        try
+        {
+            var last = _subItems.OrderByDescending(x => x.Order).First();
+            order = last.Order + 1;
+        }
+        catch { }
+
+        var item = new AgendaItem(type, title, description);
+        item.AgendaId = AgendaId;
+        item.Order = order;
+        _subItems.Add(item);
+        return item;
+    }
+
+    public bool RemoveAgendaItem(AgendaItem item)
+    {
+        int i = 1;
+        var r = _subItems.Remove(item);
+        foreach (var item0 in _subItems)
+        {
+            item0.Order = i++;
+        }
+        return r;
+    }
+
+    public bool ReorderAgendaItem(AgendaItem agendaItem, int newOrderPosition)
+    {
+        if (!_subItems.Contains(agendaItem))
+        {
+            throw new InvalidOperationException("Agenda item does not exist in this agenda.");
+        }
+
+        if (newOrderPosition < 1 || newOrderPosition > _subItems.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(newOrderPosition), "New order position is out of range.");
+        }
+
+        int oldOrderPosition = agendaItem.Order;
+
+        if (oldOrderPosition == newOrderPosition)
+            return false;
+
+        // Flyttar objektet uppåt i listan
+        if (newOrderPosition < oldOrderPosition)
+        {
+            var itemsToIncrement = SubItems
+                .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
+                .ToList();
+
+            foreach (var item in itemsToIncrement)
+            {
+                item.Order += 1;
+            }
+        }
+        // Flyttar objektet nedåt i listan
+        else
+        {
+            var itemsToDecrement = SubItems
+                .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
+                .ToList();
+
+            foreach (var item in itemsToDecrement)
+            {
+                item.Order -= 1;
+            }
+        }
+
+        // Uppdatera order för objektet som flyttas
+        agendaItem.Order = newOrderPosition;
+
+        return true;
     }
 
     public User? CreatedBy { get; set; } = null!;

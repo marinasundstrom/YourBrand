@@ -30,13 +30,17 @@ public sealed record ChangeMeetingQuorumDto(int RequiredNumber);
 
 public sealed record ChangeMeetingStateDto(MeetingState State);
 
-public sealed record AddMeetingAttendeeDto(string Name, string? UserId, string Email, AttendeeRole Role, bool? HasSpeakingRights, bool? HasVotingRights);
+public sealed record AddMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
 
-public sealed record EditMeetingAttendeeDto(string Name, string? UserId, string Email, AttendeeRole Role, bool? HasSpeakingRights, bool? HasVotingRights);
+public sealed record EditMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
 
 public sealed record AddAttendeesFromGroupDto(int GroupId);
 
 public sealed record MarkAttendeeAsPresentDto(bool IsPresent);
+
+public sealed record ProposeCandidateDto(string AttendeeId, string? Statement);
+
+public sealed record WithdrawCandidatureDto(string CandidateId);
 
 [ApiController]
 [ApiVersion("1")]
@@ -288,6 +292,26 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
     public async Task<ActionResult> EndAgendaItemVoting([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new EndAgendaItemVoting(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/Agenda/Candidate")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> ProposeCandidate([FromQuery] string organizationId, int id, ProposeCandidateDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new ProposeCandidate(organizationId, id, request.AttendeeId, request.Statement), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpDelete("{id}/Agenda/Candidate")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> WithdrawCandidature([FromQuery] string organizationId, int id, WithdrawCandidatureDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new WithdrawCandidature(organizationId, id, request.CandidateId), cancellationToken);
         return this.HandleResult(result);
     }
 

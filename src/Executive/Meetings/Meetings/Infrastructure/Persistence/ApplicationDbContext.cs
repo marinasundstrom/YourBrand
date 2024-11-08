@@ -60,13 +60,19 @@ public sealed class ApplicationDbContext(
 
     public DbSet<Meeting> Meetings { get; set; }
 
+    public DbSet<AttendeeRole> AttendeeRoles { get; set; }
+
     public DbSet<Agenda> Agendas { get; set; }
+
+    public DbSet<AgendaItemType> AgendaItemTypes { get; set; }
 
     public DbSet<Domain.Entities.Minutes> Minutes { get; set; }
 
     public DbSet<Motion> Motions { get; set; }
 
     public DbSet<MeetingGroup> MeetingGroups { get; set; }
+
+    public DbSet<MemberRole> MemberRoles { get; set; }
 
     public DbSet<User> Users { get; set; }
 

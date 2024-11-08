@@ -21,7 +21,7 @@
     </HeaderContent>
     <RowTemplate Context="member">
         <MudTd DataLabel="Name">@member.Name</MudTd>
-        <MudTd DataLabel="Role">@member.Role</MudTd>
+        <MudTd DataLabel="Role">@member.Role.Name</MudTd>
         <MudTd DataLabel="Email">@member.Email</MudTd>
         <MudTd DataLabel="UserId">@member.User?.Id</MudTd>
         <MudTd DataLabel="HasVotingRights">@(member.HasVotingRights.GetValueOrDefault() ? "Yes" : "No")</MudTd>
@@ -83,7 +83,7 @@
         var dto = new AddMeetingGroupMember
         {
             Name = memberModel.Name,
-            Role = memberModel.Role,
+            Role = memberModel.Role.Id,
             Email = memberModel.Email,
             UserId = memberModel.User?.Id,
             HasVotingRights = memberModel.HasVotingRights,
@@ -115,7 +115,7 @@
         var dto = new EditMeetingGroupMember
         {
             Name = editedModel.Name,
-            Role = editedModel.Role,
+            Role = editedModel.Role.Id,
             Email = editedModel.Email,
             UserId = editedModel.User?.Id,
             HasVotingRights = editedModel.HasVotingRights

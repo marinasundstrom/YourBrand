@@ -8,6 +8,8 @@ namespace YourBrand.Meetings.Domain.Entities;
 
 public class MeetingGroupMember : Entity<MeetingGroupMemberId>, IAuditableEntity<MeetingGroupMemberId>, IHasTenant, IHasOrganization
 {
+    protected MeetingGroupMember() { }
+
     public MeetingGroupMember(string name, string email, AttendeeRole role, UserId? userId, bool? hasSpeakingRights, bool? hasVotingRights)
         : base(new MeetingGroupMemberId())
     {
@@ -31,6 +33,7 @@ public class MeetingGroupMember : Entity<MeetingGroupMemberId>, IAuditableEntity
     public UserId? UserId { get; set; }
 
     public AttendeeRole Role { get; set; } = AttendeeRole.Attendee;
+    public int RoleId{ get; set; }
 
     public bool? HasSpeakingRights { get; set; }
     public bool? HasVotingRights { get; set; }

@@ -65,7 +65,21 @@ else
                 <MudPaper Class="pa-8 mb-4" Elevation="25">
                     <MudText Typo="@Typo.h4" GutterBottom="true">Agenda</MudText>
 
-                    <AgendaDisplay Agenda="@agenda" AgendaItemId="@agendaItem?.Id" />
+
+                    @{
+                        string? currentItemId = null;
+                        string? currentSubItemId = null;
+
+                        currentItemId = agendaItem?.Id;
+
+                        if (agendaItem?.ParentId is not null)
+                        {
+                            currentItemId = agendaItem.ParentId;
+                            currentSubItemId = agendaItem.Id;
+                        }
+                    }
+
+                    <AgendaDisplay Agenda="@agenda" AgendaItemId="@currentItemId" AgendaSubItemId="@currentSubItemId" />
                 </MudPaper>
             </MudItem>
         }

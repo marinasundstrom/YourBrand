@@ -10,7 +10,7 @@ using YourBrand.Meetings.Features.Procedure.Command;
 
 namespace YourBrand.Meetings.Features.Minutes.Command;
 
-public record AddMinutesItem(string OrganizationId, int Id, int? AgendaId, string? AgendaItemId, AgendaItemType Type, string Title, string Description, int? MotionId, int? Order) : IRequest<Result<MinutesItemDto>>
+public record AddMinutesItem(string OrganizationId, int Id, int? AgendaId, string? AgendaItemId, int Type, string Title, string Description, int? MotionId, int? Order) : IRequest<Result<MinutesItemDto>>
 {
     public class Validator : AbstractValidator<AddMinutesItem>
     {
@@ -33,7 +33,14 @@ public record AddMinutesItem(string OrganizationId, int Id, int? AgendaId, strin
                 return Errors.Minutes.MinuteNotFound;
             }
 
-            var minuteItem = minute.AddItem(request.Type, request.AgendaId, request.AgendaItemId, request.Title, request.Description);
+            var type = AgendaItemType.AllTypes.FirstOrDefault(x => x.Id == request.Type);
+
+            if (type is null)
+            {
+                throw new Exception("Invalid type");
+            }
+
+            var minuteItem = minute.AddItem(type, request.AgendaId, request.AgendaItemId, request.Title, request.Description);
 
             if (request.Order is not null)
             {

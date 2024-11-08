@@ -17,9 +17,9 @@ public sealed record CreateMinutesDto(int MeetingId, IEnumerable<CreateMinutesIt
 
 public sealed record EditMinuteDetailsDto();
 
-public sealed record AddMinutesItemDto(int? AgendaId, string? AgendaItemId, AgendaItemType Type, string Title, string Description, int? MotionId, int? Order);
+public sealed record AddMinutesItemDto(int? AgendaId, string? AgendaItemId, int Type, string Title, string Description, int? MotionId, int? Order);
 
-public sealed record EditMinutesItemDto(AgendaItemType Type, string Title, string Description, int? MotionId);
+public sealed record EditMinutesItemDto(int Type, string Title, string Description, int? MotionId);
 
 public sealed record MoveMinutesItemDto(int Order);
 

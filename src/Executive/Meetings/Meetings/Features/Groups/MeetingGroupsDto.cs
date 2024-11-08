@@ -4,4 +4,6 @@ public sealed record MeetingGroupDto(int Id, string Title, string Description, M
 
 public sealed record MeetingGroupQuorumDto(int RequiredNumber);
 
-public sealed record MeetingGroupMemberDto(string Id, int Order, string Name, AttendeeRole Role, string? Email, string? UserId, bool? HasSpeakingRights, bool? HasVotingRights);
+public sealed record MeetingGroupMemberDto(string Id, int Order, string Name, AttendeeRoleDto Role, string? Email, string? UserId, bool? HasSpeakingRights, bool? HasVotingRights);
+
+public sealed record MemberRoleDto(int Id, string Name, string? Description);

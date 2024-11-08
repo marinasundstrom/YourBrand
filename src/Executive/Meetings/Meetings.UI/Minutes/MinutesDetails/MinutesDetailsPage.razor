@@ -72,7 +72,7 @@
                 </HeaderContent>
                 <RowTemplate Context="item">
                     <MudTd DataLabel="Order">@item.Order</MudTd>
-                    <MudTd DataLabel="Type">@item.Type</MudTd>
+                    <MudTd DataLabel="Type">@item.Type.Name</MudTd>
                     <MudTd DataLabel="Title">@item.Title</MudTd>
                     <MudTd>
                         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
@@ -185,7 +185,7 @@
 
         var dto = new AddMinutesItem
             {
-                Type = itemModel.Type,
+                Type = itemModel.Type.Id,
                 Title = itemModel.Title,
                 Description = itemModel.Description,
                 AgendaId = itemModel.AgendaId,
@@ -220,7 +220,7 @@
 
         var dto = new EditMinutesItem
             {
-                Type = editedModel.Type,
+                Type = editedModel.Type.Id,
                 Title = editedModel.Title,
                 Description = editedModel.Description,
                 //AgendaId = editedModel.AgendaId,

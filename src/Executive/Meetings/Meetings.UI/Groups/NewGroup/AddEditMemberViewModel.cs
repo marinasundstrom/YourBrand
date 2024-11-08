@@ -7,7 +7,7 @@ public class AddEditMemberViewModel
     [Required]
     public string Name { get; set; }
 
-    public AttendeeRole Role { get; set; } = AttendeeRole.Attendee;
+    public AttendeeRole Role { get; set; }
 
     [Required]
     [EmailAddress]

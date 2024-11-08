@@ -13,6 +13,12 @@ public sealed class MinutesAttendeeConfiguration : IEntityTypeConfiguration<Minu
 
         builder.HasIndex(x => x.TenantId);
 
+        builder.HasOne(x => x.Role)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Navigation(x => x.Role).AutoInclude();
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

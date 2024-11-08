@@ -21,6 +21,24 @@ public static class Seed
 
         //return;
 
+        if (!await context.AttendeeRoles.AnyAsync())
+        {
+            await context.AttendeeRoles.AddRangeAsync(AttendeeRole.AllRoles);
+            await context.SaveChangesAsync();
+        }
+
+        if (!await context.AgendaItemTypes.AnyAsync())
+        {
+            await context.AgendaItemTypes.AddRangeAsync(AgendaItemType.AllTypes);
+            await context.SaveChangesAsync();
+        }
+
+        if (!await context.MemberRoles.AnyAsync())
+        {
+            await context.MemberRoles.AddRangeAsync(MemberRole.AllRoles);
+            await context.SaveChangesAsync();
+        }
+
         if (!await context.Motions.AnyAsync())
         {
             var motion1 = new Motion(1, "Motion to Approve New Policy")
@@ -122,99 +140,387 @@ public static class Seed
             await context.SaveChangesAsync();
         }
 
+        Meeting annualGeneralMeeting = default!;
+
         if (!await context.Meetings.AnyAsync())
         {
-            var meeting = new Meeting(1, "Board meeting")
+            var boardMeeting = new Meeting(1, "Board meeting")
             {
                 TenantId = TenantConstants.TenantId,
                 OrganizationId = TenantConstants.OrganizationId,
                 ScheduledAt = DateTimeOffset.UtcNow,
                 Location = "HQ",
-                Description = "Tes",
+                Description = "Test",
                 State = MeetingState.Scheduled
             };
 
-            context.Meetings.Add(meeting);
+            context.Meetings.Add(boardMeeting);
+
+            annualGeneralMeeting = new Meeting(2, "Annual general meeting")
+            {
+                TenantId = TenantConstants.TenantId,
+                OrganizationId = TenantConstants.OrganizationId,
+                ScheduledAt = DateTimeOffset.UtcNow,
+                Location = "Fancy venue",
+                Description = "Test",
+                State = MeetingState.Scheduled
+            };
+
+            context.Meetings.Add(annualGeneralMeeting);
 
             await context.SaveChangesAsync();
         }
 
         if (!await context.Agendas.AnyAsync())
         {
-            var agenda = new Agenda(1)
-            {
-                TenantId = TenantConstants.TenantId,
-                OrganizationId = TenantConstants.OrganizationId,
-                MeetingId = 1,
-                //State = AgendaState.InDraft
-            };
+            await BoardMeeting(context);
 
-            // Add agenda items
-            agenda.AddItem(
-                type: AgendaItemType.CallToOrder,
-                title: "Call to Order",
-                description: "Chairperson calls the meeting to order."
-            );
-
-            agenda.AddItem(
-                type: AgendaItemType.RollCall,
-                title: "Roll Call",
-                description: "Secretary takes attendance."
-            );
-
-            agenda.AddItem(
-                type: AgendaItemType.ApprovalOfMinutes,
-                title: "Approval of Minutes",
-                description: "Review and approve minutes from the previous meeting."
-            );
-
-            agenda.AddItem(
-                type: AgendaItemType.ApprovalOfAgenda,
-                title: "Approval of Agenda",
-                description: "Approve the agenda for the current meeting."
-            );
-
-            agenda.AddItem(
-                type: AgendaItemType.Reports,
-                title: "Committee Reports",
-                description: "Presentations from various committees."
-            );
-
-            agenda.AddItem(
-                type: AgendaItemType.OldBusiness,
-                title: "Old Business",
-                description: "Discuss unresolved issues from previous meetings."
-            );
-
-            agenda.AddItem(
-                type: AgendaItemType.NewBusiness,
-                title: "New Business",
-                description: "Introduce and discuss new topics."
-            );
-
-            var item = agenda.AddItem(
-                type: AgendaItemType.Motion,
-                title: "Motion to Approve Budget",
-                description: "Proposal to approve the annual budget."
-            );
-            item.MotionId = 4;
-
-            var item2 = agenda.AddItem(
-                type: AgendaItemType.Motion,
-                title: "Motion to Endorse Environmental Initiative",
-                description: "Proposal for organization's commitment to environmental sustainability."
-            );
-            item2.MotionId = 3;
-
-            agenda.AddItem(
-                type: AgendaItemType.Adjournment,
-                title: "Adjournment",
-                description: "Formal closing of the meeting."
-            );
-
-            context.Agendas.Add(agenda);
-
-            await context.SaveChangesAsync();
+            await AnnualGeneralMeeting(context, annualGeneralMeeting);
         }
+    }
+
+    private static async Task BoardMeeting(ApplicationDbContext context)
+    {
+        var agenda = new Agenda(1)
+        {
+            TenantId = TenantConstants.TenantId,
+            OrganizationId = TenantConstants.OrganizationId,
+            MeetingId = 1,
+        };
+
+        // Opening and formalities
+        agenda.AddItem(
+            type: AgendaItemType.CallToOrder,
+            title: "Call to Order",
+            description: "Chairperson calls the meeting to order."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Secretary",
+            description: "Election to appoint the Secretary for the meeting."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Adjuster of Minutes",
+            description: "Election to appoint an Adjuster of Minutes for this meeting."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.RollCall,
+            title: "Roll Call",
+            description: "Secretary takes attendance."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.QuorumCheck,
+            title: "Quorum Check",
+            description: "Secretary verifies quorum."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.ApprovalOfMinutes,
+            title: "Approval of Minutes",
+            description: "Review and approve minutes from the previous meeting."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.ApprovalOfAgenda,
+            title: "Approval of Agenda",
+            description: "Approve the agenda for the current meeting."
+        );
+
+        // Chairperson’s opening remarks
+        agenda.AddItem(
+            type: AgendaItemType.ChairpersonRemarks,
+            title: "Chairperson's Remarks",
+            description: "The chairperson provides an overview of key focus areas for the meeting."
+        );
+
+        // Key reports
+        agenda.AddItem(
+            type: AgendaItemType.Reports,
+            title: "Financial Report",
+            description: "Presentation of the financial performance and status."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Reports,
+            title: "Operational Report",
+            description: "Overview of operational activities and performance metrics."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Reports,
+            title: "Committee Reports",
+            description: "Updates from various committees, including progress on strategic initiatives."
+        );
+
+        // Business discussions and decisions
+        agenda.AddItem(
+            type: AgendaItemType.OldBusiness,
+            title: "Old Business",
+            description: "Review unresolved issues from previous meetings."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.NewBusiness,
+            title: "New Business",
+            description: "Introduce new business items requiring board attention or decision."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Discussion,
+            title: "Strategic Planning Discussion",
+            description: "Focused discussion on strategic goals and planning for the next quarter."
+        );
+
+        var item = agenda.AddItem(
+            type: AgendaItemType.Motion,
+            title: "Motion to Approve Key Initiatives",
+            description: "Proposal for endorsement of strategic initiatives for growth and sustainability."
+        );
+        item.MotionId = 3;
+
+        agenda.AddItem(
+            type: AgendaItemType.Voting,
+            title: "Voting",
+            description: "Formal voting on motions and decisions presented during the meeting."
+        );
+
+        // Final announcements and closing
+        agenda.AddItem(
+            type: AgendaItemType.Announcements,
+            title: "Announcements",
+            description: "Final announcements, including reminders of upcoming meetings or events."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Adjournment,
+            title: "Adjournment",
+            description: "Formal closing of the meeting."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.ClosingRemarks,
+            title: "Closing Remarks",
+            description: "Final comments from the chairperson or other board members."
+        );
+
+        // Save the agenda to the context
+        context.Agendas.Add(agenda);
+        await context.SaveChangesAsync();
+    }
+
+    private static async Task AnnualGeneralMeeting(ApplicationDbContext context, Meeting meeting)
+    {
+        var agenda = new Agenda(2)
+        {
+            TenantId = TenantConstants.TenantId,
+            OrganizationId = TenantConstants.OrganizationId,
+            MeetingId = 2,
+        };
+
+        // Opening of the AGM
+        agenda.AddItem(
+            type: AgendaItemType.CallToOrder,
+            title: "Call to Order",
+            description: "Temporary chairperson calls the meeting to order."
+        );
+
+        // Election of AGM roles
+        agenda.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Chairperson",
+            description: "Election to appoint the Chairperson for the meeting."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Secretary",
+            description: "Election to appoint the Secretary for the meeting."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Adjuster of Minutes",
+            description: "Election to appoint an Adjuster of Minutes for this meeting."
+        );
+
+        // Formalities and approvals
+        agenda.AddItem(
+            type: AgendaItemType.RollCall,
+            title: "Roll Call",
+            description: "Secretary takes attendance."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.QuorumCheck,
+            title: "Quorum Check",
+            description: "Secretary verifies quorum."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.ApprovalOfMinutes,
+            title: "Approval of Minutes",
+            description: "Review and approve minutes from the previous AGM."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.ApprovalOfAgenda,
+            title: "Approval of Agenda",
+            description: "Approve the agenda for the current meeting."
+        );
+
+        // Chairperson’s overview and annual reports
+        agenda.AddItem(
+            type: AgendaItemType.ChairpersonRemarks,
+            title: "Chairperson's Remarks",
+            description: "Chairperson provides an overview of the meeting and addresses key objectives."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Reports,
+            title: "Annual Financial Report",
+            description: "Presentation of the annual financial report by the Treasurer."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Reports,
+            title: "Committee Reports",
+            description: "Reports from various committees on annual activities and accomplishments."
+        );
+
+        // Election of board members and other officials
+        var boardMemberElection = agenda.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Board Members",
+            description: "Election of board members and officials as per organizational bylaws."
+        );
+
+        var electionOfChairperson = boardMemberElection.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Chairperson",
+            description: "Election of the Chairperson of the board as per organizational bylaws."
+        );
+
+        boardMemberElection.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Vice Chairperson",
+            description: "Election of the Vice Chairperson of the board as per organizational bylaws."
+        );
+
+        boardMemberElection.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Secretary",
+            description: "Election of the Secretary of the board as per organizational bylaws."
+        );
+
+        boardMemberElection.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Treasurer",
+            description: "Election of the Treasurer of the board as per organizational bylaws."
+        );
+
+        boardMemberElection.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Member (Position 1)",
+            description: "Election of a board member for Position 1 as per organizational bylaws."
+        );
+
+        boardMemberElection.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Member (Position 2)",
+            description: "Election of a board member for Position 2 as per organizational bylaws."
+        );
+
+        var x = boardMemberElection.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Member (Position 3)",
+            description: "Election of a board member for Position 3 as per organizational bylaws."
+        );
+
+        boardMemberElection.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Alternate (Position 1)",
+            description: "Election of an alternate board member for Position 1 as per organizational bylaws."
+        );
+
+        boardMemberElection.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Alternate (Position 2)",
+            description: "Election of an alternate board member for Position 2 as per organizational bylaws."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Election,
+            title: "Election of Financial Auditor",
+            description: "Election of a financial auditor as per organizational bylaws."
+        );
+
+        // Reviewing and addressing past business and new issues
+        agenda.AddItem(
+            type: AgendaItemType.OldBusiness,
+            title: "Old Business",
+            description: "Discussion of unresolved issues from previous meetings."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.NewBusiness,
+            title: "New Business",
+            description: "Introduction and discussion of new business for the upcoming year."
+        );
+
+        // Strategic discussion and budget approval
+        agenda.AddItem(
+            type: AgendaItemType.Discussion,
+            title: "Strategic Discussion",
+            description: "Strategic planning and goal-setting for the upcoming year."
+        );
+
+        var item1 = agenda.AddItem(
+            type: AgendaItemType.Motion,
+            title: "Approval of Annual Budget",
+            description: "Proposal to approve the annual budget."
+        );
+        item1.MotionId = 4;
+
+        // Other significant motions
+        var item2 = agenda.AddItem(
+            type: AgendaItemType.Motion,
+            title: "Approval of Environmental Initiative",
+            description: "Proposal for commitment to environmental sustainability."
+        );
+        item2.MotionId = 3;
+
+        // Voting on motions and decisions
+        agenda.AddItem(
+            type: AgendaItemType.Voting,
+            title: "Voting",
+            description: "Voting on motions and proposals presented during the meeting."
+        );
+
+        // Final remarks and closing
+        agenda.AddItem(
+            type: AgendaItemType.Announcements,
+            title: "Announcements",
+            description: "Final announcements, such as reminders for future meetings or events."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.Adjournment,
+            title: "Adjournment",
+            description: "Formal closing of the meeting."
+        );
+
+        agenda.AddItem(
+            type: AgendaItemType.ClosingRemarks,
+            title: "Closing Remarks",
+            description: "Final comments from the chairperson or other leaders."
+        );
+
+        context.Agendas.Add(agenda);
+        await context.SaveChangesAsync();
     }
 }

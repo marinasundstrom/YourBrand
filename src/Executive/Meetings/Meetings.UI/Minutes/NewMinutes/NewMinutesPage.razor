@@ -56,7 +56,7 @@
                     </HeaderContent>
                     <RowTemplate Context="item">
                         <MudTd DataLabel="Order">@item.Order</MudTd>
-                        <MudTd DataLabel="Type">@item.Type</MudTd>
+                        <MudTd DataLabel="Type">@item.Type.Name</MudTd>
                         <MudTd DataLabel="Title">@item.Title</MudTd>
                         <MudTd>
                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
@@ -115,7 +115,7 @@
                 Items = Items.Select(model => {
                     return new CreateMinutesItem
                     {
-                        Type = model.Type,
+                        Type = model.Type.Id,
                         Title = model.Title,
                         Description = model.Description,
                         AgendaId = model.AgendaId,

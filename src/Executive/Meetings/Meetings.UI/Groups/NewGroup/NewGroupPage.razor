@@ -123,7 +123,7 @@
                     return new CreateMeetingGroupMember
                     {
                         Name = model.Name,
-                        Role = model.Role,
+                        Role = model.Role.Id,
                         Email = model.Email,
                         UserId = model.User?.Id,
                         HasVotingRights = model.HasVotingRights

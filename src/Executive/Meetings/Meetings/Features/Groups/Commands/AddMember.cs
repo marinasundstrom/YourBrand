@@ -8,7 +8,7 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Groups.Command;
 
-public record AddMember(string OrganizationId, int Id, string Name, string? UserId, string Email, AttendeeRole Role, bool? HasSpeakingRights, bool? HasVotingRights) : IRequest<Result<MeetingGroupMemberDto>>
+public record AddMember(string OrganizationId, int Id, string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights) : IRequest<Result<MeetingGroupMemberDto>>
 {
     public class Validator : AbstractValidator<AddMember>
     {
@@ -31,7 +31,14 @@ public record AddMember(string OrganizationId, int Id, string Name, string? User
                 return Errors.MeetingGroups.MeetingGroupNotFound;
             }
 
-            var member = meetingGroup.AddMember(request.Name, request.Email, request.Role, request.UserId, request.HasSpeakingRights, request.HasVotingRights);
+            var role = await context.AttendeeRoles.FirstOrDefaultAsync(x => x.Id == request.Role, cancellationToken);
+
+            if (role is null)
+            {
+                throw new Exception("Invalid role");
+            }
+
+            var member = meetingGroup.AddMember(request.Name, request.Email, role, request.UserId, request.HasSpeakingRights, request.HasVotingRights);
 
             context.MeetingGroups.Update(meetingGroup);
 

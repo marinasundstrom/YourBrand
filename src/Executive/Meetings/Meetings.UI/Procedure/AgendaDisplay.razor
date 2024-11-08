@@ -2,24 +2,45 @@
     @foreach (var item in Agenda.Items)
     {
         <li class="mb-2">
-            @if (item.Id == AgendaItemId)
-            {
-                <MudText Typo="@Typo.body1" Class="mb-2"><b>@item.Order. @item.Title</b></MudText>
-
-            }
-            else
-            {
-                <MudText Typo="@Typo.body1" Class="mb-2">@item.Order. @item.Title</MudText>
-            }
+            <MudText  @key="item.Id" Typo="@Typo.body1" Class="mb-2">
+                @if (item.Id == AgendaItemId)
+                {
+                    <b>@item.Order. @item.Title</b>
+                }
+                else
+                {
+                    <text>@item.Order. @item.Title</text>
+                }
+            </MudText>
+            <ul class="ms-4">
+                @foreach (var item2 in item.SubItems)
+                {
+                    <li class="mb-2">
+                        <MudText @key="item2.Id" Typo="@Typo.body1" Class="mb-2">
+                            @if (item2.Id == AgendaSubItemId)
+                            {
+                                <b>@item2.Order. @item2.Title</b>
+                            }
+                            else
+                            {
+                                <text>@item2.Order. @item2.Title</text>
+                            }
+                        </MudText>
+                    </li>
+                }
+            </ul>
         </li>
     }
 </ul>
 
-@code 
+@code
 {
     [Parameter]
     public Agenda Agenda { get; set; }
 
     [Parameter]
     public string AgendaItemId { get; set; }
+
+    [Parameter]
+    public string? AgendaSubItemId { get; set; }
 }

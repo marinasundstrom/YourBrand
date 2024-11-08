@@ -85,7 +85,7 @@ else
                                     <MudText Typo="Typo.subtitle1"><b>Title:</b> @currentAgendaItem.Title</MudText>
                                 </MudItem>
                                 <MudItem xs="12" sm="6">
-                                    <MudText Typo="Typo.subtitle1"><b>Type:</b> @currentAgendaItem.Type</MudText>
+                                    <MudText Typo="Typo.subtitle1"><b>Type:</b> @currentAgendaItem.Type.Name</MudText>
                                 </MudItem>
                                 <MudItem xs="12" sm="6">
                                     <MudText Typo="Typo.subtitle1"><b>State:</b> @currentAgendaItem.State</MudText>
@@ -136,7 +136,7 @@ else
                     </MudCardActions>
                 </MudCard>
 
-                @if (currentAgendaItem?.Type == AgendaItemType.RollCall 
+                @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.RollCall 
                     && currentAgendaItem?.State != AgendaItemState.Voting 
                     && currentAgendaItem?.State != AgendaItemState.Completed)
                 {
@@ -163,7 +163,21 @@ else
             <MudPaper Class="pa-8 mb-4" Elevation="25">
                 <MudText Typo="@Typo.h4" GutterBottom="true">Agenda</MudText>
 
-                <AgendaDisplay Agenda="@agenda" AgendaItemId="@currentAgendaItem?.Id" />
+                @{
+                    string? currentItemId = null;
+                    string? currentSubItemId = null;
+
+                    currentItemId = currentAgendaItem?.Id;
+
+                    if(currentAgendaItem?.ParentId is not null) 
+                    {
+                        currentItemId = currentAgendaItem.ParentId;
+                        currentSubItemId = currentAgendaItem.Id;
+                    }
+                }
+                
+                <AgendaDisplay Agenda="@agenda" AgendaItemId="@currentItemId"  AgendaSubItemId="@currentSubItemId"  />
+
             </MudPaper>
             }
         </MudItem>
@@ -214,16 +228,25 @@ else
     {
         meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
         agenda = await MeetingsClient.GetMeetingAgendaAsync(organization.Id, MeetingId);
-
+ 
         currentAgendaItem = meeting.CurrentAgendaItemIndex is null ? null : agenda!.Items
-        .OrderBy(ai => ai.Order)
-        .ElementAtOrDefault(meeting.CurrentAgendaItemIndex.GetValueOrDefault());
+            .OrderBy(ai => ai.Order)
+            .ElementAtOrDefault(meeting.CurrentAgendaItemIndex.GetValueOrDefault());
+
+        if(currentAgendaItem is not null 
+            && meeting.CurrentAgendaSubItemIndex is not null
+            && currentAgendaItem.SubItems.Any()) 
+        {
+            currentAgendaItem = meeting.CurrentAgendaSubItemIndex is null ? null : currentAgendaItem!.SubItems
+                .OrderBy(ai => ai.Order)
+                .ElementAtOrDefault(meeting.CurrentAgendaSubItemIndex.GetValueOrDefault());
+        }
 
         lastItem = agenda.Items.OrderBy(ai => ai.Order).LastOrDefault()?.Id == currentAgendaItem?.Id;
 
         currentMotion = null;
 
-        if (currentAgendaItem != null)
+        if (currentAgendaItem is not null)
         {
             // Load the current motion associated with the agenda item
             if (currentAgendaItem.MotionId is not null)

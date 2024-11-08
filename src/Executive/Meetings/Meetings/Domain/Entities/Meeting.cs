@@ -46,6 +46,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
     public IReadOnlyCollection<MeetingAttendee> Attendees => _attendees;
     public Agenda? Agenda { get; set; }
     public int? CurrentAgendaItemIndex { get; private set; } = null;
+    public int? CurrentAgendaSubItemIndex { get; private set; } = null;
     public Quorum Quorum { get; set; } = new Quorum();
 
     public AttendeeAccessLevel SpeakingRightsAccessLevel { get; set; } = AttendeeAccessLevel.Participants;
@@ -98,20 +99,18 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
             throw new InvalidOperationException("Cannot start a meeting without agenda items.");
         }
 
+        /*
         if (!IsQuorumMet())
         {
             throw new InvalidOperationException("Quorum not met.");
         }
+        */
 
         StartedAt = DateTimeOffset.UtcNow;
 
         State = MeetingState.InProgress;
 
         CurrentAgendaItemIndex = 0;
-
-        // ?
-        // var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
-        // agendaItems[CurrentAgendaItemIndex.Value].State = AgendaItemState.UnderDiscussion;
     }
 
     public void CancelMeeting()
@@ -170,37 +169,117 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
             throw new InvalidOperationException("Meeting is not in progress.");
         }
 
-        var agendaItems = Agenda?.Items.OrderBy(ai => ai.Order).ToList();
-        if (agendaItems == null || CurrentAgendaItemIndex >= agendaItems.Count - 1)
+        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
+
+        // Start from the first agenda item if index is null
+        if (CurrentAgendaItemIndex == null)
         {
-            throw new InvalidOperationException("No more agenda items.");
+            CurrentAgendaItemIndex = 0;
+            return agendaItems[CurrentAgendaItemIndex.Value];
         }
 
-        var currentItem = agendaItems.ElementAt(CurrentAgendaItemIndex.GetValueOrDefault());
+        var currentItem = agendaItems[CurrentAgendaItemIndex.Value];
 
-        if (currentItem.State == AgendaItemState.Pending)
+        // Check if the current main item has sub-items
+        if (currentItem.SubItems.Any())
         {
-            throw new InvalidOperationException("Can't skip item that is in pending state.");
+            var subItems = currentItem.SubItems.OrderBy(si => si.Order).ToList();
+
+            // Process the main item first if sub-items haven't started
+            if (CurrentAgendaSubItemIndex == null)
+            {
+                CurrentAgendaSubItemIndex = 0; // Start processing sub-items after the main item
+                return currentItem; // Return the main item first
+            }
+
+            // Process each sub-item in order
+            if (CurrentAgendaSubItemIndex < subItems.Count)
+            {
+                var subItem = subItems[CurrentAgendaSubItemIndex.Value];
+                CurrentAgendaSubItemIndex++;
+
+                // After the last sub-item, reset `CurrentAgendaSubItemIndex` and increment `CurrentAgendaItemIndex`
+                if (CurrentAgendaSubItemIndex >= subItems.Count)
+                {
+                    CurrentAgendaSubItemIndex = null;
+                    CurrentAgendaItemIndex++; // Move to the next main item
+                }
+
+                return subItem;
+            }
+        }
+        else
+        {
+            // If there are no sub-items, directly move to the next main agenda item
+            if (CurrentAgendaItemIndex < agendaItems.Count - 1)
+            {
+                CurrentAgendaItemIndex++;
+                return agendaItems[CurrentAgendaItemIndex.Value];
+            }
         }
 
-        CurrentAgendaItemIndex++;
+        throw new InvalidOperationException("No more items in the agenda.");
+    }
 
-        var nextItem = agendaItems.ElementAt(CurrentAgendaItemIndex.GetValueOrDefault());
+    public void ProcessCurrentAgendaItem()
+    {
+        var currentItem = GetCurrentAgendaItem();
+        if (currentItem == null)
+        {
+            throw new InvalidOperationException("No current agenda item.");
+        }
 
-        return nextItem;
+        if (currentItem.Type == AgendaItemType.RollCall)
+        {
+            // Logic to process roll call, like marking attendees present.
+            Console.WriteLine("Processing Roll Call...");
+        }
+        else if (currentItem.Type == AgendaItemType.QuorumCheck)
+        {
+            if (!IsQuorumMet())
+                throw new InvalidOperationException("Quorum not met.");
+            Console.WriteLine("Quorum confirmed.");
+        }
+        else if (currentItem.Type == AgendaItemType.Motion)
+        {
+            // StartDiscussion();
+        }
+        else if (currentItem.Type == AgendaItemType.Election)
+        {
+            // StartVoting();
+        }
+        else
+        {
+            throw new InvalidOperationException("No handler found for this agenda item type.");
+        }
     }
 
     public AgendaItem? GetCurrentAgendaItem()
     {
-        if (CurrentAgendaItemIndex is null)
+        if (CurrentAgendaItemIndex is null || Agenda == null)
         {
             return null;
         }
 
-        return Agenda?.Items
-            .OrderBy(ai => ai.Order)
-            .ElementAtOrDefault(CurrentAgendaItemIndex.GetValueOrDefault());
+        var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
+        var currentItem = agendaItems.ElementAtOrDefault(CurrentAgendaItemIndex.Value);
+
+        if (currentItem == null)
+        {
+            return null;
+        }
+
+        // If we are processing sub-items, return the current sub-item
+        if (CurrentAgendaSubItemIndex.HasValue && CurrentAgendaSubItemIndex >= 0)
+        {
+            var subItems = currentItem.SubItems.OrderBy(si => si.Order).ToList();
+            return subItems.ElementAtOrDefault(CurrentAgendaSubItemIndex.Value - 1); // Adjust for sub-item index
+        }
+
+        // Otherwise, return the main item
+        return currentItem;
     }
+
 
     public AgendaItem? GetAgendaItem(string id)
     {
@@ -322,6 +401,58 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         }
 
         return false;
+    }
+
+    // Determines if the meeting can be started
+    public bool CanStart =>
+        State == MeetingState.Scheduled &&
+        Attendees.Any() &&
+        Agenda != null && Agenda.Items.Any();
+
+    // Determines if the meeting can move to the next agenda item
+    public bool CanMoveNext
+    {
+        get
+        {
+            if (State != MeetingState.InProgress || Agenda == null || !CurrentAgendaItemIndex.HasValue)
+            {
+                return false;
+            }
+
+            var currentItem = GetCurrentAgendaItem();
+            if (currentItem == null)
+            {
+                return false;
+            }
+
+            // Allow moving to the next item only if the current item's state allows it
+            return (currentItem.State == AgendaItemState.Completed ||
+                    currentItem.State == AgendaItemState.Skipped ||
+                    currentItem.State == AgendaItemState.Canceled) &&
+                   CurrentAgendaItemIndex < Agenda.Items.Count - 1;
+        }
+    }
+
+    // Determines if the meeting can be canceled
+    public bool CanCancel =>
+        State == MeetingState.Scheduled || State == MeetingState.InProgress;
+
+    // Determines if the meeting can be ended
+    public bool CanEnd
+    {
+        get
+        {
+            if (State != MeetingState.InProgress || Agenda == null)
+            {
+                return false;
+            }
+
+            // Check if all items are in a terminal state
+            return Agenda.Items.All(item =>
+                item.State == AgendaItemState.Completed ||
+                item.State == AgendaItemState.Skipped ||
+                item.State == AgendaItemState.Canceled);
+        }
     }
 
     public User? CreatedBy { get; set; } = null!;

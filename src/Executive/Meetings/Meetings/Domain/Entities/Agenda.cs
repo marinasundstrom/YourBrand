@@ -108,7 +108,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
         PublishedAt = DateTimeOffset.UtcNow;
     }
 
-    public IReadOnlyCollection<AgendaItem> Items => _items;
+    public IReadOnlyCollection<AgendaItem> Items => _items.Where(x => x.ParentId == null).ToList();
 
     public AgendaItem AddItem(AgendaItemType type, string title, string description)
     {
@@ -126,12 +126,16 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
 
         try
         {
-            var last = _items.OrderByDescending(x => x.Order).First();
+            var last = _items
+                .Where(x => x.ParentId == null)
+                .OrderByDescending(x => x.Order).First();
+
             order = last.Order + 1;
         }
         catch { }
 
         var item = new AgendaItem(type, title, description);
+        item.AgendaId = Id;
         item.Order = order;
         _items.Add(item);
         return item;
@@ -169,6 +173,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
         if (newOrderPosition < oldOrderPosition)
         {
             var itemsToIncrement = Items
+                .Where(x => x.ParentId == null)
                 .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
                 .ToList();
 
@@ -181,6 +186,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
         else
         {
             var itemsToDecrement = Items
+                .Where(x => x.ParentId == null)
                 .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
                 .ToList();
 

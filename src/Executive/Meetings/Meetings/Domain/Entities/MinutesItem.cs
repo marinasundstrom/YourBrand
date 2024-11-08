@@ -17,6 +17,8 @@ public class MinutesItem : Entity<MinutesItemId>, IAuditableEntity<MinutesItemId
 {
     readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
 
+    protected MinutesItem() { }
+
     public MinutesItem(AgendaItemType type, string heading, string details)
     : base(new MinutesItemId())
     {

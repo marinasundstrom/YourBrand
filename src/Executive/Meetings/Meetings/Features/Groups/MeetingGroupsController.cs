@@ -19,9 +19,9 @@ public sealed record UpdateMeetingGroupDescriptionDto(string Description);
 
 public sealed record ChangeMeetingGroupQuorumDto(int RequiredNumber);
 
-public sealed record AddMeetingGroupMemberDto(string Name, string? UserId, string Email, AttendeeRole Role, bool? HasSpeakingRights, bool? HasVotingRights);
+public sealed record AddMeetingGroupMemberDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
 
-public sealed record EditMeetingGroupMemberDto(string Name, string? UserId, string Email, AttendeeRole Role, bool? HasSpeakingRights, bool? HasVotingRights);
+public sealed record EditMeetingGroupMemberDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
 
 public sealed record ReorderMeetingGroupMemberDto(int Order);
 

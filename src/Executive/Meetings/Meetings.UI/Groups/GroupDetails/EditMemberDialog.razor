@@ -9,14 +9,8 @@
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Name"
                     For="@(() => Model.Name)" />
-                <MudSelect T="AttendeeRole" Label="Role" Variant="Variant.Outlined" @bind-Value="Model.Role"
-                    Class="mt-4">
-                    @foreach (var type in Enum.GetValues<AttendeeRole>())
-                    {
-                        <MudSelectItem T="AttendeeRole" Value="@type">@Enum.GetName(typeof(AttendeeRole), type)
-                        </MudSelectItem>
-                    }
-                </MudSelect>
+                <AttendeeRoleSelector OrganizationId="OrganizationId" Class="mt-4" Label="Role"
+                    Variant="Variant.Outlined" @bind-Value="Model.Role" For="() => Model.Role" />
                 <MudTextField Label="Email" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Email"
                     For="@(() => Model.Email)" />
                 <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey" Class="mt-4" Label="User" Variant="Variant.Outlined" @bind-Value="Model.User" For="() => Model.User" />

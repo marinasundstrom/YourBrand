@@ -8,13 +8,19 @@ public interface IApplicationDbContext
 {
     DbSet<Meeting> Meetings { get; }
 
+    DbSet<AttendeeRole> AttendeeRoles { get; }
+
     DbSet<Agenda> Agendas { get; }
+
+    DbSet<AgendaItemType> AgendaItemTypes { get; }
 
     DbSet<Entities.Minutes> Minutes { get; }
 
     DbSet<Motion> Motions { get; }
 
     DbSet<MeetingGroup> MeetingGroups { get; }
+
+    DbSet<MemberRole> MemberRoles { get; }
 
     DbSet<User> Users { get; }
 

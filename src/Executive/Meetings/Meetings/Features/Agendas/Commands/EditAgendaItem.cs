@@ -10,7 +10,7 @@ using YourBrand.Meetings.Features.Procedure;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public record EditAgendaItem(string OrganizationId, int Id, string ItemId, AgendaItemType Type, string Title, string Description, int? MotionId) : IRequest<Result<AgendaItemDto>>
+public record EditAgendaItem(string OrganizationId, int Id, string ItemId, int Type, string Title, string Description, int? MotionId) : IRequest<Result<AgendaItemDto>>
 {
     public class Validator : AbstractValidator<EditAgendaItem>
     {
@@ -40,7 +40,14 @@ public record EditAgendaItem(string OrganizationId, int Id, string ItemId, Agend
                 return Errors.Agendas.AgendaItemNotFound;
             }
 
-            agendaItem.Type = request.Type;
+            var type = AgendaItemType.AllTypes.FirstOrDefault(x => x.Id == request.Type);
+
+            if (type is null)
+            {
+                throw new Exception("Invalid type");
+            }
+
+            agendaItem.Type = type;
             agendaItem.Title = request.Title;
             agendaItem.Description = request.Description;
             agendaItem.MotionId = request.MotionId;

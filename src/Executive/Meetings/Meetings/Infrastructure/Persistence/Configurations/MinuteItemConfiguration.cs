@@ -13,6 +13,12 @@ public sealed class MinutesItemConfiguration : IEntityTypeConfiguration<MinutesI
 
         builder.HasIndex(x => x.TenantId);
 
+        builder.HasOne(x => x.Type)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Navigation(x => x.Type).AutoInclude();
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

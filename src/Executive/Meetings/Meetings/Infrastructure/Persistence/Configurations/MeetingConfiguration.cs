@@ -15,7 +15,8 @@ public sealed class MeetingConfiguration : IEntityTypeConfiguration<Meeting>
 
         builder.HasMany(x => x.Attendees)
             .WithOne()
-            .HasForeignKey(x => new { x.OrganizationId, x.MeetingId });
+            .HasForeignKey(x => new { x.OrganizationId, x.MeetingId })
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Navigation(x => x.Attendees).AutoInclude();
 

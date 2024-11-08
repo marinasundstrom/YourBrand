@@ -23,7 +23,7 @@
     </HeaderContent>
     <RowTemplate Context="attendee">
         <MudTd DataLabel="Name">@attendee.Name</MudTd>
-        <MudTd DataLabel="Role">@attendee.Role</MudTd>
+        <MudTd DataLabel="Role">@attendee.Role.Name</MudTd>
         <MudTd DataLabel="Email">@attendee.Email</MudTd>
         <MudTd DataLabel="UserId">@attendee.User?.Id</MudTd>
         <MudTd DataLabel="HasVotingRights">@(attendee.HasVotingRights.GetValueOrDefault() ? "Yes" : "No")</MudTd>

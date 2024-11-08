@@ -19,6 +19,8 @@ public class AgendaItemViewModel
 
     public Motion Motion { get; set; }
 
+    public List<AgendaItemViewModel> SubItems { get; set; }
+
     public AgendaItemViewModel Clone()
     {
         return new AgendaItemViewModel
@@ -29,7 +31,8 @@ public class AgendaItemViewModel
             Type = Type,
             State = State,
             Description = Description,
-            Motion = Motion
+            Motion = Motion,
+            SubItems = SubItems?.Select(x => x.Clone()).ToList() ?? new List<AgendaItemViewModel>()
         };
     }
 }

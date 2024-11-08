@@ -6,11 +6,17 @@ namespace YourBrand.Meetings.Features.Agendas;
 public static partial class Mappings
 {
     public static AgendaDto ToDto(this Agenda agenda) => new(agenda.Id, agenda.State, agenda.Items.Select(x => x.ToDto()));
-    public static AgendaItemDto ToDto(this AgendaItem item) => new(item.Id, item.Order, item.Type, item.Title!, item.State, item.Description,
+    public static AgendaItemDto ToDto(this AgendaItem item) => new(
+        item.Id, item.ParentId, item.Order, item.Type.ToDto(), item.Title!, item.State, item.Description,
         item.IsMandatory,
         item.DiscussionActions,
         item.VoteActions,
         item.IsDiscussionCompleted,
         item.IsVoteCompleted,
-        item.MotionId);
+        item.MotionId,
+        item.SubItems.Select(x => x.ToDto()));
+
+
+    public static AgendaItemTypeDto ToDto(this AgendaItemType type) =>
+        new(type.Id, type.Name, type.Description);
 }
