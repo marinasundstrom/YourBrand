@@ -24,9 +24,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
 {
     readonly HashSet<AgendaItem> _items = new HashSet<AgendaItem>();
 
-    protected Agenda()
-    {
-    }
+    protected Agenda() { }
 
     public Agenda(AgendaId id) : base(id)
     {
@@ -48,61 +46,27 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
     public void FinalizeContent()
     {
         if (State != AgendaState.InDraft)
-        {
             throw new InvalidOperationException("Agenda can only be finalized from the draft state.");
-        }
 
         State = AgendaState.Finalized;
-    }
-
-    public void SubmitForApproval()
-    {
-        if (State != AgendaState.Finalized)
-        {
-            throw new InvalidOperationException("Agenda must be finalized before submitting for approval.");
-        }
-
-        if (ApprovalStatus != ApprovalStatus.Pending)
-        {
-            throw new InvalidOperationException("Agenda is already submitted for approval.");
-        }
-
-        ApprovalStatus = ApprovalStatus.Pending;
     }
 
     public void Approve()
     {
         if (ApprovalStatus != ApprovalStatus.Pending)
-        {
             throw new InvalidOperationException("Agenda is not pending approval.");
-        }
 
         ApprovalStatus = ApprovalStatus.Approved;
         ApprovedAt = DateTimeOffset.UtcNow;
     }
 
-    public void Reject()
-    {
-        if (ApprovalStatus != ApprovalStatus.Pending)
-        {
-            throw new InvalidOperationException("Agenda is not pending approval.");
-        }
-
-        ApprovalStatus = ApprovalStatus.Rejected;
-        RejectedAt = DateTimeOffset.UtcNow;
-    }
-
     public void Publish()
     {
         if (State != AgendaState.Finalized)
-        {
             throw new InvalidOperationException("Agenda must be finalized before publishing.");
-        }
 
         if (ApprovalStatus != ApprovalStatus.Approved)
-        {
             throw new InvalidOperationException("Agenda must be approved before publishing.");
-        }
 
         State = AgendaState.Published;
         PublishedAt = DateTimeOffset.UtcNow;
@@ -112,98 +76,66 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
 
     public AgendaItem AddItem(AgendaItemType type, string title, string description)
     {
+        if (ApprovalStatus == ApprovalStatus.Approved)
+            throw new InvalidOperationException("Cannot modify agenda items after approval.");
+
         if (_items.Any(i => i.Title.Equals(title, StringComparison.OrdinalIgnoreCase)))
-        {
             throw new InvalidOperationException("An agenda item with the same title already exists.");
-        }
 
-        if (State != AgendaState.InDraft && State != AgendaState.Published)
-        {
-            throw new InvalidOperationException("Cannot add agenda items unless the agenda is in draft or under review.");
-        }
+        int order = _items.Where(x => x.ParentId == null)
+                          .OrderByDescending(x => x.Order)
+                          .Select(x => x.Order)
+                          .FirstOrDefault() + 1;
 
-        int order = 1;
-
-        try
-        {
-            var last = _items
-                .Where(x => x.ParentId == null)
-                .OrderByDescending(x => x.Order).First();
-
-            order = last.Order + 1;
-        }
-        catch { }
-
-        var item = new AgendaItem(type, title, description);
-        item.AgendaId = Id;
-        item.Order = order;
+        var item = new AgendaItem(type, title, description) { AgendaId = Id, Order = order };
         _items.Add(item);
         return item;
     }
 
     public bool RemoveAgendaItem(AgendaItem item)
     {
+        if (ApprovalStatus == ApprovalStatus.Approved)
+            throw new InvalidOperationException("Cannot remove agenda items after approval.");
+
         int i = 1;
-        var r = _items.Remove(item);
-        foreach (var item0 in _items)
+        var removed = _items.Remove(item);
+        foreach (var agendaItem in _items)
         {
-            item0.Order = i++;
+            agendaItem.Order = i++;
         }
-        return r;
+        return removed;
     }
 
     public bool ReorderAgendaItem(AgendaItem agendaItem, int newOrderPosition)
     {
+        if (ApprovalStatus == ApprovalStatus.Approved)
+            throw new InvalidOperationException("Cannot reorder agenda items after approval.");
+
         if (!_items.Contains(agendaItem))
-        {
             throw new InvalidOperationException("Agenda item does not exist in this agenda.");
-        }
 
         if (newOrderPosition < 1 || newOrderPosition > _items.Count)
-        {
             throw new ArgumentOutOfRangeException(nameof(newOrderPosition), "New order position is out of range.");
-        }
 
         int oldOrderPosition = agendaItem.Order;
-
         if (oldOrderPosition == newOrderPosition)
             return false;
 
-        // Flyttar objektet uppåt i listan
-        if (newOrderPosition < oldOrderPosition)
-        {
-            var itemsToIncrement = Items
-                .Where(x => x.ParentId == null)
-                .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
-                .ToList();
+        var itemsToShift = oldOrderPosition < newOrderPosition
+            ? Items.Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
+            : Items.Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition);
 
-            foreach (var item in itemsToIncrement)
-            {
-                item.Order += 1;
-            }
-        }
-        // Flyttar objektet nedåt i listan
-        else
+        foreach (var item in itemsToShift)
         {
-            var itemsToDecrement = Items
-                .Where(x => x.ParentId == null)
-                .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
-                .ToList();
-
-            foreach (var item in itemsToDecrement)
-            {
-                item.Order -= 1;
-            }
+            item.Order += oldOrderPosition < newOrderPosition ? -1 : 1;
         }
 
-        // Uppdatera order för objektet som flyttas
         agendaItem.Order = newOrderPosition;
-
         return true;
     }
 
-    public User? CreatedBy { get; set; } = null!;
-    public UserId? CreatedById { get; set; } = null!;
+    public User? CreatedBy { get; set; }
+    public UserId? CreatedById { get; set; }
     public DateTimeOffset Created { get; set; }
     public User? LastModifiedBy { get; set; }
     public UserId? LastModifiedById { get; set; }

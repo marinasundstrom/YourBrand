@@ -1,18 +1,19 @@
-using System;
-
 using MediatR;
 
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
+using YourBrand.Meetings.Features.Procedure.Command;
+using YourBrand.Meetings.Features.Procedure.Discussions;
 
-namespace YourBrand.Meetings.Features.Procedure.Elections;
+namespace YourBrand.Meetings.Features.Procedure.Attendee;
 
-public sealed record CastBallot(string OrganizationId, int Id, string CandidateId) : IRequest<Result>
+public sealed record RevokeSpeakerTime(string OrganizationId, int Id, string AgendaItemId) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, TimeProvider timeProvider) : IRequestHandler<CastBallot, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<DiscussionsHub, IDiscussionsHubClient> hubContext) : IRequestHandler<RevokeSpeakerTime, Result>
     {
-        public async Task<Result> Handle(CastBallot request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(RevokeSpeakerTime request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -37,30 +38,27 @@ public sealed record CastBallot(string OrganizationId, int Id, string CandidateI
                 return Errors.Meetings.YouHaveNoVotingRights;
             }
 
-            var agendaItem = meeting.GetCurrentAgendaItem();
+            var agendaItem = meeting.GetAgendaItem(request.AgendaItemId);
 
             if (agendaItem is null)
             {
-                return Errors.Meetings.NoActiveAgendaItem;
+                return Errors.Meetings.AgendaItemNotFound;
             }
 
-            if (agendaItem.VotingSession is null)
+            if (agendaItem.SpeakerSession is null)
             {
-                return Errors.Meetings.NoOngoingVotingSession;
+                return Errors.Meetings.NoOngoingDiscussionSession;
             }
 
-            var candidate = agendaItem.Candidates.FirstOrDefault(x => x.Id == request.CandidateId);
-
-            if (candidate is null)
-            {
-                return Errors.Meetings.CandidateNotFound;
-            }
-
-            agendaItem.ElectionSession!.CastBallot(attendee, candidate, timeProvider);
+            var id = agendaItem.SpeakerSession!.RemoveSpeaker(attendee);
 
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
+
+            await hubContext.Clients
+                .Group($"meeting-{meeting.Id}")
+                .OnSpeakerRequestRevoked(agendaItem.Id, id);
 
             return Result.Success;
         }

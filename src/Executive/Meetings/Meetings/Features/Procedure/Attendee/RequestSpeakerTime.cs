@@ -5,8 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 using YourBrand.Meetings.Features.Procedure.Command;
+using YourBrand.Meetings.Features.Procedure.Discussions;
 
-namespace YourBrand.Meetings.Features.Procedure.Discussions;
+namespace YourBrand.Meetings.Features.Procedure.Attendee;
 
 public sealed record RequestSpeakerTime(string OrganizationId, int Id, string AgendaItemId) : IRequest<Result>
 {
@@ -46,7 +47,7 @@ public sealed record RequestSpeakerTime(string OrganizationId, int Id, string Ag
 
             if (agendaItem.SpeakerSession is null)
             {
-                return Errors.Meetings.NoOngoingSpeakerSession;
+                return Errors.Meetings.NoOngoingDiscussionSession;
             }
 
             var speakerRequest = agendaItem.SpeakerSession!.AddSpeaker(attendee);

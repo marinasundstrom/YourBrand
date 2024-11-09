@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 
-namespace YourBrand.Meetings.Features.Procedure.Elections;
+namespace YourBrand.Meetings.Features.Procedure.Attendee;
 
-public sealed record NominateCandidate(string OrganizationId, int Id, string AttendeeId, string? Statement) : IRequest<Result>
+public sealed record WithdrawCandidacy(string OrganizationId, int Id, string CandidateId) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<NominateCandidate, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<WithdrawCandidacy, Result>
     {
-        public async Task<Result> Handle(NominateCandidate request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(WithdrawCandidacy request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -42,26 +42,19 @@ public sealed record NominateCandidate(string OrganizationId, int Id, string Att
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            /*
-            if (agendaItem.VotingSession is null)
+            if (agendaItem.VotingSession is null || agendaItem.VotingSession.State == VotingState.Completed)
             {
                 return Errors.Meetings.NoOngoingVotingSession;
             }
-            */
 
-            var candidateAttendee = meeting.GetAttendeeByUserId(request.AttendeeId);
+            var candidate = agendaItem.Candidates.FirstOrDefault(x => x.Id == request.CandidateId);
 
-            if (candidateAttendee is null)
-            {
-                return Errors.Meetings.NotAnAttendantOfMeeting;
-            }
-
-            if (!agendaItem.Candidates.Any(x => x.AttendeeId == candidateAttendee.Id))
+            if (candidate is null)
             {
                 return Errors.Meetings.CandidateAlreadyProposed;
             }
 
-            agendaItem!.AddCandidate(candidateAttendee, request.Statement);
+            agendaItem!.RemoveCandidate(candidate);
 
             context.Meetings.Update(meeting);
 

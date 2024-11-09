@@ -1,18 +1,18 @@
+using System;
+
 using MediatR;
 
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
-using YourBrand.Meetings.Features.Agendas;
 
-namespace YourBrand.Meetings.Features.Procedure.Voting;
+namespace YourBrand.Meetings.Features.Procedure.Attendee;
 
-public sealed record EndAgendaItemVoting(string OrganizationId, int Id) : IRequest<Result>
+public sealed record CastVote(string OrganizationId, int Id, VoteOption Option) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<EndAgendaItemVoting, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, TimeProvider timeProvider) : IRequestHandler<CastVote, Result>
     {
-        public async Task<Result> Handle(EndAgendaItemVoting request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CastVote request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -32,6 +32,11 @@ public sealed record EndAgendaItemVoting(string OrganizationId, int Id) : IReque
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
+            if (!meeting.IsAttendeeAllowedToVote(attendee))
+            {
+                return Errors.Meetings.YouHaveNoVotingRights;
+            }
+
             var agendaItem = meeting.GetCurrentAgendaItem();
 
             if (agendaItem is null)
@@ -39,20 +44,16 @@ public sealed record EndAgendaItemVoting(string OrganizationId, int Id) : IReque
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (attendee.Role != AttendeeRole.Chairperson)
+            if (agendaItem.VotingSession is null)
             {
-                return Errors.Meetings.OnlyChairpersonCanEndVotingSession;
+                return Errors.Meetings.NoOngoingVotingSession;
             }
 
-            agendaItem.EndVoting();
+            agendaItem.VotingSession!.CastVote(attendee, request.Option, timeProvider);
 
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
-
-            await hubContext.Clients
-                .Group($"meeting-{meeting.Id}")
-                .OnAgendaItemStatusChanged(agendaItem.Id);
 
             return Result.Success;
         }

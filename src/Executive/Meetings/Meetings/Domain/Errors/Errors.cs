@@ -12,9 +12,11 @@ public static partial class Errors
 
         public static readonly Error NoActiveAgendaItem = new Error(nameof(NoActiveAgendaItem), "No active agenda item", string.Empty);
 
-        public static readonly Error NoOngoingSpeakerSession = new Error(nameof(NoOngoingSpeakerSession), "No on-going speaker session", string.Empty);
+        public static readonly Error NoOngoingDiscussionSession = new Error(nameof(NoOngoingDiscussionSession), "No on-going discussion session", string.Empty);
 
         public static readonly Error NoOngoingVotingSession = new Error(nameof(NoOngoingVotingSession), "No on-going voting session", string.Empty);
+
+        public static readonly Error NoOngoingElectionSession = new Error(nameof(NoOngoingElectionSession), "No on-going discussion session", string.Empty);
 
         public static readonly Error YouAreNotAttendeeOfMeeting = new Error(nameof(YouAreNotAttendeeOfMeeting), "You are not a attendee of this meeting.", string.Empty);
 

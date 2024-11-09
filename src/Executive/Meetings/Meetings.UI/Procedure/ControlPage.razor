@@ -1,6 +1,7 @@
 @page "/meetings/{MeetingId:int}/control"
 @using YourBrand.Portal.Services
 @inject IMeetingsClient MeetingsClient
+@inject IChairmanClient ChairmanClient
 @inject IAgendasClient AgendasClient
 @inject IMotionsClient MotionsClient
 @inject IDialogService DialogService
@@ -225,7 +226,7 @@ else
             return;
         }
 
-        await MeetingsClient.ResetMeetingProcedureAsync(organization.Id, MeetingId);
+        await ChairmanClient.ResetMeetingProcedureAsync(organization.Id, MeetingId);
 
         await LoadMeetingDetails();
     }
@@ -302,13 +303,13 @@ else
 
     private async Task StartDiscussion()
     {
-        await MeetingsClient.StartAgendaItemDiscussionAsync(organization.Id, meeting.Id);
+        await ChairmanClient.StartDiscussionAsync(organization.Id, meeting.Id);
         await LoadMeetingDetails();
     }
 
     private async Task StartVoting()
     {
-        await MeetingsClient.StartAgendaItemVotingAsync(organization.Id, meeting.Id);
+        await ChairmanClient.StartVotingAsync(organization.Id, meeting.Id);
         await LoadMeetingDetails();
     }
 

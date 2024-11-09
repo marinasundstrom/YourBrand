@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
-using YourBrand.Meetings.Features.Procedure.Command;
+using YourBrand.Meetings.Features.Agendas;
 
-namespace YourBrand.Meetings.Features.Procedure.Discussions;
+namespace YourBrand.Meetings.Features.Procedure.Chairman;
 
-public sealed record RevokeSpeakerTime(string OrganizationId, int Id, string AgendaItemId) : IRequest<Result>
+public sealed record EndVoting(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<DiscussionsHub, IDiscussionsHubClient> hubContext) : IRequestHandler<RevokeSpeakerTime, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<EndVoting, Result>
     {
-        public async Task<Result> Handle(RevokeSpeakerTime request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(EndVoting request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -32,24 +32,19 @@ public sealed record RevokeSpeakerTime(string OrganizationId, int Id, string Age
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.IsAttendeeAllowedToVote(attendee))
-            {
-                return Errors.Meetings.YouHaveNoVotingRights;
-            }
-
-            var agendaItem = meeting.GetAgendaItem(request.AgendaItemId);
+            var agendaItem = meeting.GetCurrentAgendaItem();
 
             if (agendaItem is null)
             {
-                return Errors.Meetings.AgendaItemNotFound;
+                return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (agendaItem.SpeakerSession is null)
+            if (attendee.Role != AttendeeRole.Chairperson)
             {
-                return Errors.Meetings.NoOngoingSpeakerSession;
+                return Errors.Meetings.OnlyChairpersonCanEndVotingSession;
             }
 
-            var id = agendaItem.SpeakerSession!.RemoveSpeaker(attendee);
+            agendaItem.EndVoting();
 
             context.Meetings.Update(meeting);
 
@@ -57,7 +52,7 @@ public sealed record RevokeSpeakerTime(string OrganizationId, int Id, string Age
 
             await hubContext.Clients
                 .Group($"meeting-{meeting.Id}")
-                .OnSpeakerRequestRevoked(agendaItem.Id, id);
+                .OnAgendaItemStatusChanged(agendaItem.Id);
 
             return Result.Success;
         }

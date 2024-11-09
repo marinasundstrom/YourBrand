@@ -14,7 +14,9 @@ public static class ServiceExtensions
             .AddMotionsClient(configureClient, builder)
             .AddMinutesClient(configureClient, builder)
             .AddMeetingGroupsClient(configureClient, builder)
-            //.AddMemberRolesClient(configureClient, builder)
+            .AddMemberRolesClient(configureClient, builder)
+            .AddChairmanClient(configureClient, builder)
+            .AddAttendeeClient(configureClient, builder)
             .AddUsersClient(configureClient, builder);
 
         return services;
@@ -96,7 +98,6 @@ public static class ServiceExtensions
         return services;
     }
 
-    /*
     public static IServiceCollection AddMemberRolesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
@@ -107,7 +108,28 @@ public static class ServiceExtensions
 
         return services;
     }
-    */
+
+    public static IServiceCollection AddChairmanClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(ChairmanClient) + "MS", configureClient)
+            .AddTypedClient<IChairmanClient>((http, sp) => new ChairmanClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddAttendeeClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(AttendeeClient) + "MS", configureClient)
+            .AddTypedClient<IAttendeeClient>((http, sp) => new AttendeeClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
 
     public static IServiceCollection AddUsersClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {

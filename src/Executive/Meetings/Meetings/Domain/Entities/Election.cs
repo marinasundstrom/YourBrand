@@ -135,14 +135,43 @@ public sealed class Election : AggregateRoot<ElectionSessionId>, IAuditableEntit
         _ballots.Add(ballot);
     }
 
+    public void NominateCandidateDuringSession(MeetingAttendeeId attendeeId, string name, string? statement, string? position, MeetingAttendeeId nominatedBy, TimeProvider timeProvider)
+    {
+        if (State != ElectionState.Voting)
+            throw new InvalidOperationException("New candidates can only be proposed during an active voting session.");
+
+        var newCandidate = new ElectionCandidate(attendeeId, name, statement, position)
+        {
+            NominatedBy = nominatedBy,
+            NominatedAt = timeProvider.GetUtcNow(),
+            AgendaItemId = AgendaItemId,
+            ElectionSessionId = Id
+        };
+
+        _candidates.Add(newCandidate);
+    }
+
+    public void WithdrawCandidateDuringSession(ElectionCandidate candidate, TimeProvider timeProvider)
+    {
+        if (State != ElectionState.Voting)
+            throw new InvalidOperationException("Candidates can only withdraw during an active voting session.");
+
+        if (!_candidates.Contains(candidate))
+            throw new InvalidOperationException("Candidate is not part of this election.");
+
+        candidate.WithdrawnAt = timeProvider.GetUtcNow();
+    }
+
     public Dictionary<string, int> GetElectionResults()
     {
         if (State != ElectionState.ResultReady)
             throw new InvalidOperationException("The results are not ready.");
 
-        return _candidates.ToDictionary(
-            candidate => candidate.Name,
-            candidate => _ballots.Count(b => b.SelectedCandidateId == candidate.Id));
+        return _candidates
+            .Where(c => c.WithdrawnAt == null) // Exclude withdrawn candidates from results
+            .ToDictionary(
+                candidate => candidate.Name,
+                candidate => _ballots.Count(b => b.SelectedCandidateId == candidate.Id));
     }
 
     public User? CreatedBy { get; set; }

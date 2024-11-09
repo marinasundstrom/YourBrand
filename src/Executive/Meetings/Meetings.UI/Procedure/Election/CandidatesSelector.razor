@@ -1,5 +1,6 @@
 @using YourBrand.Portal.Services
 @inject IMeetingsClient MeetingsClient
+@inject IAttendeeClient AttendeeClient
 @inject IOrganizationProvider OrganizationProvider
 
 <MudGrid Class="mb-4">
@@ -57,6 +58,9 @@
 
     private async Task Confirm()
     {
-        await MeetingsClient.CastBallotAsync(OrganizationId, Meeting.Id, new CastBallot() { CandidateId = selectedCandidate.Id });
+        await AttendeeClient.CastBallotAsync(OrganizationId, Meeting.Id, new CastBallot()
+            {
+                CandidateId = selectedCandidate.Id
+            });
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 
 using YourBrand.Identity;
+using YourBrand.Meetings.Features.Procedure.Attendee;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Features.Procedure.Discussions;

@@ -4,6 +4,7 @@
 @using YourBrand.Meetings.MeetingDetails.Agenda
 @using YourBrand.Portal.Services
 @inject IMeetingsClient MeetingsClient
+@inject IChairmanClient ChairmanClient
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
@@ -407,7 +408,7 @@
 
     async Task ResetMeetingProcedure() 
     {
-        await MeetingsClient.ResetMeetingProcedureAsync(organization.Id, Id);
+        await ChairmanClient.ResetMeetingProcedureAsync(organization.Id, Id);
 
         await LoadMeeting();
 

@@ -21,4 +21,4 @@ public sealed record AgendaItemDto(
 
 public sealed record AgendaItemTypeDto(int Id, string Name, string? Description);
 
-public sealed record ElectionCandidateDto(string Id, string Name, string? NomineeId, string? Statement);
+public sealed record ElectionCandidateDto(string Id, string Name, string? AttendeeId, string? Statement);

@@ -1,16 +1,19 @@
 using MediatR;
 
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
+using YourBrand.Meetings.Features.Agendas;
+using YourBrand.Meetings.Features.Procedure.Command;
 
-namespace YourBrand.Meetings.Features.Procedure.Elections;
+namespace YourBrand.Meetings.Features.Procedure.Chairman;
 
-public sealed record WithdrawCandidature(string OrganizationId, int Id, string CandidateId) : IRequest<Result>
+public sealed record StartElection(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<WithdrawCandidature, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<StartElection, Result>
     {
-        public async Task<Result> Handle(WithdrawCandidature request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(StartElection request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -30,11 +33,6 @@ public sealed record WithdrawCandidature(string OrganizationId, int Id, string C
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.IsAttendeeAllowedToVote(attendee))
-            {
-                return Errors.Meetings.YouHaveNoVotingRights;
-            }
-
             var agendaItem = meeting.GetCurrentAgendaItem();
 
             if (agendaItem is null)
@@ -42,25 +40,20 @@ public sealed record WithdrawCandidature(string OrganizationId, int Id, string C
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            /*
-            if (agendaItem.VotingSession is null)
+            if (attendee.Role != AttendeeRole.Chairperson)
             {
-                return Errors.Meetings.NoOngoingVotingSession;
-            }
-            */
-
-            var candidate = agendaItem.Candidates.FirstOrDefault(x => x.Id == request.CandidateId);
-
-            if (candidate is null)
-            {
-                return Errors.Meetings.CandidateAlreadyProposed;
+                return Errors.Meetings.OnlyChairpersonCanStartVotingSession;
             }
 
-            agendaItem!.RemoveCandidate(candidate);
+            agendaItem.StartElection();
 
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
+
+            await hubContext.Clients
+                .Group($"meeting-{meeting.Id}")
+                .OnAgendaItemStatusChanged(agendaItem.Id);
 
             return Result.Success;
         }

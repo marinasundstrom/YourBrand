@@ -283,7 +283,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/title:
+  /v1/Meetings/{id}/Title:
     put:
       tags:
       - Meetings
@@ -330,7 +330,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/description:
+  /v1/Meetings/{id}/Description:
     put:
       tags:
       - Meetings
@@ -377,7 +377,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/location:
+  /v1/Meetings/{id}/Location:
     put:
       tags:
       - Meetings
@@ -424,7 +424,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/scheduledDate:
+  /v1/Meetings/{id}/ScheduledDate:
     put:
       tags:
       - Meetings
@@ -471,7 +471,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/quorum:
+  /v1/Meetings/{id}/Quorum:
     put:
       tags:
       - Meetings
@@ -518,7 +518,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/state:
+  /v1/Meetings/{id}/State:
     put:
       tags:
       - Meetings
@@ -565,7 +565,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/attendees:
+  /v1/Meetings/{id}/Attendees:
     post:
       tags:
       - Meetings
@@ -612,7 +612,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/attendees/fromgroup:
+  /v1/Meetings/{id}/Attendees/FromGroup:
     post:
       tags:
       - Meetings
@@ -659,7 +659,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/attendees/{attendeeId}:
+  /v1/Meetings/{id}/Attendees/{attendeeId}:
     put:
       tags:
       - Meetings
@@ -752,7 +752,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/attendees/{attendeeId}/IsPresent:
+  /v1/Meetings/{id}/Attendees/{attendeeId}/IsPresent:
     put:
       tags:
       - Meetings
@@ -1062,317 +1062,6 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/Agenda/Discussion/Start:
-    post:
-      tags:
-      - Meetings
-      operationId: Meetings_StartAgendaItemDiscussion
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int32
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
-  /v1/Meetings/{id}/Agenda/Discussion/End:
-    post:
-      tags:
-      - Meetings
-      operationId: Meetings_EndAgendaItemDiscussion
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int32
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
-  /v1/Meetings/{id}/Agenda/Voting/Start:
-    post:
-      tags:
-      - Meetings
-      operationId: Meetings_StartAgendaItemVoting
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int32
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
-  /v1/Meetings/{id}/Agenda/Voting/CastBallot:
-    post:
-      tags:
-      - Meetings
-      operationId: Meetings_CastBallot
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int32
-        x-position: 2
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CastBallot'
-        required: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
-  /v1/Meetings/{id}/Agenda/Voting/CastVote:
-    post:
-      tags:
-      - Meetings
-      operationId: Meetings_CastVote
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int32
-        x-position: 2
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CastVote'
-        required: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
-  /v1/Meetings/{id}/Agenda/Voting/End:
-    post:
-      tags:
-      - Meetings
-      operationId: Meetings_EndAgendaItemVoting
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int32
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
-  /v1/Meetings/{id}/Agenda/Candidate:
-    post:
-      tags:
-      - Meetings
-      operationId: Meetings_ProposeCandidate
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int32
-        x-position: 2
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProposeCandidate'
-        required: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
-    delete:
-      tags:
-      - Meetings
-      operationId: Meetings_WithdrawCandidature
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int32
-        x-position: 2
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WithdrawCandidature'
-        required: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
   /v1/Meetings/{id}/Cancel:
     post:
       tags:
@@ -1443,153 +1132,59 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Meetings/{id}/Procedure/Reset:
-    post:
-      tags:
-      - Meetings
-      operationId: Meetings_ResetMeetingProcedure
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int32
-        x-position: 2
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
-  /v1/Meetings/{id}/speakers:
+  /v1/MemberRoles:
     get:
       tags:
-      - Meetings
-      operationId: Meetings_GetSpeakerSession
+      - MemberRoles
+      operationId: MemberRoles_GetMemberRoles
       parameters:
       - name: organizationId
         in: query
         schema:
           type: string
         x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int32
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SpeakerSession'
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
-  /v1/Meetings/{id}/speakers/request:
-    post:
-      tags:
-      - Meetings
-      operationId: Meetings_RequestSpeakerTime
-      parameters:
-      - name: organizationId
+      - name: page
         in: query
         schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
         schema:
           type: integer
           format: int32
-        x-position: 2
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RequestSpeakerTime'
-        required: true
+          default: 10
         x-position: 3
-      responses:
-        200:
-          description: ''
-        404:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-        default:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-      security:
-      - JWT: []
-  /v1/Meetings/{id}/speakers/revoke:
-    post:
-      tags:
-      - Meetings
-      operationId: Meetings_RevokeSpeakerTime
-      parameters:
-      - name: organizationId
+      - name: searchTerm
         in: query
         schema:
           type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
         schema:
-          type: integer
-          format: int32
-        x-position: 2
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RevokeSpeakerTime'
-        required: true
-        x-position: 3
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
       responses:
         200:
           description: ''
-        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfAttendeeRole'
+        429:
           description: ''
           content:
             application/json:
@@ -1719,6 +1314,625 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+  /v1/Meetings/{id}/Voting:
+    get:
+      tags:
+      - Voting
+      operationId: Voting_GetVotingSession
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VotingSession'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Elections:
+    get:
+      tags:
+      - Elections
+      operationId: Elections_GetElectionSession
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ElectionSession'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Discussions:
+    get:
+      tags:
+      - Discussions
+      operationId: Discussions_GetDiscussion
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpeakerSession'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Discussions/Start:
+    post:
+      tags:
+      - Chairman
+      operationId: Chairman_StartDiscussion
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Discussions/End:
+    post:
+      tags:
+      - Chairman
+      operationId: Chairman_EndDiscussion
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Elections/Start:
+    post:
+      tags:
+      - Chairman
+      operationId: Chairman_StartElection
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Elections/End:
+    post:
+      tags:
+      - Chairman
+      operationId: Chairman_EndElection
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Procedure/Reset:
+    post:
+      tags:
+      - Chairman
+      operationId: Chairman_ResetMeetingProcedure
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Voting/Start:
+    post:
+      tags:
+      - Chairman
+      operationId: Chairman_StartVoting
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Voting/End:
+    post:
+      tags:
+      - Chairman
+      operationId: Chairman_EndVoting
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Discussions/Speakers/RequestSpeakerTime:
+    post:
+      tags:
+      - Attendee
+      operationId: Attendee_RequestSpeakerTime
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestSpeakerTime'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Discussions/Speakers/RevokeSpeakerTime:
+    post:
+      tags:
+      - Attendee
+      operationId: Attendee_RevokeSpeakerTime
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevokeSpeakerTime'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Elections/CastBallot:
+    post:
+      tags:
+      - Attendee
+      operationId: Attendee_CastBallot
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastBallot'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Elections/Candidate:
+    post:
+      tags:
+      - Attendee
+      operationId: Attendee_NominateCandidate
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProposeCandidate'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Attendee
+      operationId: Attendee_WithdrawCandidacy
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WithdrawCandidature'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Voting/CastVote:
+    post:
+      tags:
+      - Attendee
+      operationId: Attendee_CastVote
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastVote'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Organizations:
     get:
       tags:
@@ -3854,80 +4068,12 @@ components:
           type: string
         name:
           type: string
-        nomineeId:
+        attendeeId:
           type: string
           nullable: true
         statement:
           type: string
           nullable: true
-    CastBallot:
-      type: object
-      additionalProperties: false
-      properties:
-        candidateId:
-          type: string
-    CastVote:
-      type: object
-      additionalProperties: false
-      properties:
-        option:
-          $ref: '#/components/schemas/VoteOption'
-    VoteOption:
-      type: integer
-      description: ''
-      x-enumNames:
-      - For
-      - Against
-      - Abstain
-      enum:
-      - 0
-      - 1
-      - 2
-    ProposeCandidate:
-      type: object
-      additionalProperties: false
-      properties:
-        attendeeId:
-          type: string
-        statement:
-          type: string
-          nullable: true
-    WithdrawCandidature:
-      type: object
-      additionalProperties: false
-      properties:
-        candidateId:
-          type: string
-    SpeakerSession:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        speakerQueue:
-          type: array
-          items:
-            $ref: '#/components/schemas/SpeakerRequest'
-    SpeakerRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        attendeeId:
-          type: string
-    RequestSpeakerTime:
-      type: object
-      additionalProperties: false
-      properties:
-        agendaItemId:
-          type: string
-    RevokeSpeakerTime:
-      type: object
-      additionalProperties: false
-      properties:
-        agendaItemId:
-          type: string
     PagedResultOfUser:
       type: object
       additionalProperties: false
@@ -3963,6 +4109,86 @@ components:
           type: string
         email:
           type: string
+    VotingSession:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+    ElectionSession:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+    SpeakerSession:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        speakerQueue:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpeakerRequest'
+    SpeakerRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        attendeeId:
+          type: string
+    RequestSpeakerTime:
+      type: object
+      additionalProperties: false
+      properties:
+        agendaItemId:
+          type: string
+    RevokeSpeakerTime:
+      type: object
+      additionalProperties: false
+      properties:
+        agendaItemId:
+          type: string
+    CastBallot:
+      type: object
+      additionalProperties: false
+      properties:
+        candidateId:
+          type: string
+    ProposeCandidate:
+      type: object
+      additionalProperties: false
+      properties:
+        attendeeId:
+          type: string
+        statement:
+          type: string
+          nullable: true
+    WithdrawCandidature:
+      type: object
+      additionalProperties: false
+      properties:
+        candidateId:
+          type: string
+    CastVote:
+      type: object
+      additionalProperties: false
+      properties:
+        option:
+          $ref: '#/components/schemas/VoteOption'
+    VoteOption:
+      type: integer
+      description: ''
+      x-enumNames:
+      - For
+      - Against
+      - Abstain
+      enum:
+      - 0
+      - 1
+      - 2
     PagedResultOfOrganization:
       type: object
       additionalProperties: false
