@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
 using YourBrand.Meetings.Features.Agendas;
 
-namespace YourBrand.Meetings.Features.Procedure.Voting;
+namespace YourBrand.Meetings.Features.Procedure.Discussions;
 
-public sealed record EndAgendaItemDiscussion(string OrganizationId, int Id) : IRequest<Result>
+public sealed record StartAgendaItemDiscussion(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<EndAgendaItemDiscussion, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<StartAgendaItemDiscussion, Result>
     {
-        public async Task<Result> Handle(EndAgendaItemDiscussion request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(StartAgendaItemDiscussion request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -41,10 +41,10 @@ public sealed record EndAgendaItemDiscussion(string OrganizationId, int Id) : IR
 
             if (attendee.Role != AttendeeRole.Chairperson)
             {
-                return Errors.Meetings.OnlyChairpersonCanEndDiscussion;
+                return Errors.Meetings.OnlyChairpersonCanStartDiscussion;
             }
 
-            agendaItem.EndDiscussion();
+            agendaItem.StartDiscussion();
 
             context.Meetings.Update(meeting);
 

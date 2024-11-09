@@ -14,12 +14,6 @@ public sealed class VoteConfiguration : IEntityTypeConfiguration<Vote>
 
         builder.HasIndex(x => x.TenantId);
 
-        builder.HasOne(x => x.SelectedCandidate)
-            .WithOne()
-            .HasForeignKey<Vote>(x => new { x.OrganizationId, x.SelectedCandidateId });
-
-        builder.Navigation(x => x.SelectedCandidate).AutoInclude();
-
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

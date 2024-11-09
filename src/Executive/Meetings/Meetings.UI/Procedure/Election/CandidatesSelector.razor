@@ -1,0 +1,62 @@
+@using YourBrand.Portal.Services
+@inject IMeetingsClient MeetingsClient
+@inject IOrganizationProvider OrganizationProvider
+
+<MudGrid Class="mb-4">
+    @foreach (var candidate in AgendaItem.Candidates)
+    {
+        <MudItem xs="12" sm="12" md="6" lg="4">
+            <a href="#" @onclick="() => SelectCandidate(candidate)" @onclick:preventDefault>
+                <MudCard Class="@ItemStyle(candidate)">
+                    <MudCardHeader>
+                        @candidate.Name
+                    </MudCardHeader>
+                    <MudCardContent>
+                        
+                    </MudCardContent>
+                    <MudCardActions>
+
+                    </MudCardActions>
+                </MudCard>
+            </a>
+        </MudItem>
+    }
+</MudGrid>
+
+<MudButton Variant="@Variant.Filled" Disabled="@(selectedCandidate is null)" OnClick="async () => await Confirm()">Confirm
+</MudButton>
+
+<style>
+    .selected {
+        border: 1px solid black;
+    }
+</style>
+
+@code 
+{
+    [Parameter]
+    public string OrganizationId { get; set; }
+
+    [Parameter]
+    public Meeting Meeting { get; set; }
+
+    [Parameter]
+    public AgendaItem AgendaItem { get; set; }
+
+    ElectionCandidate? selectedCandidate = null;
+
+    private string ItemStyle(ElectionCandidate candidate)
+    {
+        return candidate == selectedCandidate ? "selected" : string.Empty;
+    }
+
+    private void SelectCandidate(ElectionCandidate candidate)
+    {
+        selectedCandidate = candidate;
+    }
+
+    private async Task Confirm()
+    {
+        await MeetingsClient.CastBallotAsync(OrganizationId, Meeting.Id, new CastBallot() { CandidateId = selectedCandidate.Id });
+    }
+}

@@ -1,16 +1,18 @@
+using System;
+
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 
-namespace YourBrand.Meetings.Features.Procedure.Voting;
+namespace YourBrand.Meetings.Features.Procedure.Elections;
 
-public sealed record WithdrawCandidature(string OrganizationId, int Id, string CandidateId) : IRequest<Result>
+public sealed record CastBallot(string OrganizationId, int Id, string CandidateId) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<WithdrawCandidature, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, TimeProvider timeProvider) : IRequestHandler<CastBallot, Result>
     {
-        public async Task<Result> Handle(WithdrawCandidature request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CastBallot request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -42,21 +44,19 @@ public sealed record WithdrawCandidature(string OrganizationId, int Id, string C
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            /*
             if (agendaItem.VotingSession is null)
             {
                 return Errors.Meetings.NoOngoingVotingSession;
             }
-            */
 
             var candidate = agendaItem.Candidates.FirstOrDefault(x => x.Id == request.CandidateId);
 
             if (candidate is null)
             {
-                return Errors.Meetings.CandidateAlreadyProposed;
+                return Errors.Meetings.CandidateNotFound;
             }
 
-            agendaItem!.WithdrawCandidate(candidate);
+            agendaItem.ElectionSession!.CastBallot(attendee, candidate, timeProvider);
 
             context.Meetings.Update(meeting);
 

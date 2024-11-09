@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 
-namespace YourBrand.Meetings.Features.Procedure.Voting;
+namespace YourBrand.Meetings.Features.Procedure.Elections;
 
-public sealed record ProposeCandidate(string OrganizationId, int Id, string AttendeeId, string? Statement) : IRequest<Result>
+public sealed record WithdrawCandidature(string OrganizationId, int Id, string CandidateId) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<ProposeCandidate, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<WithdrawCandidature, Result>
     {
-        public async Task<Result> Handle(ProposeCandidate request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(WithdrawCandidature request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -49,19 +49,14 @@ public sealed record ProposeCandidate(string OrganizationId, int Id, string Atte
             }
             */
 
-            var candidateAttendee = meeting.GetAttendeeByUserId(request.AttendeeId);
+            var candidate = agendaItem.Candidates.FirstOrDefault(x => x.Id == request.CandidateId);
 
-            if (candidateAttendee is null)
-            {
-                return Errors.Meetings.NotAnAttendantOfMeeting;
-            }
-
-            if (!agendaItem.Candidates.Any(x => x.NomineeId == candidateAttendee.Id))
+            if (candidate is null)
             {
                 return Errors.Meetings.CandidateAlreadyProposed;
             }
 
-            agendaItem!.AddCandidate(candidateAttendee, request.Statement);
+            agendaItem!.RemoveCandidate(candidate);
 
             context.Meetings.Update(meeting);
 

@@ -1167,6 +1167,92 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Meetings/{id}/Agenda/Voting/CastBallot:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_CastBallot
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastBallot'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Agenda/Voting/CastVote:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_CastVote
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CastVote'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Agenda/Voting/End:
     post:
       tags:
@@ -3774,6 +3860,29 @@ components:
         statement:
           type: string
           nullable: true
+    CastBallot:
+      type: object
+      additionalProperties: false
+      properties:
+        candidateId:
+          type: string
+    CastVote:
+      type: object
+      additionalProperties: false
+      properties:
+        option:
+          $ref: '#/components/schemas/VoteOption'
+    VoteOption:
+      type: integer
+      description: ''
+      x-enumNames:
+      - For
+      - Against
+      - Abstain
+      enum:
+      - 0
+      - 1
+      - 2
     ProposeCandidate:
       type: object
       additionalProperties: false

@@ -34,20 +34,30 @@ public sealed class ApplicationDbContext(
     {
         configurationBuilder.Properties<AgendaId>().HaveConversion<AgendaIdConverter>();
         configurationBuilder.Properties<AgendaItemId>().HaveConversion<AgendaItemIdConverter>();
+
         configurationBuilder.Properties<MeetingId>().HaveConversion<MeetingIdConverter>();
         configurationBuilder.Properties<MeetingAttendeeId>().HaveConversion<MeetingAttendeeIdConverter>();
+
         configurationBuilder.Properties<DebateId>().HaveConversion<DebateIdConverter>();
         configurationBuilder.Properties<DebateEntryId>().HaveConversion<DebateEntryIdConverter>();
+
         configurationBuilder.Properties<MotionId>().HaveConversion<MotionIdConverter>();
         configurationBuilder.Properties<MotionOperativeClauseId>().HaveConversion<OperativeClauseIdConverter>();
+
         configurationBuilder.Properties<VotingSessionId>().HaveConversion<VotingSessionIdConverter>();
-        configurationBuilder.Properties<ElectionCandidateId>().HaveConversion<ElectionCandidateIdConverter>();
         configurationBuilder.Properties<VoteId>().HaveConversion<VoteIdConverter>();
+
+        configurationBuilder.Properties<ElectionSessionId>().HaveConversion<ElectionSessionIdConverter>();
+        configurationBuilder.Properties<ElectionCandidateId>().HaveConversion<ElectionCandidateIdConverter>();
+        configurationBuilder.Properties<BallotId>().HaveConversion<BallotIdConverter>();
+
         configurationBuilder.Properties<SpeakerSessionId>().HaveConversion<SpeakerSessionIdConverter>();
         configurationBuilder.Properties<SpeakerRequestId>().HaveConversion<SpeakerRequestIdConverter>();
+
         configurationBuilder.Properties<MinutesId>().HaveConversion<MinutesIdConverter>();
         configurationBuilder.Properties<MinutesAttendeeId>().HaveConversion<MinutesAttendeeIdConverter>();
         configurationBuilder.Properties<MinutesItemId>().HaveConversion<MinutesItemIdConverter>();
+        
         configurationBuilder.Properties<MeetingGroupId>().HaveConversion<MeetingGroupIdConverter>();
         configurationBuilder.Properties<MeetingGroupMemberId>().HaveConversion<MeetingGroupMemberIdConverter>();
 

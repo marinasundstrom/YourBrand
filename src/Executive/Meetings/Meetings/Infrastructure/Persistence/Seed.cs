@@ -532,8 +532,8 @@ public static class Seed
 
         agenda.AddItem(
             type: AgendaItemType.Election,
-            title: "Election of Financial Auditor",
-            description: "Election of a financial auditor as per organizational bylaws."
+            title: "Election of Auditor",
+            description: "Election of an auditor as per organizational bylaws."
         );
 
         // Reviewing and addressing past business and new issues

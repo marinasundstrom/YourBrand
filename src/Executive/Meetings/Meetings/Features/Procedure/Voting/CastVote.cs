@@ -1,3 +1,5 @@
+using System;
+
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +10,7 @@ namespace YourBrand.Meetings.Features.Procedure.Voting;
 
 public sealed record CastVote(string OrganizationId, int Id, VoteOption Option) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<CastVote, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, TimeProvider timeProvider) : IRequestHandler<CastVote, Result>
     {
         public async Task<Result> Handle(CastVote request, CancellationToken cancellationToken)
         {
@@ -47,13 +49,7 @@ public sealed record CastVote(string OrganizationId, int Id, VoteOption Option) 
                 return Errors.Meetings.NoOngoingVotingSession;
             }
 
-            agendaItem.VotingSession!.AddVote(new Vote
-            {
-                OrganizationId = request.OrganizationId,
-                VoterId = attendee.Id,
-                Option = request.Option,
-                TimeCast = DateTimeOffset.UtcNow
-            });
+            agendaItem.VotingSession!.CastVote(attendee, request.Option, timeProvider);
 
             context.Meetings.Update(meeting);
 

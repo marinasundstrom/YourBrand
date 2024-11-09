@@ -10,6 +10,8 @@ using YourBrand.Meetings.Features;
 using YourBrand.Meetings.Features.Agendas;
 using YourBrand.Meetings.Features.Command;
 using YourBrand.Meetings.Features.Procedure.Command;
+using YourBrand.Meetings.Features.Procedure.Discussions;
+using YourBrand.Meetings.Features.Procedure.Elections;
 using YourBrand.Meetings.Features.Procedure.Voting;
 using YourBrand.Meetings.Features.Queries;
 using YourBrand.Meetings.Models;
@@ -285,6 +287,32 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
         return this.HandleResult(result);
     }
 
+    public record CastBallotDto(string CandidateId);
+
+    public record CastVoteDto(VoteOption Option);
+
+    [HttpPost("{id}/Agenda/Voting/CastBallot")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> CastBallot([FromQuery] string organizationId, int id, CastBallotDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new CastBallot(organizationId, id, request.CandidateId), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+
+    [HttpPost("{id}/Agenda/Voting/CastVote")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> CastVote([FromQuery] string organizationId, int id, CastVoteDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new CastVote(organizationId, id, request.Option), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+
     [HttpPost("{id}/Agenda/Voting/End")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
@@ -299,9 +327,9 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> ProposeCandidate([FromQuery] string organizationId, int id, ProposeCandidateDto request, CancellationToken cancellationToken)
+    public async Task<ActionResult> NominateCandidate([FromQuery] string organizationId, int id, ProposeCandidateDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new ProposeCandidate(organizationId, id, request.AttendeeId, request.Statement), cancellationToken);
+        var result = await mediator.Send(new NominateCandidate(organizationId, id, request.AttendeeId, request.Statement), cancellationToken);
         return this.HandleResult(result);
     }
 

@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 
-namespace YourBrand.Meetings.Features.Procedure.Voting;
+namespace YourBrand.Meetings.Features.Procedure.Elections;
 
-public sealed record CastBallot(string OrganizationId, int Id, string CandidateId) : IRequest<Result>
+public sealed record NominateCandidate(string OrganizationId, int Id, string AttendeeId, string? Statement) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<CastBallot, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<NominateCandidate, Result>
     {
-        public async Task<Result> Handle(CastBallot request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(NominateCandidate request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -42,18 +42,26 @@ public sealed record CastBallot(string OrganizationId, int Id, string CandidateI
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
+            /*
             if (agendaItem.VotingSession is null)
             {
                 return Errors.Meetings.NoOngoingVotingSession;
             }
+            */
 
-            agendaItem.VotingSession!.AddVote(new Vote
+            var candidateAttendee = meeting.GetAttendeeByUserId(request.AttendeeId);
+
+            if (candidateAttendee is null)
             {
-                OrganizationId = request.OrganizationId,
-                VoterId = attendee.Id,
-                SelectedCandidateId = request.CandidateId,
-                TimeCast = DateTimeOffset.UtcNow
-            });
+                return Errors.Meetings.NotAnAttendantOfMeeting;
+            }
+
+            if (!agendaItem.Candidates.Any(x => x.AttendeeId == candidateAttendee.Id))
+            {
+                return Errors.Meetings.CandidateAlreadyProposed;
+            }
+
+            agendaItem!.AddCandidate(candidateAttendee, request.Statement);
 
             context.Meetings.Update(meeting);
 

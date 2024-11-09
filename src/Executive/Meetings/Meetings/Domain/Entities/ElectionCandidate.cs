@@ -11,22 +11,34 @@ public sealed class ElectionCandidate : Entity<ElectionCandidateId>, IAuditableE
     public ElectionCandidate()
         : base(new ElectionCandidateId())
     {
-
     }
 
-    public ElectionCandidate(MeetingAttendeeId id, string? statement)
+    public ElectionCandidate(MeetingAttendeeId id, string name, string? statement, string? position = null)
         : base(new ElectionCandidateId())
     {
-        NomineeId = id;
+        AttendeeId = id;
+        Name = name;
         Statement = statement;
+        Position = position;
     }
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
-    public AgendaItemId AgendaItemId { get; set; }
+    public AgendaItemId? AgendaItemId { get; set; }
+    public ElectionSessionId? ElectionSessionId { get; set; }
 
-    public MeetingAttendeeId NomineeId { get; set; }
+    public string Name { get; set; }
+    public string? Position { get; set; }
+    public string? Description { get; set; }
+    public MeetingAttendeeId AttendeeId { get; set; }
+
+    public MeetingAttendeeId? NominatedBy { get; set; }
+    public DateTimeOffset? NominatedAt { get; set; }
     public string? Statement { get; set; }
+
+    public DateTimeOffset? WithdrawnAt { get; set; }
+
+    public bool IsPreMeetingNomination { get; set; } // Tracks if the nomination is pre-meeting
 
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;

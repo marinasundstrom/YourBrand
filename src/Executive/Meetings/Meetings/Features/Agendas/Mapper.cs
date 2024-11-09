@@ -22,5 +22,5 @@ public static partial class Mappings
         new(type.Id, type.Name, type.Description);
 
     public static ElectionCandidateDto ToDto(this ElectionCandidate candidate) =>
-        new(candidate.Id, $"Attendee {candidate.NomineeId}", candidate.NomineeId, candidate.Statement);
+        new(candidate.Id, candidate.Name, candidate.AttendeeId, candidate.Statement);
 }

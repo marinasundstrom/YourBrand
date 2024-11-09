@@ -82,7 +82,8 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     // public AgendaItemId DependsOnItem { get; set; }
 
     public SpeakerSession? SpeakerSession { get; set; }
-    public VotingSession? VotingSession { get; set; }
+    public Voting? VotingSession { get; set; }
+    public Election? ElectionSession { get; set; }
 
     public DateTimeOffset? DiscussionStartedAt { get; private set; }
     public DateTimeOffset? DiscussionEndedAt { get; private set; }
@@ -94,41 +95,30 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     // For election
     public string? Position { get; set; }
+    
     public IReadOnlyCollection<ElectionCandidate> Candidates => _candidates;
 
     public void AddCandidate(MeetingAttendee candidate, string? statement)
     {
         if (candidate == null)
-        {
             throw new ArgumentNullException(nameof(candidate));
-        }
 
-        /*
-        if (string.IsNullOrWhiteSpace(statement))
-        {
-            throw new ArgumentException("Candidate statement is required.", nameof(statement));
-        }
-        */
+        if (State != AgendaItemState.Pending)
+            throw new InvalidOperationException("Candidates can only be managed when the agenda item is pending.");
 
-        if (Type != AgendaItemType.Election)
-        {
-            throw new InvalidOperationException("Candidates can only be added to election agenda items.");
-        }
-
-        if (_candidates.Any(v => v.NomineeId == candidate.Id))
-        {
+        if (_candidates.Any(c => c.AttendeeId == candidate.Id))
             throw new InvalidOperationException("Attendee is already a candidate.");
-        }
 
-        _candidates.Add(new ElectionCandidate(candidate.Id, statement));
+        _candidates.Add(new ElectionCandidate(candidate.Id, candidate.Name, statement));
     }
 
-    public void WithdrawCandidate(ElectionCandidate candidate)
+    public void RemoveCandidate(ElectionCandidate candidate)
     {
+        if (State != AgendaItemState.Pending)
+            throw new InvalidOperationException("Candidates can only be managed when the agenda item is pending.");
+
         if (!_candidates.Contains(candidate))
-        {
             throw new InvalidOperationException("Is not a candidate.");
-        }
 
         _candidates.Remove(candidate);
     }
@@ -177,48 +167,69 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     public void StartVoting()
     {
         if (State != AgendaItemState.UnderDiscussion)
-        {
             throw new InvalidOperationException("Cannot start voting.");
-        }
 
-        if (DiscussionActions == DiscussionActions.Required && !IsDiscussionCompleted)
+        if (VotingSession != null)
+            throw new InvalidOperationException("Voting session already in progress.");
+
+        VotingSession = new Voting(VotingType.SimpleMajority)
         {
-            throw new InvalidOperationException("Discussion must be completed before voting can start.");
-        }
-
-        if (State == AgendaItemState.Completed || State == AgendaItemState.Canceled || State == AgendaItemState.Skipped)
-        {
-            throw new InvalidOperationException("Cannot perform this action on an agenda item that is completed, canceled, or skipped.");
-        }
-
-        if (State == AgendaItemState.Postponed || State == AgendaItemState.Canceled)
-        {
-            throw new InvalidOperationException("Cannot perform this action on an agenda item that is postponed or canceled.");
-        }
-
-        if (IsVoteCompleted)
-        {
-            throw new InvalidOperationException("Already had voting.");
-        }
-
-        VotingSession = new VotingSession(Type.Id switch
-        {
-            16 => VotingType.Motion,       // AgendaItemType.Motion Id
-            20 => VotingType.Election,     // AgendaItemType.Election Id
-            _ => throw new InvalidOperationException("Invalid agenda item type")
-        });
-
-        VotingSession.OrganizationId = OrganizationId;
-
+            OrganizationId = OrganizationId,
+            TenantId = TenantId
+        };
         VotingStartedAt = DateTimeOffset.UtcNow;
-
         State = AgendaItemState.Voting;
     }
 
     public void EndVoting()
     {
-        IsVoteCompleted = true;
+        if (VotingSession == null)
+            throw new InvalidOperationException("No active voting session.");
+
+        VotingSession.TallyVotes();
         VotingEndedAt = DateTimeOffset.UtcNow;
+        IsVoteCompleted = true;
+        State = AgendaItemState.Completed;
+    }
+
+    public Voting? GetCurrentVotingSession()
+    {
+        return VotingSession?.EndTime == null ? VotingSession : null;
+    }
+
+    public void StartElection()
+    {
+        if (State != AgendaItemState.UnderDiscussion)
+            throw new InvalidOperationException("Cannot start an election.");
+
+        if (ElectionSession != null)
+            throw new InvalidOperationException("Election already in progress.");
+
+        // Pass current candidates to the election session
+        ElectionSession = new Election(_candidates)
+        {
+            OrganizationId = OrganizationId,
+            TenantId = TenantId
+        };
+
+        VotingStartedAt = DateTimeOffset.UtcNow;
+        State = AgendaItemState.Voting;
+    }
+
+    public void EndElection()
+    {
+        if (ElectionSession == null)
+            throw new InvalidOperationException("No active election session.");
+
+        ElectionSession.TallyBallots();
+        VotingEndedAt = DateTimeOffset.UtcNow;
+        IsVoteCompleted = true;
+        State = AgendaItemState.Completed;
+    }
+
+    public Election? GetCurrentElection()
+    {
+        return ElectionSession?.EndTime == null ? ElectionSession : null;
     }
 
     public void Complete()

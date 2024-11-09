@@ -1,6 +1,7 @@
 @page "/meetings/{MeetingId:int}/attendee"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.SignalR.Client
+@using YourBrand.Meetings.Procedure.Election
 @using YourBrand.Portal.Services
 @using YourBrand.Meetings
 @attribute [Authorize]
@@ -57,6 +58,65 @@ else
                 }
             </MudPaper>
 
+        @if (agendaItem?.State == AgendaItemState.UnderDiscussion)
+        {
+            <MudPaper Elevation="25" Class="pa-4 mb-4">
+                <MudText Typo="@Typo.h4" GutterBottom="true">Discussions</MudText>
+
+                <MudButton Variant="Variant.Filled" Class="me-2"
+                    OnClick="async () => await hubProxy.RequestSpeakerTime(agendaItem.Id)">Request
+                    to speak</MudButton>
+
+                <MudButton Variant="Variant.Filled" OnClick="async () => await hubProxy.RevokeSpeakerTime(agendaItem.Id)">Revoke
+                </MudButton>
+
+            </MudPaper>
+
+            <MudPaper Elevation="25" Class="pa-4 mb-4">
+
+                <MudText Typo="@Typo.h4" GutterBottom="true">Speakers queue</MudText>
+
+                <SpeakerDisplay MeetingId="@MeetingId" />
+
+            </MudPaper>
+        }
+
+        @if (agendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election
+           && agendaItem?.State != AgendaItemState.Voting)
+        {
+                <MudPaper Elevation="25" Class="pa-4 mb-4">
+
+                    <MudText Typo="@Typo.h4" GutterBottom="true">Candidates</MudText>
+
+                    <CandidatesView Meeting="meeting" AgendaItem="agendaItem" />
+
+                </MudPaper>
+        }
+
+        @if (agendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
+        && agendaItem?.State == AgendaItemState.Voting)
+        {
+            <MudPaper Elevation="25" Class="pa-4 mb-4">
+                
+                <MudText Typo="@Typo.h4" GutterBottom="true">Pick a candidate</MudText>
+
+                <CandidatesSelector OrganizationId="@organization?.Id" Meeting="meeting" AgendaItem="agendaItem" />
+
+            </MudPaper>
+        }
+
+        @if (agendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
+        && agendaItem?.State == AgendaItemState.Completed)
+        {
+            <MudPaper Elevation="25" Class="pa-4 mb-4">
+                
+                <MudText Typo="@Typo.h4" GutterBottom="true">Elected </MudText>
+
+                @* <CandidatesSelector OrganizationId="@organization?.Id" Meeting="meeting" AgendaItem="agendaItem" /> *@
+
+            </MudPaper>
+        }
+
         </MudItem>
 
         @if (agenda is not null)
@@ -84,28 +144,4 @@ else
             </MudItem>
         }
         </MudGrid>
-
-
-    @if (agendaItem?.State == AgendaItemState.UnderDiscussion)
-    {
-        <MudPaper Elevation="25" Class="pa-4 mb-4">
-            <MudText Typo="@Typo.h4" GutterBottom="true">Discussions</MudText>
-
-            <MudButton Variant="Variant.Filled" Class="me-2"
-                OnClick="async () => await hubProxy.RequestSpeakerTime(agendaItem.Id)">Request
-                to speak</MudButton>
-
-            <MudButton Variant="Variant.Filled" OnClick="async () => await hubProxy.RevokeSpeakerTime(agendaItem.Id)">Revoke
-            </MudButton>
-
-        </MudPaper>
-
-        <MudPaper Elevation="25" Class="pa-4 mb-4">
-
-            <MudText Typo="@Typo.h4" GutterBottom="true">Speakers queue</MudText>
-
-            <SpeakerDisplay MeetingId="@MeetingId" />
-
-        </MudPaper>
-    }
 }
