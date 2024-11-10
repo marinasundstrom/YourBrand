@@ -11,6 +11,9 @@ public static class ServiceExtensions
             .AddAttendeeRolesClient(configureClient, builder)
             .AddAgendasClient(configureClient, builder)
             .AddAgendaItemTypesClient(configureClient, builder)
+            .AddDiscussionsClient(configureClient, builder)
+            .AddVotingClient(configureClient, builder)
+            .AddElectionsClient(configureClient, builder)
             .AddMotionsClient(configureClient, builder)
             .AddMinutesClient(configureClient, builder)
             .AddMeetingGroupsClient(configureClient, builder)
@@ -59,6 +62,39 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(AgendaItemTypesClient) + "MS", configureClient)
             .AddTypedClient<IAgendaItemTypesClient>((http, sp) => new AgendaItemTypesClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddDiscussionsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(DiscussionsClient) + "MS", configureClient)
+            .AddTypedClient<IDiscussionsClient>((http, sp) => new DiscussionsClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddVotingClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(VotingClient) + "MS", configureClient)
+            .AddTypedClient<IVotingClient>((http, sp) => new VotingClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddElectionsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(ElectionsClient) + "MS", configureClient)
+            .AddTypedClient<IElectionsClient>((http, sp) => new ElectionsClient(http));
 
         builder?.Invoke(b);
 

@@ -135,7 +135,10 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
 
     private async Task LoadAgenda()
     {
-        agenda = await MeetingsClient.GetMeetingAgendaAsync(organization.Id, MeetingId);
+        if (agenda is null)
+        {
+            agenda = await MeetingsClient.GetMeetingAgendaAsync(organization.Id, MeetingId);
+        }
     }
 
     private async Task LoadAgendaItem()
@@ -253,7 +256,12 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         return Task.CompletedTask;
     }
 
-    public Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId)
+    public Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId, string name)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnMovedToNextSpeaker(string id)
     {
         return Task.CompletedTask;
     }

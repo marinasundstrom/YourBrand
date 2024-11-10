@@ -1,13 +1,21 @@
 @page "/meetings/{MeetingId:int}/control"
+@using Microsoft.AspNetCore.SignalR.Client
 @using YourBrand.Portal.Services
+@inject IStringLocalizer<DisplayPage> T
 @inject IMeetingsClient MeetingsClient
 @inject IChairmanClient ChairmanClient
 @inject IAgendasClient AgendasClient
 @inject IMotionsClient MotionsClient
+@inject IDiscussionsClient DiscussionsClient
+@inject IVotingClient VotingClient
+@inject IElectionsClient ElectionsClient
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
+@inject YourBrand.Portal.Services.IAccessTokenProvider AccessTokenProvider
+@inject ISnackbar Snackbar
 @implements IDisposable
+@implements IDiscussionsHubClient
 
 <AppPageTitle>@meeting?.Title</AppPageTitle>
 
@@ -169,6 +177,19 @@ else
                         <MotionDisplay Motion="@currentMotion" />
                     </MudPaper>
                 }
+
+                @if (@currentAgendaItem?.State == AgendaItemState.UnderDiscussion) 
+                {
+                    <MudPaper Class="pa-8 mb-4" Elevation="25">
+                        <MudText Typo="@Typo.h4" GutterBottom="true">Discussion</MudText>
+
+                        <MudButton Variant="Variant.Filled" Class="me-2"
+                            OnClick="async () => await hubProxy.MoveToNextSpeaker()">Next speaker</MudButton>
+                            
+                        <SpeakerDisplay MeetingId="@MeetingId" />
+
+                    </MudPaper>
+                } 
         </MudItem>
 
         <MudItem xs="12" md="4">
@@ -208,6 +229,14 @@ else
     private Motion? currentMotion;
     private bool lastItem;
 
+    private SpeakerSession? discussion;
+    private VotingSession? voting;
+    private ElectionSession? election;
+
+    HubConnection procedureHub = null!;
+    IDiscussionsHub hubProxy = default!;
+
+
     protected override async Task OnInitializedAsync()
     {
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
@@ -215,6 +244,62 @@ else
         OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
 
         await LoadMeetingDetails();
+      await InitHubs();
+    }
+
+    private async Task InitHubs()
+    {
+        procedureHub = new HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/procedure/?organizationId={organization.Id}&meetingId={MeetingId}",
+        options =>
+        {
+            options.AccessTokenProvider = async () =>
+            {
+                return await AccessTokenProvider.GetAccessTokenAsync();
+            };
+        }).WithAutomaticReconnect().Build();
+
+        hubProxy = procedureHub.ServerProxy<IDiscussionsHub>();
+        _ = procedureHub.ClientRegistration<IDiscussionsHubClient>(this);
+
+        procedureHub.Closed += (error) =>
+        {
+            if (error is not null)
+            {
+                Snackbar.Add($"{error.Message}", Severity.Error, configure: options =>
+                {
+                    options.Icon = Icons.Material.Filled.Cable;
+                });
+            }
+
+            Snackbar.Add(T["Disconnected"], configure: options =>
+            {
+                options.Icon = Icons.Material.Filled.Cable;
+            });
+
+            return Task.CompletedTask;
+        };
+
+        procedureHub.Reconnected += (error) =>
+        {
+            Snackbar.Add(T["Reconnected"], configure: options =>
+            {
+                options.Icon = Icons.Material.Filled.Cable;
+            });
+
+            return Task.CompletedTask;
+        };
+
+        procedureHub.Reconnecting += (error) =>
+        {
+            Snackbar.Add(T["Reconnecting"], configure: options =>
+            {
+                options.Icon = Icons.Material.Filled.Cable;
+            });
+
+            return Task.CompletedTask;
+        };
+
+        await procedureHub.StartAsync();
     }
 
     private async Task ResetProcedure() 
@@ -240,8 +325,15 @@ else
 
     private async Task LoadMeetingDetails()
     {
-        meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
-        agenda = await MeetingsClient.GetMeetingAgendaAsync(organization.Id, MeetingId);
+        //if(meeting is null) 
+        //{
+            meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
+        //}
+
+        //if(agenda is null) 
+        //{
+            agenda = await MeetingsClient.GetMeetingAgendaAsync(organization.Id, MeetingId);
+        //}
  
         currentAgendaItem = meeting.CurrentAgendaItemIndex is null ? null : agenda!.Items
             .OrderBy(ai => ai.Order)
@@ -266,6 +358,23 @@ else
             if (currentAgendaItem.MotionId is not null)
             {
                 currentMotion = await MotionsClient.GetMotionByIdAsync(organization.Id, currentAgendaItem.MotionId.GetValueOrDefault());
+            }
+
+            if(currentAgendaItem.State == AgendaItemState.UnderDiscussion) 
+            {
+                // fetch disc
+                discussion = await DiscussionsClient.GetDiscussionAsync(organization.Id, MeetingId);
+            }
+            else if(currentAgendaItem.State == AgendaItemState.Voting) 
+            {
+                if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting) 
+                {
+                    voting = await VotingClient.GetVotingSessionAsync(organization.Id, MeetingId);
+                }
+                else if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Election) 
+                {
+                    election = await ElectionsClient.GetElectionSessionAsync(organization.Id, MeetingId);
+                }
             }
         }
     }
@@ -334,5 +443,25 @@ else
     public void Dispose()
     {
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+ 
+    public Task OnDiscussionStatusChanged(int status)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnSpeakerRequestRevoked(string agendaItemId, string id)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId, string name)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnMovedToNextSpeaker(string id)
+    {
+        return Task.CompletedTask;
     }
 }

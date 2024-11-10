@@ -14,11 +14,14 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
 {
     Meeting? meeting;
     Agenda? agenda;
-    AgendaItem? agendaItem;
+    AgendaItem? currentAgendaItem;
     Motion? currentMotion;
 
+    private SpeakerSession? discussion;
+    private VotingSession? voting;
+    private ElectionSession? election;
+
     HubConnection procedureHub = null!;
-    HubConnection discussionsHub = null!;
     IDiscussionsHub hubProxy = default!;
 
     [Parameter]
@@ -40,11 +43,12 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         {
             await LoadAgendaItem();
         }
-        if (discussionsHub is not null && discussionsHub.State != HubConnectionState.Disconnected)
-        {
-            await discussionsHub.DisposeAsync();
-        }
+        
+        await InitHubs();
+    }
 
+    private async Task InitHubs()
+    {
         procedureHub = new HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/procedure/?organizationId={organization.Id}&meetingId={MeetingId}",
         options =>
         {
@@ -54,6 +58,8 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
             };
         }).WithAutomaticReconnect().Build();
 
+        hubProxy = procedureHub.ServerProxy<IDiscussionsHub>();
+        _ = procedureHub.ClientRegistration<IMeetingsProcedureHubClient>(this);
 
         procedureHub.Closed += (error) =>
         {
@@ -93,58 +99,7 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
             return Task.CompletedTask;
         };
 
-        discussionsHub = new HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/discussions/?organizationId={organization.Id}&meetingId={MeetingId}",
-        options =>
-        {
-            options.AccessTokenProvider = async () =>
-            {
-                return await AccessTokenProvider.GetAccessTokenAsync();
-            };
-        }).WithAutomaticReconnect().Build();
-
-        hubProxy = discussionsHub.ServerProxy<IDiscussionsHub>();
-        _ = procedureHub.ClientRegistration<IMeetingsProcedureHubClient>(this);
-
-        discussionsHub.Closed += (error) =>
-        {
-            if (error is not null)
-            {
-                Snackbar.Add($"{error.Message}", Severity.Error, configure: options =>
-                {
-                    options.Icon = Icons.Material.Filled.Cable;
-                });
-            }
-
-            Snackbar.Add(T["Disconnected"], configure: options =>
-            {
-                options.Icon = Icons.Material.Filled.Cable;
-            });
-
-            return Task.CompletedTask;
-        };
-
-        discussionsHub.Reconnected += (error) =>
-        {
-            Snackbar.Add(T["Reconnected"], configure: options =>
-            {
-                options.Icon = Icons.Material.Filled.Cable;
-            });
-
-            return Task.CompletedTask;
-        };
-
-        discussionsHub.Reconnecting += (error) =>
-        {
-            Snackbar.Add(T["Reconnecting"], configure: options =>
-            {
-                options.Icon = Icons.Material.Filled.Cable;
-            });
-
-            return Task.CompletedTask;
-        };
-
         await procedureHub.StartAsync();
-        await discussionsHub.StartAsync();
     }
 
     YourBrand.Portal.Services.Organization organization = default!;
@@ -175,13 +130,29 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
 
     private async Task LoadAgendaItem()
     {
-        agendaItem = await MeetingsClient.GetCurrentAgendaItemAsync(organization.Id, MeetingId);
+        currentAgendaItem = await MeetingsClient.GetCurrentAgendaItemAsync(organization.Id, MeetingId);
 
         currentMotion = null;
 
-        if (agendaItem.MotionId is not null)
+        if (currentAgendaItem.MotionId is not null)
         {
-            currentMotion = await MotionsClient.GetMotionByIdAsync(organization.Id, agendaItem.MotionId.GetValueOrDefault());
+            currentMotion = await MotionsClient.GetMotionByIdAsync(organization.Id, currentAgendaItem.MotionId.GetValueOrDefault());
+        }
+
+        if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
+        {
+            discussion = await DiscussionsClient.GetDiscussionAsync(organization.Id, MeetingId);
+        }
+        else if (currentAgendaItem.State == AgendaItemState.Voting)
+        {
+            if (currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting)
+            {
+                voting = await VotingClient.GetVotingSessionAsync(organization.Id, MeetingId);
+            }
+            else if (currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Election)
+            {
+                election = await ElectionsClient.GetElectionSessionAsync(organization.Id, MeetingId);
+            }
         }
     }
 
@@ -196,7 +167,7 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
 
         if (meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Canceled || meeting.State == MeetingState.Completed)
         {
-            agendaItem = null;
+            currentAgendaItem = null;
         }
 
         StateHasChanged();
@@ -229,7 +200,12 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         return Task.CompletedTask;
     }
 
-    public Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId)
+    public Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId, string name)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnMovedToNextSpeaker(string id)
     {
         return Task.CompletedTask;
     }

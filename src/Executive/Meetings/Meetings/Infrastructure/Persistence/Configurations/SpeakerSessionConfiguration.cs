@@ -17,7 +17,19 @@ public sealed class SpeakerSessionConfiguration : IEntityTypeConfiguration<Speak
             .WithOne()
             .HasForeignKey(x => new { x.OrganizationId, x.SpeakerSessionId });
 
-        builder.Navigation(x => x.SpeakerQueue).AutoInclude();
+        /*
+        builder
+            .Property(x => x.SpeakerQueue)
+            .HasField("_speakerQueue"); */
+
+        builder
+            .Navigation(x => x.SpeakerQueue).AutoInclude();
+
+        builder.HasOne(x => x.CurrentSpeaker)
+            .WithMany()
+            .HasForeignKey(x => new { x.OrganizationId, x.CurrentSpeakerId });
+
+        builder.Navigation(x => x.CurrentSpeaker).AutoInclude();
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

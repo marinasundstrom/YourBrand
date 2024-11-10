@@ -128,41 +128,23 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     public void StartDiscussion()
     {
-        if (State != AgendaItemState.Pending)
-        {
-            throw new InvalidOperationException("Cannot start discussion.");
-        }
-
         if (State != AgendaItemState.Pending && State != AgendaItemState.Postponed)
-        {
             throw new InvalidOperationException("Discussion can only be started when the agenda item is pending or postponed.");
-        }
-
-        if (State == AgendaItemState.Completed || State == AgendaItemState.Canceled || State == AgendaItemState.Skipped)
-        {
-            throw new InvalidOperationException("Cannot perform this action on an agenda item that is completed, canceled, or skipped.");
-        }
-
-        if (State == AgendaItemState.Postponed || State == AgendaItemState.Canceled)
-        {
-            throw new InvalidOperationException("Cannot perform this action on an agenda item that is postponed or canceled.");
-        }
 
         if (IsDiscussionCompleted)
-        {
-            throw new InvalidOperationException("Already had voting.");
-        }
+            throw new InvalidOperationException("Discussion already completed.");
 
-        SpeakerSession = new SpeakerSession();
-        SpeakerSession.OrganizationId = OrganizationId;
+        SpeakerSession = new SpeakerSession { OrganizationId = OrganizationId };
+        SpeakerSession.StartSession();
 
         DiscussionStartedAt = DateTimeOffset.UtcNow;
-
         State = AgendaItemState.UnderDiscussion;
     }
 
     public void EndDiscussion()
     {
+        SpeakerSession?.EndSession();
+
         IsDiscussionCompleted = true;
         DiscussionEndedAt = DateTimeOffset.UtcNow;
     }
@@ -180,6 +162,9 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
             OrganizationId = OrganizationId,
             TenantId = TenantId
         };
+
+        VotingSession.StartVoting();
+
         VotingStartedAt = DateTimeOffset.UtcNow;
         State = AgendaItemState.Voting;
     }
@@ -190,6 +175,9 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
             throw new InvalidOperationException("No active voting session.");
 
         VotingSession.TallyVotes();
+
+        VotingSession.EndVoting();
+
         VotingEndedAt = DateTimeOffset.UtcNow;
         IsVoteCompleted = true;
         State = AgendaItemState.Completed;
@@ -215,6 +203,8 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
             TenantId = TenantId
         };
 
+        ElectionSession.StartElection();
+
         VotingStartedAt = DateTimeOffset.UtcNow;
         State = AgendaItemState.Voting;
     }
@@ -225,6 +215,9 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
             throw new InvalidOperationException("No active election session.");
 
         ElectionSession.TallyBallots();
+
+        ElectionSession.EndElection();
+
         VotingEndedAt = DateTimeOffset.UtcNow;
         IsVoteCompleted = true;
         State = AgendaItemState.Completed;
@@ -277,11 +270,23 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     private void ValidateAgendaItemType()
     {
-        if (Type == AgendaItemType.Motion && VoteActions == VoteActions.None)
+        /*
+        switch (Type)
         {
-            throw new InvalidOperationException("Motion items must have voting actions.");
+            case AgendaItemType.Motion:
+                if (VoteActions == VoteActions.None)
+                    throw new InvalidOperationException("Motion items must have voting actions.");
+                break;
+                
+            case AgendaItemType.Election:
+                if (_candidates.Count == 0)
+                    throw new InvalidOperationException("Election items must have candidates.");
+                break;
+            // Add validations for other types as needed.
+            default:
+                break;
         }
-        // Add similar validations for other types as needed
+        */
     }
 
     // Determines if the item can start discussion
@@ -396,10 +401,16 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     public void Reset()
     {
         State = AgendaItemState.Pending;
+        IsDiscussionCompleted = false;
+        IsVoteCompleted = false;
+        DiscussionStartedAt = null;
+        DiscussionEndedAt = null;
+        VotingStartedAt = null;
+        VotingEndedAt = null;
 
         SpeakerSession?.Reset();
-        VotingSession?.Reset();
-        ElectionSession?.Reset();
+        VotingSession = null;
+        ElectionSession = null;
     }
 
     public User? CreatedBy { get; set; } = null!;

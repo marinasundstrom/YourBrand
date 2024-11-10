@@ -7,13 +7,13 @@ using YourBrand.Identity;
 using YourBrand.Meetings.Features.Procedure.Command;
 using YourBrand.Meetings.Features.Procedure.Discussions;
 
-namespace YourBrand.Meetings.Features.Procedure.Attendee;
+namespace YourBrand.Meetings.Features.Procedure.Chairman;
 
-public sealed record RequestSpeakerTime(string OrganizationId, int Id, string AgendaItemId) : IRequest<Result>
+public sealed record MoveToNextSpeaker(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<RequestSpeakerTime, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<MoveToNextSpeaker, Result>
     {
-        public async Task<Result> Handle(RequestSpeakerTime request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(MoveToNextSpeaker request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -38,7 +38,7 @@ public sealed record RequestSpeakerTime(string OrganizationId, int Id, string Ag
                 return Errors.Meetings.YouHaveNoVotingRights;
             }
 
-            var agendaItem = meeting.GetAgendaItem(request.AgendaItemId);
+            var agendaItem = meeting.GetCurrentAgendaItem();
 
             if (agendaItem is null)
             {
@@ -50,7 +50,7 @@ public sealed record RequestSpeakerTime(string OrganizationId, int Id, string Ag
                 return Errors.Meetings.NoOngoingDiscussionSession;
             }
 
-            var speakerRequest = agendaItem.SpeakerSession!.AddSpeaker(attendee);
+            var speakerRequest = agendaItem.SpeakerSession!.MoveToNextSpeaker();
 
             context.Meetings.Update(meeting);
 
@@ -58,7 +58,7 @@ public sealed record RequestSpeakerTime(string OrganizationId, int Id, string Ag
 
             await hubContext.Clients
                .Group($"meeting-{meeting.Id}")
-               .OnSpeakerRequestAdded(agendaItem.Id, speakerRequest.Id, speakerRequest.AttendeeId, speakerRequest.Name);
+               .OnMovedToNextSpeaker(speakerRequest.Id);
 
             return Result.Success;
         }

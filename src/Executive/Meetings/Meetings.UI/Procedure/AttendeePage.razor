@@ -9,6 +9,9 @@
 @inject IMeetingsClient MeetingsClient
 @inject IAgendasClient AgendasClient
 @inject IMotionsClient MotionsClient
+@inject IDiscussionsClient DiscussionsClient
+@inject IVotingClient VotingClient
+@inject IElectionsClient ElectionsClient
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
 @inject YourBrand.Portal.Services.IAccessTokenProvider AccessTokenProvider
@@ -41,11 +44,11 @@ else
                 }
                 else if (meeting.State == MeetingState.InProgress)
                 {
-                    @if (agendaItem is not null)
+                    @if (currentAgendaItem is not null)
                     {
-                        <MudText Typo="@Typo.h4" GutterBottom="true">@agendaItem?.Order. @agendaItem?.Title</MudText>
+                        <MudText Typo="@Typo.h4" GutterBottom="true">@currentAgendaItem?.Order. @currentAgendaItem?.Title</MudText>
 
-                        <MudText Typo="@Typo.body1" GutterBottom="true">@agendaItem.State</MudText>
+                        <MudText Typo="@Typo.body1" GutterBottom="true">@currentAgendaItem.State</MudText>
                     }
                 }
                 else if (meeting.State == MeetingState.Completed)
@@ -58,61 +61,56 @@ else
                 }
             </MudPaper>
 
-        @if (agendaItem?.State == AgendaItemState.UnderDiscussion)
+        @if (currentAgendaItem?.State == AgendaItemState.UnderDiscussion)
         {
             <MudPaper Elevation="25" Class="pa-4 mb-4">
-                <MudText Typo="@Typo.h4" GutterBottom="true">Discussions</MudText>
+                <MudText Typo="@Typo.h4" GutterBottom="true">Discussion</MudText>
 
-                <MudButton Variant="Variant.Filled" Class="me-2"
-                    OnClick="async () => await hubProxy.RequestSpeakerTime(agendaItem.Id)">Request
-                    to speak</MudButton>
+                    <MudButton Variant="Variant.Filled" Class="me-2"
+                        OnClick="async () => await hubProxy.RequestSpeakerTime(currentAgendaItem.Id)">Request
+                        to speak</MudButton>
 
-                <MudButton Variant="Variant.Filled" OnClick="async () => await hubProxy.RevokeSpeakerTime(agendaItem.Id)">Revoke
-                </MudButton>
-
-            </MudPaper>
-
-            <MudPaper Elevation="25" Class="pa-4 mb-4">
-
-                <MudText Typo="@Typo.h4" GutterBottom="true">Speakers queue</MudText>
+                    <MudButton Variant="Variant.Filled"
+                        OnClick="async () => await hubProxy.RevokeSpeakerTime(currentAgendaItem.Id)">Revoke
+                    </MudButton>
 
                 <SpeakerDisplay MeetingId="@MeetingId" />
 
             </MudPaper>
         }
 
-        @if (agendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election
-           && agendaItem?.State != AgendaItemState.Voting)
+        @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election
+           && currentAgendaItem?.State != AgendaItemState.Voting)
         {
                 <MudPaper Elevation="25" Class="pa-4 mb-4">
 
                     <MudText Typo="@Typo.h4" GutterBottom="true">Candidates</MudText>
 
-                    <CandidatesView Meeting="meeting" AgendaItem="agendaItem" />
+                    <CandidatesView Meeting="meeting" AgendaItem="currentAgendaItem" />
 
                 </MudPaper>
         }
 
-        @if (agendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
-        && agendaItem?.State == AgendaItemState.Voting)
+        @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
+        && currentAgendaItem?.State == AgendaItemState.Voting)
         {
             <MudPaper Elevation="25" Class="pa-4 mb-4">
                 
                 <MudText Typo="@Typo.h4" GutterBottom="true">Pick a candidate</MudText>
 
-                <CandidatesSelector OrganizationId="@organization?.Id" Meeting="meeting" AgendaItem="agendaItem" />
+                <CandidatesSelector OrganizationId="@organization?.Id" Meeting="meeting" AgendaItem="currentAgendaItem" />
 
             </MudPaper>
         }
 
-        @if (agendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
-        && agendaItem?.State == AgendaItemState.Completed)
+        @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
+        && currentAgendaItem?.State == AgendaItemState.Completed)
         {
             <MudPaper Elevation="25" Class="pa-4 mb-4">
                 
                 <MudText Typo="@Typo.h4" GutterBottom="true">Elected </MudText>
 
-                @* <CandidatesSelector OrganizationId="@organization?.Id" Meeting="meeting" AgendaItem="agendaItem" /> *@
+                @* <CandidatesSelector OrganizationId="@organization?.Id" Meeting="meeting" AgendaItem="currentAgendaItem" /> *@
 
             </MudPaper>
         }
@@ -130,12 +128,12 @@ else
                         string? currentItemId = null;
                         string? currentSubItemId = null;
 
-                        currentItemId = agendaItem?.Id;
+                        currentItemId = currentAgendaItem?.Id;
 
-                        if (agendaItem?.ParentId is not null)
+                        if (currentAgendaItem?.ParentId is not null)
                         {
-                            currentItemId = agendaItem.ParentId;
-                            currentSubItemId = agendaItem.Id;
+                            currentItemId = currentAgendaItem.ParentId;
+                            currentSubItemId = currentAgendaItem.Id;
                         }
                     }
 

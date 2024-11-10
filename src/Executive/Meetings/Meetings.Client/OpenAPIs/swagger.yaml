@@ -4194,10 +4194,29 @@ components:
       properties:
         id:
           type: string
+        state:
+          $ref: '#/components/schemas/SpeakerSessionState'
         speakerQueue:
           type: array
           items:
             $ref: '#/components/schemas/SpeakerRequest'
+        currentSpeaker:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SpeakerRequest'
+    SpeakerSessionState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - NotStarted
+      - InProgress
+      - Paused
+      - Completed
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
     SpeakerRequest:
       type: object
       additionalProperties: false

@@ -17,6 +17,7 @@ public record GetMeetingById(string OrganizationId, int Id) : IRequest<Result<Me
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
                 .AsNoTracking()
+                .AsSplitQuery()
                 .Include(x => x.Attendees.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 

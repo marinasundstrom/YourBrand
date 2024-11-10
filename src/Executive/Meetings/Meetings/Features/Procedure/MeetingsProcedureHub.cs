@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 
 using YourBrand.Identity;
 using YourBrand.Meetings.Features.Procedure.Attendee;
+using YourBrand.Meetings.Features.Procedure.Chairman;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Features.Procedure;
@@ -47,6 +48,16 @@ public sealed class MeetingsProcedureHub(IMediator mediator, ISettableUserContex
 
         //return (string)await mediator.Send(
         //    new PostMessage(s.OrganizationId, channelId, replyTo, content));
+    }
+
+    public async Task MoveToNextSpeaker()
+    {
+        var connectionState = state[Context.ConnectionId];
+
+        SetContext(userContext, tenantContext, connectionState);
+
+        await mediator.Send(
+            new MoveToNextSpeaker(connectionState.OrganizationId, connectionState.MeetingId));
     }
 
     public async Task RequestSpeakerTime(string agendaItemId)

@@ -7,6 +7,7 @@
 @inject IMeetingsClient MeetingsClient
 @inject IAgendasClient AgendasClient
 @inject IMotionsClient MotionsClient
+@inject IDiscussionsClient DiscussionsClient
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
 @inject YourBrand.Portal.Services.IAccessTokenProvider AccessTokenProvider
@@ -14,6 +15,19 @@
 @inject ISnackbar Snackbar
 @implements IDisposable
 @implements IDiscussionsHubClient
+
+<MudText Typo="@Typo.h6" GutterBottom="true" Class="mt-4">Now</MudText>
+
+@if (CurrentSpeaker is not null)
+{
+    <MudText Typo="@Typo.body1" GutterBottom="true">@CurrentSpeaker.Name</MudText>
+}
+else
+{
+    <MudText Typo="@Typo.body1" GutterBottom="true">No speaker</MudText>
+}
+
+<MudText Typo="@Typo.h6" GutterBottom="true" Class="mt-4">Speakers' queue</MudText>
 
 <ul>
     @foreach (var speakerRequest in speakerQueue)

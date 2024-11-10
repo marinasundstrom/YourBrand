@@ -21,6 +21,8 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
     [Parameter]
     public int MeetingId { get; set; }
 
+    public SpeakerRequest? CurrentSpeaker { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
@@ -29,12 +31,19 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
 
         var currentUserId = await UserContext.GetUserId()!;
 
-        //await LoadAgenda();
-
         if (hubConnection is not null && hubConnection.State != HubConnectionState.Disconnected)
         {
             await hubConnection.DisposeAsync();
         }
+
+        var discussion = await DiscussionsClient.GetDiscussionAsync(organization!.Id, MeetingId);
+
+        foreach(var speaker in discussion.SpeakerQueue) 
+        {
+            speakerQueue.Enqueue(speaker);
+        }
+
+        CurrentSpeaker = discussion.CurrentSpeaker;
 
         hubConnection = new
         HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/procedure/?organizationId={organization.Id}&meetingId={MeetingId}",
@@ -110,9 +119,9 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
         return Task.CompletedTask;
     }
 
-    public Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId)
+    public Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId, string name)
     {
-        speakerQueue.Enqueue(new SpeakerRequest() { Id = id, AttendeeId = attendeeId, });
+        speakerQueue.Enqueue(new SpeakerRequest() { Id = id, Name = name, AttendeeId = attendeeId, });
 
         Console.WriteLine("Added");
 
@@ -128,6 +137,25 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
 
     public Task OnDiscussionStatusChanged(int status)
     {
+        return Task.CompletedTask;
+    }
+
+    public Task OnMovedToNextSpeaker(string id)
+    {
+        var first = speakerQueue.Peek();
+        if(first is null) 
+        {
+            CurrentSpeaker = null;
+
+            StateHasChanged();
+
+            return Task.CompletedTask;
+        }
+        CurrentSpeaker = first;
+        speakerQueue.Dequeue();
+
+        StateHasChanged();
+
         return Task.CompletedTask;
     }
 }
