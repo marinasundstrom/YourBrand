@@ -145,6 +145,11 @@ public sealed class Voting : AggregateRoot<VotingSessionId>, IAuditableEntity<Vo
                      .ToDictionary(g => g.Key.ToString(), g => g.Count());
     }
 
+    public void Reset()
+    {
+        State = VotingState.NotStarted;
+    }
+
     public User? CreatedBy { get; set; }
     public UserId? CreatedById { get; set; }
     public DateTimeOffset Created { get; set; }

@@ -393,6 +393,10 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     public void Reset()
     {
         State = AgendaItemState.Pending;
+
+        SpeakerSession?.Reset();
+        VotingSession?.Reset();
+        ElectionSession?.Reset();
     }
 
     public User? CreatedBy { get; set; } = null!;

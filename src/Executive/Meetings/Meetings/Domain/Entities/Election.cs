@@ -174,6 +174,11 @@ public sealed class Election : AggregateRoot<ElectionSessionId>, IAuditableEntit
                 candidate => _ballots.Count(b => b.SelectedCandidateId == candidate.Id));
     }
 
+    public void Reset()
+    {
+        State = ElectionState.NotStarted;
+    }
+
     public User? CreatedBy { get; set; }
     public UserId? CreatedById { get; set; }
     public DateTimeOffset Created { get; set; }

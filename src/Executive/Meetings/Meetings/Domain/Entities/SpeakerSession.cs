@@ -63,6 +63,11 @@ public sealed class SpeakerSession : AggregateRoot<SpeakerSessionId>, IAuditable
         return request.Id;
     }
 
+    public void Reset()
+    {
+        //State = SpeakerState.NotStarted;
+    }
+
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;
     public DateTimeOffset Created { get; set; }
