@@ -177,20 +177,69 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         }
         else if (state == AgendaItemState.Voting)
         {
-
             Console.WriteLine("Voting");
+        }
+        else if (state == AgendaItemState.Canceled)
+        {
+            Console.WriteLine("Canceled");
+        }
+        else if (state == AgendaItemState.Skipped)
+        {
+            Console.WriteLine("Skipped");
+        }
+        else if (state == AgendaItemState.Postponed)
+        {
+            Console.WriteLine("Postponed");
+        }
+        else if (state == AgendaItemState.Completed)
+        {
+            Console.WriteLine("Completed");
         }
 
         StateHasChanged();
     }
 
-    public Task OnVotingStatusChanged(int status)
+    public Task OnVotingStatusChanged(VotingState state)
     {
+        if (state == VotingState.Voting)
+        {
+            Console.WriteLine("Voting");
+        }
+        else if (state == VotingState.RedoRequired)
+        {
+            Console.WriteLine("Voting redo required");
+        }
+        else if (state == VotingState.ResultReady)
+        {
+            Console.WriteLine("Voting result ready");
+        }
+        else if (state == VotingState.Completed)
+        {
+            Console.WriteLine("Voting completed");
+        }
+
         return Task.CompletedTask;
     }
 
-    public Task OnElectionStatusChanged(int status)
+    public Task OnElectionStatusChanged(ElectionState state)
     {
+        if (state == ElectionState.Voting)
+        {
+            Console.WriteLine("Election");
+        }
+        else if (state == ElectionState.RedoRequired)
+        {
+            Console.WriteLine("Election redo required");
+        }
+        else if (state == ElectionState.ResultReady)
+        {
+            Console.WriteLine("Election result ready");
+        }
+        else if (state == ElectionState.Completed)
+        {
+            Console.WriteLine("Election completed");
+        }
+
         return Task.CompletedTask;
     }
 

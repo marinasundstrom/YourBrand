@@ -209,12 +209,12 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         StateHasChanged();
     }
 
-    public Task OnVotingStatusChanged(int status)
+    public Task OnVotingStatusChanged(VotingState state)
     {
         return Task.CompletedTask;
     }
 
-    public Task OnElectionStatusChanged(int status)
+    public Task OnElectionStatusChanged(ElectionState state)
     {
         return Task.CompletedTask;
     }

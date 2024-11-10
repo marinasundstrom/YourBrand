@@ -4115,12 +4115,56 @@ components:
       properties:
         id:
           type: string
+        state:
+          $ref: '#/components/schemas/VotingState'
+        hasPassed:
+          type: boolean
+    VotingState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - NotStarted
+      - Voting
+      - Completed
+      - ResultReady
+      - RedoRequired
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
     ElectionSession:
       type: object
       additionalProperties: false
       properties:
         id:
           type: string
+        state:
+          $ref: '#/components/schemas/ElectionState'
+        candidates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ElectionCandidate'
+        electedCandidate:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ElectionCandidate'
+    ElectionState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - NotStarted
+      - Voting
+      - Completed
+      - ResultReady
+      - RedoRequired
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
     SpeakerSession:
       type: object
       additionalProperties: false
