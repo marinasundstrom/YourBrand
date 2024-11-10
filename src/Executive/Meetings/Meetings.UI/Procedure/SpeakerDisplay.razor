@@ -21,11 +21,11 @@
         <li @key="speakerRequest.Id">
             @if (speakerRequest.Id == currentSpeaker?.Id)
             {
-                <MudText Typo="@Typo.body1" Class="mb-2"><b>@speakerRequest.AttendeeId</b></MudText>
+                <MudText Typo="@Typo.body1" Class="mb-2"><b>@speakerRequest.Name</b></MudText>
             }
             else
             {
-                <MudText Typo="@Typo.body1" Class="mb-2">@speakerRequest.AttendeeId</MudText>
+                <MudText Typo="@Typo.body1" Class="mb-2">@speakerRequest.Name</MudText>
             }
         </li>
     }

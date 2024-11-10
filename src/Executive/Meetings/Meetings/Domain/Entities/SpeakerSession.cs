@@ -8,7 +8,7 @@ namespace YourBrand.Meetings.Domain.Entities;
 
 public sealed class SpeakerSession : AggregateRoot<SpeakerSessionId>, IAuditableEntity<SpeakerSessionId>, IHasTenant, IHasOrganization
 {
-    readonly HashSet<SpeakerRequest> _speakerQueue = new HashSet<SpeakerRequest>();
+    readonly List<SpeakerRequest> _speakerQueue = new List<SpeakerRequest>();
 
     public SpeakerSession()
         : base(new SpeakerSessionId())
@@ -24,12 +24,25 @@ public sealed class SpeakerSession : AggregateRoot<SpeakerSessionId>, IAuditable
     public IReadOnlyCollection<SpeakerRequest> SpeakerQueue => _speakerQueue;
     public TimeSpan? SpeakingTimeLimit { get; set; }
 
+
+    // Method to get the current speaker (first in the queue)
+    public SpeakerRequest? GetCurrentSpeaker()
+    {
+        return _speakerQueue.FirstOrDefault();
+    }
+
     public SpeakerRequest AddSpeaker(MeetingAttendee attendee)
     {
+        if (_speakerQueue.Any(s => s.AttendeeId == attendee.Id))
+        {
+            throw new InvalidOperationException("Attendee already has a pending speaker request.");
+        }
+
         var request = new SpeakerRequest
         {
             OrganizationId = OrganizationId,
             AttendeeId = attendee.Id,
+            Name = attendee.Name!,
             RequestedTime = DateTimeOffset.UtcNow
         };
 
@@ -40,7 +53,12 @@ public sealed class SpeakerSession : AggregateRoot<SpeakerSessionId>, IAuditable
 
     public SpeakerRequestId RemoveSpeaker(MeetingAttendee attendee)
     {
-        var request = _speakerQueue.First(s => s.AttendeeId == attendee.Id);
+        var request = _speakerQueue.FirstOrDefault(s => s.AttendeeId == attendee.Id);
+        if (request == null)
+        {
+            throw new InvalidOperationException("Speaker request not found for the specified attendee.");
+        }
+
         _speakerQueue.Remove(request);
         return request.Id;
     }

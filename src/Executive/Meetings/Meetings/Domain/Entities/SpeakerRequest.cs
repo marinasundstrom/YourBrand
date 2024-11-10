@@ -18,6 +18,8 @@ public sealed class SpeakerRequest : Entity<SpeakerRequestId>, IAuditableEntity<
     public OrganizationId OrganizationId { get; set; }
     public SpeakerSessionId SpeakerSessionId { get; set; }
 
+    public string Name { get; set; }
+
     public MeetingAttendeeId AttendeeId { get; set; }
     public DateTimeOffset RequestedTime { get; set; }
     public TimeSpan? ActualSpeakingTime { get; set; }
