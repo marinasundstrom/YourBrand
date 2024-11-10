@@ -6,6 +6,8 @@ public class MemberRole
     public string Name { get; private set; }
     public string? Description { get; private set; }
 
+    //public int? Limit { get; set; }
+
     // Private constructor for EF Core and for creating static instances
     private MemberRole(int id, string name, string? description = null)
     {

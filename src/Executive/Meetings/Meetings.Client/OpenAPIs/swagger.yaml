@@ -1183,7 +1183,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PagedResultOfAttendeeRole'
+                $ref: '#/components/schemas/PagedResultOfMemberRole'
         429:
           description: ''
           content:
@@ -4072,6 +4072,29 @@ components:
           type: string
           nullable: true
         statement:
+          type: string
+          nullable: true
+    PagedResultOfMemberRole:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberRole'
+        total:
+          type: integer
+          format: int32
+    MemberRole:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
           type: string
           nullable: true
     PagedResultOfUser:
