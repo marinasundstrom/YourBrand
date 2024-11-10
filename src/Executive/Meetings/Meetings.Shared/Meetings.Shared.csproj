@@ -6,4 +6,27 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0-*" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="9.0.0-*">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="NSwag.ApiDescription.Client" Version="14.0.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+    <ItemGroup>
+    <OpenApiReference Include="OpenAPIs\swagger.yaml"
+      Options="/JsonLibrary:SystemTextJson /GenerateClientClasses:false /GenerateExceptionClasses:false /GenerateDtoTypes:true /GenerateNullableReferenceTypes:true"
+      Namespace="YourBrand.Meetings.Dtos">
+        <SourceUri>https://localhost:5001/openapi/v1/openapi.yaml</SourceUri>
+        <ClassName>Dtos</ClassName>
+        <OutputPath>Generated\Dtos.cs</OutputPath>
+      </OpenApiReference>
+    </ItemGroup>
+
 </Project>

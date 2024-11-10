@@ -84,9 +84,9 @@ public class UserSearchProvider(IUsersClient usersClient) : IUserSearchProvider
 
 public static class UserMappings
 {
-    public static Portal.User ToUser(this User user) => new(user.Id, user.Name);
+    public static Portal.User ToUser(this Dtos.User user) => new(user.Id, user.Name);
 
-    public static User ToDto(this Portal.User user) => new()
+    public static Dtos.User ToDto(this Portal.User user) => new()
     {
         Id = user.Id,
         Name = user.Name

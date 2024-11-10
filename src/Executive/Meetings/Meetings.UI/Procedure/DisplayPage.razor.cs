@@ -119,26 +119,7 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
     }
 
-    public async Task OnMeetingStateChanged()
-    {
-        meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
-
-        if (meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Canceled || meeting.State == MeetingState.Completed)
-        {
-            agendaItem = null;
-        }
-
-        StateHasChanged();
-    }
-
     public async Task OnAgendaItemChanged(string agendaItemId)
-    {
-        await LoadAgendaItem();
-
-        StateHasChanged();
-    }
-
-    public async Task OnAgendaItemStatusChanged(string agendaItemId)
     {
         await LoadAgendaItem();
 
@@ -172,5 +153,59 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
     public void Dispose()
     {
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+
+    public Task OnMeetingStateChanged(MeetingState state)
+    {
+        if (state == MeetingState.Scheduled || state == MeetingState.Canceled || state == MeetingState.Completed)
+        {
+            agendaItem = null;
+        }
+
+        StateHasChanged();
+
+        return Task.CompletedTask;
+    }
+
+    public async Task OnAgendaItemStateChanged(string agendaItemId, AgendaItemState state)
+    {
+        await LoadAgendaItem();
+
+        if(state == AgendaItemState.UnderDiscussion) 
+        {
+            Console.WriteLine("Under discussion");
+        }
+        else if (state == AgendaItemState.Voting)
+        {
+
+            Console.WriteLine("Voting");
+        }
+
+        StateHasChanged();
+    }
+
+    public Task OnVotingStatusChanged(int status)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnElectionStatusChanged(int status)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnDiscussionStatusChanged(int status)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnSpeakerRequestRevoked(string agendaItemId, string id)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId)
+    {
+        return Task.CompletedTask;
     }
 }

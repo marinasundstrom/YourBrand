@@ -10,7 +10,7 @@ public static class WebApplicationExtensions
     public static WebApplication MapHubsForApp(this WebApplication app)
     {
         app.MapHub<MeetingsProcedureHub>("/hubs/meetings/procedure");
-        app.MapHub<DiscussionsHub>("/hubs/meetings/discussions");
+        //app.MapHub<DiscussionsHub>("/hubs/meetings/discussions");
 
         return app;
     }

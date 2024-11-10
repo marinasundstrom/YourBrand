@@ -1,6 +1,6 @@
 namespace YourBrand.Meetings;
 
-public interface IMeetingsProcedureHub
+public interface IMeetingsProcedureHub : IDiscussionsHub, IVotingHub, IElectionsHub
 {
     Task ChangeAgendaItem(string agendaItemId);
 }

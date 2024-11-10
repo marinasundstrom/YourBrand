@@ -37,7 +37,7 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
         }
 
         hubConnection = new
-        HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/discussions/?organizationId={organization.Id}&meetingId={MeetingId}",
+        HubConnectionBuilder().WithUrl($"{NavigationManager.BaseUri}api/meetings/hubs/meetings/procedure/?organizationId={organization.Id}&meetingId={MeetingId}",
         options =>
         {
             options.AccessTokenProvider = async () =>
@@ -46,7 +46,7 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
             };
         }).WithAutomaticReconnect().Build();
 
-        hubProxy = hubConnection.ServerProxy<IDiscussionsHub>();
+        hubProxy = hubConnection.ServerProxy<IMeetingsProcedureHub>();
         _ = hubConnection.ClientRegistration<IDiscussionsHubClient>(this);
 
         hubConnection.Closed += (error) =>
@@ -97,7 +97,7 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
     }
 
-    public async Task OnSpeakerRequestRevoked(string agendaItemId, string id)
+    public Task OnSpeakerRequestRevoked(string agendaItemId, string id)
     {
         var list = speakerQueue.ToList();
         list.Remove(speakerQueue.First(x => x.Id == id));
@@ -106,19 +106,28 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
         Console.WriteLine("Removed");
 
         StateHasChanged();
+
+        return Task.CompletedTask;
     }
 
-    public async Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId)
+    public Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId)
     {
         speakerQueue.Enqueue(new SpeakerRequest() { Id = id, AttendeeId = attendeeId, });
 
         Console.WriteLine("Added");
 
         StateHasChanged();
+
+        return Task.CompletedTask;
     }
 
     public void Dispose()
     {
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
+    }
+
+    public Task OnDiscussionStatusChanged(int status)
+    {
+        return Task.CompletedTask;
     }
 }

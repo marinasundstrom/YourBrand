@@ -52,7 +52,7 @@ public sealed record EndElection(string OrganizationId, int Id) : IRequest<Resul
 
             await hubContext.Clients
                 .Group($"meeting-{meeting.Id}")
-                .OnAgendaItemStatusChanged(agendaItem.Id);
+                .OnAgendaItemStateChanged(agendaItem.Id, (Dtos.AgendaItemState)agendaItem.State);
 
             return Result.Success;
         }

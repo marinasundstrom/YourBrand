@@ -183,7 +183,7 @@
 
     async Task CreateAgenda()
     {
-        agenda = await AgendasClient.CreateAgendaAsync(OrganizationId, MeetingId, new Meetings.CreateAgenda() { Items = [] });
+        agenda = await AgendasClient.CreateAgendaAsync(OrganizationId, MeetingId, new Meetings.Dtos.CreateAgenda() { Items = [] });
     }
 
     async Task AddItem()

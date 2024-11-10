@@ -54,7 +54,7 @@ public record ResetMeetingProcedure(string OrganizationId, int Id) : IRequest<Re
 
             await hubContext.Clients
                 .Group($"meeting-{meeting.Id}")
-                .OnMeetingStateChanged();
+                .OnMeetingStateChanged((Dtos.MeetingState)meeting.State);
 
             return meeting.ToDto();
         }

@@ -1,0 +1,1 @@
+global using YourBrand.Meetings.Dtos;

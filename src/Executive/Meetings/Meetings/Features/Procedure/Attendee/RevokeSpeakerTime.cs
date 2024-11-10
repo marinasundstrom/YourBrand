@@ -11,7 +11,7 @@ namespace YourBrand.Meetings.Features.Procedure.Attendee;
 
 public sealed record RevokeSpeakerTime(string OrganizationId, int Id, string AgendaItemId) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<DiscussionsHub, IDiscussionsHubClient> hubContext) : IRequestHandler<RevokeSpeakerTime, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<RevokeSpeakerTime, Result>
     {
         public async Task<Result> Handle(RevokeSpeakerTime request, CancellationToken cancellationToken)
         {
