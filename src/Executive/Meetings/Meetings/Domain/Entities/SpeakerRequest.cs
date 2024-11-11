@@ -22,7 +22,7 @@ public sealed class SpeakerRequest : Entity<SpeakerRequestId>, IAuditableEntity<
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
-    public SpeakerSessionId SpeakerSessionId { get; set; }
+    public DiscussionId SpeakerSessionId { get; set; }
 
     public string Name { get; set; }
 

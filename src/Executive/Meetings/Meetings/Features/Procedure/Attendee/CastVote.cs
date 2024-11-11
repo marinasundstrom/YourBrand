@@ -44,12 +44,12 @@ public sealed record CastVote(string OrganizationId, int Id, VoteOption Option) 
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (agendaItem.VotingSession is null)
+            if (agendaItem.Voting is null)
             {
                 return Errors.Meetings.NoOngoingVotingSession;
             }
 
-            agendaItem.VotingSession!.CastVote(attendee, request.Option, timeProvider);
+            agendaItem.Voting!.CastVote(attendee, request.Option, timeProvider);
 
             context.Meetings.Update(meeting);
 

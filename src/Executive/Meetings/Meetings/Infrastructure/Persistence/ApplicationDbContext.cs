@@ -44,14 +44,14 @@ public sealed class ApplicationDbContext(
         configurationBuilder.Properties<MotionId>().HaveConversion<MotionIdConverter>();
         configurationBuilder.Properties<MotionOperativeClauseId>().HaveConversion<OperativeClauseIdConverter>();
 
-        configurationBuilder.Properties<VotingSessionId>().HaveConversion<VotingSessionIdConverter>();
+        configurationBuilder.Properties<VotingId>().HaveConversion<VotingSessionIdConverter>();
         configurationBuilder.Properties<VoteId>().HaveConversion<VoteIdConverter>();
 
-        configurationBuilder.Properties<ElectionSessionId>().HaveConversion<ElectionSessionIdConverter>();
+        configurationBuilder.Properties<ElectionId>().HaveConversion<ElectionSessionIdConverter>();
         configurationBuilder.Properties<ElectionCandidateId>().HaveConversion<ElectionCandidateIdConverter>();
         configurationBuilder.Properties<BallotId>().HaveConversion<BallotIdConverter>();
 
-        configurationBuilder.Properties<SpeakerSessionId>().HaveConversion<SpeakerSessionIdConverter>();
+        configurationBuilder.Properties<DiscussionId>().HaveConversion<SpeakerSessionIdConverter>();
         configurationBuilder.Properties<SpeakerRequestId>().HaveConversion<SpeakerRequestIdConverter>();
 
         configurationBuilder.Properties<MinutesId>().HaveConversion<MinutesIdConverter>();
@@ -69,6 +69,8 @@ public sealed class ApplicationDbContext(
 #nullable disable
 
     public DbSet<Meeting> Meetings { get; set; }
+
+    public DbSet<MeetingAttendee> MeetingAttendees { get; set; }
 
     public DbSet<AttendeeRole> AttendeeRoles { get; set; }
 

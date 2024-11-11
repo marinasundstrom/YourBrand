@@ -42,7 +42,7 @@ public sealed record WithdrawCandidacy(string OrganizationId, int Id, string Can
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (agendaItem.VotingSession is null || agendaItem.VotingSession.State == VotingState.Completed)
+            if (agendaItem.Voting is null || agendaItem.Voting.State == VotingState.Completed)
             {
                 return Errors.Meetings.NoOngoingVotingSession;
             }

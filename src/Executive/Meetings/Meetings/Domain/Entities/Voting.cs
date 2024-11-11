@@ -21,11 +21,11 @@ public enum VotingState
     RedoRequired
 }
 
-public sealed class Voting : AggregateRoot<VotingSessionId>, IAuditableEntity<VotingSessionId>, IHasTenant, IHasOrganization
+public sealed class Voting : AggregateRoot<VotingId>, IAuditableEntity<VotingId>, IHasTenant, IHasOrganization
 {
     private readonly HashSet<Vote> _votes = new HashSet<Vote>();
 
-    public Voting(VotingType type) : base(new VotingSessionId())
+    public Voting(VotingType type) : base(new VotingId())
     {
         Type = type;
         State = VotingState.NotStarted;

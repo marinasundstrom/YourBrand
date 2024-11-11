@@ -45,12 +45,12 @@ public sealed record RevokeSpeakerTime(string OrganizationId, int Id, string Age
                 return Errors.Meetings.AgendaItemNotFound;
             }
 
-            if (agendaItem.SpeakerSession is null)
+            if (agendaItem.Discussion is null)
             {
                 return Errors.Meetings.NoOngoingDiscussionSession;
             }
 
-            var id = agendaItem.SpeakerSession!.RemoveSpeaker(attendee);
+            var id = agendaItem.Discussion!.RemoveSpeaker(attendee);
 
             context.Meetings.Update(meeting);
 

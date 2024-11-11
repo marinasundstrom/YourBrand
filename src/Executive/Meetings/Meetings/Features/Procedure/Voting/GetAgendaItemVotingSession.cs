@@ -31,12 +31,12 @@ public sealed record GetAgendaItemVotingSession(string OrganizationId, int Id) :
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (agendaItem.VotingSession is null)
+            if (agendaItem.Voting is null)
             {
                 return Errors.Meetings.NoOngoingVotingSession;
             }
 
-            return agendaItem.VotingSession?.ToDto();
+            return agendaItem.Voting?.ToDto();
         }
     }
 }

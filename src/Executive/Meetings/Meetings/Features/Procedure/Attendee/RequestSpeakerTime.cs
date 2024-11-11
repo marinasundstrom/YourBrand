@@ -45,12 +45,12 @@ public sealed record RequestSpeakerTime(string OrganizationId, int Id, string Ag
                 return Errors.Meetings.AgendaItemNotFound;
             }
 
-            if (agendaItem.SpeakerSession is null)
+            if (agendaItem.Discussion is null)
             {
                 return Errors.Meetings.NoOngoingDiscussionSession;
             }
 
-            var speakerRequest = agendaItem.SpeakerSession!.AddSpeaker(attendee);
+            var speakerRequest = agendaItem.Discussion!.AddSpeakerRequest(attendee);
 
             context.Meetings.Update(meeting);
 

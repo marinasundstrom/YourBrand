@@ -16,7 +16,7 @@ public sealed class Ballot : Entity<BallotId>, IAuditableEntity<BallotId>, IHasT
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
-    public ElectionSessionId ElectionSessionId { get; set; }
+    public ElectionId ElectionSessionId { get; set; }
 
     public MeetingAttendeeId VoterId { get; set; }
     public DateTimeOffset TimeCast { get; set; }

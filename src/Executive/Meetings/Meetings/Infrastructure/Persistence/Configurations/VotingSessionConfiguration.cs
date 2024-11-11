@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.Agendas.Infrastructure.Persistence.Configurations;
 
-public sealed class VotingSessionConfiguration : IEntityTypeConfiguration<Voting>
+public sealed class VotingConfiguration : IEntityTypeConfiguration<Voting>
 {
     public void Configure(EntityTypeBuilder<Voting> builder)
     {

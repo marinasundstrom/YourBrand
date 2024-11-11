@@ -1,6 +1,8 @@
+using YourBrand.Domain;
+
 namespace YourBrand.Meetings.Domain.Entities;
 
-public class AgendaItemType
+public class AgendaItemType : IEntity
 {
     public int Id { get; private set; } // Unique identifier
     public string Name { get; private set; } // Name of the agenda item type

@@ -16,31 +16,41 @@
 @implements IDisposable
 @implements IDiscussionsHubClient
 
-<MudText Typo="@Typo.h6" GutterBottom="true" Class="mt-4">Now</MudText>
+<MudGrid>
+    <MudItem xs="12" sm="6">
 
-@if (CurrentSpeaker is not null)
-{
-    <MudText Typo="@Typo.body1" GutterBottom="true">@CurrentSpeaker.Name</MudText>
-}
-else
-{
-    <MudText Typo="@Typo.body1" GutterBottom="true">No speaker</MudText>
-}
+        <MudText Typo="@Typo.h6" GutterBottom="true" Class="mt-4">Now</MudText>
 
-<MudText Typo="@Typo.h6" GutterBottom="true" Class="mt-4">Speakers' queue</MudText>
+        @if (CurrentSpeaker is not null)
+        {
+            <MudText Typo="@Typo.body1" GutterBottom="true">@CurrentSpeaker.Name</MudText>
+        }
+        else
+        {
+            <MudText Typo="@Typo.body1" GutterBottom="true"><i>No speaker</i></MudText>
+        }
 
-<ul>
-    @foreach (var speakerRequest in speakerQueue)
-    {
-        <li @key="speakerRequest.Id">
-            @if (speakerRequest.Id == currentSpeaker?.Id)
+    </MudItem>
+
+    <MudItem xs="12" sm="6">
+
+        <MudText Typo="@Typo.h6" GutterBottom="true" Class="mt-4">Speakers' queue</MudText>
+
+        <ul>
+            @foreach (var speakerRequest in speakerQueue)
             {
-                <MudText Typo="@Typo.body1" Class="mb-2"><b>@speakerRequest.Name</b></MudText>
+                <li @key="speakerRequest.Id">
+                    @if (speakerRequest.Id == currentSpeaker?.Id)
+                    {
+                        <MudText Typo="@Typo.body1" Class="mb-2"><b>@speakerRequest.Name</b></MudText>
+                    }
+                    else
+                    {
+                        <MudText Typo="@Typo.body1" Class="mb-2">@speakerRequest.Name</MudText>
+                    }
+                </li>
             }
-            else
-            {
-                <MudText Typo="@Typo.body1" Class="mb-2">@speakerRequest.Name</MudText>
-            }
-        </li>
-    }
-</ul>
+        </ul>
+
+    </MudItem>
+</MudGrid>

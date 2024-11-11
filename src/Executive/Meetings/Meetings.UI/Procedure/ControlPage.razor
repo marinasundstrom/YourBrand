@@ -149,7 +149,7 @@ else
                     && currentAgendaItem?.State != AgendaItemState.Voting 
                     && currentAgendaItem?.State != AgendaItemState.Completed)
                 {
-                    <MudPaper Class="pa-8 mb-4" Elevation="25">
+                    <MudPaper Class="pa-6 mb-4" Elevation="25">
                         <MudText Typo="@Typo.h4" GutterBottom="true" Class="mb-4">Roll call</MudText>
 
                         <YourBrand.Meetings.Procedure.RollCall.RollCallDisplay OrganizationId="@organization.Id" Meeting="@meeting" />
@@ -162,7 +162,7 @@ else
                     && currentAgendaItem?.State != AgendaItemState.Voting 
                     && currentAgendaItem?.State != AgendaItemState.Completed)
                 {
-                    <MudPaper Class="pa-8 mb-4" Elevation="25">
+                    <MudPaper Class="pa-6 mb-4" Elevation="25">
                         <MudText Typo="@Typo.h4" GutterBottom="true" Class="mb-4">Candidates</MudText>
 
                         <YourBrand.Meetings.Procedure.Election.CandidatesView Meeting="@meeting" AgendaItem="@currentAgendaItem" />
@@ -173,14 +173,14 @@ else
 
                 @if (currentMotion is not null)
                 {
-                    <MudPaper Class="pa-8 mb-4" Elevation="25">
+                    <MudPaper Class="pa-6 mb-4" Elevation="25">
                         <MotionDisplay Motion="@currentMotion" />
                     </MudPaper>
                 }
 
                 @if (@currentAgendaItem?.State == AgendaItemState.UnderDiscussion) 
                 {
-                    <MudPaper Class="pa-8 mb-4" Elevation="25">
+                    <MudPaper Class="pa-6 mb-4" Elevation="25">
                         <MudText Typo="@Typo.h4" GutterBottom="true">Discussion</MudText>
 
                         <MudButton Variant="Variant.Filled" Class="me-2"
@@ -195,7 +195,7 @@ else
         <MudItem xs="12" md="4">
             @if(agenda is not null) 
             {
-            <MudPaper Class="pa-8 mb-4" Elevation="25">
+            <MudPaper Class="pa-6 mb-4" Elevation="25">
                 <MudText Typo="@Typo.h4" GutterBottom="true" Class="mb-4">Agenda</MudText>
 
                 @{

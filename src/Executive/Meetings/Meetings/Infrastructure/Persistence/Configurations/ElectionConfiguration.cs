@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace YourBrand.Agendas.Infrastructure.Persistence.Configurations;
 
-public sealed class ElectionSessionConfiguration : IEntityTypeConfiguration<Election>
+public sealed class ElectionConfiguration : IEntityTypeConfiguration<Election>
 {
     public void Configure(EntityTypeBuilder<Election> builder)
     {
-        builder.ToTable("ElectionSession");
+        builder.ToTable("Elections");
 
         builder.HasKey(x => new { x.OrganizationId, x.Id });
 

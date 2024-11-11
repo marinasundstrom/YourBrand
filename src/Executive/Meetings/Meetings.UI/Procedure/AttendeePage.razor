@@ -9,6 +9,7 @@
 @inject IMeetingsClient MeetingsClient
 @inject IAgendasClient AgendasClient
 @inject IMotionsClient MotionsClient
+@inject IAttendeeClient AttendeeClient
 @inject IDiscussionsClient DiscussionsClient
 @inject IVotingClient VotingClient
 @inject IElectionsClient ElectionsClient
@@ -17,6 +18,7 @@
 @inject YourBrand.Portal.Services.IAccessTokenProvider AccessTokenProvider
 @inject IUserContext UserContext
 @inject ISnackbar Snackbar
+@inject IDialogService DialogService
 @implements IDisposable
 @implements IMeetingsProcedureHubClient
 
@@ -31,7 +33,7 @@ else
     <MudGrid>
         <MudItem xs="12" md="8">
 
-            <MudPaper Class="pa-8 mb-4" Elevation="25">
+            <MudPaper Class="pa-6 mb-4" Elevation="25">
                 <MudText Typo="@Typo.h2" GutterBottom="true">@meeting?.Title</MudText>
 
                 @if (meeting.State == MeetingState.Draft)
@@ -40,7 +42,7 @@ else
                 }
                 else if (meeting.State == MeetingState.Scheduled)
                 {
-                    <MudText Typo="@Typo.body1" GutterBottom="true">Waiting for the meeting start</MudText>
+                    <MudText Typo="@Typo.body1" GutterBottom="true">Waiting for the meeting to start</MudText>
                 }
                 else if (meeting.State == MeetingState.InProgress)
                 {
@@ -63,7 +65,7 @@ else
 
         @if (currentAgendaItem?.State == AgendaItemState.UnderDiscussion)
         {
-            <MudPaper Elevation="25" Class="pa-4 mb-4">
+            <MudPaper Elevation="25" Class="pa-6 mb-4">
                 <MudText Typo="@Typo.h4" GutterBottom="true">Discussion</MudText>
 
                     <MudButton Variant="Variant.Filled" Class="me-2"
@@ -80,11 +82,21 @@ else
         }
 
         @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election
-           && currentAgendaItem?.State != AgendaItemState.Voting)
+                        && currentAgendaItem?.State != AgendaItemState.Voting)
         {
-                <MudPaper Elevation="25" Class="pa-4 mb-4">
+                <MudPaper Elevation="25" Class="pa-6 mb-4">
 
                     <MudText Typo="@Typo.h4" GutterBottom="true">Candidates</MudText>
+
+                    @if (currentAgendaItem?.State != AgendaItemState.Canceled 
+                        && currentAgendaItem?.State != AgendaItemState.Skipped 
+                        && currentAgendaItem?.State != AgendaItemState.Voting 
+                        && currentAgendaItem?.State != AgendaItemState.Completed)
+                    {
+                        <MudButton Variant="Variant.Filled" Class="me-2" OnClick="Nominate">Nominate</MudButton>
+                            
+                        <MudButton Variant="Variant.Filled" Class="me-2" OnClick="Register">Register for candidacy</MudButton>
+                    }
 
                     <CandidatesView Meeting="meeting" AgendaItem="currentAgendaItem" />
 
@@ -94,7 +106,7 @@ else
         @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
         && currentAgendaItem?.State == AgendaItemState.Voting)
         {
-            <MudPaper Elevation="25" Class="pa-4 mb-4">
+            <MudPaper Elevation="25" Class="pa-6 mb-4">
                 
                 <MudText Typo="@Typo.h4" GutterBottom="true">Pick a candidate</MudText>
 
@@ -106,7 +118,7 @@ else
         @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
         && currentAgendaItem?.State == AgendaItemState.Completed)
         {
-            <MudPaper Elevation="25" Class="pa-4 mb-4">
+            <MudPaper Elevation="25" Class="pa-6 mb-4">
                 
                 <MudText Typo="@Typo.h4" GutterBottom="true">Elected </MudText>
 
@@ -120,7 +132,7 @@ else
         @if (agenda is not null)
         {
             <MudItem xs="12" md="4">
-                <MudPaper Class="pa-8 mb-4" Elevation="25">
+                <MudPaper Class="pa-6 mb-4" Elevation="25">
                     <MudText Typo="@Typo.h4" GutterBottom="true" Class="mb-4">Agenda</MudText>
 
 

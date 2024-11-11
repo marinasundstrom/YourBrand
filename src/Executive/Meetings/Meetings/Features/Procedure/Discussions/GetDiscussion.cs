@@ -31,12 +31,12 @@ public sealed record GetDiscussion(string OrganizationId, int Id) : IRequest<Res
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (agendaItem.SpeakerSession is null)
+            if (agendaItem.Discussion is null)
             {
                 return Errors.Meetings.NoOngoingDiscussionSession;
             }
 
-            return agendaItem.SpeakerSession?.ToDto();
+            return agendaItem.Discussion?.ToDto();
         }
     }
 }

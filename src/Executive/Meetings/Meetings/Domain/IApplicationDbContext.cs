@@ -8,6 +8,8 @@ public interface IApplicationDbContext
 {
     DbSet<Meeting> Meetings { get; }
 
+    DbSet<MeetingAttendee> MeetingAttendees { get; }
+
     DbSet<AttendeeRole> AttendeeRoles { get; }
 
     DbSet<Agenda> Agendas { get; }

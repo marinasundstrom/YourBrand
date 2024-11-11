@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using MudBlazor;
 
 using YourBrand.Meetings;
+using YourBrand.Meetings.Procedure.Election;
 
 namespace YourBrand.Meetings.Procedure;
 
@@ -208,5 +209,33 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
     public Task OnMovedToNextSpeaker(string id)
     {
         return Task.CompletedTask;
+    }
+
+    public async Task Nominate() 
+    {
+        DialogParameters parameters = new()
+        {
+            { nameof(NominateCandidateDialog.OrganizationId), organization.Id },
+            { nameof(NominateCandidateDialog.MeetingId), MeetingId }
+        };
+
+        var modalRef = DialogService.Show<NominateCandidateDialog>("Nominate candidate", parameters);
+
+        var result = await modalRef.Result;
+
+        if (result.Canceled) return;
+
+        var memberModel = (NominateCandidateDialog.ViewModel)result.Data!;
+
+        await AttendeeClient.NominateCandidateAsync(organization.Id, MeetingId,
+            new ProposeCandidate {
+                AttendeeId = memberModel.Attendee.Id,
+                Statement = memberModel.Statement,
+            });
+    }
+
+    public async Task Register()
+    {
+
     }
 }

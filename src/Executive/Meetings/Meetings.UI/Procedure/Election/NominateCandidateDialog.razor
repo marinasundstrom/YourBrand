@@ -1,0 +1,58 @@
+@using System.ComponentModel.DataAnnotations
+@inject IMeetingsClient MeetingsClient
+@inject ISnackbar Snackbar
+
+<EditForm Model="@Model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog Gutters="false">
+        <DialogContent>
+            <MudContainer Style="max-height: 500px; overflow-y: scroll">
+                <AttendeeSelector OrganizationId="@OrganizationId" MeetingId="@MeetingId" Class="mt-4" Label="Attendee"
+                    Variant="Variant.Outlined" @bind-Value="Model.Attendee" For="() => Model.Attendee" />
+                <MudTextField Label="Statement" Lines="5" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Statement"
+                    For="@(() => Model.Statement)" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                Nominate
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code
+{
+    [CascadingParameter]
+    public MudDialogInstance Dialog { get; set; } = null!;
+
+    [Parameter]
+    public string? OrganizationId { get; set; } = null!;
+
+    [Parameter]
+    public int MeetingId { get; set; }
+
+    [Parameter]
+    public ViewModel? Model { get; set; } = new ViewModel();
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+    public void OnValidSubmit()
+    {
+        Dialog.Close(Model);
+    }
+
+    public class ViewModel 
+    {
+        [Required]
+        public MeetingAttendee Attendee { get; set; }
+
+        public string? Statement { get; set; }
+    }
+}

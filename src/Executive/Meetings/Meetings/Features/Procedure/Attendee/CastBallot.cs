@@ -44,7 +44,7 @@ public sealed record CastBallot(string OrganizationId, int Id, string CandidateI
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (agendaItem.VotingSession is null)
+            if (agendaItem.Voting is null)
             {
                 return Errors.Meetings.NoOngoingVotingSession;
             }
@@ -56,7 +56,7 @@ public sealed record CastBallot(string OrganizationId, int Id, string CandidateI
                 return Errors.Meetings.CandidateNotFound;
             }
 
-            agendaItem.ElectionSession!.CastBallot(attendee, candidate, timeProvider);
+            agendaItem.Election!.CastBallot(attendee, candidate, timeProvider);
 
             context.Meetings.Update(meeting);
 

@@ -14,11 +14,11 @@ public enum SpeakerSessionState
     Completed
 }
 
-public sealed class SpeakerSession : AggregateRoot<SpeakerSessionId>, IAuditableEntity<SpeakerSessionId>, IHasTenant, IHasOrganization
+public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<DiscussionId>, IHasTenant, IHasOrganization
 {
     private readonly List<SpeakerRequest> _speakerQueue = new List<SpeakerRequest>();
 
-    public SpeakerSession() : base(new SpeakerSessionId())
+    public Discussion() : base(new DiscussionId())
     {
         State = SpeakerSessionState.NotStarted;
     }
@@ -42,7 +42,7 @@ public sealed class SpeakerSession : AggregateRoot<SpeakerSessionId>, IAuditable
     public SpeakerRequestId? CurrentSpeakerId { get; private set; }
 
     // Method to add a speaker request to the queue
-    public SpeakerRequest AddSpeaker(MeetingAttendee attendee)
+    public SpeakerRequest AddSpeakerRequest(MeetingAttendee attendee)
     {
         if (_speakerQueue.Any(s => s.AttendeeId == attendee.Id))
         {

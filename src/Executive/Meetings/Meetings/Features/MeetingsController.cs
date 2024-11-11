@@ -132,6 +132,14 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
         return this.HandleResult(result);
     }
 
+    [HttpGet("{id}/Attendees")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<MeetingAttendeeDto>))]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    [ProducesDefaultResponseType]
+    public async Task<PagedResult<MeetingAttendeeDto>> GetAttendees(string organizationId, int id, int page = 1, int pageSize = 10, string? searchTerm = null, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    => await mediator.Send(new GetAttendees(organizationId, id, page, pageSize, searchTerm, sortBy, sortDirection), cancellationToken);
+
+
     [HttpPost("{id}/Attendees")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingAttendeeDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]

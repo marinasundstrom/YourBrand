@@ -15,14 +15,14 @@ public enum ElectionState
     RedoRequired
 }
 
-public sealed class Election : AggregateRoot<ElectionSessionId>, IAuditableEntity<ElectionSessionId>, IHasTenant, IHasOrganization
+public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<ElectionId>, IHasTenant, IHasOrganization
 {
     private readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
     private readonly HashSet<Ballot> _ballots = new HashSet<Ballot>();
 
     private Election() { }
 
-    public Election(IEnumerable<ElectionCandidate> candidates) : base(new ElectionSessionId())
+    public Election(IEnumerable<ElectionCandidate> candidates) : base(new ElectionId())
     {
         foreach (var candidate in candidates)
         {

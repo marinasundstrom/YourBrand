@@ -25,7 +25,7 @@ public sealed class ElectionCandidate : Entity<ElectionCandidateId>, IAuditableE
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
     public AgendaItemId? AgendaItemId { get; set; }
-    public ElectionSessionId? ElectionSessionId { get; set; }
+    public ElectionId? ElectionSessionId { get; set; }
 
     public string Name { get; set; }
     public string? Position { get; set; }

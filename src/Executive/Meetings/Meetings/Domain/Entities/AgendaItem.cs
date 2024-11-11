@@ -84,9 +84,9 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     // public AgendaItemId DependsOnItem { get; set; }
 
-    public SpeakerSession? SpeakerSession { get; set; }
-    public Voting? VotingSession { get; set; }
-    public Election? ElectionSession { get; set; }
+    public Discussion? Discussion { get; set; }
+    public Voting? Voting { get; set; }
+    public Election? Election { get; set; }
 
     public DateTimeOffset? DiscussionStartedAt { get; private set; }
     public DateTimeOffset? DiscussionEndedAt { get; private set; }
@@ -134,8 +134,9 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         if (IsDiscussionCompleted)
             throw new InvalidOperationException("Discussion already completed.");
 
-        SpeakerSession = new SpeakerSession { OrganizationId = OrganizationId };
-        SpeakerSession.StartSession();
+        // Initialize SpeakerSession if it hasn't been created yet (in case there were no prior requests)
+        Discussion ??= new Discussion { OrganizationId = OrganizationId };
+        Discussion.StartSession();
 
         DiscussionStartedAt = DateTimeOffset.UtcNow;
         State = AgendaItemState.UnderDiscussion;
@@ -143,10 +144,20 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     public void EndDiscussion()
     {
-        SpeakerSession?.EndSession();
+        Discussion?.EndSession();
 
         IsDiscussionCompleted = true;
         DiscussionEndedAt = DateTimeOffset.UtcNow;
+    }
+
+    public void RequestSpeakerSlot(MeetingAttendee attendee)
+    {
+        if (State != AgendaItemState.Pending)
+            throw new InvalidOperationException("Speaker slots can only be requested when the item is pending.");
+
+        // Create SpeakerSession only if it doesn't exist
+        Discussion ??= new Discussion { OrganizationId = OrganizationId };
+        Discussion.AddSpeakerRequest(attendee);
     }
 
     public void StartVoting()
@@ -154,16 +165,16 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         if (State != AgendaItemState.UnderDiscussion)
             throw new InvalidOperationException("Cannot start voting.");
 
-        if (VotingSession != null)
+        if (Voting != null)
             throw new InvalidOperationException("Voting session already in progress.");
 
-        VotingSession = new Voting(VotingType.SimpleMajority)
+        Voting = new Voting(VotingType.SimpleMajority)
         {
             OrganizationId = OrganizationId,
             TenantId = TenantId
         };
 
-        VotingSession.StartVoting();
+        Voting.StartVoting();
 
         VotingStartedAt = DateTimeOffset.UtcNow;
         State = AgendaItemState.Voting;
@@ -171,12 +182,12 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     public void EndVoting()
     {
-        if (VotingSession == null)
+        if (Voting == null)
             throw new InvalidOperationException("No active voting session.");
 
-        VotingSession.TallyVotes();
+        Voting.TallyVotes();
 
-        VotingSession.EndVoting();
+        Voting.EndVoting();
 
         VotingEndedAt = DateTimeOffset.UtcNow;
         IsVoteCompleted = true;
@@ -185,7 +196,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     public Voting? GetCurrentVotingSession()
     {
-        return VotingSession?.EndTime == null ? VotingSession : null;
+        return Voting?.EndTime == null ? Voting : null;
     }
 
     public void StartElection()
@@ -193,17 +204,17 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         if (State != AgendaItemState.UnderDiscussion)
             throw new InvalidOperationException("Cannot start an election.");
 
-        if (ElectionSession != null)
+        if (Election != null)
             throw new InvalidOperationException("Election already in progress.");
 
         // Pass current candidates to the election session
-        ElectionSession = new Election(_candidates)
+        Election = new Election(_candidates)
         {
             OrganizationId = OrganizationId,
             TenantId = TenantId
         };
 
-        ElectionSession.StartElection();
+        Election.StartElection();
 
         VotingStartedAt = DateTimeOffset.UtcNow;
         State = AgendaItemState.Voting;
@@ -211,12 +222,12 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     public void EndElection()
     {
-        if (ElectionSession == null)
+        if (Election == null)
             throw new InvalidOperationException("No active election session.");
 
-        ElectionSession.TallyBallots();
+        Election.TallyBallots();
 
-        ElectionSession.EndElection();
+        Election.EndElection();
 
         VotingEndedAt = DateTimeOffset.UtcNow;
         IsVoteCompleted = true;
@@ -225,7 +236,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     public Election? GetCurrentElection()
     {
-        return ElectionSession?.EndTime == null ? ElectionSession : null;
+        return Election?.EndTime == null ? Election : null;
     }
 
     public void Complete()
@@ -408,9 +419,9 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         VotingStartedAt = null;
         VotingEndedAt = null;
 
-        SpeakerSession?.Reset();
-        VotingSession = null;
-        ElectionSession = null;
+        Discussion?.Reset();
+        Voting = null;
+        Election = null;
     }
 
     public User? CreatedBy { get; set; } = null!;

@@ -45,12 +45,12 @@ public sealed record MoveToNextSpeaker(string OrganizationId, int Id) : IRequest
                 return Errors.Meetings.AgendaItemNotFound;
             }
 
-            if (agendaItem.SpeakerSession is null)
+            if (agendaItem.Discussion is null)
             {
                 return Errors.Meetings.NoOngoingDiscussionSession;
             }
 
-            var speakerRequest = agendaItem.SpeakerSession!.MoveToNextSpeaker();
+            var speakerRequest = agendaItem.Discussion!.MoveToNextSpeaker();
 
             context.Meetings.Update(meeting);
 

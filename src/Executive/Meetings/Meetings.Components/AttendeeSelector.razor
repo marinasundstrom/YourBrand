@@ -1,0 +1,65 @@
+@using System.Linq.Expressions
+@inject IMeetingsClient MeetingsClient
+@inject IDialogService DialogService
+
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="MeetingAttendee" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchMeetingAttendees" ToStringFunc="(x) => x.Name"
+            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Attendee";
+
+    [Parameter]
+    public MeetingAttendee Value { get; set; }
+
+    [Parameter]
+    public EventCallback<MeetingAttendee> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<MeetingAttendee>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public string? OrganizationId { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public int MeetingId { get; set; }
+
+    async Task<IEnumerable<MeetingAttendee>> SearchMeetingAttendees(string text, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var results = await MeetingsClient.GetAttendeesAsync(OrganizationId, MeetingId, 1, 10, text, null, null,
+            cancellationToken);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+}

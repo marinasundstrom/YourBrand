@@ -25,17 +25,17 @@ public sealed class AgendaItemConfiguration : IEntityTypeConfiguration<AgendaIte
 
        //builder.Navigation(x => x.SubItems).AutoInclude();
 
-        builder.HasOne(x => x.SpeakerSession)
+        builder.HasOne(x => x.Discussion)
             .WithOne()
-            .HasForeignKey<SpeakerSession>(x => new { x.OrganizationId, x.AgendaItemId });
+            .HasForeignKey<Discussion>(x => new { x.OrganizationId, x.AgendaItemId });
 
-        builder.Navigation(x => x.SpeakerSession).AutoInclude();
+        builder.Navigation(x => x.Discussion).AutoInclude();
 
-        builder.HasOne(x => x.VotingSession)
+        builder.HasOne(x => x.Voting)
             .WithOne()
             .HasForeignKey<Voting>(x => new { x.OrganizationId, x.AgendaItemId });
 
-        builder.Navigation(x => x.VotingSession).AutoInclude();
+        builder.Navigation(x => x.Voting).AutoInclude();
 
         builder.HasMany(x => x.Candidates)
             .WithOne()
@@ -43,11 +43,11 @@ public sealed class AgendaItemConfiguration : IEntityTypeConfiguration<AgendaIte
 
         builder.Navigation(x => x.Candidates).AutoInclude();
 
-        builder.HasOne(x => x.ElectionSession)
+        builder.HasOne(x => x.Election)
             .WithOne()
             .HasForeignKey<Election>(x => new { x.OrganizationId, x.AgendaItemId });
 
-        builder.Navigation(x => x.ElectionSession).AutoInclude();
+        builder.Navigation(x => x.Election).AutoInclude();
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
