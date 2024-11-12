@@ -42,7 +42,7 @@ public sealed record StartVoting(string OrganizationId, int Id) : IRequest<Resul
 
             if (attendee.Role != AttendeeRole.Chairperson)
             {
-                return Errors.Meetings.OnlyChairpersonCanStartVotingSession;
+                return Errors.Meetings.OnlyChairpersonCanStartVoting;
             }
 
             agendaItem.StartVoting();

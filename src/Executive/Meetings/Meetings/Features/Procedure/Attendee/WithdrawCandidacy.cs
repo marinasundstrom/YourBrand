@@ -8,7 +8,7 @@ namespace YourBrand.Meetings.Features.Procedure.Attendee;
 
 public sealed record WithdrawCandidacy(string OrganizationId, int Id, string CandidateId) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<WithdrawCandidacy, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, TimeProvider timeProvider) : IRequestHandler<WithdrawCandidacy, Result>
     {
         public async Task<Result> Handle(WithdrawCandidacy request, CancellationToken cancellationToken)
         {
@@ -44,17 +44,19 @@ public sealed record WithdrawCandidacy(string OrganizationId, int Id, string Can
 
             if (agendaItem.Voting is null || agendaItem.Voting.State == VotingState.Completed)
             {
-                return Errors.Meetings.NoOngoingVotingSession;
+                return Errors.Meetings.NoOngoingVoting;
             }
 
-            var candidate = agendaItem.Candidates.FirstOrDefault(x => x.Id == request.CandidateId);
+            var election = agendaItem.Election;
+
+            var candidate = election.Candidates.FirstOrDefault(x => x.Id == request.CandidateId);
 
             if (candidate is null)
             {
                 return Errors.Meetings.CandidateAlreadyProposed;
             }
 
-            agendaItem!.RemoveCandidate(candidate);
+            election!.WithdrawCandidacy(candidate, timeProvider);
 
             context.Meetings.Update(meeting);
 

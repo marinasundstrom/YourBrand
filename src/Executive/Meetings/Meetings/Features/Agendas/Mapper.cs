@@ -1,5 +1,6 @@
-﻿using YourBrand.Meetings.Features.Organizations;
-using YourBrand.Meetings.Features.Users;
+﻿using YourBrand.Meetings.Features.Procedure.Discussions;
+using YourBrand.Meetings.Features.Procedure.Voting;
+using YourBrand.Meetings.Features.Procedure.Elections;
 
 namespace YourBrand.Meetings.Features.Agendas;
 
@@ -15,7 +16,9 @@ public static partial class Mappings
         item.IsVoteCompleted,
         item.MotionId,
         item.SubItems.Select(x => x.ToDto()),
-        item.Candidates.Select(x => x.ToDto()));
+        item.Discussion?.ToDto(),
+        item.Voting?.ToDto(),
+        item.Election?.ToDto());
 
 
     public static AgendaItemTypeDto ToDto(this AgendaItemType type) =>

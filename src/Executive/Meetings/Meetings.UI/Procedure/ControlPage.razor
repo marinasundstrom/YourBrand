@@ -229,9 +229,9 @@ else
     private Motion? currentMotion;
     private bool lastItem;
 
-    private SpeakerSession? discussion;
-    private VotingSession? voting;
-    private ElectionSession? election;
+    private Discussion? discussion;
+    private Voting? voting;
+    private Election? election;
 
     HubConnection procedureHub = null!;
     IDiscussionsHub hubProxy = default!;
@@ -369,11 +369,11 @@ else
             {
                 if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting) 
                 {
-                    voting = await VotingClient.GetVotingSessionAsync(organization.Id, MeetingId);
+                    voting = await VotingClient.GetVotingAsync(organization.Id, MeetingId);
                 }
                 else if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Election) 
                 {
-                    election = await ElectionsClient.GetElectionSessionAsync(organization.Id, MeetingId);
+                    election = await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
                 }
             }
         }

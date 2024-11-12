@@ -7,11 +7,11 @@ using YourBrand.Meetings.Features.Agendas;
 
 namespace YourBrand.Meetings.Features.Procedure.Discussions;
 
-public sealed record GetDiscussion(string OrganizationId, int Id) : IRequest<Result<SpeakerSessionDto?>>
+public sealed record GetDiscussion(string OrganizationId, int Id) : IRequest<Result<DiscussionDto?>>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<GetDiscussion, Result<SpeakerSessionDto?>>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<GetDiscussion, Result<DiscussionDto?>>
     {
-        public async Task<Result<SpeakerSessionDto?>> Handle(GetDiscussion request, CancellationToken cancellationToken)
+        public async Task<Result<DiscussionDto?>> Handle(GetDiscussion request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)

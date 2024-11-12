@@ -69,9 +69,9 @@ internal sealed class OperativeClauseIdConverter : ValueConverter<MotionOperativ
     }
 }
 
-internal sealed class VotingSessionIdConverter : ValueConverter<VotingId, string>
+internal sealed class VotingIdConverter : ValueConverter<VotingId, string>
 {
-    public VotingSessionIdConverter()
+    public VotingIdConverter()
         : base(v => v.Value, v => new(v))
     {
     }
@@ -85,9 +85,9 @@ internal sealed class VoteIdConverter : ValueConverter<VoteId, string>
     }
 }
 
-internal sealed class ElectionSessionIdConverter : ValueConverter<ElectionId, string>
+internal sealed class ElectionIdConverter : ValueConverter<ElectionId, string>
 {
-    public ElectionSessionIdConverter()
+    public ElectionIdConverter()
         : base(v => v.Value, v => new(v))
     {
     }
@@ -110,9 +110,9 @@ internal sealed class BallotIdConverter : ValueConverter<BallotId, string>
 }
 
 
-internal sealed class SpeakerSessionIdConverter : ValueConverter<DiscussionId, string>
+internal sealed class SpeakerIdConverter : ValueConverter<DiscussionId, string>
 {
-    public SpeakerSessionIdConverter()
+    public SpeakerIdConverter()
         : base(v => v.Value, v => new(v))
     {
     }

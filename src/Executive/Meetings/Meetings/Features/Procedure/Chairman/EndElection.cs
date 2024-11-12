@@ -41,7 +41,7 @@ public sealed record EndElection(string OrganizationId, int Id) : IRequest<Resul
 
             if (attendee.Role != AttendeeRole.Chairperson)
             {
-                return Errors.Meetings.OnlyChairpersonCanEndVotingSession;
+                return Errors.Meetings.OnlyChairpersonCanEndVoting;
             }
 
             agendaItem.EndElection();

@@ -9,6 +9,8 @@ public class AgendaItemType : IEntity
     public string? Description { get; private set; } // Optional description
 
     // Rule properties
+    public AttendeeRole? HandledByRole { get; private set; }
+
     public bool RequiresDiscussion { get; private set; }
     public bool RequiresVoting { get; private set; }
     public bool CanBePostponed { get; private set; }
@@ -19,7 +21,8 @@ public class AgendaItemType : IEntity
 
     private AgendaItemType(int id, string name, string? description = null,
         bool requiresDiscussion = false, bool requiresVoting = false,
-        bool canBePostponed = true, bool canBeSkipped = true, bool isMandatory = false)
+        bool canBePostponed = true, bool canBeSkipped = true, bool isMandatory = false, 
+        AttendeeRole? handledByRole = null)
     {
         Id = id;
         Name = name;
@@ -29,12 +32,14 @@ public class AgendaItemType : IEntity
         CanBePostponed = canBePostponed;
         CanBeSkipped = canBeSkipped;
         IsMandatory = isMandatory;
+
+        HandledByRole = handledByRole;
     }
 
     // Static instances with rule settings
     public static readonly AgendaItemType CallToOrder = new(1, "Call To Order", "Opening the meeting formally", isMandatory: true, canBePostponed: false, canBeSkipped: false);
-    public static readonly AgendaItemType RollCall = new(2, "Roll Call", "Attendance check", isMandatory: true, canBePostponed: false, canBeSkipped: false);
-    public static readonly AgendaItemType QuorumCheck = new(3, "Quorum Check", "Verification of quorum", isMandatory: true, canBePostponed: false, canBeSkipped: false);
+    public static readonly AgendaItemType RollCall = new(2, "Roll Call", "Attendance check", isMandatory: true, canBePostponed: false, canBeSkipped: false, handledByRole: AttendeeRole.Secretary);
+    public static readonly AgendaItemType QuorumCheck = new(3, "Quorum Check", "Verification of quorum", isMandatory: true, canBePostponed: false, canBeSkipped: false, handledByRole: AttendeeRole.Secretary);
     public static readonly AgendaItemType ApprovalOfMinutes = new(4, "Approval Of Minutes", "Approval of previous meeting's minutes", requiresVoting: true);
     public static readonly AgendaItemType ApprovalOfAgenda = new(5, "Approval Of Agenda", "Approval of the current meeting's agenda", requiresVoting: true, canBePostponed: false);
     public static readonly AgendaItemType ConsentAgenda = new(6, "Consent Agenda", "Routine items grouped for a single vote", requiresVoting: true);

@@ -6,7 +6,7 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
 
-public enum SpeakerSessionState
+public enum DiscussionState
 {
     NotStarted,
     InProgress,
@@ -20,14 +20,14 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
 
     public Discussion() : base(new DiscussionId())
     {
-        State = SpeakerSessionState.NotStarted;
+        State = DiscussionState.NotStarted;
     }
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
     public AgendaItemId? AgendaItemId { get; set; }
 
-    public SpeakerSessionState State { get; private set; }
+    public DiscussionState State { get; private set; }
 
     public IEnumerable<SpeakerRequest> SpeakerQueue => _speakerQueue;
 
@@ -89,7 +89,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
         if (_speakerQueue.Count == 0)
         {
             CurrentSpeaker = null;
-            State = SpeakerSessionState.Completed;
+            State = DiscussionState.Completed;
         }
         else
         {
@@ -111,7 +111,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
 
             if (CurrentSpeaker == null)
             {
-                State = SpeakerSessionState.Completed;
+                State = DiscussionState.Completed;
             }
         }
 
@@ -121,18 +121,18 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
     // Method to start the session
     public void StartSession()
     {
-        if (State != SpeakerSessionState.NotStarted)
+        if (State != DiscussionState.NotStarted)
         {
             throw new InvalidOperationException("Session has already started.");
         }
 
-        State = SpeakerSessionState.InProgress;
+        State = DiscussionState.InProgress;
     }
 
     // Method to manually end the session
     public void EndSession()
     {
-        if (State == SpeakerSessionState.Completed)
+        if (State == DiscussionState.Completed)
         {
             throw new InvalidOperationException("Session is already completed.");
         }
@@ -147,29 +147,29 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
         }
 
         // End the session manually
-        State = SpeakerSessionState.Completed;
+        State = DiscussionState.Completed;
     }
 
     // Method to pause the session
     public void PauseSession()
     {
-        if (State != SpeakerSessionState.InProgress)
+        if (State != DiscussionState.InProgress)
         {
             throw new InvalidOperationException("Session is not in progress and cannot be paused.");
         }
 
-        State = SpeakerSessionState.Paused;
+        State = DiscussionState.Paused;
     }
 
     // Method to resume the session if paused
     public void ResumeSession()
     {
-        if (State != SpeakerSessionState.Paused)
+        if (State != DiscussionState.Paused)
         {
             throw new InvalidOperationException("Session is not paused and cannot be resumed.");
         }
 
-        State = SpeakerSessionState.InProgress;
+        State = DiscussionState.InProgress;
     }
 
     // Method to reset the speaker session and clear the queue
@@ -177,7 +177,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
     {
         _speakerQueue.Clear();
         CurrentSpeaker = null;
-        State = SpeakerSessionState.NotStarted;
+        State = DiscussionState.NotStarted;
     }
 
     public User? CreatedBy { get; set; } = null!;

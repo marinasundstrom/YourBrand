@@ -14,10 +14,10 @@ namespace YourBrand.Meetings.Features.Procedure.Voting;
 public sealed partial class VotingController(IMediator mediator) : ControllerBase
 {
     [HttpGet("{id}/Voting")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(VotingSessionDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(VotingDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<VotingSessionDto>> GetVotingSession(string organizationId, int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<VotingDto>> GetVoting(string organizationId, int id, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetVoting(organizationId, id), cancellationToken);
         return this.HandleResult(result);

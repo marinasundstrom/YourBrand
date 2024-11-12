@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using MudBlazor;
 
 using YourBrand.Meetings;
-using YourBrand.Meetings.Procedure.Election;
+using YourBrand.Meetings.Procedure.Elections;
 
 namespace YourBrand.Meetings.Procedure;
 
@@ -18,9 +18,9 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
     AgendaItem? currentAgendaItem;
     Motion? currentMotion;
 
-    private SpeakerSession? discussion;
-    private VotingSession? voting;
-    private ElectionSession? election;
+    private Discussion? discussion;
+    private Voting? voting;
+    private Election? election;
 
     HubConnection procedureHub = null!;
     IDiscussionsHub hubProxy = default!;
@@ -148,11 +148,11 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         {
             if (currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting)
             {
-                voting = await VotingClient.GetVotingSessionAsync(organization.Id, MeetingId);
+                voting = await VotingClient.GetVotingAsync(organization.Id, MeetingId);
             }
             else if (currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Election)
             {
-                election = await ElectionsClient.GetElectionSessionAsync(organization.Id, MeetingId);
+                election = await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
             }
         }
     }

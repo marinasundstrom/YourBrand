@@ -1,3 +1,7 @@
+using YourBrand.Meetings.Features.Procedure.Discussions;
+using YourBrand.Meetings.Features.Procedure.Voting;
+using YourBrand.Meetings.Features.Procedure.Elections;
+
 namespace YourBrand.Meetings.Features.Agendas;
 
 public sealed record AgendaDto(int Id, AgendaState State, IEnumerable<AgendaItemDto> Items);
@@ -17,7 +21,9 @@ public sealed record AgendaItemDto(
     bool IsVoteCompleted,
     int? MotionId,
     IEnumerable<AgendaItemDto> SubItems,
-    IEnumerable<ElectionCandidateDto> Candidates);
+    DiscussionDto? Discussion,
+    VotingDto? Voting,
+    ElectionDto? Election);
 
 public sealed record AgendaItemTypeDto(int Id, string Name, string? Description);
 

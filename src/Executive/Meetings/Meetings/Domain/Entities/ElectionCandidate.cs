@@ -8,31 +8,36 @@ namespace YourBrand.Meetings.Domain.Entities;
 
 public sealed class ElectionCandidate : Entity<ElectionCandidateId>, IAuditableEntity<ElectionCandidateId>, IHasTenant, IHasOrganization
 {
-    public ElectionCandidate()
+    private ElectionCandidate()
         : base(new ElectionCandidateId())
     {
     }
 
-    public ElectionCandidate(MeetingAttendeeId id, string name, string? statement, string? position = null)
+    public ElectionCandidate(string name, string? statement,
+        UserId? userId = null,
+        MeetingGroupMemberId? groupMemberId = null,
+        MeetingAttendeeId? attendeeId = null)
         : base(new ElectionCandidateId())
     {
-        AttendeeId = id;
+        UserId = userId;
+        GroupMemberId = groupMemberId;
+        AttendeeId = attendeeId;
         Name = name;
         Statement = statement;
-        Position = position;
     }
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
-    public AgendaItemId? AgendaItemId { get; set; }
-    public ElectionId? ElectionSessionId { get; set; }
+    public ElectionId? ElectionId { get; set; }
 
     public string Name { get; set; }
-    public string? Position { get; set; }
     public string? Description { get; set; }
-    public MeetingAttendeeId AttendeeId { get; set; }
 
-    public MeetingAttendeeId? NominatedBy { get; set; }
+    public UserId? UserId { get; set; }
+    public MeetingGroupMemberId? GroupMemberId { get; set; }
+    public MeetingAttendeeId? AttendeeId { get; set; }
+
+    public IdGroup? NominatedBy { get; set; }
     public DateTimeOffset? NominatedAt { get; set; }
     public string? Statement { get; set; }
 
@@ -46,4 +51,12 @@ public sealed class ElectionCandidate : Entity<ElectionCandidateId>, IAuditableE
     public User? LastModifiedBy { get; set; }
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
+}
+
+public class IdGroup 
+{
+    public string? Name { get; set; }
+    public UserId? UserId { get; set; }
+    public MeetingGroupMemberId? GroupMemberId { get; set; }
+    public MeetingAttendeeId? AttendeeId { get; set; }
 }

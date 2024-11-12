@@ -37,12 +37,6 @@ public sealed class AgendaItemConfiguration : IEntityTypeConfiguration<AgendaIte
 
         builder.Navigation(x => x.Voting).AutoInclude();
 
-        builder.HasMany(x => x.Candidates)
-            .WithOne()
-            .HasForeignKey(x => new { x.OrganizationId, x.AgendaItemId });
-
-        builder.Navigation(x => x.Candidates).AutoInclude();
-
         builder.HasOne(x => x.Election)
             .WithOne()
             .HasForeignKey<Election>(x => new { x.OrganizationId, x.AgendaItemId });

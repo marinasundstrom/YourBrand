@@ -8,7 +8,7 @@ namespace YourBrand.Meetings.Features.Procedure.Attendee;
 
 public sealed record NominateCandidate(string OrganizationId, int Id, string AttendeeId, string? Statement) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<NominateCandidate, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, TimeProvider timeProvider) : IRequestHandler<NominateCandidate, Result>
     {
         public async Task<Result> Handle(NominateCandidate request, CancellationToken cancellationToken)
         {
@@ -44,7 +44,7 @@ public sealed record NominateCandidate(string OrganizationId, int Id, string Att
 
             if (agendaItem.Voting is null || agendaItem.Voting.State == VotingState.Completed)
             {
-                return Errors.Meetings.NoOngoingVotingSession;
+                return Errors.Meetings.NoOngoingVoting;
             }
 
             var candidateAttendee = meeting.GetAttendeeByUserId(request.AttendeeId);
@@ -53,13 +53,15 @@ public sealed record NominateCandidate(string OrganizationId, int Id, string Att
             {
                 return Errors.Meetings.NotAnAttendantOfMeeting;
             }
+            
+            var election = agendaItem!.Election;
 
-            if (!agendaItem.Candidates.Any(x => x.AttendeeId == candidateAttendee.Id))
+            if (election.IsAlreadyCandidate(candidateAttendee.Id))
             {
                 return Errors.Meetings.CandidateAlreadyProposed;
             }
 
-            agendaItem!.AddCandidate(candidateAttendee, request.Statement);
+            election.NominateCandidate(timeProvider, candidateAttendee.Id, "", request.Statement, "", null);
 
             context.Meetings.Update(meeting);
 

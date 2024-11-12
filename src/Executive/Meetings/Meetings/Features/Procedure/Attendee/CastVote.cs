@@ -46,7 +46,7 @@ public sealed record CastVote(string OrganizationId, int Id, VoteOption Option) 
 
             if (agendaItem.Voting is null)
             {
-                return Errors.Meetings.NoOngoingVotingSession;
+                return Errors.Meetings.NoOngoingVoting;
             }
 
             agendaItem.Voting!.CastVote(attendee, request.Option, timeProvider);

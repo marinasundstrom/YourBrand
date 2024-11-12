@@ -7,11 +7,11 @@ using YourBrand.Meetings.Features.Agendas;
 
 namespace YourBrand.Meetings.Features.Procedure.Voting;
 
-public sealed record GetVoting(string OrganizationId, int Id) : IRequest<Result<VotingSessionDto?>>
+public sealed record GetVoting(string OrganizationId, int Id) : IRequest<Result<VotingDto?>>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<GetVoting, Result<VotingSessionDto?>>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<GetVoting, Result<VotingDto?>>
     {
-        public async Task<Result<VotingSessionDto?>> Handle(GetVoting request, CancellationToken cancellationToken)
+        public async Task<Result<VotingDto?>> Handle(GetVoting request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
@@ -33,7 +33,7 @@ public sealed record GetVoting(string OrganizationId, int Id) : IRequest<Result<
 
             if (agendaItem.Discussion is null)
             {
-                return Errors.Meetings.NoOngoingVotingSession;
+                return Errors.Meetings.NoOngoingVoting;
             }
 
             return agendaItem.Voting?.ToDto();

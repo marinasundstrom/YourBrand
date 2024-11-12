@@ -1390,7 +1390,7 @@ paths:
     get:
       tags:
       - Voting
-      operationId: Voting_GetVotingSession
+      operationId: Voting_GetVoting
       parameters:
       - name: organizationId
         in: query
@@ -1410,7 +1410,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VotingSession'
+                $ref: '#/components/schemas/Voting'
         404:
           description: ''
           content:
@@ -1429,7 +1429,7 @@ paths:
     get:
       tags:
       - Elections
-      operationId: Elections_GetElectionSession
+      operationId: Elections_GetElection
       parameters:
       - name: organizationId
         in: query
@@ -1449,7 +1449,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ElectionSession'
+                $ref: '#/components/schemas/Election'
         404:
           description: ''
           content:
@@ -1488,7 +1488,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SpeakerSession'
+                $ref: '#/components/schemas/Discussion'
         404:
           description: ''
           content:
@@ -4098,10 +4098,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AgendaItem'
-        candidates:
-          type: array
-          items:
-            $ref: '#/components/schemas/ElectionCandidate'
+        discussion:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Discussion'
+        voting:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Voting'
+        election:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Election'
     AgendaItemState:
       type: integer
       description: ''
@@ -4143,6 +4151,101 @@ components:
       - 0
       - 1
       - 2
+    Discussion:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/DiscussionState'
+        speakerQueue:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpeakerRequest'
+        currentSpeaker:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SpeakerRequest'
+    DiscussionState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - NotStarted
+      - InProgress
+      - Paused
+      - Completed
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+    SpeakerRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        attendeeId:
+          type: string
+    Voting:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/VotingState'
+        hasPassed:
+          type: boolean
+    VotingState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - NotStarted
+      - Voting
+      - Completed
+      - ResultReady
+      - RedoRequired
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+    Election:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        state:
+          $ref: '#/components/schemas/ElectionState'
+        candidates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ElectionCandidate'
+        electedCandidate:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ElectionCandidate'
+    ElectionState:
+      type: integer
+      description: ''
+      x-enumNames:
+      - NotStarted
+      - Voting
+      - Completed
+      - ResultReady
+      - RedoRequired
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
     ElectionCandidate:
       type: object
       additionalProperties: false
@@ -4214,101 +4317,6 @@ components:
         name:
           type: string
         email:
-          type: string
-    VotingSession:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        state:
-          $ref: '#/components/schemas/VotingState'
-        hasPassed:
-          type: boolean
-    VotingState:
-      type: integer
-      description: ''
-      x-enumNames:
-      - NotStarted
-      - Voting
-      - Completed
-      - ResultReady
-      - RedoRequired
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-    ElectionSession:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        state:
-          $ref: '#/components/schemas/ElectionState'
-        candidates:
-          type: array
-          items:
-            $ref: '#/components/schemas/ElectionCandidate'
-        electedCandidate:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/ElectionCandidate'
-    ElectionState:
-      type: integer
-      description: ''
-      x-enumNames:
-      - NotStarted
-      - Voting
-      - Completed
-      - ResultReady
-      - RedoRequired
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-    SpeakerSession:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        state:
-          $ref: '#/components/schemas/SpeakerSessionState'
-        speakerQueue:
-          type: array
-          items:
-            $ref: '#/components/schemas/SpeakerRequest'
-        currentSpeaker:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/SpeakerRequest'
-    SpeakerSessionState:
-      type: integer
-      description: ''
-      x-enumNames:
-      - NotStarted
-      - InProgress
-      - Paused
-      - Completed
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-    SpeakerRequest:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        attendeeId:
           type: string
     RequestSpeakerTime:
       type: object

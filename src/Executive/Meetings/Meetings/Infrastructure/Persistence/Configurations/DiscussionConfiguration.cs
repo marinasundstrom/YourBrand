@@ -15,7 +15,7 @@ public sealed class DiscussionConfiguration : IEntityTypeConfiguration<Discussio
 
         builder.HasMany(x => x.SpeakerQueue)
             .WithOne()
-            .HasForeignKey(x => new { x.OrganizationId, x.SpeakerSessionId });
+            .HasForeignKey(x => new { x.OrganizationId, x.SpeakerId });
 
         /*
         builder

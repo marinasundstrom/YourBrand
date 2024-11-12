@@ -16,6 +16,8 @@ public static class Seed
 
         using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
+        var timeProvider = scope.ServiceProvider.GetRequiredService<TimeProvider>();
+
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
 
@@ -137,8 +139,24 @@ public static class Seed
         {
             await BoardMeeting(context);
 
-            await AnnualGeneralMeeting(context, annualGeneralMeeting);
+            await AnnualGeneralMeeting(context, annualGeneralMeeting, timeProvider);
         }
+    }
+
+    private static MeetingGroup NewBoard(ApplicationDbContext context)
+    {
+        // Create a new MeetingGroup
+        var meetingGroup = new MeetingGroup(3, "Board of directors (2025)", "New board")
+        {
+            TenantId = TenantConstants.TenantId,
+            OrganizationId = TenantConstants.OrganizationId,
+            Quorum = new Quorum
+            {
+                RequiredNumber = 3
+            }
+        };
+
+        return meetingGroup;
     }
 
     private static MeetingGroup Board(ApplicationDbContext context)
@@ -378,7 +396,7 @@ public static class Seed
         await context.SaveChangesAsync();
     }
 
-    private static async Task AnnualGeneralMeeting(ApplicationDbContext context, Meeting meeting)
+    private static async Task AnnualGeneralMeeting(ApplicationDbContext context, Meeting meeting, TimeProvider timeProvider)
     {
         var agenda = new Agenda(2)
         {
@@ -464,71 +482,150 @@ public static class Seed
             description: "Election of board members and officials as per organizational bylaws."
         );
 
-        var electionOfChairperson = boardMemberElection.AddItem(
+        var election = new Election() 
+        { 
+            OrganizationId = TenantConstants.OrganizationId,
+            Position = MemberRole.Chairperson,
+            GroupId = 3
+        };
+
+        election.NominateCandidate(timeProvider, meeting.Attendees.First(x => x.Order == 1), null);
+        election.NominateCandidate(timeProvider, meeting.Attendees.First(x => x.Order == 10), null);
+
+        boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Chairperson",
-            description: "Election of the Chairperson of the board as per organizational bylaws."
+            description: "Election of the Chairperson of the board as per organizational bylaws.",
+            election: election
         );
 
-        electionOfChairperson.AddCandidate(meeting.Attendees.First(x => x.Order == 1), null);
-        electionOfChairperson.AddCandidate(meeting.Attendees.First(x => x.Order == 10), null);
+        election = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            Position = MemberRole.ViceChairperson,
+            GroupId = 3
+        };
 
-        boardMemberElection.AddItem(
+        election.NominateCandidate(timeProvider, meeting.Attendees.First(x => x.Order == 2), null);
+
+        var item = boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Vice Chairperson",
-            description: "Election of the Vice Chairperson of the board as per organizational bylaws."
-        )
-        .AddCandidate(meeting.Attendees.First(x => x.Order == 2), null);
+            description: "Election of the Vice Chairperson of the board as per organizational bylaws.",
+            election: election
+        );
 
-        boardMemberElection.AddItem(
+        election = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            Position = MemberRole.Secretary,
+            GroupId = 3
+        };
+
+        election.NominateCandidate(timeProvider, meeting.Attendees.First(x => x.Order == 3), null);
+
+        item = boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Secretary",
-            description: "Election of the Secretary of the board as per organizational bylaws."
-        )
-        .AddCandidate(meeting.Attendees.First(x => x.Order == 3), null);
+            description: "Election of the Secretary of the board as per organizational bylaws.",
+            election: election
+        );
 
-        boardMemberElection.AddItem(
+        election = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            Position = MemberRole.Treasurer,
+            GroupId = 3
+        };
+
+        election.NominateCandidate(timeProvider, meeting.Attendees.First(x => x.Order == 4), null);
+
+        item = boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Treasurer",
-            description: "Election of the Treasurer of the board as per organizational bylaws."
-        )
-        .AddCandidate(meeting.Attendees.First(x => x.Order == 4), null);
+            description: "Election of the Treasurer of the board as per organizational bylaws.",
+            election: election
+        );
 
-        boardMemberElection.AddItem(
+        election = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            Position = MemberRole.Member,
+            GroupId = 3
+        };
+
+        election.NominateCandidate(timeProvider, meeting.Attendees.First(x => x.Order == 5), null);
+
+        item = boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Member (Position 1)",
-            description: "Election of a board member for Position 1 as per organizational bylaws."
-        )
-        .AddCandidate(meeting.Attendees.First(x => x.Order == 5), null);
+            description: "Election of a board member for Position 1 as per organizational bylaws.",
+            election: election
+        );
 
+        election = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            Position = MemberRole.Member,
+            GroupId = 3
+        };
 
-        boardMemberElection.AddItem(
+        election.NominateCandidate(timeProvider, meeting.Attendees.First(x => x.Order == 6), null);
+
+        item = boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Member (Position 2)",
-            description: "Election of a board member for Position 2 as per organizational bylaws."
-        )
-        .AddCandidate(meeting.Attendees.First(x => x.Order == 6), null);
+            description: "Election of a board member for Position 2 as per organizational bylaws.",
+            election: election
+        );
 
-        boardMemberElection.AddItem(
+        election = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            Position = MemberRole.Member,
+            GroupId = 3
+        };
+
+        election.NominateCandidate(timeProvider, meeting.Attendees.First(x => x.Order == 7), null);
+
+        item = boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Member (Position 3)",
-            description: "Election of a board member for Position 3 as per organizational bylaws."
-        )
-        .AddCandidate(meeting.Attendees.First(x => x.Order == 7), null);
+            description: "Election of a board member for Position 3 as per organizational bylaws.",
+            election: election
+        );
 
-        boardMemberElection.AddItem(
+        election = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            Position = MemberRole.Alternate,
+            GroupId = 3
+        };
+
+        election.NominateCandidate(timeProvider, meeting.Attendees.First(x => x.Order == 8), null);
+
+        item = boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Alternate (Position 1)",
-            description: "Election of an alternate board member for Position 1 as per organizational bylaws."
-        )
-        .AddCandidate(meeting.Attendees.First(x => x.Order == 8), null);
+            description: "Election of an alternate board member for Position 1 as per organizational bylaws.",
+            election: election
+        );
 
-        boardMemberElection.AddItem(
+        election = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            Position = MemberRole.Alternate,
+            GroupId = 3
+        };
+
+        election.NominateCandidate(timeProvider, meeting.Attendees.First(x => x.Order == 9), null);
+
+        item = boardMemberElection.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Alternate (Position 2)",
-            description: "Election of an alternate board member for Position 2 as per organizational bylaws."
-        )
-        .AddCandidate(meeting.Attendees.First(x => x.Order == 9), null);
+            description: "Election of an alternate board member for Position 2 as per organizational bylaws.",
+            election: election
+        );
 
         agenda.AddItem(
             type: AgendaItemType.Election,

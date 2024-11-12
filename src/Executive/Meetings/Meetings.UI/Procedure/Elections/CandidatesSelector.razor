@@ -4,7 +4,7 @@
 @inject IOrganizationProvider OrganizationProvider
 
 <MudGrid Class="mb-4">
-    @foreach (var candidate in AgendaItem.Candidates)
+    @foreach (var candidate in AgendaItem.Election.Candidates)
     {
         <MudItem xs="12" sm="12" md="6" lg="4">
             <a href="#" @onclick="() => SelectCandidate(candidate)" @onclick:preventDefault>

@@ -2,6 +2,7 @@ using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Meetings.Domain.ValueObjects;
+using YourBrand.Meetings.Dtos;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Domain.Entities;
@@ -20,27 +21,77 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
     private readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
     private readonly HashSet<Ballot> _ballots = new HashSet<Ballot>();
 
-    private Election() { }
-
-    public Election(IEnumerable<ElectionCandidate> candidates) : base(new ElectionId())
+    public Election() : base(new ElectionId())
     {
-        foreach (var candidate in candidates)
-        {
-            _candidates.Add(candidate);
-        }
+
     }
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
+    public MeetingId? MeetingId { get; set; }
+    public AgendaId? AgendaId { get; set; }
     public AgendaItemId? AgendaItemId { get; set; }
     public MotionOperativeClauseId? MotionOperativeClauseId { get; set; }
     public DateTimeOffset? StartTime { get; private set; }
     public DateTimeOffset? EndTime { get; private set; }
 
+    public MemberRole? Position { get; set; }
+    public int? PositionId { get; set; }
+    public MeetingGroupId? GroupId { get; set; }
+
     public int MinimumVotesToWin { get; set; } = 1;
     public ElectionState State { get; private set; } = ElectionState.NotStarted;
 
     public IReadOnlyCollection<ElectionCandidate> Candidates => _candidates;
+
+    public bool IsAlreadyCandidate(MeetingAttendeeId candidateAttendeeId)
+    {
+        return Candidates.Any(x => x.AttendeeId == candidateAttendeeId);
+    }
+
+    public ElectionCandidate NominateCandidate(
+        TimeProvider timeProvider,
+        MeetingAttendee attendee, string? statement = null,
+        IdGroup? nominatedBy = null)
+    {
+        return NominateCandidate(timeProvider, attendee.Name!, statement, attendee.UserId, null, attendee.Id, nominatedBy);
+    }
+
+    public ElectionCandidate NominateCandidate(
+        TimeProvider timeProvider,
+        string name, string? statement = null,
+        UserId? userId = null, 
+        MeetingGroupMemberId? groupMemberId = null,
+        MeetingAttendeeId? attendeeId = null, 
+        IdGroup? nominatedBy = null)
+    {
+        if (State != ElectionState.NotStarted)
+            throw new InvalidOperationException("New candidates can only be proposed when election not started.");
+
+        var newCandidate = new ElectionCandidate(name, statement, 
+            userId, groupMemberId, attendeeId)
+        {
+            NominatedBy = nominatedBy,
+            NominatedAt = timeProvider.GetUtcNow(),
+            ElectionId = Id
+        };
+
+        _candidates.Add(newCandidate);
+
+        return newCandidate;
+    }
+
+    public void WithdrawCandidacy(ElectionCandidate candidate, TimeProvider timeProvider)
+    {
+        if (State != ElectionState.Voting)
+            throw new InvalidOperationException("Candidates can only withdraw during an active voting session.");
+
+        if (!_candidates.Contains(candidate))
+            throw new InvalidOperationException("Candidate is not part of this election.");
+
+        candidate.WithdrawnAt = timeProvider.GetUtcNow();
+    }
+
     public IReadOnlyCollection<Ballot> Ballots => _ballots;
 
     public ElectionCandidate? ElectedCandidate { get; private set; }
@@ -133,33 +184,6 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
         };
 
         _ballots.Add(ballot);
-    }
-
-    public void NominateCandidateDuringSession(MeetingAttendeeId attendeeId, string name, string? statement, string? position, MeetingAttendeeId nominatedBy, TimeProvider timeProvider)
-    {
-        if (State != ElectionState.Voting)
-            throw new InvalidOperationException("New candidates can only be proposed during an active voting session.");
-
-        var newCandidate = new ElectionCandidate(attendeeId, name, statement, position)
-        {
-            NominatedBy = nominatedBy,
-            NominatedAt = timeProvider.GetUtcNow(),
-            AgendaItemId = AgendaItemId,
-            ElectionSessionId = Id
-        };
-
-        _candidates.Add(newCandidate);
-    }
-
-    public void WithdrawCandidateDuringSession(ElectionCandidate candidate, TimeProvider timeProvider)
-    {
-        if (State != ElectionState.Voting)
-            throw new InvalidOperationException("Candidates can only withdraw during an active voting session.");
-
-        if (!_candidates.Contains(candidate))
-            throw new InvalidOperationException("Candidate is not part of this election.");
-
-        candidate.WithdrawnAt = timeProvider.GetUtcNow();
     }
 
     public Dictionary<string, int> GetElectionResults()

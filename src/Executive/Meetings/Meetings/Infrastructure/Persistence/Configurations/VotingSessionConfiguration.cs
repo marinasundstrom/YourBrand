@@ -15,7 +15,7 @@ public sealed class VotingConfiguration : IEntityTypeConfiguration<Voting>
 
         builder.HasMany(x => x.Votes)
             .WithOne()
-            .HasForeignKey(x => new { x.OrganizationId, x.VotingSessionId });
+            .HasForeignKey(x => new { x.OrganizationId, x.VotingId });
 
         builder.Navigation(x => x.Votes).AutoInclude();
 

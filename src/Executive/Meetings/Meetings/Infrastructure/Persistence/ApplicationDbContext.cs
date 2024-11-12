@@ -44,14 +44,14 @@ public sealed class ApplicationDbContext(
         configurationBuilder.Properties<MotionId>().HaveConversion<MotionIdConverter>();
         configurationBuilder.Properties<MotionOperativeClauseId>().HaveConversion<OperativeClauseIdConverter>();
 
-        configurationBuilder.Properties<VotingId>().HaveConversion<VotingSessionIdConverter>();
+        configurationBuilder.Properties<VotingId>().HaveConversion<VotingIdConverter>();
         configurationBuilder.Properties<VoteId>().HaveConversion<VoteIdConverter>();
 
-        configurationBuilder.Properties<ElectionId>().HaveConversion<ElectionSessionIdConverter>();
+        configurationBuilder.Properties<ElectionId>().HaveConversion<ElectionIdConverter>();
         configurationBuilder.Properties<ElectionCandidateId>().HaveConversion<ElectionCandidateIdConverter>();
         configurationBuilder.Properties<BallotId>().HaveConversion<BallotIdConverter>();
 
-        configurationBuilder.Properties<DiscussionId>().HaveConversion<SpeakerSessionIdConverter>();
+        configurationBuilder.Properties<DiscussionId>().HaveConversion<SpeakerIdConverter>();
         configurationBuilder.Properties<SpeakerRequestId>().HaveConversion<SpeakerRequestIdConverter>();
 
         configurationBuilder.Properties<MinutesId>().HaveConversion<MinutesIdConverter>();

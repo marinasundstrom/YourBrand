@@ -4,5 +4,5 @@ namespace YourBrand.Meetings.Features.Procedure.Elections;
 
 public static partial class Mappings
 {
-    public static ElectionSessionDto ToDto(this Domain.Entities.Election electionSession) => new(electionSession.Id, electionSession.State, electionSession.Candidates.Select(x => x.ToDto()), electionSession.ElectedCandidate?.ToDto());
+    public static ElectionDto ToDto(this Domain.Entities.Election election) => new(election.Id, election.State, election.Candidates.Select(x => x.ToDto()), election.ElectedCandidate?.ToDto());
 }

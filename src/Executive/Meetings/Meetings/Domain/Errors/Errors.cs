@@ -14,9 +14,9 @@ public static partial class Errors
 
         public static readonly Error NoOngoingDiscussionSession = new Error(nameof(NoOngoingDiscussionSession), "No on-going discussion session", string.Empty);
 
-        public static readonly Error NoOngoingVotingSession = new Error(nameof(NoOngoingVotingSession), "No on-going voting session", string.Empty);
+        public static readonly Error NoOngoingVoting = new Error(nameof(NoOngoingVoting), "No on-going voting session", string.Empty);
 
-        public static readonly Error NoOngoingElectionSession = new Error(nameof(NoOngoingElectionSession), "No on-going discussion session", string.Empty);
+        public static readonly Error NoOngoingElection = new Error(nameof(NoOngoingElection), "No on-going discussion session", string.Empty);
 
         public static readonly Error YouAreNotAttendeeOfMeeting = new Error(nameof(YouAreNotAttendeeOfMeeting), "You are not a attendee of this meeting.", string.Empty);
 
@@ -42,9 +42,9 @@ public static partial class Errors
 
         public static readonly Error OnlyChairpersonCanEndDiscussion = new Error(nameof(OnlyChairpersonCanEndDiscussion), "Only the Chairperson can end a discussion.", string.Empty);
 
-        public static readonly Error OnlyChairpersonCanStartVotingSession = new Error(nameof(OnlyChairpersonCanStartVotingSession), "Only the Chairperson can start a voting session.", string.Empty);
+        public static readonly Error OnlyChairpersonCanStartVoting = new Error(nameof(OnlyChairpersonCanStartVoting), "Only the Chairperson can start a voting session.", string.Empty);
 
-        public static readonly Error OnlyChairpersonCanEndVotingSession = new Error(nameof(OnlyChairpersonCanEndVotingSession), "Only the Chairperson can end a voting session.", string.Empty);
+        public static readonly Error OnlyChairpersonCanEndVoting = new Error(nameof(OnlyChairpersonCanEndVoting), "Only the Chairperson can end a voting session.", string.Empty);
 
         public static readonly Result NotAnAttendantOfMeeting = new Error(nameof(NotAnAttendantOfMeeting), "Not an attendee of this meeting.", string.Empty);
 

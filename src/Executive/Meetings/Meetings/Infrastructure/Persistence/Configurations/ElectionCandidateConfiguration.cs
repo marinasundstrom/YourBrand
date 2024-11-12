@@ -13,6 +13,8 @@ public sealed class ElectionCandidateConfiguration : IEntityTypeConfiguration<El
 
         builder.HasIndex(x => x.TenantId);
 
+        builder.OwnsOne(x => x.NominatedBy);
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

@@ -18,10 +18,10 @@ public sealed record RevokeSpeakerTimeDto(string AgendaItemId);
 public sealed partial class DiscussionsController(IMediator mediator) : ControllerBase
 {
     [HttpGet("{id}/Discussions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SpeakerSessionDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DiscussionDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<SpeakerSessionDto>> GetDiscussion(string organizationId, int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<DiscussionDto>> GetDiscussion(string organizationId, int id, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetDiscussion(organizationId, id), cancellationToken);
         return this.HandleResult(result);

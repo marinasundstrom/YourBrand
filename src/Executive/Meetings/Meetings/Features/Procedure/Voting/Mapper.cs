@@ -5,5 +5,5 @@ namespace YourBrand.Meetings.Features.Procedure.Voting;
 
 public static partial class Mappings
 {
-    public static VotingSessionDto ToDto(this Domain.Entities.Voting votingSession) => new(votingSession.Id, votingSession.State, votingSession.HasPassed);
+    public static VotingDto ToDto(this Domain.Entities.Voting voting) => new(voting.Id, voting.State, voting.HasPassed);
 }

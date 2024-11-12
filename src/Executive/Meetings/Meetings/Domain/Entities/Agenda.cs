@@ -74,7 +74,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
 
     public IReadOnlyCollection<AgendaItem> Items => _items.Where(x => x.ParentId == null).ToList();
 
-    public AgendaItem AddItem(AgendaItemType type, string title, string description)
+    public AgendaItem AddItem(AgendaItemType type, string title, string description, Election? election = null)
     {
         if (ApprovalStatus == ApprovalStatus.Approved)
             throw new InvalidOperationException("Cannot modify agenda items after approval.");
@@ -87,7 +87,12 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
                           .Select(x => x.Order)
                           .FirstOrDefault() + 1;
 
-        var item = new AgendaItem(type, title, description) { AgendaId = Id, Order = order };
+        var item = new AgendaItem(OrganizationId, type, title, description) { 
+            AgendaId = Id, 
+            Order = order, 
+            Election = election 
+        };
+        
         _items.Add(item);
         return item;
     }

@@ -46,17 +46,19 @@ public sealed record CastBallot(string OrganizationId, int Id, string CandidateI
 
             if (agendaItem.Voting is null)
             {
-                return Errors.Meetings.NoOngoingVotingSession;
+                return Errors.Meetings.NoOngoingVoting;
             }
 
-            var candidate = agendaItem.Candidates.FirstOrDefault(x => x.Id == request.CandidateId);
+            var election = agendaItem.Election;
+
+            var candidate = election.Candidates.FirstOrDefault(x => x.Id == request.CandidateId);
 
             if (candidate is null)
             {
                 return Errors.Meetings.CandidateNotFound;
             }
 
-            agendaItem.Election!.CastBallot(attendee, candidate, timeProvider);
+            election!.CastBallot(attendee, candidate, timeProvider);
 
             context.Meetings.Update(meeting);
 

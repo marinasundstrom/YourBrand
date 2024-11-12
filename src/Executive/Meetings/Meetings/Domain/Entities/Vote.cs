@@ -23,7 +23,7 @@ public sealed class Vote : Entity<VoteId>, IAuditableEntity<VoteId>, IHasTenant,
 
     public TenantId TenantId { get; set; }
     public OrganizationId OrganizationId { get; set; }
-    public VotingId VotingSessionId { get; set; }
+    public VotingId VotingId { get; set; }
 
     public MeetingAttendeeId VoterId { get; set; }
     public DateTimeOffset TimeCast { get; set; }

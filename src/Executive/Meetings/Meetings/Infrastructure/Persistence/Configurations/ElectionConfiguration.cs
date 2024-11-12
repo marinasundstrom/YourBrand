@@ -15,13 +15,13 @@ public sealed class ElectionConfiguration : IEntityTypeConfiguration<Election>
 
         builder.HasMany(x => x.Candidates)
             .WithOne()
-            .HasForeignKey(x => new { x.OrganizationId, x.ElectionSessionId });
+            .HasForeignKey(x => new { x.OrganizationId, x.ElectionId });
 
         builder.Navigation(x => x.Candidates).AutoInclude();
 
         builder.HasMany(x => x.Ballots)
             .WithOne()
-            .HasForeignKey(x => new { x.OrganizationId, x.ElectionSessionId });
+            .HasForeignKey(x => new { x.OrganizationId, x.ElectionId });
 
         builder.Navigation(x => x.Ballots).AutoInclude();
 

@@ -40,12 +40,11 @@ public enum PostponementType
 
 public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, IHasTenant, IHasOrganization
 {
-    readonly HashSet<ElectionCandidate> _candidates = new HashSet<ElectionCandidate>();
     private HashSet<AgendaItem> _subItems = new HashSet<AgendaItem>();
 
     protected AgendaItem() {}
 
-    public AgendaItem(AgendaItemType type, string title, string description)
+    public AgendaItem(OrganizationId organizationId, AgendaItemType type, string title, string description)
     : base(new AgendaItemId())
     {
         if (string.IsNullOrWhiteSpace(title))
@@ -54,9 +53,26 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         if (string.IsNullOrWhiteSpace(description))
             throw new ArgumentException("Description is required.", nameof(description));
 
+        OrganizationId = organizationId;
         Type = type;
         Title = title;
         Description = description;
+
+        if(Type == AgendaItemType.Discussion) 
+        {
+            Discussion = new Discussion()
+            {
+                OrganizationId = OrganizationId,
+                //AgendaId = 
+            };
+        }
+        else if (Type == AgendaItemType.Election)
+        {
+            Election = new Election() 
+            {
+                OrganizationId = OrganizationId
+            };
+        }
     }
 
     public TenantId TenantId { get; set; }
@@ -98,33 +114,6 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     // For election
     public string? Position { get; set; }
-    
-    public IReadOnlyCollection<ElectionCandidate> Candidates => _candidates;
-
-    public void AddCandidate(MeetingAttendee candidate, string? statement)
-    {
-        if (candidate == null)
-            throw new ArgumentNullException(nameof(candidate));
-
-        if (State != AgendaItemState.Pending)
-            throw new InvalidOperationException("Candidates can only be managed when the agenda item is pending.");
-
-        if (_candidates.Any(c => c.AttendeeId == candidate.Id))
-            throw new InvalidOperationException("Attendee is already a candidate.");
-
-        _candidates.Add(new ElectionCandidate(candidate.Id, candidate.Name, statement));
-    }
-
-    public void RemoveCandidate(ElectionCandidate candidate)
-    {
-        if (State != AgendaItemState.Pending)
-            throw new InvalidOperationException("Candidates can only be managed when the agenda item is pending.");
-
-        if (!_candidates.Contains(candidate))
-            throw new InvalidOperationException("Is not a candidate.");
-
-        _candidates.Remove(candidate);
-    }
 
     public void StartDiscussion()
     {
@@ -134,7 +123,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         if (IsDiscussionCompleted)
             throw new InvalidOperationException("Discussion already completed.");
 
-        // Initialize SpeakerSession if it hasn't been created yet (in case there were no prior requests)
+        // Initialize Discussion if it hasn't been created yet (in case there were no prior requests)
         Discussion ??= new Discussion { OrganizationId = OrganizationId };
         Discussion.StartSession();
 
@@ -155,7 +144,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         if (State != AgendaItemState.Pending)
             throw new InvalidOperationException("Speaker slots can only be requested when the item is pending.");
 
-        // Create SpeakerSession only if it doesn't exist
+        // Create Discussion only if it doesn't exist
         Discussion ??= new Discussion { OrganizationId = OrganizationId };
         Discussion.AddSpeakerRequest(attendee);
     }
@@ -194,11 +183,6 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         State = AgendaItemState.Completed;
     }
 
-    public Voting? GetCurrentVotingSession()
-    {
-        return Voting?.EndTime == null ? Voting : null;
-    }
-
     public void StartElection()
     {
         if (State != AgendaItemState.UnderDiscussion)
@@ -208,7 +192,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
             throw new InvalidOperationException("Election already in progress.");
 
         // Pass current candidates to the election session
-        Election = new Election(_candidates)
+        Election = new Election()
         {
             OrganizationId = OrganizationId,
             TenantId = TenantId
@@ -321,7 +305,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     public IReadOnlyCollection<AgendaItem> SubItems => _subItems;
 
-    public AgendaItem AddItem(AgendaItemType type, string title, string description)
+    public AgendaItem AddItem(AgendaItemType type, string title, string description, Election? election = null)
     {
         if (_subItems.Any(i => i.Title.Equals(title, StringComparison.OrdinalIgnoreCase)))
         {
@@ -343,9 +327,11 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         }
         catch { }
 
-        var item = new AgendaItem(type, title, description);
+        var item = new AgendaItem(OrganizationId, type, title, description);
         item.AgendaId = AgendaId;
         item.Order = order;
+        item.Election = election;
+
         _subItems.Add(item);
         return item;
     }
