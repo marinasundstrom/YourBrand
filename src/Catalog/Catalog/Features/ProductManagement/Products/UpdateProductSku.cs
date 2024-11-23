@@ -48,7 +48,7 @@ public sealed record UpdateProductSku(string OrganizationId, string IdOrHandle, 
                 Sku = product.Sku
             });
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

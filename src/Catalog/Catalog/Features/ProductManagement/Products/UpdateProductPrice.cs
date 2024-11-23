@@ -49,7 +49,7 @@ public sealed record UpdateProductPrice(string OrganizationId, string IdOrHandle
                 DiscountRate = product.DiscountRate
             });
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

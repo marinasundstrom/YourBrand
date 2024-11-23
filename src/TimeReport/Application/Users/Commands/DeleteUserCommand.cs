@@ -4,15 +4,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Users.Commands;
 
-public record DeleteUserCommand(string UserId) : IRequest
+public record DeleteUserCommand(string UserId) : IRequest<Result>
 {
-    public class DeleteUserCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteUserCommand>
+    public class DeleteUserCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteUserCommand, Result>
     {
-        public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var user = await context.Users
                         .AsSplitQuery()
@@ -20,13 +19,14 @@ public record DeleteUserCommand(string UserId) : IRequest
 
             if (user is null)
             {
-                throw new UserNotFoundException(request.UserId);
+               return new UserNotFound(request.UserId);
             }
 
             context.Users.Remove(user);
 
             await context.SaveChangesAsync(cancellationToken);
 
+            return Result.Success;
         }
     }
 }

@@ -41,7 +41,7 @@ public sealed record UpdateProductDetails(string OrganizationId, string IdOrHand
                 Description = product.Description
             });
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

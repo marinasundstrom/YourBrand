@@ -4,22 +4,21 @@ using MediatR;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
-using YourBrand.TimeReport.Domain.Exceptions;
 using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record LockMonthCommand(string OrganizationId, string TimeSheetId) : IRequest
+public record LockMonthCommand(string OrganizationId, string TimeSheetId) : IRequest<Result>
 {
-    public class LockMonthCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<LockMonthCommand>
+    public class LockMonthCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<LockMonthCommand, Result>
     {
-        public async Task Handle(LockMonthCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(LockMonthCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
-                throw new TimeSheetNotFoundException(request.TimeSheetId);
+                return new TimeSheetNotFound(request.TimeSheetId);
             }
 
             var firstWeekDay = timeSheet.From;
@@ -74,7 +73,7 @@ public record LockMonthCommand(string OrganizationId, string TimeSheetId) : IReq
                               statusCode: StatusCodes.Status403Forbidden);
                     */
 
-                    return;
+                    return Result.Success;
                 }
 
                 // Cannot lock month with open Timesheets
@@ -99,6 +98,7 @@ public record LockMonthCommand(string OrganizationId, string TimeSheetId) : IReq
                 await unitOfWork.SaveChangesAsync();
             }
 
+            return Result.Success;
         }
     }
 }

@@ -31,7 +31,7 @@ public record DeleteOrganization(string OrganizationId) : IRequest<Result<Delete
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(user.ToDto2());
+            return Result.SuccessWith(user.ToDto2());
         }
     }
 }

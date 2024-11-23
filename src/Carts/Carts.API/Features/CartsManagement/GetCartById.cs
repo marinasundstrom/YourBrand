@@ -17,7 +17,7 @@ public sealed record GetCartById(string Id) : IRequest<Result<Cart>>
                 .Include(cart => cart.Items.OrderBy(cartItem => cartItem.Created))
                 .FirstOrDefaultAsync(cart => cart.Id == request.Id, cancellationToken);
 
-            return cart is not null ? Result.Success(cart) : Result.Failure<Cart>(Errors.CartNotFound);
+            return cart is not null ? Result.SuccessWith(cart) : Result.Failure<Cart>(Errors.CartNotFound);
         }
     }
 }

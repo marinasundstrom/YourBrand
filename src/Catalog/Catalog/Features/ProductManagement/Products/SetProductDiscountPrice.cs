@@ -46,7 +46,7 @@ public sealed record SetProductDiscountPrice(string OrganizationId, string IdOrH
                 DiscountRate = product.DiscountRate
             });
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

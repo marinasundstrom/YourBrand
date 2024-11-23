@@ -16,7 +16,7 @@ public sealed record CreateCart(string Tag) : IRequest<Result<Cart>>
             cart.Created = DateTimeOffset.UtcNow;
             await cartsContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(cart);
+            return Result.SuccessWith(cart);
         }
     }
 }

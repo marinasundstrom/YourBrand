@@ -36,7 +36,7 @@ public record CreateOrganization(string Id, string Name, string TenantId) : IReq
                 return Result.Failure<OrganizationDto>(Errors.Organizations.OrganizationNotFound);
             }
 
-            return Result.Success(organization.ToDto2());
+            return Result.SuccessWith(organization.ToDto2());
         }
     }
 }

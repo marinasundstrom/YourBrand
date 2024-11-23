@@ -21,7 +21,7 @@ public sealed record GetCartItemById(string CartId, string CartItemId) : IReques
                 return Result.Failure<CartItem>(Errors.CartItemNotFound);
             }
 
-            return Result.Success(cartItem);
+            return Result.SuccessWith(cartItem);
         }
     }
 }

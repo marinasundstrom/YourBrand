@@ -1,0 +1,10 @@
+{
+    "ignoredExceptions": [
+        "System.ArgumentNullException"
+    ],
+    "informationalExceptions": [
+        "System.NotImplementedException",
+        "System.IO.IOException",
+        "System.TimeoutException"
+    ]
+}

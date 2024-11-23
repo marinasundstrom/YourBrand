@@ -37,7 +37,7 @@ public sealed record UpdateBillingDetails(string OrganizationId, string Id, Bill
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Results.Success;
+            return Result.Success;
         }
 
         private Address Map(Address a, AddressDto address)

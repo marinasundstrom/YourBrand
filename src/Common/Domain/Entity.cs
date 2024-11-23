@@ -2,7 +2,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using YourBrand.Domain;
 
-namespace YourBrand.Customers.Domain.Entities;
+namespace YourBrand.Domain;
+
+/*
 
 public abstract class Entity<TId> : IEntity<TId>, IEquatable<Entity<TId>>, IHasDomainEvents
     where TId : notnull
@@ -71,3 +73,5 @@ public abstract class Entity<TId> : IEntity<TId>, IEquatable<Entity<TId>>, IHasD
         return $"{GetType().Name} [Id={Id}]";
     }
 }
+
+*/

@@ -33,7 +33,7 @@ public sealed record UpdateCartItemPrice(string CartId, string CartItemId, decim
 
             await cartsContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(cartItem);
+            return Result.SuccessWith(cartItem);
         }
     }
 }

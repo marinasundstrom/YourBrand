@@ -31,7 +31,7 @@ public sealed record DeleteProductCategory(string OrganizationId, string IdOrPat
 
             await catalogContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

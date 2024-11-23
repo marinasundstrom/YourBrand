@@ -30,7 +30,7 @@ public sealed record GetProductById(string OrganizationId, string IdOrHandle) : 
 
             return product is null
                 ? Result.Failure<ProductDto>(Errors.ProductNotFound)
-                : Result.Success(product.ToDto());
+                : Result.SuccessWith(product.ToDto());
         }
     }
 }

@@ -36,7 +36,7 @@ public sealed record UpdateShippingDetails(string OrganizationId, string Id, Shi
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Results.Success;
+            return Result.Success;
         }
 
         private Address Map(Address a, AddressDto address)

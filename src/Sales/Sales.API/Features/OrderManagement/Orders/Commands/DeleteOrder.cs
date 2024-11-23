@@ -39,7 +39,7 @@ public sealed record DeleteOrder(string OrganizationId, string Id) : IRequest<Re
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Results.Success;
+            return Result.Success;
         }
     }
 }

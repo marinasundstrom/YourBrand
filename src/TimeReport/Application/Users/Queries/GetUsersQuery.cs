@@ -8,11 +8,11 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Users.Queries;
 
-public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, TimeReport.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<UserDto>>
+public record GetUsersQuery(int Page = 0, int PageSize = 10, string? SearchString = null, string? SortBy = null, TimeReport.Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Result<ItemsResult<UserDto>>>
 {
-    public class GetUsersQueryHandler(ITimeReportContext context) : IRequestHandler<GetUsersQuery, ItemsResult<UserDto>>
+    public class GetUsersQueryHandler(ITimeReportContext context) : IRequestHandler<GetUsersQuery, Result<ItemsResult<UserDto>>>
     {
-        public async Task<ItemsResult<UserDto>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ItemsResult<UserDto>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
             var query = context.Users
                 .OrderBy(p => p.Created)

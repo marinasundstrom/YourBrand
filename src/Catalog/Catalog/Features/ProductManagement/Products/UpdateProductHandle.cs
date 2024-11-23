@@ -49,7 +49,7 @@ public sealed record UpdateProductHandle(string OrganizationId, string IdOrHandl
             });
 
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

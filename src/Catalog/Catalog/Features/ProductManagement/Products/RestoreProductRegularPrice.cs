@@ -44,7 +44,7 @@ public sealed record RestoreProductRegularPrice(string OrganizationId, string Id
                 NewPrice = product.Price
             });
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

@@ -40,7 +40,7 @@ public record AddUserToOrganization(string OrganizationId, string UserId) : IReq
             {
                 throw new Exception();
 
-                //return Result.Success(organization.ToDto());
+                //return Result.SuccessWith(organization.ToDto());
             }
 
             organization.AddUser(user);

@@ -8,11 +8,11 @@ using YourBrand.TimeReport.Application.Common.Models;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectStatisticsSummaryQuery(string OrganizationId) : IRequest<StatisticsSummary>
+public record GetProjectStatisticsSummaryQuery(string OrganizationId) : IRequest<Result<StatisticsSummary>>
 {
-    public class GetProjectStatisticsSummaryHandler(ITimeReportContext context) : IRequestHandler<GetProjectStatisticsSummaryQuery, StatisticsSummary>
+    public class GetProjectStatisticsSummaryHandler(ITimeReportContext context) : IRequestHandler<GetProjectStatisticsSummaryQuery, Result<StatisticsSummary>>
     {
-        public async Task<StatisticsSummary> Handle(GetProjectStatisticsSummaryQuery request, CancellationToken cancellationToken)
+        public async Task<Result<StatisticsSummary>> Handle(GetProjectStatisticsSummaryQuery request, CancellationToken cancellationToken)
         {
             var entries = await context.Entries
                 .InOrganization(request.OrganizationId)

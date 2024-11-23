@@ -4,15 +4,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectMembershipQuery(string OrganizationId, string ProjectId, string MembershipId) : IRequest<ProjectMembershipDto>
+public record GetProjectMembershipQuery(string OrganizationId, string ProjectId, string MembershipId) : IRequest<Result<ProjectMembershipDto>>
 {
-    public class GetProjectMembershipQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectMembershipQuery, ProjectMembershipDto>
+    public class GetProjectMembershipQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectMembershipQuery, Result<ProjectMembershipDto>>
     {
-        public async Task<ProjectMembershipDto> Handle(GetProjectMembershipQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ProjectMembershipDto>> Handle(GetProjectMembershipQuery request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
                 .InOrganization(request.OrganizationId)
@@ -24,14 +23,14 @@ public record GetProjectMembershipQuery(string OrganizationId, string ProjectId,
 
             if (project is null)
             {
-                throw new ProjectNotFoundException(request.ProjectId);
+                return new ProjectNotFound(request.ProjectId);
             }
 
             var m = project.Memberships.FirstOrDefault(x => x.Id == request.MembershipId);
 
             if (m is null)
             {
-                throw new ProjectMembershipNotFoundException(request.ProjectId);
+                return new ProjectMembershipNotFound(request.ProjectId);
             }
 
             return m.ToDto();

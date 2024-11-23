@@ -152,7 +152,7 @@ public sealed record ImportProducts(string OrganizationId, Stream Stream) : IReq
 
             Directory.Delete(ArchiveDirPath, true);
 
-            return Result.Success(new ProductImportResult(diagnostics));
+            return Result.SuccessWith(new ProductImportResult(diagnostics));
         }
 
         private static string GetHandle(ProductRecord record)

@@ -46,7 +46,7 @@ public sealed record UpdateBillingDetails(string OrganizationId, string Id, Bill
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Results.Success;
+            return Result.Success;
         }
     }
 }

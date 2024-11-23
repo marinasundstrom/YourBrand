@@ -46,7 +46,7 @@ public sealed record UpdateShippingDetails(string OrganizationId, string Id, Shi
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Results.Success;
+            return Result.Success;
         }
     }
 }

@@ -5,15 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectStatisticsForProjectQuery(string OrganizationId, string ProjectId, DateTime? From = null, DateTime? To = null) : IRequest<Data>
+public record GetProjectStatisticsForProjectQuery(string OrganizationId, string ProjectId, DateTime? From = null, DateTime? To = null) : IRequest<Result<Data>>
 {
-    public class GetProjectStatisticsForProjectQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectStatisticsForProjectQuery, Data>
+    public class GetProjectStatisticsForProjectQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectStatisticsForProjectQuery, Result<Data>>
     {
-        public async Task<Data> Handle(GetProjectStatisticsForProjectQuery request, CancellationToken cancellationToken)
+        public async Task<Result<Data>> Handle(GetProjectStatisticsForProjectQuery request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
                 .InOrganization(request.OrganizationId)
@@ -25,7 +24,7 @@ public record GetProjectStatisticsForProjectQuery(string OrganizationId, string 
 
             if (project is null)
             {
-                throw new ProjectNotFoundException(request.ProjectId);
+                return new ProjectNotFound(request.ProjectId);
             }
 
             List<DateTime> months = new();

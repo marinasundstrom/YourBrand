@@ -26,7 +26,7 @@ public sealed record AddCartItem(string CartId, string Name, string? Image, long
 
             await cartsContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(cartItem);
+            return Result.SuccessWith(cartItem);
         }
     }
 }

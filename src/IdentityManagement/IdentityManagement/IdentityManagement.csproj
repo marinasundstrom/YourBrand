@@ -5,6 +5,7 @@
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <RootNamespace>YourBrand.IdentityManagement</RootNamespace>
     <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'SelfHost' " />

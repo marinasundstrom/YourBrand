@@ -42,7 +42,7 @@ public sealed record SetCustomer(string OrganizationId, string Id, string Custom
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Results.Success;
+            return Result.Success;
         }
     }
 }

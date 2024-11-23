@@ -26,7 +26,7 @@ public sealed record GetCarts(int Page = 1, int PageSize = 2) : IRequest<Result<
 
             var pagedResult = new PagedResult<Cart>(carts, total);
 
-            return Result.Success(pagedResult);
+            return Result.SuccessWith(pagedResult);
         }
     }
 }

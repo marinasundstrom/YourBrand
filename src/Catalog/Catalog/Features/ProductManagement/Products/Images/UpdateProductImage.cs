@@ -46,7 +46,7 @@ public sealed record UpdateProductImage(string OrganizationId, string IdOrHandle
             });
             */
 
-            return Result.Success(productImage.ToDto());
+            return Result.SuccessWith(productImage.ToDto());
         }
     }
 }

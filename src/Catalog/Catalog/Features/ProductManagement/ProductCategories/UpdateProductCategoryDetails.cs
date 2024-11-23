@@ -38,7 +38,7 @@ public sealed record UpdateProductCategoryDetails(string OrganizationId, string 
                 .AsNoTracking()
                 .FirstAsync(x => x.Id == productCategory.Id, cancellationToken);
 
-            return Result.Success<ProductCategory>(productCategory.ToDto());
+            return Result.SuccessWith(productCategory.ToDto());
         }
     }
 }

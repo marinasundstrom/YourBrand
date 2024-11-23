@@ -9,18 +9,21 @@ var password = builder.AddParameter("messaging-password", true);
 
 var messaging = builder.AddRabbitMQ("messaging", userName: username, password: password, port: 5672)
     .WithHttpEndpoint(port: 15672, targetPort: 15672, name: "management")
-    .WithBindMount("../../data/rabbitmq", "/var/lib/rabbitmq");
+    .WithBindMount("../../data/rabbitmq", "/var/lib/rabbitmq")
+    .WithLifetime(ContainerLifetime.Persistent);
 
 var storage = builder.AddAzureStorage("storage")
     .RunAsEmulator(container =>
                    {
                        container.WithBlobPort(10000);
                        container.WithBindMount("../../data/azurite", "/data");
+                       container.WithLifetime(ContainerLifetime.Persistent);
                    });
 
 var blobStorage = storage.AddBlobs("blobs");
 
-var redis = builder.AddRedis("redis");
+var redis = builder.AddRedis("redis")
+    .WithLifetime(ContainerLifetime.Persistent);
 
 /*
 var customContainer = builder.AddContainer("consul-server", "hashicorp/consul", "latest")
@@ -34,7 +37,8 @@ var sqlServerPassword = builder.AddParameter("sqlServerPassword", true);
 
 var sqlServer = builder.AddSqlServer("sql", password: sqlServerPassword, port: 1433)
     .WithBindMount("../../data/sql-edge", "/var/opt/mssql")
-    .WithEnvironment("MSSQL_PID", "Developer");
+    .WithEnvironment("MSSQL_PID", "Developer")
+    .WithLifetime(ContainerLifetime.Persistent);
 
 var hangfireDb = sqlServer.AddDatabase("hangfireDb", "HangfireDB");
 

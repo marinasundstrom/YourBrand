@@ -4,15 +4,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public record UpdateProjectMembershipCommand(string OrganizationId, string ProjectId, string MembershipId, DateTime? From, DateTime? To) : IRequest<ProjectMembershipDto>
+public record UpdateProjectMembershipCommand(string OrganizationId, string ProjectId, string MembershipId, DateTime? From, DateTime? To) : IRequest<Result<ProjectMembershipDto>>
 {
-    public class UpdateProjectMembershipCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateProjectMembershipCommand, ProjectMembershipDto>
+    public class UpdateProjectMembershipCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateProjectMembershipCommand, Result<ProjectMembershipDto>>
     {
-        public async Task<ProjectMembershipDto> Handle(UpdateProjectMembershipCommand request, CancellationToken cancellationToken)
+        public async Task<Result<ProjectMembershipDto>> Handle(UpdateProjectMembershipCommand request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
                 .InOrganization(request.OrganizationId)
@@ -23,14 +22,14 @@ public record UpdateProjectMembershipCommand(string OrganizationId, string Proje
 
             if (project is null)
             {
-                throw new ProjectNotFoundException(request.ProjectId);
+                return new ProjectNotFound(request.ProjectId);
             }
 
             var m = project.Memberships.FirstOrDefault(x => x.Id == request.MembershipId);
 
             if (m is null)
             {
-                throw new ProjectMembershipNotFoundException(request.MembershipId);
+                return new ProjectMembershipNotFound(request.MembershipId);
             }
 
             m.From = request.From;

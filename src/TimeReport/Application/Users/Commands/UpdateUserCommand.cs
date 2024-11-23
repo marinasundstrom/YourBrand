@@ -4,15 +4,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Users.Commands;
 
-public record UpdateUserCommand(string UserId, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<UserDto>
+public record UpdateUserCommand(string UserId, string FirstName, string LastName, string? DisplayName, string Ssn, string Email) : IRequest<Result<UserDto>>
 {
-    public class UpdateUserCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateUserCommand, UserDto>
+    public class UpdateUserCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateUserCommand, Result<UserDto>>
     {
-        public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UserDto>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var user = await context.Users
                 .AsSplitQuery()
@@ -20,7 +19,7 @@ public record UpdateUserCommand(string UserId, string FirstName, string LastName
 
             if (user is null)
             {
-                throw new UserNotFoundException(request.UserId);
+               return new UserNotFound(request.UserId);
             }
 
             user.FirstName = request.FirstName;

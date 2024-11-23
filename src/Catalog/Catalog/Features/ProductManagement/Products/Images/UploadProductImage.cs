@@ -54,7 +54,7 @@ public sealed record UploadProductImage(string OrganizationId, string IdOrHandle
                 });
             }
 
-            return Result.Success(image.ToDto());
+            return Result.SuccessWith(image.ToDto());
         }
     }
 }

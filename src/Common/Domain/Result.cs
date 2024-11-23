@@ -1,4 +1,4 @@
-﻿namespace YourBrand.Sales.Domain;
+﻿namespace YourBrand;
 
 public class Result
 {

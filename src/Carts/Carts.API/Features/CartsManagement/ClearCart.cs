@@ -26,7 +26,7 @@ public sealed record ClearCart(string CartId) : IRequest<Result>
 
             await cartsContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

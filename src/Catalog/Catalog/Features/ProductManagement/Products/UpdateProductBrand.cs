@@ -40,7 +40,7 @@ public sealed record UpdateProductBrand(string OrganizationId, string IdOrHandle
 
             await catalogContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

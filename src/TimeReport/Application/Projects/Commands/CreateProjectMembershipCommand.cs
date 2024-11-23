@@ -5,15 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public record CreateProjectMembershipCommand(string OrganizationId, string ProjectId, string UserId, DateTime? From, DateTime? To) : IRequest<ProjectMembershipDto>
+public record CreateProjectMembershipCommand(string OrganizationId, string ProjectId, string UserId, DateTime? From, DateTime? To) : IRequest<Result<ProjectMembershipDto>>
 {
-    public class CreateProjectMembershipCommandHandler(ITimeReportContext context) : IRequestHandler<CreateProjectMembershipCommand, ProjectMembershipDto>
+    public class CreateProjectMembershipCommandHandler(ITimeReportContext context) : IRequestHandler<CreateProjectMembershipCommand, Result<ProjectMembershipDto>>
     {
-        public async Task<ProjectMembershipDto> Handle(CreateProjectMembershipCommand request, CancellationToken cancellationToken)
+        public async Task<Result<ProjectMembershipDto>> Handle(CreateProjectMembershipCommand request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
                         .InOrganization(request.OrganizationId)
@@ -25,7 +24,7 @@ public record CreateProjectMembershipCommand(string OrganizationId, string Proje
 
             if (project is null)
             {
-                throw new ProjectNotFoundException(request.ProjectId);
+                return new ProjectNotFound(request.ProjectId);
             }
 
             var user = await context.Users
@@ -33,14 +32,14 @@ public record CreateProjectMembershipCommand(string OrganizationId, string Proje
 
             if (user is null)
             {
-                throw new UserNotFoundException(request.UserId);
+               return new UserNotFound(request.UserId);
             }
 
             var membership = project.Memberships.FirstOrDefault(x => x.User.Id == user.Id);
 
             if (membership is not null)
             {
-                throw new UserAlreadyProjectMemberException(request.UserId, request.ProjectId);
+                return new UserAlreadyProjectMember(request.UserId, request.ProjectId);
             }
 
             var m = new ProjectMembership()

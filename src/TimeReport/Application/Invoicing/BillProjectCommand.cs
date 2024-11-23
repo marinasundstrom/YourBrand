@@ -7,11 +7,11 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Invoicing;
 
-public record BillProjectCommand(string OrganizationId, string ProjectId, DateTime From, DateTime To) : IRequest
+public record BillProjectCommand(string OrganizationId, string ProjectId, DateTime From, DateTime To) : IRequest<Result>
 {
-    public class Handler(ITimeReportContext context, IInvoicesClient invoicesClient) : IRequestHandler<BillProjectCommand>
+    public class Handler(ITimeReportContext context, IInvoicesClient invoicesClient) : IRequestHandler<BillProjectCommand, Result>
     {
-        public async Task Handle(BillProjectCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(BillProjectCommand request, CancellationToken cancellationToken)
         {
             var from = DateOnly.FromDateTime(request.From);
             var to = DateOnly.FromDateTime(request.To);
@@ -30,7 +30,7 @@ public record BillProjectCommand(string OrganizationId, string ProjectId, DateTi
 
             if (!entries.Any())
             {
-                return;
+                return Result.Success;
             }
 
             var invoice = await invoicesClient.CreateInvoiceAsync(new CreateInvoice()
@@ -63,6 +63,7 @@ public record BillProjectCommand(string OrganizationId, string ProjectId, DateTi
 
             // TODO: Mark TimeSheets as billed.
 
+            return Result.Success;
         }
     }
 }

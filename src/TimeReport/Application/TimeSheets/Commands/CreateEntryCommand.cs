@@ -4,30 +4,28 @@ using YourBrand.Identity;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
-using YourBrand.TimeReport.Domain.Exceptions;
 using YourBrand.TimeReport.Domain.Repositories;
 
-using static System.Result<YourBrand.TimeReport.Application.TimeSheets.EntryDto, YourBrand.TimeReport.Domain.Exceptions.DomainException>;
 using static YourBrand.TimeReport.Application.TimeSheets.Constants;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record CreateEntryCommand(string OrganizationId, string TimeSheetId, string ProjectId, string ActivityId, DateOnly Date, double? Hours, string? Description) : IRequest<Result<EntryDto, DomainException>>
+public record CreateEntryCommand(string OrganizationId, string TimeSheetId, string ProjectId, string ActivityId, DateOnly Date, double? Hours, string? Description) : IRequest<Result<EntryDto>>
 {
-    public class CreateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IProjectRepository projectRepository, IUnitOfWork unitOfWork) : IRequestHandler<CreateEntryCommand, Result<EntryDto, DomainException>>
+    public class CreateEntryCommandHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IProjectRepository projectRepository, IUnitOfWork unitOfWork) : IRequestHandler<CreateEntryCommand, Result<EntryDto>>
     {
-        public async Task<Result<EntryDto, DomainException>> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
+        public async Task<Result<EntryDto>> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
-                return new Error(new TimeSheetNotFoundException(request.TimeSheetId));
+                return new TimeSheetNotFound(request.TimeSheetId);
             }
 
             if (timeSheet.Status != TimeSheetStatus.Open)
             {
-                return new Error(new TimeSheetClosedException(request.TimeSheetId));
+                return new TimeSheetClosed(request.TimeSheetId);
             }
 
             var group = await reportingPeriodRepository.GetReportingPeriod(timeSheet.UserId, request.Date.Year, request.Date.Month, cancellationToken);
@@ -43,7 +41,7 @@ public record CreateEntryCommand(string OrganizationId, string TimeSheetId, stri
             {
                 if (group.Status == EntryStatus.Locked)
                 {
-                    return new Error(new MonthLockedException(request.TimeSheetId));
+                    return new MonthLocked(request.TimeSheetId);
                 }
             }
 
@@ -54,21 +52,21 @@ public record CreateEntryCommand(string OrganizationId, string TimeSheetId, stri
 
             if (existingEntryWithDate is not null)
             {
-                return new Error(new EntryAlreadyExistsException(request.TimeSheetId, date, request.ActivityId));
+                return new EntryAlreadyExists(request.TimeSheetId, date, request.ActivityId);
             }
 
             var project = await projectRepository.GetProject(request.ProjectId, cancellationToken);
 
             if (project is null)
             {
-                return new Error(new ProjectNotFoundException(request.ProjectId));
+                return new ProjectNotFound(request.ProjectId);
             }
 
             var activity = project!.Activities.FirstOrDefault(x => x.Id == request.ActivityId);
 
             if (activity is null)
             {
-                return new Error(new ActivityNotFoundException(request.ProjectId));
+                return new ActivityNotFound(request.ProjectId);
             }
 
             var dateOnly = request.Date;
@@ -78,14 +76,14 @@ public record CreateEntryCommand(string OrganizationId, string TimeSheetId, stri
 
             if (totalHoursDay > WorkingDayHours)
             {
-                return new Error(new DayHoursExceedPermittedDailyWorkingHoursException(request.TimeSheetId, dateOnly));
+                return new DayHoursExceedPermittedDailyWorkingHours(request.TimeSheetId, dateOnly);
             }
 
             double totalHoursWeek = timeSheet.GetTotalHours() + request.Hours.GetValueOrDefault();
 
             if (totalHoursWeek > WorkingWeekHours)
             {
-                return new Error(new WeekHoursExceedPermittedWeeklyWorkingHoursException(request.TimeSheetId));
+                return new WeekHoursExceedPermittedWeeklyWorkingHours(request.TimeSheetId);
             }
 
             var timeSheetActivity = timeSheet.GetActivity(activity.Id);
@@ -101,7 +99,7 @@ public record CreateEntryCommand(string OrganizationId, string TimeSheetId, stri
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return new Ok(entry.ToDto());
+            return entry.ToDto();
         }
     }
 }

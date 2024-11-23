@@ -39,7 +39,7 @@ public sealed record UpdateProductListingState(string OrganizationId, string IdO
                 ListingState = (Contracts.ProductListingState)product.ListingState
             });
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

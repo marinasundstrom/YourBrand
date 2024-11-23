@@ -43,7 +43,7 @@ public sealed record SetMainProductImage(string OrganizationId, string IdOrHandl
                 ImageUrl = product.Image.Url
             });
 
-            return Result.Success(productImage.ToDto());
+            return Result.SuccessWith(productImage.ToDto());
         }
     }
 }

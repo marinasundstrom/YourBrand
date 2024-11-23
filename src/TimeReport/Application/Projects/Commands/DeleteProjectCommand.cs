@@ -4,15 +4,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public record DeleteProjectCommand(string OrganizationId, string ProjectId) : IRequest
+public record DeleteProjectCommand(string OrganizationId, string ProjectId) : IRequest<Result>
 {
-    public class DeleteProjectCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteProjectCommand>
+    public class DeleteProjectCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteProjectCommand, Result>
     {
-        public async Task Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
                 .InOrganization(request.OrganizationId)
@@ -21,13 +20,14 @@ public record DeleteProjectCommand(string OrganizationId, string ProjectId) : IR
 
             if (project is null)
             {
-                throw new ProjectNotFoundException(request.ProjectId);
+                return new ProjectNotFound(request.ProjectId);
             }
 
             context.Projects.Remove(project);
 
             await context.SaveChangesAsync(cancellationToken);
 
+            return Result.Success;
         }
     }
 }

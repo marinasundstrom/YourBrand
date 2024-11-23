@@ -36,14 +36,14 @@ public record AddUserToOrganization(string OrganizationId, string UserId) : IReq
 
             if (organization.Users.Contains(user))
             {
-                return Result.Success(organization.ToDto());
+                return Result.SuccessWith(organization.ToDto());
             }
 
             organization.Users.Add(user);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(organization.ToDto());
+            return Result.SuccessWith(organization.ToDto());
         }
     }
 }

@@ -4,15 +4,14 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Commands;
 
-public record UpdateProjectCommand(string OrganizationId, string ProjectId, string Name, string? Description) : IRequest<ProjectDto>
+public record UpdateProjectCommand(string OrganizationId, string ProjectId, string Name, string? Description) : IRequest<Result<ProjectDto>>
 {
-    public class UpdateProjectCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateProjectCommand, ProjectDto>
+    public class UpdateProjectCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateProjectCommand, Result<ProjectDto>>
     {
-        public async Task<ProjectDto> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
+        public async Task<Result<ProjectDto>> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
                 .InOrganization(request.OrganizationId)
@@ -21,7 +20,7 @@ public record UpdateProjectCommand(string OrganizationId, string ProjectId, stri
 
             if (project is null)
             {
-                throw new ProjectNotFoundException(request.ProjectId);
+                return new ProjectNotFound(request.ProjectId);
             }
 
             project.Name = request.Name;

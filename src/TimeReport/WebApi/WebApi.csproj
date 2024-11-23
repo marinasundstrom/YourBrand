@@ -58,6 +58,8 @@
     <ProjectReference Include="..\..\Common\Integration.MassTransit\Integration.MassTransit.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+
+    <ProjectReference Include="..\..\Common\Domain.AspNetCore\Domain.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

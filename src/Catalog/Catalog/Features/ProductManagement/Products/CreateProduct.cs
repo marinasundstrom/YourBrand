@@ -82,7 +82,7 @@ public sealed record CreateProduct(string OrganizationId, string Name, string St
 
             await catalogContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(product.ToDto());
+            return Result.SuccessWith(product.ToDto());
         }
     }
 }

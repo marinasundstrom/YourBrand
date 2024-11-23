@@ -41,7 +41,7 @@ public sealed record GetProductCategoryTree(string OrganizationId, string? Store
 
             var root = new ProductCategoryTreeRootDto(productCategories.Select(x => x.ToProductCategoryTreeNodeDto()), productCategories.Sum(x => x.ProductsCount));
 
-            return Result.Success(root);
+            return Result.SuccessWith(root);
         }
     }
 }

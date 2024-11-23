@@ -12,11 +12,11 @@ using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Queries;
 
-public record GetTimeSheetForWeekQuery(string OrganizationId, int Year, int Week, string? UserId) : IRequest<TimeSheetDto?>
+public record GetTimeSheetForWeekQuery(string OrganizationId, int Year, int Week, string? UserId) : IRequest<Result<TimeSheetDto?>>
 {
-    public sealed class GetTimeSheetForWeekQueryHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITimeReportContext context, IUserContext userContext) : IRequestHandler<GetTimeSheetForWeekQuery, TimeSheetDto?>
+    public sealed class GetTimeSheetForWeekQueryHandler(ITimeSheetRepository timeSheetRepository, IReportingPeriodRepository reportingPeriodRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITimeReportContext context, IUserContext userContext) : IRequestHandler<GetTimeSheetForWeekQuery, Result<TimeSheetDto?>>
     {
-        public async Task<TimeSheetDto?> Handle(GetTimeSheetForWeekQuery request, CancellationToken cancellationToken)
+        public async Task<Result<TimeSheetDto?>> Handle(GetTimeSheetForWeekQuery request, CancellationToken cancellationToken)
         {
             var query = timeSheetRepository.GetTimeSheets()
                 .AsSplitQuery();

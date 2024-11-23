@@ -45,7 +45,7 @@ public sealed record UpdateCartItemData(string CartId, string CartItemId, string
 
             await cartsContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(cartItem);
+            return Result.SuccessWith(cartItem);
         }
     }
 }

@@ -45,7 +45,7 @@ public sealed record DeleteProductImage(string OrganizationId, string IdOrHandle
                 ImageUrl = product.Image.Url
             });
 
-            return Result.Success(product.Image.ToDto());
+            return Result.SuccessWith(product.Image.ToDto());
         }
     }
 }

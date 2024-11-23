@@ -5,15 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectMembershipsQuery(string OrganizationId, string ProjectId, int Page = 0, int PageSize = 10, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectMembershipDto>>
+public record GetProjectMembershipsQuery(string OrganizationId, string ProjectId, int Page = 0, int PageSize = 10, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Result<ItemsResult<ProjectMembershipDto>>>
 {
-    public class GetProjectMembershipsQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectMembershipsQuery, ItemsResult<ProjectMembershipDto>>
+    public class GetProjectMembershipsQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectMembershipsQuery, Result<ItemsResult<ProjectMembershipDto>>>
     {
-        public async Task<ItemsResult<ProjectMembershipDto>> Handle(GetProjectMembershipsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<ItemsResult<ProjectMembershipDto>>> Handle(GetProjectMembershipsQuery request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
                 .InOrganization(request.OrganizationId)
@@ -23,7 +22,7 @@ public record GetProjectMembershipsQuery(string OrganizationId, string ProjectId
 
             if (project is null)
             {
-                throw new ProjectNotFoundException(request.ProjectId);
+                return new ProjectNotFound(request.ProjectId);
             }
 
             var query = context.ProjectMemberships

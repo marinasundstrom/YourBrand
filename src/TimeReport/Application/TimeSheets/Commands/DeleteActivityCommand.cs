@@ -6,34 +6,33 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
-using YourBrand.TimeReport.Domain.Exceptions;
 using YourBrand.TimeReport.Domain.Repositories;
 
 namespace YourBrand.TimeReport.Application.TimeSheets.Commands;
 
-public record DeleteActivityCommand(string OrganizationId, string TimeSheetId, string ActivityId) : IRequest
+public record DeleteActivityCommand(string OrganizationId, string TimeSheetId, string ActivityId) : IRequest<Result>
 {
-    public class DeleteActivityCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<DeleteActivityCommand>
+    public class DeleteActivityCommandHandler(ITimeSheetRepository timeSheetRepository, IUnitOfWork unitOfWork, ITimeReportContext context) : IRequestHandler<DeleteActivityCommand, Result>
     {
-        public async Task Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
         {
             var timeSheet = await timeSheetRepository.GetTimeSheet(request.TimeSheetId, cancellationToken);
 
             if (timeSheet is null)
             {
-                throw new TimeSheetNotFoundException(request.TimeSheetId);
+                return new TimeSheetNotFound(request.TimeSheetId);
             }
 
             if (timeSheet.Status != TimeSheetStatus.Open)
             {
-                throw new TimeSheetClosedException(request.TimeSheetId);
+                return new TimeSheetClosed(request.TimeSheetId);
             }
 
             var activity = await context!.Activities.FirstOrDefaultAsync(x => x.Id == request.ActivityId, cancellationToken);
 
             if (activity is null)
             {
-                throw new ActivityNotFoundException(request.ActivityId);
+                return new ActivityNotFound(request.ActivityId);
             }
 
             var entries = timeSheet.GetEntriesByActivityId(activity.Id);
@@ -50,6 +49,7 @@ public record DeleteActivityCommand(string OrganizationId, string TimeSheetId, s
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
+            return Result.Success;
         }
     }
 }

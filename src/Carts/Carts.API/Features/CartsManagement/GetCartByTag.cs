@@ -32,7 +32,7 @@ public record GetCartByTag(string Tag) : IRequest<Result<Cart>>
                 return Result.Failure<Cart>(Errors.CartNotFound);
             }
 
-            return Result.Success(cart);
+            return Result.SuccessWith(cart);
         }
     }
 }

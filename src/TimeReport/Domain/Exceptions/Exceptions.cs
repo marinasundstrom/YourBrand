@@ -1,55 +1,38 @@
-﻿namespace YourBrand.TimeReport.Domain.Exceptions;
+﻿namespace YourBrand.TimeReport;
 
-public class DomainException(string title, string details) : Exception(title)
-{
-    private readonly string stackTrace = Environment.StackTrace;
-
-    public string Title => Message;
-
-    public string Details { get; set; } = details;
-
-    public override string StackTrace
-    {
-        get
-        {
-            return this.stackTrace;
-        }
-    }
-}
-
-public class TimeSheetNotFoundException(string timeSheetId) : DomainException("TimeSheet not found", $"TimeSheet with Id {timeSheetId} was not found.")
+public record TimeSheetNotFound(string timeSheetId) : Error(nameof(TimeSheetNotFound), "TimeSheet not found", $"TimeSheet with Id {timeSheetId} was not found.")
 {
     public string TimeSheetId { get; } = timeSheetId;
 }
 
-public class TimeSheetClosedException(string timeSheetId) : DomainException("TimeSheet is closed", $"TimeSheet with Id {timeSheetId} is closed.")
+public record TimeSheetClosed(string timeSheetId) : Error(nameof(TimeSheetClosed), "TimeSheet is closed", $"TimeSheet with Id {timeSheetId} is closed.")
 {
     public string TimeSheetId { get; } = timeSheetId;
 }
 
-public class EntryNotFoundException(string entryId) : DomainException("Entry not found", $"Entry with Id {entryId} was not found.")
+public record EntryNotFound(string entryId) : Error(nameof(EntryNotFound), "Entry not found", $"Entry with Id {entryId} was not found.")
 {
     public string EntryId { get; } = entryId;
 }
 
-public class ProjectMembershipNotFoundException(string membershipId) : DomainException("Project Membership not found", $"Project Membership with Id {membershipId} was not found.")
+public record ProjectMembershipNotFound(string membershipId) : Error(nameof(ProjectMembershipNotFound), "Project Membership not found", $"Project Membership with Id {membershipId} was not found.")
 {
     public string ProjectMembershipId { get; } = membershipId;
 }
 
-public class UserNotFoundException(string userName) : DomainException("User not found", $"User {userName} was not found.")
+public record UserNotFound(string userName) : Error(nameof(UserNotFound), "User not found", $"User {userName} was not found.")
 {
     public string UserName { get; } = userName;
 }
 
-public class UserAlreadyProjectMemberException(string userName, string projectId) : DomainException("User is already a member", $"User {userName} is already a member of {projectId}.")
+public record UserAlreadyProjectMember(string userName, string projectId) : Error(nameof(UserAlreadyProjectMember), "User is already a member", $"User {userName} is already a member of {projectId}.")
 {
     public string UserName { get; } = userName;
 
     public string ProjectId { get; } = projectId;
 }
 
-public class EntryAlreadyExistsException(string timeSheetId, DateOnly date, string activityId) : DomainException("Entry already exists", $"Entry already registered for {activityId} on {date}.")
+public record EntryAlreadyExists(string timeSheetId, DateOnly date, string activityId) : Error(nameof(EntryAlreadyExists), "Entry already exists", $"Entry already registered for {activityId} on {date}.")
 {
     public string TimeSheetId { get; } = timeSheetId;
 
@@ -58,29 +41,29 @@ public class EntryAlreadyExistsException(string timeSheetId, DateOnly date, stri
     public string ActivityId { get; } = activityId;
 }
 
-public class MonthLockedException(string timeSheetId) : DomainException("Month is locked", $"The month is locked for TimeSheet withd Id {timeSheetId}.")
+public record MonthLocked(string timeSheetId) : Error(nameof(MonthLocked), "Month is locked", $"The month is locked for TimeSheet withd Id {timeSheetId}.")
 {
     public string TimeSheetId { get; } = timeSheetId;
 }
 
-public class ProjectNotFoundException(string projectId) : DomainException("Project not found", $"Project with Id {projectId} was not found.")
+public record ProjectNotFound(string projectId) : Error(nameof(ProjectNotFound), "Project not found", $"Project with Id {projectId} was not found.")
 {
     public string ProjectId { get; } = projectId;
 }
 
-public class ActivityNotFoundException(string activityId) : DomainException("Activity not found", $"Activity with Id {activityId} was not found.")
+public record ActivityNotFound(string activityId) : Error(nameof(ActivityNotFound), "Activity not found", $"Activity with Id {activityId} was not found.")
 {
     public string ActivityId { get; } = activityId;
 }
 
-public class DayHoursExceedPermittedDailyWorkingHoursException(string timeSheetId, DateOnly date) : DomainException("Total daily hours exceed working hours", $"The number of hours for {date} in TimeSheet with Id {timeSheetId} exceeds the permitted daily working hours.")
+public record DayHoursExceedPermittedDailyWorkingHours(string timeSheetId, DateOnly date) : Error(nameof(DayHoursExceedPermittedDailyWorkingHours), "Total daily hours exceed working hours", $"The number of hours for {date} in TimeSheet with Id {timeSheetId} exceeds the permitted daily working hours.")
 {
     public string TimeSheetId { get; } = timeSheetId;
 
     public DateOnly Date { get; } = date;
 }
 
-public class WeekHoursExceedPermittedWeeklyWorkingHoursException(string timeSheetId) : DomainException("Total weekly hours exceed working hours", $"The number of hours for TimeSheet with Id {timeSheetId} exceeds the permitted weekly working hours.")
+public record WeekHoursExceedPermittedWeeklyWorkingHours(string timeSheetId) : Error(nameof(WeekHoursExceedPermittedWeeklyWorkingHours), "Total weekly hours exceed working hours", $"The number of hours for TimeSheet with Id {timeSheetId} exceeds the permitted weekly working hours.")
 {
     public string TimeSheetId { get; } = timeSheetId;
 }

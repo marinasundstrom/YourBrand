@@ -37,7 +37,7 @@ public sealed record GetProductCategoryById(string OrganizationId, string IdOrPa
             }
             return productCategory is null
                 ? Result.Failure<ProductCategory>(Errors.ProductCategoryNotFound)
-                : Result.Success(productCategory.ToDto());
+                : Result.SuccessWith(productCategory.ToDto());
         }
     }
 }

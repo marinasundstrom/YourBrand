@@ -5,15 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Application.Common.Interfaces;
 using YourBrand.TimeReport.Application.Common.Models;
-using YourBrand.TimeReport.Domain.Exceptions;
 
 namespace YourBrand.TimeReport.Application.Projects.Queries;
 
-public record GetProjectStatisticsSummaryForProjectQuery(string OrganizationId, string ProjectId) : IRequest<StatisticsSummary>
+public record GetProjectStatisticsSummaryForProjectQuery(string OrganizationId, string ProjectId) : IRequest<Result<StatisticsSummary>>
 {
-    public class GetProjectStatisticsSummaryForQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectStatisticsSummaryForProjectQuery, StatisticsSummary>
+    public class GetProjectStatisticsSummaryForQueryHandler(ITimeReportContext context) : IRequestHandler<GetProjectStatisticsSummaryForProjectQuery, Result<StatisticsSummary>>
     {
-        public async Task<StatisticsSummary> Handle(GetProjectStatisticsSummaryForProjectQuery request, CancellationToken cancellationToken)
+        public async Task<Result<StatisticsSummary>> Handle(GetProjectStatisticsSummaryForProjectQuery request, CancellationToken cancellationToken)
         {
             var project = await context.Projects
                 .InOrganization(request.OrganizationId)
@@ -28,7 +27,7 @@ public record GetProjectStatisticsSummaryForProjectQuery(string OrganizationId, 
 
             if (project is null)
             {
-                throw new ProjectNotFoundException(request.ProjectId);
+                return new ProjectNotFound(request.ProjectId);
             }
 
             var totalHours = project.Entries

@@ -32,7 +32,7 @@ public record UpdateOrganization(string OrganizationId, string Name) : IRequest<
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(user.ToDto());
+            return Result.SuccessWith(user.ToDto());
         }
     }
 }

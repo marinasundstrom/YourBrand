@@ -35,7 +35,7 @@ public sealed record UpdateStatus(string OrganizationId, string Id, int StatusId
             order.UpdateStatus(request.StatusId, timeProvider);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Results.Success;
+            return Result.Success;
         }
     }
 }

@@ -44,7 +44,7 @@ public sealed record UpdateProductCategory(string OrganizationId, string IdOrHan
 
             await catalogContext.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

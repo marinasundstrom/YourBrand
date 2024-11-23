@@ -34,7 +34,7 @@ public sealed record UpdateSubscriptionStatus(string OrganizationId, Guid Id, in
             subscription.UpdateStatus(request.StatusId, timeProvider);
             await salesContext.SaveChangesAsync(cancellationToken);
 
-            return Results.Success;
+            return Result.Success;
         }
     }
 }

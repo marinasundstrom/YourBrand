@@ -45,7 +45,7 @@ public sealed record UpdateAssignedUser(string OrganizationId, string Id, string
             order.UpdateAssigneeId(request.UserId);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Results.Success;
+            return Result.Success;
         }
     }
 }

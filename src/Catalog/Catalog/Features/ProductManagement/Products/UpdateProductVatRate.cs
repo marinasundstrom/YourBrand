@@ -56,7 +56,7 @@ public sealed record UpdateProductVatRate(string OrganizationId, string IdOrHand
                 NewVatRate = product.VatRate
             });
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

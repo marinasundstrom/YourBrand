@@ -18,7 +18,7 @@ public class SeedData
     {
         using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
-            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             context.Database.Migrate();
 
             var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -38,10 +38,10 @@ public class SeedData
                 }
 
                 result = userMgr.AddClaimsAsync(alice, new Claim[]{
-                            new Claim(JwtClaimTypes.Name, "Alice Smith"),
-                            new Claim(JwtClaimTypes.GivenName, "Alice"),
-                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
+                            new(JwtClaimTypes.Name, "Alice Smith"),
+                            new(JwtClaimTypes.GivenName, "Alice"),
+                            new(JwtClaimTypes.FamilyName, "Smith"),
+                            new(JwtClaimTypes.WebSite, "http://alice.com"),
                         }).Result;
                 if (!result.Succeeded)
                 {
@@ -70,11 +70,11 @@ public class SeedData
                 }
 
                 result = userMgr.AddClaimsAsync(bob, new Claim[]{
-                            new Claim(JwtClaimTypes.Name, "Bob Smith"),
-                            new Claim(JwtClaimTypes.GivenName, "Bob"),
-                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                            new Claim("location", "somewhere")
+                            new(JwtClaimTypes.Name, "Bob Smith"),
+                            new(JwtClaimTypes.GivenName, "Bob"),
+                            new(JwtClaimTypes.FamilyName, "Smith"),
+                            new(JwtClaimTypes.WebSite, "http://bob.com"),
+                            new("location", "somewhere")
                         }).Result;
                 if (!result.Succeeded)
                 {

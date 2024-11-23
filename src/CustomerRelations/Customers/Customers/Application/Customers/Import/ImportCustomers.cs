@@ -92,7 +92,7 @@ public sealed record ImportCustomers(Stream Stream) : IRequest<Result<CustomerIm
 
             await context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(new CustomerImportResult(diagnostics));
+            return Result.SuccessWith(new CustomerImportResult(diagnostics));
         }
 
 

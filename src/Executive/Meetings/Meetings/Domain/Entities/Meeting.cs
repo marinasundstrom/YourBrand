@@ -169,6 +169,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         }
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public AgendaItem MoveToNextAgendaItem()
     {
         if (Agenda is null)
@@ -233,6 +234,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         throw new InvalidOperationException("No more items in the agenda.");
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void ProcessCurrentAgendaItem()
     {
         var currentItem = GetCurrentAgendaItem();
@@ -244,13 +246,11 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         if (currentItem.Type == AgendaItemType.RollCall)
         {
             // Logic to process roll call, like marking attendees present.
-            Console.WriteLine("Processing Roll Call...");
         }
         else if (currentItem.Type == AgendaItemType.QuorumCheck)
         {
             if (!IsQuorumMet())
                 throw new InvalidOperationException("Quorum not met.");
-            Console.WriteLine("Quorum confirmed.");
         }
         else if (currentItem.Type == AgendaItemType.Motion)
         {
@@ -265,7 +265,6 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
             throw new InvalidOperationException("No handler found for this agenda item type.");
         }
     }
-
     public AgendaItem? GetCurrentAgendaItem()
     {
         if (CurrentAgendaItemIndex is null || Agenda == null)
@@ -274,7 +273,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         }
 
         var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
-        var currentItem = agendaItems.ElementAtOrDefault(CurrentAgendaItemIndex.Value);
+        var currentItem = agendaItems.ElementAtOrDefault(CurrentAgendaItemIndex.GetValueOrDefault());
 
         if (currentItem == null)
         {
@@ -285,7 +284,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         if (CurrentAgendaSubItemIndex.HasValue)
         {
             var subItems = currentItem.SubItems.OrderBy(si => si.Order).ToList();
-            return subItems.ElementAtOrDefault(CurrentAgendaSubItemIndex.Value); // No need for -1 adjustment
+            return subItems.ElementAtOrDefault(CurrentAgendaSubItemIndex.GetValueOrDefault()); // No need for -1 adjustment
         }
 
         // Otherwise, return the main item

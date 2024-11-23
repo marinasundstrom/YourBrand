@@ -9,10 +9,7 @@ using YourBrand.TimeReport.Application.Common.Models;
 using YourBrand.TimeReport.Application.TimeSheets;
 using YourBrand.TimeReport.Application.TimeSheets.Commands;
 using YourBrand.TimeReport.Application.TimeSheets.Queries;
-using YourBrand.TimeReport.Domain.Exceptions;
 using YourBrand.TimeReport.Dtos;
-
-using static System.Result<YourBrand.TimeReport.Application.TimeSheets.EntryDto, YourBrand.TimeReport.Domain.Exceptions.DomainException>;
 
 namespace YourBrand.TimeReport.Controllers;
 
@@ -46,7 +43,8 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<TimeSheetDto>> GetTimeSheetForWeek(string organizationId, [FromRoute] int year, [FromRoute] int week, [FromQuery] string? userId, CancellationToken cancellationToken)
     {
-        return Ok(await mediator.Send(new GetTimeSheetForWeekQuery(organizationId, year, week, userId), cancellationToken));
+        var r = await mediator.Send(new GetTimeSheetForWeekQuery(organizationId, year, week, userId), cancellationToken);
+        return this.HandleResult(r);
     }
 
     [HttpPost("{timeSheetId}")]
@@ -55,26 +53,8 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<EntryDto>> CreateEntry(string organizationId, [FromRoute] string timeSheetId, CreateEntryDto dto, CancellationToken cancellationToken)
     {
-        var date = DateOnly.FromDateTime(dto.Date);
-
-        var result = await mediator.Send(new CreateEntryCommand(organizationId, timeSheetId, dto.ProjectId, dto.ActivityId, DateOnly.FromDateTime(dto.Date), dto.Hours, dto.Description), cancellationToken);
-
-        return result switch
-        {
-            Ok(EntryDto value) => Ok(value),
-            Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            _ => BadRequest()
-
-            /*
-            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is TimeSheetClosedException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is MonthLockedException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is EntryAlreadyExistsException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is ProjectMembershipNotFoundException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is ActivityNotFoundException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is DayHoursExceedPermittedDailyWorkingHoursException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            Result<EntryDto, DomainException>.Error(DomainException exception) when exception is WeekHoursExceedPermittedWeeklyWorkingHoursException exc => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-            */
-        };
+        var result = await mediator.Send(new CreateEntryCommand(organizationId, timeSheetId,  dto.ProjectId, dto.ActivityId, DateOnly.FromDateTime(dto.Date), dto.Hours, dto.Description), cancellationToken);
+        return this.HandleResult(result);
     }
 
     [HttpPut("{timeSheetId}/{entryId}")]
@@ -83,41 +63,8 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<EntryDto>> UpdateEntry(string organizationId, [FromRoute] string timeSheetId, [FromRoute] string entryId, UpdateEntryDto dto, CancellationToken cancellationToken)
     {
-        try
-        {
-            var result = await mediator.Send(new UpdateEntryCommand(organizationId, timeSheetId, entryId, dto.Hours, dto.Description), cancellationToken);
-
-            return result switch
-            {
-                Ok(EntryDto value) => Ok(value),
-                Error(DomainException exc) => Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest),
-                _ => BadRequest()
-            };
-        }
-        catch (TimeSheetNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (TimeSheetClosedException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (MonthLockedException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (EntryAlreadyExistsException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (DayHoursExceedPermittedDailyWorkingHoursException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (WeekHoursExceedPermittedWeeklyWorkingHoursException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
+        var result = await mediator.Send(new UpdateEntryCommand(organizationId, timeSheetId, entryId, dto.Hours, dto.Description), cancellationToken);
+        return this.HandleResult(result);
     }
 
     [HttpPut("{timeSheetId}/{entryId}/Details")]
@@ -126,35 +73,8 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<EntryDto>> UpdateEntryDetails(string organizationId, [FromRoute] string timeSheetId, [FromRoute] string entryId, UpdateEntryDetailsDto dto, CancellationToken cancellationToken)
     {
-        try
-        {
-            var newDto = await mediator.Send(new UpdateEntryDetailsCommand(organizationId, timeSheetId, entryId, dto.Description), cancellationToken);
-            return Ok(newDto);
-        }
-        catch (TimeSheetNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (TimeSheetClosedException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (MonthLockedException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (EntryAlreadyExistsException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (DayHoursExceedPermittedDailyWorkingHoursException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (WeekHoursExceedPermittedWeeklyWorkingHoursException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
+        var r = await mediator.Send(new UpdateEntryDetailsCommand(organizationId, timeSheetId, entryId, dto.Description), cancellationToken);
+        return this.HandleResult(r);
     }
 
     [HttpDelete("{timeSheetId}/{activityId}")]
@@ -162,23 +82,8 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> DeleteActvityEntries(string organizationId, [FromRoute] string timeSheetId, [FromRoute] string activityId, CancellationToken cancellationToken)
     {
-        try
-        {
-            await mediator.Send(new DeleteActivityCommand(organizationId, timeSheetId, activityId), cancellationToken);
-            return Ok();
-        }
-        catch (TimeSheetNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (TimeSheetClosedException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
-        catch (MonthLockedException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
+        var r = await mediator.Send(new DeleteActivityCommand(organizationId, timeSheetId, activityId), cancellationToken);
+        return this.HandleResult(r);
     }
 
     [HttpPost("{timeSheetId}/CloseWeek")]
@@ -186,15 +91,8 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> CloseWeek(string organizationId, [FromRoute] string timeSheetId, CancellationToken cancellationToken)
     {
-        try
-        {
-            await mediator.Send(new CloseWeekCommand(organizationId, timeSheetId), cancellationToken);
-            return Ok();
-        }
-        catch (TimeSheetNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
+        var r = await mediator.Send(new CloseWeekCommand(organizationId, timeSheetId), cancellationToken);
+        return this.HandleResult(r);
     }
 
     [HttpPost("{timeSheetId}/OpenWeek")]
@@ -202,15 +100,8 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> OpenWeek(string organizationId, [FromRoute] string timeSheetId, CancellationToken cancellationToken)
     {
-        try
-        {
-            await mediator.Send(new ReopenWeekCommand(organizationId, timeSheetId), cancellationToken);
-            return Ok();
-        }
-        catch (TimeSheetNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
+        var r = await mediator.Send(new ReopenWeekCommand(organizationId, timeSheetId), cancellationToken);
+        return this.HandleResult(r);
     }
 
     [HttpPost("{timeSheetId}/Approve")]
@@ -218,15 +109,8 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> ApproveWeek(string organizationId, [FromRoute] string timeSheetId, CancellationToken cancellationToken)
     {
-        try
-        {
-            await mediator.Send(new ApproveWeekCommand(organizationId, timeSheetId), cancellationToken);
-            return Ok();
-        }
-        catch (TimeSheetNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
+        var r = await mediator.Send(new ApproveWeekCommand(organizationId, timeSheetId), cancellationToken);
+        return this.HandleResult(r);
     }
 
     [HttpPut("{timeSheetId}/Status")]
@@ -234,15 +118,8 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> UpdateTimeSheetStatus(string organizationId, [FromRoute] string timeSheetId, int statusCode, CancellationToken cancellationToken)
     {
-        try
-        {
-            await mediator.Send(new UpdateTimeSheetStatusCommand(organizationId, timeSheetId), cancellationToken);
-            return Ok();
-        }
-        catch (TimeSheetNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
+        var r = await mediator.Send(new UpdateTimeSheetStatusCommand(organizationId, timeSheetId), cancellationToken);
+        return this.HandleResult(r);
     }
 
     [HttpPost("{timeSheetId}/LockMonth")]
@@ -250,14 +127,7 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> LockMonth(string organizationId, [FromRoute] string timeSheetId, CancellationToken cancellationToken)
     {
-        try
-        {
-            await mediator.Send(new LockMonthCommand(organizationId, timeSheetId), cancellationToken);
-            return Ok();
-        }
-        catch (TimeSheetNotFoundException exc)
-        {
-            return Problem(title: exc.Title, detail: exc.Details, statusCode: StatusCodes.Status400BadRequest);
-        }
+        var r = await mediator.Send(new LockMonthCommand(organizationId, timeSheetId), cancellationToken);
+        return this.HandleResult(r);
     }
 }

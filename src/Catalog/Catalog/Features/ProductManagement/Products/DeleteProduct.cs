@@ -90,7 +90,7 @@ public sealed record DeleteProduct(string OrganizationId, string IdOrHandle) : I
 
             await transaction.CommitAsync();
 
-            return Result.Success();
+            return Result.Success;
         }
     }
 }

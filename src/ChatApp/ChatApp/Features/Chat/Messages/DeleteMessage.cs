@@ -26,6 +26,7 @@ public sealed record DeleteMessage(OrganizationId OrganizationId, ChannelId Chan
 
     public sealed class Handler(ApplicationDbContext applicationDbContext, IUserContext userContext) : IRequestHandler<DeleteMessage, Result>
     {
+        [Throws(typeof(OperationCanceledException))]
         public async Task<Result> Handle(DeleteMessage request, CancellationToken cancellationToken)
         {
             var message = await applicationDbContext
@@ -81,7 +82,7 @@ public sealed record DeleteMessage(OrganizationId OrganizationId, ChannelId Chan
                 .ExecuteDeleteAsync();      
 
             return deleted > 0 
-                ? Result.Success() 
+                ? Result.Success 
                 : Result.Failure(Errors.Messages.MessageNotFound);
             */
         }
