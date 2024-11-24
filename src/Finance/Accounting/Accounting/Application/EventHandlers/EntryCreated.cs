@@ -11,7 +11,7 @@ public class EntryCreatedEventHandler(ILogger<EntryCreatedEventHandler> logger) 
 {
     public Task Handle(EntryCreatedEvent notification, CancellationToken cancellationToken)
     {
-        logger.LogInformation($"Entry created: {notification.EntryId}");
+        logger.LogInformation("Entry created: {EntryId}", notification.EntryId);
 
         return Task.CompletedTask;
     }

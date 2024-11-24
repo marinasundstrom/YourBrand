@@ -49,6 +49,7 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
         return Candidates.Any(x => x.AttendeeId == candidateAttendeeId);
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public ElectionCandidate NominateCandidate(
         TimeProvider timeProvider,
         MeetingAttendee attendee, string? statement = null,
@@ -57,6 +58,7 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
         return NominateCandidate(timeProvider, attendee.Name!, statement, attendee.UserId, null, attendee.Id, nominatedBy);
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public ElectionCandidate NominateCandidate(
         TimeProvider timeProvider,
         string name, string? statement = null,
@@ -81,6 +83,7 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
         return newCandidate;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void WithdrawCandidacy(ElectionCandidate candidate, TimeProvider timeProvider)
     {
         if (State != ElectionState.Voting)
@@ -106,6 +109,7 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
         State = ElectionState.Voting;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void EndElection()
     {
         if (State != ElectionState.Voting)
@@ -115,6 +119,7 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
         State = ElectionState.Completed;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void TallyBallots()
     {
         if (State != ElectionState.Completed)
@@ -155,6 +160,7 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
         }
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void RedoElection()
     {
         if (State != ElectionState.RedoRequired)
@@ -167,6 +173,7 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
         State = ElectionState.NotStarted;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void CastBallot(MeetingAttendee voter, ElectionCandidate candidate, TimeProvider timeProvider)
     {
         if (State != ElectionState.Voting)
@@ -186,6 +193,7 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
         _ballots.Add(ballot);
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public Dictionary<string, int> GetElectionResults()
     {
         if (State != ElectionState.ResultReady)

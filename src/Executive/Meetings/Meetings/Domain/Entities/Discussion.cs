@@ -42,6 +42,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
     public SpeakerRequestId? CurrentSpeakerId { get; private set; }
 
     // Method to add a speaker request to the queue
+    [Throws(typeof(InvalidOperationException))]
     public SpeakerRequest AddSpeakerRequest(MeetingAttendee attendee)
     {
         if (_speakerQueue.Any(s => s.AttendeeId == attendee.Id))
@@ -64,6 +65,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
     }
 
     // Method to remove a speaker request from the queue
+    [Throws(typeof(InvalidOperationException))]
     public SpeakerRequestId RemoveSpeaker(MeetingAttendee attendee)
     {
         var request = _speakerQueue.FirstOrDefault(s => s.AttendeeId == attendee.Id);
@@ -119,6 +121,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
     }
 
     // Method to start the session
+    [Throws(typeof(InvalidOperationException))]
     public void StartSession()
     {
         if (State != DiscussionState.NotStarted)
@@ -130,6 +133,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
     }
 
     // Method to manually end the session
+    [Throws(typeof(InvalidOperationException))]
     public void EndSession()
     {
         if (State == DiscussionState.Completed)
@@ -151,6 +155,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
     }
 
     // Method to pause the session
+    [Throws(typeof(InvalidOperationException))]
     public void PauseSession()
     {
         if (State != DiscussionState.InProgress)
@@ -162,6 +167,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
     }
 
     // Method to resume the session if paused
+    [Throws(typeof(InvalidOperationException))]
     public void ResumeSession()
     {
         if (State != DiscussionState.Paused)

@@ -63,6 +63,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
     public DateTimeOffset? CanceledAt { get; set; }
     public DateTimeOffset? EndedAt { get; set; }
 
+    [Throws(typeof(InvalidOperationException))]
     public bool IsQuorumMet()
     {
         if (Quorum.RequiredNumber == 0)
@@ -84,6 +85,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         return presentAttendees >= Quorum.RequiredNumber;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void StartMeeting()
     {
         if (State != MeetingState.Scheduled)
@@ -116,6 +118,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         CurrentAgendaSubItemIndex = null;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void CancelMeeting()
     {
         if (State != MeetingState.Scheduled && State != MeetingState.InProgress)
@@ -143,6 +146,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         }
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void EndMeeting()
     {
         if (State != MeetingState.InProgress)
@@ -297,6 +301,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         return Agenda?.Items.FirstOrDefault(x => x.Id == id);
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public MeetingAttendee AddAttendee(string name, string? userId, string email, AttendeeRole role, bool? hasSpeakingRights, bool? hasVotingRights,
         MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
     {
@@ -335,6 +340,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         return attendee;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public async Task AddAttendeesFromGroup(MeetingGroup meetingGroup, IApplicationDbContext context, CancellationToken cancellationToken = default)
     {
         foreach (var member in meetingGroup.Members)

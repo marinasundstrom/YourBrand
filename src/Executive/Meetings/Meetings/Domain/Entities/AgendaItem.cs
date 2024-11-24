@@ -115,6 +115,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     // For election
     public string? Position { get; set; }
 
+    [Throws(typeof(InvalidOperationException))]
     public void StartDiscussion()
     {
         if (State != AgendaItemState.Pending && State != AgendaItemState.Postponed)
@@ -131,6 +132,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         State = AgendaItemState.UnderDiscussion;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void EndDiscussion()
     {
         Discussion?.EndSession();
@@ -139,6 +141,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         DiscussionEndedAt = DateTimeOffset.UtcNow;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void RequestSpeakerSlot(MeetingAttendee attendee)
     {
         if (State != AgendaItemState.Pending)
@@ -149,6 +152,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         Discussion.AddSpeakerRequest(attendee);
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void StartVoting()
     {
         if (State != AgendaItemState.UnderDiscussion)
@@ -169,6 +173,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         State = AgendaItemState.Voting;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void EndVoting()
     {
         if (Voting == null)
@@ -183,6 +188,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         State = AgendaItemState.Completed;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void StartElection()
     {
         if (State != AgendaItemState.UnderDiscussion)
@@ -204,6 +210,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         State = AgendaItemState.Voting;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void EndElection()
     {
         if (Election == null)
@@ -223,6 +230,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         return Election?.EndTime == null ? Election : null;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void Complete()
     {
         if (!CanComplete)
@@ -233,6 +241,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         State = AgendaItemState.Completed;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void Skip()
     {
         if (IsMandatory)
@@ -243,6 +252,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         State = AgendaItemState.Skipped;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void Postpone()
     {
         if (IsMandatory)
@@ -253,6 +263,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         State = AgendaItemState.Postponed;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void Cancel()
     {
         if (IsMandatory)
@@ -305,6 +316,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     public IReadOnlyCollection<AgendaItem> SubItems => _subItems;
 
+    [Throws(typeof(InvalidOperationException))]
     public AgendaItem AddItem(AgendaItemType type, string title, string description, Election? election = null)
     {
         if (_subItems.Any(i => i.Title.Equals(title, StringComparison.OrdinalIgnoreCase)))
@@ -347,6 +359,8 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         return r;
     }
 
+    [Throws(typeof(InvalidOperationException))]
+    [Throws(typeof(ArgumentOutOfRangeException))]
     public bool ReorderAgendaItem(AgendaItem agendaItem, int newOrderPosition)
     {
         if (!_subItems.Contains(agendaItem))

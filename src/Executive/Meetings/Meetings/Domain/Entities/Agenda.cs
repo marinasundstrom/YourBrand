@@ -43,6 +43,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
     public DateTimeOffset? RejectedAt { get; private set; }
     public DateTimeOffset? PublishedAt { get; private set; }
 
+    [Throws(typeof(InvalidOperationException))]
     public void FinalizeContent()
     {
         if (State != AgendaState.InDraft)
@@ -51,6 +52,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
         State = AgendaState.Finalized;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void Approve()
     {
         if (ApprovalStatus != ApprovalStatus.Pending)
@@ -60,6 +62,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
         ApprovedAt = DateTimeOffset.UtcNow;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public void Publish()
     {
         if (State != AgendaState.Finalized)
@@ -74,6 +77,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
 
     public IReadOnlyCollection<AgendaItem> Items => _items.Where(x => x.ParentId == null).ToList();
 
+    [Throws(typeof(InvalidOperationException))]
     public AgendaItem AddItem(AgendaItemType type, string title, string description, Election? election = null)
     {
         if (ApprovalStatus == ApprovalStatus.Approved)
@@ -97,6 +101,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
         return item;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public bool RemoveAgendaItem(AgendaItem item)
     {
         if (ApprovalStatus == ApprovalStatus.Approved)
@@ -111,6 +116,7 @@ public class Agenda : AggregateRoot<AgendaId>, IAuditableEntity<AgendaId>, IHasT
         return removed;
     }
 
+    [Throws(typeof(InvalidOperationException))]
     public bool ReorderAgendaItem(AgendaItem agendaItem, int newOrderPosition)
     {
         if (ApprovalStatus == ApprovalStatus.Approved)

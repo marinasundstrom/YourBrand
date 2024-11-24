@@ -1,10 +1,8 @@
 {
     "ignoredExceptions": [
-        "System.ArgumentNullException"
     ],
-    "informationalExceptions": [
-        "System.NotImplementedException",
-        "System.IO.IOException",
-        "System.TimeoutException"
-    ]
+    "informationalExceptions": {
+        "System.IO.IOException": "Propagation",
+        "System.TimeoutException": "Always"
+    }
 }
