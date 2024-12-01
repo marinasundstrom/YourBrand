@@ -44,7 +44,7 @@
     </LoadingContent>
 </MudTable>
 
-@if (table is not null && !table.GetServerData().Items.Any())
+@if (!(table?.GetServerData()?.Items?.Any() ?? false))
 {
     <MudButton Variant="Variant.Filled" OnClick="PopulateModules" Class="mt-4">Populate modules</MudButton>
 }
@@ -52,8 +52,15 @@
 @code {
     MudTable<TenantModule> table;
 
+    protected override void OnInitialized() 
+    {
+
+    }
+
     private async Task<TableData<TenantModule>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
+        Console.WriteLine("FOO: " + table.GetServerData()?.Items?.Any());
+
         try
         {
             var results = await ModulesClient.GetModulesAsync(cancellationToken); //false, state.Page + 1, state.PageSize, state.SortLabel,
