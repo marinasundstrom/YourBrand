@@ -2,6 +2,7 @@
     "ignoredExceptions": [
     ],
     "informationalExceptions": {
+        "System.IO.NotImplementedException": "Always",
         "System.IO.IOException": "Propagation",
         "System.TimeoutException": "Always"
     }
