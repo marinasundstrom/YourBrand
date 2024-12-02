@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +19,7 @@ public sealed class ChatHub : Hub<IChatHubClient>, IChatHub
     private readonly IMediator mediator;
     private readonly ISettableUserContext userContext;
     private readonly ISettableTenantContext tenantContext;
-    private readonly static Dictionary<string, ConnectionState> state = new Dictionary<string, ConnectionState>();
+    private readonly static ConcurrentDictionary<string, ConnectionState> state = new ConcurrentDictionary<string, ConnectionState>();
 
     public ChatHub(IMediator mediator, ISettableUserContext userContext, ISettableTenantContext tenantContext)
     {
@@ -43,7 +45,7 @@ public sealed class ChatHub : Hub<IChatHubClient>, IChatHub
                 Groups.AddToGroupAsync(this.Context.ConnectionId, $"channel-{channelId}");
             }
 
-            state.Add(Context.ConnectionId, new ConnectionState(tenantId, organizationId, channelId));
+            state.TryAdd(Context.ConnectionId, new ConnectionState(tenantId, organizationId, channelId));
         }
 
         return base.OnConnectedAsync();
@@ -66,7 +68,7 @@ public sealed class ChatHub : Hub<IChatHubClient>, IChatHub
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        state.Remove(Context.ConnectionId);
+        state.Remove(Context.ConnectionId, out var _);
 
         return base.OnDisconnectedAsync(exception);
     }

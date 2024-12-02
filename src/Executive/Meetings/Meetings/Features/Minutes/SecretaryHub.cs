@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +15,7 @@ public record ConnectionState(string TenantId, string OrganizationId, int Meetin
 [Authorize]
 public sealed class SecretaryHub(IMediator mediator, ISettableUserContext userContext, ISettableTenantContext tenantContext) : Hub<ISecretaryHubClient>, ISecretaryHub
 {
-    private readonly static Dictionary<string, ConnectionState> state = new Dictionary<string, ConnectionState>();
+    private readonly static ConcurrentDictionary<string, ConnectionState> state = new ConcurrentDictionary<string, ConnectionState>();
 
     public override Task OnConnectedAsync()
     {
@@ -32,7 +34,7 @@ public sealed class SecretaryHub(IMediator mediator, ISettableUserContext userCo
                 Groups.AddToGroupAsync(this.Context.ConnectionId, $"meeting-{meetingId}");
             }
 
-            state.Add(Context.ConnectionId, new ConnectionState(tenantId, organizationId, int.Parse(meetingId)));
+            state.TryAdd(Context.ConnectionId, new ConnectionState(tenantId, organizationId, int.Parse(meetingId)));
         }
 
         return base.OnConnectedAsync();
@@ -52,7 +54,7 @@ public sealed class SecretaryHub(IMediator mediator, ISettableUserContext userCo
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        state.Remove(Context.ConnectionId);
+        state.Remove(Context.ConnectionId, out var _);
 
         return base.OnDisconnectedAsync(exception);
     }
