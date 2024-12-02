@@ -35,6 +35,12 @@ public static class ModelBuilderExtensions
                 continue;
             }
 
+            if (type.BaseType?.IsAbstract() ?? false)  
+            {
+                Console.WriteLine($"Skipping type {clrType} because it is a derived entity type.");
+                continue;
+            }
+
             var entityTypeBuilder = modelBuilder.Entity(clrType);
 
             entityTypeBuilder
