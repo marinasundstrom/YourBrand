@@ -16,6 +16,7 @@
 
     <ItemGroup>
         <ProjectReference Include="$(MSBuildThisFileDirectory)\src\Common\Domain\Domain.csproj"
+            IsAspireProjectResource="false"
             Condition="'$(RootNamespace)' != 'YourBrand.Domain'" />
     </ItemGroup>
 </Project>
