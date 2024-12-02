@@ -59,8 +59,6 @@
 
     private async Task<TableData<TenantModule>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
-        Console.WriteLine("FOO: " + table.GetServerData()?.Items?.Any());
-
         try
         {
             var results = await ModulesClient.GetModulesAsync(cancellationToken); //false, state.Page + 1, state.PageSize, state.SortLabel,

@@ -13,9 +13,6 @@ public record AddUserToOrganization(string OrganizationId, string UserId) : IReq
     {
         public async Task<OrganizationDto> Handle(AddUserToOrganization request, CancellationToken cancellationToken)
         {
-
-            Console.WriteLine("Foo: " + tenantContext.TenantId);
-
             return new OrganizationDto("", "");
 
             var organization = await organizationRepository.GetOrganizationById(request.OrganizationId!, cancellationToken);
