@@ -10,24 +10,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-*">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-*" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-*">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0-*" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0-*" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
 
-		<PackageReference Include="Polly" Version="7.2.3" />
-		<PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.8.1" />
-		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
-		<PackageReference Include="Scrutor" Version="4.2.0" />
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
-		<PackageReference Include="Microsoft.Extensions.Azure" Version="1.6.0" />
+		<PackageReference Include="Polly" />
+		<PackageReference Include="Quartz.Extensions.DependencyInjection" />
+		<PackageReference Include="Quartz.Extensions.Hosting" />
+		<PackageReference Include="Scrutor" />
+		<PackageReference Include="Azure.Storage.Blobs" />
+		<PackageReference Include="Microsoft.Extensions.Azure" />
 	</ItemGroup>
 
 	<ItemGroup>

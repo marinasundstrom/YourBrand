@@ -11,20 +11,20 @@
 
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'Documents' " />
 	<ItemGroup>
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
-        <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
-        <PackageReference Include="Polly" Version="8.3.0" />
-        <PackageReference Include="Quartz" Version="3.8.1" />
-        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
-        <PackageReference Include="RazorLight" Version="2.1.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-*" />
-        <PackageReference Include="IronPdf" Version="2022.9.9056" />
-        <PackageReference Include="IronPdf.MacOs" Version="2022.9.9056" />
-        <PackageReference Include="MediatR" Version="12.2.0" />
-        <PackageReference Include="Azure.Storage.Blobs" Version="12.14.0-beta.1" />
-        <PackageReference Include="Microsoft.Extensions.Azure" Version="1.7.6" />
-        <PackageReference Include="Yarp.ReverseProxy" Version="2.1.0" />
-        <PackageReference Include="Scrutor" Version="4.2.0" />    
+        <PackageReference Include="MassTransit.RabbitMQ" />
+        <PackageReference Include="NSwag.AspNetCore" />
+        <PackageReference Include="Polly" />
+        <PackageReference Include="Quartz" />
+        <PackageReference Include="Quartz.Extensions.Hosting" />
+        <PackageReference Include="RazorLight" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+        <PackageReference Include="IronPdf" />
+        <PackageReference Include="IronPdf.MacOs" />
+        <PackageReference Include="MediatR" />
+        <PackageReference Include="Azure.Storage.Blobs" />
+        <PackageReference Include="Microsoft.Extensions.Azure" />
+        <PackageReference Include="Yarp.ReverseProxy" />
+        <PackageReference Include="Scrutor" />    
     </ItemGroup>
 
 	<ItemGroup>

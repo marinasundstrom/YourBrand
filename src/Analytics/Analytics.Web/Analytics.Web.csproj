@@ -17,15 +17,14 @@
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'Web' " />
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'YourBrand.Catalog.Web' " />
 	<ItemGroup>
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-*">
+        <PackageReference Include="MassTransit.RabbitMQ" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
-            Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0-*" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Options" />
     </ItemGroup>
 
 	<ItemGroup>

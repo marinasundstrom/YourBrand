@@ -9,8 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Portal.Modules.Abstractions\Portal.Modules.Abstractions.csproj" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
-      Version="9.0.0-*" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0-*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
   </ItemGroup>
 </Project>

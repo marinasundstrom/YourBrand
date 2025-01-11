@@ -7,17 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.3.2" />
+        <PackageReference Include="Duende.IdentityServer.AspNetIdentity" />
 
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-*" />
-        <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
+        <PackageReference Include="Serilog.AspNetCore" />
 
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore"
-           Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"
-           Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-*" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
     </ItemGroup>
 </Project>

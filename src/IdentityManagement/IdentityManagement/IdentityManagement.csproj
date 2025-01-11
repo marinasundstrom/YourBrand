@@ -10,26 +10,26 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'SelfHost' " />
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.0-*" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
 
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.0-*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-*"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
 
-    <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="8.0.0-*" />
+    <PackageReference Include="NSwag.AspNetCore" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" />
 
-    <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.8" />
+    <PackageReference Include="Duende.IdentityServer.AspNetIdentity" />
 
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
-    <PackageReference Include="MediatR" Version="12.2.0" />
-    <PackageReference Include="AspNetCore.Authentication.ApiKey" Version="7.0.0" />
-    <PackageReference Include="MassTransit.Abstractions" Version="8.2.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="AspNetCore.Authentication.ApiKey" />
+    <PackageReference Include="MassTransit.Abstractions" />
   </ItemGroup>
 
   <ItemGroup>

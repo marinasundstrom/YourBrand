@@ -23,25 +23,25 @@
 
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'Web' " />
 	<ItemGroup>
-        <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
-        <PackageReference Include="MediatR" Version="12.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-*" />
-        <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
-        <PackageReference Include="Hangfire.Core" Version="1.8.12" />
-        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.12" />
-        <PackageReference Include="Hangfire.SqlServer" Version="1.8.12" />
-        <PackageReference Include="Polly" Version="8.3.0" />
-        <PackageReference Include="Quartz" Version="3.8.1" />
-        <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
-        <PackageReference Include="Scrutor" Version="4.2.0" />
-        <PackageReference Include="FluentValidation" Version="11.4.0" />
-        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
-        <PackageReference Include="LinqKit" Version="1.2.3" />
-        <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.5.1" />
+        <PackageReference Include="MassTransit.RabbitMQ" />
+        <PackageReference Include="MediatR" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+        <PackageReference Include="NSwag.AspNetCore" />
+        <PackageReference Include="Hangfire.Core" />
+        <PackageReference Include="Hangfire.AspNetCore" />
+        <PackageReference Include="Hangfire.SqlServer" />
+        <PackageReference Include="Polly" />
+        <PackageReference Include="Quartz" />
+        <PackageReference Include="Quartz.Extensions.Hosting" />
+        <PackageReference Include="Scrutor" />
+        <PackageReference Include="FluentValidation" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+        <PackageReference Include="LinqKit" />
+        <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" />
         <ProjectReference Include="..\..\Common\Domain.EFCore\Domain.EFCore.csproj" />
 	</ItemGroup>
 

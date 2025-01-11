@@ -18,22 +18,21 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-        <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="9.0.0-*">
+        <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="Microsoft.Extensions.ApiDescription.Client">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="NSwag.ApiDescription.Client" Version="14.0.7">
+        <PackageReference Include="NSwag.ApiDescription.Client">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
-           Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0-*" />
-        <PackageReference Include="Microsoft.JSInterop.WebAssembly" Version="9.0.0-*" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Http" />
+        <PackageReference Include="Microsoft.JSInterop.WebAssembly" />
     </ItemGroup>
 
 </Project>

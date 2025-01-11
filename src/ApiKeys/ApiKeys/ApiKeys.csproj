@@ -9,22 +9,22 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Search' " />
   <ItemGroup>
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.0" />
-    <PackageReference Include="MediatR" Version="12.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0-*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.0-*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-*" />
-    <PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
-    <PackageReference Include="Hangfire.Core" Version="1.8.12" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.12" />
-    <PackageReference Include="Hangfire.SqlServer" Version="1.8.12" />
-    <PackageReference Include="AspNetCore.Authentication.ApiKey" Version="7.0.0" />
-    <PackageReference Include="Polly" Version="8.3.0" />
-    <PackageReference Include="Quartz" Version="3.8.1" />
-    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
-    <PackageReference Include="IdentityModel" Version="7.0.0" />
-    <PackageReference Include="Scrutor" Version="4.2.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="NSwag.AspNetCore" />
+    <PackageReference Include="Hangfire.Core" />
+    <PackageReference Include="Hangfire.AspNetCore" />
+    <PackageReference Include="Hangfire.SqlServer" />
+    <PackageReference Include="AspNetCore.Authentication.ApiKey" />
+    <PackageReference Include="Polly" />
+    <PackageReference Include="Quartz" />
+    <PackageReference Include="Quartz.Extensions.Hosting" />
+    <PackageReference Include="IdentityModel" />
+    <PackageReference Include="Scrutor" />
   </ItemGroup>
 
   <ItemGroup>
