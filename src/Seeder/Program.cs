@@ -6,10 +6,10 @@ using YourBrand.IdentityManagement.Client;
 
 var services = BuildServiceProvider();
 
-var syncClient = services.GetRequiredService<ISyncClient>();
-
 if (args.ToArray().Contains("--sync"))
 {
+    var syncClient = services.GetRequiredService<ISyncClient>();
+
     await syncClient.SyncDataAsync();
     return;
 }

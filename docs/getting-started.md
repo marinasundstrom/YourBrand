@@ -22,6 +22,8 @@ Activate Portal module “Identity Management” for this:
 
 7. Go ``Menu > Administration > Sync`` to sync and re-sync user data across services. Also used after recreating and seeding service databases.
 
+Alternatively, you can sync using the `Seeder` project: `dotnet run -- --sync``
+
 Seed the databases for the rest of the services as you need them, and when the Aspire app host is running:
 
 ```
