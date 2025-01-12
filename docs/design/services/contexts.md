@@ -1,4 +1,4 @@
-# Request context
+# Contexts
 
 Each service is capable to handling more than one tenant. So each request belongs to potentially a different tenant, and user.
 
