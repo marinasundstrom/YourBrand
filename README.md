@@ -8,7 +8,7 @@ Watch this [video](https://www.youtube.com/watch?v=k6SftNnsILo) demoing the app.
 
 ## Getting started
 
-Read this [document](/docs/getting-started.md).
+Read this [document](/docs/development/getting-started.md).
 
 ## Background
 
@@ -65,7 +65,7 @@ Products
 
 ## Architecture
 
-<a href="/docs/overview.png">
-<img src="/docs/overview.png" height="450"  alt="Overview"  /></a>
+<a href="/docs/architecture/overview.png">
+<img src="/docs/architecture/overview.png" height="450"  alt="Overview"  /></a>
 
 <p>Architectural Overview</p>
