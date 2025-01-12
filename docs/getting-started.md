@@ -1,64 +1,29 @@
 # Getting started
 
-* Aspire Dashboard: https://localhost:17125/
-* Portal: https://localhost:5174/ (Actually the reverse proxy)
-* Identity Management: https://localhost:5040/
-* Store: https://localhost:7188/
+1. Run services in Aspire (Requires .NET 9 SDK and Docker):
 
-## Run with Aspire
+``dotnet run --project src/YourBrand.AppHost/YourBrand.AppHost.csproj;``
 
-```sh
-dotnet run --project src/YourBrand.AppHost/YourBrand.AppHost.csproj
-```
+2. Run ``seed.sh`` for seeding the essential services' databases. This will create default data with test tenant, users, and organisations.
 
-### Important service
+3. Go to the Portal: https://localhost:5174/ 
 
-These services are essential for the function of YourBrand:
+4. Click the "Login" button in the top menu, Enter username ``alice`` (or ``bob``) and password ``Pass123$``. Succeed with logging in.
 
-* Proxy
-* Portal
-* AppService
-* IdentityManagement
-* HumanResources
-* ApiKeys
+Now you are in!
 
-### Syncing user data
+5. Activate the desired Portal modules at ``Menu > Administration > Modules``. Click "Populate modules" and "Reload app". (Don't click "Populate" more than once!)
 
-Everytime a database is created and recreated, you must populate it with users.
+Keep in mind that modules depend on other modules. ``Sales`` depend on ``Customers``. So activate both.
 
-Initial creation from seed:
+6. Seed the other services as you need.
+
+Activate Portal module “Identity Management” for this:
+
+7. Go ``Menu > Administration > Sync`` to sync and re-sync user data across services. Also used after recreating and seeding service databases.
+
+Seed the databases for the rest of the services as you need them, and when the Aspire app host is running:
 
 ```
-dotnet run --project Seeder/Seeder.csproj -- --seed
-```
-
-To sync users to services (will make sure users have been created):
-
-```
-dotnet run --project Seeder/Seeder.csproj -- --sync
-```
-
-The services must be running.
-
-A ``CreateUser`` message will be published, and each service will consume that message, creating a local user if not already existing.
-
-## Setting up a company
-
-You have to create a company in the Portal, in ``Administration > Set up``.
-
-Default credentials:
-
-```
-AliceSmith@email.com
-Pass123$
-```
-
-These credentials are used when logging in for the first time.
-
-## DevTunnel
-
-To connect from remote:
-
-```
-devtunnel host -p 5174 -a
+dotnet run -- --seed
 ```
