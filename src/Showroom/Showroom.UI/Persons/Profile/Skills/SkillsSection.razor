@@ -28,12 +28,12 @@
                     @skillGroup.Name
                 </MudText>
 
-                <MudChip T="string" Class="mt-2">
+                <MudChipSet T="string" Class="mt-2">
                     @foreach (var skill in skillGroup.Skills)
                     {
                         @if (IsEditing)
                         {
-                            <MudChip T="string"  OnClose="async () => await RemoveSkill(skillGroup, skill)">@skill.Skill.Name</MudChip>
+                            <MudChip T="string" OnClose="async () => await RemoveSkill(skillGroup, skill)">@skill.Skill.Name</MudChip>
                         }
                         else
                         {
@@ -47,7 +47,7 @@
                             </MudTooltip>
                         }
                     }
-                </MudChip>
+                </MudChipSet>
             </section>
         }
 

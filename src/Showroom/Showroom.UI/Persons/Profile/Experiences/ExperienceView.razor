@@ -60,7 +60,7 @@
         @((MarkupString)experience.Description?.Replace("\n", "<br />"))
     </MudText>
 
-    <MudChip T="string" Class="mt-4">
+    <MudChipSet T="string" Class="mt-4">
         @foreach (var skill in experience.Skills)
     {
         <MudTooltip>
@@ -87,7 +87,7 @@
             </TooltipContent>
         </MudTooltip>
     }
-    </MudChip>
+    </MudChipSet>
 
     @code {
     [Parameter]
