@@ -241,6 +241,8 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAntiforgery();
 
+app.MapStaticAssets();
+
 app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(typeof(BlazorApp.CookieHandler).Assembly)
     .AddInteractiveWebAssemblyRenderMode()

@@ -1,8 +1,8 @@
-﻿using System.Data.Entity;
-
-using FluentValidation;
+﻿using FluentValidation;
 
 using MediatR;
+
+using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Sales.Domain.Events;
 using YourBrand.Sales.Features.OrderManagement.Repositories;

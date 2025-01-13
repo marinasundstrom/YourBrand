@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Carts.Contracts;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Carts.Features.CartsManagement.Consumers;
 
@@ -41,11 +42,14 @@ public sealed class GetCartByIdConsumer(IMediator mediator) : IConsumer<GetCartB
     }
 }
 
-public sealed class GetCartByTagConsumer(IMediator mediator) : IConsumer<GetCartByTag>
+public sealed class GetCartByTagConsumer(IMediator mediator, ITenantContext tenantContext, ILogger<GetCartByTagConsumer> logger) : IConsumer<GetCartByTag>
 {
     public async Task Consume(ConsumeContext<GetCartByTag> context)
     {
         var tag = context.Message.Tag;
+
+        logger.LogError("GetCartByTag: {TenantId}", tenantContext.TenantId);
+        logger.LogError("Tag: {TenantId}", tag);
 
         var r = await mediator.Send(new Requests.GetCartByTag(tag), context.CancellationToken);
         var cart = r.GetValue();

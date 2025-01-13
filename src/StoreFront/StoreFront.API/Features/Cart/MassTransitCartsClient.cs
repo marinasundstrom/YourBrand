@@ -27,6 +27,7 @@ public sealed class MassTransitCartsClient(
     public async Task<Cart> GetCartByTag(string tag, CancellationToken cancellationToken = default)
     {
         logger.LogError("GetCartByTag: {TenantId}", tenantContext.TenantId);
+        logger.LogError("Tag: {TenantId}", tag);
 
         var response = await getCartByTagClient.GetResponse<Carts.Contracts.GetCartByTagResponse>(
             new Carts.Contracts.GetCartByTag { Tag = tag }, cancellationToken);

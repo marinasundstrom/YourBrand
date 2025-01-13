@@ -96,8 +96,6 @@ public static class Mappings
 
     public static UserInfoDto ToDto2(this User user) => new(user.Id, user.Name);
 
-    public static AddressDto ToDto(this YourBrand.Domain.Address address) => address.ToDto();
-
     public static BillingDetailsDto ToDto(this BillingDetails billingDetails) => new()
     {
         FirstName = billingDetails.FirstName,

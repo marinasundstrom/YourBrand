@@ -28,6 +28,16 @@ public record Address
         };
     }
 
+    public AddressDto ToDto() => new AddressDto(
+        this.Street,
+        this.City,
+        this.PostalCode,
+        this.Country,
+        this.AddressLine2,
+        this.StateOrProvince,
+        this.CareOf
+    );
+
     // Method to return the full address in a formatted way
     public override string ToString()
     {
