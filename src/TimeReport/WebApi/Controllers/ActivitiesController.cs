@@ -43,16 +43,9 @@ public class ActivitiesController(IMediator mediator) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<ActivityDto>> CreateActivity(string organizationId, string projectId, CreateActivityDto createActivityDto, CancellationToken cancellationToken)
     {
-        try
-        {
-            var activity = await mediator.Send(new CreateActivityCommand(organizationId, projectId, createActivityDto.Name, createActivityDto.ActivityTypeId, createActivityDto.Description, createActivityDto.HourlyRate), cancellationToken);
+        var activity = await mediator.Send(new CreateActivityCommand(organizationId, projectId, createActivityDto.Name, createActivityDto.ActivityTypeId, createActivityDto.Description, createActivityDto.HourlyRate), cancellationToken);
 
-            return Ok(activity);
-        }
-        catch (Exception)
-        {
-            return NotFound();
-        }
+        return Ok(activity);
     }
 
     [HttpPut("{id}")]

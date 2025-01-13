@@ -21,6 +21,17 @@ public sealed record CreateProductCategory(string OrganizationId, string Name, s
                     .FirstAsync(p => p.Id == request.ParentCategoryId, cancellationToken);
             }
 
+            int categoryId = 1;
+
+            try
+            {
+                categoryId = await catalogContext.ProductCategories
+                    .Where(x => x.OrganizationId == request.OrganizationId)
+                    .Where(x => x.StoreId == request.StoreId)
+                    .MaxAsync(x => x.Id, cancellationToken) + 1;
+            }
+            catch { }
+
             var product = new Domain.Entities.ProductCategory()
             {
                 OrganizationId = request.OrganizationId,

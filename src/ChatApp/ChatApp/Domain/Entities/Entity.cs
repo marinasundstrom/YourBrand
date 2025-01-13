@@ -25,7 +25,7 @@ public abstract class Entity<TId> : IEntity<TId>, IEquatable<Entity<TId>>, IHasD
     public override bool Equals(object? obj)
     {
         if (obj is not Entity<TId> entity) return false;
-        return Id.Equals(entity.Id);
+        return Id?.Equals(entity.Id) ?? false;
     }
 
     public static bool operator ==(Entity<TId>? left, Entity<TId>? right)
@@ -41,7 +41,7 @@ public abstract class Entity<TId> : IEntity<TId>, IEquatable<Entity<TId>>, IHasD
     public bool Equals(Entity<TId>? other)
     {
         if (other is null) return false;
-        return Id.Equals(other.Id);
+        return Id?.Equals(other.Id) ?? false;
     }
 
     public override int GetHashCode()
