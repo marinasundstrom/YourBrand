@@ -2,15 +2,33 @@
     "experience": [
         {
             "title": "Software Developer",
-            "employer": "Telavox",
+            "employer": "Itm8",
             "employmentType": "FullTime",
             "highlight": true,
+            "company": "Itm8",
+            "companyLogo": "/assets/logos/itm8.jpg",
+            "industry": "Information Technology and Services",
+            "link": "https://www.itm8.com/",
+            "location": "Malm\u00F6, Sweden",
+            "current": true,
+            "startDate": "2025-01-01T00:00:00",
+            "endDate": null,
+            "description": "Consulting as part of Itm8.",
+            "skills": [
+                "Software development"
+            ]
+        },
+        {
+            "title": "Software Developer",
+            "employer": "Telavox",
+            "employmentType": "FullTime",
+            "highlight": false,
             "company": "Telavox",
             "companyLogo": "/assets/logos/telavox.jpg",
             "industry": "Telecommunications",
             "link": "https://www.telavox.com/",
             "location": "Malm\u00F6, Sweden",
-            "current": true,
+            "current": false,
             "startDate": "2023-03-27T00:00:00",
             "endDate": "2023-12-27T00:00:00",
             "description": "Part of a team that developed system in the core business domain for telecommunication. Among our responsibilities were integrations with other domains, and customer management, and branding.\n\nExperimenting with containerization with Docker and Kubernetes. RabbitMQ for one project.",
