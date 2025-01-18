@@ -1341,6 +1341,62 @@ paths:
           description: ''
       security:
       - JWT: []
+  /PersonProfiles/{id}/Employments:
+    get:
+      tags:
+      - PersonProfiles
+      operationId: PersonProfiles_GetEmployments
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          nullable: true
+        x-position: 3
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 6
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultsOfEmployment'
+      security:
+      - JWT: []
   /SkillAreas:
     get:
       tags:
@@ -2152,10 +2208,32 @@ components:
         description:
           type: string
           nullable: true
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmploymentRole'
         skills:
           type: array
           items:
             $ref: '#/components/schemas/PersonProfileSkill'
+    EmploymentRole:
+      type: object
+      additionalProperties: false
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+          nullable: true
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
     PersonProfileSkill:
       type: object
       additionalProperties: false
@@ -2335,6 +2413,34 @@ components:
           $ref: '#/components/schemas/SkillLevel'
         comment:
           type: string
+          nullable: true
+    ResultsOfEmployment:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Employment'
+        totalCount:
+          type: integer
+          format: int32
+    Employment:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        employer:
+          $ref: '#/components/schemas/Company'
+        employmentType:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
           nullable: true
     ResultsOfSkillArea:
       type: object

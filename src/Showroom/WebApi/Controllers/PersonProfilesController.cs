@@ -15,6 +15,9 @@ using YourBrand.Showroom.Application.PersonProfiles.Queries;
 using YourBrand.Showroom.Application.PersonProfiles.Search.Queries;
 using YourBrand.Showroom.Application.PersonProfiles.Skills.Commands;
 using YourBrand.Showroom.Application.PersonProfiles.Skills.Queries;
+using YourBrand.Showroom.Application.PersonProfiles.Employments;
+using YourBrand.Showroom.Application.PersonProfiles.Employments.Commands;
+using YourBrand.Showroom.Application.PersonProfiles.Employments.Queries;
 using YourBrand.Showroom.Domain.Enums;
 
 namespace YourBrand.Showroom.WebApi.Controllers;
@@ -161,6 +164,45 @@ public class PersonProfilesController(IMediator mediator) : ControllerBase
     {
         await mediator.Send(new RemoveSkillCommand(skillId), cancellationToken);
     }
+
+
+    [HttpGet("{id}/Employments")]
+    public async Task<Results<EmploymentDto>> GetEmployments(string? id, int page = 1, int? pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    {
+        return await mediator.Send(new GetEmploymentsQuery(page - 1, pageSize, id, searchString, sortBy, sortDirection), cancellationToken);
+    }
+
+    /*
+
+    [HttpGet("{id}/Employments/{employmentId}")]
+    public async Task<EmploymentDto?> GetEmployment(string id, string employmentId, CancellationToken cancellationToken)
+    {
+        return await mediator.Send(new GetEmploymentQuery(id, employmentId), cancellationToken);
+    }
+
+    [HttpPost("{id}/Employments")]
+    public async Task AddEmployment(string id, CreateEmploymentDto dto, CancellationToken cancellationToken)
+    {
+        await mediator.Send(
+            new AddEmploymentCommand(id, dto.Title, dto.CompanyId, dto.Location, dto.EmploymentType, dto.StartDate, dto.EndDate, dto.Description),
+            cancellationToken);
+    }
+
+    [HttpPut("{id}/Employments/{employmentId}")]
+    public async Task UpdateEmployment(string id, string employmentId, UpdateEmploymentDto dto, CancellationToken cancellationToken)
+    {
+        await mediator.Send(
+            new UpdateEmploymentCommand(id, employmentId,
+            dto.Title, dto.CompanyId, dto.Location, dto.EmploymentType, dto.StartDate, dto.EndDate, dto.Description),
+            cancellationToken);
+    }
+
+    [HttpDelete("{id}/Employments/{employmentId}")]
+    public async Task RemoveEmployment(string id, string employmentId, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new RemoveEmploymentCommand(id, employmentId), cancellationToken);
+    }
+    */
 }
 
 public record AddPersonProfileSkillDto(string SkillId, SkillLevel Level, string? Comment);

@@ -17,6 +17,21 @@ sealed class PersonProfilCaseConfigurationConfiguration : IEntityTypeConfigurati
         builder.HasIndex(x => x.TenantId);
 
         builder
+            .HasMany(p => p.Employments)
+            .WithOne(x => x.PersonProfile)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder
+            .HasMany(p => p.Assignments)
+            .WithOne(x => x.PersonProfile)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder
+            .HasMany(p => p.Projects)
+            .WithOne(x => x.PersonProfile)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
             .HasMany(p => p.Skills)
             .WithMany(p => p.PersonProfiles)
             .UsingEntity<PersonProfileSkill>(

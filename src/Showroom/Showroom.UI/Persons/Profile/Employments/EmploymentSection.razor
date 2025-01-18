@@ -1,0 +1,139 @@
+﻿@using Humanizer
+@using Employments
+@inject IPersonProfilesClient PersonProfilesClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+<MudCard Class="mb-4" Elevation="25">
+    <MudCardHeader>
+        <div class="d-flex justify-space-between align-center" style="width: 100%;">
+            <MudText Typo="Typo.h4">
+                Employments
+            </MudText>
+
+            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="async () => await AddOrEditEmployment(null)" />
+        </div>
+    </MudCardHeader>
+
+    <MudCardContent>
+        @{
+            var employments2 = employments
+                   .OrderByDescending(x => Default(x.EndDate));
+        }
+
+        <EmploymentList Employments="employments2" AddOrEditEmployment="AddOrEditEmployment" DeleteEmployment="DeleteEmployment"  />
+
+        @if (employments.Count() < total)
+        {
+            <div Class="d-flex justify-center flex-grow-1 mt-8">
+                    @if(isLoading) 
+                    {
+                        <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+                    } 
+                    else 
+                    {
+                        <MudButton Variant="Variant.Text" OnClick="LoadMore" Disabled="isLoading">
+                            Ladda fler (@(total - employments.Count()))
+                        </MudButton>
+                    }
+            </div>
+        }
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<Employment>? employments = new List<Employment>();
+
+    bool isLoading = false;
+
+    int page = 1;
+    int total = 0;
+
+    [Parameter]
+    public string PersonProfileId { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            page = 1;
+
+            var employmentsResult = await PersonProfilesClient.GetEmploymentsAsync(PersonProfileId, page++, 3, null, null, null);
+            employments = employmentsResult.Items.ToList();
+            total = employmentsResult.TotalCount;
+        }
+        /*catch (ApiException exc)
+        {
+        }
+        catch (HttpRequestException exc)
+        {
+        }*/
+        catch (Exception exc)
+        {
+            //await JSHelpers.Alert(exc.Message);
+        }
+    }
+
+    private async Task LoadMore()
+    {
+        if (total == employments.Count())
+        {
+            return;
+        }
+
+        isLoading = true;
+
+        var employmentsResult = await PersonProfilesClient.GetEmploymentsAsync(PersonProfileId, page++, 3, null, null, null);
+        employments.AddRange(employmentsResult.Items);
+
+        isLoading = false;
+
+        StateHasChanged();
+    }
+
+    private async Task AddOrEditEmployment(Employment? employment)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(EmploymentDialog.PersonProfileId), PersonProfileId);
+        parameters.Add(nameof(EmploymentDialog.Employment), employment);
+
+        var dialogReference = DialogService.Show<EmploymentDialog>(employment is null ? "New employment" : "Update employment", parameters);
+        var result = await dialogReference.Result;
+
+        if (result.Canceled)
+            return;
+
+        page = 1;
+
+        var employmentsResult = await PersonProfilesClient.GetEmploymentsAsync(PersonProfileId, page++, 3, null, null, null);
+        employments = employmentsResult.Items.ToList();
+        total = employmentsResult.TotalCount;
+    }
+
+    async Task DeleteEmployment(Employment employment)
+    {
+        try
+        {
+            var result = await DialogService.ShowMessageBox($"Delete employment at {employment.Employer.Name}?", "Are you sure?", "Yes", "No");
+            if (result.GetValueOrDefault())
+            {
+                //await PersonProfilesClient.RemoveEmploymentAsync(PersonProfileId, employment.Id);
+            }
+
+            page = 1;
+
+            var employmentsResult = await PersonProfilesClient.GetEmploymentsAsync(PersonProfileId, page++, 3, null, null, null);
+            employments = employmentsResult.Items.ToList();
+            total = employmentsResult.TotalCount;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    DateTimeOffset Default(DateTimeOffset? date)
+    {
+        return date ?? DateTimeOffset.Now;
+    }
+}

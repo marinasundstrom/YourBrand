@@ -1,0 +1,58 @@
+@{
+    var employment = Model.employment;
+    var isSub = Model.isSub;
+
+    var now = DateTime.UtcNow;
+
+    var startDate = employment.StartDate.Date;
+    DateTime? endDate = employment.EndDate?.Date;
+}
+
+<div class="d-flex justify-space-between align-center">
+
+    <div>
+        @if (AddOrEditEmployment.HasDelegate)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Edit"
+            Size="Size.Small"
+            OnClick="async () => await AddOrEditEmployment.InvokeAsync(employment)" />
+        }
+        @if (DeleteEmployment.HasDelegate)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+            Size="Size.Small"
+            OnClick="async () => await DeleteEmployment.InvokeAsync(employment)" />
+        }
+    </div>
+</div>
+
+<MudText Typo="Typo.body2">
+    @if (Model.isSub)
+    {
+        <p>@employment.EmploymentType @(employment.Employer.Name != employment.Employer.Name ? "• " + employment.Employer.Name : null)</p>
+    }
+    else
+    {
+        <p>@employment.Employer.Name • @employment.EmploymentType @(employment.Employer.Name != employment.Employer.Name ? "• " + employment.Employer.Name : null)</p>
+    }
+    </MudText>
+
+    <MudText Typo="Typo.body2">
+        @employment.StartDate.ToString("MMMM yyyy") - @(employment.EndDate?.ToString("MMMM yyyy") ??
+    "Now") · @(((employment.EndDate ?? DateTime.Now.Date) - employment.StartDate).Humanize(minUnit:
+    Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))
+    </MudText>
+
+    @* SKills *@
+
+    @code {
+    [Parameter]
+    [EditorRequired]
+    public Obj Model { get; set; }
+
+    [Parameter]
+    public EventCallback<Employment> AddOrEditEmployment { get; set; }
+
+    [Parameter]
+    public EventCallback<Employment> DeleteEmployment { get; set; }
+}

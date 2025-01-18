@@ -64,7 +64,7 @@ public class PersonProfile : AuditableEntity<string>, IHasTenant, ISoftDeletable
 
     public string? PhoneNumber { get; set; }
 
-    public List<PersonProfileExperience> Experience { get; set; } = new List<PersonProfileExperience>();
+    public List<PersonProfileExperience> Experiences { get; set; } = new List<PersonProfileExperience>();
 
     public List<PersonProfileIndustryExperiences> IndustryExperience { get; set; } = new List<PersonProfileIndustryExperiences>();
 
@@ -73,6 +73,10 @@ public class PersonProfile : AuditableEntity<string>, IHasTenant, ISoftDeletable
     public List<PersonProfileSkill> PersonProfileSkills { get; set; } = new List<PersonProfileSkill>();
 
     public List<Employment> Employments { get; set; } = new List<Employment>();
+
+    public List<Assignment> Assignments { get; set; } = new List<Assignment>();
+
+    public List<PersonProfileProject> Projects { get; set; } = new List<PersonProfileProject>();
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? Deleted { get; set; }

@@ -12,13 +12,13 @@
     @if (isSub)
     {
         <MudText Typo="Typo.h5" Class="mb-2 mt-1">
-            @experience.Title
+            @experience.Roles.FirstOrDefault()?.Title
         </MudText>
     }
     else
     {
         <MudText Typo="Typo.h5" Class="mb-2">
-            @experience.Title
+            @experience.Roles.FirstOrDefault()?.Title
         </MudText>
     }
 

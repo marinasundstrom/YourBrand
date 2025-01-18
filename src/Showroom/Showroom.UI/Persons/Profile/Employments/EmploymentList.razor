@@ -1,0 +1,42 @@
+@using YourBrand.Showroom.Client
+
+@foreach (var employment in Employments)
+{
+    <div style="page-break-inside: avoid;">
+    <div class="d-flex mt-4">
+        <div class="col-logo">
+            <Logo Src="@employment.Employer.Logo" Alt="@($"{@employment.Employer.Name} logo")" Class="me-4"
+                Href="@employment.Employer.Link" />
+        </div>
+
+        <div class="flex-grow-1">
+            <MudText Typo="Typo.h5" Class="mb-2">
+                @employment.Employer.Name
+            </MudText>
+
+            <p class="text-muted meta mb-5">
+                @employment.StartDate.Date.Humanize2(employment.EndDate?.Date ?? DateTime.Now.Date)
+            </p>
+        </div>
+    </div>
+
+</div>
+
+
+    @if (Employments.LastOrDefault() != employment)
+    {
+        <hr />
+    }
+}
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public IEnumerable<Employment> Employments { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<Employment> AddOrEditEmployment { get; set; }
+
+    [Parameter]
+    public EventCallback<Employment> DeleteEmployment { get; set; }
+}

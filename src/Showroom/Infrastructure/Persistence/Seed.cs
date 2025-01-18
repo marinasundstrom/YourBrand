@@ -224,7 +224,7 @@ My career began back in 2014, when I was working as a software developer for a l
             var skillArea = new Domain.Entities.SkillArea()
             {
                 Name = skillGroup.Key,
-                Slug = NewMethod(skillGroup.Key),
+                Slug = GetSkillName(skillGroup.Key),
                 Industry = await context.Industries.FirstAsync(x => x.Name == "Software Development"),
             };
 
@@ -236,7 +236,7 @@ My career began back in 2014, when I was working as a software developer for a l
                 var skill = new Domain.Entities.Skill()
                 {
                     Name = skillName,
-                    Slug = NewMethod(skillName),
+                    Slug = GetSkillName(skillName),
                 };
 
                 skillArea.Skills.Add(skill);
@@ -289,18 +289,55 @@ My career began back in 2014, when I was working as a software developer for a l
                 employment = new Employment()
                 {
                     Employer = await context.Companies.FirstAsync(x => x.Name == experience.Employer),
-                    Title = experience.Title, // Incorrect
                     StartDate = resume.Experience.OrderBy(x => x.StartDate).First(x => x.Company == experience.Company).StartDate,
                     EndDate = resume.Experience.OrderBy(x => x.StartDate).Last(x => x.Company == experience.Company).EndDate
                 };
 
+                employment.Roles.Add(new EmploymentRole()
+                {
+                    PersonProfile = personProfile,
+                    Title = experience.Title,
+                    Location = experience.Location,
+                    StartDate = resume.Experience.OrderBy(x => x.StartDate).First(x => x.Company == experience.Company).StartDate,
+                    EndDate = resume.Experience.OrderBy(x => x.StartDate).Last(x => x.Company == experience.Company).EndDate,
+                    Description = experience.Description
+                });
+
                 personProfile.Employments.Add(employment);
+
+                foreach (var skill in experience.Skills)
+                {
+                    var name = GetSkillName(skill);
+
+                    var sk = await context.PersonProfileSkills.FirstOrDefaultAsync(x => x.Skill.Slug == name);
+
+                    if (sk is null)
+                    {
+                        var sk2 = await context.Skills.FirstOrDefaultAsync(x => x.Slug == name);
+
+                        if (sk2 is null) continue;
+
+                        sk = new PersonProfileSkill()
+                        {
+                            PersonProfile = personProfile,
+                            Skill = sk2!
+                        };
+
+                        personProfile.PersonProfileSkills.Add(sk);
+                    }
+
+                    employment.Skills.Add(new PersonProfileExperienceSkill()
+                    {
+                        Employment = employment,
+                        PersonProfileSkill = sk
+                    });
+                }
 
                 await context.SaveChangesAsync();
             }
         }
 
-        foreach (var experience in resume.Experience)
+        foreach (var experience in resume.Experience.Where(x => x.EmploymentType == "Contract"))
         {
             var company = await context.Companies
                 .Include(x => x.Industry)
@@ -308,26 +345,39 @@ My career began back in 2014, when I was working as a software developer for a l
 
             var employment = await context.Employments.FirstOrDefaultAsync(x => x.Employer.Name == experience.Employer);
 
-            var experience2 = new Domain.Entities.PersonProfileExperience()
+            var assignment = new Assignment()
             {
                 PersonProfile = personProfile,
-                Current = experience.Current,
-                Highlight = experience.Highlight,
+                //Current = experience.Current,
+                //Highlight = experience.Highlight,
                 Company = company,
-                Location = experience.Location,
-                Title = experience.Title,
+                //Location = experience.Location,
+                //Title = experience.Title,
                 Employment = employment,
-                EmploymentType = experience.EmploymentType,
+                //EmploymentType = experience.EmploymentType,
+                StartDate = experience.StartDate,
+                EndDate = experience.EndDate,
+                //Description = experience.Description
+            };
+
+            assignment.Roles.Add(new EmploymentRole()
+            {
+                PersonProfile = personProfile,
+                Employment = employment,
+                Assignment = assignment,
+                Title = experience.Title,
+                Location = experience.Location,
                 StartDate = experience.StartDate,
                 EndDate = experience.EndDate,
                 Description = experience.Description
-            };
+            });
+
 
             //experience2.AddDomainEvent(new ExperienceAdded(experience2.Id, personProfile.Id, company.Industry.Id));
 
             foreach (var skill in experience.Skills)
             {
-                var name = NewMethod(skill);
+                var name = GetSkillName(skill);
 
                 var sk = await context.PersonProfileSkills.FirstOrDefaultAsync(x => x.Skill.Slug == name);
 
@@ -346,20 +396,21 @@ My career began back in 2014, when I was working as a software developer for a l
                     personProfile.PersonProfileSkills.Add(sk);
                 }
 
-                experience2.Skills.Add(new PersonProfileExperienceSkill()
+                assignment.Skills.Add(new PersonProfileExperienceSkill()
                 {
-                    PersonProfileExperience = experience2,
+                    //Employment = employment,
+                    Assignment = assignment,
                     PersonProfileSkill = sk
                 });
             }
 
-            personProfile.Experience.Add(experience2);
+            personProfile.Assignments.Add(assignment);
         }
 
         await context.SaveChangesAsync();
     }
 
-    private static string NewMethod(string skillName)
+    private static string GetSkillName(string skillName)
     {
         return skillName
                             .ToLower()

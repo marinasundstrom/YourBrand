@@ -17,7 +17,19 @@ public class PersonProfileExperienceSkill : AuditableEntity<string>, IHasTenant,
 
     //public OrganizationId OrganizationId { get; set; } = null!;
 
-    public PersonProfileExperience PersonProfileExperience { get; set; } = null!;
+    public PersonProfileExperience? PersonProfileExperience { get; set; }
+
+    public Employment? Employment { get; set; }
+
+    public string? EmploymentId { get; set; }
+
+    public Assignment? Assignment { get; set; }
+
+    public string? AssignmentId { get; set; }
+
+    public PersonProfileProject? Project { get; set; }
+
+    public string? ProjectId { get; set; }
 
     public PersonProfileSkill PersonProfileSkill { get; set; } = null!;
 

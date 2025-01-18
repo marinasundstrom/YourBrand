@@ -6,27 +6,27 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence.Configurations;
 
-sealed class EmploymentConfiguration : IEntityTypeConfiguration<Employment>
+sealed class AssignmentConfiguration : IEntityTypeConfiguration<Assignment>
 {
-    public void Configure(EntityTypeBuilder<Employment> builder)
+    public void Configure(EntityTypeBuilder<Assignment> builder)
     {
-        builder.ToTable("Employments");
+        builder.ToTable("Assignments");
 
         builder.HasIndex(x => x.TenantId);
 
         builder
             .HasMany(p => p.Roles)
-            .WithOne(x => x.Employment)
+            .WithOne(x => x.Assignment)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder
-            .HasMany(p => p.Assignments)
-            .WithOne(x => x.Employment)
+            .HasOne(p => p.Employment)
+            .WithMany(x => x.Assignments)
             .OnDelete(DeleteBehavior.NoAction);
 
         builder
-            .HasMany(p => p.Skills)
-            .WithOne(x => x.Employment)
-            .OnDelete(DeleteBehavior.NoAction);
+            .HasOne(p => p.PersonProfile)
+            .WithMany(x => x.Assignments)
+            .OnDelete(DeleteBehavior.NoAction); 
     }
 }

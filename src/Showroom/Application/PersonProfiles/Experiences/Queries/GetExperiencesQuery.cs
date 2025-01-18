@@ -18,8 +18,8 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
     {
         public async Task<Results<ExperienceDto>> Handle(GetExperiencesQuery request, CancellationToken cancellationToken)
         {
-            IQueryable<PersonProfileExperience> result = context
-                    .PersonProfileExperiences
+            IQueryable<Employment> result = context
+                    .Employments
                     .OrderByDescending(x => x.StartDate)
                     .ThenByDescending(x => x.EndDate)
                     .AsNoTracking()
@@ -32,20 +32,44 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
 
             if (request.SearchString is not null)
             {
+                /*
                 result = result.Where(p =>
                     p.Company.Name.ToLower().Contains(request.SearchString.ToLower())
                     || p.Location!.ToLower().Contains(request.SearchString.ToLower())
                     || p.Title.ToLower().Contains(request.SearchString.ToLower()));
+                */
             }
 
-            var totalCount = await result.CountAsync(cancellationToken);
+            var totalCount = await result
+                .SelectMany(x => x.Assignments)
+                .CountAsync(cancellationToken);
 
             result = result
-                .Include(x => x.Employment)
-                .ThenInclude(x => x.Employer)
-                .Include(x => x.Company)
+                .Include(x => x.Employer)
                 .ThenInclude(x => x.Industry)
+                .Include(x => x.Assignments)
+                .ThenInclude(x => x.Company)
+                .ThenInclude(x => x.Industry)
+
                 .Include(x => x.Skills)
+                .ThenInclude(x => x.PersonProfileSkill)
+                .ThenInclude(x => x.Skill)
+                .ThenInclude(x => x.Area)
+                .ThenInclude(x => x.Industry)
+
+                .Include(x => x.Roles)
+                .ThenInclude(x => x.Skills)
+                .ThenInclude(x => x.Skill)
+                .ThenInclude(x => x.Area)
+                .ThenInclude(x => x.Industry)
+
+                .Include(x => x.Assignments)
+                .Include(x => x.Employer)
+                .Include(x => x.Assignments)
+                .ThenInclude(x => x.Roles)
+
+                .Include(x => x.Assignments)
+                .ThenInclude(x => x.Skills)
                 .ThenInclude(x => x.PersonProfileSkill)
                 .ThenInclude(x => x.Skill)
                 .ThenInclude(x => x.Area)
@@ -56,7 +80,7 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
                 result = result.OrderBy(request.SortBy, request.SortDirection == Application.Common.Models.SortDirection.Desc ? Showroom.Application.SortDirection.Descending : Showroom.Application.SortDirection.Ascending);
             }
 
-            IQueryable<PersonProfileExperience> items = null!;
+            IQueryable<Employment> items = null!;
 
             if (request.PageSize is null)
             {
@@ -69,9 +93,28 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
                     .Take(request.PageSize.GetValueOrDefault());
             }
 
+            List<ExperienceDto> experience = new List<ExperienceDto>();
+
+            foreach (var item in items) 
+            {
+                if(item.Assignments.Any()) 
+                {
+                    foreach(var assignment in item.Assignments) 
+                    {
+                        experience.Add(assignment.ToDto());
+                    }
+                }
+                else 
+                {
+                    experience.Add(item.ToDto2());
+                }
+            }
+
             return new Results<ExperienceDto>(
-                items.Select(e => e.ToDto()),
+                experience,
                 totalCount);
+
+            // items.SelectMany(x => x.Assignments).Select(e => e.ToDto())
         }
     }
 }

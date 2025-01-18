@@ -2,6 +2,7 @@
 @attribute [Authorize]
 @using Humanizer
 @using YourBrand.Showroom.Persons.Profile.Experiences
+@using YourBrand.Showroom.Persons.Profile.Employments
 @using YourBrand.Showroom.Persons.Profile.Skills
 @inject IPersonProfilesClient PersonProfilesClient
 @inject NavigationManager NavigationManager
@@ -69,6 +70,8 @@ else
             <AboutSection PersonProfile="profile" />
 
             <ExperienceSection PersonProfileId="@Id" />
+
+            <EmploymentSection PersonProfileId="@Id" />
 
             <div style="page-break-inside: avoid;">
                 <SkillsSection PersonProfileId="@profile.Id" />
