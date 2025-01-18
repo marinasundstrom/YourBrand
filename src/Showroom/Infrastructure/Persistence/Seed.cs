@@ -290,7 +290,10 @@ My career began back in 2014, when I was working as a software developer for a l
                 {
                     Employer = await context.Companies.FirstAsync(x => x.Name == experience.Employer),
                     StartDate = resume.Experience.OrderBy(x => x.StartDate).First(x => x.Company == experience.Company).StartDate,
-                    EndDate = resume.Experience.OrderBy(x => x.StartDate).Last(x => x.Company == experience.Company).EndDate
+                    EndDate = resume.Experience.OrderBy(x => x.StartDate).Last(x => x.Company == experience.Company).EndDate,
+                    EmploymentType = EmploymentType.Parse<EmploymentType>(experience.EmploymentType),
+                    Description = null, // experience.Description,
+                    Location = experience.Location
                 };
 
                 employment.Roles.Add(new EmploymentRole()
@@ -348,16 +351,13 @@ My career began back in 2014, when I was working as a software developer for a l
             var assignment = new Assignment()
             {
                 PersonProfile = personProfile,
-                //Current = experience.Current,
-                //Highlight = experience.Highlight,
                 Company = company,
-                //Location = experience.Location,
-                //Title = experience.Title,
+                Location = experience.Location,
                 Employment = employment,
-                //EmploymentType = experience.EmploymentType,
+                AssignmentType = AssignmentType.Consulting,
                 StartDate = experience.StartDate,
                 EndDate = experience.EndDate,
-                //Description = experience.Description
+                Description = null
             };
 
             assignment.Roles.Add(new EmploymentRole()

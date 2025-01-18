@@ -21,11 +21,13 @@ public class Employment : AuditableEntity<string>, IHasTenant
 
     public EmploymentType EmploymentType { get; set; }
 
+    public string? Location { get; set; }
+
+    public string? Description { get; set; }
+
     public DateTime StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }
-
-    public string? Description { get; set; }
 
     public List<EmploymentRole> Roles { get; set; } = new List<EmploymentRole>();
 

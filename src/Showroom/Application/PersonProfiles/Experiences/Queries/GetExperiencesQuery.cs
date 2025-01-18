@@ -41,6 +41,9 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
             }
 
             var totalCount = await result
+                .CountAsync(cancellationToken);
+                
+            totalCount += await result
                 .SelectMany(x => x.Assignments)
                 .CountAsync(cancellationToken);
 
@@ -113,8 +116,6 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
             return new Results<ExperienceDto>(
                 experience,
                 totalCount);
-
-            // items.SelectMany(x => x.Assignments).Select(e => e.ToDto())
         }
     }
 }

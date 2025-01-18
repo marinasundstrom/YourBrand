@@ -2,7 +2,7 @@
 
 @foreach (var employment in Employments)
 {
-    <div style="page-break-inside: avoid;">
+<div style="page-break-inside: avoid;">
     <div class="d-flex mt-4">
         <div class="col-logo">
             <Logo Src="@employment.Employer.Logo" Alt="@($"{@employment.Employer.Name} logo")" Class="me-4"
@@ -15,8 +15,15 @@
             </MudText>
 
             <p class="text-muted meta mb-5">
-                @employment.StartDate.Date.Humanize2(employment.EndDate?.Date ?? DateTime.Now.Date)
+                @employment.EmploymentType • @employment.Location<br />
+                @employment.StartDate.ToString("MMMM yyyy") - @(employment.EndDate?.ToString("MMMM yyyy") ??
+                "Now") • @employment.StartDate.Date.Humanize2(employment.EndDate?.Date ??
+                DateTime.Now.Date)
             </p>
+
+            <MudText Typo="Typo.body1" Class="mt-4 mb-2">
+                @((MarkupString)employment.Description?.Replace("\n", "<br />"))
+            </MudText>
         </div>
     </div>
 

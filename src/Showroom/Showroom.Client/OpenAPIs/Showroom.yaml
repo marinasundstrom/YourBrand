@@ -2182,6 +2182,8 @@ components:
       properties:
         id:
           type: string
+        type:
+          type: string
         employerName:
           type: string
           nullable: true
@@ -2234,6 +2236,10 @@ components:
           type: string
           format: date-time
           nullable: true
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonProfileSkill'
     PersonProfileSkill:
       type: object
       additionalProperties: false
@@ -2433,7 +2439,12 @@ components:
           type: string
         employer:
           $ref: '#/components/schemas/Company'
+        location:
+          type: string
+          nullable: true
         employmentType:
+          type: string
+        description:
           type: string
         startDate:
           type: string

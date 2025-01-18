@@ -22,6 +22,8 @@ public class Assignment : AuditableEntity<string>, IHasTenant
 
     public Company Company { get; set; } = null!;
 
+    public AssignmentType AssignmentType { get; set; }
+
     public string? Location { get; set; }
 
     public DateTime StartDate { get; set; }

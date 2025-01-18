@@ -62,25 +62,25 @@ public static class Mapper
 
     public static ExperienceDto ToDto(this Domain.Entities.PersonProfileExperience experience)
     {
-        return new (experience.Id, "", experience.Employment?.Employer?.Name, experience.Title, experience.Company.ToDto(), experience.Location, experience.EmploymentType, experience.StartDate, experience.EndDate, experience.Current, experience.Highlight, experience.Description,
+        return new (experience.Id, experience.EmploymentType.ToString(), experience.Employment?.Employer?.Name, experience.Title, experience.Company.ToDto(), experience.Location, experience.EmploymentType, experience.StartDate, experience.EndDate, experience.Current, experience.Highlight, experience.Description,
             [], experience.Skills.OrderBy(s => s.PersonProfileSkill.Skill.Name).Select(x => x.PersonProfileSkill.ToDto()));
     }
 
     public static EmploymentDto ToDto(this Domain.Entities.Employment employment)
     {
-        return new (employment.Id, employment.Employer.ToDto(), /* employment.Location, */ employment.EmploymentType.ToString(), employment.StartDate, employment.EndDate);
+        return new (employment.Id, employment.Employer.ToDto(), employment.Location, employment.EmploymentType.ToString(), employment.Description, employment.StartDate, employment.EndDate);
     }
 
     public static ExperienceDto ToDto2(this Domain.Entities.Employment employment)
     {
-        return new (employment.Id, "Employment", employment?.Employer?.Name, "", employment.Employer.ToDto(), "Location", string.Empty, employment.StartDate, employment.EndDate, false, false, employment.Description,
+        return new (employment.Id, "Employment", employment?.Employer?.Name, "", employment.Employer.ToDto(), employment.Location, employment.EmploymentType.ToString(), employment.StartDate, employment.EndDate, false, false, employment.Description,
             employment.Roles.Select(x => x.ToDto()),
             employment.Skills.OrderBy(s => s.PersonProfileSkill.Skill.Name).Select(x => x.PersonProfileSkill.ToDto()));
     }
 
     public static ExperienceDto ToDto(this Domain.Entities.Assignment assignment)
     {
-        return new (assignment.Id, "Assignment", assignment.Employment?.Employer?.Name, "", assignment.Company.ToDto(), assignment.Location, string.Empty, assignment.StartDate, assignment.EndDate, false, false, assignment.Description,
+        return new (assignment.Id, "Assignment", assignment.Employment?.Employer?.Name, "", assignment.Company.ToDto(), assignment.Location, assignment.AssignmentType.ToString(), assignment.StartDate, assignment.EndDate, false, false, assignment.Description,
             assignment.Roles.Select(x => x.ToDto()),
             assignment.Skills.OrderBy(s => s.PersonProfileSkill.Skill.Name).Select(x => x.PersonProfileSkill.ToDto()));
     }

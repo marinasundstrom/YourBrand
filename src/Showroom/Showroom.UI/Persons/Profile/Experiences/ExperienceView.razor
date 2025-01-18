@@ -54,10 +54,14 @@
     "Now") · @(((experience.EndDate ?? DateTime.Now.Date) - experience.StartDate).Humanize(minUnit:
     Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))
     </MudText>
-    <MudText Typo="Typo.body2">@experience.Location</MudText>
+    <MudText Typo="Typo.body2">@(experience.Roles.FirstOrDefault()?.Location ?? experience.Location)</MudText>
 
     <MudText Typo="Typo.body1" Class="mt-4 mb-2">
-        @((MarkupString)experience.Description?.Replace("\n", "<br />"))
+        @{
+            string description = experience.Roles.FirstOrDefault()?.Description 
+                ?? experience.Description;
+        }
+        @((MarkupString)description?.Replace("\n", "<br />"))
     </MudText>
 
     <MudChipSet T="string" Class="mt-4">

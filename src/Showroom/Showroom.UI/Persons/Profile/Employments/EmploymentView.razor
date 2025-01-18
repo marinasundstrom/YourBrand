@@ -43,6 +43,10 @@
     Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))
     </MudText>
 
+    <MudText Typo="Typo.body1" Class="mt-4 mb-2">
+        @((MarkupString)employment.Description?.Replace("\n", "<br />"))
+    </MudText>
+
     @* SKills *@
 
     @code {
