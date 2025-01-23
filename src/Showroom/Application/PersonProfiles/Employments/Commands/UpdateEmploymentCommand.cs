@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.PersonProfiles.Experiences;
 using YourBrand.Showroom.Events.Enums;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Employments.Commands;

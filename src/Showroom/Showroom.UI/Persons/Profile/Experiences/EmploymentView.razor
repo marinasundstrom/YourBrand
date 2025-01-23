@@ -1,0 +1,40 @@
+<div class="d-flex mt-4">
+    <div class="col-logo">
+        <Logo Src="@Employment.Employer.Logo" Alt="@($"{Employment.Employer.Name} logo")" Class="me-4"
+            Href="@Employment.Employer.Link" />
+    </div>
+
+    <div class="flex-grow-1">
+        <div class="mb-5">
+
+            <div class="d-flex justify-space-between align-center">
+                <MudText Typo="Typo.h5" Class="mb-2 mt-1">
+                    @Employment.Roles.First().Title
+                </MudText>
+
+                <div>
+
+                </div>
+            </div>
+
+            <MudText Typo="Typo.body2">
+                <p>@Employment.Employer.Name • @Employment.EmploymentType</p>
+            </MudText>
+
+            <MudText Typo="Typo.body2">
+
+            </MudText>
+
+            <MudText Typo="Typo.body1" Class="mt-4 mb-2">
+                @Employment.Description
+            </MudText>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    [EditorRequired]
+    public Employment Employment { get; set; } = null!;
+}

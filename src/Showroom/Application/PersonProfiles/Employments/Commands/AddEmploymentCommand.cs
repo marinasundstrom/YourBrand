@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.PersonProfiles.Experiences;
 using YourBrand.Showroom.Domain.Entities;
 using YourBrand.Showroom.Events.Enums;
 
@@ -14,7 +15,7 @@ public record AddEmploymentCommand(
     string Title,
     string CompanyId,
     string? Location,
-    string EmploymentType,
+    EmploymentType EmploymentType,
     DateTime StartDate, DateTime? EndDate,
     string? Description)
     : IRequest<EmploymentDto>
@@ -35,8 +36,8 @@ public record AddEmploymentCommand(
             {
                 PersonProfile = personProfile,
                 //Title = request.Title,
-                //CompanyId = request.CompanyId,
-                //EmploymentType = request.EmploymentType,
+                Employer = company,
+                EmploymentType = request.EmploymentType,
                 //Location = request.Location,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,

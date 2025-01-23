@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Domain.Entities;
 using YourBrand.Showroom.Events.Enums;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Commands;
@@ -11,6 +12,7 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Commands;
 public record UpdateExperienceCommand(
     string PersonProfileId,
     string Id,
+    ExperienceType Type,
     string Title,
     string CompanyId,
     string? Location,

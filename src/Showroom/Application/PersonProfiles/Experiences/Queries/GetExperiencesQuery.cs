@@ -109,12 +109,14 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
                 }
                 else 
                 {
-                    experience.Add(item.ToDto2());
+                    experience.Add(item.ToDto());
                 }
             }
 
             return new Results<ExperienceDto>(
-                experience,
+                experience
+                    .OrderByDescending(x => x.StartDate)
+                    .ThenByDescending(x => x.EndDate),
                 totalCount);
         }
     }

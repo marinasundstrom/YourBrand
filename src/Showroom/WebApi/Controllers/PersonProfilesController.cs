@@ -103,10 +103,10 @@ public class PersonProfilesController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost("{id}/Experiences")]
-    public async Task AddExperience(string id, CreateExperienceDto dto, CancellationToken cancellationToken)
+    public async Task AddExperience(string id, ExperienceDetailsDto dto, CancellationToken cancellationToken)
     {
         await mediator.Send(
-            new AddExperienceCommand(id, dto.Title, dto.CompanyId, dto.Location, dto.EmploymentType, dto.StartDate, dto.EndDate, dto.Description),
+            new AddExperienceCommand(id, dto),
             cancellationToken);
     }
 
@@ -114,7 +114,7 @@ public class PersonProfilesController(IMediator mediator) : ControllerBase
     public async Task UpdateExperience(string id, string experienceId, UpdateExperienceDto dto, CancellationToken cancellationToken)
     {
         await mediator.Send(
-            new UpdateExperienceCommand(id, experienceId,
+            new UpdateExperienceCommand(id, experienceId, dto.Type,
             dto.Title, dto.CompanyId, dto.Location, dto.EmploymentType, dto.StartDate, dto.EndDate, dto.Description),
             cancellationToken);
     }

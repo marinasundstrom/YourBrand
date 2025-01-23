@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
 using YourBrand.Showroom.Application.Common.Models;
+using YourBrand.Showroom.Application.PersonProfiles.Experiences;
 using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Employments.Queries;

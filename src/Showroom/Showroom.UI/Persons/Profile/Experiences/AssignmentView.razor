@@ -1,0 +1,38 @@
+<div class="d-flex mt-4">
+    <div class="col-logo">
+        <Logo Src="@Assignment.Company.Logo" Alt="@($"{Assignment.Company.Name} logo")" Class="me-4"
+            Href="@Assignment.Company.Link" />
+    </div>
+
+    <div class="flex-grow-1">
+        <div class="mb-5">
+            <div class="d-flex justify-space-between align-center">
+                <MudText Typo="Typo.h5" Class="mb-2 mt-1">
+                    @Assignment.Roles.First().Title
+                </MudText>
+
+                <div>
+
+                </div>
+            </div>
+
+            <MudText Typo="Typo.body2">
+                <p>@Assignment.Company.Name • @Assignment.AssignmentType • @Assignment.Employment.Employer.Name</p>
+            </MudText>
+
+            <MudText Typo="Typo.body2">
+
+            </MudText>
+
+            <MudText Typo="Typo.body1" Class="mt-4 mb-2">
+                @Assignment.Description
+            </MudText>
+        </div>
+    </div>
+</div>
+@code
+{
+    [Parameter]
+    [EditorRequired]
+    public Assignment Assignment { get; set; } = null!;
+}

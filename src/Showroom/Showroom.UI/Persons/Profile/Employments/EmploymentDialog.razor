@@ -15,9 +15,10 @@
                 <MudTextField Label="Location" Class="mb-2" Variant="Variant.Outlined"
                               @bind-Value="Location" For="@(() => Location)" />
                 <MudSelect Label="Employment Type" Variant="Variant.Outlined" Class="mb-2" @bind-Value="EmploymentType" For="() => EmploymentType">
-                    @foreach(var optionType in Enum.GetValues<EmploymentType>())
+                    @foreach(var employmentType in Enum.GetValues<EmploymentType>())
                     {
-                        <MudSelectItem Value="@optionType">@(optionType.GetAttribute<DisplayAttribute>()!.Name)</MudSelectItem>
+                        <MudSelectItem Value="@employmentType">@(employmentType.GetAttribute<DisplayAttribute>()!.Name)
+                        </MudSelectItem>
                     }     
                 </MudSelect>
                 <MudGrid>
@@ -79,7 +80,7 @@
             //Title = Employment.Title;
             Company = Employment.Employer;
             //Location = Employment.Location;
-            EmploymentType = Enum.Parse<EmploymentType>(Employment.EmploymentType);
+            EmploymentType = (EmploymentType)Employment.EmploymentType;
             StartDate = Employment.StartDate.Date;
             EndDate = Employment.EndDate?.Date;
         }

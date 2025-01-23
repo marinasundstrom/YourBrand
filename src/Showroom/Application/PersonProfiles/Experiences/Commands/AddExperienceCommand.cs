@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using System.Text.Json.Serialization;
+
+using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -11,54 +13,164 @@ namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Commands;
 
 public record AddExperienceCommand(
     string PersonProfileId,
-    string Title,
-    string CompanyId,
-    string? Location,
-    string EmploymentType,
-    DateTime StartDate, DateTime? EndDate,
-    string? Description)
+    ExperienceDetailsDto ExperienceDetails)
     : IRequest<ExperienceDto>
 {
-    sealed class CreatePersonProfileCommandHandler(
+    sealed class Handler(
         IShowroomContext context,
         IUserContext userContext) : IRequestHandler<AddExperienceCommand, ExperienceDto>
     {
         public async Task<ExperienceDto> Handle(AddExperienceCommand request, CancellationToken cancellationToken)
         {
-            var personProfile = await context.PersonProfiles.FirstAsync(cp => cp.Id == request.PersonProfileId, cancellationToken);
+            var personProfile = await context.PersonProfiles
+                .FirstAsync(cp => cp.Id == request.PersonProfileId, cancellationToken);
 
-            var company = await context.Companies
-                .Include(x => x.Industry)
-                .FirstAsync(cp => cp.Id == request.CompanyId, cancellationToken);
+            var details = request.ExperienceDetails;
 
-            var experience = new PersonProfileExperience
+            if(details is EmploymentDetailsDto employmentDetails) 
             {
-                PersonProfile = personProfile,
-                Title = request.Title,
-                CompanyId = request.CompanyId,
-                EmploymentType = request.EmploymentType,
-                Location = request.Location,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
-                Description = request.Description
-            };
+                var company = await context.Companies
+                    .Include(x => x.Industry)
+                    .FirstAsync(cp => cp.Id == employmentDetails.CompanyId, cancellationToken);
 
-            context.PersonProfileExperiences.Add(experience);
+                var employment = new Employment
+                {
+                    Employer = company,
+                    EmploymentType = employmentDetails.EmploymentType,
+                    Location = employmentDetails.Location,
+                    StartDate = employmentDetails.StartDate,
+                    EndDate = employmentDetails.EndDate,
+                };
 
-            experience.AddDomainEvent(new ExperienceUpdated(experience.PersonProfile.Id, personProfile.Id, company.Industry.Id));
+                employment.Roles.Add(new EmploymentRole 
+                {
+                    PersonProfile = personProfile,
+                    Title = employmentDetails.Title,
+                    Description = employmentDetails.Description,
+                    StartDate = employmentDetails.StartDate,
+                    EndDate = employmentDetails.EndDate,
+                });
 
-            await context.SaveChangesAsync(cancellationToken);
+                personProfile.Employments.Add(employment);
 
-            experience = await context.PersonProfileExperiences
-                .Include(x => x.Employment)
-                .ThenInclude(x => x.Employer)
-                .Include(x => x.Company)
-                .ThenInclude(x => x.Industry)
-                .Include(x => x.Skills)
-                .ThenInclude(x => x.PersonProfileSkill)
-                .FirstAsync(x => x.Id == experience.Id);
+                await context.SaveChangesAsync(cancellationToken);
 
-            return experience.ToDto();
+                employment = await context.Employments
+                    .Include(x => x.Employer)
+                    .ThenInclude(x => x.Industry)
+                    .Include(x => x.Roles)
+                    .Include(x => x.Skills)
+                    .ThenInclude(x => x.PersonProfileSkill)
+                    .FirstAsync(x => x.Id == employment.Id);
+
+                return employment.ToDto();
+            }
+            else if (details is AssignmentDetailsDto assignmentDetails)
+            {
+
+            } 
+            else if (details is ProjectDetailsDto projectDetails)
+            {
+
+            } 
+            else if (details is RoleDetailsDto roleDetails)
+            {
+                var employment = await context.Employments
+                    .Include(x => x.Assignments)
+                    .ThenInclude(x => x.Roles)
+                    .Include(x => x.Roles)
+                    .FirstOrDefaultAsync(x => x.Id == roleDetails.EmploymentId, cancellationToken);
+
+                var assignment = employment.Assignments
+                    .FirstOrDefault(x => x.Id == roleDetails.AssignmentId);
+
+                var role = new EmploymentRole
+                {
+                    PersonProfile = personProfile,
+                    Assignment = assignment,
+                    Title = roleDetails.Title,
+                    Description = roleDetails.Description,
+                    StartDate = roleDetails.StartDate,
+                    EndDate = roleDetails.EndDate,
+                };
+
+                employment.Roles.Add(role);
+
+                personProfile.Employments.Add(employment);
+
+                await context.SaveChangesAsync(cancellationToken);
+
+                employment = await context.Employments
+                    .Include(x => x.Assignments)
+                    .ThenInclude(x => x.Roles)
+                    .Include(x => x.Roles)
+                    .FirstOrDefaultAsync(x => x.Id == roleDetails.EmploymentId, cancellationToken);
+
+                return employment.ToDto();
+            }
+            else if (details is CareerBreakDetailsDto careerBreak)
+            {
+
+            }
+
+            throw new Exception();
         }
     }
 }
+
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(EmploymentDetailsDto), "Employment")]
+[JsonDerivedType(typeof(AssignmentDetailsDto), "Assignment")]
+[JsonDerivedType(typeof(ProjectDetailsDto), "Project")]
+[JsonDerivedType(typeof(RoleDetailsDto), "Role")]
+[JsonDerivedType(typeof(CareerBreakDetailsDto), "CareerBreak")]
+public abstract record ExperienceDetailsDto(
+    ExperienceType Type,
+    DateTime StartDate, DateTime? EndDate,
+    string? Description);
+
+public record CareerBreakDetailsDto(
+    DateTime StartDate, DateTime? EndDate,
+    string? Description)
+    : ExperienceDetailsDto(ExperienceType.CareerBreak, StartDate, EndDate, Description);
+
+public record EmploymentDetailsDto(
+    string Title,
+    string CompanyId,
+    string? Location,
+    EmploymentType EmploymentType,
+    DateTime StartDate, DateTime? EndDate,
+    string? Description)
+    : ExperienceDetailsDto(ExperienceType.Employment, StartDate, EndDate, Description);
+
+public record AssignmentDetailsDto(
+    string Title,
+    string EmploymentId,
+    string? CompanyId,
+    string? Location,
+    AssignmentType AssignmentType,
+    DateTime StartDate, DateTime? EndDate,
+    string? Description)
+    : ExperienceDetailsDto(ExperienceType.Employment, StartDate, EndDate, Description);
+
+public record ProjectDetailsDto(
+    string Title,
+    string? EmploymentId,
+    string? AssignmentId,
+    string? CompanyId,
+    string? Location,
+    string EmploymentType,
+    DateTime StartDate, DateTime? EndDate,
+    string? Description)
+    : ExperienceDetailsDto(ExperienceType.Employment, StartDate, EndDate, Description);
+
+public record RoleDetailsDto(
+    string Title,
+    string EmploymentId,
+    string? AssignmentId,
+    string? CompanyId,
+    string? Location,
+    string EmploymentType,
+    DateTime StartDate, DateTime? EndDate,
+    string? Description)
+    : ExperienceDetailsDto(ExperienceType.Employment, StartDate, EndDate, Description);

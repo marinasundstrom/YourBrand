@@ -18,9 +18,8 @@
     <MudCardContent>
         @{
             var groups = experiences
-                   .OrderByDescending(x => x.Highlight)
-                   .ThenByDescending(x => Default(x.EndDate))
-                   .GroupBy(e => e.Company.Name);
+                   .OrderByDescending(x => Default(x.EndDate))
+                   .GroupBy(e => DateTime.Now.Ticks.ToString());
         }
 
         <ExperienceList Groups="groups" AddOrEditExperience="AddOrEditExperience" DeleteExperience="DeleteExperience"  />
@@ -95,6 +94,7 @@
 
     private async Task AddOrEditExperience(Experience? experience)
     {
+        /*
         var parameters = new DialogParameters();
         parameters.Add(nameof(ExperienceDialog.PersonProfileId), PersonProfileId);
         parameters.Add(nameof(ExperienceDialog.Experience), experience);
@@ -110,10 +110,12 @@
         var experiencesResult = await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, page++, 3, null, null, null);
         experiences = experiencesResult.Items.ToList();
         total = experiencesResult.TotalCount;
+        */
     }
 
     async Task DeleteExperience(Experience experience)
     {
+        /*
         try
         {
             var result = await DialogService.ShowMessageBox($"Delete experience at {experience.Company.Name}?", "Are you sure?", "Yes", "No");
@@ -132,6 +134,7 @@
         {
             exception.Redirect();
         }
+        */
     }
 
     DateTimeOffset Default(DateTimeOffset? date)

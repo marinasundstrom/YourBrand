@@ -8,72 +8,41 @@
     {
         var experience = experiences.First();
 
-        <div class="d-flex mt-4" style="page-break-inside: avoid;">
-            <div class="col-logo">
-                <Logo Src="@experience.Company.Logo" Alt="@($"{experience.Company.Name} logo")" Class="me-4"
-                    Href="@experience.Company.Link" />
-            </div>
-
-            <div class="flex-grow-1">
-                <div class="mb-5">
-                    <ExperienceView Model="@Foo(experience, false)" AddOrEditExperience="AddOrEditExperience" DeleteExperience="DeleteExperience" />
-                </div>
-            </div>
-        </div>
+        if (experience is Employment employment) 
+        {
+            <EmploymentView Employment="employment"></EmploymentView>
+        }
+        else if (experience is Assignment assignment)
+        {
+            <AssignmentView Assignment="assignment"></AssignmentView>
+        }
+        else 
+        {
+            @experience.Description
+        }
+        
+        @* Add more *@
     }
     else
     {
-        var lastExperience = experiences.First();
-        var firstExperience = experiences.Last();
-
-        <div style="page-break-inside: avoid;">
-            <div class="d-flex mt-4">
-                <div class="col-logo">
-                        <Logo Src="@firstExperience.Company.Logo" Alt="@($"{firstExperience.Company.Name} logo")" Class="me-4"
-                        Href="@firstExperience.Company.Link" />
-
-                        @*
-                                        <a href="@experience.Link">
-                        <MudImage Src="@(experience.CompanyLogo ??  "placeholder.jpg")" 
-                            Alt="@($"{experience.CompanyName} logo")" 
-                            Class="me-4"
-                            Style="    height: 60px;
-    width: 60px;" />
-                    </a>*@
-                </div>
-
-                <div class="flex-grow-1">
-                    <MudText Typo="Typo.h5" Class="mb-2">
-                        @firstExperience.Company.Name
-                    </MudText>
-
-                    <p class="text-muted meta mb-5">
-                        @firstExperience.GetStartDate().Humanize2(lastExperience.GetEndDate())
-                    </p>
-                </div>
-            </div>
-
-            <div>
-                <div class="mb-4">
-                    <MudTimeline TimelinePosition="TimelinePosition.Start" TimelineAlign="TimelineAlign.Start" Class="pb-0">
-
-                        @foreach (var experience in experiences
-                            .OrderByDescending(x => x.StartDate)
-                            .ThenByDescending(x => x.EndDate))
-                                {
-                                    <MudTimelineItem Size="Size.Small" Color="Color.Info">
-                                        <MudPaper Elevation="0" Class="mt-n1">
-                                            <ExperienceView Model="@Foo(experience, true)" AddOrEditExperience="AddOrEditExperience" DeleteExperience="DeleteExperience" />
-                                        </MudPaper>
-                                    </MudTimelineItem>
-                                }
-                    </MudTimeline>
-                </div>
-            </div>
-        </div>
+        foreach(var experience in experiences) 
+        {
+            if (experience is Employment employment) 
+            {
+                <EmploymentView Employment="employment"></EmploymentView>
+            }
+            else if (experience is Assignment assignment)
+            {
+                <AssignmentView Assignment="assignment"></AssignmentView>
+            }
+            else 
+            {
+                @experience.Description
+            }
+        }
     }
 
-    @if (Groups.LastOrDefault() != group )
+    @if (Groups.LastOrDefault() != group)
     {
         <hr />
     }
@@ -89,9 +58,4 @@
 
     [Parameter]
     public EventCallback<Experience> DeleteExperience { get; set; }
-
-    public Obj Foo(Experience experience, bool isSub)
-    {
-        return new Obj(experience, isSub);
-    }
 }

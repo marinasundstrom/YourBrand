@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 using YourBrand.Showroom.Application.Common.Interfaces;
+using YourBrand.Showroom.Application.PersonProfiles.Experiences;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Employments.Queries;
 

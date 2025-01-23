@@ -1054,7 +1054,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateExperience'
+              $ref: '#/components/schemas/ExperienceDetails'
         required: true
         x-position: 2
       responses:
@@ -2178,24 +2178,20 @@ components:
           format: int32
     Experience:
       type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          Employment: '#/components/schemas/Employment'
+          Assignment: '#/components/schemas/Assignment'
+          Project: '#/components/schemas/Project'
+          CareerBreak: '#/components/schemas/CareerBreak'
+      x-abstract: true
       additionalProperties: false
+      required:
+      - type
       properties:
-        id:
-          type: string
         type:
-          type: string
-        employerName:
-          type: string
-          nullable: true
-        title:
-          type: string
-        company:
-          $ref: '#/components/schemas/Company'
-        location:
-          type: string
-          nullable: true
-        employmentType:
-          type: string
+          $ref: '#/components/schemas/ExperienceType'
         startDate:
           type: string
           format: date-time
@@ -2203,21 +2199,78 @@ components:
           type: string
           format: date-time
           nullable: true
-        current:
-          type: boolean
-        highlight:
-          type: boolean
         description:
           type: string
           nullable: true
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/EmploymentRole'
-        skills:
-          type: array
-          items:
-            $ref: '#/components/schemas/PersonProfileSkill'
+    ExperienceType:
+      type: string
+      description: ''
+      x-enumNames:
+      - Employment
+      - Assignment
+      - Project
+      - Role
+      - CareerBreak
+      enum:
+      - Employment
+      - Assignment
+      - Project
+      - Role
+      - CareerBreak
+    Employment:
+      allOf:
+      - $ref: '#/components/schemas/Experience'
+      - type: object
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+          employer:
+            $ref: '#/components/schemas/Company'
+          location:
+            type: string
+            nullable: true
+          employmentType:
+            $ref: '#/components/schemas/EmploymentType'
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/EmploymentRole'
+          skills:
+            type: array
+            items:
+              $ref: '#/components/schemas/PersonProfileSkill'
+    EmploymentType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - FullTime
+      - PartTime
+      - Temporary
+      - Contract
+      - Internship
+      - Freelance
+      - SelfEmployment
+      - Apprenticeship
+      - VolunteerWork
+      - Remote
+      - Seasonal
+      - Casual
+      - OnCall
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
     EmploymentRole:
       type: object
       additionalProperties: false
@@ -2287,19 +2340,116 @@ components:
           type: string
         href:
           type: string
-    CreateExperience:
+    Assignment:
+      allOf:
+      - $ref: '#/components/schemas/Experience'
+      - type: object
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+          employment:
+            $ref: '#/components/schemas/Employment'
+          company:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/Company'
+          location:
+            type: string
+            nullable: true
+          assignmentType:
+            $ref: '#/components/schemas/AssignmentType'
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/EmploymentRole'
+          skills:
+            type: array
+            items:
+              $ref: '#/components/schemas/PersonProfileSkill'
+    AssignmentType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - ShortTerm
+      - LongTerm
+      - ProjectBased
+      - Consulting
+      - Training
+      - Leadership
+      - Research
+      - ContractedTask
+      - ClientEngagement
+      - InternalRotation
+      - Mentoring
+      - SupportRole
+      - Developmental
+      - RemoteAssignment
+      - TemporaryCover
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
+    Project:
+      allOf:
+      - $ref: '#/components/schemas/Experience'
+      - type: object
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+          employment:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/Employment'
+          assignment:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/Assignment'
+          company:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/Company'
+          location:
+            type: string
+            nullable: true
+    CareerBreak:
+      allOf:
+      - $ref: '#/components/schemas/Experience'
+      - type: object
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+    ExperienceDetails:
       type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          Employment: '#/components/schemas/EmploymentDetails'
+          Assignment: '#/components/schemas/AssignmentDetails'
+          Project: '#/components/schemas/ProjectDetails'
+          Role: '#/components/schemas/RoleDetails'
+          CareerBreak: '#/components/schemas/CareerBreakDetails'
+      x-abstract: true
       additionalProperties: false
+      required:
+      - type
       properties:
-        title:
-          type: string
-        companyId:
-          type: string
-        location:
-          type: string
-          nullable: true
-        employmentType:
-          type: string
+        type:
+          $ref: '#/components/schemas/ExperienceType'
         startDate:
           type: string
           format: date-time
@@ -2307,17 +2457,96 @@ components:
           type: string
           format: date-time
           nullable: true
-        current:
-          type: boolean
-        highlight:
-          type: boolean
         description:
           type: string
           nullable: true
+    EmploymentDetails:
+      allOf:
+      - $ref: '#/components/schemas/ExperienceDetails'
+      - type: object
+        additionalProperties: false
+        properties:
+          title:
+            type: string
+          companyId:
+            type: string
+          location:
+            type: string
+            nullable: true
+          employmentType:
+            $ref: '#/components/schemas/EmploymentType'
+    AssignmentDetails:
+      allOf:
+      - $ref: '#/components/schemas/ExperienceDetails'
+      - type: object
+        additionalProperties: false
+        properties:
+          title:
+            type: string
+          employmentId:
+            type: string
+          companyId:
+            type: string
+            nullable: true
+          location:
+            type: string
+            nullable: true
+          assignmentType:
+            $ref: '#/components/schemas/AssignmentType'
+    ProjectDetails:
+      allOf:
+      - $ref: '#/components/schemas/ExperienceDetails'
+      - type: object
+        additionalProperties: false
+        properties:
+          title:
+            type: string
+          employmentId:
+            type: string
+            nullable: true
+          assignmentId:
+            type: string
+            nullable: true
+          companyId:
+            type: string
+            nullable: true
+          location:
+            type: string
+            nullable: true
+          employmentType:
+            type: string
+    RoleDetails:
+      allOf:
+      - $ref: '#/components/schemas/ExperienceDetails'
+      - type: object
+        additionalProperties: false
+        properties:
+          title:
+            type: string
+          employmentId:
+            type: string
+          assignmentId:
+            type: string
+            nullable: true
+          companyId:
+            type: string
+            nullable: true
+          location:
+            type: string
+            nullable: true
+          employmentType:
+            type: string
+    CareerBreakDetails:
+      allOf:
+      - $ref: '#/components/schemas/ExperienceDetails'
+      - type: object
+        additionalProperties: false
     UpdateExperience:
       type: object
       additionalProperties: false
       properties:
+        type:
+          $ref: '#/components/schemas/ExperienceType'
         title:
           type: string
         companyId:
@@ -2431,28 +2660,6 @@ components:
         totalCount:
           type: integer
           format: int32
-    Employment:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        employer:
-          $ref: '#/components/schemas/Company'
-        location:
-          type: string
-          nullable: true
-        employmentType:
-          type: string
-        description:
-          type: string
-        startDate:
-          type: string
-          format: date-time
-        endDate:
-          type: string
-          format: date-time
-          nullable: true
     ResultsOfSkillArea:
       type: object
       additionalProperties: false
