@@ -21,11 +21,15 @@
             </MudText>
 
             <MudText Typo="Typo.body2">
-
+                @Assignment.StartDate.ToString("MMMM yyyy") - @(Assignment.EndDate?.ToString("MMMM yyyy") ?? "Now") ·
+                @(((Assignment.EndDate ?? DateTime.Now.Date) - Assignment.StartDate).Humanize(minUnit:
+                Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))
             </MudText>
 
+            <MudText Typo="Typo.body2">@(Assignment.Roles.FirstOrDefault()?.Location ?? Assignment.Location)</MudText>
+
             <MudText Typo="Typo.body1" Class="mt-4 mb-2">
-                @Assignment.Description
+                @((MarkupString)Assignment.Description?.Replace("\n", "<br />"))
             </MudText>
         </div>
     </div>

@@ -19,7 +19,7 @@
         @{
             var groups = experiences
                    .OrderByDescending(x => Default(x.EndDate))
-                   .GroupBy(e => DateTime.Now.Ticks.ToString());
+            .GroupBy(e => (e as Assignment)?.Company?.Name ?? (e as Employment)?.Employer?.Name ?? DateTime.Now.Ticks.ToString());
         }
 
         <ExperienceList Groups="groups" AddOrEditExperience="AddOrEditExperience" DeleteExperience="DeleteExperience"  />
