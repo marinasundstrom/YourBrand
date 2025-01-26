@@ -29,7 +29,7 @@ public record EmploymentDto(
     EmploymentType EmploymentType,
     DateTime StartDate, DateTime? EndDate,
     string? Description,
-    IEnumerable<EmploymentRoleDto> Roles, 
+    IEnumerable<RoleDto> Roles, 
     IEnumerable<PersonProfileSkillDto> Skills)
     : ExperienceDto(ExperienceType.Employment, StartDate, EndDate, Description);
 
@@ -41,12 +41,13 @@ public record AssignmentDto(
     AssignmentType AssignmentType,
     DateTime StartDate, DateTime? EndDate,
     string? Description,
-    IEnumerable<EmploymentRoleDto> Roles,
+    IEnumerable<RoleDto> Roles,
     IEnumerable<PersonProfileSkillDto> Skills)
     : ExperienceDto(ExperienceType.Assignment, StartDate, EndDate, Description);
 
 public record ProjectDto(
     string Id,
+    string Name,
     EmploymentDto? Employment,
     AssignmentDto? Assignment,
     CompanyDto? Company,
@@ -58,15 +59,13 @@ public record ProjectDto(
 public record RoleDto(
     string Id,
     string Title,
-    EmploymentDto Employment,
-    AssignmentDto? Assignment,
-    CompanyDto? Company,
+    //EmploymentDto? Employment,
+    //AssignmentDto? Assignment,
     string? Location,
     DateTime StartDate, DateTime? EndDate,
-    string? Description);
+    string? Description,
+    IEnumerable<PersonProfileSkillDto> Skills);
 
 public record CreateExperienceDto(ExperienceType Type, string Title, string CompanyId, string? Location, string EmploymentType, DateTime StartDate, DateTime? EndDate, bool Current, bool Highlight, string? Description);
 
 public record UpdateExperienceDto(ExperienceType Type, string Title, string CompanyId, string? Location, string EmploymentType, DateTime StartDate, DateTime? EndDate, bool Current, bool Highlight, string? Description);
-
-public record EmploymentRoleDto(string Title, string Description, string? Location, DateTime StartDate, DateTime? EndDate, IEnumerable<PersonProfileSkillDto> Skills);

@@ -1,0 +1,10 @@
+@foreach(var role in Roles) 
+{
+    <RoleView Role="role" />
+}
+
+@code
+{
+    [Parameter]
+    public IEnumerable<Role> Roles { get; set; }
+}

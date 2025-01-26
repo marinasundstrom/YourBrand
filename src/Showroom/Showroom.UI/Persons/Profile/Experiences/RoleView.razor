@@ -1,0 +1,29 @@
+<div class="flex-grow-1">
+    <div class="mb-5">
+        <div class="d-flex justify-space-between align-center">
+            <MudText Typo="Typo.h6" Class="mb-2 mt-1">
+                @Role.Title
+            </MudText>
+
+            <div>
+
+            </div>
+        </div>
+
+        <MudText Typo="Typo.body2">
+            <DateDisplay StartDate="@Role.StartDate" EndDate="@Role.EndDate" />
+        </MudText>
+
+        <MudText Typo="Typo.body2">@Role.Location</MudText>
+
+        <MudText Typo="Typo.body1" Class="mt-4 mb-2">
+            @((MarkupString)Role.Description?.Replace("\n", "<br />"))
+        </MudText>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public Role Role { get; set; }
+}

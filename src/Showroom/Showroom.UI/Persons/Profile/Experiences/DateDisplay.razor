@@ -1,0 +1,12 @@
+@StartDate.ToString("MMMM yyyy") - @(EndDate?.ToString("MMMM yyyy") ?? "Now") ·
+@(((EndDate ?? DateTimeOffset.Now.Date) - StartDate).Humanize(minUnit:
+Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))
+
+@code 
+{
+    [Parameter]
+    public DateTimeOffset StartDate { get; set; }
+
+    [Parameter]
+    public DateTimeOffset? EndDate { get; set; }
+}

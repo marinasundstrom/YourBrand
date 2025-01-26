@@ -94,10 +94,10 @@ public static class Mapper
             assignment.Roles.Select(x => x.ToDto()),
             assignment.Skills.OrderBy(s => s.PersonProfileSkill.Skill.Name).Select(x => x.PersonProfileSkill.ToDto()));
     }
-
-    public static EmploymentRoleDto ToDto(this Domain.Entities.EmploymentRole role)
+ 
+    public static RoleDto ToDto(this Domain.Entities.EmploymentRole role)
     {
-        return new (role.Title, role.Description, role.Location, role.StartDate, role.EndDate, role.Skills.OrderBy(s => s.Skill.Name).Select(x => x.ToDto()));
+        return new (role.Id, role.Title, /* role.Employment?.ToDto(), role.Assignment?.ToDto(), */ role.Location, role.StartDate, role.EndDate, role.Description, role.Skills.OrderBy(s => s.Skill.Name).Select(x => x.ToDto()));
     }
 
     public static SkillDto ToDto(this Domain.Entities.Skill skill)

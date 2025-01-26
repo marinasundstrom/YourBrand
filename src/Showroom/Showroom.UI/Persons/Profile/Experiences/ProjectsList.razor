@@ -1,0 +1,10 @@
+@foreach(var project in Projects) 
+{
+    <ProjectView Project="project" />
+}
+
+@code
+{
+    [Parameter]
+    public IEnumerable<Project> Projects { get; set; }
+}

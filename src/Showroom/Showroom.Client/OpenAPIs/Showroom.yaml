@@ -2181,8 +2181,8 @@ components:
       discriminator:
         propertyName: type
         mapping:
-          Employment: '#/components/schemas/Employment'
           Assignment: '#/components/schemas/Assignment'
+          Employment: '#/components/schemas/Employment'
           Project: '#/components/schemas/Project'
           CareerBreak: '#/components/schemas/CareerBreak'
       x-abstract: true
@@ -2235,7 +2235,7 @@ components:
           roles:
             type: array
             items:
-              $ref: '#/components/schemas/EmploymentRole'
+              $ref: '#/components/schemas/Role'
           skills:
             type: array
             items:
@@ -2271,14 +2271,22 @@ components:
       - 10
       - 11
       - 12
-    EmploymentRole:
+    Role:
       type: object
       additionalProperties: false
       properties:
+        id:
+          type: string
         title:
           type: string
-        description:
-          type: string
+        employment:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Employment'
+        assignment:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Assignment'
         location:
           type: string
           nullable: true
@@ -2289,10 +2297,75 @@ components:
           type: string
           format: date-time
           nullable: true
+        description:
+          type: string
+          nullable: true
         skills:
           type: array
           items:
             $ref: '#/components/schemas/PersonProfileSkill'
+    Assignment:
+      allOf:
+      - $ref: '#/components/schemas/Experience'
+      - type: object
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+          employment:
+            $ref: '#/components/schemas/Employment'
+          company:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/Company'
+          location:
+            type: string
+            nullable: true
+          assignmentType:
+            $ref: '#/components/schemas/AssignmentType'
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/Role'
+          skills:
+            type: array
+            items:
+              $ref: '#/components/schemas/PersonProfileSkill'
+    AssignmentType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - ShortTerm
+      - LongTerm
+      - ProjectBased
+      - Consulting
+      - Training
+      - Leadership
+      - Research
+      - ContractedTask
+      - ClientEngagement
+      - InternalRotation
+      - Mentoring
+      - SupportRole
+      - Developmental
+      - RemoteAssignment
+      - TemporaryCover
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
     PersonProfileSkill:
       type: object
       additionalProperties: false
@@ -2340,68 +2413,6 @@ components:
           type: string
         href:
           type: string
-    Assignment:
-      allOf:
-      - $ref: '#/components/schemas/Experience'
-      - type: object
-        additionalProperties: false
-        properties:
-          id:
-            type: string
-          employment:
-            $ref: '#/components/schemas/Employment'
-          company:
-            nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/Company'
-          location:
-            type: string
-            nullable: true
-          assignmentType:
-            $ref: '#/components/schemas/AssignmentType'
-          roles:
-            type: array
-            items:
-              $ref: '#/components/schemas/EmploymentRole'
-          skills:
-            type: array
-            items:
-              $ref: '#/components/schemas/PersonProfileSkill'
-    AssignmentType:
-      type: integer
-      description: ''
-      x-enumNames:
-      - ShortTerm
-      - LongTerm
-      - ProjectBased
-      - Consulting
-      - Training
-      - Leadership
-      - Research
-      - ContractedTask
-      - ClientEngagement
-      - InternalRotation
-      - Mentoring
-      - SupportRole
-      - Developmental
-      - RemoteAssignment
-      - TemporaryCover
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      - 12
-      - 13
-      - 14
     Project:
       allOf:
       - $ref: '#/components/schemas/Experience'
@@ -2409,6 +2420,8 @@ components:
         additionalProperties: false
         properties:
           id:
+            type: string
+          name:
             type: string
           employment:
             nullable: true

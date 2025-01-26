@@ -6,31 +6,46 @@
 
     <div class="flex-grow-1">
         <div class="mb-5">
-            <div class="d-flex justify-space-between align-center">
-                <MudText Typo="Typo.h5" Class="mb-2 mt-1">
-                    @Assignment.Roles.First().Title
+            @if (Assignment.Roles.Count > 1) 
+            {
+                <div class="d-flex justify-space-between align-center">
+                    <MudText Typo="Typo.h5" Class="mb-2 mt-1">
+                        @Assignment.Company.Name
+                    </MudText>
+
+                    <div>
+
+                    </div>
+                </div>
+
+                <RoleList Roles="Assignment.Roles" />
+            }
+            else 
+            {
+                <div class="d-flex justify-space-between align-center">
+                    <MudText Typo="Typo.h5" Class="mb-2 mt-1">
+                        @Assignment.Roles.First().Title
+                    </MudText>
+
+                    <div>
+
+                    </div>
+                </div>
+
+                <MudText Typo="Typo.body2">
+                    <p>@Assignment.Company.Name • @Assignment.AssignmentType • @Assignment.Employment.Employer.Name</p>
                 </MudText>
 
-                <div>
+                <MudText Typo="Typo.body2">
+                    <DateDisplay StartDate="@Assignment.StartDate" EndDate="@Assignment.EndDate" />
+                </MudText>
 
-                </div>
-            </div>
+                <MudText Typo="Typo.body2">@(Assignment.Roles.FirstOrDefault()?.Location ?? Assignment.Location)</MudText>
 
-            <MudText Typo="Typo.body2">
-                <p>@Assignment.Company.Name • @Assignment.AssignmentType • @Assignment.Employment.Employer.Name</p>
-            </MudText>
-
-            <MudText Typo="Typo.body2">
-                @Assignment.StartDate.ToString("MMMM yyyy") - @(Assignment.EndDate?.ToString("MMMM yyyy") ?? "Now") ·
-                @(((Assignment.EndDate ?? DateTime.Now.Date) - Assignment.StartDate).Humanize(minUnit:
-                Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))
-            </MudText>
-
-            <MudText Typo="Typo.body2">@(Assignment.Roles.FirstOrDefault()?.Location ?? Assignment.Location)</MudText>
-
-            <MudText Typo="Typo.body1" Class="mt-4 mb-2">
-                @((MarkupString)Assignment.Description?.Replace("\n", "<br />"))
-            </MudText>
+                <MudText Typo="Typo.body1" Class="mt-4 mb-2">
+                @((MarkupString)Assignment.Roles.FirstOrDefault()?.Description?.Replace("\n", "<br />"))
+                </MudText>
+            }
         </div>
     </div>
 </div>
