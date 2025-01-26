@@ -167,7 +167,7 @@ public static class Seed2
 
         await context.SaveChangesAsync();
 
-        //await CreateTShirt(context, productFactory, cancellationToken);
+        await CreateTShirt(context, productFactory, cancellationToken);
 
         await CreateKebabPlate(context, productFactory, cancellationToken);
 
@@ -218,13 +218,13 @@ public static class Seed2
             Headline = "T-shirt i olika färger",
             HasVariants = true,
             ListingState = Domain.Enums.ProductListingState.Listed,
+            VatRate = 0.25,
             BrandId = brand.Id,
             StoreId = store.Id,
             ImageId = PlaceholderImage.Id
         }, cancellationToken);
 
         tshirts.AddProduct(product);
-
 
         product.AddProductAttribute(new ProductAttribute
         {
@@ -938,6 +938,7 @@ public static class Seed2
         {
             Name = "House cleaning",
             Handle = "house-cleaning",
+            Type = ProductType.Service,
             Description = "",
             Headline = "Cleaning your house",
             ListingState = Domain.Enums.ProductListingState.Listed,

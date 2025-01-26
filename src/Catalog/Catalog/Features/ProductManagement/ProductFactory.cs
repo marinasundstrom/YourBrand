@@ -26,6 +26,8 @@ public class ProductFactory(CatalogContext catalogContext, ITenantContext tenant
 
         var product = new Product(organizationId, productId, options.Name);
 
+        product.Type = options.Type;
+
         product.Handle = options.Handle;
 
         product.Headline = options.Headline;
@@ -67,6 +69,8 @@ public class ProductFactory(CatalogContext catalogContext, ITenantContext tenant
 public class ProductOptions
 {
     public string Name { get; set; }
+
+    public ProductType Type { get; set; }
 
     public string Handle { get; set; }
 
