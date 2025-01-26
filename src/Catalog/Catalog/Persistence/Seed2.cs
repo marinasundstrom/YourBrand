@@ -137,7 +137,7 @@ public static class Seed2
 
         if (drinks is null)
         {
-            food ??= await productCategoryFactory.CreateProductCategoryAsync(TenantConstants.OrganizationId, new()
+            drinks ??= await productCategoryFactory.CreateProductCategoryAsync(TenantConstants.OrganizationId, new()
             {
                 Name = "Drinks",
                 OrganizationId = TenantConstants.OrganizationId,
@@ -177,7 +177,15 @@ public static class Seed2
 
         await CreatePizza(context, productFactory, cancellationToken);
 
-        await CreateSalad(context, productFactory, cancellationToken);
+        await CreateSallad(context, productFactory, cancellationToken);
+
+        await CreateHamburger(context, productFactory, cancellationToken);
+
+        await CreateCocaCola(context, productFactory, cancellationToken);
+
+        await CreateCocaColaZero(context, productFactory, cancellationToken);
+
+        await CreateCarlsberg(context, productFactory, cancellationToken);
 
         await CreateHouseCleaningService(context, productFactory, cancellationToken);
     }
@@ -445,8 +453,6 @@ public static class Seed2
 
         food.AddProduct(product);
 
-
-
         await context.SaveChangesAsync();
 
         var option = new ChoiceOption("Sås");
@@ -456,19 +462,19 @@ public static class Seed2
 
         await context.SaveChangesAsync();
 
-        var valueSmall = new OptionValue("Mild sås");
+        var mildSauce = new OptionValue("Mild sås");
 
-        option.AddValue(valueSmall);
+        option.AddValue(mildSauce);
 
-        var valueMedium = new OptionValue("Stark sås");
+        var hotSauce = new OptionValue("Stark sås");
 
-        option.AddValue(valueMedium);
+        option.AddValue(hotSauce);
 
-        var valueLarge = new OptionValue("Blandad sås");
+        var allSauces = new OptionValue("Blandad sås");
 
-        option.DefaultValue = valueSmall;
+        option.DefaultValue = mildSauce;
 
-        option.AddValue(valueLarge);
+        option.AddValue(allSauces);
 
         await context.SaveChangesAsync();
     }
@@ -717,7 +723,7 @@ public static class Seed2
         await context.SaveChangesAsync();
     }
 
-    public static async Task CreateSalad(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
+    public static async Task CreateSallad(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
     {
         var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
         {
@@ -928,6 +934,146 @@ public static class Seed2
         };
 
         product.AddOption(optionCitronLime);
+
+        await context.SaveChangesAsync();
+    }
+
+
+    public static async Task CreateHamburger(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
+    {
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
+        {
+            Name = "Big Burger",
+            Handle = "big-hamburger",
+            Headline = "Tasty burger",
+            Description = "",
+            VatRate = 0.12,
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+            ListingState = Domain.Enums.ProductListingState.Listed
+        }, cancellationToken);
+
+        product.SetPrice(55);
+
+        food.AddProduct(product);
+
+
+        var patty = new ChoiceOption("Patty");
+
+        product.AddOption(patty);
+
+        await context.SaveChangesAsync();
+
+        var pattyBeef = new OptionValue("Beef");
+
+        patty.AddValue(pattyBeef);
+
+        var pattyVeg = new OptionValue("Veg");
+
+        patty.DefaultValue = pattyBeef;
+
+        patty.AddValue(pattyVeg);
+
+
+        var optionLettuce = new SelectableOption("Lettuce");;
+
+        product.AddOption(optionLettuce);
+
+        var optionTomato = new SelectableOption("Tomato"); ;
+
+        product.AddOption(optionTomato);
+
+        var optionCheddarCheese = new SelectableOption("Cheddar cheese"); ;
+
+        product.AddOption(optionCheddarCheese);
+
+        var optionOnion = new SelectableOption("Onion"); ;
+
+        product.AddOption(optionOnion);
+
+        var optionMustard = new SelectableOption("Mustard"); ;
+
+        product.AddOption(optionMustard);
+
+        var optionPickles = new SelectableOption("Pickles"); ;
+
+        product.AddOption(optionPickles);
+
+        var optionJalapeno = new SelectableOption("Jalapeño"); ;
+
+        product.AddOption(optionJalapeno);
+
+
+        var bread = new ChoiceOption("Bread");
+
+        product.AddOption(bread);
+
+        var breadBun = new OptionValue("Hamburger bun");
+
+        bread.AddValue(breadBun);
+
+        await context.SaveChangesAsync();
+
+        var firscoBun = new OptionValue("Frisco bun");
+
+        bread.DefaultValue = breadBun;
+
+        bread.AddValue(firscoBun);
+
+        await context.SaveChangesAsync();
+    }
+
+    public static async Task CreateCocaCola(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
+    {
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
+        {
+            Name = "Coca Cola 33cl",
+            Handle = "coca-cola-33cl",
+            Description = "",
+            Price = 12,
+            VatRate = 0.12,
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
+
+        drinks.AddProduct(product);
+
+        await context.SaveChangesAsync();
+    }
+
+    public static async Task CreateCocaColaZero(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
+    {
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
+        {
+            Name = "Coca Cola Zero Sugar 33cl",
+            Handle = "coca-cola-zero-sugar-33cl",
+            Description = "",
+            Price = 12,
+            VatRate = 0.12,
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
+
+        drinks.AddProduct(product);
+
+        await context.SaveChangesAsync();
+    }
+
+    public static async Task CreateCarlsberg(CatalogContext context, ProductFactory productFactory, CancellationToken cancellationToken = default)
+    {
+        var product = await productFactory.CreateProductAsync(TenantConstants.OrganizationId, new()
+        {
+            Name = "Carlsberg Export 33cl",
+            Handle = "carlsberg-export-33cl",
+            Headline = "Probably the best beer in the world!",
+            Description = "Pilsner beer",
+            Price = 21,
+            VatRate = 0.12,
+            StoreId = store.Id,
+            ImageId = PlaceholderImage.Id,
+        }, cancellationToken);
+
+        drinks.AddProduct(product);
 
         await context.SaveChangesAsync();
     }
