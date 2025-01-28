@@ -35,7 +35,7 @@ public static class Config
             {
                 ClientId = "store",
                 AllowedGrantTypes = GrantTypes.Code,
-                RequirePkce = true,
+                RequirePkce = false, //true,
                 RequireClientSecret = false,
                 AllowedCorsOrigins = { "https://localhost:7188" },
                 AllowedScopes = { "openid", "profile", "storefrontapi" },

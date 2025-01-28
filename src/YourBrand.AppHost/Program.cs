@@ -238,6 +238,7 @@ var storefront = builder.AddProject<StoreFront>("storefront")
     .WithReference(sales)
     .WithReference(inventory)
     .WithReference(analytics)
+    .WithReference(customers)
     .WithReference(identityService)
     .WaitFor(messaging);
 

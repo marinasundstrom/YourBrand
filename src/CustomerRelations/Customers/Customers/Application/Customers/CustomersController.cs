@@ -2,6 +2,7 @@
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Customers.Application.Customers.Queries;
@@ -12,6 +13,7 @@ namespace YourBrand.Customers.Application.Customers;
 [ApiController]
 [ApiVersion("1")]
 [Route("v{version:apiVersion}/[controller]")]
+[Authorize]
 public class CustomersController(IMediator mediator)
   : ControllerBase
 {

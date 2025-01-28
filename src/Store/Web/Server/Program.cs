@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 
 using Azure.Identity;
@@ -20,7 +21,9 @@ using HealthChecks.UI.Client;
 
 using MassTransit;
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
@@ -129,20 +132,31 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddAuthentication("MicrosoftOidc")
-    .AddOpenIdConnect("MicrosoftOidc", oidcOptions =>
-{
-    oidcOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    {
+        options.LoginPath = "/login";  // Custom login path
+        options.LogoutPath = "/logout";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8); // Cookie expiration time
+    })
+.   AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+    {
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
-    builder.Configuration.Bind("Local", oidcOptions);
+        builder.Configuration.Bind("Local", options);
 
-    oidcOptions.MapInboundClaims = true;
-    oidcOptions.TokenValidationParameters.NameClaimType = JwtRegisteredClaimNames.Name;
-    oidcOptions.TokenValidationParameters.RoleClaimType = "role";
-})
-.AddCookie("Cookies");
+        options.MapInboundClaims = true;
+        options.TokenValidationParameters.NameClaimType = JwtRegisteredClaimNames.Name;
+        options.TokenValidationParameters.RoleClaimType = "role";
 
-builder.Services.ConfigureCookieOidcRefresh("Cookies", "MicrosoftOidc");
+        options.GetClaimsFromUserInfoEndpoint = true;
+    });
+
+builder.Services.ConfigureCookieOidcRefresh("Cookies", "OpenIdConnect");
 
 builder.Services.AddAuthorization();
 
@@ -248,7 +262,18 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddInteractiveServerRenderMode();
 
-app.MapGroup("/authentication").MapLoginAndLogout();
+app.MapGet("/login", async (HttpContext httpContext) =>
+{
+    await httpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme);
+});
+
+app.MapGet("/logout", async (HttpContext httpContext) =>
+{
+    await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    httpContext.Response.Redirect("/");
+});
+
+//app.MapGroup("/authentication").MapLoginAndLogout();
 
 app.MapGet("/requires-auth", (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization();
 
@@ -289,6 +314,7 @@ static void AddClients(WebApplicationBuilder builder)
         }
 
         http.BaseAddress = baseUrl;
+        //http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("", "");
     },
     static (clientBuilder) =>
     {

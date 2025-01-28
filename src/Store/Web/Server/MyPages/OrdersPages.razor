@@ -1,0 +1,31 @@
+@page "/mypages"
+@using YourBrand.StoreFront
+@inject IOrdersClient OrdersClient
+
+<AppPageTitle>Orders</AppPageTitle>
+
+<h1>Orders</h1>
+
+@if (orders is null) 
+{
+    <em>Loading orders...</em>
+}
+else 
+{
+    <ul>
+        @foreach(var order in orders.Items)
+        {
+            <li>@order.OrderNo</li>
+        }
+    </ul>
+}
+
+@code 
+{
+    PagedResultOfOrder? orders;
+
+    protected override async Task OnInitializedAsync() 
+    {
+        orders = await OrdersClient.GetOrdersAsync(0, 100, null, null);
+    }
+}

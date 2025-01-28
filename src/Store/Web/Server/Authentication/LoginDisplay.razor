@@ -1,7 +1,9 @@
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authentication
 @implements IDisposable
 
 @inject NavigationManager NavigationManager
+@inject IHttpContextAccessor HttpContextAccessor
 
 <AuthorizeView>
     <Authorized>
@@ -10,14 +12,9 @@
         </li>
 
         <li class="nav-item col-12 col-md-auto">
-            <form action="authentication/logout" method="post">
-                <AntiforgeryToken />
-                <input type="hidden" name="ReturnUrl" value="@currentUrl" />
-                <button type="submit" class="nav-link">
-                    <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
-                    @context.User.Identity?.Name
-                </button>
-            </form>
+            <a href="/logout" class="nav-link">
+                <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+            </a>
         </li>
     </Authorized>
     <NotAuthorized>
@@ -26,7 +23,7 @@
         </li>
 
         <li class="nav-item col-12 col-md-auto">
-            <a class="nav-link" href="/authentication/login">Log in</a>
+            <a class="nav-link" href="/login">Log in</a>
         </li>
     </NotAuthorized>
 </AuthorizeView>

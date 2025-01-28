@@ -48,7 +48,7 @@ public static class AuthenticationExtensions
                         {
                             NameClaimType = "name",
                             ValidateAudience = false,
-                            ValidTypes = new[] { "at+jwt" }
+                            ValidTypes = ["at+jwt"]
                         };
 
                         options.SaveToken = true;

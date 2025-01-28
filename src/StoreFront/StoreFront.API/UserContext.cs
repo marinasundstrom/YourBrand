@@ -19,7 +19,7 @@ public sealed class UserContext(IHttpContextAccessor httpContextAccessor) : IUse
     {
         get
         {
-            var str = _httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == "CustomerId")?.Value;
+            var str = _httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == "customerId")?.Value;
 
             if (str is null) return null;
 
@@ -53,5 +53,10 @@ public sealed class UserContext(IHttpContextAccessor httpContextAccessor) : IUse
             }
         }
         return _httpContext.Connection.RemoteIpAddress?.ToString();
+    }
+
+    public string? GetClaim(string name)
+    {
+        return _httpContext?.User?.Claims?.FirstOrDefault(x => x.Type == name)?.Value;
     }
 }

@@ -16,6 +16,7 @@ using YourBrand;
 using YourBrand.Analytics.Client;
 using YourBrand.Carts;
 using YourBrand.Catalog;
+using YourBrand.Customers.Client;
 using YourBrand.Extensions;
 using YourBrand.Identity;
 using YourBrand.Integration;
@@ -28,6 +29,8 @@ using YourBrand.StoreFront.API.Features.Cart;
 using YourBrand.StoreFront.API.Features.Checkout;
 using YourBrand.StoreFront.API.Features.Products;
 using YourBrand.StoreFront.API.Persistence;
+using YourBrand.StoreFront.Application.Features.UserProfiles;
+
 //using YourBrand.Identity;
 using YourBrand.Tenancy;
 
@@ -59,7 +62,6 @@ builder.Host.UseSerilog((ctx, cfg) =>
 });
 
 builder.AddServiceDefaults();
-
 
 builder.Services.AddCors();
 
@@ -184,7 +186,8 @@ app.UseCors();
 app.MapCartEndpoints()
     .MapProductsEndpoints()
     .MapCheckoutEndpoints()
-    .MapBrandsEndpoints();
+    .MapBrandsEndpoints()
+    .MapOrdersEndpoints();
 
 app.MapControllers();
 
@@ -286,6 +289,19 @@ static void AddClients(WebApplicationBuilder builder)
     var analyticsApiHttpClient = builder.Services.AddAnalyticsClients((sp, http) =>
     {
         http.BaseAddress = new Uri(builder.Configuration["yourbrand:analytics-svc:url"]!);
+    },
+    clientBuilder =>
+    {
+        clientBuilder.AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+
+        clientBuilder.AddStandardResilienceHandler();
+
+        clientBuilder.AddServiceDiscovery();
+    });
+
+    var customersApiHttpClient = builder.Services.AddCustomersClients((sp, http) =>
+    {
+        http.BaseAddress = new Uri(builder.Configuration["yourbrand:customers-svc:url"]!);
     },
     clientBuilder =>
     {

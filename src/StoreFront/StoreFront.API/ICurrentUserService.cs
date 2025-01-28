@@ -14,5 +14,7 @@ public interface IUserContext
 
     string? Host { get; }
 
+    string? GetClaim(string name);
+
     string? GetRemoteIPAddress(bool allowForwarded = true);
 }
