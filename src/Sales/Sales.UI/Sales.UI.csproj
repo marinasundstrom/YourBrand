@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Heron.MudCalendar" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
     <PackageReference Include="Microsoft.Extensions.Http" />
     <PackageReference Include="MudBlazor" />
@@ -26,8 +27,7 @@
     <ProjectReference Include="..\..\Catalog\Catalog.Components\Catalog.Components.csproj" />
     <ProjectReference Include="..\Sales.Components\Sales.Components.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Shell\Portal.Shell.csproj" />
-    <ProjectReference
-      Include="..\..\CustomerRelations\Customers\Customers.Components\Customers.Components.csproj" />
+    <ProjectReference Include="..\..\CustomerRelations\Customers\Customers.Components\Customers.Components.csproj" />
     <ProjectReference Include="..\..\Utils\Utils.csproj" />
     <ProjectReference Include="..\..\Portal\Portal.Modules\Portal.Modules.csproj" />
     <ProjectReference Include="..\..\Core\Core.csproj" />

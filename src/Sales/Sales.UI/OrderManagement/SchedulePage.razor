@@ -1,0 +1,58 @@
+﻿@page "/orders/schedule"
+@using Heron.MudCalendar
+
+<AppPageTitle>Schedule</AppPageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true" Class="mt-4 mb-8">Schedule</MudText>
+
+<MudCalendar Items="_events" CellClicked="CellClicked" ItemClicked="ItemClicked"
+DayTimeInterval="CalendarTimeInterval.Minutes15" EnableDragItems="true" ShowTodayButton="true"
+EnableResizeItems="true" DateRangeChanged="OnDateRangeChanged" ItemChanged="OnItemChanged" ViewChanged="OnViewChanged" />
+@code {
+
+    [Inject]
+    private IDialogService DialogService { get; set; }
+
+    private Task CellClicked(DateTime dateTime)
+    {
+        return DialogService.ShowMessageBox("Cell Clicked", dateTime.ToString(Thread.CurrentThread.CurrentCulture));
+    }
+
+    private Task ItemClicked(CalendarItem item)
+    {
+        return DialogService.ShowMessageBox("Item Clicked", item.Text);
+    }
+
+    private List<CalendarItem> _events = new()
+    {
+        new CalendarItem
+        {
+            Start = DateTime.Today.AddHours(10),
+            End = DateTime.Today.AddHours(11),
+            Text = "Event today"
+        },
+        new CalendarItem
+        {
+            Start = DateTime.Today.AddDays(1).AddHours(11),
+            End = DateTime.Today.AddDays(1).AddHours(12.5),
+            Text = "Event tomorrow"
+        }
+    };
+
+    Task OnDateRangeChanged(DateRange dateRange) 
+    {
+        Console.WriteLine($"New date range: {dateRange}");
+        return Task.CompletedTask;
+    }
+
+    void OnItemChanged(CalendarItem item) 
+    {
+        Console.WriteLine($"Item changed: {item.Start} - {item.End}");
+    }
+
+    Task OnViewChanged(CalendarView calendarView) 
+    {
+        Console.WriteLine($"View changed: {calendarView}");
+        return Task.CompletedTask;
+    }
+}

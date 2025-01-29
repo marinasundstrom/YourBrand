@@ -27,6 +27,8 @@ public static class ServiceExtensions
 
         group.CreateItem("orders", () => t["Orders"], MudBlazor.Icons.Material.Filled.InsertDriveFile, "/orders");
 
+        group.CreateItem("schedule", () => t["Schedule"], MudBlazor.Icons.Material.Filled.Schedule, "/orders/schedule");
+
 
         var widgetService =
             services.GetRequiredService<IWidgetService>();
