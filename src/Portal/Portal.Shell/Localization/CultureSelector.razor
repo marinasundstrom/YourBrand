@@ -37,7 +37,7 @@
 
     private CultureInfo Culture { get; set; }
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     void Submit()
     {

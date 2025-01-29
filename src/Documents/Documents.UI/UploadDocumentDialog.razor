@@ -57,7 +57,7 @@
     DocumentDto? _documentDto;
     DocumentModel _model = new DocumentModel();
 
-    [CascadingParameter] MudDialogInstance Modal { get; set; }
+    [CascadingParameter] IMudDialogInstance Modal { get; set; }
 
     protected override Task OnInitializedAsync()
     {
@@ -117,7 +117,7 @@
 
             Snackbar.Add("Document was uploaded", Severity.Info);
 
-            Modal.SetTitle($"Edit {_documentDto.Name}");
+            await Modal.SetTitleAsync($"Edit {_documentDto.Name}");
 
             StateHasChanged();
         }

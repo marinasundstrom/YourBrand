@@ -44,7 +44,7 @@
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }
 
-    [CascadingParameter] MudDialogInstance Modal { get; set; } = default!;
+    [CascadingParameter] IMudDialogInstance Modal { get; set; } = default!;
 
     [Parameter] public int ProductId { get; set; } = default!;
 

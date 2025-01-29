@@ -8,7 +8,7 @@ public static class Themes
     {
         Typography = new Typography()
         {
-            Default = new Default()
+            Default = new DefaultTypography()
             {
                 FontFamily = new[] { "Roboto", "sans-serif" }
             }
@@ -26,7 +26,7 @@ public static class Themes
     {
         Typography = new Typography()
         {
-            Default = new Default()
+            Default = new DefaultTypography()
             {
                 FontFamily = new[] { "Roboto", "sans-serif" }
             }

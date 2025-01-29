@@ -111,7 +111,7 @@
 @code {
     InvoiceItem? item;
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = null!;
 
     [Parameter] public string? InvoiceId { get; set; }
 

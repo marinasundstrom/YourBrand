@@ -246,7 +246,7 @@ public partial class ChannelPage : IChatHubClient
 
                 Snackbar.Add($"{message.PostedBy.Name} said: \"{message.Content}\"", Severity.Normal, options =>
                 {
-                    options.Onclick = async (sb) =>
+                    options.OnClick = async (sb) =>
                     {
                         await JSRuntime.InvokeVoidAsyncIgnoreErrors("helpers.scrollToBottom");
                     };

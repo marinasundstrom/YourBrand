@@ -31,7 +31,7 @@
 </EditForm>
 
 @code {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     [Parameter] public YourBrand.Invoicing.Invoicing.InvoiceViewModel Invoice { get; set; }
 

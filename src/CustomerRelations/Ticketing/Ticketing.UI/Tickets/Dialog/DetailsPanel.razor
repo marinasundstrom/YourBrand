@@ -89,7 +89,7 @@
     bool notFound = false;
     bool error = false;
 
-    [CascadingParameter] public MudDialogInstance Instance { get; set; } = null!;
+    [CascadingParameter] public IMudDialogInstance Instance { get; set; } = null!;
 
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }

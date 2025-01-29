@@ -140,7 +140,7 @@
 @code {
     IList<OptionGroup> Groups { get; set; }
 
-    [CascadingParameter] MudDialogInstance Modal { get; set; }
+    [CascadingParameter] IMudDialogInstance Modal { get; set; }
 
     [Parameter] public int ProductId { get; set; }
 

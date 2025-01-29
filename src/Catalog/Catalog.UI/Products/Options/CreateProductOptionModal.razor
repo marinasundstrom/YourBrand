@@ -144,7 +144,7 @@
 @code {
     IList<OptionGroup> Groups { get; set; }
 
-    [CascadingParameter] MudDialogInstance Modal { get; set; }
+    [CascadingParameter] IMudDialogInstance Modal { get; set; }
 
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }

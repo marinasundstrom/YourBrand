@@ -31,10 +31,10 @@
     [Parameter]
     public EventCallback<ProductCategoryTreeNode?> ProductCategoryTreeNodeChanged { get; set; }
 
-    [CascadingParameter] MudDialogInstance Modal { get; set; }
+    [CascadingParameter] IMudDialogInstance Modal { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Modal.SetTitle("Select category");
+        await Modal.SetTitleAsync("Select category");
     }
 }

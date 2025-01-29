@@ -39,7 +39,7 @@
 </EditForm>
 
 @code {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     [Required]
     [Parameter] public DateTime? Date { get; set; } = DateTime.Now;

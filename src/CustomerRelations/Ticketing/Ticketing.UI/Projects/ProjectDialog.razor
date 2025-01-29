@@ -39,7 +39,7 @@
     EditContext context;
 
     [CascadingParameter]
-    public MudDialogInstance Dialog { get; set; } = default!;
+    public IMudDialogInstance Dialog { get; set; } = default!;
 
     [Parameter]
     public int? ProjectId { get; set; } = default!;

@@ -37,7 +37,7 @@
     DocumentDto? _documentDto;
     DocumentModel _model = new DocumentModel();
 
-    [CascadingParameter] MudDialogInstance Modal { get; set; }
+    [CascadingParameter] IMudDialogInstance Modal { get; set; }
 
     [Parameter] public string Id { get; set; } = null!;
 

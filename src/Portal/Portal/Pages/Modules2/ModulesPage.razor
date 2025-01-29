@@ -71,7 +71,7 @@
 
             module.Enabled = !module.Enabled;
 
-            Snackbar.Add("Module was successfully toggled.\nReload your browser to reflect the changes.", Severity.Info, config => { config.Onclick = async (Snackbar snackbar) => await Reload(); });
+            Snackbar.Add("Module was successfully toggled.\nReload your browser to reflect the changes.", Severity.Info, config => { config.OnClick = async (Snackbar snackbar) => await Reload(); });
         }
         catch(Exception) 
         {

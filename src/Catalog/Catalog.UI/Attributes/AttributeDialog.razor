@@ -34,7 +34,7 @@
     EditContext context = null!;
 
     [CascadingParameter]
-    public MudDialogInstance Dialog { get; set; } = null!;
+    public IMudDialogInstance Dialog { get; set; } = null!;
 
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }

@@ -43,7 +43,7 @@
     [Parameter]
     public IEnumerable<Activity> Activities { get; set; }
 
-    [CascadingParameter] MudDialogInstance Modal { get; set; }
+    [CascadingParameter] IMudDialogInstance Modal { get; set; }
 
     [Parameter]
     public int Year { get; set; }

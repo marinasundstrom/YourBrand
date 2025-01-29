@@ -104,7 +104,7 @@ else
     bool error = false;
     bool saveButtonVisible = false;
 
-    [CascadingParameter] public MudDialogInstance Instance { get; set; } = null!;
+    [CascadingParameter] public IMudDialogInstance Instance { get; set; } = null!;
 
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }
@@ -147,7 +147,7 @@ else
         }
         else
         {
-            Instance.SetTitle(T["NewTicket"]);
+            await Instance.SetTitleAsync(T["NewTicket"]);
         }
     }
 
@@ -270,7 +270,7 @@ else
             Urgency = Form.Urgency
         }, cts.Token);
 
-        Instance.SetTitle($"{ticket.Id} - {ticket.Subject}");
+        await Instance.SetTitleAsync($"{ticket.Id} - {ticket.Subject}");
     }
 
     public void Dispose()

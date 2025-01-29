@@ -31,7 +31,7 @@
 </EditForm>
 
 @code {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
 
     [EditorRequired]
     [Parameter] public string OrganizationId { get; set; }

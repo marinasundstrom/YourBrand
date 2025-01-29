@@ -40,7 +40,7 @@
 @code {
     IEnumerable<ProductAttribute> productAttributes = Enumerable.Empty<ProductAttribute>();
 
-    [CascadingParameter] MudDialogInstance Modal { get; set; } = default!;
+    [CascadingParameter] IMudDialogInstance Modal { get; set; } = default!;
 
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }

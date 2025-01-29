@@ -104,7 +104,7 @@
 @code {
     OrderItem? item;
 
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; } = null!;
 
     [Parameter] public string? OrderId { get; set; }
 
