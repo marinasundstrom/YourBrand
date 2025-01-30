@@ -92,9 +92,9 @@ public static class Endpoints
         return app;
     }
 
-    private static async Task<Ok<PagedResult<OrderDto>>> GetOrders(string organizationId, int[]? types, int[]? status, string? customerId, string? ssn, string? assigneeId, Guid? subscriptionId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
+    private static async Task<Ok<PagedResult<OrderDto>>> GetOrders(string organizationId, int[]? types, int[]? status, string? customerId, string? ssn, string? assigneeId, Guid? subscriptionId, DateTimeOffset? fromDate = null, DateTimeOffset? toDate = null, DateTimeOffset? plannedFromDate = null, DateTimeOffset? plannedToDate = null, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
-        var result = await mediator.Send(new GetOrders(organizationId, types, status, customerId, ssn, assigneeId, subscriptionId, page, pageSize, sortBy, sortDirection), cancellationToken);
+        var result = await mediator.Send(new GetOrders(organizationId, types, status, customerId, ssn, assigneeId, subscriptionId, fromDate, toDate, plannedFromDate, plannedToDate, page, pageSize, sortBy, sortDirection), cancellationToken);
         return TypedResults.Ok(result.GetValue());
     }
 

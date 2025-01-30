@@ -180,7 +180,7 @@ else
 
         try
         {
-            var result = await OrdersClient.GetOrdersAsync(organizationId, [], selectedStatuses?.Select(x => x.Id), null, null, null, subscription.Id, state.Page +
+            var result = await OrdersClient.GetOrdersAsync(organizationId, [], selectedStatuses?.Select(x => x.Id), null, null, null, subscription.Id, null, null, null, null, state.Page +
             1,
             state.PageSize,
             state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,

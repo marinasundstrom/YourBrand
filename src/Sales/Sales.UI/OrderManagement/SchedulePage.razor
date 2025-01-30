@@ -1,11 +1,15 @@
 ﻿@page "/orders/schedule"
 @using Heron.MudCalendar
+@using YourBrand.Portal.Services
+@inject NavigationManager NavigationManager
+@inject IOrdersClient OrdersClient
+@inject IOrganizationProvider OrganizationProvider
 
 <AppPageTitle>Schedule</AppPageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true" Class="mt-4 mb-8">Schedule</MudText>
 
-<MudCalendar Items="_events" CellClicked="CellClicked" ItemClicked="ItemClicked"
+<CustomCalendar Items="_events" CellClicked="CellClicked" ItemClicked="ItemClicked"
 DayTimeInterval="CalendarTimeInterval.Minutes15" EnableDragItems="true" ShowTodayButton="true"
 EnableResizeItems="true" DateRangeChanged="OnDateRangeChanged" ItemChanged="OnItemChanged" ViewChanged="OnViewChanged" />
 @code {
@@ -13,36 +17,62 @@ EnableResizeItems="true" DateRangeChanged="OnDateRangeChanged" ItemChanged="OnIt
     [Inject]
     private IDialogService DialogService { get; set; }
 
-    private Task CellClicked(DateTime dateTime)
+    protected override async Task OnInitializedAsync() 
     {
-        return DialogService.ShowMessageBox("Cell Clicked", dateTime.ToString(Thread.CurrentThread.CurrentCulture));
+        var organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
+        //await GetOrders(organization.Id, );
     }
 
-    private Task ItemClicked(CalendarItem item)
+    async Task GetOrders(string organizationId, DateTimeOffset plannedStart, DateTimeOffset plannedEnd)
     {
-        return DialogService.ShowMessageBox("Item Clicked", item.Text);
-    }
+        var result = await OrdersClient.GetOrdersAsync(organizationId, [], null, null, null,
+            null, null, null, null, plannedStart, plannedEnd, 1,
+            100, null, null);
 
-    private List<CalendarItem> _events = new()
-    {
-        new CalendarItem
+        _events.Clear();
+
+        foreach(var order in result.Items) 
         {
-            Start = DateTime.Today.AddHours(10),
-            End = DateTime.Today.AddHours(11),
-            Text = "Event today"
-        },
-        new CalendarItem
-        {
-            Start = DateTime.Today.AddDays(1).AddHours(11),
-            End = DateTime.Today.AddDays(1).AddHours(12.5),
-            Text = "Event tomorrow"
+            if (order.Schedule is null)
+                continue;
+            
+            _events.Add(new CalendarItem
+                {
+                    Start = order.Schedule.PlannedStartDate.GetValueOrDefault().DateTime,
+                    End = order.Schedule.PlannedEndDate.GetValueOrDefault().DateTime,
+                    Text = order.OrderNo?.ToString()     
+                });
         }
-    };
+    }
 
-    Task OnDateRangeChanged(DateRange dateRange) 
+    private async Task CellClicked(DateTime dateTime)
+    {
+        //return DialogService.ShowMessageBox("Cell Clicked", dateTime.ToString(Thread.CurrentThread.CurrentCulture));
+    }
+
+    private async Task ItemClicked(CalendarItem item)
+    {
+        //return DialogService.ShowMessageBox("Item Clicked", item.Text);
+
+        NavigationManager.NavigateTo($"/orders/{item.Text}");
+    }
+
+    private List<CalendarItem> _events = new();
+
+    async Task OnDateRangeChanged(DateRange dateRange) 
     {
         Console.WriteLine($"New date range: {dateRange}");
-        return Task.CompletedTask;
+
+        var organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+
+        var start = DateTime.SpecifyKind(dateRange.Start.GetValueOrDefault(), DateTimeKind.Local);
+        DateTimeOffset localTime1 = start;
+
+        var end = DateTime.SpecifyKind(dateRange.End.GetValueOrDefault(), DateTimeKind.Local);
+        DateTimeOffset localTime2 = end;
+
+        await GetOrders(organization.Id, localTime1, localTime2);
     }
 
     void OnItemChanged(CalendarItem item) 

@@ -254,8 +254,9 @@
                         <MudText>@order.BillingDetails.FirstName @order.BillingDetails.LastName</MudText>
                         <MudText>@order.BillingDetails.Ssn</MudText>
 
-                        <MudText Class="mt-2">@address.Thoroughfare @address.Premises @address.SubPremises</MudText>
-                        <MudText>@address.PostalCode @address.Locality</MudText>
+                        <MudText Class="mt-2">@address.Street</MudText>
+                        <MudText>@address.AddressLine2</MudText>
+                        <MudText>@address.PostalCode @address.City</MudText>
                         <MudText>@address.Country</MudText>
 
                         <MudText Class="mt-2">@order.BillingDetails.PhoneNumber</MudText>
@@ -284,8 +285,10 @@
                             var address = order.ShippingDetails.Address;
 
                             <MudText>@order.ShippingDetails.FirstName @order.ShippingDetails.LastName</MudText>
-                            <MudText class="mt-2">@address.Thoroughfare @address.Premises @address.SubPremises</MudText>
-                            <MudText>@address.PostalCode @address.Locality</MudText>
+                            <MudText class="mt-2">@address.Street</MudText>
+                            <MudText>@address.AddressLine2</MudText>
+                            <MudText>@address.PostalCode @address.City</MudText>
+                            <MudText>@address.StateOrProvince</MudText>
                             <MudText>@address.Country</MudText>
                         }
                     </ChildContent>

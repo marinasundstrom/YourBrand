@@ -134,7 +134,8 @@
 
         try
         {
-            var result = await OrdersClient.GetOrdersAsync(organizationId, selectedTypes?.Select(x => x.Id), selectedStatuses?.Select(x => x.Id), null, null, null, null, state.Page +
+            var result = await OrdersClient.GetOrdersAsync(organizationId, selectedTypes?.Select(x => x.Id),
+            selectedStatuses?.Select(x => x.Id), null, null, null, null, null, null, null, null, state.Page +
             1,
             state.PageSize,
             state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,

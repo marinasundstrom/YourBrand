@@ -42,21 +42,16 @@
                         </MudTextField>
                     </MudItem>
 
+
                     <MudItem xs="12" md="8">
-                        <MudTextField Label="Thoroughfare" @bind-Value="Model.Address.Thoroughfare"
-                            For="() => Model.Address.Thoroughfare" Class="mt-4" Required>
+                        <MudTextField Label="Thoroughfare" @bind-Value="Model.Address.Street"
+                            For="() => Model.Address.Street" Class="mt-4" Required>
                         </MudTextField>
                     </MudItem>
 
                     <MudItem xs="12" md="4">
-                        <MudTextField Label="Premises" @bind-Value="Model.Address.Premises"
-                            For="() => Model.Address.Premises" Class="mt-4" Required>
-                        </MudTextField>
-                    </MudItem>
-
-                    <MudItem xs="12" md="12">
-                        <MudTextField Label="Sub Premises" @bind-Value="Model.Address.SubPremises"
-                            For="() => Model.Address.SubPremises" Class="mt-4">
+                        <MudTextField Label="AddressLine2" @bind-Value="Model.Address.AddressLine2"
+                            For="() => Model.Address.AddressLine2" Class="mt-4" Required>
                         </MudTextField>
                     </MudItem>
 
@@ -67,20 +62,14 @@
                     </MudItem>
 
                     <MudItem xs="12" md="8">
-                        <MudTextField Label="Locality" @bind-Value="Model.Address.Locality"
-                            For="() => Model.Address.Locality" Class="mt-4" Required>
+                        <MudTextField Label="Locality" @bind-Value="Model.Address.City" For="() => Model.Address.City"
+                            Class="mt-4" Required>
                         </MudTextField>
                     </MudItem>
 
                     <MudItem xs="12" md="12">
-                        <MudTextField Label="Sub Administrative Area" @bind-Value="Model.Address.SubAdministrativeArea"
-                            For="() => Model.Address.SubAdministrativeArea" Class="mt-4" Required>
-                        </MudTextField>
-                    </MudItem>
-
-                    <MudItem xs="12" md="6">
-                        <MudTextField Label="Administrative Area" @bind-Value="Model.Address.AdministrativeArea"
-                            For="() => Model.Address.AdministrativeArea" Class="mt-4" Required>
+                        <MudTextField Label="Sub Administrative Area" @bind-Value="Model.Address.StateOrProvince"
+                            For="() => Model.Address.StateOrProvince" Class="mt-4" Required>
                         </MudTextField>
                     </MudItem>
 

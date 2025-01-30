@@ -32,7 +32,7 @@ public static class Endpoints
 
         var customer = await customersClient.GetCustomerBySSNAsync(ssn, cancellationToken);
 
-        var orders = await ordersClient.GetOrdersAsync(configuration["OrganizationId"]!, null, null, null, customer.Ssn, null, null, page, pageSize, null, null, cancellationToken);
+        var orders = await ordersClient.GetOrdersAsync(configuration["OrganizationId"]!, null, null, null, customer.Ssn, null, null, null, null, null, null, page, pageSize, null, null, cancellationToken);
 
         return TypedResults.Ok(new PagedResult<Order>(orders.Items, orders.Total));
     }

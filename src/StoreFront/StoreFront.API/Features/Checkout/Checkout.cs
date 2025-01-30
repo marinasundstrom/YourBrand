@@ -202,13 +202,11 @@ public sealed record Checkout(
         {
             return new()
             {
-                Thoroughfare = address.Thoroughfare,
-                Premises = address.Premises,
-                SubPremises = address.SubPremises,
+                Street = address.Thoroughfare,
+                AddressLine2 = address.SubPremises,
                 PostalCode = address.PostalCode,
-                Locality = address.Locality,
-                SubAdministrativeArea = address.SubAdministrativeArea,
-                AdministrativeArea = address.AdministrativeArea,
+                City = address.Locality,
+                StateOrProvince = address.AdministrativeArea,
                 Country = address.Country
             };
         }
