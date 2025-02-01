@@ -63,17 +63,17 @@ public record GetOrders(string OrganizationId, int[]? Types, int[]? Status, stri
 
             if (request.ToDate is not null)
             {
-                query = query.Where(x => x.Date <= request.FromDate);
+                query = query.Where(x => x.Date <= request.ToDate);
             }
 
             if (request.PlannedFromDate is not null)
             {
-                query = query.Where(x => x.Schedule.PlannedStartDate >= request.PlannedFromDate);
+                query = query.Where(x => x.Schedule!.PlannedStartDate == null || x.Schedule!.PlannedStartDate >= request.PlannedFromDate);
             }
 
             if (request.PlannedToDate is not null)
             {
-                query = query.Where(x => x.Schedule.PlannedEndDate <= request.PlannedToDate);
+                query = query.Where(x => x.Schedule!.PlannedEndDate == null || x.Schedule!.PlannedEndDate <= request.PlannedToDate);
             }
 
             var totalCount = await query.CountAsync(cancellationToken);
