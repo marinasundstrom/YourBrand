@@ -73,7 +73,9 @@ public record GetOrders(string OrganizationId, int[]? Types, int[]? Status, stri
 
             if (request.PlannedToDate is not null)
             {
-                query = query.Where(x => x.Schedule!.PlannedEndDate == null || x.Schedule!.PlannedEndDate <= request.PlannedToDate);
+                query = query.Where(x => x.Schedule!.PlannedEndDate != null 
+                ? x.Schedule!.PlannedEndDate <= request.PlannedToDate
+                : x.Schedule!.PlannedStartDate <= request.PlannedToDate);
             }
 
             var totalCount = await query.CountAsync(cancellationToken);
