@@ -65,8 +65,9 @@ public static class Endpoints
     {
         return await mediator.Send(new CreateSubscriptionOrder(
             organizationId,
-            request.ProductId, request.ProductName, request.Price, request.RegularPrice, request.SubscriptionPlanId, request.StartDate, request.StartTime, request.Customer,
-            request.BillingDetails, request.ShippingDetails, request.Notes
+            request.ProductId, request.ProductName, request.Price, request.RegularPrice, request.SubscriptionPlanId, request.StartDate, request.StartTime,
+            request.EndDate, request.EndTime, 
+            request.Customer, request.BillingDetails, request.ShippingDetails, request.Notes
         ), cancellationToken);
     }
 
@@ -78,7 +79,7 @@ public static class Endpoints
 }
 
 public sealed record CreateSubscriptionRequest(
-    string ProductId, string ProductName, decimal Price, decimal? RegularPrice, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, SetCustomerDto Customer,
+    string ProductId, string ProductName, decimal Price, decimal? RegularPrice, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, DateOnly EndDate, TimeOnly? EndTime, SetCustomerDto Customer,
     BillingDetailsDto BillingDetails, ShippingDetailsDto ShippingDetails, string Notes);
 
 public sealed record UpdateSubscriptionStatusRequest(int StatusId);

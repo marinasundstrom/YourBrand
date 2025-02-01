@@ -2672,6 +2672,13 @@ components:
           type: string
           format: time
           nullable: true
+        endDate:
+          type: string
+          format: date
+        endTime:
+          type: string
+          format: time
+          nullable: true
         customer:
           $ref: '#/components/schemas/SetCustomer'
         billingDetails:

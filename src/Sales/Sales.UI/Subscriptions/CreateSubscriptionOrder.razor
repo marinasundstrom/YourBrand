@@ -21,13 +21,25 @@
 
                 <MudGrid>
                     <MudItem md="6">
-                        <MudDatePicker Variant="Variant.Outlined" Class="mb-4" Label="Start Date" @bind-Date="Model.StartDate"
-                            For="() => Model.StartDate" />
+                        <MudDatePicker Variant="Variant.Outlined" Class="mb-4" Label="Start Date" 
+                            @bind-Date="Model.StartDate" For="() => Model.StartDate" />
                     </MudItem>
 
                     <MudItem md="6">
-                        <MudTimePicker Variant="Variant.Outlined" Class="mb-4" Label="Start Time" @bind-Time="Model.StartTime"
-                            For="() => Model.StartTime" />
+                        <MudTimePicker Variant="Variant.Outlined" Class="mb-4" Label="Start Time"
+                            @bind-Time="Model.StartTime" For="() => Model.StartTime" />
+                    </MudItem>
+                </MudGrid>
+
+                <MudGrid>
+                    <MudItem md="6">
+                        <MudDatePicker Variant="Variant.Outlined" Class="mb-4" Label="End Date"
+                            @bind-Date="Model.EndDate" For="() => Model.EndDate" />
+                    </MudItem>
+
+                    <MudItem md="6">
+                        <MudTimePicker Variant="Variant.Outlined" Class="mb-4" Label="End Time"
+                            @bind-Time="Model.EndTime" For="() => Model.EndTime" />
                     </MudItem>
                 </MudGrid>
 
@@ -75,6 +87,8 @@
             SubscriptionPlanId = Model.SubscriptionPlan.Id,
             StartDate = DateOnly.FromDateTime(Model.StartDate.GetValueOrDefault()),
             StartTime = Model.StartTime is null ? null : TimeOnly.FromTimeSpan(Model.StartTime.GetValueOrDefault()),
+            EndDate = DateOnly.FromDateTime(Model.EndDate.GetValueOrDefault()),
+            EndTime = Model.EndTime is null ? null : TimeOnly.FromTimeSpan(Model.EndTime.GetValueOrDefault()),
             Customer = new SetCustomer
             {
                 Id = Model.Customer.Id.ToString(),

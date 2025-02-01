@@ -16,6 +16,10 @@ public class SubscriptionViewModel
 
     public TimeSpan? StartTime { get; set; }
 
+    public DateTime? EndDate { get; set; } = DateTime.Now.AddYears(1);
+
+    public TimeSpan? EndTime { get; set; }
+
     [Required]
     public Customers.Client.Customer Customer { get; set; }
 

@@ -13,7 +13,9 @@ using YourBrand.Sales.Persistence.Repositories.Mocks;
 
 namespace YourBrand.Sales.Features.SubscriptionManagement;
 
-public record CreateSubscriptionOrder(string OrganizationId, string ProductId, string ProductName, decimal Price, decimal? OriginalPrice, Guid SubscriptionPlanId, DateOnly StartDate, TimeOnly? StartTime, OrderManagement.Orders.Commands.SetCustomerDto Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, string? Notes) : IRequest<OrderDto>
+public record CreateSubscriptionOrder(string OrganizationId, string ProductId, string ProductName, decimal Price, decimal? OriginalPrice, Guid SubscriptionPlanId, 
+    DateOnly StartDate, TimeOnly? StartTime, DateOnly EndDate, TimeOnly? EndTime,
+    SetCustomerDto Customer, BillingDetailsDto BillingDetails, ShippingDetailsDto? ShippingDetails, string? Notes) : IRequest<OrderDto>
 {
     public class Handler(SalesContext salesContext, TimeProvider timeProvider, OrderNumberFetcher orderNumberFetcher, SubscriptionNumberFetcher subscriptionNumberFetcher, SubscriptionOrderGenerator subscriptionOrderGenerator) : IRequestHandler<CreateSubscriptionOrder, OrderDto>
     {
@@ -27,7 +29,8 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
                 Schedule = subscriptionPlan!.Schedule.Clone(),
                 StartDate = request.StartDate,
                 //StartTime = request.StartTime, // REVISIT
-                EndDate = request.StartDate.AddMonths(12),
+                EndDate = request.EndDate,
+                //EndTime = request.EndTime, // REVISIT
                 OrganizationId = request.OrganizationId
             };
 
