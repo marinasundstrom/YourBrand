@@ -227,6 +227,7 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
         targetOrderItem.Unit = orderItem.Unit;
         targetOrderItem.Price = orderItem.Price;
         targetOrderItem.RegularPrice = orderItem.RegularPrice;
+        targetOrderItem.VatIncluded = orderItem.VatIncluded;
         targetOrderItem.VatRate = orderItem.VatRate;
         targetOrderItem.DirectDiscount = orderItem.DirectDiscount;
         targetOrderItem.DiscountRate = orderItem.DiscountRate;

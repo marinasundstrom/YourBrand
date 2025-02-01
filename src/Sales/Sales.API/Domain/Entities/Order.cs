@@ -141,6 +141,7 @@ public class Order : AggregateRoot<string>, IAuditableEntity<string, User>, IHas
         }
         var schedule = new OrderSchedule();
         config(schedule);
+        Schedule = schedule;
         return this;
     }
 
@@ -390,6 +391,8 @@ public class Order : AggregateRoot<string>, IAuditableEntity<string, User>, IHas
         bool copySubscription = false, bool makeChild = false)
     {
         var order = this;
+
+        targetOrder.VatIncluded = order.VatIncluded;
 
         targetOrder.UpdateStatus((int)OrderStatusEnum.Draft, timeProvider);
 
