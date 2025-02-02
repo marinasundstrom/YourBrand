@@ -29,6 +29,8 @@
       Include="..\..\..\Finance\Transactions\Transactions.Client\Transactions.Client.csproj" />
     <ProjectReference Include="..\..\..\Finance\Payments\Payments.Client\Payments.Client.csproj" />
     <ProjectReference Include="..\..\..\Portal\Portal.Modules\Portal.Modules.csproj" />
+    <ProjectReference
+      Include="..\..\..\Sales\Sales.Components\Sales.Components.csproj" />
   </ItemGroup>
 
 </Project>

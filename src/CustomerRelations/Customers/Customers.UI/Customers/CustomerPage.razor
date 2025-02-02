@@ -19,25 +19,32 @@
 }
 else
 {
-<MudText Typo="Typo.h3" Class="mb-4">
-    @if (customer.CustomerType == CustomerType.Individual)
-    {
-        <text>@Id - @customer.FirstName @customer.LastName (@customer.Ssn)</text>
-    }
-    else if (customer.CustomerType == CustomerType.Organization)
-    {
-        <text>@Id - @customer.Name (@customer.OrgNo)</text>
-    }
-</MudText>
-    <MudText Typo="Typo.h4">Address</MudText>
-    <MudPaper Class="pa-4" Elevation="25">
+    <MudText Typo="Typo.h3" Class="mb-4">
+        @if (customer.CustomerType == CustomerType.Individual)
+        {
+            <text>@Id - @customer.FirstName @customer.LastName (@customer.Ssn)</text>
+        }
+        else if (customer.CustomerType == CustomerType.Organization)
+        {
+            <text>@Id - @customer.Name (@customer.OrgNo)</text>
+        }
+    </MudText>
+
+    <MudText Typo="Typo.h4" GutterBottom="true">Address</MudText>
+
+    <MudPaper Class="pa-4 mb-4" Elevation="25">
         @customer.Address.Thoroughfare @customer.Address.Premises @customer.Address.SubPremises<br />
         @customer.Address.PostalCode @customer.Address.Locality<br />
         @customer.Address.SubAdministrativeArea @customer.Address.AdministrativeArea<br />
     </MudPaper>
+
+
+    <MudText Typo="Typo.h4" GutterBottom="true">Orders</MudText>
+
+    <YourBrand.Sales.OrderTable CustomerId="@(Id.ToString())" />
 }
 
-@code 
+@code
 {
     private Customer? @customer;
     private bool loadingFailed = false;

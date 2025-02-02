@@ -1,0 +1,175 @@
+@using Microsoft.AspNetCore.Authorization
+@using YourBrand.Portal.Services
+@using YourBrand.Sales
+@inject IOrdersClient OrdersClient
+@inject IOrderTypesClient OrderTypesClient
+@inject IOrderStatusesClient OrderStatusesClient
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject IOrganizationProvider OrganizationProvider
+
+<MudTable T="Order" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
+    Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
+    <ToolBarContent>
+        <MudSelect T="OrderType?" Label="Type" MultiSelection="true" @bind-Value="Type"
+        SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" 
+        ToStringFunc="(o) => o.Name" Class="mt-0">
+            @foreach (var type in orderTypes)
+            {
+                <MudSelectItem T="OrderType?" Value="@type">@type.Name</MudSelectItem>
+            }
+        </MudSelect>
+        <MudSpacer />
+        <MudSelect T="OrderStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
+            SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedStatusesChanged"
+            ToStringFunc="(o) => o.Name" Class="mt-0">
+            @foreach (var status in orderStatuses)
+            {
+                <MudSelectItem T="OrderStatus?" Value="@status">@status.Name</MudSelectItem>
+            }
+        </MudSelect>
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel T="Order" SortLabel="OrderNo">#</MudTableSortLabel>
+        </MudTh>
+        <MudTh>Type</MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Order" SortLabel="Date">Date</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Order" SortLabel="Status">Status</MudTableSortLabel>
+        </MudTh>
+        <MudTh>Sub Total</MudTh>
+        <MudTh>VAT</MudTh>
+        <MudTh>Discount</MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Order" SortLabel="Total">Total</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Order" SortLabel="Created">Created</MudTableSortLabel>
+        </MudTh>
+        <MudTh>
+            <MudTableSortLabel T="Order" SortLabel="LastModified">LastModified</MudTableSortLabel>
+        </MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate Context="order">
+        <MudTd DataLabel="Id">@order.OrderNo</MudTd>
+        <MudTd DataLabel="Type">@order.Type.Name</MudTd>
+        <MudTd DataLabel="Date">@order.Date?.ToString("yyyy-MM-dd")</MudTd>
+        <MudTd DataLabel="Status">@order.Status.Name</MudTd>
+        <MudTd DataLabel="Sub Total">@order.SubTotal.FormatCurrency(order.Currency)</MudTd>
+        <MudTd DataLabel="VAT">@order.Vat.FormatCurrency(order.Currency)</MudTd>
+        <MudTd DataLabel="Discount">@order.Discount?.FormatCurrency(order.Currency)</MudTd>
+        <MudTd DataLabel="Total">@order.Total.FormatCurrency(order.Currency)</MudTd>
+        <MudTd DataLabel="Created">@order.Created.ToString("yyyy-MM-dd")</MudTd>
+        <MudTd DataLabel="LastModified">@order.LastModified?.ToString("yyyy-MM-dd")</MudTd>
+        <MudTd>
+            @*
+            <MudIconButton Icon="@Icons.Material.Filled.FileDownload" Size="Size.Small"
+            Href="@($"/api/invoicing/orders/{order.OrderNo}/file")" @onclick:stopPropagation /> *@
+            @if (order.Status.Id == 1)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small"
+                    OnClick="async (e) => await DeleteOrder(order)" />
+            }
+        </MudTd>
+    </RowTemplate>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code
+{
+    CancellationTokenSource cts = new();
+    MudTable<YourBrand.Sales.Order> table;
+    bool loading = false;
+    OrderType? Type;
+    IEnumerable<OrderType> orderTypes = new List<OrderType>();
+    IEnumerable<OrderType?> selectedTypes = new List<OrderType?>();
+    OrderStatus? Status;
+    IEnumerable<OrderStatus> orderStatuses = new List<OrderStatus>();
+    IEnumerable<OrderStatus?> selectedStatuses = new List<OrderStatus?>();
+
+    string organizationId;
+
+    [Parameter]
+    public string CustomerId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
+        orderTypes = (await OrderTypesClient.GetOrderTypesAsync(organizationId, 1, 100, null, null,
+        null)).Items.ToList();
+
+        orderStatuses = (await OrderStatusesClient.GetOrderStatusesAsync(organizationId, 1, 100, null, null,
+        null)).Items.ToList();
+    }
+
+    private async Task<TableData<Order>> ServerReload(TableState state, CancellationToken cancellationToken)
+    {
+        loading = true;
+
+        organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync())?.Id;
+
+        if(organizationId is null)
+            return new TableData<Order>();
+
+        try
+        {
+            var result = await OrdersClient.GetOrdersAsync(organizationId, selectedTypes?.Select(x => x.Id),
+            selectedStatuses?.Select(x => x.Id), CustomerId, null, null, null, null, null, null, null, state.Page +
+            1,
+            state.PageSize,
+            state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
+            state.SortDirection == MudBlazor.SortDirection.None ? null : (state.SortDirection == MudBlazor.SortDirection.Ascending ?
+            YourBrand.Sales.SortDirection.Asc : YourBrand.Sales.SortDirection.Desc), cts.Token);
+
+            return new TableData<Order>() { TotalItems = result.Total, Items = result.Items };
+        }
+        catch
+        {
+            return new TableData<Order>();
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    public async Task GoTo(Order order)
+    {
+        NavigationManager.NavigateTo($"/orders/{order.OrderNo?.ToString() ?? order.Id}");
+    }
+
+    private async Task OnSelectedTypesChanged(IEnumerable<OrderType?> selectedValues)
+    {
+        selectedTypes = selectedValues;
+        await table.ReloadServerData();
+    }
+
+
+    private async Task OnSelectedStatusesChanged(IEnumerable<OrderStatus?> selectedValues)
+    {
+        selectedStatuses = selectedValues;
+        await table.ReloadServerData();
+    }
+
+    private async Task DeleteOrder(Order order)
+    {
+        var result = await DialogService.ShowMessageBox("Delete draft order", "Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+
+        await OrdersClient.DeleteOrderAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id);
+        await table.ReloadServerData();
+    }
+}
