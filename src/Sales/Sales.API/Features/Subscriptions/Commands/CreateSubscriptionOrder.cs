@@ -27,6 +27,7 @@ public record CreateSubscriptionOrder(string OrganizationId, string ProductId, s
             {
                 Plan = subscriptionPlan!,
                 Schedule = subscriptionPlan!.Schedule.Clone(),
+                CustomerId = int.Parse(request.Customer.Id),
                 StartDate = request.StartDate,
                 //StartTime = request.StartTime, // REVISIT
                 EndDate = request.EndDate,

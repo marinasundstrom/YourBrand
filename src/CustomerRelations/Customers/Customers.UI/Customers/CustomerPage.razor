@@ -39,9 +39,13 @@ else
     </MudPaper>
 
 
-    <MudText Typo="Typo.h4" GutterBottom="true">Orders</MudText>
+    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-4">Orders</MudText>
 
     <YourBrand.Sales.OrderTable CustomerId="@(Id.ToString())" />
+
+    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-4">Subscriptions</MudText>
+
+    <YourBrand.Sales.SubscriptionTable CustomerId="@(Id.ToString())" />
 }
 
 @code

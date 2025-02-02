@@ -1073,26 +1073,32 @@ paths:
             type: integer
             format: int32
         x-position: 3
+      - name: customerId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 1
-        x-position: 4
+        x-position: 5
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
           default: 10
-        x-position: 5
+        x-position: 6
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 6
+        x-position: 7
       - name: sortDirection
         in: query
         schema:
@@ -1100,7 +1106,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 7
+        x-position: 8
       responses:
         200:
           description: ''

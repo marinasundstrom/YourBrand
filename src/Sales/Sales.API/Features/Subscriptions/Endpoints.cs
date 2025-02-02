@@ -44,9 +44,9 @@ public static class Endpoints
         return app;
     }
 
-    private static async Task<PagedResult<SubscriptionDto>> GetSubscriptions(string organizationId, int[]? types, int[]? status, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
+    private static async Task<PagedResult<SubscriptionDto>> GetSubscriptions(string organizationId, int[]? types, int[]? status, string? customerId = null, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
     {
-        return await mediator.Send(new GetSubscriptionsQuery(organizationId, types, status, page, pageSize, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetSubscriptionsQuery(organizationId, types, status, customerId, page, pageSize, sortBy, sortDirection), cancellationToken);
     }
 
     private static async Task<SubscriptionDto> GetSubscriptionById(Guid id, IMediator mediator, CancellationToken cancellationToken)

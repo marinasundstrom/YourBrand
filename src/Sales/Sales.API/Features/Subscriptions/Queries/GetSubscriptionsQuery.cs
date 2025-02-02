@@ -7,7 +7,7 @@ using YourBrand.Sales.Persistence;
 
 namespace YourBrand.Sales.Features.SubscriptionManagement;
 
-public record GetSubscriptionsQuery(string OrganizationId, int[]? Types, int[]? Status, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<SubscriptionDto>>
+public record GetSubscriptionsQuery(string OrganizationId, int[]? Types, int[]? Status, string? CustomerId = null, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<SubscriptionDto>>
 {
     public class GetSubscriptionsQueryHandler(SalesContext salesContext) : IRequestHandler<GetSubscriptionsQuery, PagedResult<SubscriptionDto>>
     {
@@ -27,6 +27,12 @@ public record GetSubscriptionsQuery(string OrganizationId, int[]? Types, int[]? 
             {
                 var status = request.Status;
                 query = query.Where(x => status.Any(z => z == x.StatusId));
+            }
+
+            if (request.CustomerId is not null)
+            {
+                var customerId = int.Parse(request.CustomerId);
+                query = query.Where(x => x.CustomerId == customerId);
             }
 
             var totalCount = await query.CountAsync(cancellationToken);

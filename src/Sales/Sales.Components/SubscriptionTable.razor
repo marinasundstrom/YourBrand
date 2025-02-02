@@ -1,4 +1,4 @@
-﻿@using System.Globalization
+@using System.Globalization
 @using YourBrand.Sales
 @using YourBrand.Portal.Services
 @inject ISubscriptionsClient SubscriptionsClient
@@ -7,20 +7,6 @@
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject IOrganizationProvider OrganizationProvider
-
-@page "/subscriptions"
-
-<AppPageTitle>Subscriptions</AppPageTitle>
-
-<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Subscriptions</MudText>
-
-<MudButton Variant="Variant.Filled" OnClick="CreateSubscription" Class="mb-2 me-2">New subscription</MudButton>
-
-<MudButton Variant="Variant.Filled" OnClick="CreateSubscriptionPlan" Class="mb-2 me-2">New subscription plan</MudButton>
-
-<MudButton Variant="Variant.Filled" Href="/subscriptions/types" Class="mb-2 me-2">Types</MudButton>
-
-<MudButton Variant="Variant.Filled" Href="/subscriptions/statuses" Class="mb-2 me-2">Statuses</MudButton>
 
 <MudTable T="Subscription" @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
@@ -103,6 +89,9 @@
 
     string organizationId;
 
+    [Parameter]
+    public string CustomerId { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
@@ -118,10 +107,12 @@
     {
         loading = true;
 
+        organizationId = (await OrganizationProvider.GetCurrentOrganizationAsync()).Id;
+
         try
         {
             var result = await SubscriptionsClient.GetSubscriptionsAsync(organizationId, selectedTypes?.Select(x => x.Id),
-                selectedStatuses?.Select(x => x.Id), null, state.Page +
+                selectedStatuses?.Select(x => x.Id), CustomerId, state.Page +
                 1,
                 state.PageSize,
                 state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel,
@@ -153,67 +144,9 @@
         await table.ReloadServerData();
     }
 
-
     private async Task OnSelectedStatusesChanged(IEnumerable<SubscriptionStatus?> selectedValues)
     {
         selectedStatuses = selectedValues;
         await table.ReloadServerData();
-    }
-
-    /*
-    private async Task DeleteSubscription(Subscription subscription)
-    {
-        var result = await DialogService.ShowMessageBox("Delete draft subscription", "Are you sure?", "Yes", "No");
-
-        if (!result.GetValueOrDefault())
-            return;
-
-        await SubscriptionsClient.DeleteSubscriptionAsync(subscription.Id);
-        await table.ReloadServerData();
-    }
-    */
-
-    private async Task CreateSubscription() 
-    {
-        var dialogParameters = new DialogParameters();
-        //dialogParameters.Add(nameof(SubscriptionItemDialog.SubscriptionId), order.Id);
-
-        var dialogRef = DialogService.Show<CreateSubscriptionOrder>("New subscription", dialogParameters, new DialogOptions
-            {
-                FullWidth = true,
-                MaxWidth = MaxWidth.Small,
-                CloseButton = true
-            });
-
-        var result = await dialogRef.Result;
-
-        if (result.Canceled)
-            return;
-
-        var order = (Order)result.Data;
-
-        NavigationManager.NavigateTo($"/orders/{order.OrderNo}");
-    }
-
-    private async Task CreateSubscriptionPlan()
-    {
-        var dialogParameters = new DialogParameters();
-        //dialogParameters.Add(nameof(SubscriptionItemDialog.SubscriptionId), order.Id);
-
-        var dialogRef = DialogService.Show<Plans.CreateSubscriptionPlan>("New subscription plan", dialogParameters, new DialogOptions
-            {
-                FullWidth = true,
-                MaxWidth = MaxWidth.Small,
-                CloseButton = true
-            });
-
-        var result = await dialogRef.Result;
-
-        if (result.Canceled)
-            return;
-
-        var order = (Subscription)result.Data;
-
-        //NavigationManager.NavigateTo($"/orders/{order.SubscriptionNo}");
     }
 }
