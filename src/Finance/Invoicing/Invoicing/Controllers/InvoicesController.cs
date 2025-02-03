@@ -16,9 +16,9 @@ namespace YourBrand.Invoicing.Controllers;
 public class InvoicesController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<ItemsResult<InvoiceDto>>> GetInvoicesAsync(string organizationId, int page, int pageSize, [FromQuery] InvoiceType[]? type, [FromQuery] int[]? status, [FromQuery] string? reference, string? sortBy, SortDirection? sortDirection, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ItemsResult<InvoiceDto>>> GetInvoicesAsync(string organizationId, string? customerId = null, int page = 1, int pageSize = 10, [FromQuery] InvoiceType[]? type = null, [FromQuery] int[]? status = null, [FromQuery] string? reference = null, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        var result = await mediator.Send(new GetInvoices(organizationId, page, pageSize, type, status, reference, sortBy, sortDirection), cancellationToken);
+        var result = await mediator.Send(new GetInvoices(organizationId, customerId, page, pageSize, type, status, reference, sortBy, sortDirection), cancellationToken);
         return Ok(result);
     }
 }

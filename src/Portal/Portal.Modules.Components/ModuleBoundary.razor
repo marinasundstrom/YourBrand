@@ -1,0 +1,15 @@
+@inject IModuleRegistry ModuleRegistry
+
+@if (ModuleRegistry.GetEnabledModules().Any(x => x.Id == Guid.Parse(ModuleId))) 
+{
+    @ChildContent
+}
+
+@code 
+{
+    [Parameter]
+    public string ModuleId { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

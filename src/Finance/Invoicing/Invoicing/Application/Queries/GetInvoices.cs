@@ -7,7 +7,7 @@ using YourBrand.Invoicing.Domain.Enums;
 
 namespace YourBrand.Invoicing.Application.Queries;
 
-public record GetInvoices(string OrganizationId, int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, int[]? Status = null, string? Reference = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<InvoiceDto>>
+public record GetInvoices(string OrganizationId, string? CustomerId = null, int Page = 1, int PageSize = 10, InvoiceType[]? Types = null, int[]? Status = null, string? Reference = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<InvoiceDto>>
 {
     public class Handler(IInvoicingContext context) : IRequestHandler<GetInvoices, ItemsResult<InvoiceDto>>
     {
@@ -30,6 +30,12 @@ public record GetInvoices(string OrganizationId, int Page = 1, int PageSize = 10
                 .OrderByDescending(x => x.Id)
                 .InOrganization(request.OrganizationId)
                 .AsQueryable();
+
+            if (request.CustomerId is not null)
+            {
+                //int customerId = int.Parse(request.CustomerId);
+                query = query.Where(i => i.Customer.Id == request.CustomerId);
+            }
 
             if (request.Reference is not null)
             {

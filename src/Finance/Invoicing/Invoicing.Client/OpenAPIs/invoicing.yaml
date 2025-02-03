@@ -856,18 +856,23 @@ paths:
         schema:
           type: string
         x-position: 1
+      - name: customerId
+        in: query
+        schema:
+          type: string
+        x-position: 2
       - name: page
         in: query
         schema:
           type: integer
           format: int32
-        x-position: 2
+        x-position: 3
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
-        x-position: 3
+        x-position: 4
       - name: type
         in: query
         style: form
@@ -877,7 +882,7 @@ paths:
           nullable: true
           items:
             $ref: '#/components/schemas/InvoiceType'
-        x-position: 4
+        x-position: 5
       - name: status
         in: query
         style: form
@@ -888,26 +893,26 @@ paths:
           items:
             type: integer
             format: int32
-        x-position: 5
+        x-position: 6
       - name: reference
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 6
+        x-position: 7
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 7
+        x-position: 8
       - name: sortDirection
         in: query
         schema:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/SortDirection'
-        x-position: 8
+        x-position: 9
       responses:
         200:
           description: ''

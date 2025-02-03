@@ -1,6 +1,7 @@
 @page "/customers/{Id:int}"
 @attribute [Authorize]
 @using Humanizer
+@using YourBrand.Portal.Modules
 @inject ICustomersClient CustomersClient
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
@@ -37,15 +38,26 @@ else
         @customer.Address.PostalCode @customer.Address.Locality<br />
         @customer.Address.SubAdministrativeArea @customer.Address.AdministrativeArea<br />
     </MudPaper>
+    
+    <ModuleBoundary ModuleId="@KnownsModulesIds.SalesModule">
 
+        <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-4">Orders</MudText>
 
-    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-4">Orders</MudText>
+        <YourBrand.Sales.OrderTable CustomerId="@(Id.ToString())" />
 
-    <YourBrand.Sales.OrderTable CustomerId="@(Id.ToString())" />
+        <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-4">Subscriptions</MudText>
 
-    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-4">Subscriptions</MudText>
+        <YourBrand.Sales.SubscriptionTable CustomerId="@(Id.ToString())" />
 
-    <YourBrand.Sales.SubscriptionTable CustomerId="@(Id.ToString())" />
+    </ModuleBoundary>
+
+    <ModuleBoundary ModuleId="@KnownsModulesIds.InvoicingModule">
+
+        <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-4">Invoices</MudText>
+
+        <YourBrand.Invoicing.InvoiceTable CustomerId="@(Id.ToString())" />
+    
+    </ModuleBoundary>
 }
 
 @code
