@@ -46,8 +46,8 @@ public class ModuleInitializer : IModuleInitializer
             options.SetName(() => resources["Timesheets"]);
             options.Icon = MudBlazor.Icons.Material.Filled.ListAlt;
             options.Href = "/timesheets";
-            options.RequiresAuthorization = true;
-            options.Roles = ["Administrator"];
+            //options.RequiresAuthorization = true;
+            //options.Roles = ["Administrator"];
         });
         group.CreateItem("generate-reports", () => resources["GenerateReport"], MudBlazor.Icons.Material.Filled.ListAlt, "/reports");
 

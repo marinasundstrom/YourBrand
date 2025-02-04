@@ -1,4 +1,5 @@
-﻿using YourBrand.Invoicing.Client;
+﻿using YourBrand.Identity;
+using YourBrand.Invoicing.Client;
 
 namespace YourBrand.TimeReport;
 
@@ -9,7 +10,7 @@ public static class ServiceExtensions
         services.AddInvoicingClients((sp, http) =>
         {
             http.BaseAddress = new Uri($"https://localhost:5174/api/invoicing/");
-        });
+        }, b => b.AddHttpMessageHandler<AuthForwardHandler>());
 
         return services;
     }

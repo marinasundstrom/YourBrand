@@ -64,6 +64,8 @@ var services = builder.Services;
 
 var configuration = builder.Configuration;
 
+services.AddScoped<AuthForwardHandler>();
+
 services
     .AddApplication(configuration)
     .AddInfrastructure(configuration)

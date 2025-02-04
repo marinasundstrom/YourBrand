@@ -88,6 +88,9 @@
 
     private async Task<TableData<TimeSheet>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
+        if (Organization is null) 
+            return new TableData<TimeSheet>();
+
         var page = await TimeSheetsClient.GetTimeSheetsAsync(Organization.Id, state.Page, state.PageSize, null, User?.Id, searchString,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc, cancellationToken);
 

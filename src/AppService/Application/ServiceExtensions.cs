@@ -1,9 +1,6 @@
-﻿using System.Net.Http.Headers;
-
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using YourBrand.Identity;
 using YourBrand.Notifications.Client;
 
 namespace YourBrand.Application;
@@ -14,7 +11,7 @@ public static class ServiceExtensions
     {
         services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(ServiceExtensions)));
 
-        services.AddScoped<Handler>();
+        services.AddScoped<AuthForwardHandler>();
 
         services.AddNotificationsClients((sp, http) =>
         {
@@ -22,19 +19,9 @@ public static class ServiceExtensions
         },
         builder =>
         {
-            builder.AddHttpMessageHandler<Handler>();
+            builder.AddHttpMessageHandler<AuthForwardHandler>();
         });
 
         return services;
-    }
-}
-
-public class Handler(IUserContext userContext) : DelegatingHandler
-{
-    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-    {
-        request.Headers.Authorization = new AuthenticationHeaderValue("bearer", userContext.GetAccessToken());
-
-        return base.SendAsync(request, cancellationToken);
     }
 }
