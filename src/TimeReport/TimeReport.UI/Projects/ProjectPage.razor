@@ -1,12 +1,16 @@
 ﻿@page "/projects/{projectId}"
 @attribute [Authorize]
-@using TimeReport.Projects.Activities
+@using TimeReport.Projects.Tasks
 @using TimeReport.Projects.Expenses
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
-@inject IActivitiesClient ActivitiesClient
+@inject ITasksClient TasksClient
 @inject IProjectsClient ProjectsClient
 @inject IExpensesClient ExpensesClient
+
+@using Task = System.Threading.Tasks.Task
+@using ProjectTask = YourBrand.TimeReport.Client.Task
+
 
 @if (project is null)
 {
@@ -25,26 +29,26 @@ else
         }
     </div>
 
-    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-6">Activities</MudText>
+    <MudText Typo="Typo.h4" GutterBottom="true" Class="mt-6">Tasks</MudText>
 
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewActivityClicked">New activity</MudButton>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="OnNewTaskClicked">New task</MudButton>
 
-    <MudTable T="Activity" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<Activity>>>(ServerReload))"
+    <MudTable T="ProjectTask" ServerData="@(new Func<TableState, CancellationToken, Task<TableData<ProjectTask>>>(ServerReload))"
               Hover="true" @ref="table" Class="mt-4" Elevation="25">
         <HeaderContent>
-            <MudTh><MudTableSortLabel T="Activity" SortLabel="Name">Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="Activity" SortLabel="Description">Description</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="Activity" SortLabel="ActivityType">Type</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel T="Activity" SortLabel="HourlyRate">Hourly Rate</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Task" SortLabel="Name">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Task" SortLabel="Description">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Task" SortLabel="TaskType">Type</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Task" SortLabel="HourlyRate">Hourly Rate</MudTableSortLabel></MudTh>
             <MudTh></MudTh>
         </HeaderContent>
-        <RowTemplate Context="activity">
-            <MudTd DataLabel="Name">@activity.Name</MudTd>
-            <MudTd DataLabel="Description">@activity.Description</MudTd>
-            <MudTd DataLabel="Type">@activity.ActivityType.Name</MudTd>
-            <MudTd DataLabel="Hourly Rate">@activity.HourlyRate?.FormatCurrency(currency)</MudTd>
+        <RowTemplate Context="task">
+            <MudTd DataLabel="Name">@task.Name</MudTd>
+            <MudTd DataLabel="Description">@task.Description</MudTd>
+            <MudTd DataLabel="Type">@task.TaskType.Name</MudTd>
+            <MudTd DataLabel="Hourly Rate">@task.HourlyRate?.FormatCurrency(currency)</MudTd>
             <MudTd>
-                <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditActivityClicked(activity)" />
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditTaskClicked(task)" />
                 @* <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteOption(option)" /> *@
             </MudTd>
         </RowTemplate>
@@ -133,7 +137,7 @@ else
         }
         else 
         {
-            <MudText Typo="Typo.h6" GutterBottom="true">Activity hours per month</MudText>
+            <MudText Typo="Typo.h6" GutterBottom="true">Task hours per month</MudText>
 
             <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
         }
@@ -144,7 +148,7 @@ else
     string currency = "SEK";
     Project? project;
     Data? data;
-    MudTable<Activity> table;
+    MudTable<ProjectTask> table;
     MudTable<ProjectMembership> table2;
     MudTable<Expense> table3;
     StatisticsSummary statisticsSummary;
@@ -178,12 +182,12 @@ else
         statisticsSummary = await ProjectsClient.GetStatisticsSummary2Async(Organization.Id, ProjectId);
     }
 
-    private async Task<TableData<Activity>> ServerReload(TableState state, CancellationToken cancellationToken)
+    private async Task<TableData<ProjectTask>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
-        var result = await ActivitiesClient.GetActivitiesAsync(Organization.Id, state.Page, state.PageSize, ProjectId, null, null,
+        var result = await TasksClient.GetTasksAsync(Organization.Id, state.Page, state.PageSize, ProjectId, null, null,
             state.SortLabel, state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortDirection == MudBlazor.SortDirection.Descending ? TimeReport.Client.SortDirection.Desc : TimeReport.Client.SortDirection.Asc, cancellationToken);
 
-        return new TableData<Activity>() { TotalItems = result.TotalItems, Items = result.Items };
+        return new TableData<ProjectTask>() { TotalItems = result.TotalItems, Items = result.Items };
     }
 
     private async Task<TableData<ProjectMembership>> ServerReload2(TableState state, CancellationToken cancellationToken)
@@ -202,12 +206,12 @@ else
         return new TableData<Expense>() { TotalItems = result.TotalItems, Items = result.Items };
     }
 
-    private async Task OnNewActivityClicked()
+    private async Task OnNewTaskClicked()
     {
         DialogParameters parameters = new();
-        parameters.Add(nameof(ActivityDialog.ProjectId), project.Id);
+        parameters.Add(nameof(TaskDialog.ProjectId), project.Id);
 
-        var dialogRef = DialogService.Show<ActivityDialog>("New activity", parameters);
+        var dialogRef = DialogService.Show<TaskDialog>("New task", parameters);
 
         var dialogResult = await dialogRef.Result;
 
@@ -217,12 +221,12 @@ else
         table.ReloadServerData();
     }
 
-    private async Task OnEditActivityClicked(Activity activity)
+    private async Task OnEditTaskClicked(ProjectTask task)
     {
         DialogParameters parameters = new();
-        parameters.Add(nameof(ActivityDialog.ActivityId), activity.Id);
+        parameters.Add(nameof(TaskDialog.TaskId), task.Id);
 
-        var dialogRef = DialogService.Show<ActivityDialog>($"Edit {activity.Name}", parameters);
+        var dialogRef = DialogService.Show<TaskDialog>($"Edit {task.Name}", parameters);
 
         var dialogResult = await dialogRef.Result;
 
@@ -263,7 +267,7 @@ else
         table2.ReloadServerData();
     }
 
-    async Task DeleteMembership(ProjectMembership membership)
+    async System.Threading.Tasks.Task DeleteMembership(ProjectMembership membership)
     {
         var modalResult = await DialogService.ShowMessageBox($"Revoke the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
@@ -281,7 +285,7 @@ else
         NavigationManager.NavigateTo($"/users/{membership.User.Id}");
     }
 
-    private async Task OnAddExpenseClicked()
+    private async System.Threading.Tasks.Task OnAddExpenseClicked()
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(ExpenseDialog.ProjectId), project.Id);
@@ -298,7 +302,7 @@ else
         statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync(Organization.Id);
     }
 
-    private async Task OnEditExpenseClicked(Expense expense)
+    private async System.Threading.Tasks.Task OnEditExpenseClicked(Expense expense)
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(ExpenseDialog.ProjectId), expense.Project.Id);

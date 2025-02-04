@@ -9,7 +9,7 @@ public record EntryCreatedEvent : DomainEvent
     {
         ProjectId = projectId;
         TimeSheetId = timeSheetId;
-        ActivityId = activityId;
+        TaskId = activityId;
         EntryId = entryId;
         Hours = hours;
     }
@@ -18,7 +18,7 @@ public record EntryCreatedEvent : DomainEvent
 
     public string TimeSheetId { get; }
 
-    public string ActivityId { get; }
+    public string TaskId { get; }
 
     public string EntryId { get; }
 

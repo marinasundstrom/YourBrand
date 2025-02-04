@@ -8,6 +8,9 @@ using YourBrand.Portal.Modules;
 using YourBrand.Portal.Navigation;
 using YourBrand.TimeReport.Client;
 
+using Task = System.Threading.Tasks.Task;
+using ProjectTask = YourBrand.TimeReport.Client.Task;
+
 namespace YourBrand.TimeReport;
 
 public class ModuleInitializer : IModuleInitializer

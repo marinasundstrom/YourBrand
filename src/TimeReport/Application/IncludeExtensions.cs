@@ -6,7 +6,7 @@ namespace YourBrand.TimeReport.Application;
 
 public static class IncludeExtensions
 {
-    public static IQueryable<Activity> IncludeAll(this IQueryable<Activity> source)
+    public static IQueryable<Domain.Entities.Task> IncludeAll(this IQueryable<Domain.Entities.Task> source)
     {
         return source
             .Include(a => a.CreatedBy)
@@ -63,7 +63,7 @@ public static class IncludeExtensions
             .Include(pg => pg.DeletedBy);
     }
 
-    public static IQueryable<ActivityType> IncludeAll(this IQueryable<ActivityType> source)
+    public static IQueryable<TaskType> IncludeAll(this IQueryable<TaskType> source)
     {
         return source
             .Include(at => at.Project)

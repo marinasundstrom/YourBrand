@@ -7,7 +7,7 @@ namespace YourBrand.TimeReport.Infrastructure.Persistence;
 
 public static class Seed
 {
-    public static async Task SeedAsync(this IServiceProvider app)
+    public static async System.Threading.Tasks.Task SeedAsync(this IServiceProvider app)
     {
         using var scope = app.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<TimeReportContext>();
@@ -26,14 +26,14 @@ public static class Seed
             await context.SaveChangesAsync();
         }
 
-        if (!context.ActivityTypes.Any())
+        if (!context.TaskTypes.Any())
         {
-            context.ActivityTypes.Add(new ActivityType("Chargeable", null)
+            context.TaskTypes.Add(new TaskType("Billable", null)
             {
                 OrganizationId = TenantConstants.OrganizationId
             });
 
-            context.ActivityTypes.Add(new ActivityType("Sick", null)
+            context.TaskTypes.Add(new TaskType("Not billable", null)
             {
                 OrganizationId = TenantConstants.OrganizationId
             });
@@ -80,7 +80,7 @@ public static class Seed
 
         context.Projects.Add(project);
 
-        var activity = new Activity
+        var activity = new Task
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Documentation",
@@ -91,9 +91,9 @@ public static class Seed
             CreatedById = "N/A"
         };
 
-        project.Activities.Add(activity);
+        project.Tasks.Add(activity);
 
-        var activity3 = new Activity
+        var activity3 = new Task
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Miscellaneous",
@@ -104,7 +104,7 @@ public static class Seed
             CreatedById = "N/A"
         };
 
-        project.Activities.Add(activity3);
+        project.Tasks.Add(activity3);
 
         var project2 = new Project
         {
@@ -117,7 +117,7 @@ public static class Seed
 
         context.Projects.Add(project2);
 
-        var activity2 = new Activity
+        var activity2 = new Task
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Project time",
@@ -131,7 +131,7 @@ public static class Seed
             CreatedById = "N/A"
         };
 
-        project2.Activities.Add(activity2);
+        project2.Tasks.Add(activity2);
 
         await context.SaveChangesAsync();
 

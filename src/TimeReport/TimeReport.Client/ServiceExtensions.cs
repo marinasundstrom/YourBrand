@@ -33,12 +33,12 @@ public static class ServiceExtensions
             .AddTypedClient<IProjectGroupsClient>((http, sp) => new ProjectGroupsClient(http)));
 
         builder(
-            services.AddHttpClient(nameof(IActivitiesClient), configureClient)
-            .AddTypedClient<IActivitiesClient>((http, sp) => new ActivitiesClient(http)));
+            services.AddHttpClient(nameof(ITasksClient), configureClient)
+            .AddTypedClient<ITasksClient>((http, sp) => new TasksClient(http)));
 
         builder(
-            services.AddHttpClient(nameof(IActivityTypesClient), configureClient)
-            .AddTypedClient<IActivityTypesClient>((http, sp) => new ActivityTypesClient(http)));
+            services.AddHttpClient(nameof(ITaskTypesClient), configureClient)
+            .AddTypedClient<ITaskTypesClient>((http, sp) => new TaskTypesClient(http)));
 
         builder(
             services.AddHttpClient(nameof(IReportsClient), configureClient)

@@ -53,7 +53,7 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<EntryDto>> CreateEntry(string organizationId, [FromRoute] string timeSheetId, CreateEntryDto dto, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateEntryCommand(organizationId, timeSheetId,  dto.ProjectId, dto.ActivityId, DateOnly.FromDateTime(dto.Date), dto.Hours, dto.Description), cancellationToken);
+        var result = await mediator.Send(new CreateEntryCommand(organizationId, timeSheetId,  dto.ProjectId, dto.TaskId, DateOnly.FromDateTime(dto.Date), dto.Hours, dto.Description), cancellationToken);
         return this.HandleResult(result);
     }
 
@@ -77,12 +77,12 @@ public class TimeSheetsController(IMediator mediator) : ControllerBase
         return this.HandleResult(r);
     }
 
-    [HttpDelete("{timeSheetId}/{activityId}")]
+    [HttpDelete("{timeSheetId}/{taskId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult> DeleteActvityEntries(string organizationId, [FromRoute] string timeSheetId, [FromRoute] string activityId, CancellationToken cancellationToken)
+    public async Task<ActionResult> DeleteActvityEntries(string organizationId, [FromRoute] string timeSheetId, [FromRoute] string taskId, CancellationToken cancellationToken)
     {
-        var r = await mediator.Send(new DeleteActivityCommand(organizationId, timeSheetId, activityId), cancellationToken);
+        var r = await mediator.Send(new DeleteTaskCommand(organizationId, timeSheetId, taskId), cancellationToken);
         return this.HandleResult(r);
     }
 

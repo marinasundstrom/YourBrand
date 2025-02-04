@@ -16,7 +16,7 @@ public record GetProjectStatisticsForProjectQuery(string OrganizationId, string 
         {
             var project = await context.Projects
                 .InOrganization(request.OrganizationId)
-                .Include(x => x.Activities)
+                .Include(x => x.Tasks)
                 .ThenInclude(x => x.Entries)
                 .AsNoTracking()
                 .AsSplitQuery()
@@ -44,13 +44,13 @@ public record GetProjectStatisticsForProjectQuery(string OrganizationId, string 
             var firstMonth = DateOnly.FromDateTime(firstDate);
             var lastMonth = DateOnly.FromDateTime(lastDate);
 
-            foreach (var activity in project.Activities)
+            foreach (var task in project.Tasks)
             {
                 List<decimal> values = new();
 
                 foreach (var month in months)
                 {
-                    var value = activity.Entries
+                    var value = task.Entries
                         .Where(e => e.Date.Year == month.Year && e.Date.Month == month.Month)
                         .Select(x => x.Hours.GetValueOrDefault())
                         .Sum();
@@ -58,7 +58,7 @@ public record GetProjectStatisticsForProjectQuery(string OrganizationId, string 
                     values.Add((decimal)value);
                 }
 
-                series.Add(new Series(activity.Name, values));
+                series.Add(new Series(task.Name, values));
             }
 
             return new Data(

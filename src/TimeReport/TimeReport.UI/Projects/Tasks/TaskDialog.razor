@@ -1,0 +1,105 @@
+﻿@using System.ComponentModel.DataAnnotations
+@inject ITasksClient TasksClient
+@inject ITaskTypesClient TaskTypesClient
+@inject IStringLocalizer<TaskDialog> T
+
+@using Task = System.Threading.Tasks.Task
+@using ProjectTask = YourBrand.TimeReport.Client.Task
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudTextField Label="@(T["Name"])" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
+
+            <MudAutocomplete T="TaskType" Label="Task Type" Class="mb-6" Variant="Variant.Outlined" @bind-Value="TaskType" SearchFunc="@Search1"
+                                 For="() => TaskType"
+                                 ToStringFunc="u => u?.Name"
+                                 ResetValueOnEmptyText="true"
+                                 CoerceText="true" CoerceValue="true"
+                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+
+            <MudTextField Lines="3" Label="@(T["Description"])" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
+
+            <MudNumericField Label="@(T["HourlyRate"])" Class="mb-6" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" @bind-Value="HourlyRate" For="() => HourlyRate" HideSpinButtons="true" />
+
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton OnClick="() => Modal.Cancel()">@T["Cancel"]</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">@(TaskId is null ? T["Create"] : T["SaveChanges"])</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+</EditForm>
+
+@code {
+    [CascadingParameter] IMudDialogInstance Modal { get; set; }
+
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
+    [Parameter] public string? ProjectId { get; set; }
+
+    [Parameter] public string? TaskId { get; set; }
+
+    [Required]
+    public string Name { get; set; }
+
+    [Required]
+    public TaskType TaskType { get; set; }
+
+    public string? Description { get; set; }
+
+    public decimal? HourlyRate { get; set; }
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        if (TaskId is not null)
+        {
+            var result = await TasksClient.GetTaskAsync(Organization.Id, TaskId);
+
+            Name = result.Name;
+            TaskType = result.TaskType;
+            Description = result.Description;
+            HourlyRate = result.HourlyRate;
+        }
+    }
+
+    async System.Threading.Tasks.Task OnSubmit()
+    {
+        ProjectTask? result = null;
+
+        if (TaskId is null)
+        {
+            result = await TasksClient.CreateTaskAsync(Organization.Id, ProjectId, new CreateTask
+            {
+                Name = Name,
+                TaskTypeId = TaskType.Id,
+                Description = Description,
+                HourlyRate = HourlyRate
+            });
+        }
+        else
+        {
+            result = await TasksClient.UpdateTaskAsync(Organization.Id, TaskId, new UpdateTask
+            {
+                Name = Name,
+                TaskTypeId = TaskType.Id,
+                Description = Description,
+                HourlyRate = HourlyRate
+            });
+        }
+
+        Modal.Close(DialogResult.Ok(result));
+    }
+
+    private async Task<IEnumerable<TaskType>> Search1(string value, CancellationToken cancellationToken)
+    {
+        var page = await TaskTypesClient.GetTaskTypesAsync(Organization.Id, 0, 10, null!, value, null, null, cancellationToken);
+
+        return page.Items;
+    }
+}

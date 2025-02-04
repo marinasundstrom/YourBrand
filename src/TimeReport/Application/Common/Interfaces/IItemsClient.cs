@@ -4,9 +4,9 @@ namespace YourBrand.TimeReport.Application.Common.Interfaces;
 
 public interface IItemsClient
 {
-    Task ItemAdded(User item);
+    System.Threading.Tasks.Task ItemAdded(User item);
 
-    Task ItemDeleted(string id, string name);
+    System.Threading.Tasks.Task ItemDeleted(string id, string name);
 
-    Task ImageUploaded(string id, string image);
+    System.Threading.Tasks.Task ImageUploaded(string id, string image);
 }

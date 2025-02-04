@@ -2,6 +2,9 @@
 @inject IProjectsClient ProjectsClient
 @inject IUsersClient UsersClient
 
+@using Task = System.Threading.Tasks.Task
+@using ProjectTask = YourBrand.TimeReport.Client.Task
+
 <EditForm Model="@this" OnValidSubmit="OnSubmit">
     <DataAnnotationsValidator />
 

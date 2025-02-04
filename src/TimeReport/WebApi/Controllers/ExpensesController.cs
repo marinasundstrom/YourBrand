@@ -43,9 +43,9 @@ public class ExpensesController(IMediator mediator) : ControllerBase
     {
         try
         {
-            var activity = await mediator.Send(new CreateExpenseCommand(organizationId, projectId, createExpenseDto.Date, createExpenseDto.ExpenseTypeId, createExpenseDto.Amount, createExpenseDto.Description), cancellationToken);
+            var task = await mediator.Send(new CreateExpenseCommand(organizationId, projectId, createExpenseDto.Date, createExpenseDto.ExpenseTypeId, createExpenseDto.Amount, createExpenseDto.Description), cancellationToken);
 
-            return Ok(activity);
+            return Ok(task);
         }
         catch (Exception)
         {
@@ -70,9 +70,9 @@ public class ExpensesController(IMediator mediator) : ControllerBase
     {
         try
         {
-            var activity = await mediator.Send(new UpdateExpenseCommand(organizationId, id, updateExpenseDto.Date, updateExpenseDto.Amount, updateExpenseDto.Description), cancellationToken);
+            var task = await mediator.Send(new UpdateExpenseCommand(organizationId, id, updateExpenseDto.Date, updateExpenseDto.Amount, updateExpenseDto.Description), cancellationToken);
 
-            return Ok(activity);
+            return Ok(task);
         }
         catch (Exception)
         {

@@ -1,5 +1,5 @@
-using YourBrand.TimeReport.Application.Activities;
-using YourBrand.TimeReport.Application.Activities.ActivityTypes;
+using YourBrand.TimeReport.Application.Tasks;
+using YourBrand.TimeReport.Application.Tasks.TaskTypes;
 using YourBrand.TimeReport.Application.Organizations;
 using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Application.Projects.Expenses;
@@ -37,14 +37,14 @@ public static class Mapper
                 projectMembership.From, projectMembership.To);
     }
 
-    public static ActivityDto ToDto(this Domain.Entities.Activity activity)
+    public static TaskDto ToDto(this Domain.Entities.Task task)
     {
-        return new(activity.Id, activity.Name, activity.ActivityType.ToDto(), activity.Description, activity.HourlyRate, activity.Project.ToDto());
+        return new(task.Id, task.Name, task.TaskType.ToDto(), task.Description, task.HourlyRate, task.Project.ToDto());
     }
 
-    public static ActivityTypeDto ToDto(this Domain.Entities.ActivityType activityType)
+    public static TaskTypeDto ToDto(this Domain.Entities.TaskType taskType)
     {
-        return new(activityType.Id, activityType.Name, activityType.Description, activityType.ExcludeHours, activityType.Project?.ToDto());
+        return new(taskType.Id, taskType.Name, taskType.Description, taskType.ExcludeHours, taskType.Project?.ToDto());
     }
 
     public static ExpenseDto ToDto(this Domain.Entities.Expense expense)
@@ -59,19 +59,19 @@ public static class Mapper
 
     public static TimeSheetDto ToDto(this Domain.Entities.TimeSheet timeSheet, IEnumerable<ReportingPeriod> period)
     {
-        var activities = timeSheet.Activities
+        var tasks = timeSheet.Tasks
             .OrderBy(e => e.Created)
             .Select(a => a.ToDto())
             .ToArray();
 
         return new(timeSheet.Id, timeSheet.Year, timeSheet.Week, timeSheet.From, timeSheet.To, (TimeSheetStatusDto)timeSheet.Status, timeSheet.User.ToDto(),
-                activities, period.Select(x => new ReportingPeriodDto(x.Month, x.Status == EntryStatus.Locked)));
+                tasks, period.Select(x => new ReportingPeriodDto(x.Month, x.Status == EntryStatus.Locked)));
     }
 
-    public static TimeSheetActivityDto ToDto(this Domain.Entities.TimeSheetActivity activity)
+    public static TimeSheetTaskDto ToDto(this Domain.Entities.TimeSheetTask task)
     {
-        return new(activity.Activity.Id, activity.Activity.Name, activity.Activity.Description, activity.Project.ToDto(),
-                    activity.Entries.OrderBy(e => e.Date).Select(e => e.ToTimeSheetEntryDto()));
+        return new(task.Task.Id, task.Task.Name, task.Task.Description, task.Project.ToDto(),
+                    task.Entries.OrderBy(e => e.Date).Select(e => e.ToTimeSheetEntryDto()));
     }
 
     public static TimeSheetEntryDto ToTimeSheetEntryDto(this Domain.Entities.Entry entry)
@@ -81,7 +81,7 @@ public static class Mapper
 
     public static EntryDto ToDto(this Domain.Entities.Entry entry)
     {
-        return new(entry.Id, entry.Project.ToDto(), entry.Activity.ToDto(), entry.Date.ToDateTime(TimeOnly.Parse("01:00")), entry.Hours, entry.Description, (EntryStatusDto)entry.MonthGroup.Status);
+        return new(entry.Id, entry.Project.ToDto(), entry.Task.ToDto(), entry.Date.ToDateTime(TimeOnly.Parse("01:00")), entry.Hours, entry.Description, (EntryStatusDto)entry.MonthGroup.Status);
     }
 
     public static AbsenceDto ToDto(this Domain.Entities.Absence absence)

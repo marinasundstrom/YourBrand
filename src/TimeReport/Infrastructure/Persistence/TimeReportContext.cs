@@ -65,9 +65,9 @@ public class TimeReportContext(
 
     public DbSet<ExpenseType> ExpenseTypes { get; set; } = null!;
 
-    public DbSet<Activity> Activities { get; set; } = null!;
+    public DbSet<Domain.Entities.Task> Tasks { get; set; } = null!;
 
-    public DbSet<ActivityType> ActivityTypes { get; set; } = null!;
+    public DbSet<TaskType> TaskTypes { get; set; } = null!;
 
     public DbSet<Entry> Entries { get; set; } = null!;
 
@@ -75,7 +75,7 @@ public class TimeReportContext(
 
     public DbSet<ReportingPeriod> ReportingPeriods { get; set; } = null!;
 
-    public DbSet<TimeSheetActivity> TimeSheetActivities { get; set; } = null!;
+    public DbSet<TimeSheetTask> TimeSheetTasks { get; set; } = null!;
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

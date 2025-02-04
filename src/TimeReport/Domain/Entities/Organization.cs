@@ -10,7 +10,7 @@ public class Organization : AuditableEntity<OrganizationId>, IOrganization, ISof
     readonly HashSet<User> _users = new HashSet<User>();
     readonly HashSet<Organization> _subOrganizations = new HashSet<Organization>();
     readonly HashSet<Project> _projects = new HashSet<Project>();
-    readonly HashSet<ActivityType> _activityTypes = new HashSet<ActivityType>();
+    readonly HashSet<TaskType> _activityTypes = new HashSet<TaskType>();
     readonly HashSet<OrganizationUser> _organizationUsers = new HashSet<OrganizationUser>();
 
     protected Organization()
@@ -24,9 +24,9 @@ public class Organization : AuditableEntity<OrganizationId>, IOrganization, ISof
         Description = description;
     }
 
-    public ActivityType AddActivityType(string name, string? description)
+    public TaskType AddTaskType(string name, string? description)
     {
-        ActivityType activityType = new(name, description);
+        TaskType activityType = new(name, description);
         activityType.Project = null;
         activityType.Organization = this;
         _activityTypes.Add(activityType);
@@ -66,7 +66,7 @@ public class Organization : AuditableEntity<OrganizationId>, IOrganization, ISof
 
     public IReadOnlyCollection<Project> Project => _projects;
 
-    public IReadOnlyCollection<ActivityType> ActivityTypes => _activityTypes;
+    public IReadOnlyCollection<TaskType> TaskTypes => _activityTypes;
 
     public IReadOnlyCollection<OrganizationUser> OrganizationUsers => _organizationUsers;
 

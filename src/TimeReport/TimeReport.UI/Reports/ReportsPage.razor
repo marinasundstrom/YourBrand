@@ -7,6 +7,9 @@
 @inject IReportsClient ReportsClient
 @inject IJSRuntime JS
 
+@using Task = System.Threading.Tasks.Task
+@using ProjectTask = YourBrand.TimeReport.Client.Task
+
 <AppPageTitle>Reports</AppPageTitle>
 
 @if (projects is null)

@@ -6,6 +6,9 @@
 @inject ITeamsClient TeamsClient
 @inject IUsersClient UsersClient
 
+@using Task = System.Threading.Tasks.Task
+@using ProjectTask = YourBrand.TimeReport.Client.Task
+
 <AppPageTitle>Teams</AppPageTitle>
 
 @if (Team is not null)

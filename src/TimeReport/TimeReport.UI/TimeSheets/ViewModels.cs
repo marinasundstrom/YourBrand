@@ -4,9 +4,9 @@ using YourBrand.TimeReport.Client;
 
 namespace YourBrand.TimeReport.TimeSheets;
 
-public class ActivityModel
+public class TaskModel
 {
-    public Activity? Activity { get; set; }
+    public ProjectTask? Task { get; set; }
 
     [ValidateComplexType]
     public List<EntryModel> Entries { get; set; } = new List<EntryModel>();

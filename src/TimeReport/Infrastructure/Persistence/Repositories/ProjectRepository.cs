@@ -12,8 +12,8 @@ public sealed class ProjectRepository(TimeReportContext context) : IProjectRepos
     {
         return await context.Projects
                 .Include(x => x.Organization)
-                .Include(x => x.Activities)
-                .ThenInclude(x => x.ActivityType)
+                .Include(x => x.Tasks)
+                .ThenInclude(x => x.TaskType)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
@@ -21,8 +21,8 @@ public sealed class ProjectRepository(TimeReportContext context) : IProjectRepos
     {
         return context.Projects
                 .Include(x => x.Organization)
-                .Include(x => x.Activities)
-                .ThenInclude(x => x.ActivityType)
+                .Include(x => x.Tasks)
+                .ThenInclude(x => x.TaskType)
                 .AsQueryable();
     }
 }

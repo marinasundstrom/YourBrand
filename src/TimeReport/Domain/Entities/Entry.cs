@@ -14,19 +14,19 @@ public class Entry : AuditableEntity<string>, IHasTenant, IHasOrganization
     {
     }
 
-    public Entry(User user, Project project, Activity activity, TimeSheet timeSheet, TimeSheetActivity timeSheetActivity,
+    public Entry(User user, Project project, Task task, TimeSheet timeSheet, TimeSheetTask timeSheetTask,
         DateOnly date, double? hours, string? description) : base(Guid.NewGuid().ToString())
     {
         User = user;
         Project = project;
-        Activity = activity;
+        Task = task;
         TimeSheet = timeSheet;
-        TimeSheetActivity = timeSheetActivity;
+        TimeSheetTask = timeSheetTask;
         Date = date;
         Hours = hours;
         Description = description;
 
-        AddDomainEvent(new EntryCreatedEvent(project.Id, timeSheet.Id, activity.Id, Id, hours));
+        AddDomainEvent(new EntryCreatedEvent(project.Id, timeSheet.Id, task.Id, Id, hours));
     }
 
     public TenantId TenantId { get; set; }
@@ -39,11 +39,11 @@ public class Entry : AuditableEntity<string>, IHasTenant, IHasOrganization
 
     public Project Project { get; private set; } = null!;
 
-    public Activity Activity { get; private set; } = null!;
+    public Task Task { get; private set; } = null!;
 
     public TimeSheet TimeSheet { get; private set; } = null!;
 
-    public TimeSheetActivity TimeSheetActivity { get; private set; } = null!;
+    public TimeSheetTask TimeSheetTask { get; private set; } = null!;
 
     public ReportingPeriod? MonthGroup { get; set; }
 
@@ -76,6 +76,6 @@ public class Entry : AuditableEntity<string>, IHasTenant, IHasOrganization
 
         Hours = value;
 
-        AddDomainEvent(new EntryHoursUpdatedEvent(Project.Id, TimeSheet.Id, Activity.Id, Id, value));
+        AddDomainEvent(new EntryHoursUpdatedEvent(Project.Id, TimeSheet.Id, Task.Id, Id, value));
     }
 }

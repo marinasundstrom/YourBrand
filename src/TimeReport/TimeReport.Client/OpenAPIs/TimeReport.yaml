@@ -421,385 +421,6 @@ paths:
                 $ref: '#/components/schemas/ItemsResultOfTeamMembership'
       security:
       - JWT: []
-  /Activities:
-    get:
-      tags:
-      - Activities
-      operationId: Activities_GetActivities
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: page
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 0
-        x-position: 2
-      - name: pageSize
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 10
-        x-position: 3
-      - name: projectId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 4
-      - name: userId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 5
-      - name: searchString
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 6
-      - name: sortBy
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 7
-      - name: sortDirection
-        in: query
-        schema:
-          oneOf:
-          - nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/SortDirection'
-        x-position: 8
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ItemsResultOfActivity'
-      security:
-      - JWT: []
-    post:
-      tags:
-      - Activities
-      operationId: Activities_CreateActivity
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: projectId
-        in: query
-        schema:
-          type: string
-        x-position: 2
-      requestBody:
-        x-name: createActivityDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateActivity'
-        required: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Activity'
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /Activities/{id}:
-    get:
-      tags:
-      - Activities
-      operationId: Activities_GetActivity
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Activity'
-      security:
-      - JWT: []
-    put:
-      tags:
-      - Activities
-      operationId: Activities_UpdateActivity
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      requestBody:
-        x-name: updateActivityDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateActivity'
-        required: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Activity'
-      security:
-      - JWT: []
-    delete:
-      tags:
-      - Activities
-      operationId: Activities_DeleteActivity
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      responses:
-        200:
-          description: ''
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /Activities/{id}/Statistics/Summary:
-    get:
-      tags:
-      - Activities
-      operationId: Activities_GetStatisticsSummary
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StatisticsSummary'
-      security:
-      - JWT: []
-  /ActivityTypes:
-    get:
-      tags:
-      - ActivityTypes
-      operationId: ActivityTypes_GetActivityTypes
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: page
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 0
-        x-position: 2
-      - name: pageSize
-        in: query
-        schema:
-          type: integer
-          format: int32
-          default: 10
-        x-position: 3
-      - name: projectId
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 4
-      - name: searchString
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 5
-      - name: sortBy
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 6
-      - name: sortDirection
-        in: query
-        schema:
-          oneOf:
-          - nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/SortDirection'
-        x-position: 7
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ItemsResultOfActivityType'
-      security:
-      - JWT: []
-    post:
-      tags:
-      - ActivityTypes
-      operationId: ActivityTypes_CreateActivityType
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      requestBody:
-        x-name: createActivityTypeDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateActivityType'
-        required: true
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActivityType'
-      security:
-      - JWT:
-        - Administrator
-        - Manager
-  /ActivityTypes/{id}:
-    get:
-      tags:
-      - ActivityTypes
-      operationId: ActivityTypes_GetActivityType
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActivityType'
-      security:
-      - JWT: []
-    put:
-      tags:
-      - ActivityTypes
-      operationId: ActivityTypes_UpdateActivityType
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      requestBody:
-        x-name: updateActivityTypeDto
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateActivityType'
-        required: true
-        x-position: 3
-      responses:
-        200:
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActivityType'
-      security:
-      - JWT: []
-    delete:
-      tags:
-      - ActivityTypes
-      operationId: ActivityTypes_DeleteActivityType
-      parameters:
-      - name: organizationId
-        in: query
-        schema:
-          type: string
-        x-position: 1
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-        x-position: 2
-      responses:
-        200:
-          description: ''
-      security:
-      - JWT:
-        - Administrator
-        - Manager
   /Expenses:
     get:
       tags:
@@ -1934,6 +1555,385 @@ paths:
                 format: binary
       security:
       - JWT: []
+  /Tasks:
+    get:
+      tags:
+      - Tasks
+      operationId: Tasks_GetTasks
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: projectId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: userId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 7
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 8
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfTask'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Tasks
+      operationId: Tasks_CreateTask
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: projectId
+        in: query
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: createTaskDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTask'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /Tasks/{id}:
+    get:
+      tags:
+      - Tasks
+      operationId: Tasks_GetTask
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Tasks
+      operationId: Tasks_UpdateTask
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: updateTaskDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTask'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Tasks
+      operationId: Tasks_DeleteTask
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /Tasks/{id}/Statistics/Summary:
+    get:
+      tags:
+      - Tasks
+      operationId: Tasks_GetStatisticsSummary
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticsSummary'
+      security:
+      - JWT: []
+  /TaskTypes:
+    get:
+      tags:
+      - TaskTypes
+      operationId: TaskTypes_GetTaskTypes
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: projectId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfTaskType'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - TaskTypes
+      operationId: TaskTypes_CreateTaskType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: createTaskTypeDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskType'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskType'
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /TaskTypes/{id}:
+    get:
+      tags:
+      - TaskTypes
+      operationId: TaskTypes_GetTaskType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskType'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - TaskTypes
+      operationId: TaskTypes_UpdateTaskType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: updateTaskTypeDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskType'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskType'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - TaskTypes
+      operationId: TaskTypes_DeleteTaskType
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT:
+        - Administrator
+        - Manager
   /TimeSheets:
     get:
       tags:
@@ -2216,7 +2216,7 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /TimeSheets/{timeSheetId}/{activityId}:
+  /TimeSheets/{timeSheetId}/{taskId}:
     delete:
       tags:
       - TimeSheets
@@ -2233,7 +2233,7 @@ paths:
         schema:
           type: string
         x-position: 2
-      - name: activityId
+      - name: taskId
         in: path
         required: true
         schema:
@@ -2792,170 +2792,6 @@ components:
           type: string
           format: date-time
           nullable: true
-    ItemsResultOfActivity:
-      type: object
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Activity'
-        totalItems:
-          type: integer
-          format: int32
-    Activity:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        activityType:
-          $ref: '#/components/schemas/ActivityType'
-        description:
-          type: string
-          nullable: true
-        hourlyRate:
-          type: number
-          format: decimal
-          nullable: true
-        project:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/Project'
-    ActivityType:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-          nullable: true
-        excludeHours:
-          type: boolean
-        project:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/Project'
-    Project:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-          nullable: true
-        organization:
-          $ref: '#/components/schemas/Organization'
-        teams:
-          type: array
-          items:
-            $ref: '#/components/schemas/Team'
-    CreateActivity:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        activityTypeId:
-          type: string
-        description:
-          type: string
-          nullable: true
-        hourlyRate:
-          type: number
-          format: decimal
-          nullable: true
-    UpdateActivity:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        activityTypeId:
-          type: string
-        description:
-          type: string
-          nullable: true
-        hourlyRate:
-          type: number
-          format: decimal
-          nullable: true
-    StatisticsSummary:
-      type: object
-      additionalProperties: false
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/StatisticsSummaryEntry'
-    StatisticsSummaryEntry:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        value:
-          type: number
-          format: double
-          nullable: true
-        value2:
-          type: number
-          format: decimal
-          nullable: true
-        unit:
-          type: string
-          nullable: true
-    ItemsResultOfActivityType:
-      type: object
-      additionalProperties: false
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ActivityType'
-        totalItems:
-          type: integer
-          format: int32
-    CreateActivityType:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-          nullable: true
-        organizationId:
-          type: string
-        projectId:
-          type: string
-          nullable: true
-        excludeHours:
-          type: boolean
-    UpdateActivityType:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-          nullable: true
-        organizationId:
-          type: string
-        projectId:
-          type: string
-          nullable: true
-        excludeHours:
-          type: boolean
     ItemsResultOfExpense:
       type: object
       additionalProperties: false
@@ -3004,6 +2840,23 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/Project'
+    Project:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        organization:
+          $ref: '#/components/schemas/Organization'
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
     CreateExpense:
       type: object
       additionalProperties: false
@@ -3140,6 +2993,31 @@ components:
         organizationId:
           type: string
           nullable: true
+    StatisticsSummary:
+      type: object
+      additionalProperties: false
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatisticsSummaryEntry'
+    StatisticsSummaryEntry:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        value:
+          type: number
+          format: double
+          nullable: true
+        value2:
+          type: number
+          format: decimal
+          nullable: true
+        unit:
+          type: string
+          nullable: true
     Data:
       type: object
       additionalProperties: false
@@ -3227,6 +3105,128 @@ components:
       enum:
       - 0
       - 1
+    ItemsResultOfTask:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        totalItems:
+          type: integer
+          format: int32
+    Task:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        taskType:
+          $ref: '#/components/schemas/TaskType'
+        description:
+          type: string
+          nullable: true
+        hourlyRate:
+          type: number
+          format: decimal
+          nullable: true
+        project:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Project'
+    TaskType:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        excludeHours:
+          type: boolean
+        project:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Project'
+    CreateTask:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        taskTypeId:
+          type: string
+        description:
+          type: string
+          nullable: true
+        hourlyRate:
+          type: number
+          format: decimal
+          nullable: true
+    UpdateTask:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        taskTypeId:
+          type: string
+        description:
+          type: string
+          nullable: true
+        hourlyRate:
+          type: number
+          format: decimal
+          nullable: true
+    ItemsResultOfTaskType:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskType'
+        totalItems:
+          type: integer
+          format: int32
+    CreateTaskType:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        organizationId:
+          type: string
+        projectId:
+          type: string
+          nullable: true
+        excludeHours:
+          type: boolean
+    UpdateTaskType:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        organizationId:
+          type: string
+        projectId:
+          type: string
+          nullable: true
+        excludeHours:
+          type: boolean
     ItemsResultOfTimeSheet:
       type: object
       additionalProperties: false
@@ -3260,10 +3260,10 @@ components:
           $ref: '#/components/schemas/TimeSheetStatus'
         user:
           $ref: '#/components/schemas/User'
-        activities:
+        tasks:
           type: array
           items:
-            $ref: '#/components/schemas/TimeSheetActivity'
+            $ref: '#/components/schemas/TimeSheetTask'
         months:
           type: array
           items:
@@ -3281,7 +3281,7 @@ components:
       - Closed
       - Approved
       - Disapproved
-    TimeSheetActivity:
+    TimeSheetTask:
       type: object
       additionalProperties: false
       properties:
@@ -3342,8 +3342,8 @@ components:
           type: string
         project:
           $ref: '#/components/schemas/Project'
-        activity:
-          $ref: '#/components/schemas/Activity'
+        task:
+          $ref: '#/components/schemas/Task'
         date:
           type: string
           format: date-time
@@ -3387,7 +3387,7 @@ components:
         projectId:
           type: string
           nullable: true
-        activityId:
+        taskId:
           type: string
           nullable: true
         date:

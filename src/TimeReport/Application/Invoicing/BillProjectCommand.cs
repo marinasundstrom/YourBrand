@@ -19,14 +19,14 @@ public record BillProjectCommand(string OrganizationId, string ProjectId, DateTi
             var entries = await context.Entries
                 .InOrganization(request.OrganizationId)
                 .Include(e => e.Project)
-                .Include(e => e.Activity)
+                .Include(e => e.Task)
                 .AsSplitQuery()
                 .Where(e => e.Project.Id == request.ProjectId)
                 .Where(e => e.Date > from && e.Date < to)
                 .Where(e => e.TimeSheet.Status == Domain.Entities.TimeSheetStatus.Approved)
                 .ToArrayAsync(cancellationToken);
 
-            var entriesByActivity = entries.GroupBy(x => x.Activity);
+            var entriesByTask = entries.GroupBy(x => x.Task);
 
             if (!entries.Any())
             {
@@ -37,10 +37,10 @@ public record BillProjectCommand(string OrganizationId, string ProjectId, DateTi
             {
                 OrganizationId = request.OrganizationId,
                 Date = DateTime.Now,
-                Note = entriesByActivity.First().Key.Project.Name
+                Note = entriesByTask.First().Key.Project.Name
             });
 
-            foreach (var entryGroup in entriesByActivity)
+            foreach (var entryGroup in entriesByTask)
             {
                 var description = entryGroup.Key.Name;
                 var hourlyRate = entryGroup.Key.HourlyRate.GetValueOrDefault();

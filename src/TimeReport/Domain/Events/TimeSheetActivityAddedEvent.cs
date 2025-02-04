@@ -4,18 +4,18 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Events;
 
-public record TimeSheetActivityAddedEvent : DomainEvent
+public record TimeSheetTaskAddedEvent : DomainEvent
 {
-    public TimeSheetActivityAddedEvent(string timeSheetId, string timeSheetActivityId, string activityId)
+    public TimeSheetTaskAddedEvent(string timeSheetId, string timeSheetTaskId, string activityId)
     {
         TimeSheetId = timeSheetId;
-        TimeSheetActivityId = timeSheetActivityId;
-        ActivityId = activityId;
+        TimeSheetTaskId = timeSheetTaskId;
+        TaskId = activityId;
     }
 
     public string TimeSheetId { get; }
 
-    public string TimeSheetActivityId { get; }
+    public string TimeSheetTaskId { get; }
 
-    public string ActivityId { get; }
+    public string TaskId { get; }
 }

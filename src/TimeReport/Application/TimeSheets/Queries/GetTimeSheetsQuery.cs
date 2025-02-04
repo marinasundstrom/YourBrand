@@ -23,7 +23,7 @@ public record GetTimeSheetsQuery(string OrganizationId, int Page = 0, int PageSi
 
             if (request.ProjectId is not null)
             {
-                query = query.Where(timeSheet => timeSheet.Activities.Any(x => x.Project.Id == request.ProjectId));
+                query = query.Where(timeSheet => timeSheet.Tasks.Any(x => x.Project.Id == request.ProjectId));
             }
 
             if (request.UserId is not null)

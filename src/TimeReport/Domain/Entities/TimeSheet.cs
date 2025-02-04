@@ -11,7 +11,7 @@ namespace YourBrand.TimeReport.Domain.Entities;
 
 public class TimeSheet : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletableWithAudit<User>
 {
-    private readonly HashSet<TimeSheetActivity> _activities = new HashSet<TimeSheetActivity>();
+    private readonly HashSet<TimeSheetTask> _activities = new HashSet<TimeSheetTask>();
     private readonly HashSet<Entry> _entries = new HashSet<Entry>();
 
     public TimeSheet(User user, int year, int week) : base(Guid.NewGuid().ToString())
@@ -52,32 +52,32 @@ public class TimeSheet : AuditableEntity<string>, IHasTenant, IHasOrganization, 
         Status = status;
     }
 
-    public IReadOnlyCollection<TimeSheetActivity> Activities => _activities;
+    public IReadOnlyCollection<TimeSheetTask> Tasks => _activities;
 
     public IReadOnlyCollection<Entry> Entries => _entries;
 
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }
 
-    public IEnumerable<Entry> GetEntriesByActivityId(string activityId)
+    public IEnumerable<Entry> GetEntriesByTaskId(string activityId)
     {
-        return Entries.Where(x => x.Activity.Id == activityId);
+        return Entries.Where(x => x.Task.Id == activityId);
     }
 
     public bool IsDeleted { get; set; }
 
     public User? DeletedBy { get; set; }
 
-    public TimeSheetActivity AddActivity(Activity activity)
+    public TimeSheetTask AddTask(Task activity)
     {
-        var tsActivity = new TimeSheetActivity(this, activity.Project, activity);
-        tsActivity.OrganizationId = OrganizationId;
+        var tsTask = new TimeSheetTask(this, activity.Project, activity);
+        tsTask.OrganizationId = OrganizationId;
 
-        _activities.Add(tsActivity);
-        return tsActivity;
+        _activities.Add(tsTask);
+        return tsTask;
     }
 
-    public void DeleteActivity(TimeSheetActivity activity)
+    public void DeleteTask(TimeSheetTask activity)
     {
         foreach (var entry in _entries.ToArray().Where(e => e.Status == EntryStatus.Unlocked))
         {
@@ -86,7 +86,7 @@ public class TimeSheet : AuditableEntity<string>, IHasTenant, IHasOrganization, 
 
         _activities.Remove(activity);
 
-        AddDomainEvent(new TimeSheetActivityAddedEvent(Id, activity.Id, activity.Activity.Id));
+        AddDomainEvent(new TimeSheetTaskAddedEvent(Id, activity.Id, activity.Task.Id));
     }
 
     internal void AddEntry(Entry entry)
@@ -94,10 +94,10 @@ public class TimeSheet : AuditableEntity<string>, IHasTenant, IHasOrganization, 
         _entries.Add(entry);
     }
 
-    public TimeSheetActivity? GetActivity(string activityId)
+    public TimeSheetTask? GetTask(string activityId)
     {
         return _activities
-               .FirstOrDefault(x => x.TimeSheet.Id == this.Id && x.Activity.Id == activityId);
+               .FirstOrDefault(x => x.TimeSheet.Id == this.Id && x.Task.Id == activityId);
     }
 
     public double GetTotalHours()

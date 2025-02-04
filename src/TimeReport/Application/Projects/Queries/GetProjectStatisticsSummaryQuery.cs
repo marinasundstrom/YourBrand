@@ -31,13 +31,13 @@ public record GetProjectStatisticsSummaryQuery(string OrganizationId) : IRequest
 
             var revenue = await context.Entries
                 .InOrganization(request.OrganizationId)
-                .Where(e => e.Activity.HourlyRate.GetValueOrDefault() > 0)
-                .SumAsync(e => e.Activity.HourlyRate.GetValueOrDefault() * (decimal)e.Hours.GetValueOrDefault());
+                .Where(e => e.Task.HourlyRate.GetValueOrDefault() > 0)
+                .SumAsync(e => e.Task.HourlyRate.GetValueOrDefault() * (decimal)e.Hours.GetValueOrDefault());
 
             var expenses = await context.Entries
                 .InOrganization(request.OrganizationId)
-                 .Where(e => e.Activity.HourlyRate.GetValueOrDefault() < 0)
-                 .SumAsync(e => e.Activity.HourlyRate.GetValueOrDefault() * (decimal)e.Hours.GetValueOrDefault());
+                 .Where(e => e.Task.HourlyRate.GetValueOrDefault() < 0)
+                 .SumAsync(e => e.Task.HourlyRate.GetValueOrDefault() * (decimal)e.Hours.GetValueOrDefault());
 
             expenses -= await context.Expenses
                  .InOrganization(request.OrganizationId)

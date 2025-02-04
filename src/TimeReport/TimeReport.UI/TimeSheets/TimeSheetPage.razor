@@ -14,13 +14,16 @@
 @inject ISnackbar Snackbar
 @inject IUsersClient UsersClient
 @inject ITimeSheetsClient TimeSheetsClient
-@inject IActivitiesClient ActivitiesClient
+@inject ITasksClient TasksClient
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 
+@using Task = System.Threading.Tasks.Task
+@using ProjectTask = YourBrand.TimeReport.Client.Task
+
 <AppPageTitle>Timesheet</AppPageTitle>
 
-@if (timeSheet is not null && ActivitiesModels is not null && Year is not null && Week is not null)
+@if (timeSheet is not null && TasksModels is not null && Year is not null && Week is not null)
 {
     <AppPageTitle>Week @Week - @Year</AppPageTitle>
 
@@ -36,11 +39,11 @@
     <EditForm Model="@this">
         <ObjectGraphDataAnnotationsValidator />
 
-        <MudTable T="ActivityModel" Items="ActivitiesModels" Hover="true" Loading="@isLoading"
+        <MudTable T="TaskModel" Items="TasksModels" Hover="true" Loading="@isLoading"
                   GroupBy="@_groupDefinition" Elevation="25">
 
             <ToolBarContent>
-                <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="NewActivity" Disabled="timeSheet?.Status != TimeSheetStatus.Open">New activity</MudButton>
+                <MudButton Variant="@Variant.Filled" Color="Color.Primary" Class="me-2" StartIcon="@Icons.Material.Filled.Add" OnClick="NewTask" Disabled="timeSheet?.Status != TimeSheetStatus.Open">New task</MudButton>
                 <MudButton StartIcon="@Icons.Material.Filled.List" Class="me-2">Templates</MudButton>
                 <AuthorizeView Roles="Administrator,Manager" Context="usersList">
                     <UserSelector ServiceKey="@ServiceKeys.UserSearchProviderKey"  Label="User" Variant="Variant.Outlined" Value="User" ValueChanged="OnUserChanged"
@@ -61,7 +64,7 @@
 
             <HeaderContent>
                 <MudTh colspan="2">
-                    Activity
+                    Task
                 </MudTh>
                 @foreach (var date in DateTimeHelpers.GetDatesInWeek(Year.GetValueOrDefault(), Week.GetValueOrDefault()))
                 {
@@ -80,25 +83,25 @@
                 </MudTh>
             </GroupHeaderTemplate>
 
-            <RowTemplate Context="activityLine">
-                <MudTd colspan="2" DataLabel="Activity">
-                    @activityLine.Activity.Name
+            <RowTemplate Context="taskLine">
+                <MudTd colspan="2" DataLabel="Task">
+                    @taskLine.Task.Name
                 </MudTd>
-                @foreach (var entry in activityLine.Entries)
+                @foreach (var entry in taskLine.Entries)
                 {
                     <MudTd DataLabel="@entry.Date.DayOfWeek.ToString()">
-                        <div @onclick="() => FocusEntry(activityLine, entry)">
-                            <MudNumericField Disabled="@(timeSheet.Status != TimeSheetStatus.Open || entry.Status == EntryStatus.Locked)" T="double?" Class="@((IsWeekend(entry.Date) ? "weekendEntry" : null) + " " + IsEntrySelectedCss(entry))" Immediate="true" DebounceInterval="debounceInterval" Value="entry.Hours" ValueChanged="(value) => OnHoursChanged(value, activityLine, entry)" Variant="Variant.Filled" Margin="Margin.Dense" HideSpinButtons="true" />
+                        <div @onclick="() => FocusEntry(taskLine, entry)">
+                            <MudNumericField Disabled="@(timeSheet.Status != TimeSheetStatus.Open || entry.Status == EntryStatus.Locked)" T="double?" Class="@((IsWeekend(entry.Date) ? "weekendEntry" : null) + " " + IsEntrySelectedCss(entry))" Immediate="true" DebounceInterval="debounceInterval" Value="entry.Hours" ValueChanged="(value) => OnHoursChanged(value, taskLine, entry)" Variant="Variant.Filled" Margin="Margin.Dense" HideSpinButtons="true" />
                         </div>
                     </MudTd>
                 }
                 <MudTd DataLabel="Total">
-                    <span>@activityLine.TotalHours h</span>
+                    <span>@taskLine.TotalHours h</span>
                 </MudTd>
                 <MudTd>
                     @if (timeSheet?.Status == TimeSheetStatus.Open)
                     {
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteActivity(activityLine)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="async () => await DeleteTask(taskLine)" />
                     }
                 </MudTd>
             </RowTemplate>
@@ -106,7 +109,7 @@
             <FooterContent>
                 <MudTh Class="mud-table-cell-custom-group" colspan="9"></MudTh>
                 <MudTd>
-                    <MudText Typo="Typo.h6">@ActivitiesModels.Sum(x => x.TotalHours) h</MudText>
+                    <MudText Typo="Typo.h6">@TasksModels.Sum(x => x.TotalHours) h</MudText>
                 </MudTd>
                 <MudTd></MudTd>
             </FooterContent>
@@ -121,8 +124,8 @@
         {
             <MudCard Class="mt-4">
                 <MudCardContent>
-                    <MudText Typo="@Typo.h6" Class="mb-2">@selectedActivity.Activity.Project.Name: @selectedActivity.Activity.Name - @selectedEntry.Date.ToShortDateString()</MudText>
-                    <MudTextField Disabled="@(timeSheet.Status != TimeSheetStatus.Open || selectedEntry.Status == EntryStatus.Locked)" T="string?" Immediate="true" DebounceInterval="debounceInterval" Value="selectedEntry.Description" ValueChanged="(value) => OnDescriptionChanged(value, selectedActivity, selectedEntry)" Variant="Variant.Filled" Label="Description" Lines="3" />
+                    <MudText Typo="@Typo.h6" Class="mb-2">@selectedTask.Task.Project.Name: @selectedTask.Task.Name - @selectedEntry.Date.ToShortDateString()</MudText>
+                    <MudTextField Disabled="@(timeSheet.Status != TimeSheetStatus.Open || selectedEntry.Status == EntryStatus.Locked)" T="string?" Immediate="true" DebounceInterval="debounceInterval" Value="selectedEntry.Description" ValueChanged="(value) => OnDescriptionChanged(value, selectedTask, selectedEntry)" Variant="Variant.Filled" Label="Description" Lines="3" />
                 </MudCardContent>
             </MudCard>
         }
@@ -139,14 +142,14 @@ else
 
     bool isLoading = false;
     TimeSheet timeSheet;
-    IEnumerable<Activity> activities = null;
+    IEnumerable<ProjectTask> tasks = null;
 
     Portal.User? User { get; set; }
     IEnumerable<Portal.User> Users { get; set; } = null;
 
-    List<ActivityModel>? ActivitiesModels { get; } = new List<ActivityModel>();
+    List<TaskModel>? TasksModels { get; } = new List<TaskModel>();
 
-    ActivityModel? selectedActivity;
+    TaskModel? selectedTask;
     EntryModel? selectedEntry;
 
     [CascadingParameter(Name = "Organization")]
@@ -185,8 +188,8 @@ else
                 User = Users.FirstOrDefault(x => x.Id == user.FindFirst(c => c.Type == "sub").Value); */
             }
 
-            var page2 = await ActivitiesClient.GetActivitiesAsync(Organization.Id, 0, 10, null, null, null, null, null);
-            activities = page2.Items;
+            var page2 = await TasksClient.GetTasksAsync(Organization.Id, 0, 10, null, null, null, null, null);
+            tasks = page2.Items;
         }
         catch (ApiException<ProblemDetails> e)
         {
@@ -219,9 +222,9 @@ else
 
     protected async Task LoadTimeSheet()
     {
-        selectedActivity = null;
+        selectedTask = null;
         selectedEntry = null;
-        ActivitiesModels.Clear();
+        TasksModels.Clear();
 
         isLoading = true;
 
@@ -253,20 +256,20 @@ else
             return;
         }
 
-        foreach (var activity in timeSheet.Activities)
+        foreach (var task in timeSheet.Tasks)
         {
-            var activityModel = new ActivityModel
+            var taskModel = new TaskModel
             {
-                Activity = activities.FirstOrDefault(x => x.Id == activity.Id)
+                Task = tasks.FirstOrDefault(x => x.Id == task.Id)
             };
 
-            activity.Entries = activity.Entries.OrderBy(x => x.Date).ToList();
+            task.Entries = task.Entries.OrderBy(x => x.Date).ToList();
 
-            ActivitiesModels.Add(activityModel);
+            TasksModels.Add(taskModel);
 
             foreach (var dayDate in DateTimeHelpers.GetDatesInWeek(Year.GetValueOrDefault(), Week.GetValueOrDefault()))
             {
-                var entry = activity.Entries.FirstOrDefault(x => x.Date.Date == dayDate.Date);
+                var entry = task.Entries.FirstOrDefault(x => x.Date.Date == dayDate.Date);
 
                 EntryModel? entryModel = null;
 
@@ -282,7 +285,7 @@ else
                         Status = value.GetValueOrDefault() ? EntryStatus.Locked : EntryStatus.Unlocked
                     };
 
-                    activityModel.Entries.Add(entryModel);
+                    taskModel.Entries.Add(entryModel);
 
                     continue;
                 }
@@ -296,39 +299,39 @@ else
                     Status = entry.Status
                 };
 
-                activityModel.Entries.Add(entryModel);
+                taskModel.Entries.Add(entryModel);
             }
         }
 
         isLoading = false;
     }
 
-    async Task NewActivity()
+    async Task NewTask()
     {
         var user = (await authenticationStateTask).User;
 
         var userId = user.FindFirst(c => c.Type == "sub").Value;
 
         DialogParameters parameters = new();
-        parameters.Add(nameof(NewTimeSheetActivityDialog.UserId), User?.Id ?? userId);
-        parameters.Add(nameof(NewTimeSheetActivityDialog.Year), Year);
-        parameters.Add(nameof(NewTimeSheetActivityDialog.Week), Week);
+        parameters.Add(nameof(NewTimeSheetTaskDialog.UserId), User?.Id ?? userId);
+        parameters.Add(nameof(NewTimeSheetTaskDialog.Year), Year);
+        parameters.Add(nameof(NewTimeSheetTaskDialog.Week), Week);
 
-        var dialogRef = DialogService.Show<NewTimeSheetActivityDialog>("New activity", parameters);
+        var dialogRef = DialogService.Show<NewTimeSheetTaskDialog>("New task", parameters);
         var dialogResult = await dialogRef.Result;
 
         if (dialogResult.Canceled)
             return;
 
-        var obj = (ActivityModel)dialogResult.Data; ;
+        var obj = (TaskModel)dialogResult.Data; ;
 
-        if (ActivitiesModels.Any(x => x.Activity.Id == obj.Activity.Id))
+        if (TasksModels.Any(x => x.Task.Id == obj.Task.Id))
         {
-            Snackbar.Add("Activity has already been added.", Severity.Info);
+            Snackbar.Add("Task has already been added.", Severity.Info);
             return;
         }
 
-        ActivitiesModels.Add(obj);
+        TasksModels.Add(obj);
 
         foreach (var entryModel in obj.Entries)
         {
@@ -340,16 +343,16 @@ else
         }
     }
 
-    async Task DeleteActivity(ActivityModel activityLine)
+    async Task DeleteTask(TaskModel taskLine)
     {
-        var result = await DialogService.ShowMessageBox("Delete activity?", "This will delete all entries for this activity. Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBox("Delete task?", "This will delete all entries for this task. Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;
 
         try
         {
-            await TimeSheetsClient.DeleteActvityEntriesAsync(Organization.Id, timeSheet.Id, activityLine.Activity.Id);
+            await TimeSheetsClient.DeleteActvityEntriesAsync(Organization.Id, timeSheet.Id, taskLine.Task.Id);
 
             await LoadTimeSheet();
         }
@@ -361,7 +364,7 @@ else
         }
         catch (Exception)
         {
-            Snackbar.Add("Failed to delete activity", Severity.Error);
+            Snackbar.Add("Failed to delete task", Severity.Error);
         }
     }
 
@@ -375,12 +378,12 @@ else
         NavigationManager.NavigateTo($"/timesheet/{Year}/{Week}?userId={user.Id}", replace: true); ;
     }
 
-    private TableGroupDefinition<ActivityModel> _groupDefinition = new()
+    private TableGroupDefinition<TaskModel> _groupDefinition = new()
     {
         GroupName = "Project",
         Indentation = false,
         Expandable = true,
-        Selector = (e) => new { e.Activity.Project.Id, e.Activity.Project.Name }
+        Selector = (e) => new { e.Task.Project.Id, e.Task.Project.Name }
     };
 
     string? IsEntrySelectedCss(EntryModel entry)
@@ -390,9 +393,9 @@ else
         return null;
     }
 
-    void FocusEntry(ActivityModel activity, EntryModel entry)
+    void FocusEntry(TaskModel task, EntryModel entry)
     {
-        selectedActivity = activity;
+        selectedTask = task;
         selectedEntry = entry;
     }
 
@@ -416,7 +419,7 @@ else
         return $"/Timesheet/{Year}/{Week + 1}";
     }
 
-    async Task OnHoursChanged(double? value, ActivityModel activity, EntryModel entry)
+    async Task OnHoursChanged(double? value, TaskModel task, EntryModel entry)
     {
         var oldValue = entry.Hours;
         entry.Hours = value;
@@ -429,12 +432,12 @@ else
             {
                 if (entry.Id is null)
                 {
-                    var a = activity.Activity;
+                    var a = task.Task;
 
                     var result = await TimeSheetsClient.CreateEntryAsync(Organization.Id, timeSheet.Id, new CreateEntry
                     {
                         ProjectId = a.Project.Id,
-                        ActivityId = a.Id,
+                        TaskId = a.Id,
                         Date = entry.Date,
                         Hours = value,
                         Description = entry.Description
@@ -472,7 +475,7 @@ else
         });
     }
 
-    async Task OnDescriptionChanged(string? value, ActivityModel activity, EntryModel entry)
+    async Task OnDescriptionChanged(string? value, TaskModel task, EntryModel entry)
     {
         var oldValue = entry.Description;
         entry.Description = value;
@@ -485,12 +488,12 @@ else
             {
                 if (entry.Id is null)
                 {
-                    var a = activity.Activity;
+                    var a = task.Task;
 
                     var result = await TimeSheetsClient.CreateEntryAsync(Organization.Id, timeSheet.Id, new CreateEntry
                     {
                         ProjectId = a.Project.Id,
-                        ActivityId = a.Id,
+                        TaskId = a.Id,
                         Date = entry.Date,
                         Hours = null,
                         Description = value
@@ -562,9 +565,9 @@ else
             await LoadTimeSheet();
 
             /*
-            foreach (var activity in ActivitiesModels)
+            foreach (var task in TasksModels)
             {
-                foreach (var entryModel in activity.Entries)
+                foreach (var entryModel in task.Entries)
                 {
                     var value = timeSheet?.Months.Any(x => entryModel.Date.Month == x.Month);
 
@@ -593,7 +596,7 @@ else
     {
         get
         {
-            var entries = ActivitiesModels.SelectMany(a => a.Entries);
+            var entries = TasksModels.SelectMany(a => a.Entries);
 
             return entries.Any()
                 && entries.All(e => e.Status == EntryStatus.Unlocked)

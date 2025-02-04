@@ -19,7 +19,7 @@ public record GetProjectStatisticsSummaryForProjectQuery(string OrganizationId, 
                 .Include(p => p.Entries)
                 .ThenInclude(x => x.User)
                 .Include(p => p.Entries)
-                .ThenInclude(x => x.Activity)
+                .ThenInclude(x => x.Task)
                 .Include(p => p.Expenses)
                 .AsSplitQuery()
                 .AsNoTracking()
@@ -34,12 +34,12 @@ public record GetProjectStatisticsSummaryForProjectQuery(string OrganizationId, 
                 .Sum(e => e.Hours.GetValueOrDefault());
 
             var revenue = project.Entries
-                .Where(e => e.Activity.HourlyRate.GetValueOrDefault() > 0)
-                .Sum(e => e.Activity.HourlyRate.GetValueOrDefault() * (decimal)e.Hours.GetValueOrDefault());
+                .Where(e => e.Task.HourlyRate.GetValueOrDefault() > 0)
+                .Sum(e => e.Task.HourlyRate.GetValueOrDefault() * (decimal)e.Hours.GetValueOrDefault());
 
             var expenses = project.Entries
-                 .Where(e => e.Activity.HourlyRate.GetValueOrDefault() < 0)
-                 .Sum(e => e.Activity.HourlyRate.GetValueOrDefault() * (decimal)e.Hours.GetValueOrDefault());
+                 .Where(e => e.Task.HourlyRate.GetValueOrDefault() < 0)
+                 .Sum(e => e.Task.HourlyRate.GetValueOrDefault() * (decimal)e.Hours.GetValueOrDefault());
 
             expenses -= project.Expenses
                  .Sum(e => e.Amount);

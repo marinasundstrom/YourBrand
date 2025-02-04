@@ -1,0 +1,105 @@
+@using System.Linq.Expressions
+@inject ITasksClient TasksClient
+@inject IDialogService DialogService
+
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="YourBrand.TimeReport.Client.Task" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+            For="For" SearchFunc="SearchTasks" ToStringFunc="(x) => x.Name"
+            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                @*<MudText Typo="Typo.body2">@context2.Ca</MudText> *@
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+    
+    @if(ShowAddButton) 
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddTask" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Task";
+
+    [Parameter]
+    public YourBrand.TimeReport.Client.Task Value { get; set; }
+
+    [Parameter]
+    public EventCallback<YourBrand.TimeReport.Client.Task> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<YourBrand.TimeReport.Client.Task>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    public string? ProjectId { get; set; }
+
+    [Parameter]
+    public string? OrganizationId { get; set; }
+
+    [Parameter]
+    public string? UserId { get; set; }
+
+    [Parameter]
+    public bool ShowAddButton { get; set; }
+
+    async System.Threading.Tasks.Task<IEnumerable<YourBrand.TimeReport.Client.Task>> SearchTasks(string text,
+    CancellationToken cancellationToken)
+    {
+        try
+        {
+            var results = await TasksClient.GetTasksAsync(OrganizationId, 0, 10, ProjectId, UserId, text, null, null, cancellationToken);
+            return results.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return null;
+    }
+
+    async System.Threading.Tasks.Task AddTask()
+    {
+        try
+        {
+            var parameters = new DialogParameters();
+
+            var type = System.Reflection.Assembly.Load("Showroom.UI")
+                .GetType("YourBrand.Showroom.Tasks.TaskDialog");
+
+            var dialogReference = DialogService.Show(type, "New Task", parameters, new DialogOptions {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+
+            var result = await dialogReference.Result;
+
+            if(result.Canceled)
+                return;
+
+            Value = (YourBrand.TimeReport.Client.Task)result.Data;
+
+            await ValueChanged.InvokeAsync(Value);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+}

@@ -25,7 +25,7 @@ public record CreateReportCommand(string OrganizationId, string[] ProjectIds, st
                 .Include(p => p.TimeSheet)
                 .ThenInclude(p => p.User)
                 .Include(p => p.Project)
-                .Include(p => p.Activity)
+                .Include(p => p.Task)
                 .Where(p => request.ProjectIds.Any(x => x == p.Project.Id))
                 .Where(p => p.Date >= startDate2 && p.Date <= endDate2)
                 .AsSplitQuery();
@@ -90,13 +90,13 @@ public record CreateReportCommand(string OrganizationId, string[] ProjectIds, st
                             headerRow = row - 1;
                         }
 
-                        var activityGroups = project.GroupBy(x => x.Activity);
+                        var taskGroups = project.GroupBy(x => x.Task);
 
-                        foreach (var activityGroup in activityGroups)
+                        foreach (var taskGroup in taskGroups)
                         {
-                            var data = activityGroup
+                            var data = taskGroup
                                 .OrderBy(e => e.Date)
-                                .Select(e => new { e.Date, User = e.TimeSheet.User.GetDisplayName(), Project = e.Project.Name, Activity = e.Activity.Name, e.Hours, e.Description, Status = e.Status.ToString(), e.TimeSheet.Id });
+                                .Select(e => new { e.Date, User = e.TimeSheet.User.GetDisplayName(), Project = e.Project.Name, Task = e.Task.Name, e.Hours, e.Description, Status = e.Status.ToString(), e.TimeSheet.Id });
 
                             worksheet.Cells[row, 1]
                                 .LoadFromCollection(data);

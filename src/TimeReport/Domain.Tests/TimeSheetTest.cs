@@ -11,7 +11,7 @@ namespace YourBrand.TimeReport.Domain.Tests;
 
 public class TimeSheetTest
 {
-    private readonly Activity _activity = null!;
+    private readonly Task _activity = null!;
     private readonly User _user = null!;
 
     public TimeSheetTest()
@@ -22,7 +22,7 @@ public class TimeSheetTest
 
         organization.AddProject(project);
 
-        ActivityType activityType = organization.AddActivityType("Test activity type", "Desc");
+        TaskType activityType = organization.AddActivityType("Test activity type", "Desc");
 
         _activity = new("Activity", activityType, "Des");
 

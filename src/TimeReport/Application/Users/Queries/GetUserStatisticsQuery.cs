@@ -17,7 +17,7 @@ public record GetUserStatisticsQuery(string UserId, DateTime? From = null, DateT
             var projects = await context.Projects
                 .Include(x => x.Memberships)
                 .ThenInclude(x => x.User)
-                .Include(x => x.Activities)
+                .Include(x => x.Tasks)
                 .ThenInclude(x => x.Entries)
                 .ThenInclude(x => x.User)
                 .Where(x => x.Memberships.Any(x => x.User.Id == request.UserId))
@@ -48,7 +48,7 @@ public record GetUserStatisticsQuery(string UserId, DateTime? From = null, DateT
 
                 foreach (var month in months)
                 {
-                    var value = project.Activities.SelectMany(a => a.Entries)
+                    var value = project.Tasks.SelectMany(a => a.Entries)
                         .Where(e => e.Date.Year == month.Year && e.Date.Month == month.Month)
                         .Where(e => e.User.Id == request.UserId)
                         .Select(x => x.Hours.GetValueOrDefault())
