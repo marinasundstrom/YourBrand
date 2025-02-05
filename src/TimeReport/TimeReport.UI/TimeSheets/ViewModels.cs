@@ -6,7 +6,7 @@ namespace YourBrand.TimeReport.TimeSheets;
 
 public class TaskModel
 {
-    public ProjectTask? Task { get; set; }
+    public YourBrand.TimeReport.Client.Task? Task { get; set; }
 
     [ValidateComplexType]
     public List<EntryModel> Entries { get; set; } = new List<EntryModel>();
