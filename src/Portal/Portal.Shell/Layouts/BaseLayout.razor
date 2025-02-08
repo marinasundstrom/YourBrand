@@ -8,9 +8,10 @@
 @inject IThemeManager ThemeManager
 @inject ILocalStorageService LocalStorage
 
+<MudThemeProvider IsDarkMode="@(ThemeManager.CurrentColorScheme == ColorScheme.Dark)" Theme="ThemeManager.Theme" />
+
 <OrganizationProviderWrap>
 
-    <MudThemeProvider IsDarkMode="@(ThemeManager.CurrentColorScheme == ColorScheme.Dark)" Theme="ThemeManager.Theme" />
     <MudPopoverProvider />
     <MudDialogProvider />
     <MudSnackbarProvider />
@@ -29,7 +30,7 @@
             </MudScrollToTop>
         </MudMainContent>
     </MudLayout>
-    
+
 </OrganizationProviderWrap>
 
 @code {
