@@ -2,11 +2,14 @@
 @inject IOrganizationProvider OrganizationProvider
 @implements IDisposable
 
-<CascadingValue Name="Organization" Value="organization">
+@if (organization is not null) 
+{
+    <CascadingValue Name="Organization" Value="organization">
 
-    @ChildContent
-    
-</CascadingValue>
+        @ChildContent
+        
+    </CascadingValue>
+}
 
 @code 
 {
