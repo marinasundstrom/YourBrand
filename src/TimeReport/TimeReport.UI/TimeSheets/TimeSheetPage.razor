@@ -23,8 +23,16 @@
 
 <AppPageTitle>Timesheet</AppPageTitle>
 
-@if (timeSheet is not null && TasksModels is not null && Year is not null && Week is not null)
+@if (timeSheet is not null && TasksModels is not null)
 {
+    var date = DateTime.Now.Date;
+
+    if (Year is null && Week is null)
+    {
+        Year = date.Year;
+        Week = date.GetCurrentWeek();
+    }
+
     <AppPageTitle>Week @Week - @Year</AppPageTitle>
 
     <MudText Typo="Typo.h5">@timeSheet?.User?.GetDisplayName()</MudText>
@@ -142,6 +150,11 @@
 }
 else 
 {
+    Console.WriteLine($"timeSheet: {timeSheet is not null}");
+    Console.WriteLine($"TaskModels: {TasksModels is not null}");
+    Console.WriteLine($"Year: { Year is not null}");
+    Console.WriteLine($"Week: { Week is not null}");
+
     <LoadingIndicator />
 }
 
@@ -210,6 +223,10 @@ else
         {
             Snackbar.Add("Could not load data from server.", Severity.Error);
             return;
+        }
+        finally 
+        {
+            isLoading = false;      
         }
 
         await LoadTimeSheet();
