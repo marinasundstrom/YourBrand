@@ -3260,10 +3260,14 @@ components:
           $ref: '#/components/schemas/TimeSheetStatus'
         user:
           $ref: '#/components/schemas/User'
-        tasks:
+        projects:
           type: array
           items:
-            $ref: '#/components/schemas/TimeSheetTask'
+            $ref: '#/components/schemas/TimeSheetProject'
+        daySummaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DaySummary'
         months:
           type: array
           items:
@@ -3281,6 +3285,20 @@ components:
       - Closed
       - Approved
       - Disapproved
+    TimeSheetProject:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSheetTask'
+        daySummaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DaySummary'
     TimeSheetTask:
       type: object
       additionalProperties: false
@@ -3325,6 +3343,16 @@ components:
       enum:
       - Unlocked
       - Locked
+    DaySummary:
+      type: object
+      additionalProperties: false
+      properties:
+        date:
+          type: string
+          format: date
+        hours:
+          type: number
+          format: double
     ReportingPeriod:
       type: object
       additionalProperties: false

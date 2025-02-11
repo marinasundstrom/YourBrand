@@ -80,7 +80,7 @@ public static class Seed
 
         context.Projects.Add(project);
 
-        var activity = new Task
+        var task = new Task
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Documentation",
@@ -91,9 +91,9 @@ public static class Seed
             CreatedById = "N/A"
         };
 
-        project.Tasks.Add(activity);
+        project.Tasks.Add(task);
 
-        var activity3 = new Task
+        var task3 = new Task
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Miscellaneous",
@@ -104,7 +104,7 @@ public static class Seed
             CreatedById = "N/A"
         };
 
-        project.Tasks.Add(activity3);
+        project.Tasks.Add(task3);
 
         var project2 = new Project
         {
@@ -117,7 +117,7 @@ public static class Seed
 
         context.Projects.Add(project2);
 
-        var activity2 = new Task
+        var task2 = new Task
         {
             Id = Guid.NewGuid().ToString(),
             Name = "Project time",
@@ -131,7 +131,7 @@ public static class Seed
             CreatedById = "N/A"
         };
 
-        project2.Tasks.Add(activity2);
+        project2.Tasks.Add(task2);
 
         await context.SaveChangesAsync();
 

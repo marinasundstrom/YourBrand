@@ -59,16 +59,36 @@ public static class Mapper
 
     public static TimeSheetDto ToDto(this Domain.Entities.TimeSheet timeSheet, IEnumerable<ReportingPeriod> period)
     {
-        var tasks = timeSheet.Tasks
-            .OrderBy(e => e.Created)
-            .Select(a => a.ToDto())
-            .ToArray();
+        var projects = timeSheet.Tasks
+            .OrderBy(t => t.Created)
+            .GroupBy(t => t.Project);
 
-        return new(timeSheet.Id, timeSheet.Year, timeSheet.Week, timeSheet.From, timeSheet.To, (TimeSheetStatusDto)timeSheet.Status, timeSheet.User.ToDto(),
-                tasks, period.Select(x => new ReportingPeriodDto(x.Month, x.Status == EntryStatus.Locked)));
+        var projectDts = projects.Select(x => {
+            var project = x.Key;
+            var tasks = timeSheet.Tasks
+                .OrderBy(e => e.Created)
+                .Select(a => a.ToTimeSheetTaskDto())
+                .ToArray();
+
+            var daySums = tasks
+                .SelectMany(x => x.Entries)
+                .GroupBy(x => x.Date)
+                .Select(x => new DaySummaryDto(DateOnly.FromDateTime(x.Key), x.Sum(x2 => x2.Hours.GetValueOrDefault())));
+
+            return new TimeSheetProjectDto(project.Id, tasks, daySums);
+        });
+
+        var daySums = timeSheet.Tasks
+            .SelectMany(x => x.Entries)
+            .GroupBy(x => x.Date)
+            .Select(x => new DaySummaryDto(x.Key, x.Sum(x2 => x2.Hours.GetValueOrDefault())));
+
+        return new(timeSheet.Id, 
+                timeSheet.Year, timeSheet.Week, timeSheet.From, timeSheet.To, (TimeSheetStatusDto)timeSheet.Status, timeSheet.User.ToDto(),
+                projectDts, daySums, period.Select(x => new ReportingPeriodDto(x.Month, x.Status == EntryStatus.Locked)));
     }
 
-    public static TimeSheetTaskDto ToDto(this Domain.Entities.TimeSheetTask task)
+    public static TimeSheetTaskDto ToTimeSheetTaskDto(this Domain.Entities.TimeSheetTask task)
     {
         return new(task.Task.Id, task.Task.Name, task.Task.Description, task.Project.ToDto(),
                     task.Entries.OrderBy(e => e.Date).Select(e => e.ToTimeSheetEntryDto()));

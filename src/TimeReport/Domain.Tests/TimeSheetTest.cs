@@ -11,7 +11,7 @@ namespace YourBrand.TimeReport.Domain.Tests;
 
 public class TimeSheetTest
 {
-    private readonly Task _activity = null!;
+    private readonly Task _task = null!;
     private readonly User _user = null!;
 
     public TimeSheetTest()
@@ -22,11 +22,11 @@ public class TimeSheetTest
 
         organization.AddProject(project);
 
-        TaskType activityType = organization.AddActivityType("Test activity type", "Desc");
+        TaskType taskType = organization.AddActivityType("Test task type", "Desc");
 
-        _activity = new("Activity", activityType, "Des");
+        _task = new("Activity", taskType, "Des");
 
-        project.AddActivity(_activity);
+        project.AddActivity(_task);
 
         _user = new();
     }
@@ -39,7 +39,7 @@ public class TimeSheetTest
 
         TimeSheet timeSheet = new(_user, year, week);
 
-        var timeSheetActivity = timeSheet.AddActivity(_activity);
+        var timeSheetActivity = timeSheet.AddActivity(_task);
 
         var date = ISOWeek.ToDateTime(year, week, DayOfWeek.Monday);
         var dateOnly = DateOnly.FromDateTime(date);
@@ -58,7 +58,7 @@ public class TimeSheetTest
 
         TimeSheet timeSheet = new(_user, year, week);
 
-        var timeSheetActivity = timeSheet.AddActivity(_activity);
+        var timeSheetActivity = timeSheet.AddActivity(_task);
 
         var date = ISOWeek.ToDateTime(year + 1, week + 2, DayOfWeek.Monday);
         var dateOnly = DateOnly.FromDateTime(date);
@@ -77,7 +77,7 @@ public class TimeSheetTest
 
         TimeSheet timeSheet = new(_user, year, week);
 
-        var timeSheetActivity = timeSheet.AddActivity(_activity);
+        var timeSheetActivity = timeSheet.AddActivity(_task);
 
         var date = ISOWeek.ToDateTime(year, week, DayOfWeek.Monday);
         var dateOnly = DateOnly.FromDateTime(date);
@@ -100,7 +100,7 @@ public class TimeSheetTest
 
         TimeSheet timeSheet = new(_user, year, week);
 
-        var timeSheetActivity = timeSheet.AddActivity(_activity);
+        var timeSheetActivity = timeSheet.AddActivity(_task);
 
         var date = ISOWeek.ToDateTime(year, week, DayOfWeek.Monday);
         var dateOnly = DateOnly.FromDateTime(date);

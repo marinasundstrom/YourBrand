@@ -6,11 +6,11 @@ namespace YourBrand.TimeReport.Domain.Events;
 
 public record TimeSheetTaskAddedEvent : DomainEvent
 {
-    public TimeSheetTaskAddedEvent(string timeSheetId, string timeSheetTaskId, string activityId)
+    public TimeSheetTaskAddedEvent(string timeSheetId, string timeSheetTaskId, string taskId)
     {
         TimeSheetId = timeSheetId;
         TimeSheetTaskId = timeSheetTaskId;
-        TaskId = activityId;
+        TaskId = taskId;
     }
 
     public string TimeSheetId { get; }

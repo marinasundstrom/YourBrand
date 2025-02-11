@@ -10,7 +10,7 @@ public class Project : AuditableEntity<string>, ISoftDeletableWithAudit<User>, I
 {
     readonly HashSet<Team> _teams = new HashSet<Team>();
     readonly HashSet<Expense> _expenses = new HashSet<Expense>();
-    readonly HashSet<Task> _activities = new HashSet<Task>();
+    readonly HashSet<Task> _tasks = new HashSet<Task>();
     readonly HashSet<Entry> _entries = new HashSet<Entry>();
     readonly HashSet<ProjectMembership> _memberships = new HashSet<ProjectMembership>();
     readonly HashSet<ProjectTeam> _projectTeams = new HashSet<ProjectTeam>();
@@ -45,12 +45,12 @@ public class Project : AuditableEntity<string>, ISoftDeletableWithAudit<User>, I
 
     public IReadOnlyCollection<Expense> Expenses => _expenses;
 
-    public IReadOnlyCollection<Task> Tasks => _activities;
+    public IReadOnlyCollection<Task> Tasks => _tasks;
 
-    public void AddTask(Task activity)
+    public void AddTask(Task task)
     {
-        activity.Project = this;
-        _activities.Add(activity);
+        task.Project = this;
+        _tasks.Add(task);
     }
 
     public IReadOnlyCollection<Entry> Entries => _entries;

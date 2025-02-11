@@ -91,14 +91,16 @@
                 </MudTh>
             </GroupHeaderTemplate>
 
-            <GroupFooterTemplate Context="c">
-                <MudTh colspan="2">
-                    
-                </MudTh>
-                <MudTh>
-                    
-                </MudTh>
-            </GroupFooterTemplate>
+            @* <GroupFooterTemplate c>
+                @foreach(var x in DateTimeHelpers.GetDatesInWeek(Year.GetValueOrDefault(), Week.GetValueOrDefault()))
+                {
+                    var y = timeSheet.DaySummaries.FirstOrDefault(z => z.Date == x.Date);
+
+                    <MudTd>
+                        <MudText Typo="Typo.h6">@y?.Hours h</MudText>
+                    </MudTd>
+                }
+            </GroupFooterTemplate> *@
 
             <RowTemplate Context="taskLine">
                 <MudTd colspan="2" DataLabel="Task">
@@ -124,9 +126,17 @@
             </RowTemplate>
 
             <FooterContent>
-                <MudTh Class="mud-table-cell-custom-group" colspan="9"></MudTh>
+                <MudTh Class="mud-table-cell-custom-group" colspan="2"></MudTh>
+                @foreach(var x in DateTimeHelpers.GetDatesInWeek(Year.GetValueOrDefault(), Week.GetValueOrDefault()))
+                {
+                    var y = timeSheet.DaySummaries.FirstOrDefault(z => z.Date == x.Date);
+
+                    <MudTd>
+                        <MudText Typo="Typo.body1">@(y?.Hours ?? 0) h</MudText>
+                    </MudTd>
+                }
                 <MudTd>
-                    <MudText Typo="Typo.h6">@TasksModels.Sum(x => x.TotalHours) h</MudText>
+                    <MudText Typo="Typo.body1">@TasksModels.Sum(x => x.TotalHours) h</MudText>
                 </MudTd>
                 <MudTd></MudTd>
             </FooterContent>
@@ -150,11 +160,6 @@
 }
 else 
 {
-    Console.WriteLine($"timeSheet: {timeSheet is not null}");
-    Console.WriteLine($"TaskModels: {TasksModels is not null}");
-    Console.WriteLine($"Year: { Year is not null}");
-    Console.WriteLine($"Week: { Week is not null}");
-
     <LoadingIndicator />
 }
 
@@ -282,7 +287,7 @@ else
             return;
         }
 
-        foreach (var task in timeSheet.Tasks)
+        foreach (var task in timeSheet.Projects.SelectMany(x => x.Tasks))
         {
             var taskModel = new TaskModel
             {

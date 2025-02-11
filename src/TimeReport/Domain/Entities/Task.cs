@@ -12,11 +12,11 @@ public class Task : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoft
     {
     }
 
-    public Task(string name, TaskType activityType, string? description)
+    public Task(string name, TaskType taskType, string? description)
     {
         Id = Guid.NewGuid().ToString();
         Name = name;
-        TaskType = activityType;
+        TaskType = taskType;
         Description = description;
     }
 

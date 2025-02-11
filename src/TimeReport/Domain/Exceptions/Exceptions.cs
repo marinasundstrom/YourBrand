@@ -32,13 +32,13 @@ public record UserAlreadyProjectMember(string userName, string projectId) : Erro
     public string ProjectId { get; } = projectId;
 }
 
-public record EntryAlreadyExists(string timeSheetId, DateOnly date, string activityId) : Error(nameof(EntryAlreadyExists), "Entry already exists", $"Entry already registered for {activityId} on {date}.")
+public record EntryAlreadyExists(string timeSheetId, DateOnly date, string taskId) : Error(nameof(EntryAlreadyExists), "Entry already exists", $"Entry already registered for {taskId} on {date}.")
 {
     public string TimeSheetId { get; } = timeSheetId;
 
     public DateOnly Date { get; } = date;
 
-    public string TaskId { get; } = activityId;
+    public string TaskId { get; } = taskId;
 }
 
 public record MonthLocked(string timeSheetId) : Error(nameof(MonthLocked), "Month is locked", $"The month is locked for TimeSheet withd Id {timeSheetId}.")
@@ -51,9 +51,9 @@ public record ProjectNotFound(string projectId) : Error(nameof(ProjectNotFound),
     public string ProjectId { get; } = projectId;
 }
 
-public record TaskNotFound(string activityId) : Error(nameof(TaskNotFound), "Task not found", $"Task with Id {activityId} was not found.")
+public record TaskNotFound(string taskId) : Error(nameof(TaskNotFound), "Task not found", $"Task with Id {taskId} was not found.")
 {
-    public string TaskId { get; } = activityId;
+    public string TaskId { get; } = taskId;
 }
 
 public record DayHoursExceedPermittedDailyWorkingHours(string timeSheetId, DateOnly date) : Error(nameof(DayHoursExceedPermittedDailyWorkingHours), "Total daily hours exceed working hours", $"The number of hours for {date} in TimeSheet with Id {timeSheetId} exceeds the permitted daily working hours.")

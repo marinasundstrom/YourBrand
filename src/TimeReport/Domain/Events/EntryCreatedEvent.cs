@@ -5,11 +5,11 @@ namespace YourBrand.TimeReport.Domain.Events;
 
 public record EntryCreatedEvent : DomainEvent
 {
-    public EntryCreatedEvent(string projectId, string timeSheetId, string activityId, string entryId, double? hours)
+    public EntryCreatedEvent(string projectId, string timeSheetId, string taskId, string entryId, double? hours)
     {
         ProjectId = projectId;
         TimeSheetId = timeSheetId;
-        TaskId = activityId;
+        TaskId = taskId;
         EntryId = entryId;
         Hours = hours;
     }
