@@ -131,7 +131,7 @@
                 {
                     var y = timeSheet.DaySummaries.FirstOrDefault(z => z.Date == x.Date);
 
-                    <MudTd>
+                    <MudTd Class="ps-7">
                         <MudText Typo="Typo.body1">@(y?.Hours ?? 0) h</MudText>
                     </MudTd>
                 }
