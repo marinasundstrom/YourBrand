@@ -1,13 +1,14 @@
 @page "/categories/{*path}"
+@attribute [StreamRendering(false)]
 @using YourBrand.StoreFront
-@rendermode RenderMode.InteractiveAuto
-@implements IDisposable
 @using BlazorApp.Products
 @using BlazorApp.ProductCategories
 @using BlazorApp.Brands
 @using Product = BlazorApp.Products.Product
 @using Brand = BlazorApp.Brands.Brand
 @using Client.Analytics
+@rendermode RenderMode.InteractiveAuto
+@implements IDisposable
 @inject IProductsService ProductsService
 @inject IProductCategoryService ProductCategoryService
 @inject IBrandsService BrandsService
@@ -79,7 +80,7 @@
                             {
                                 <div>
                                     <span href="#" class="text-decoration-none text-reset" style="cursor: pointer;"
-                                    @onclick:preventDefault
+                                        @onclick:preventDefault
                                         @onclick="async () => await OnBrandChanged(brand)">@brand.Name</span>
                                 </div>
                             }
@@ -129,36 +130,18 @@
     </div>
 
     <div class="col-md-9 col-sm-md-12">
-        @if ( /* loading || */  products is null)
-        {
-            <em>Loading...</em>
-        }
-        else if (error)
-        {
-            <h2>Sorry. We could not load any products.</h2>
-            <p>Please try again later.</p>
-        }
-        else
-        {
-            if (products.Count == 0)
+
+        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3 gx-4 gy-4 gx-md-5 gy-md-5 ">
+
+            @foreach (var product in products)
             {
-                <p>No results</p>
+                <ProductView @key="product.Id" Product="product" />
             }
-            else
-            {
-                <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3 gx-4 gy-4 gx-md-5 gy-md-5 ">
 
-                    @foreach (var product in products)
-                    {
-                        <ProductView @key="product.Id" Product="product" />
-                    }
+        </div>
 
-                </div>
-
-                <Pagination Page="Page.GetValueOrDefault()" PageCount="pageCount" Href="/categories" PageChanged="OnPageChanged"
-                    class="mt-5" />
-            }
-        }
+        <Pagination Page="Page.GetValueOrDefault()" PageCount="pageCount" Href="/categories" PageChanged="OnPageChanged"
+            class="mt-5" />
     </div>
 </div>
 
@@ -166,7 +149,7 @@
 {
     private PersistingComponentStateSubscription persistingSubscription;
 
-    ICollection<BlazorApp.Products.Product>? products;
+    ICollection<BlazorApp.Products.Product> products = [];
 
     int pageCount = 0;
     bool loading = false;
@@ -256,20 +239,20 @@
     private async Task ProductGroupViewed(ProductCategoryDto category)
     {
         await AnalyticsService.RegisterEvent(new YourBrand.StoreFront.EventData
-            {
-                EventType = YourBrand.StoreFront.EventType.ProductGroupViewed,
-                Data = new Dictionary<string, object>
-                {
-                    { "productCategoryId", category!.Id },
-                    { "name", /* GetGroupName() ?? */ category.Name }
-                }
-            });
+        {
+            EventType = YourBrand.StoreFront.EventType.ProductGroupViewed,
+            Data = new Dictionary<string, object>
+{
+{ "productCategoryId", category!.Id },
+{ "name", /* GetGroupName() ?? */ category.Name }
+}
+        });
     }
 
     /*
     private string? GetGroupName()
     {
-        return subGroups.FirstOrDefault(x => x.Path == Path)?.Name;
+    return subGroups.FirstOrDefault(x => x.Path == Path)?.Name;
     }
     */
 
@@ -355,11 +338,13 @@
 
         try
         {
-            var pagedResult = await ProductsService.GetProducts(BrandId, page, PageSize, SearchTerm, Path,
+            var pageSize = PageSize ?? 10;
+
+            var pagedResult = await ProductsService.GetProducts(BrandId, page, pageSize, SearchTerm, Path,
             cancellationToken);
 
             products = pagedResult.Items.ToList();
-            pageCount = (int)Math.Ceiling((float)pagedResult.Total / (float)PageSize.GetValueOrDefault());
+            pageCount = (int)Math.Ceiling((float)pagedResult.Total / (float)pageSize);
         }
         catch
         {
