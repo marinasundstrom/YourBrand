@@ -13,8 +13,10 @@ That means creating behavior specifications that can be automated in order to ve
 
 ## Test-driven development (TDD)
 
-The idea of making testing a part of the development routine by creating unit tests to test behavior.
+The idea of making verification a part of the development routine by writing code that verifies (is "testing") the behavior, even before the behavior has been implemented.
 
-A common method when employing TDD is Red-Green-Refactor. Meaning that you create a failing tests with code stubs. After you have implemented the logic the test should pass - become green. Finally you refactor the code. This is repeated through the process.
+So not "testing" in the way one might otherwise think.
 
-Writing and testing behavior outside in.
+A common method when employing TDD is Red-Green-Refactor. Meaning that you create a failing verification, or "test", with code stubs. After you have implemented the logic in the stubs the test should pass - gets green (in the Test Explorer UI). And if the test doesn't pass you continue write code and refactor, until it does.
+
+This way you start thinking about what you are building before implementing and then testing behavior outside in.
