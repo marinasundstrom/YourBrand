@@ -33,6 +33,12 @@ public sealed class OrganizationProvider(IOrganizationsClient organizationsClien
             _currentOrganization = _organizations!.FirstOrDefault(x => x.Id == organizationId);
         }
 
+        if (_currentOrganization is null)
+        {
+            _currentOrganization = _organizations!.FirstOrDefault();
+            await localStorageService.SetItemAsStringAsync("organizationId", _currentOrganization?.Id, cancellationToken);
+        }
+
         return _currentOrganization;
     }
 
