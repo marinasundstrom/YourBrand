@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Themes;
 using YourBrand.Domain.Entities;
 
 namespace YourBrand.Application.BrandProfiles;
@@ -19,22 +20,22 @@ public record GetBrandProfileQuery() : IRequest<BrandProfileDto?>
 
             if (brandProfile is null)
             {
-                brandProfile = new BrandProfile("Theme", null);
+                brandProfile = new BrandProfile("Brand", null) 
+                {
+                    Theme = new Theme("Theme", null)
+                    {
+                        Colors = new ThemeColors
+                        {
+                            Light = new ThemeColorPalette(),
+                            Dark = new ThemeColorPalette()
+                        }
+                    }
+                };
             }
-
-            brandProfile.Colors ??= new BrandColors
-            {
-                Light = new BrandColorPalette(),
-                Dark = new BrandColorPalette()
-            };
 
             return brandProfile?.ToDto();
         }
     }
 }
 
-public record BrandProfileDto(string Id, string Name, string? Description, BrandColorsDto Colors);
-
-public record BrandColorsDto(BrandColorPaletteDto? Light, BrandColorPaletteDto? Dark);
-
-public record BrandColorPaletteDto(string? BackgroundColor, string? AppbarBackgroundColor, string? PrimaryColor, string? SecondaryColor);
+public record BrandProfileDto(string Id, string Name, string? Description, ThemeDto? Theme);

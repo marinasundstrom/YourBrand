@@ -17,14 +17,14 @@
 {
     <MudTabs Elevation="25" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
         <MudTabPanel Text="Light">
-        <EditForm Model="brandProfile.Colors.Light">
-                <BrandColorPaletteView ColorPalette="brandProfile.Colors.Light" />
+        <EditForm Model="brandProfile.Theme.Colors.Light">
+                <BrandColorPaletteView ColorPalette="brandProfile.Theme.Colors.Light" />
             </EditForm>
         </MudTabPanel>
 
         <MudTabPanel Text="Dark">
-            <EditForm Model="brandProfile.Colors.Dark">
-                <BrandColorPaletteView ColorPalette="brandProfile.Colors.Dark" />
+            <EditForm Model="brandProfile.Theme.Colors.Dark">
+                <BrandColorPaletteView ColorPalette="brandProfile.Theme.Colors.Dark" />
             </EditForm>
         </MudTabPanel>
     </MudTabs>
@@ -46,7 +46,7 @@
             new UpdateBrandProfileRequest {
                 Name = brandProfile.Name, 
                 Description = brandProfile.Description,
-                Colors = brandProfile.Colors 
+                Theme = brandProfile.Theme 
             });
 
         var theme = BrandProfileToThemeConverter.Convert(brandProfile2);

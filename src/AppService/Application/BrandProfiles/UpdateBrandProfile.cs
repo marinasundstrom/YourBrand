@@ -3,11 +3,12 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Application.Common.Interfaces;
+using YourBrand.Application.Themes;
 using YourBrand.Domain.Entities;
 
 namespace YourBrand.Application.BrandProfiles;
 
-public record UpdateBrandProfile(string Name, string? Description, BrandColorsDto Colors) : IRequest<BrandProfileDto>
+public record UpdateBrandProfile(string Name, string? Description, ThemeDto Theme) : IRequest<BrandProfileDto>
 {
     public class Handler(IAppServiceContext appServiceContext) : IRequestHandler<UpdateBrandProfile, BrandProfileDto>
     {
@@ -23,6 +24,9 @@ public record UpdateBrandProfile(string Name, string? Description, BrandColorsDt
             {
                 brandProfile = new BrandProfile(request.Name, request.Description);
                 @new = true;
+
+                await appServiceContext.SaveChangesAsync(cancellationToken);
+
             }
             else
             {
@@ -30,14 +34,26 @@ public record UpdateBrandProfile(string Name, string? Description, BrandColorsDt
                 brandProfile.Description = request.Description;
             }
 
-            brandProfile.Colors ??= new BrandColors
+            if(brandProfile.Theme is null) 
             {
-                Light = new BrandColorPalette(),
-                Dark = new BrandColorPalette()
-            };
+                var theme = new Theme("Theme", null) 
+                {
+                    Colors = new ThemeColors
+                    {
+                        Light = new ThemeColorPalette(),
+                        Dark = new ThemeColorPalette()
+                    }
+                };
 
-            Map(brandProfile.Colors.Light, request.Colors.Light);
-            Map(brandProfile.Colors.Dark, request.Colors.Dark);
+                appServiceContext.Themes.Add(theme);
+
+                await appServiceContext.SaveChangesAsync(cancellationToken);
+
+                brandProfile.Theme = theme;
+            }
+
+            Map(brandProfile.Theme.Colors.Light, request.Theme.Colors.Light);
+            Map(brandProfile.Theme.Colors.Dark, request.Theme.Colors.Dark);
 
             if (@new)
             {
@@ -53,7 +69,7 @@ public record UpdateBrandProfile(string Name, string? Description, BrandColorsDt
             return brandProfile.ToDto();
         }
 
-        private void Map(BrandColorPalette target, BrandColorPaletteDto? from)
+        private void Map(ThemeColorPalette target, ThemeColorPaletteDto? from)
         {
             target.BackgroundColor = from.BackgroundColor;
             target.AppbarBackgroundColor = from.AppbarBackgroundColor;

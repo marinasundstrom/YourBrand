@@ -44,6 +44,8 @@ public class AppServiceContext(
 
 #nullable disable
 
+    public DbSet<Theme> Themes { get; set; } = null!;
+
     public DbSet<BrandProfile> BrandProfiles { get; set; } = null!;
 
     public DbSet<SearchResultItem> SearchResultItems { get; set; } = null!;

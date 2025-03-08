@@ -10,7 +10,7 @@ public static class BrandProfileToThemeConverter
     {
         var theme = new MudTheme();
 
-        if (brandProfile.Colors.Light is BrandColorPalette colorPalette)
+        if (brandProfile?.Theme?.Colors?.Light is ThemeColorPalette colorPalette)
         {
             if (colorPalette.BackgroundColor is not null)
             {
@@ -30,7 +30,7 @@ public static class BrandProfileToThemeConverter
             }
         }
 
-        if (brandProfile.Colors.Dark is BrandColorPalette colorPalette2)
+        if (brandProfile?.Theme?.Colors?.Dark is ThemeColorPalette colorPalette2)
         {
             if (colorPalette2.BackgroundColor is not null)
             {

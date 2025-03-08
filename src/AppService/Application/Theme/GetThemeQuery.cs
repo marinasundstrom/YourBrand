@@ -1,0 +1,40 @@
+using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Application.Common.Interfaces;
+using YourBrand.Domain.Entities;
+
+namespace YourBrand.Application.Themes;
+
+public record GetThemeQuery() : IRequest<ThemeDto?>
+{
+    public class Handler(IAppServiceContext appServiceContext) : IRequestHandler<GetThemeQuery, ThemeDto?>
+    {
+        public async Task<ThemeDto?> Handle(GetThemeQuery request, CancellationToken cancellationToken)
+        {
+            var theme = await appServiceContext.Themes
+                .OrderBy(x => x.Created)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (theme is null)
+            {
+                theme = new Theme("Theme", null);
+            }
+
+            theme.Colors ??= new ThemeColors
+            {
+                Light = new ThemeColorPalette(),
+                Dark = new ThemeColorPalette()
+            };
+
+            return theme?.ToDto();
+        }
+    }
+}
+
+public record ThemeDto(string Id, string Name, string? Description, ThemeColorsDto Colors);
+
+public record ThemeColorsDto(ThemeColorPaletteDto? Light, ThemeColorPaletteDto? Dark);
+
+public record ThemeColorPaletteDto(string? BackgroundColor, string? AppbarBackgroundColor, string? PrimaryColor, string? SecondaryColor);

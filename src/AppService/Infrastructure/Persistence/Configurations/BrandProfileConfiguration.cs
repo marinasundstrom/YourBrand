@@ -11,10 +11,8 @@ public sealed class BrandProfileConfiguration : IEntityTypeConfiguration<BrandPr
     {
         builder.ToTable("BrandProfiles");
 
-        builder.OwnsOne(x => x.Colors, x =>
-        {
-            x.OwnsOne(x => x.Light);
-            x.OwnsOne(x => x.Dark);
-        });
+        builder.HasOne(x => x.Theme);
+
+        builder.Navigation(x => x.Theme).AutoInclude();
     }
 }

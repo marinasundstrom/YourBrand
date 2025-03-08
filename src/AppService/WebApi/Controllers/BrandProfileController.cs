@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using YourBrand.Application.BrandProfiles;
+using YourBrand.Application.Themes;
 
 namespace YourBrand.WebApi.Controllers;
 
@@ -34,9 +35,9 @@ public class BrandProfileController : ControllerBase
         UpdateBrandProfileRequest request,
         [FromServices] IMediator mediator, CancellationToken cancellationToken)
     {
-        var modules = await mediator.Send(new UpdateBrandProfile(request.Name, request.Description, request.Colors), cancellationToken);
+        var modules = await mediator.Send(new UpdateBrandProfile(request.Name, request.Description, request.Theme), cancellationToken);
         return Ok(modules);
     }
 }
 
-public record UpdateBrandProfileRequest(string Name, string? Description, BrandColorsDto Colors);
+public record UpdateBrandProfileRequest(string Name, string? Description, ThemeDto Theme);

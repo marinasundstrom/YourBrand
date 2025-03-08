@@ -1,4 +1,5 @@
 using YourBrand.Application.BrandProfiles;
+using YourBrand.Application.Themes;
 using YourBrand.Application.Widgets;
 using YourBrand.Domain.Entities;
 
@@ -8,8 +9,11 @@ public static class Mapper
 {
     public static WidgetDto ToDto(this Widget widget) => new(widget.Id, widget.WidgetId, widget.WidgetAreaId, widget.UserId, widget?.Settings?.RootElement.ToString());
 
-    public static BrandProfileDto ToDto(this BrandProfile brandProfile) => new(brandProfile.Id, brandProfile.Name, brandProfile.Description,
-        new BrandColorsDto(brandProfile.Colors.Light?.ToDto(), brandProfile.Colors.Dark?.ToDto()));
+    public static ThemeDto ToDto(this Theme theme) => new(theme.Id, theme.Name, theme.Description,
+        new ThemeColorsDto(theme.Colors.Light?.ToDto(), theme.Colors.Dark?.ToDto()));
 
-    public static BrandColorPaletteDto ToDto(this BrandColorPalette brandColorPalette) => new(brandColorPalette.BackgroundColor, brandColorPalette.AppbarBackgroundColor, brandColorPalette.PrimaryColor, brandColorPalette.SecondaryColor);
+    public static ThemeColorPaletteDto ToDto(this ThemeColorPalette colorPalette) => new(colorPalette.BackgroundColor, colorPalette.AppbarBackgroundColor, colorPalette.PrimaryColor, colorPalette.SecondaryColor);
+
+    public static BrandProfileDto ToDto(this BrandProfile brandProfile) => new(brandProfile.Id, brandProfile.Name, brandProfile.Description,
+        brandProfile.Theme?.ToDto());
 }

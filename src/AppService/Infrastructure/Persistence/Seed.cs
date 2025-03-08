@@ -84,6 +84,8 @@ public static class Seed
 
         await context.SaveChangesAsync();
 
+        /*
+
         context.BrandProfiles.Add(new BrandProfile(Guid.NewGuid().ToString(), null)
         {
             Name = "Default",
@@ -120,6 +122,7 @@ public static class Seed
                 }
             }
         });
+        */
 
         await context.SaveChangesAsync();
     }

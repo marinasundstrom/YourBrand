@@ -462,21 +462,36 @@ components:
         description:
           type: string
           nullable: true
+        theme:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Theme'
+    Theme:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
         colors:
-          $ref: '#/components/schemas/BrandColors'
-    BrandColors:
+          $ref: '#/components/schemas/ThemeColors'
+    ThemeColors:
       type: object
       additionalProperties: false
       properties:
         light:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/BrandColorPalette'
+          - $ref: '#/components/schemas/ThemeColorPalette'
         dark:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/BrandColorPalette'
-    BrandColorPalette:
+          - $ref: '#/components/schemas/ThemeColorPalette'
+    ThemeColorPalette:
       type: object
       additionalProperties: false
       properties:
@@ -522,8 +537,8 @@ components:
         description:
           type: string
           nullable: true
-        colors:
-          $ref: '#/components/schemas/BrandColors'
+        theme:
+          $ref: '#/components/schemas/Theme'
     Module:
       type: object
       additionalProperties: false
