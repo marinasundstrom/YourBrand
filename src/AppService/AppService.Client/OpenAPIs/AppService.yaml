@@ -477,6 +477,12 @@ components:
         description:
           type: string
           nullable: true
+        logo:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
         dense:
           type: boolean
         colors:
@@ -501,6 +507,9 @@ components:
           type: string
           nullable: true
         appbarBackgroundColor:
+          type: string
+          nullable: true
+        appbarTextColor:
           type: string
           nullable: true
         primaryColor:

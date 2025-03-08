@@ -73,6 +73,7 @@ public record UpdateBrandProfile(string Name, string? Description, ThemeDto Them
         {
             target.BackgroundColor = from.BackgroundColor;
             target.AppbarBackgroundColor = from.AppbarBackgroundColor;
+            target.AppbarTextColor = from.AppbarTextColor;
             target.PrimaryColor = from.PrimaryColor;
             target.SecondaryColor = from.SecondaryColor;
         }

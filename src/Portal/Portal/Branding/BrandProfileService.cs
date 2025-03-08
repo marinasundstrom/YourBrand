@@ -9,7 +9,7 @@ public sealed class BrandProfileService(IThemeManager themeManager, IBrandProfil
 {
     public async Task LoadBrandProfileAsync()
     {
-        themeManager.SetTheme(new Theme());
+        themeManager.SetTheme(new Theme() {  Logo = "/logo.svg" });
 
         try
         {

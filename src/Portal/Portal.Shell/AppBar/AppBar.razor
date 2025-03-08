@@ -9,11 +9,15 @@
     <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
         OnClick="@(async (e) => await DrawerToggleCallback.InvokeAsync())" />
     <a href="/">
-        <MudIcon Icon="@Icons.Material.Filled.DataUsage" Color="@Color.Primary" Class="mt-1" Style="height: 28px; width: 28px" />
+        <img src="@logo" class="mt-1" style="
+    height: 30px;">
     </a>
+    @if (!string.IsNullOrEmpty(appBarTitle)) 
+    {
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <MudText Typo="Typo.h5" Class="ms-2"><b>@T["AppTitle"]</b></MudText>
+            <MudText Typo="Typo.h5" Class="ms-2"><b>@appBarTitle</b></MudText>
     </MudHidden>
+    }
     <MudSpacer />
     <AuthorizeView>
         <MudHidden Breakpoint="Breakpoint.SmAndDown">
@@ -37,6 +41,8 @@
 
 @code {
     ColorScheme? _currentColorScheme;
+    string? logo = null;
+    string? appBarTitle = null;
     bool dense = false;
     private bool _searchDialogOpen;
     private void OpenSearchDialog() => _searchDialogOpen = true;
@@ -57,11 +63,15 @@
         ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
 
         _currentColorScheme = ThemeManager.CurrentColorScheme;
+        logo = ThemeManager.Theme.Logo;
+        appBarTitle = ThemeManager.Theme.Title;
         dense = ThemeManager.Theme.Dense;
     }
 
     void OnThemeChanged(object? sender, EventArgs ea)
     {
+        logo = ThemeManager.Theme.Logo;
+        appBarTitle = ThemeManager.Theme.Title;
         dense = ThemeManager.Theme.Dense;
 
         StateHasChanged();

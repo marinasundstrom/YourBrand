@@ -20,6 +20,10 @@ public static class ThemeToMudThemeConverter
             {
                 mudTheme.PaletteLight.AppbarBackground = colorPalette.AppbarBackgroundColor;
             }
+            if (colorPalette.AppbarTextColor is not null)
+            {
+                mudTheme.PaletteLight.AppbarText = colorPalette.AppbarTextColor;
+            }
             if (colorPalette.PrimaryColor is not null)
             {
                 mudTheme.PaletteLight.Primary = colorPalette.PrimaryColor;
@@ -39,6 +43,10 @@ public static class ThemeToMudThemeConverter
             if (colorPalette2.AppbarBackgroundColor is not null)
             {
                 mudTheme.PaletteDark.AppbarBackground = colorPalette2.AppbarBackgroundColor;
+            }
+            if (colorPalette2.AppbarTextColor is not null)
+            {
+                mudTheme.PaletteDark.AppbarText = colorPalette2.AppbarTextColor;
             }
             if (colorPalette2.PrimaryColor is not null)
             {

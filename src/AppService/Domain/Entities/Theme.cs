@@ -27,6 +27,10 @@ public class Theme : AuditableEntity<string>, ISoftDeletableWithAudit<User>, IHa
 
     public string? Description { get; set; } = null!;
 
+    public string? Logo { get; set; } = null!;
+
+    public string? Title { get; set; } = null!;
+
     public bool? Dense { get; set; }
 
     public ThemeColors Colors { get; set; }
@@ -48,6 +52,7 @@ public class ThemeColorPalette
 {
     public string? BackgroundColor { get; set; } = null!;
     public string? AppbarBackgroundColor { get; set; } = null!;
+    public string? AppbarTextColor { get; set; } = null!;
     public string? PrimaryColor { get; set; } = null!;
     public string? SecondaryColor { get; set; } = null!;
 }
