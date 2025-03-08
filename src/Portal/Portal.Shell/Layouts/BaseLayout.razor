@@ -8,7 +8,7 @@
 @inject IThemeManager ThemeManager
 @inject ILocalStorageService LocalStorage
 
-<MudThemeProvider IsDarkMode="@(ThemeManager.CurrentColorScheme == ColorScheme.Dark)" Theme="ThemeManager.Theme" />
+<MudThemeProvider IsDarkMode="@(ThemeManager.CurrentColorScheme == ColorScheme.Dark)" Theme="@ThemeToMudThemeConverter.Convert(ThemeManager.Theme)" />
 
 <OrganizationProviderWrap>
 
@@ -73,8 +73,6 @@
 
     void OnThemeChanged(object? sender, EventArgs ea)
     {
-        Console.WriteLine(ThemeManager.Theme.PaletteLight.AppbarBackground);
-
         StateHasChanged();
     }
 

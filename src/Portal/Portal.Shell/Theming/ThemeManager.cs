@@ -2,15 +2,17 @@
 
 using MudBlazor;
 
+using YourBrand.AppService.Client;
+
 namespace YourBrand.Portal.Theming;
 
 public interface IThemeManager : IDisposable
 {
     void Initialize();
 
-    MudTheme Theme { get; }
+    Theme Theme { get; }
 
-    void SetTheme(MudTheme theme);
+    void SetTheme(Theme theme);
 
     void RefreshTheme();
 
@@ -36,7 +38,7 @@ public sealed class ThemeManager : IThemeManager
     private readonly SystemColorSchemeDetector _systemColorSchemeDetector;
     private readonly ISyncLocalStorageService _localStorage;
     private bool initialized = false;
-    private static MudTheme s_mudTheme = new MudTheme();
+    private static Theme s_mudTheme = new Theme();
 
     public ThemeManager(SystemColorSchemeDetector systemColorSchemeDetector, ISyncLocalStorageService localStorage)
     {
@@ -61,13 +63,13 @@ public sealed class ThemeManager : IThemeManager
         initialized = true;
     }
 
-    public MudTheme Theme
+    public Theme Theme
     {
         get => s_mudTheme;
         private set => s_mudTheme = value;
     }
 
-    public void SetTheme(MudTheme theme)
+    public void SetTheme(Theme theme)
     {
         if (theme != Theme)
         {

@@ -52,8 +52,18 @@
 
     protected override void OnInitialized()
     {
+        ThemeManager.ThemeChanged += OnThemeChanged;
         ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
+
         _currentColorScheme = ThemeManager.CurrentColorScheme;
+        //isDense = ThemeManager.Theme.Dense;
+    }
+
+    void OnThemeChanged(object? sender, EventArgs ea)
+    {
+        //isDense = ThemeManager.Theme.Dense;
+
+        StateHasChanged();
     }
 
     private void OnColorSchemeChanged(object? sender, ColorSchemeChangedEventArgs e)
@@ -65,6 +75,7 @@
 
     public void Dispose()
     {
-
+        ThemeManager.ThemeChanged -= OnThemeChanged;
+        ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
     }
 }

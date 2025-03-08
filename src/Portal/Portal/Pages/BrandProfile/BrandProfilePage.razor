@@ -42,15 +42,13 @@
 
     async Task Save() 
     {
-        var brandProfile2 = await BrandProfileClient.UpdateBrandProfileAsync(
+        var newBrandProfile = await BrandProfileClient.UpdateBrandProfileAsync(
             new UpdateBrandProfileRequest {
                 Name = brandProfile.Name, 
                 Description = brandProfile.Description,
                 Theme = brandProfile.Theme 
             });
 
-        var theme = BrandProfileToThemeConverter.Convert(brandProfile2);
-
-        ThemeManager.SetTheme(theme);
+        ThemeManager.SetTheme(newBrandProfile.Theme!);
     }
 }

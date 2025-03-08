@@ -9,7 +9,7 @@ public sealed class BrandProfileService(IThemeManager themeManager, IBrandProfil
 {
     public async Task LoadBrandProfileAsync()
     {
-        themeManager.SetTheme(Themes.AppTheme);
+        themeManager.SetTheme(new Theme());
 
         try
         {
@@ -17,8 +17,7 @@ public sealed class BrandProfileService(IThemeManager themeManager, IBrandProfil
 
             if (brandProfile is not null)
             {
-                var theme = BrandProfileToThemeConverter.Convert(brandProfile);
-                themeManager.SetTheme(theme);
+                themeManager.SetTheme(brandProfile.Theme);
             }
         }
         catch (Exception)
