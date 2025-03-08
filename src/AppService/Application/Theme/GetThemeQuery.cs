@@ -33,7 +33,7 @@ public record GetThemeQuery() : IRequest<ThemeDto?>
     }
 }
 
-public record ThemeDto(string Id, string Name, string? Description, ThemeColorsDto Colors);
+public record ThemeDto(string Id, string Name, string? Description, bool Dense, ThemeColorsDto Colors);
 
 public record ThemeColorsDto(ThemeColorPaletteDto? Light, ThemeColorPaletteDto? Dark);
 

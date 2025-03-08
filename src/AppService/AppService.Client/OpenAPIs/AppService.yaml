@@ -477,6 +477,8 @@ components:
         description:
           type: string
           nullable: true
+        dense:
+          type: boolean
         colors:
           $ref: '#/components/schemas/ThemeColors'
     ThemeColors:

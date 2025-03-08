@@ -5,7 +5,7 @@
 @inject IThemeManager ThemeManager
 @inject IStringLocalizer<AppBar> T
 
-<MudAppBar Elevation="25" Dense="false">
+<MudAppBar Elevation="25" Dense="@dense">
     <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
         OnClick="@(async (e) => await DrawerToggleCallback.InvokeAsync())" />
     <a href="/">
@@ -37,6 +37,7 @@
 
 @code {
     ColorScheme? _currentColorScheme;
+    bool dense = false;
     private bool _searchDialogOpen;
     private void OpenSearchDialog() => _searchDialogOpen = true;
     private DialogOptions _dialogOptions = new()
@@ -56,12 +57,12 @@
         ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
 
         _currentColorScheme = ThemeManager.CurrentColorScheme;
-        //isDense = ThemeManager.Theme.Dense;
+        dense = ThemeManager.Theme.Dense;
     }
 
     void OnThemeChanged(object? sender, EventArgs ea)
     {
-        //isDense = ThemeManager.Theme.Dense;
+        dense = ThemeManager.Theme.Dense;
 
         StateHasChanged();
     }
