@@ -11,7 +11,7 @@ public sealed class ThemeConfiguration : IEntityTypeConfiguration<Theme>
     {
         builder.ToTable("Themes");
 
-        builder.OwnsOne(x => x.Colors, x =>
+        builder.OwnsOne(x => x.ColorSchemes, x =>
         {
             x.ToJson();
             

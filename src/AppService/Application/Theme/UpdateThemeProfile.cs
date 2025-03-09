@@ -7,7 +7,7 @@ using YourBrand.Domain.Entities;
 
 namespace YourBrand.Application.Themes;
 
-public record UpdateTheme(string Name, string? Description, ThemeColorsDto Colors) : IRequest<ThemeDto>
+public record UpdateTheme(string Name, string? Description, ThemeColorSchemesDto Colors) : IRequest<ThemeDto>
 {
     public class Handler(IAppServiceContext appServiceContext) : IRequestHandler<UpdateTheme, ThemeDto>
     {
@@ -30,14 +30,14 @@ public record UpdateTheme(string Name, string? Description, ThemeColorsDto Color
                 theme.Description = request.Description;
             }
 
-            theme.Colors ??= new ThemeColors
+            theme.ColorSchemes ??= new ThemeColorSchemes
             {
-                Light = new ThemeColorPalette(),
-                Dark = new ThemeColorPalette()
+                Light = new ThemeColorScheme(),
+                Dark = new ThemeColorScheme()
             };
 
-            Map(theme.Colors.Light, request.Colors.Light);
-            Map(theme.Colors.Dark, request.Colors.Dark);
+            Map(theme.ColorSchemes.Light, request.Colors.Light);
+            Map(theme.ColorSchemes.Dark, request.Colors.Dark);
 
             if (@new)
             {
@@ -53,7 +53,7 @@ public record UpdateTheme(string Name, string? Description, ThemeColorsDto Color
             return theme.ToDto();
         }
 
-        private void Map(ThemeColorPalette target, ThemeColorPaletteDto? from)
+        private void Map(ThemeColorScheme target, ThemeColorSchemeDto? from)
         {
             target.BackgroundColor = from.BackgroundColor;
             target.AppbarBackgroundColor = from.AppbarBackgroundColor;

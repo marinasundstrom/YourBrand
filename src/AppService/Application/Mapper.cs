@@ -10,9 +10,9 @@ public static class Mapper
     public static WidgetDto ToDto(this Widget widget) => new(widget.Id, widget.WidgetId, widget.WidgetAreaId, widget.UserId, widget?.Settings?.RootElement.ToString());
 
     public static ThemeDto ToDto(this Theme theme) => new(theme.Id, theme.Name, theme.Description, theme.Logo, theme.Dense.GetValueOrDefault(),
-        new ThemeColorsDto(theme.Colors.Light?.ToDto(), theme.Colors.Dark?.ToDto()));
+        new ThemeColorSchemesDto(theme.ColorSchemes.Light?.ToDto(), theme.ColorSchemes.Dark?.ToDto()));
 
-    public static ThemeColorPaletteDto ToDto(this ThemeColorPalette colorPalette) => new(colorPalette.BackgroundColor, colorPalette.AppbarBackgroundColor, colorPalette.AppbarTextColor, colorPalette.PrimaryColor, colorPalette.SecondaryColor);
+    public static ThemeColorSchemeDto ToDto(this ThemeColorScheme colorScheme) => new(colorScheme.Logo, colorScheme.BackgroundColor, colorScheme.AppbarBackgroundColor, colorScheme.AppbarTextColor, colorScheme.PrimaryColor, colorScheme.SecondaryColor);
 
     public static BrandProfileDto ToDto(this BrandProfile brandProfile) => new(brandProfile.Id, brandProfile.Name, brandProfile.Description,
         brandProfile.Theme?.ToDto());

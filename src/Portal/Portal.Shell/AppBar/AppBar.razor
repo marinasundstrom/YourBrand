@@ -9,7 +9,7 @@
     <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
         OnClick="@(async (e) => await DrawerToggleCallback.InvokeAsync())" />
     <a href="/">
-        <img src="@logo" class="mt-1" style="
+        <img src="@logo" class="ms-2 mt-1" style="
     height: 30px;">
     </a>
     @if (!string.IsNullOrEmpty(appBarTitle)) 
@@ -62,26 +62,31 @@
         ThemeManager.ThemeChanged += OnThemeChanged;
         ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
 
-        _currentColorScheme = ThemeManager.CurrentColorScheme;
-        logo = ThemeManager.Theme.Logo;
-        appBarTitle = ThemeManager.Theme.Title;
-        dense = ThemeManager.Theme.Dense;
+        UpdateTheme();
     }
 
     void OnThemeChanged(object? sender, EventArgs ea)
     {
-        logo = ThemeManager.Theme.Logo;
-        appBarTitle = ThemeManager.Theme.Title;
-        dense = ThemeManager.Theme.Dense;
+        UpdateTheme();
 
         StateHasChanged();
     }
 
     private void OnColorSchemeChanged(object? sender, ColorSchemeChangedEventArgs e)
     {
-        _currentColorScheme = e.ColorScheme;
+        UpdateTheme();
 
         StateHasChanged();
+    }
+
+    void UpdateTheme()
+    {
+        _currentColorScheme = ThemeManager.CurrentColorScheme;
+        logo = (_currentColorScheme == ColorScheme.Light
+        ? ThemeManager.Theme.ColorSchemes?.Light?.Logo :
+        ThemeManager.Theme.ColorSchemes?.Dark?.Logo) ?? ThemeManager.Theme.Logo;
+        appBarTitle = ThemeManager.Theme.Title;
+        dense = ThemeManager.Theme.Dense;
     }
 
     public void Dispose()

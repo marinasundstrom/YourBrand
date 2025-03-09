@@ -33,7 +33,7 @@ public class Theme : AuditableEntity<string>, ISoftDeletableWithAudit<User>, IHa
 
     public bool? Dense { get; set; }
 
-    public ThemeColors Colors { get; set; }
+    public ThemeColorSchemes ColorSchemes { get; set; }
 
     public bool IsDeleted { get; set; } = false;
     public DateTimeOffset? Deleted { get; set; }
@@ -41,15 +41,16 @@ public class Theme : AuditableEntity<string>, ISoftDeletableWithAudit<User>, IHa
     public User? DeletedBy { get; set; }
 }
 
-public class ThemeColors
+public class ThemeColorSchemes
 {
-    public ThemeColorPalette Light { get; set; }
+    public ThemeColorScheme Light { get; set; }
 
-    public ThemeColorPalette Dark { get; set; }
+    public ThemeColorScheme Dark { get; set; }
 }
 
-public class ThemeColorPalette
+public class ThemeColorScheme
 {
+    public string? Logo { get; set; } = null!;
     public string? BackgroundColor { get; set; } = null!;
     public string? AppbarBackgroundColor { get; set; } = null!;
     public string? AppbarTextColor { get; set; } = null!;

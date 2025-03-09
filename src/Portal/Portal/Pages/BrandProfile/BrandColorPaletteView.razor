@@ -1,16 +1,16 @@
 @using YourBrand.AppService.Client
 
-<ColorPicker Label="AppBar Background Color" @bind-Text="ColorPalette.AppbarBackgroundColor" Class="mb-4" />
+<ColorPicker Label="AppBar Background Color" @bind-Text="ColorScheme.AppbarBackgroundColor" Class="mb-4" />
 
-<ColorPicker Label="AppBar Text Color" @bind-Text="ColorPalette.AppbarTextColor" Class="mb-4" />
+<ColorPicker Label="AppBar Text Color" @bind-Text="ColorScheme.AppbarTextColor" Class="mb-4" />
 
-<ColorPicker Label="Primary Color" @bind-Text="ColorPalette.PrimaryColor" Class="mb-4" />
+<ColorPicker Label="Primary Color" @bind-Text="ColorScheme.PrimaryColor" Class="mb-4" />
 
-<ColorPicker Label="Secondary Color" @bind-Text="ColorPalette.SecondaryColor" Class="mb-4" />
+<ColorPicker Label="Secondary Color" @bind-Text="ColorScheme.SecondaryColor" Class="mb-4" />
 
-<ColorPicker Label="Background Color" @bind-Text="ColorPalette.BackgroundColor" Class="mb-4" />
+<ColorPicker Label="Background Color" @bind-Text="ColorScheme.BackgroundColor" Class="mb-4" />
 
 @code {
     [Parameter]
-    public ThemeColorPalette ColorPalette { get; set; }
+    public ThemeColorScheme ColorScheme { get; set; }
 }

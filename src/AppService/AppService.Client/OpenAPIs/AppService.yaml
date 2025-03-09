@@ -485,24 +485,27 @@ components:
           nullable: true
         dense:
           type: boolean
-        colors:
-          $ref: '#/components/schemas/ThemeColors'
-    ThemeColors:
+        colorSchemes:
+          $ref: '#/components/schemas/ThemeColorSchemes'
+    ThemeColorSchemes:
       type: object
       additionalProperties: false
       properties:
         light:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/ThemeColorPalette'
+          - $ref: '#/components/schemas/ThemeColorScheme'
         dark:
           nullable: true
           oneOf:
-          - $ref: '#/components/schemas/ThemeColorPalette'
-    ThemeColorPalette:
+          - $ref: '#/components/schemas/ThemeColorScheme'
+    ThemeColorScheme:
       type: object
       additionalProperties: false
       properties:
+        logo:
+          type: string
+          nullable: true
         backgroundColor:
           type: string
           nullable: true

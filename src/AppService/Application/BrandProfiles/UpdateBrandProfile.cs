@@ -38,10 +38,10 @@ public record UpdateBrandProfile(string Name, string? Description, ThemeDto Them
             {
                 var theme = new Theme("Theme", null) 
                 {
-                    Colors = new ThemeColors
+                    ColorSchemes = new ThemeColorSchemes
                     {
-                        Light = new ThemeColorPalette(),
-                        Dark = new ThemeColorPalette()
+                        Light = new ThemeColorScheme(),
+                        Dark = new ThemeColorScheme()
                     }
                 };
 
@@ -52,8 +52,8 @@ public record UpdateBrandProfile(string Name, string? Description, ThemeDto Them
                 brandProfile.Theme = theme;
             }
 
-            Map(brandProfile.Theme.Colors.Light, request.Theme.Colors.Light);
-            Map(brandProfile.Theme.Colors.Dark, request.Theme.Colors.Dark);
+            Map(brandProfile.Theme.ColorSchemes.Light, request.Theme.ColorSchemes.Light);
+            Map(brandProfile.Theme.ColorSchemes.Dark, request.Theme.ColorSchemes.Dark);
 
             if (@new)
             {
@@ -69,7 +69,7 @@ public record UpdateBrandProfile(string Name, string? Description, ThemeDto Them
             return brandProfile.ToDto();
         }
 
-        private void Map(ThemeColorPalette target, ThemeColorPaletteDto? from)
+        private void Map(ThemeColorScheme target, ThemeColorSchemeDto? from)
         {
             target.BackgroundColor = from.BackgroundColor;
             target.AppbarBackgroundColor = from.AppbarBackgroundColor;

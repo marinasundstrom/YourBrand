@@ -17,14 +17,14 @@
 {
     <MudTabs Elevation="25" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
         <MudTabPanel Text="Light">
-        <EditForm Model="brandProfile.Theme.Colors.Light">
-                <BrandColorPaletteView ColorPalette="brandProfile.Theme.Colors.Light" />
+            <EditForm Model="brandProfile.Theme.ColorSchemes.Light">
+                <BrandColorPaletteView ColorScheme="brandProfile.Theme.ColorSchemes.Light" />
             </EditForm>
         </MudTabPanel>
 
         <MudTabPanel Text="Dark">
-            <EditForm Model="brandProfile.Theme.Colors.Dark">
-                <BrandColorPaletteView ColorPalette="brandProfile.Theme.Colors.Dark" />
+            <EditForm Model="brandProfile.Theme.ColorSchemes.Dark">
+                <BrandColorPaletteView ColorScheme="brandProfile.Theme.ColorSchemes.Dark" />
             </EditForm>
         </MudTabPanel>
     </MudTabs>

@@ -24,10 +24,10 @@ public record GetBrandProfileQuery() : IRequest<BrandProfileDto?>
                 {
                     Theme = new Theme("Theme", null)
                     {
-                        Colors = new ThemeColors
+                        ColorSchemes = new ThemeColorSchemes
                         {
-                            Light = new ThemeColorPalette(),
-                            Dark = new ThemeColorPalette()
+                            Light = new ThemeColorScheme(),
+                            Dark = new ThemeColorScheme()
                         }
                     }
                 };

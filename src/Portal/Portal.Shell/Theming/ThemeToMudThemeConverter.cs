@@ -10,51 +10,51 @@ public static class ThemeToMudThemeConverter
     {
         var mudTheme = new MudTheme();
 
-        if (theme?.Colors?.Light is ThemeColorPalette colorPalette)
+        if (theme?.ColorSchemes?.Light is ThemeColorScheme colorScheme)
         {
-            if (colorPalette.BackgroundColor is not null)
+            if (colorScheme.BackgroundColor is not null)
             {
-                mudTheme.PaletteLight.Background = colorPalette.BackgroundColor;
+                mudTheme.PaletteLight.Background = colorScheme.BackgroundColor;
             }
-            if (colorPalette.AppbarBackgroundColor is not null)
+            if (colorScheme.AppbarBackgroundColor is not null)
             {
-                mudTheme.PaletteLight.AppbarBackground = colorPalette.AppbarBackgroundColor;
+                mudTheme.PaletteLight.AppbarBackground = colorScheme.AppbarBackgroundColor;
             }
-            if (colorPalette.AppbarTextColor is not null)
+            if (colorScheme.AppbarTextColor is not null)
             {
-                mudTheme.PaletteLight.AppbarText = colorPalette.AppbarTextColor;
+                mudTheme.PaletteLight.AppbarText = colorScheme.AppbarTextColor;
             }
-            if (colorPalette.PrimaryColor is not null)
+            if (colorScheme.PrimaryColor is not null)
             {
-                mudTheme.PaletteLight.Primary = colorPalette.PrimaryColor;
+                mudTheme.PaletteLight.Primary = colorScheme.PrimaryColor;
             }
-            if (colorPalette.SecondaryColor is not null)
+            if (colorScheme.SecondaryColor is not null)
             {
-                mudTheme.PaletteLight.Secondary = colorPalette.SecondaryColor;
+                mudTheme.PaletteLight.Secondary = colorScheme.SecondaryColor;
             }
         }
 
-        if (theme?.Colors?.Dark is ThemeColorPalette colorPalette2)
+        if (theme?.ColorSchemes?.Dark is ThemeColorScheme colorScheme2)
         {
-            if (colorPalette2.BackgroundColor is not null)
+            if (colorScheme2.BackgroundColor is not null)
             {
-                mudTheme.PaletteDark.Background = colorPalette2.BackgroundColor;
+                mudTheme.PaletteDark.Background = colorScheme2.BackgroundColor;
             }
-            if (colorPalette2.AppbarBackgroundColor is not null)
+            if (colorScheme2.AppbarBackgroundColor is not null)
             {
-                mudTheme.PaletteDark.AppbarBackground = colorPalette2.AppbarBackgroundColor;
+                mudTheme.PaletteDark.AppbarBackground = colorScheme2.AppbarBackgroundColor;
             }
-            if (colorPalette2.AppbarTextColor is not null)
+            if (colorScheme2.AppbarTextColor is not null)
             {
-                mudTheme.PaletteDark.AppbarText = colorPalette2.AppbarTextColor;
+                mudTheme.PaletteDark.AppbarText = colorScheme2.AppbarTextColor;
             }
-            if (colorPalette2.PrimaryColor is not null)
+            if (colorScheme2.PrimaryColor is not null)
             {
-                mudTheme.PaletteDark.Primary = colorPalette2.PrimaryColor;
+                mudTheme.PaletteDark.Primary = colorScheme2.PrimaryColor;
             }
-            if (colorPalette2.SecondaryColor is not null)
+            if (colorScheme2.SecondaryColor is not null)
             {
-                mudTheme.PaletteDark.Secondary = colorPalette2.SecondaryColor;
+                mudTheme.PaletteDark.Secondary = colorScheme2.SecondaryColor;
             }
         }
 

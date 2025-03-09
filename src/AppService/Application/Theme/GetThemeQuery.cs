@@ -22,10 +22,10 @@ public record GetThemeQuery() : IRequest<ThemeDto?>
                 theme = new Theme("Theme", null);
             }
 
-            theme.Colors ??= new ThemeColors
+            theme.ColorSchemes ??= new ThemeColorSchemes
             {
-                Light = new ThemeColorPalette(),
-                Dark = new ThemeColorPalette()
+                Light = new ThemeColorScheme(),
+                Dark = new ThemeColorScheme()
             };
 
             return theme?.ToDto();
@@ -33,8 +33,8 @@ public record GetThemeQuery() : IRequest<ThemeDto?>
     }
 }
 
-public record ThemeDto(string Id, string Name, string? Description, string? Logo, bool Dense, ThemeColorsDto Colors);
+public record ThemeDto(string Id, string Name, string? Description, string? Logo, bool Dense, ThemeColorSchemesDto ColorSchemes);
 
-public record ThemeColorsDto(ThemeColorPaletteDto? Light, ThemeColorPaletteDto? Dark);
+public record ThemeColorSchemesDto(ThemeColorSchemeDto? Light, ThemeColorSchemeDto? Dark);
 
-public record ThemeColorPaletteDto(string? BackgroundColor, string? AppbarBackgroundColor, string? AppbarTextColor, string? PrimaryColor, string? SecondaryColor);
+public record ThemeColorSchemeDto(string? Logo, string? BackgroundColor, string? AppbarBackgroundColor, string? AppbarTextColor, string? PrimaryColor, string? SecondaryColor);
