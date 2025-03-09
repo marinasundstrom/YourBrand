@@ -52,6 +52,8 @@ public record UpdateBrandProfile(string Name, string? Description, ThemeDto Them
                 brandProfile.Theme = theme;
             }
 
+            brandProfile.Theme.CustomCss = request.Theme.CustomCss;
+
             Map(brandProfile.Theme.ColorSchemes.Light, request.Theme.ColorSchemes.Light);
             Map(brandProfile.Theme.ColorSchemes.Dark, request.Theme.ColorSchemes.Dark);
 

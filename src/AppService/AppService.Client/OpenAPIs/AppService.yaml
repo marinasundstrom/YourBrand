@@ -584,6 +584,9 @@ components:
           type: boolean
         colorSchemes:
           $ref: '#/components/schemas/ThemeColorSchemes'
+        customCss:
+          type: string
+          nullable: true
     ThemeColorSchemes:
       type: object
       additionalProperties: false

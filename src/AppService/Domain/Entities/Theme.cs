@@ -35,6 +35,8 @@ public class Theme : AuditableEntity<string>, ISoftDeletableWithAudit<User>, IHa
 
     public ThemeColorSchemes ColorSchemes { get; set; }
 
+    public string? CustomCss { get; set; } = null!;
+
     public bool IsDeleted { get; set; } = false;
     public DateTimeOffset? Deleted { get; set; }
     public UserId? DeletedById { get; set; }

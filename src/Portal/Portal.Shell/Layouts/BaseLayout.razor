@@ -33,10 +33,18 @@
 
 </OrganizationProviderWrap>
 
+@if(!string.IsNullOrEmpty(theme?.CustomCss)) 
+{
+    <style>
+        @theme?.CustomCss
+    </style>
+}
+
 @code {
     bool _drawerOpen = false;
     bool _disableOverlay = true;
     Organization? organization;
+    AppService.Client.Theme? theme;
 
     protected override async Task OnInitializedAsync()
     {
@@ -56,6 +64,8 @@
             ThemeManager.ThemeChanged += OnThemeChanged;
             ThemeManager.ColorSchemeChanged += OnColorSchemeChanged;
 
+            theme = ThemeManager.Theme;
+
             StateHasChanged();
         }
     }
@@ -73,6 +83,7 @@
 
     void OnThemeChanged(object? sender, EventArgs ea)
     {
+        theme = ThemeManager.Theme;
         StateHasChanged();
     }
 
@@ -84,6 +95,5 @@
     public void Dispose()
     {
         ThemeManager.ThemeChanged -= OnThemeChanged;
-        ThemeManager.ColorSchemeChanged -= OnColorSchemeChanged;
     }
 }

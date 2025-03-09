@@ -33,6 +33,18 @@
         </MudTabPanel>
     </MudTabs>
 
+    <MudExpansionPanels Class="mt-8 mb-8">
+        <MudExpansionPanel>
+            <TitleContent>
+                <MudText Typo="Typo.h4">Custom CSS</MudText>
+            </TitleContent>
+
+            <ChildContent>
+                <MudTextField Lines="10" Variant="Variant.Outlined" @bind-Value="brandProfile.Theme.CustomCss"></MudTextField>
+            </ChildContent>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+
     <MudButton OnClick="Save" Variant="Variant.Filled" Class="mt-4">Save</MudButton>
 }
 
