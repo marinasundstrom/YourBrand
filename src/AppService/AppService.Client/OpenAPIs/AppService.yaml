@@ -618,6 +618,36 @@ components:
         secondaryColor:
           type: string
           nullable: true
+        tertiaryColor:
+          type: string
+          nullable: true
+        actionDefaultColor:
+          type: string
+          nullable: true
+        actionDisabledColor:
+          type: string
+          nullable: true
+        infoColor:
+          type: string
+          nullable: true
+        successColor:
+          type: string
+          nullable: true
+        warningColor:
+          type: string
+          nullable: true
+        errorColor:
+          type: string
+          nullable: true
+        textPrimary:
+          type: string
+          nullable: true
+        textSecondary:
+          type: string
+          nullable: true
+        textDisabled:
+          type: string
+          nullable: true
     ProblemDetails:
       type: object
       additionalProperties:

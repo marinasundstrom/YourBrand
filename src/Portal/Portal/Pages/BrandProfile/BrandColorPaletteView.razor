@@ -1,5 +1,7 @@
 @using YourBrand.AppService.Client
 
+<ColorPicker Label="Background Color" @bind-Text="ColorScheme.BackgroundColor" Class="mb-4" />
+
 <ColorPicker Label="AppBar Background Color" @bind-Text="ColorScheme.AppbarBackgroundColor" Class="mb-4" />
 
 <ColorPicker Label="AppBar Text Color" @bind-Text="ColorScheme.AppbarTextColor" Class="mb-4" />
@@ -8,7 +10,25 @@
 
 <ColorPicker Label="Secondary Color" @bind-Text="ColorScheme.SecondaryColor" Class="mb-4" />
 
-<ColorPicker Label="Background Color" @bind-Text="ColorScheme.BackgroundColor" Class="mb-4" />
+<ColorPicker Label="Tertiary Color" @bind-Text="ColorScheme.TertiaryColor" Class="mb-4" />
+
+<ColorPicker Label="Action Default Color" @bind-Text="ColorScheme.ActionDefaultColor" Class="mb-4" />
+
+<ColorPicker Label="Action Disabled Color" @bind-Text="ColorScheme.ActionDisabledColor" Class="mb-4" />
+
+<ColorPicker Label="Info Color" @bind-Text="ColorScheme.InfoColor" Class="mb-4" />
+
+<ColorPicker Label="Success Color" @bind-Text="ColorScheme.SuccessColor" Class="mb-4" />
+
+<ColorPicker Label="Warning Color" @bind-Text="ColorScheme.WarningColor" Class="mb-4" />
+
+<ColorPicker Label="Error Color" @bind-Text="ColorScheme.ErrorColor" Class="mb-4" />
+
+<ColorPicker Label="Text Primary Color" @bind-Text="ColorScheme.TextPrimary" Class="mb-4" />
+
+<ColorPicker Label="Text Secondary Color" @bind-Text="ColorScheme.TextSecondary" Class="mb-4" />
+
+<ColorPicker Label="Text Disabled Color" @bind-Text="ColorScheme.TextDisabled" Class="mb-4" />
 
 @code {
     [Parameter]

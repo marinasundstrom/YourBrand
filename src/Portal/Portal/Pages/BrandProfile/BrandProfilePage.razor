@@ -58,8 +58,11 @@
         brandProfile = newBrandProfile;
     }
 
-    async Task ThemeChanged(Theme theme) 
+    async Task ThemeChanged(Theme? theme) 
     {
+        if(theme is null)
+            return;
+
         await BrandProfileClient.SetThemeAsync(new SetBrandProfileThemeRequest { ThemeId = theme.Id });
         brandProfile.Theme = theme;
         ThemeManager.SetTheme(brandProfile.Theme!);

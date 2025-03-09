@@ -37,4 +37,25 @@ public record ThemeDto(string Id, string Name, string? Description, string? Titl
 
 public record ThemeColorSchemesDto(ThemeColorSchemeDto? Light, ThemeColorSchemeDto? Dark);
 
-public record ThemeColorSchemeDto(string? Logo, string? BackgroundColor, string? AppbarBackgroundColor, string? AppbarTextColor, string? PrimaryColor, string? SecondaryColor);
+public record ThemeColorSchemeDto(
+    string? Logo, 
+
+    string? BackgroundColor, 
+    string? AppbarBackgroundColor, 
+    string? AppbarTextColor, 
+    
+    string? PrimaryColor, 
+    string? SecondaryColor, 
+    string? TertiaryColor,
+
+    string? ActionDefaultColor,
+    string? ActionDisabledColor,
+
+    string? InfoColor,
+    string? SuccessColor,
+    string? WarningColor,
+    string? ErrorColor,
+
+    string? TextPrimary,
+    string? TextSecondary,
+    string? TextDisabled);

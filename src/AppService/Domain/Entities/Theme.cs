@@ -51,9 +51,24 @@ public class ThemeColorSchemes
 public class ThemeColorScheme
 {
     public string? Logo { get; set; } = null!;
+    
     public string? BackgroundColor { get; set; } = null!;
     public string? AppbarBackgroundColor { get; set; } = null!;
     public string? AppbarTextColor { get; set; } = null!;
+
     public string? PrimaryColor { get; set; } = null!;
     public string? SecondaryColor { get; set; } = null!;
+    public string? TertiaryColor { get; set; } = null!;
+
+    public string? ActionDefaultColor { get; set; } = null!;
+    public string? ActionDisabledColor { get; set; } = null!;
+
+    public string? InfoColor { get; set; } = null!;
+    public string? SuccessColor { get; set; } = null!;
+    public string? WarningColor { get; set; } = null!;
+    public string? ErrorColor { get; set; } = null!;
+
+    public string? TextPrimary { get; set; } = null!;
+    public string? TextSecondary { get; set; } = null!;
+    public string? TextDisabled { get; set; } = null!;
 }

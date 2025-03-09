@@ -76,6 +76,16 @@ public record UpdateBrandProfile(string Name, string? Description, ThemeDto Them
             target.AppbarTextColor = from.AppbarTextColor;
             target.PrimaryColor = from.PrimaryColor;
             target.SecondaryColor = from.SecondaryColor;
+            target.TertiaryColor = from.TertiaryColor;
+            target.ActionDefaultColor = from.ActionDefaultColor;
+            target.ActionDisabledColor = from.ActionDisabledColor;
+            target.InfoColor = from.InfoColor;
+            target.SuccessColor = from.SuccessColor;
+            target.WarningColor = from.WarningColor;
+            target.ErrorColor = from.ErrorColor;
+            target.TextPrimary = from.TextPrimary;
+            target.TextSecondary = from.TextSecondary;
+            target.TextDisabled = from.TextDisabled;
         }
     }
 }
