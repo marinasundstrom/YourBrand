@@ -1,0 +1,103 @@
+@using System.Linq.Expressions
+@inject IThemesClient ThemesClient
+@inject IDialogService DialogService
+@using YourBrand.AppService
+@using YourBrand.AppService.Client
+
+<div class="d-flex flex-grow-1">
+    <div class="flex-1 d-flex">
+        <MudAutocomplete T="Theme" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class"
+            Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchThemes" ToStringFunc="(x) => x.Name"
+            ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+            <ItemTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemTemplate>
+
+            <ItemSelectedTemplate Context="context2">
+                <MudText Typo="Typo.body1">@context2.Name</MudText>
+            </ItemSelectedTemplate>
+        </MudAutocomplete>
+    </div>
+
+    @if (ShowAddButton)
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddThemes" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Theme";
+
+    [Parameter]
+    public Theme Value { get; set; }
+
+    [Parameter]
+    public EventCallback<Theme> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<Theme>> For { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    public string ThemesAreaId { get; set; }
+
+    [Parameter]
+    public bool ShowAddButton { get; set; }
+
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
+
+    async Task<IEnumerable<Theme>> SearchThemes(string text, CancellationToken cancellationToken)
+    {
+        //try
+        //{
+        var results = await ThemesClient.GetThemesAsync(); //Organization.Id, 0, 10, text, null, null, cancellationToken);
+        return results;
+        /*}
+        catch (AccessTokenNotAvailableException exception)
+        {
+        exception.Redirect();
+        }*/
+
+        return null;
+    }
+
+    async Task AddThemes()
+    {
+        /*try
+        {*/
+        var parameters = new DialogParameters();
+
+        var type = System.Reflection.Assembly.Load("Showroom.UI")
+        .GetType("YourBrand.AppService.Themes.ThemesDialog");
+
+        var dialogReference = DialogService.Show(type, "New Themes", parameters, new DialogOptions
+            {
+                //FullScreen = true,
+                MaxWidth = MaxWidth.ExtraLarge
+            });
+
+        var result = await dialogReference.Result;
+
+        if (result.Canceled)
+            return;
+
+        Value = (Theme)result.Data;
+
+        await ValueChanged.InvokeAsync(Value);
+        /*}
+        catch (AccessTokenNotAvailableException exception)
+        {
+        exception.Redirect();
+        }*/
+    }
+}

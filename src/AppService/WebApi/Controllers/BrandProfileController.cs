@@ -38,6 +38,19 @@ public class BrandProfileController : ControllerBase
         var modules = await mediator.Send(new UpdateBrandProfile(request.Name, request.Description, request.Theme), cancellationToken);
         return Ok(modules);
     }
+
+    [HttpPost("Theme")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<BrandProfileDto>> SetTheme(
+        SetBrandProfileThemeRequest request,
+        [FromServices] IMediator mediator, CancellationToken cancellationToken)
+    {
+        var modules = await mediator.Send(new SetBrandProfileTheme(request.ThemeId), cancellationToken);
+        return Ok(modules);
+    }
 }
 
 public record UpdateBrandProfileRequest(string Name, string? Description, ThemeDto Theme);
+
+public record SetBrandProfileThemeRequest(string ThemeId);

@@ -54,6 +54,34 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/BrandProfile/Theme:
+    post:
+      tags:
+      - BrandProfile
+      operationId: BrandProfile_SetTheme
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetBrandProfileThemeRequest'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BrandProfile'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Modules:
     get:
       tags:
@@ -394,6 +422,75 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Themes:
+    get:
+      tags:
+      - Themes
+      operationId: Themes_GetThemes
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Theme'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Themes
+      operationId: Themes_UpdateTheme
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateThemeRequest'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Theme'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Themes/Current:
+    get:
+      tags:
+      - Themes
+      operationId: Themes_GetTheme
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Theme'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Widgets:
     get:
       tags:
@@ -477,10 +574,10 @@ components:
         description:
           type: string
           nullable: true
-        logo:
+        title:
           type: string
           nullable: true
-        title:
+        logo:
           type: string
           nullable: true
         dense:
@@ -553,6 +650,12 @@ components:
           nullable: true
         theme:
           $ref: '#/components/schemas/Theme'
+    SetBrandProfileThemeRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        themeId:
+          type: string
     Module:
       type: object
       additionalProperties: false
@@ -713,6 +816,17 @@ components:
           $ref: '#/components/schemas/Module'
         enabled:
           type: boolean
+    UpdateThemeRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        colorSchemes:
+          $ref: '#/components/schemas/ThemeColorSchemes'
     ItemResultOfWidget:
       type: object
       additionalProperties: false

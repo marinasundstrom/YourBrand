@@ -12,6 +12,7 @@ public static class ServiceExtensions
             .AddModulesClient(configureClient, builder)
             .AddDoSomethingClient(configureClient, builder)
             .AddWidgetsClient(configureClient, builder)
+            .AddThemesClient(configureClient, builder)
             .AddOrganizationsClient(configureClient, builder)
             .AddBrandProfilesClient(configureClient, builder);
 
@@ -85,6 +86,17 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(WidgetsClient), configureClient)
             .AddTypedClient<IWidgetsClient>((http, sp) => new WidgetsClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddThemesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(ThemesClient), configureClient)
+            .AddTypedClient<IThemesClient>((http, sp) => new ThemesClient(http));
 
         builder?.Invoke(b);
 

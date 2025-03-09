@@ -32,6 +32,9 @@
     <ProjectReference Include="..\..\AppService\AppService.Client\AppService.Client.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\..\AppService\AppService.Components\AppService.Components.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
     <ProjectReference Include="..\..\TimeReport\TimeReport.UI\TimeReport.UI.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>

@@ -1,4 +1,5 @@
 ﻿@page "/brandprofile"
+@using YourBrand.AppService
 @using YourBrand.AppService.Client
 @using YourBrand.Portal.Theming
 @attribute [Authorize]
@@ -8,10 +9,13 @@
 @inject IBrandProfileClient BrandProfileClient
 @inject IDialogService DialogService
 @inject IThemeManager ThemeManager
+@inject IThemesClient ThemesClient
 
 <AppPageTitle>@T["BrandProfile"]</AppPageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">@T["BrandProfile"]</MudText>
+
+<ThemeSelector Label="Active theme" Class="mb-16" Value="brandProfile?.Theme" ValueChanged="ThemeChanged" />
 
 @if (brandProfile is not null) 
 {
@@ -50,5 +54,14 @@
             });
 
         ThemeManager.SetTheme(newBrandProfile.Theme!);
+
+        brandProfile = newBrandProfile;
+    }
+
+    async Task ThemeChanged(Theme theme) 
+    {
+        await BrandProfileClient.SetThemeAsync(new SetBrandProfileThemeRequest { ThemeId = theme.Id });
+        brandProfile.Theme = theme;
+        ThemeManager.SetTheme(brandProfile.Theme!);
     }
 }
