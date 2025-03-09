@@ -10,7 +10,7 @@
         OnClick="@(async (e) => await DrawerToggleCallback.InvokeAsync())" />
     <a href="/">
         <img src="@logo" class="ms-2 mt-1" style="
-    height: 30px;">
+    height: @(dense ? "26px;" : "30px;")">
     </a>
     @if (!string.IsNullOrEmpty(appBarTitle)) 
     {
