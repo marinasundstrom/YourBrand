@@ -22,7 +22,7 @@ public record GetBrandProfileQuery() : IRequest<BrandProfileDto?>
             {
                 brandProfile = new BrandProfile("Brand", null) 
                 {
-                    Theme = new Theme("Theme", null)
+                    Theme = new Theme("Default theme", null)
                     {
                         ColorSchemes = new ThemeColorSchemes
                         {

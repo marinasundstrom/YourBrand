@@ -23,6 +23,11 @@
     {
         <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddThemes" />
     }
+
+    @if (ShowCopyButton)
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.ContentCopy" OnClick="CopyTheme" />
+    }
 </div>
 
 @code {
@@ -52,6 +57,9 @@
 
     [Parameter]
     public bool ShowAddButton { get; set; }
+
+    [Parameter]
+    public bool ShowCopyButton { get; set; }
 
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization Organization { get; set; }
@@ -99,5 +107,10 @@
         {
         exception.Redirect();
         }*/
+    }
+    
+    async Task CopyTheme() 
+    {
+        await ThemesClient.CopyThemeAsync(Value.Id);
     }
 }

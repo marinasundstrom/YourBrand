@@ -36,7 +36,7 @@ public record UpdateBrandProfile(string Name, string? Description, ThemeDto Them
 
             if(brandProfile.Theme is null) 
             {
-                var theme = new Theme("Theme", null) 
+                var theme = new Theme("Default theme", null) 
                 {
                     ColorSchemes = new ThemeColorSchemes
                     {

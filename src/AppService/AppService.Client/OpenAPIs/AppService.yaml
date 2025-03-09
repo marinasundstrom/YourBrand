@@ -444,18 +444,11 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-    post:
+  /v1/Themes/Current:
+    get:
       tags:
       - Themes
-      operationId: Themes_UpdateTheme
-      requestBody:
-        x-name: request
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateThemeRequest'
-        required: true
-        x-position: 1
+      operationId: Themes_GetTheme
       responses:
         200:
           description: ''
@@ -471,11 +464,53 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Themes/Current:
-    get:
+  /v1/Themes/{id}:
+    post:
       tags:
       - Themes
-      operationId: Themes_GetTheme
+      operationId: Themes_UpdateTheme
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateThemeRequest'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Theme'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Themes/{id}/Copy:
+    post:
+      tags:
+      - Themes
+      operationId: Themes_CopyTheme
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
       responses:
         200:
           description: ''

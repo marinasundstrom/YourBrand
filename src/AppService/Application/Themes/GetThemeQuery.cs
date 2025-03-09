@@ -19,7 +19,7 @@ public record GetThemeQuery() : IRequest<ThemeDto?>
 
             if (theme is null)
             {
-                theme = new Theme("Theme", null);
+                theme = new Theme("Default theme", null);
             }
 
             theme.ColorSchemes ??= new ThemeColorSchemes

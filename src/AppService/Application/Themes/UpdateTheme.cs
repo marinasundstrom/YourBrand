@@ -7,15 +7,14 @@ using YourBrand.Domain.Entities;
 
 namespace YourBrand.Application.Themes;
 
-public record UpdateTheme(string Name, string? Description, ThemeColorSchemesDto Colors) : IRequest<ThemeDto>
+public record UpdateTheme(string Id, string Name, string? Description, ThemeColorSchemesDto Colors) : IRequest<ThemeDto>
 {
     public class Handler(IAppServiceContext appServiceContext) : IRequestHandler<UpdateTheme, ThemeDto>
     {
         public async Task<ThemeDto?> Handle(UpdateTheme request, CancellationToken cancellationToken)
         {
             Theme? theme = await appServiceContext.Themes
-                .OrderBy(x => x.Created)
-                .FirstOrDefaultAsync(cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             bool @new = false;
 
@@ -47,8 +46,7 @@ public record UpdateTheme(string Name, string? Description, ThemeColorSchemesDto
             await appServiceContext.SaveChangesAsync(cancellationToken);
 
             theme = await appServiceContext.Themes
-                .OrderBy(x => x.Created)
-                .FirstAsync(cancellationToken);
+                .FirstAsync(x => x.Id == request.Id, cancellationToken);
 
             return theme.ToDto();
         }

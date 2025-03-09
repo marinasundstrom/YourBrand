@@ -18,7 +18,7 @@ public abstract class Entity<TId> : IEntity<TId>, IEquatable<Entity<TId>>, IHasD
         Id = id ?? throw new ArgumentNullException(nameof(id), "Id cannot be null.");
     }
 
-    public TId Id { get; private set; }
+    public TId Id { get; protected set; }
 
     public override bool Equals(object? obj)
     {

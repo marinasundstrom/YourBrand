@@ -37,15 +37,28 @@ public class ThemesController : ControllerBase
         return Ok(modules);
     }
 
-    [HttpPost]
+    [HttpPost("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     //[AllowAnonymous]
     public async Task<ActionResult<ThemeDto>> UpdateTheme(
+        string id,
         UpdateThemeRequest request,
         [FromServices] IMediator mediator, CancellationToken cancellationToken)
     {
-        var modules = await mediator.Send(new UpdateTheme(request.Name, request.Description, request.ColorSchemes), cancellationToken);
+        var modules = await mediator.Send(new UpdateTheme(id, request.Name, request.Description, request.ColorSchemes), cancellationToken);
+        return Ok(modules);
+    }
+
+    [HttpPost("{id}/Copy")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[AllowAnonymous]
+    public async Task<ActionResult<ThemeDto>> CopyTheme(
+        string id,
+        [FromServices] IMediator mediator, CancellationToken cancellationToken)
+    {
+        var modules = await mediator.Send(new CopyTheme(id), cancellationToken);
         return Ok(modules);
     }
 }
