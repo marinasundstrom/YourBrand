@@ -1,5 +1,9 @@
-﻿html, body {
-    font-family: Roboto, sans-serif;
+﻿:root {
+    --mud-typography-default-family: Roboto, sans-serif;
+}
+
+html, body {
+
 }
 
 .search-box .mud-input-slot 
