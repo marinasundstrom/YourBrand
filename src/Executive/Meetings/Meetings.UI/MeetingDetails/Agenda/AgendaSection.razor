@@ -191,7 +191,7 @@
         DialogParameters parameters = new();
         parameters.Add(nameof(AddAgendaItemDialog.OrganizationId), OrganizationId);
 
-        var modalRef = DialogService.Show<AddAgendaItemDialog>("Add item", parameters);
+        var modalRef = await DialogService.ShowAsync<AddAgendaItemDialog>("Add item", parameters);
 
         var result = await modalRef.Result;
 
@@ -313,7 +313,7 @@
         parameters.Add(nameof(AddAgendaItemDialog.OrganizationId), OrganizationId);
         parameters.Add(nameof(AddAgendaItemDialog.Model), originalItem.Clone());
 
-        var modalRef = DialogService.Show<AddAgendaItemDialog>("Edit item", parameters);
+        var modalRef = await DialogService.ShowAsync<AddAgendaItemDialog>("Edit item", parameters);
 
         var result = await modalRef.Result;
 

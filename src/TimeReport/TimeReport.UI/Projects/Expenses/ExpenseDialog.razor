@@ -71,7 +71,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if(ProjectId is not null)
+        if(ExpenseId is not null)
         {
             var result = await ExpensesClient.GetExpenseAsync(Organization.Id, ExpenseId);
 

@@ -136,7 +136,7 @@ Dense="true" Hover="true" @ref="table" OnRowClick="(e) => ShowProduct(e.Item)" E
 
     async Task CreateProduct()
     {
-        var modalRef = DialogService.Show<CreateProductDialog>("New Product");
+        var modalRef = await DialogService.ShowAsync<CreateProductDialog>("New Product");
 
         var result = await modalRef.Result;
 

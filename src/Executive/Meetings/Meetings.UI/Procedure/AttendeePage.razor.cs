@@ -219,7 +219,7 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
             { nameof(NominateCandidateDialog.MeetingId), MeetingId }
         };
 
-        var modalRef = DialogService.Show<NominateCandidateDialog>("Nominate candidate", parameters);
+        var modalRef = await DialogService.ShowAsync<NominateCandidateDialog>("Nominate candidate", parameters);
 
         var result = await modalRef.Result;
 

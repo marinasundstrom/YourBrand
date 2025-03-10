@@ -108,7 +108,7 @@
 
     async Task CreateProduct()
     {
-        var modalRef = DialogService.Show<CreateProductDialog>("New Product");
+        var modalRef = await DialogService.ShowAsync<CreateProductDialog>("New Product");
 
         var result = await modalRef.Result;
 

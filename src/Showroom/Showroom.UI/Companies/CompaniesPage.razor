@@ -91,7 +91,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(CompanyDialog.CompanyId), dto?.Id);
 
-            var dialogReference = DialogService.Show<CompanyDialog>(dto is null ? "New Company" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<CompanyDialog>(dto is null ? "New Company" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

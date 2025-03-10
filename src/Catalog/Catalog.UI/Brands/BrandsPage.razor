@@ -109,7 +109,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(BrandDialog.BrandId), dto?.Id);
 
-            var dialogReference = DialogService.Show<BrandDialog>(dto is null ? "New Brand" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<BrandDialog>(dto is null ? "New Brand" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

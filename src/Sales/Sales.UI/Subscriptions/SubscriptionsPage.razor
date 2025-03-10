@@ -178,7 +178,7 @@
         var dialogParameters = new DialogParameters();
         //dialogParameters.Add(nameof(SubscriptionItemDialog.SubscriptionId), order.Id);
 
-        var dialogRef = DialogService.Show<CreateSubscriptionOrder>("New subscription", dialogParameters, new DialogOptions
+        var dialogRef = await DialogService.ShowAsync<CreateSubscriptionOrder>("New subscription", dialogParameters, new DialogOptions
             {
                 FullWidth = true,
                 MaxWidth = MaxWidth.Small,
@@ -200,7 +200,7 @@
         var dialogParameters = new DialogParameters();
         //dialogParameters.Add(nameof(SubscriptionItemDialog.SubscriptionId), order.Id);
 
-        var dialogRef = DialogService.Show<Plans.CreateSubscriptionPlan>("New subscription plan", dialogParameters, new DialogOptions
+        var dialogRef = await DialogService.ShowAsync<Plans.CreateSubscriptionPlan>("New subscription plan", dialogParameters, new DialogOptions
             {
                 FullWidth = true,
                 MaxWidth = MaxWidth.Small,

@@ -111,7 +111,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(StoreDialog.StoreId), dto?.Id);
 
-            var dialogReference = DialogService.Show<StoreDialog>(dto is null ? "New Store" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<StoreDialog>(dto is null ? "New Store" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

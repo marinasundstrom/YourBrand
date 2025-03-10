@@ -13,7 +13,7 @@
 
             <MudTextField Label="Name" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
 
-            <OrganizationSelector ServiceKey="@ServiceKeys.OrganizationSearchProviderKey" Variant="Variant.Outlined" Class="mb-4" @bind-Value="Organization" For="() => Organization" />
+            <OrganizationSelector ServiceKey="@ServiceKeys.OrganizationSearchProviderKey" Variant="Variant.Outlined" Class="mb-4" @bind-Value="organization" For="() => organization" />
 
             <MudTextField Lines="3" Label="Description" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
 
@@ -28,12 +28,14 @@
 </EditForm>
 
 @code {
+    Portal.Organization? organization;
 
     [CascadingParameter] IMudDialogInstance Modal { get; set; }
 
     [Parameter] public string? ProjectId { get; set; }
 
-    [Parameter] public Portal.Organization? Organization { get; set; }
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
 
     [Required]
     public string Name { get; set; }
@@ -48,7 +50,7 @@
 
             Name = result.Name;
             Description = result.Description;
-            Organization = result.Organization.ToOrganization();
+            organization = result.Organization.ToOrganization();
         }
     }
 
@@ -64,7 +66,7 @@
             {
                 Name = Name,
                 Description = Description,
-                OrganizationId = Organization.Id
+                OrganizationId = organization.Id
             });
         }
         else
@@ -73,7 +75,7 @@
             {
                 Name = Name,
                 Description = Description,
-                OrganizationId = Organization.Id
+                OrganizationId = organization.Id
             });
         }
 

@@ -138,7 +138,7 @@
 
     public async Task NewInvoice()
     {
-        var dialogRef = DialogService.Show<NewInvoiceDialog>("New invoice");
+        var dialogRef = await DialogService.ShowAsync<NewInvoiceDialog>("New invoice");
 
         var result = await dialogRef.Result;
 

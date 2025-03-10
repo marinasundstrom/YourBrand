@@ -129,7 +129,7 @@
 
         var dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
-        var modalRef = DialogService.Show<AddEditOperativeClauseDialog>("Add operative clause", parameters, dialogOptions);
+        var modalRef = await DialogService.ShowAsync<AddEditOperativeClauseDialog>("Add operative clause", parameters, dialogOptions);
 
         var result = await modalRef.Result;
 
@@ -150,7 +150,7 @@
 
         var dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
-        var modalRef = DialogService.Show<AddEditOperativeClauseDialog>("Edit operative clause", parameters, dialogOptions);
+        var modalRef = await DialogService.ShowAsync<AddEditOperativeClauseDialog>("Edit operative clause", parameters, dialogOptions);
 
         var result = await modalRef.Result;
 

@@ -109,7 +109,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(OrderStatusDialog.OrderStatusId), dto?.Id);
 
-            var dialogReference = DialogService.Show<OrderStatusDialog>(dto is null ? "New Order Status" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<OrderStatusDialog>(dto is null ? "New Order Status" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

@@ -90,7 +90,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(IndustryDialog.IndustryId), dto?.Id);
 
-            var dialogReference = DialogService.Show<IndustryDialog>(dto is null ? "New Industry" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<IndustryDialog>(dto is null ? "New Industry" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

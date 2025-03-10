@@ -122,7 +122,10 @@
 
     private async Task OnNewProjectClicked()
     {
-        var dialogRef = DialogService.Show<ProjectDialog>("New project");
+        DialogParameters parameters = new();
+        //parameters.Add(nameof(ProjectDialog.Organization), Organization);
+
+        var dialogRef = await DialogService.ShowAsync<ProjectDialog>("New project", parameters);
 
         var dialogResult = await dialogRef.Result;
 
@@ -136,8 +139,9 @@
     {
         DialogParameters parameters = new();
         parameters.Add(nameof(ProjectDialog.ProjectId), project.Id);
+        //parameters.Add(nameof(ProjectDialog.Organization), Organization);
 
-        var dialogRef = DialogService.Show<ProjectDialog>($"Edit {project.Name}", parameters);
+        var dialogRef = await DialogService.ShowAsync<ProjectDialog>($"Edit {project.Name}", parameters);
 
         var dialogResult = await dialogRef.Result;
 
@@ -150,7 +154,7 @@
 
     private async Task BillProject() 
     {
-        var dialogReference = DialogService.Show<BillProjectDialog>("Bill project");
+        var dialogReference = await DialogService.ShowAsync<BillProjectDialog>("Bill project");
         var result = await dialogReference.Result;
 
         if (result.Canceled)

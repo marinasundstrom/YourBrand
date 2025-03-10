@@ -208,7 +208,7 @@
         dialogParameters.Add(nameof(YourBrand.Ticketing.Tickets.Dialog.TicketDialog.Id), id);
 
         DialogOptions dialogOptions = new DialogOptions() { FullWidth = true, MaxWidth = MaxWidth.Large, CloseButton = true };
-        var dialogRef = DialogService.Show<YourBrand.Ticketing.Tickets.Dialog.TicketDialog>(string.Empty, dialogParameters,
+        var dialogRef = await DialogService.ShowAsync<YourBrand.Ticketing.Tickets.Dialog.TicketDialog>(string.Empty, dialogParameters,
         dialogOptions);
         var result = await dialogRef.Result;
     }

@@ -91,7 +91,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(ItemGroupDialog.Id), dto?.Id);
 
-            var dialogReference = DialogService.Show<ItemGroupDialog>(dto is null ? "New Group" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<ItemGroupDialog>(dto is null ? "New Group" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

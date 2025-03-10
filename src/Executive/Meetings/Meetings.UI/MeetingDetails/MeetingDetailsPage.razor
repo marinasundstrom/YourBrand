@@ -291,7 +291,7 @@
         DialogParameters parameters = new();
         parameters.Add(nameof(AddAttendeeDialog.OrganizationId), organization.Id);
 
-        var modalRef = DialogService.Show<AddAttendeeDialog>("Add attendee", parameters);
+        var modalRef = await DialogService.ShowAsync<AddAttendeeDialog>("Add attendee", parameters);
 
         var result = await modalRef.Result;
 
@@ -320,7 +320,7 @@
         DialogParameters parameters = new();
         parameters.Add(nameof(AddAttendeesFromGroupDialog.OrganizationId), organization.Id);
 
-        var modalRef = DialogService.Show<AddAttendeesFromGroupDialog>("Add group", parameters);
+        var modalRef = await DialogService.ShowAsync<AddAttendeesFromGroupDialog>("Add group", parameters);
 
         var result = await modalRef.Result;
 
@@ -355,7 +355,7 @@
         parameters.Add(nameof(EditAttendeeDialog.OrganizationId), organization.Id);
         parameters.Add(nameof(EditAttendeeDialog.Model), originalAttendee.Clone());
 
-        var modalRef = DialogService.Show<EditAttendeeDialog>("Edit attendee", parameters);
+        var modalRef = await DialogService.ShowAsync<EditAttendeeDialog>("Edit attendee", parameters);
 
         var result = await modalRef.Result;
 

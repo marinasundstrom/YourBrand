@@ -82,7 +82,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(SiteDialog.SiteId), dto?.Id);
 
-            var dialogReference = DialogService.Show<SiteDialog>(dto is null ? "New Site" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<SiteDialog>(dto is null ? "New Site" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

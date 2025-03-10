@@ -95,7 +95,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(SkillAreaDialog.SkillAreaId), dto?.Id);
 
-            var dialogReference = DialogService.Show<SkillAreaDialog>(dto is null ? "New Skill Area" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<SkillAreaDialog>(dto is null ? "New Skill Area" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

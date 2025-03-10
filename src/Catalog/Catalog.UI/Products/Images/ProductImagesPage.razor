@@ -98,7 +98,7 @@ else
         parameters.Add(nameof(ProductImageDialog.ProductId), ProductId);
         parameters.Add(nameof(ProductImageDialog.ProductImage), productImage);
 
-        var modalRef = DialogService.Show<ProductImageDialog>("Update Image", parameters);
+        var modalRef = await DialogService.ShowAsync<ProductImageDialog>("Update Image", parameters);
 
         var result = await modalRef.Result;
 

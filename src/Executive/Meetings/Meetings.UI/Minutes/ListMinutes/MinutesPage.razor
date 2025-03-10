@@ -77,7 +77,7 @@
 @*
     public async Task NewMinutes()
     {
-        var dialogRef = DialogService.Show<NewMinutesDialog>("New motion");
+        var dialogRef = await DialogService.ShowAsync<NewMinutesDialog>("New motion");
 
         var result = await dialogRef.Result;
 

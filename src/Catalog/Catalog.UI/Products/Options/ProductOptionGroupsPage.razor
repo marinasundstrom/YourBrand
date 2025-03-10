@@ -65,7 +65,7 @@ else
         DialogParameters parameters = new();
         parameters.Add(nameof(CreateProductOptionGroupModal.ProductId), ProductId);
 
-        var modalRef = DialogService.Show<CreateProductOptionGroupModal>("Create Group", parameters);
+        var modalRef = await DialogService.ShowAsync<CreateProductOptionGroupModal>("Create Group", parameters);
 
         var result = await modalRef.Result;
 
@@ -80,7 +80,7 @@ else
         parameters.Add(nameof(UpdateProductOptionGroupModal.ProductId), ProductId);
         parameters.Add(nameof(UpdateProductOptionGroupModal.OptionGroup), optionGroup);
 
-        var modalRef = DialogService.Show<UpdateProductOptionGroupModal>("Update Group", parameters);
+        var modalRef = await DialogService.ShowAsync<UpdateProductOptionGroupModal>("Update Group", parameters);
 
         var result = await modalRef.Result;
 

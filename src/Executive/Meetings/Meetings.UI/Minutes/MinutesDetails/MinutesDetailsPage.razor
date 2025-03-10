@@ -175,7 +175,7 @@
 
         var dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
-        var modalRef = DialogService.Show<AddItemDialog>("Add item", parameters, dialogOptions);
+        var modalRef = await DialogService.ShowAsync<AddItemDialog>("Add item", parameters, dialogOptions);
 
         var result = await modalRef.Result;
 
@@ -210,7 +210,7 @@
 
         var dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
-        var modalRef = DialogService.Show<EditItemDialog>("Edit item", parameters, dialogOptions);
+        var modalRef = await DialogService.ShowAsync<EditItemDialog>("Edit item", parameters, dialogOptions);
 
         var result = await modalRef.Result;
 

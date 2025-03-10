@@ -60,7 +60,7 @@
 
     public async Task UploadDocument()
     {
-        var dialogRef = DialogService.Show<UploadDocumentDialog>("Upload document");
+        var dialogRef = await DialogService.ShowAsync<UploadDocumentDialog>("Upload document");
 
         var result = await dialogRef.Result;
 
@@ -74,7 +74,7 @@
         var parameters = new DialogParameters();
         parameters.Add(nameof(EditDocumentDetailsDialog.Id), document.Id);
 
-        var dialogRef = DialogService.Show<EditDocumentDetailsDialog>($"Edit {document.Name}", parameters);
+        var dialogRef = await DialogService.ShowAsync<EditDocumentDetailsDialog>($"Edit {document.Name}", parameters);
 
         var result = await dialogRef.Result;
 

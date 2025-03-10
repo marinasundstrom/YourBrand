@@ -148,7 +148,7 @@ else
             var parameters = new DialogParameters();
             parameters.Add(nameof(ItemDialog.Id), Item.Id);
 
-            var dialogReference = DialogService.Show<ItemDialog>($"Update {Item.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<ItemDialog>($"Update {Item.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });
@@ -174,7 +174,7 @@ else
             parameters.Add(nameof(Inventory.Warehouses.Items.ItemDialog.ItemId), Id);
             parameters.Add(nameof(Inventory.Warehouses.Items.ItemDialog.WarehouseId), dto?.Warehouse?.Id);
 
-            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.ItemDialog>(dto is null ? "New Item" : $"Update {dto.Item.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<Inventory.Warehouses.Items.ItemDialog>(dto is null ? "New Item" : $"Update {dto.Item.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });
@@ -199,7 +199,7 @@ else
             parameters.Add(nameof(Inventory.Warehouses.Items.AdjustQuantityOnHandDialog.ItemId), dto.Item.Id);
             parameters.Add(nameof(Inventory.Warehouses.Items.AdjustQuantityOnHandDialog.WarehouseId), dto?.Warehouse?.Id);
 
-            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.AdjustQuantityOnHandDialog>("Adjust Quantity on Hand", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<Inventory.Warehouses.Items.AdjustQuantityOnHandDialog>("Adjust Quantity on Hand", parameters, new DialogOptions {
                 MaxWidth = MaxWidth.ExtraLarge
             });
             var result = await dialogReference.Result;
@@ -233,7 +233,7 @@ else
             parameters.Add(nameof(Inventory.Warehouses.Items.PickItemsDialog.ItemId), dto.Item.Id);
             parameters.Add(nameof(Inventory.Warehouses.Items.PickItemsDialog.WarehouseId), dto?.Warehouse?.Id);
 
-            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.PickItemsDialog>("Pick items", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<Inventory.Warehouses.Items.PickItemsDialog>("Pick items", parameters, new DialogOptions {
                 MaxWidth = MaxWidth.ExtraLarge
             });
             var result = await dialogReference.Result;
@@ -267,7 +267,7 @@ else
             parameters.Add(nameof(Inventory.Warehouses.Items.ReserveItemsDialog.ItemId), dto.Item.Id);
             parameters.Add(nameof(Inventory.Warehouses.Items.ReserveItemsDialog.WarehouseId), dto?.Warehouse?.Id);
 
-            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.ReserveItemsDialog>("Reserve items", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<Inventory.Warehouses.Items.ReserveItemsDialog>("Reserve items", parameters, new DialogOptions {
                 MaxWidth = MaxWidth.ExtraLarge
             });
             var result = await dialogReference.Result;
@@ -301,7 +301,7 @@ else
             parameters.Add(nameof(Inventory.Warehouses.Items.ShipItemsDialog.ItemId), dto.Item.Id);
             parameters.Add(nameof(Inventory.Warehouses.Items.ShipItemsDialog.WarehouseId), dto?.Warehouse?.Id);
 
-            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.ShipItemsDialog>("Ship items", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<Inventory.Warehouses.Items.ShipItemsDialog>("Ship items", parameters, new DialogOptions {
                 MaxWidth = MaxWidth.ExtraLarge
             });
             var result = await dialogReference.Result;
@@ -335,7 +335,7 @@ else
             parameters.Add(nameof(Inventory.Warehouses.Items.ReceiveItemsDialog.ItemId), dto.Item.Id);
             parameters.Add(nameof(Inventory.Warehouses.Items.ReceiveItemsDialog.WarehouseId), dto?.Warehouse?.Id);
 
-            var dialogReference = DialogService.Show<Inventory.Warehouses.Items.ReceiveItemsDialog>("Receive items", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<Inventory.Warehouses.Items.ReceiveItemsDialog>("Receive items", parameters, new DialogOptions {
                 MaxWidth = MaxWidth.ExtraLarge
             });
             var result = await dialogReference.Result;

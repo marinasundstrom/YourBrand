@@ -77,7 +77,7 @@
 @*
     public async Task NewMeeting()
     {
-        var dialogRef = DialogService.Show<NewMeetingDialog>("New meeting");
+        var dialogRef = await DialogService.ShowAsync<NewMeetingDialog>("New meeting");
 
         var result = await dialogRef.Result;
 

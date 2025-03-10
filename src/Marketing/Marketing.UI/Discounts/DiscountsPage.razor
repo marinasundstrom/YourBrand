@@ -81,7 +81,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(DiscountDialog.Id), dto?.Id);
 
-            var dialogReference = DialogService.Show<DiscountDialog>(dto is null ? "New Discount" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<DiscountDialog>(dto is null ? "New Discount" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 FullWidth = true,
                 MaxWidth = MaxWidth.Small,

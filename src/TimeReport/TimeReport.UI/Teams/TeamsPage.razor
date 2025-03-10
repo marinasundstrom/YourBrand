@@ -95,7 +95,7 @@
 
     private async Task OnNewTeamClicked()
     {
-        var dialogRef = DialogService.Show<TeamDialog>("New Team");
+        var dialogRef = await DialogService.ShowAsync<TeamDialog>("New Team");
 
         var dialogResult = await dialogRef.Result;
 
@@ -112,7 +112,7 @@
     DialogParameters parameters = new();
     parameters.Add(nameof(TimeSheetDialog.TimeSheetId), timeSheet.Id);
 
-    var dialogRef = DialogService.Show<TimeSheetDialog>($"Edit {timeSheet.FirstName}", parameters);
+    var dialogRef = await DialogService.ShowAsync<TimeSheetDialog>($"Edit {timeSheet.FirstName}", parameters);
 
     var dialogResult = await dialogRef.Result;
 

@@ -350,7 +350,7 @@ else
         parameters.Add(nameof(NewTimeSheetTaskDialog.Year), Year);
         parameters.Add(nameof(NewTimeSheetTaskDialog.Week), Week);
 
-        var dialogRef = DialogService.Show<NewTimeSheetTaskDialog>("New task", parameters);
+        var dialogRef = await DialogService.ShowAsync<NewTimeSheetTaskDialog>("New task", parameters);
         var dialogResult = await dialogRef.Result;
 
         if (dialogResult.Canceled)

@@ -211,7 +211,7 @@ else
         DialogParameters parameters = new();
         parameters.Add(nameof(TaskDialog.ProjectId), project.Id);
 
-        var dialogRef = DialogService.Show<TaskDialog>("New task", parameters);
+        var dialogRef = await DialogService.ShowAsync<TaskDialog>("New task", parameters);
 
         var dialogResult = await dialogRef.Result;
 
@@ -226,7 +226,7 @@ else
         DialogParameters parameters = new();
         parameters.Add(nameof(TaskDialog.TaskId), task.Id);
 
-        var dialogRef = DialogService.Show<TaskDialog>($"Edit {task.Name}", parameters);
+        var dialogRef = await DialogService.ShowAsync<TaskDialog>($"Edit {task.Name}", parameters);
 
         var dialogResult = await dialogRef.Result;
 
@@ -241,7 +241,7 @@ else
         DialogParameters parameters = new();
         parameters.Add(nameof(MembershipDialog.ProjectId), project.Id);
 
-        var dialogRef = DialogService.Show<MembershipDialog>("New membership", parameters);
+        var dialogRef = await DialogService.ShowAsync<MembershipDialog>("New membership", parameters);
 
         var dialogResult = await dialogRef.Result;
 
@@ -257,7 +257,7 @@ else
         parameters.Add(nameof(MembershipDialog.ProjectId), membership.Project.Id);
         parameters.Add(nameof(MembershipDialog.MembershipId), membership.Id);
 
-        var dialogRef = DialogService.Show<MembershipDialog>($"Edit membership", parameters);
+        var dialogRef = await DialogService.ShowAsync<MembershipDialog>($"Edit membership", parameters);
 
         var dialogResult = await dialogRef.Result;
 
@@ -290,7 +290,7 @@ else
         DialogParameters parameters = new();
         parameters.Add(nameof(ExpenseDialog.ProjectId), project.Id);
 
-        var dialogRef = DialogService.Show<ExpenseDialog>("New expense", parameters);
+        var dialogRef = await DialogService.ShowAsync<ExpenseDialog>("New expense", parameters);
 
         var dialogResult = await dialogRef.Result;
 
@@ -308,7 +308,7 @@ else
         parameters.Add(nameof(ExpenseDialog.ProjectId), expense.Project.Id);
         parameters.Add(nameof(ExpenseDialog.ExpenseId), expense.Id);
 
-        var dialogRef = DialogService.Show<ExpenseDialog>($"Edit expense", parameters);
+        var dialogRef = await DialogService.ShowAsync<ExpenseDialog>($"Edit expense", parameters);
 
         var dialogResult = await dialogRef.Result;
 

@@ -106,7 +106,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(ContactDialog.Id), dto?.Id);
 
-            var dialogReference = DialogService.Show<ContactDialog>(dto is null ? "New Contact" : $"Update {dto.FirstName}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<ContactDialog>(dto is null ? "New Contact" : $"Update {dto.FirstName}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

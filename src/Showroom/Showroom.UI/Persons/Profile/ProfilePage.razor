@@ -191,7 +191,7 @@ else
         var parameters = new DialogParameters();
         parameters.Add(nameof(DetailsDialog.PersonProfile), profile);
 
-        var dialogReference = DialogService.Show<DetailsDialog>("Update details", parameters);
+        var dialogReference = await DialogService.ShowAsync<DetailsDialog>("Update details", parameters);
         var result = await dialogReference.Result;
 
         if (result.Canceled)

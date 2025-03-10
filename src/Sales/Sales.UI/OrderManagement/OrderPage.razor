@@ -568,7 +568,7 @@ Delete
         var dialogParameters = new DialogParameters();
         dialogParameters.Add(nameof(OrderItemDialog.OrderId), order.Id);
 
-        var dialogRef = DialogService.Show<OrderItemDialog>("New Item", dialogParameters, new DialogOptions {
+        var dialogRef = await DialogService.ShowAsync<OrderItemDialog>("New Item", dialogParameters, new DialogOptions {
             FullWidth = true,
             MaxWidth = MaxWidth.Medium,
             CloseButton = true
@@ -595,7 +595,7 @@ Delete
         dialogParameters.Add(nameof(OrderItemDialog.OrderId), order.Id);
         dialogParameters.Add(nameof(OrderItemDialog.Model), model);
 
-        var dialogRef = DialogService.Show<OrderItemDialog>("Update Item", dialogParameters, new DialogOptions {
+        var dialogRef = await DialogService.ShowAsync<OrderItemDialog>("Update Item", dialogParameters, new DialogOptions {
             FullWidth = true,
             MaxWidth = MaxWidth.Medium,
             CloseButton = true
@@ -615,7 +615,7 @@ Delete
         dialogParameters.Add(nameof(SetStatusDialog.OrderId), order.Id);
         dialogParameters.Add(nameof(SetStatusDialog.Status), Model.Status);
 
-        var dialogRef = DialogService.Show<SetStatusDialog>("Update status", dialogParameters);
+        var dialogRef = await DialogService.ShowAsync<SetStatusDialog>("Update status", dialogParameters);
 
         var result = await dialogRef.Result;
 
@@ -656,7 +656,7 @@ Delete
         dialogParameters.Add(nameof(UpdateBillingDetailsDialog.OrderId), order.Id);
         dialogParameters.Add(nameof(UpdateBillingDetailsDialog.Model), order.BillingDetails);
 
-        var dialogRef = DialogService.Show<UpdateBillingDetailsDialog>("Update billing details", dialogParameters);
+        var dialogRef = await DialogService.ShowAsync<UpdateBillingDetailsDialog>("Update billing details", dialogParameters);
 
         var result = await dialogRef.Result;
 
@@ -671,7 +671,7 @@ Delete
         dialogParameters.Add(nameof(UpdateShippingDetailsDialog.OrderId), order.Id);
         dialogParameters.Add(nameof(UpdateShippingDetailsDialog.Model), order.ShippingDetails);
 
-        var dialogRef = DialogService.Show<UpdateShippingDetailsDialog>("Update shipping details", dialogParameters);
+        var dialogRef = await DialogService.ShowAsync<UpdateShippingDetailsDialog>("Update shipping details", dialogParameters);
 
         var result = await dialogRef.Result;
 

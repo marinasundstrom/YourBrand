@@ -89,7 +89,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(AttributeDialog.AttributeId), dto?.Id);
 
-            var dialogReference = DialogService.Show<AttributeDialog>(dto is null ? "New Attribute" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<AttributeDialog>(dto is null ? "New Attribute" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

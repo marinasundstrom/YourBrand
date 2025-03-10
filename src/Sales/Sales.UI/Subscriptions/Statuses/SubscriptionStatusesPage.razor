@@ -109,7 +109,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(SubscriptionStatusDialog.SubscriptionStatusId), dto?.Id);
 
-            var dialogReference = DialogService.Show<SubscriptionStatusDialog>(dto is null ? "New Subscription Status" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<SubscriptionStatusDialog>(dto is null ? "New Subscription Status" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

@@ -157,7 +157,7 @@
             parameters.Add(nameof(SkillDialog.PersonProfileId), PersonProfileId);
             parameters.Add(nameof(SkillDialog.PersonProfileSkillId), dto.Id);
 
-            var dialogReference = DialogService.Show<SkillDialog>($"Update {dto.Skill.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<SkillDialog>($"Update {dto.Skill.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });
@@ -176,7 +176,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(SkillDialog.PersonProfileId), PersonProfileId);
 
-            var dialogReference = DialogService.Show<SkillDialog>("Add new skill", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<SkillDialog>("Add new skill", parameters, new DialogOptions {
                 //FullScreen = true
                 MaxWidth = MaxWidth.ExtraLarge
             });

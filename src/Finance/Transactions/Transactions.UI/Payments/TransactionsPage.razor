@@ -84,7 +84,7 @@
         DialogParameters dialogParameters = new();
         dialogParameters.Add(nameof(NewTransactionDialog.OrganizationId), Organization.Id);
 
-        var dialogRef = DialogService.Show<NewTransactionDialog>("New transaction", dialogParameters);
+        var dialogRef = await DialogService.ShowAsync<NewTransactionDialog>("New transaction", dialogParameters);
 
         var result = await dialogRef.Result;
 
@@ -100,7 +100,7 @@
         dialogParameters.Add(nameof(UpdateTransactionReferenceDialog.TransactionId), transaction.Id);
         dialogParameters.Add(nameof(UpdateTransactionReferenceDialog.Reference), transaction.Reference);
 
-        var dialogRef = DialogService.Show<UpdateTransactionReferenceDialog>("Update reference", dialogParameters);
+        var dialogRef = await DialogService.ShowAsync<UpdateTransactionReferenceDialog>("Update reference", dialogParameters);
 
         var result = await dialogRef.Result;
 

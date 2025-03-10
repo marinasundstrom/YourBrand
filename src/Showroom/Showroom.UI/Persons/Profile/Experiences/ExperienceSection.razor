@@ -99,7 +99,7 @@
         parameters.Add(nameof(ExperienceDialog.PersonProfileId), PersonProfileId);
         parameters.Add(nameof(ExperienceDialog.Experience), experience);
 
-        var dialogReference = DialogService.Show<ExperienceDialog>(experience is null ? "New experience" : "Update experience", parameters);
+        var dialogReference = await DialogService.ShowAsync<ExperienceDialog>(experience is null ? "New experience" : "Update experience", parameters);
         var result = await dialogReference.Result;
 
         if (result.Canceled)

@@ -90,7 +90,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(CompetenceAreaDialog.CompetenceAreaId), dto?.Id);
 
-            var dialogReference = DialogService.Show<CompetenceAreaDialog>(dto is null ? "New Competence Area" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<CompetenceAreaDialog>(dto is null ? "New Competence Area" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

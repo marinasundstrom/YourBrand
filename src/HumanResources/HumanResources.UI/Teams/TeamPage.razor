@@ -95,7 +95,7 @@
         DialogParameters parameters = new();
         parameters.Add(nameof(MembershipDialog.TeamId), Id);
 
-        var dialogRef = DialogService.Show<MembershipDialog>("New membership", parameters);
+        var dialogRef = await DialogService.ShowAsync<MembershipDialog>("New membership", parameters);
 
         var dialogResult = await dialogRef.Result;
 
@@ -111,7 +111,7 @@
         parameters.Add(nameof(MembershipDialog.TeamId), Id);
         //parameters.Add(nameof(MembershipDialog.MembershipId), membership.Id);
 
-        var dialogRef = DialogService.Show<MembershipDialog>($"Edit membership", parameters);
+        var dialogRef = await DialogService.ShowAsync<MembershipDialog>($"Edit membership", parameters);
 
         var dialogResult = await dialogRef.Result;
 

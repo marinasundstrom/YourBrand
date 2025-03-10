@@ -76,7 +76,7 @@
 @*
     public async Task NewMotion()
     {
-        var dialogRef = DialogService.Show<NewMotionDialog>("New motion");
+        var dialogRef = await DialogService.ShowAsync<NewMotionDialog>("New motion");
 
         var result = await dialogRef.Result;
 

@@ -506,7 +506,7 @@
         parameters.Add(nameof(ActivateRotOrRutDialog.Invoice), Model);
         parameters.Add(nameof(ActivateRotOrRutDialog.InvoiceDomesticService), invoice.DomesticService);
 
-        var dialogRef = DialogService.Show<ActivateRotOrRutDialog>("Activate deduction for domestic services", parameters);
+        var dialogRef = await DialogService.ShowAsync<ActivateRotOrRutDialog>("Activate deduction for domestic services", parameters);
         var result = await dialogRef.Result;
 
         if (result.Canceled)
@@ -598,7 +598,7 @@
         var dialogParameters = new DialogParameters();
         dialogParameters.Add(nameof(InvoiceItemDialog.InvoiceId), invoice.Id);
 
-        var dialogRef = DialogService.Show<InvoiceItemDialog>("New Item", dialogParameters);
+        var dialogRef = await DialogService.ShowAsync<InvoiceItemDialog>("New Item", dialogParameters);
 
         var result = await dialogRef.Result;
 
@@ -621,7 +621,7 @@
         dialogParameters.Add(nameof(InvoiceItemDialog.InvoiceId), invoice.Id);
         dialogParameters.Add(nameof(InvoiceItemDialog.Model), model);
 
-        var dialogRef = DialogService.Show<InvoiceItemDialog>("Update Item", dialogParameters);
+        var dialogRef = await DialogService.ShowAsync<InvoiceItemDialog>("Update Item", dialogParameters);
 
         var result = await dialogRef.Result;
 
@@ -641,7 +641,7 @@
         dialogParameters.Add(nameof(SetStatusDialog.InvoiceId), invoiceId);
         dialogParameters.Add(nameof(SetStatusDialog.Status), Model.Status);
 
-        var dialogRef = DialogService.Show<SetStatusDialog>("Update status", dialogParameters);
+        var dialogRef = await DialogService.ShowAsync<SetStatusDialog>("Update status", dialogParameters);
 
         var result = await dialogRef.Result;
 
@@ -757,7 +757,7 @@
         dialogParameters.Add(nameof(UpdateBillingDetailsDialog.InvoiceId), invoice.Id);
         dialogParameters.Add(nameof(UpdateBillingDetailsDialog.Model), invoice.BillingDetails);
 
-        var dialogRef = DialogService.Show<UpdateBillingDetailsDialog>("Update billing details", dialogParameters);
+        var dialogRef = await DialogService.ShowAsync<UpdateBillingDetailsDialog>("Update billing details", dialogParameters);
 
         var result = await dialogRef.Result;
 
@@ -772,7 +772,7 @@
         dialogParameters.Add(nameof(UpdateShippingDetailsDialog.InvoiceId), invoice.Id);
         dialogParameters.Add(nameof(UpdateShippingDetailsDialog.Model), invoice.ShippingDetails);
 
-        var dialogRef = DialogService.Show<UpdateShippingDetailsDialog>("Update shipping details", dialogParameters);
+        var dialogRef = await DialogService.ShowAsync<UpdateShippingDetailsDialog>("Update shipping details", dialogParameters);
 
         var result = await dialogRef.Result;
 

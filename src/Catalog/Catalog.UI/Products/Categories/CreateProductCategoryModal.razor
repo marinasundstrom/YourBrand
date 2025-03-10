@@ -68,7 +68,7 @@
 
     async Task UpdateCategory()
     {
-        var dref = DialogService.Show<ProductCategorySelectorModal>();
+        var dref = await DialogService.ShowAsync<ProductCategorySelectorModal>();
         var r = await dref.Result;
 
         if (r.Canceled) return;

@@ -107,7 +107,7 @@
             var parameters = new DialogParameters();
             parameters.Add(nameof(TicketStatusDialog.TicketStatusId), dto?.Id);
 
-            var dialogReference = DialogService.Show<TicketStatusDialog>(dto is null ? "New Ticket Status" : $"Update {dto.Name}", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync<TicketStatusDialog>(dto is null ? "New Ticket Status" : $"Update {dto.Name}", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });
