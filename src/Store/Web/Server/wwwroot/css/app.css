@@ -125,14 +125,9 @@ h1:focus {
     }
 }
 
-.bg-purple {
-    background-color: var(--bs-purple);
-}
-
 .bg-dark {
     background-color: #137cdf !important;
 }
-
 .footer a {
     color: var(--bs-body-color);
     text-decoration: none;
