@@ -73,31 +73,31 @@
 
             <div class="row g-3">
                 <div class="form-floating col-sm-6">
-                    <InputText class="form-control" @bind-Value="FirstName" />
+                    <InputText id="firstName" class="form-control" @bind-Value="FirstName" placeholder="Jane" />
                     <label for="firstName" class="form-label">First name</label>
                     <ValidationMessage For="() => FirstName" />
                 </div>
 
                 <div class="form-floating col-sm-6">
-                    <InputText class="form-control" @bind-Value="LastName" />
+                    <InputText id="lastName" class="form-control" @bind-Value="LastName" placeholder="Smith" />
                     <label for="lastName" class="form-label">Last name</label>
                     <ValidationMessage For="() => LastName" />
                 </div>
 
                 <div class="form-floating col-sm-6">
-                    <InputText class="form-control" @bind-Value="SSN" />
+                    <InputText id="ssn" class="form-control" @bind-Value="SSN" placeholder="19880306-2345" />
                     <label for="ssn" class="form-label">SSN</label>
                     <ValidationMessage For="() => SSN" />
                 </div>
 
                 <div class="form-floating col-12">
-                    <InputText class="form-control" @bind-Value="Email" />
+                    <InputText id="email" class="form-control" @bind-Value="Email" placeholder="jane.smith@email.com" />
                     <label for="email" class="form-label">Email</label>
                     <ValidationMessage For="() => Email" />
                 </div>
 
                 <div class="form-floating col-12">
-                    <InputText class="form-control" @bind-Value="Phone" />
+                    <InputText id="phoneNumber" class="form-control" @bind-Value="Phone" placeholder="0723347732" />
                     <label for="phoneNumber" class="form-label">Phone number</label>
                     <ValidationMessage For="() => Phone" />
                 </div>
