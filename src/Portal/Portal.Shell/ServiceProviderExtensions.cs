@@ -58,12 +58,14 @@ public static class ServiceProviderExtensions
         });
         */
 
+        /*
         group.CreateItem("setup", options =>
         {
             options.NameFunc = () => t["SetUp"];
             options.Icon = MudBlazor.Icons.Material.Filled.Settings;
             options.Href = "/setup";
         });
+        */
 
         var notificationsGroup = group.CreateGroup("notifications", options =>
         {
