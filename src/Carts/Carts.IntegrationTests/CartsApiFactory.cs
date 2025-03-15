@@ -25,7 +25,6 @@ public class CartsApiFactory
     private const string CartsDbName = "yourbrand-carts-db";
     private const string DbServerName = "yourbrand-test-sqlserver";
     static readonly MsSqlContainer _dbContainer = new MsSqlBuilder()
-        .WithImage("mcr.microsoft.com/azure-sql-edge:1.0.7")
         .WithHostname(DbServerName)
         .WithName(DbServerName)
         .WithPortBinding(51736)
