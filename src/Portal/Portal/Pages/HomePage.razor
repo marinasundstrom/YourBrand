@@ -1,6 +1,7 @@
 ﻿@page "/"
 @layout MainLayout2
 @using YourBrand.Portal.Widgets
+@attribute [Authorize]
 @inject IStringLocalizer<HomePage> T
 
 <AppPageTitle>@T["Dashboard"]</AppPageTitle>

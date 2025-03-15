@@ -1,6 +1,5 @@
 ﻿@inject ISnackbar Snackbar
 @inject YourBrand.Portal.Modules.IModuleRegistry ModuleRegistry
-
 @using System.Reflection
 
 <CascadingAuthenticationState>
@@ -8,14 +7,7 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    @if (context.User.Identity?.IsAuthenticated != true)
-                    {
-                        <RedirectToLogin />
-                    }
-                    else
-                    {
-                        <p role="alert">You are not authorized to access this resource.</p>
-                    }
+                    <RedirectToLogin />
                 </NotAuthorized>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -30,8 +22,6 @@
 </CascadingAuthenticationState>
 
 @code {
-    
-
     protected override void OnInitialized()
     {
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;

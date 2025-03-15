@@ -13,6 +13,10 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+#if DEBUG
+builder.Logging.SetMinimumLevel(LogLevel.Debug);
+#endif
+
 builder.Services.AddOidcAuthentication(options =>
 {
     builder.Configuration.Bind("Oidc", options.ProviderOptions);
@@ -42,14 +46,22 @@ builder.Services.AddServices()
 
 var app = builder.Build();
 
-await app.Services.ConfigureModuleServices();
+try
+{
+    await app.Services.ConfigureModuleServices();
+}
+catch(Exception) { }
 
 app.Services.UseShell();
 
 await app.Services.Localize();
 
 // Load brand profile
-await app.Services.LoadBrandProfileAsync();
+try 
+{
+    await app.Services.LoadBrandProfileAsync();
+}
+catch(Exception) {}
 
 await app.RunAsync();
 
