@@ -31,6 +31,7 @@
                 <span>Your basket</span>
                 <span class="badge bg-danger rounded-pill">@(cart.Items.Sum(x => x.Quantity))</span>
             </h4>
+            @*
             <ul class="list-group mb-3">
                 @foreach (var cartItem in cart.Items)
                 {
@@ -54,6 +55,7 @@
                 </li>
         </div>
         </ul>
+        *@
 
         @*
             <form class="card p-2">

@@ -13,7 +13,7 @@ using Respawn;
 
 using YourBrand.Sales.Persistence;
 
-using Testcontainers.SqlEdge;
+using Testcontainers.MsSql;
 
 namespace YourBrand.Carts.IntegrationTests;
 

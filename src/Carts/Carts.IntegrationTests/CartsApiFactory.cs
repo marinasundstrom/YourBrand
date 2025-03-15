@@ -1,5 +1,7 @@
 
-using YourBrand.Carts.API.Persistence;
+using YourBrand.Carts;
+using YourBrand.Carts.Persistence;
+using YourBrand.Integration;
 
 using DotNet.Testcontainers.Builders;
 
@@ -13,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Respawn;
 
-using Testcontainers.SqlEdge;
+using Testcontainers.MsSql;
 
 namespace YourBrand.Carts.IntegrationTests;
 
@@ -22,7 +24,7 @@ public class CartsApiFactory
 {
     private const string CartsDbName = "yourbrand-carts-db";
     private const string DbServerName = "yourbrand-test-sqlserver";
-    static readonly SqlEdgeContainer _dbContainer = new SqlEdgeBuilder()
+    static readonly MsSqlContainer _dbContainer = new MsSqlBuilder()
         .WithImage("mcr.microsoft.com/azure-sql-edge:1.0.7")
         .WithHostname(DbServerName)
         .WithName(DbServerName)
@@ -55,7 +57,7 @@ public class CartsApiFactory
             {
                 x.AddDelayedMessageScheduler();
 
-                x.AddConsumers(typeof(Carts.API.Features.CartsManagement.Consumers.GetCartsConsumer).Assembly);
+                x.AddConsumers(typeof(Carts.Features.CartsManagement.Consumers.GetCartsConsumer).Assembly);
 
                 x.UsingInMemory((context, cfg) =>
                 {

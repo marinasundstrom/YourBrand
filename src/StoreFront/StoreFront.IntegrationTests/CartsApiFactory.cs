@@ -13,7 +13,7 @@ using Respawn;
 
 using YourBrand.StoreFront.API.Persistence;
 
-using Testcontainers.SqlEdge;
+using Testcontainers.MsSql;
 
 namespace YourBrand.StoreFront.IntegrationTests;
 
