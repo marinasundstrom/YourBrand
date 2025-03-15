@@ -243,3 +243,9 @@ input[type="checkbox"] {
     --bs-accordion-active-bg: var(--primay-color);
     --bs-accordion-active-color: #fff;
 }
+
+[data-bs-theme='dark'] {
+    .form-control, .form-select, .form-check-input:not(:checked) {
+        background: #272c31;
+    }
+}
