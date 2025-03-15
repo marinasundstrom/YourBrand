@@ -143,8 +143,7 @@
     <PackageVersion Include="Serilog.Sinks.Grafana.Loki" Version="8.2.0-beta.1" />
     <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.1.0" />
     <PackageVersion Include="Shouldly" Version="4.1.0" />
-    <PackageVersion Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
-    <PackageVersion Include="SpecFlow.xUnit" Version="3.9.74" />
+    <PackageVersion Include="Reqnroll.xUnit" Version="2.4.0" />
     <PackageVersion Include="Sundstrom.CheckedExceptions" Version="1.2.3" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
