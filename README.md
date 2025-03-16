@@ -6,7 +6,9 @@ Modular solution with Portal and e-Shop apps.
 
 Watch this [video](https://www.youtube.com/watch?v=k6SftNnsILo) demoing the app.
 
-[Video](https://www.youtube.com/watch?v=rQgaeXCR9eY) of the  Store (2025)
+[Video](https://www.youtube.com/watch?v=LJtzuaxEjA0) of the  Store (2025)
+
+[Video](https://www.youtube.com/watch?v=0vX1Tnc0-74) showing branding
 
 ## Getting started
 
