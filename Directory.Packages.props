@@ -107,7 +107,7 @@
     <PackageVersion Include="Microsoft.JSInterop.WebAssembly" Version="9.0.1-*" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
     <PackageVersion Include="MiniValidation" Version="0.6.0-pre.20220527.55" />
-    <PackageVersion Include="MudBlazor" Version="8.0.0" />
+    <PackageVersion Include="MudBlazor" Version="8.4.0" />
     <PackageVersion Include="NJsonSchema" Version="11.0.2" />
     <PackageVersion Include="NJsonSchema.NewtonsoftJson" Version="11.0.0" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
