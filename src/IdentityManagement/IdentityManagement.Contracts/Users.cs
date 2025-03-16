@@ -1,5 +1,15 @@
 ﻿namespace YourBrand.IdentityManagement.Contracts;
 
+public record IsEmailAlreadyRegistered
+{
+    public string? Email { get; init; }
+}
+
+public record IsEmailAlreadyRegisteredResponse
+{
+    public bool IsEmailRegistered { get; init; }
+}
+
 public record CreateUser
 {
     public string OrganizationId { get; init; }

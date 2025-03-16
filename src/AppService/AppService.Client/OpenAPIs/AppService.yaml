@@ -341,6 +341,12 @@ paths:
       responses:
         200:
           description: ''
+        400:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
   /v1/DoSomething:
     post:
       tags:
@@ -867,7 +873,14 @@ components:
       type: object
       additionalProperties: false
       properties:
+        tenantName:
+          type: string
+          nullable: true
         organizationName:
+          type: string
+        firstName:
+          type: string
+        lastName:
           type: string
         email:
           type: string

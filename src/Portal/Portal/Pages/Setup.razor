@@ -18,6 +18,12 @@
 
                 <MudText Typo="Typo.h4" GutterBottom="true" Class="mb-8">Administrator account</MudText>
 
+                <MudTextField Label="First Name" Class="mb-6"
+                    @bind-Value="FirstName" Variant="Variant.Outlined" For="() => FirstName" />
+
+                <MudTextField Label="Last Name" Class="mb-6" @bind-Value="LastName" Variant="Variant.Outlined"
+                    For="() => LastName" />
+
                 <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
 
                 <MudTextField Class="mb-6" InputType="InputType.Password" Label="New password" @bind-Value="Password" Variant="Variant.Outlined" For="() => Password" />
@@ -36,7 +42,9 @@
     {
 #if DEBUG
         OrganizationName  = "My company";
-        Email = "admin@email.com";
+        FirstName = "John";
+        LastName = "Smith";
+        Email = "john.smith@email.com";
         Password = "Abc123!?";
         RepeatPassword = "Abc123!?";
 #endif
@@ -44,6 +52,12 @@
 
     [Required]
     public string OrganizationName { get; set; }
+
+    [Required]
+    public string FirstName { get; set; }
+
+    [Required]
+    public string LastName { get; set; }
 
     [Required]
     [EmailAddress]
@@ -63,17 +77,29 @@
             await SetupClient.SetupAsync(new SetupRequest
             {
                 OrganizationName = OrganizationName,
+                FirstName = FirstName,
+                LastName = LastName,
                 Email = Email,
                 Password = Password
             });
 
             NavigationManager.NavigateTo("/authentication/login");
         }
-        catch (Exception exception)
+        catch (ApiException<ProblemDetails> exc)
         {
-            Snackbar.Add(exception.ToString(), Severity.Error);
+            Snackbar.Add(exc.Result.Detail, Severity.Error);
+        }
+        catch (Exception exc)
+        {
+            Snackbar.Add(exc.ToString(), Severity.Error);
 
             //exception.Redirect();
         }
     }
 }
+
+<style>
+    body {
+        padding-top: 50px;
+    }
+</style>

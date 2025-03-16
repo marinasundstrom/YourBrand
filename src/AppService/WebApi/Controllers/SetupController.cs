@@ -4,6 +4,7 @@ using Asp.Versioning;
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 
 using YourBrand.Application.Setup;
 
@@ -16,12 +17,17 @@ public class SetupController(IMediator mediator) : Controller
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Setup(SetupRequest request, CancellationToken cancellationToken = default)
     {
-        await mediator.Send(new SetupCommand(request.OrganizationName, request.Email, request.Password), cancellationToken);
+        var result = await mediator.Send(new SetupCommand(request.TenantName, request.OrganizationName, request.FirstName, request.LastName, request.Email, request.Password), cancellationToken);
+        if(result.Status == SetupStatusCode.Failed && result.Reason == SetupFailReason.EmailAddressAlreadyRegistered)
+        {
+            return Problem("Email address already existing", statusCode: StatusCodes.Status400BadRequest);
+        }
         return Ok();
     }
 }
 
 
-public record SetupRequest(string OrganizationName, string Email, string Password);
+public record SetupRequest(string? TenantName, string OrganizationName, string FirstName, string LastName, string Email, string Password);

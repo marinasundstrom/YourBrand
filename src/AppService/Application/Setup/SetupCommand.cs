@@ -7,15 +7,25 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Application.Setup;
 
-public record SetupCommand(string OrganizationName, string Email, string Password) : IRequest
+public record SetupCommand(string? TenantName, string OrganizationName, string FirstName, string LastName, string Email, string Password) : IRequest<SetupResult>
 {
-    public class SetupCommandHandler(ISettableTenantContext tenantContext, IRequestClient<CreateTenant> createTenantClient, IRequestClient<CreateOrganization> createOrgClient, IRequestClient<CreateUser> createUserClient) : IRequestHandler<SetupCommand>
+    public class SetupCommandHandler(ISettableTenantContext tenantContext, IRequestClient<IsEmailAlreadyRegistered> isEmailAlreadyRegisteredClient, IRequestClient<CreateTenant> createTenantClient, IRequestClient<CreateOrganization> createOrgClient, IRequestClient<CreateUser> createUserClient) : IRequestHandler<SetupCommand, SetupResult>
     {
-        public async Task Handle(SetupCommand request, CancellationToken cancellationToken)
+        public async Task<SetupResult> Handle(SetupCommand request, CancellationToken cancellationToken)
         {
+            var emailRes = await isEmailAlreadyRegisteredClient.GetResponse<IsEmailAlreadyRegisteredResponse>(new IsEmailAlreadyRegistered
+            {
+                Email = request.Email,
+            });
+
+            if(emailRes.Message.IsEmailRegistered) 
+            {
+                return new SetupResult(SetupStatusCode.Failed, SetupFailReason.EmailAddressAlreadyRegistered);
+            }
+
             var tenantRes = await createTenantClient.GetResponse<CreateTenantResponse>(new CreateTenant
             {
-                Name = request.OrganizationName,
+                Name = request.TenantName ?? request.OrganizationName,
                 FriendlyName = null
             });
 
@@ -30,14 +40,28 @@ public record SetupCommand(string OrganizationName, string Email, string Passwor
             await createUserClient.GetResponse<CreateUserResponse>(new CreateUser
             {
                 OrganizationId = orgRes.Message.OrganizationId,
-                FirstName = "Administrator",
-                LastName = "Administrator",
-                DisplayName = "Administrator",
+                FirstName = request.FirstName,
+                LastName = request.LastName,
                 Role = "Administrator",
                 Email = request.Email,
                 Password = request.Password
             });
 
+            return new SetupResult(SetupStatusCode.Succeeded, SetupFailReason.None);
         }
     }
+}
+
+public record SetupResult(SetupStatusCode Status, SetupFailReason Reason);
+
+public enum SetupStatusCode
+{
+    Succeeded,
+    Failed
+}
+
+public enum SetupFailReason
+{
+    None,
+    EmailAddressAlreadyRegistered
 }
