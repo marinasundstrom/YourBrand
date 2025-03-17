@@ -1,0 +1,95 @@
+@page "/auth/confirm"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.Extensions.Localization
+@using BlazorApp.Authentication
+@using BlazorApp.BankId
+@inject IBankIdService BankIdService
+@inject IStringLocalizer<Confirm> T
+
+<AppPageTitle>@T["Title"]</AppPageTitle>
+
+@if(status == BankIdStatus.Error) 
+{
+    <p>>@T["ErrorMessage"]</p>
+}
+
+@code 
+{
+    BankIdStatus status;
+
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync() 
+    {
+        if (HttpContext is null)
+            return;
+
+        var referenceToken = GetReferenceToken();
+
+        if(referenceToken is null) 
+        {
+            HttpContext.Response.Redirect("/");
+            return;
+        }
+
+        var statusResponse = await BankIdService.GetStatusAsync(new GetStatusRequest(referenceToken));
+
+        if(statusResponse.Status == BankIdStatus.Complete) 
+        {
+            // Get customer data
+
+            object? customer = new object();
+
+            if(customer is null) 
+            {
+                HttpContext.Response.Redirect("/not-customer");
+                return;
+            }
+
+            var claims = new List<Claim>() 
+            {
+                new Claim(ClaimTypes.Name, statusResponse.Name!),
+                new Claim(ClaimTypes.GivenName, statusResponse.GivenName!),
+                new Claim(ClaimTypes.Surname, statusResponse.Surname!),
+                new Claim(CustomClaimTypes.FullName, statusResponse.Surname!),
+                new Claim(CustomClaimTypes.SocialSecurityNumber, statusResponse.Ssn!),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties 
+            {
+                IsPersistent = false
+            };
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+            HttpContext.Response.Cookies.Delete(AuthConstants.SecureDataCookieName);
+
+            if(string.IsNullOrEmpty(ReturnUrl)) 
+            {
+                ReturnUrl = "/";
+            }
+
+            HttpContext.Response.Redirect(ReturnUrl);
+        }
+    }
+
+    string? GetReferenceToken() 
+    {
+        return HttpContext!.Request.Cookies[AuthConstants.SecureDataCookieName];
+    }
+}
+using Microsoft.AspNetCore.Authentication;
+#line default
+using Microsoft.AspNetCore.Authentication.Cookies;
+#line default
+using Microsoft.AspNetCore.Authentication;
+#line default

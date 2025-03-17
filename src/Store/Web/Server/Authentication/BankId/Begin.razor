@@ -1,0 +1,49 @@
+@page "/auth/begin"
+@using BlazorApp.BankId
+@using System.ComponentModel.DataAnnotations
+@inject IBankIdService BankIdService
+
+<AppPageTitle>BankID</AppPageTitle>
+
+@if(pending) 
+{
+    <Client.Authentication.PendingBankId ReferenceToken="@referenceToken" />
+}
+else 
+{
+    <h1>BankID</h1>
+
+    <EditForm FormName="@FormName" Model="Model" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+
+        <button type="submit" class="btn btn-primary" name="Model.AuthMethod" value="BankId_QRCode">Authenticate</button>
+    </EditForm>
+}
+
+@code {
+    const string FormName = "AuthForm";
+
+    private bool pending = false;
+    string? referenceToken = null;
+
+    [SupplyParameterFromForm(FormName = FormName)]
+    public FormData Model { get; set; } = new FormData();
+
+    [CascadingParameter]
+    public HttpContext? HttpContext { get; set; }
+
+    private async Task HandleSubmit()
+    {
+        var response = await BankIdService.AuthenticateAsync(new AuthenticateRequest(null));
+        pending = true;
+        referenceToken = response.ReferenceToken;
+
+        Console.WriteLine($"AuthMethod: {Model.AuthMethod}");
+    }
+
+    public class FormData
+    {
+        [Required]
+        public string AuthMethod { get; set; }
+    }
+}

@@ -12,6 +12,8 @@ using Client.Analytics;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
+using StoreWeb;
+
 using YourBrand.StoreFront;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -24,6 +26,8 @@ builder.Services
 
 builder.Services.AddGeolocationServices();
 
+builder.Services.AddLocalization();
+
 builder.Services
     .AddBlazoredLocalStorage()
     .AddBlazoredSessionStorage();
@@ -32,9 +36,12 @@ builder.Services
     .AddHttpClient("WebAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
     .AddHttpMessageHandler<CookieHandler>()
     .AddStandardResilienceHandler();
-
+    
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
     .CreateClient("WebAPI"));
+
+builder.Services.AddHttpClient<IAuthenticationClient>("WebAPI")
+    .AddTypedClient<IAuthenticationClient>((http, sp) => new AuthenticationClient(http));
 
 builder.Services.AddSingleton<RenderingContext, ClientRenderingContext>();
 

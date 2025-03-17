@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Azure.Identity;
 
 using BlazorApp;
+using BlazorApp.BankId;
 using BlazorApp.Brands;
 using BlazorApp.Cart;
 using BlazorApp.Data;
@@ -31,6 +32,8 @@ using Microsoft.EntityFrameworkCore;
 
 using Serilog;
 
+using StoreWeb;
+
 using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Integration;
@@ -43,8 +46,11 @@ string ServiceVersion = "1.0";
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
+builder.Services.AddScoped<IAuthenticationClient, VoidAuthenticationClient>();
 
+builder.Services.AddControllers();
+
+builder.AddServiceDefaults();
 
 builder.Host.UseSerilog((ctx, cfg) =>
 {
@@ -101,6 +107,8 @@ builder.Services
     .AddProductCategoriesServices()
     .AddCartServices()
     .AddBrandsServices();
+
+builder.Services.AddSingleton<IBankIdService, FakeBankIdService>();
 
 builder.Services
     .AddScoped<AnalyticsService>();
@@ -225,6 +233,8 @@ builder.Services.AddReverseProxy()
 
 var app = builder.Build();
 
+app.MapControllers();
+
 app.UseSerilogRequestLogging();
 
 app.MapDefaultEndpoints();
@@ -320,4 +330,17 @@ static void AddClients(WebApplicationBuilder builder)
     {
         //clientBuilder.AddStandardResilienceHandler();
     });
+}
+
+public sealed class VoidAuthenticationClient : IAuthenticationClient
+{
+    public Task<AuthenticationStatusResponse> GetStatusAsync(string? referenceToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<AuthenticationStatusResponse> GetStatusAsync(string? referenceToken, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

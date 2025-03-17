@@ -1,0 +1,101 @@
+@page "/auth/pending"
+@using System.Dynamic
+@using Microsoft.Extensions.Localization
+@using System.Runtime.InteropServices.JavaScript
+@using BlazorApp.Authentication
+@using StoreWeb
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode InteractiveWebAssembly
+@inject NavigationManager Navigation
+@inject IAuthenticationClient AuthenticationClient
+@inject IStringLocalizer<PendingBankId> T
+
+<h1>@status</h1>
+
+@if(qrCode is not null) 
+{
+    <img src="@qrCode" alt="QR code" />
+}
+
+@code 
+{
+    const int BankIdSessionLengthMin = 5;
+    CancellationTokenSource cancellationTokenSource = new ();
+    Task? task;
+    string? qrCode;
+    BankIdStatus? status;
+
+    [Parameter]
+    [EditorRequired]
+    public string ReferenceToken { get; set; } = default;
+
+    [Parameter]
+    public string? ReturnUrl { get; set; }
+
+    public bool IsAutoStartRequested { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var cancellationToken = cancellationTokenSource.Token;
+
+        if(!RendererInfo.IsInteractive)
+        {
+            return;
+        }
+
+        await JSHost.ImportAsync("PendingBankId", "../Authentication/PendingBankId.razor.js");
+
+        if(IsAutoStartRequested) 
+        {
+            // TODO: Handle
+            return;
+        }
+
+        task = Task.Run(async () => {
+            if(ReferenceToken is null)
+                return;
+
+            await Task.Delay(TimeSpan.FromSeconds(1));
+
+            StateHasChanged();
+
+            try 
+            {
+                while(!cancellationToken.IsCancellationRequested) 
+                {
+                    var authenticationStatusResponse = await GetAuthenticationStatus(ReferenceToken);
+
+                    qrCode = authenticationStatusResponse.QrCode;
+                    status = authenticationStatusResponse.Status;
+
+                    if (status == BankIdStatus.Complete)
+                    {
+                        var expiresAt = DateTime.Now.AddMinutes(BankIdSessionLengthMin);
+                        SetCookie(AuthConstants.SecureDataCookieName, ReferenceToken);
+
+                        Navigation.NavigateTo($"/auth/confirm?returnUrl={ReturnUrl}");
+                        return;
+                    }
+                    else if (status == BankIdStatus.Error)
+                    {
+                        // Error
+                        return;
+                    }
+
+                    StateHasChanged();
+
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                }
+            }
+            catch (Exception exc) 
+            {
+                Console.WriteLine(exc.Message);
+            }
+        }, cancellationToken);
+    }
+
+    async Task<AuthenticationStatusResponse> GetAuthenticationStatus(string referenceToken) 
+    {
+        return await AuthenticationClient.GetStatusAsync(referenceToken);
+    }
+}
