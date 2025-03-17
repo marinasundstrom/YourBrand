@@ -1,5 +1,6 @@
 using System.Text.Json;
 
+using BlazorApp;
 using BlazorApp.Cart;
 using BlazorApp.ProductCategories;
 using BlazorApp.Products;
@@ -151,7 +152,8 @@ public partial class ProductPage
         //await JS.InvokeVoidAsync("skipScroll");
 
         System.Text.StringBuilder sb = new();
-        sb.Append($"/products/{Id}");
+        sb.Append(PageRoutes.Product.Replace("{id}", Id));
+
 
         if (productViewModel!.VariantId is not null)
         {

@@ -140,18 +140,7 @@ else
 
     async Task UpdateItem(CartItem cartItem)
     {
-        NavigationManager.NavigateTo($"/products/{cartItem.ProductId}?cartItemId={cartItem.Id}");
-
-        /*
-        if(cartItem.Product.Parent is null) 
-        {
-            NavigationManager.NavigateTo($"/products/{cartItem.Product.Id}?cartItemId={cartItem.Id}");
-        }
-        else 
-        {
-            NavigationManager.NavigateTo($"/products/{cartItem.Product?.Parent.Id}/{cartItem.Product.Id}?cartItemId={cartItem.Id}");
-        }
-        */
+        NavigationManager.NavigateTo(PageRoutes.Product.Replace("{id}", cartItem.ProductHandle) + $"?cartItemId={cartItem.Id}");
     }
 
     async Task DeleteItem(CartItem cartItem)

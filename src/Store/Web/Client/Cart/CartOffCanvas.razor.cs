@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices.JavaScript;
 using System.Runtime.Versioning;
 
+using BlazorApp;
 using BlazorApp.Cart;
 
 using Blazored.Toast.Services;
@@ -47,20 +48,9 @@ public partial class CartOffCanvas
 
     async Task UpdateItem(CartItem cartItem)
     {
-        NavigationManager.NavigateTo($"/products/{cartItem.ProductHandle}?cartItemId={cartItem.Id}");
+        NavigationManager.NavigateTo(PageRoutes.Product.Replace("{id}", cartItem.ProductHandle) + $"?cartItemId={cartItem.Id}");
 
         HideCartOffCanvas();
-
-        /*
-        if(cartItem.Product.Parent is null)
-        {
-        NavigationManager.NavigateTo($"/products/{cartItem.Product.Id}?cartItemId={cartItem.Id}");
-        }
-        else
-        {
-        NavigationManager.NavigateTo($"/products/{cartItem.Product?.Parent.Id}/{cartItem.Product.Id}?cartItemId={cartItem.Id}");
-        }
-        */
     }
 
     async Task DeleteItem(CartItem cartItem)
@@ -70,6 +60,8 @@ public partial class CartOffCanvas
             isDeletingItem = true;
 
             var isProductPage = NavigationManager.Uri.Contains("/products/");
+
+            NavigationManager.NavigateTo(PageRoutes.Products);
 
             await CartService.RemoveCartItem(cartItem.Id);
 
