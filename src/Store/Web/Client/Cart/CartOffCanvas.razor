@@ -33,7 +33,7 @@
                                 <li @key="cartItem.Id">
                                     <div class="row">
                                         <div class="col-1" style="width: 90px;">
-                                            <a href="/products/@cartItem.ProductHandle">
+                                            <a href="@PageRoutes.Products.Replace("{id}", cartItem.ProductHandle)">
                                                 <img src="@cartItem.Image" class="ms-0 my-2 mx-2 me-4 img-border-rounded shadow"
                                                     style="width: 60px; height: 60px; aspect-ratio: 1 / 1; object-fit: cover;" />
                                             </a>

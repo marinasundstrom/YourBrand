@@ -1,4 +1,4 @@
-@page "/authentication/register"
+@attribute [Route(PageRoutes.Register)]
 @inject UserManager<IdentityUser> UserManager
 @inject SignInManager<IdentityUser> SignInManager
 @inject ILogger<Register> Logger
@@ -64,7 +64,7 @@
 
             Logger.LogInformation("User signed in.");
 
-            NavigationManager.NavigateTo("/authentication/profile");
+            NavigationManager.NavigateTo(@PageRoutes.Profile);
             return;
         }
         foreach (var error in result.Errors)

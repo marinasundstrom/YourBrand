@@ -1,4 +1,4 @@
-@page "/basket"
+@attribute [Route(PageRoutes.Basket)]
 @attribute [StreamRendering(false)]
 @rendermode renderMode
 @using BlazorApp
@@ -31,7 +31,7 @@ else
                         <li @key="cartItem.Id"> @* d-flex flex-row justify-content-between flex-md-wrap *@
                            <div class="row mb-3">
                                     <div class="col-1" style="width: 110px;">
-                                        <a href="/products/@cartItem.ProductHandle">
+                                        <a href="@PageRoutes.Products.Replace("{id}", cartItem.ProductHandle)">
                                             <img src="@cartItem.Image" class="ms-0 my-2 mx-2 me-4 img-border-rounded shadow" style="width: 80px; height: 80px; aspect-ratio: 1 / 1; object-fit: cover;" />
                                         </a>    
                                     </div>
@@ -87,7 +87,7 @@ else
 
                 <div class="d-flex justify-content-end">
 @*                        <LoadingButton Color="secondary" Class="me-2" Icon="trash" OnClick="async () => await ClearItems()">Clear basket</LoadingButton>*@
-                    <a class="btn btn-lg btn-primary" href="/checkout">Checkout & Pay</a>
+                    <a class="btn btn-lg btn-primary" href="@PageRoutes.Checkout">Checkout & Pay</a>
                 </div>
             }
             else 

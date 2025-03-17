@@ -1,5 +1,5 @@
-@page "/products/{id}"
-@page "/products/{id}/{variantId}"
+@attribute [Route(PageRoutes.Product)]
+@attribute [Route(PageRoutes.ProductVariant)]
 @attribute [StreamRendering(false)]
 @rendermode RenderMode.InteractiveWebAssembly
 @implements IDisposable
@@ -92,7 +92,7 @@ else
                     @foreach (var category in IterateCategories(productViewModel!.Product!.Category!))
                     {
                         <li class="breadcrumb-item"><a class="text-decoration-none text-reset muted"
-                                href="/categories/@category.Path">@category.Name</a></li>
+                                href="@PageRoutes.Category.Replace("{*path}", category.Path)">@category.Name</a></li>
                     }
                 </ol>
             </nav>

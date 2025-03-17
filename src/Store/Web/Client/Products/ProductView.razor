@@ -7,7 +7,7 @@
         <Badge BadgeClass="top-0 start-100 discount-label" BadgeStyle=""
             Visible="@(Product.RegularPrice is not null)">
             <ChildContent>
-                <a href="/products/@Product.Handle">
+                <a href="@PageRoutes.Product.Replace("{id}", Product.Handle)">
                     <img class="bd-placeholder-img card-img-top shadow" alt="Product image"
                         style="max-width: 100%; height: auto; object-fit: cover; aspect-ratio: 1 / 1;"
                         src="@Product.Image.Url" />
@@ -22,10 +22,10 @@
             </BadgeContent>
         </Badge>
         <div class="card-body">
-            <a href="/products/@Product.Handle" class="text-decoration-none text-reset">
+            <a href="@PageRoutes.Product.Replace("{id}", Product.Handle)" class="text-decoration-none text-reset">
                 <h5 class="card-title mt-2">@Product.Name</h5>
             </a>
-            <a href="/products/@Product.Handle" class="text-decoration-none text-reset">
+            <a href="@PageRoutes.Product.Replace("{id}", Product.Handle)" class="text-decoration-none text-reset">
                 <p class="card-text mt-2 text-muted">@Product.Description</p>
             </a>
         </div>

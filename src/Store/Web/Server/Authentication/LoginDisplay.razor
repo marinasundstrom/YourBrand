@@ -8,22 +8,22 @@
 <AuthorizeView>
     <Authorized>
         <li class="nav-item col-12 col-md-auto">
-            <a class="nav-link" href="/authentication/profile">Hello, @context.User.Identity?.Name!</a>
+            <a class="nav-link" href="@PageRoutes.Profile">Hello, @context.User.Identity?.Name!</a>
         </li>
 
         <li class="nav-item col-12 col-md-auto">
-            <a href="/logout" class="nav-link">
+            <a href="@PageRoutes.AuthLogout" class="nav-link">
                 <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
             </a>
         </li>
     </Authorized>
     <NotAuthorized>
         <li class="nav-item col-12 col-md-auto">
-            <a class="nav-link" href="/authentication/register">Register</a>              
+            <a class="nav-link" href="@PageRoutes.Register">Register</a>              
         </li>
 
         <li class="nav-item col-12 col-md-auto">
-            <a class="nav-link" href="/login">Log in</a>
+            <a class="nav-link" href="@PageRoutes.Login">Log in</a>
         </li>
     </NotAuthorized>
 </AuthorizeView>

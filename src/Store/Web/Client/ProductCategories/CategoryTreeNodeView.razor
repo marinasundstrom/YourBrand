@@ -14,7 +14,9 @@
         <div class="col">
             <div class="row">
                 <div class="col">
-                    <a href="@("/categories/" + Node.Path)" class="text-decoration-none text-reset @(Path == $"{Node.Path}" ? "active" : null)" @onclick:preventDefault @onclick="async () => await OnClick.InvokeAsync(Node)">
+                    <a href="@PageRoutes.Category.Replace("{*path}", Node.Path)"
+                        class="text-decoration-none text-reset @(Path == $"{Node.Path}" ? "active" : null)"
+                        @onclick:preventDefault @onclick="async () => await OnClick.InvokeAsync(Node)">
                         @Node.Name
                     </a>
 

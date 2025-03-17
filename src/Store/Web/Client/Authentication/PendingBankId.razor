@@ -1,4 +1,4 @@
-@page "/auth/pending"
+@attribute [Route(PageRoutes.AuthPending)]
 @using System.Dynamic
 @using Microsoft.Extensions.Localization
 @using System.Runtime.InteropServices.JavaScript
@@ -73,7 +73,7 @@
                         var expiresAt = DateTime.Now.AddMinutes(BankIdSessionLengthMin);
                         SetCookie(AuthConstants.SecureDataCookieName, ReferenceToken);
 
-                        Navigation.NavigateTo($"/auth/confirm?returnUrl={ReturnUrl}");
+                        Navigation.NavigateTo($"/{PageRoutes.AuthConfirm}?returnUrl={ReturnUrl}");
                         return;
                     }
                     else if (status == BankIdStatus.Error)

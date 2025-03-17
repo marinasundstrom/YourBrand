@@ -34,7 +34,7 @@
         aria-controls="offcanvasNavbar">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand ms-2" href="/">
+      <a class="navbar-brand ms-2" href="@PageRoutes.Home">
         <h5 style="display: inline">
           <img src="/logo.svg" class="me-1" alt="Your Brand" />
         </h5>
@@ -52,7 +52,7 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-start flex-grow-1 pe-3">
           <li class="nav-item">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+            <NavLink class="nav-link" href="@PageRoutes.Home" Match="NavLinkMatch.All">
               Home
             </NavLink>
           </li>
@@ -63,13 +63,14 @@
             {
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
-                  href="@($"/categories/{category.Path}")">
+                  href="@PageRoutes.Category.Replace("{*path}", category.Path)">
                   @category.Name
                 </a>
                 <ul class="dropdown-menu bg-white">
                   @foreach (var subCategory in category.SubCategories)
                   {
-                    <li><a class="dropdown-item" href="@($"/categories/{subCategory.Path}")">@subCategory.Name</a></li>
+                    <li><a class="dropdown-item"
+                        href="@PageRoutes.Category.Replace("{*path}", subCategory.Path)">@subCategory.Name</a></li>
                   }
                 </ul>
               </li>
@@ -77,7 +78,7 @@
             else
             {
               <li class="nav-item">
-                <NavLink class="nav-link" href="@($"/categories/{category.Path}")">
+                <NavLink class="nav-link" href="@PageRoutes.Category.Replace("{*path}", category.Path)">
                   @category.Name
                 </NavLink>
               </li>
