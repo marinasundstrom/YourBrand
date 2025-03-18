@@ -61,15 +61,13 @@ public partial class CartOffCanvas
 
             var isProductPage = NavigationManager.Uri.Contains("/products/");
 
-            NavigationManager.NavigateTo(PageRoutes.Products);
-
             await CartService.RemoveCartItem(cartItem.Id);
 
             if (isProductPage
                 && NavigationManager.Uri.Contains($"/{cartItem.ProductHandle}")
                 && NavigationManager.Uri.Contains($"cartItemId={cartItem.Id}"))
             {
-                NavigationManager.NavigateTo("/");
+                NavigationManager.NavigateTo(PageRoutes.Home);
 
                 HideCartOffCanvas();
             }
