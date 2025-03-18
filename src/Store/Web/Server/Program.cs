@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Logging;
 
 using Serilog;
 
@@ -38,6 +39,11 @@ using YourBrand;
 using YourBrand.Extensions;
 using YourBrand.Integration;
 using YourBrand.StoreFront;
+
+#if DEBUG
+IdentityModelEventSource.ShowPII = true;
+#endif
+
 
 string MyAllowSpecificOrigins = nameof(MyAllowSpecificOrigins);
 
@@ -154,14 +160,15 @@ builder.Services.AddAuthentication(options =>
 .   AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
         builder.Configuration.Bind("Local", options);
 
-        options.MapInboundClaims = true;
+        options.MapInboundClaims = false;
         options.TokenValidationParameters.NameClaimType = JwtRegisteredClaimNames.Name;
         options.TokenValidationParameters.RoleClaimType = "role";
 
         options.GetClaimsFromUserInfoEndpoint = true;
+
+        options.SaveTokens = true;
     });
 
 builder.Services.ConfigureCookieOidcRefresh("Cookies", "OpenIdConnect");
@@ -220,6 +227,8 @@ builder.Services.AddMassTransit(x =>
     }
 });
 
+builder.Services.AddTransient<AuthForwardHandler>();
+
 builder.Services
     .AddHealthChecks();
 
@@ -232,8 +241,6 @@ builder.Services.AddReverseProxy()
     .AddServiceDiscoveryDestinationResolver();
 
 var app = builder.Build();
-
-app.MapControllers();
 
 app.UseSerilogRequestLogging();
 
@@ -267,6 +274,11 @@ app.UseAntiforgery();
 
 app.MapStaticAssets();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
 app.MapRazorComponents<App>()
     .AddAdditionalAssemblies(typeof(BlazorApp.CookieHandler).Assembly)
     .AddInteractiveWebAssemblyRenderMode()
@@ -274,7 +286,10 @@ app.MapRazorComponents<App>()
 
 app.MapGet(PageRoutes.Login, async (HttpContext httpContext) =>
 {
-    await httpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme);
+    await httpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+    {
+        RedirectUri = "https://localhost:7188"
+    });
 });
 
 app.MapGet(PageRoutes.Logout, async (HttpContext httpContext) =>
@@ -328,6 +343,7 @@ static void AddClients(WebApplicationBuilder builder)
     },
     static (clientBuilder) =>
     {
+        clientBuilder.AddHttpMessageHandler<AuthForwardHandler>();
         //clientBuilder.AddStandardResilienceHandler();
     });
 }
@@ -342,5 +358,22 @@ public sealed class VoidAuthenticationClient : IAuthenticationClient
     public Task<AuthenticationStatusResponse> GetStatusAsync(string? referenceToken, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
+    }
+}
+
+public class AuthForwardHandler(IHttpContextAccessor httpContextAccessor) : DelegatingHandler
+{
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        //var token = httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
+
+        var token = await httpContextAccessor.HttpContext!.GetTokenAsync("access_token");
+
+        if (!string.IsNullOrEmpty(token))
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        return await base.SendAsync(request, cancellationToken);
     }
 }

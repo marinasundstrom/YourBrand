@@ -1,4 +1,5 @@
 @attribute [Route(PageRoutes.MyPages)]
+@attribute [Authorize]
 @using YourBrand.StoreFront
 @inject IOrdersClient OrdersClient
 
@@ -26,6 +27,13 @@ else
 
     protected override async Task OnInitializedAsync() 
     {
-        orders = await OrdersClient.GetOrdersAsync(0, 100, null, null);
+        try 
+        {
+            orders = await OrdersClient.GetOrdersAsync(1, 100, null, null);
+        }
+        catch(Exception exc) 
+        {
+
+        }
     }
 }

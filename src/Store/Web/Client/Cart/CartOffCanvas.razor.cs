@@ -4,8 +4,6 @@ using System.Runtime.Versioning;
 using BlazorApp;
 using BlazorApp.Cart;
 
-using Blazored.Toast.Services;
-
 using Microsoft.AspNetCore.Components;
 
 namespace Client.Cart;

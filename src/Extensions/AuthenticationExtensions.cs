@@ -38,8 +38,7 @@ public static class AuthenticationExtensions
         services.AddAuthentication()
                     .AddJwtBearer(options =>
                     {
-                        options.Authority = configuration.GetValue<string>("Local:Authority");
-                        options.Audience = configuration.GetValue<string>("Local:Audience");
+                        configuration.Bind("Local", options);
 
                         Console.WriteLine(options.Authority);
                         Console.WriteLine("Audience: " + options.Audience);

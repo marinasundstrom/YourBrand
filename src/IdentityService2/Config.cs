@@ -7,35 +7,33 @@ namespace IdentityService;
 public static class Config
 {
     public static IEnumerable<IdentityResource> IdentityResources =>
-        new IdentityResource[]
-        {
+        [
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
-        };
+            new IdentityResource("ssn", ["ssn"]),
+            new IdentityResource("customer_id", ["customer_id"]),
+        ];
 
     public static IEnumerable<ApiResource> ApiResources =>
-        new ApiResource[]
-        {
-                new ApiResource("storefrontapi", "The StoreFront API", new[] { JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role })
+        [
+                new ApiResource("storefrontapi", "The StoreFront API", new[] { JwtClaimTypes.Name, JwtClaimTypes.PreferredUserName, JwtClaimTypes.Email, JwtClaimTypes.Role, "ssn", "customer_id" })
                 {
-                    Scopes = new string[] { "storefrontapi" }
+                    Scopes = ["storefrontapi"]
                 }
-        };
+        ];
 
     public static IEnumerable<ApiScope> ApiScopes =>
-        new ApiScope[]
-        {
-            new ApiScope("storefrontapi", "Access the StoreFront API"),
-        };
+        [
+            new ApiScope("storefrontapi", "Access the StoreFront API", ["ssn", "customer_id"]),
+        ];
 
     public static IEnumerable<Client> Clients =>
-        new Client[]
-        {
-            new Duende.IdentityServer.Models.Client
+        [
+            new Client
             {
                 ClientId = "store",
                 AllowedGrantTypes = GrantTypes.Code,
-                RequirePkce = false, //true,
+                RequirePkce = true,
                 RequireClientSecret = false,
                 AllowedCorsOrigins = { "https://localhost:7188" },
                 AllowedScopes = { "openid", "profile", "storefrontapi" },
@@ -45,7 +43,7 @@ public static class Config
                 Enabled = true
             },
             /*
-            new Duende.IdentityServer.Models.Client
+            new Client
             {
                 ClientId = "storefront",
 
@@ -62,5 +60,5 @@ public static class Config
                 AllowedScopes = { "profile", "email", "storefrontapi" },
             }
             */
-        };
+        ];
 }

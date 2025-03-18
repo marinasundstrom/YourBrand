@@ -19,8 +19,8 @@ public static class Endpoints
             .RequireCors();
 
         ordersGroup.MapGet("/", GetOrders)
-            .WithName($"Orders_{nameof(GetOrders)}");
-            //.RequireAuthorization()
+            .WithName($"Orders_{nameof(GetOrders)}")
+            .RequireAuthorization();
             //.CacheOutput(OutputCachePolicyNames.GetOrders);
 
         return app;

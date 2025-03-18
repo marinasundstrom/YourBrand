@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 
 using Serilog;
 
-using YourBrand;
 using YourBrand.Analytics.Client;
 using YourBrand.Carts;
 using YourBrand.Catalog;
@@ -23,7 +22,6 @@ using YourBrand.Integration;
 using YourBrand.Inventory.Client;
 using YourBrand.Sales;
 using YourBrand.Services.Authentication;
-using YourBrand.StoreFront.API;
 using YourBrand.StoreFront.API.Features.Brands;
 using YourBrand.StoreFront.API.Features.Cart;
 using YourBrand.StoreFront.API.Features.Checkout;
@@ -64,6 +62,10 @@ builder.Host.UseSerilog((ctx, cfg) =>
 builder.AddServiceDefaults();
 
 builder.Services.AddCors();
+
+builder.Services.AddAuthenticationServices(builder.Configuration);
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddOutputCache(options =>
 {
@@ -157,7 +159,7 @@ else
     builder.Services.AddSingleton<ITokenProvider, IdentityServerClientCredentialsTokenProvider>();
 }
 
-builder.Services.AddTransient<AuthenticationDelegatingHandler>();
+builder.Services.AddTransient<ClientAuthenticationHandler>();
 
 builder.Services.AddControllers()
             .AddJsonOptions(jsonOptions =>
@@ -243,7 +245,7 @@ static void AddClients(WebApplicationBuilder builder)
     },
     clientBuilder =>
     {
-        clientBuilder.AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+        clientBuilder.AddHttpMessageHandler<ClientAuthenticationHandler>();
 
         clientBuilder.AddStandardResilienceHandler();
 
@@ -253,7 +255,7 @@ static void AddClients(WebApplicationBuilder builder)
     var cartsApiHttpClient = builder.Services.AddCartsClient(new Uri(builder.Configuration["yourbrand:carts-svc:url"]!),
     clientBuilder =>
     {
-        clientBuilder.AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+        clientBuilder.AddHttpMessageHandler<ClientAuthenticationHandler>();
 
         clientBuilder.AddStandardResilienceHandler();
 
@@ -266,7 +268,7 @@ static void AddClients(WebApplicationBuilder builder)
     },
     clientBuilder =>
     {
-        clientBuilder.AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+        clientBuilder.AddHttpMessageHandler<ClientAuthenticationHandler>();
 
         clientBuilder.AddStandardResilienceHandler();
 
@@ -279,7 +281,7 @@ static void AddClients(WebApplicationBuilder builder)
     },
     clientBuilder =>
     {
-        clientBuilder.AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+        clientBuilder.AddHttpMessageHandler<ClientAuthenticationHandler>();
 
         clientBuilder.AddStandardResilienceHandler();
 
@@ -292,7 +294,7 @@ static void AddClients(WebApplicationBuilder builder)
     },
     clientBuilder =>
     {
-        clientBuilder.AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+        clientBuilder.AddHttpMessageHandler<ClientAuthenticationHandler>();
 
         clientBuilder.AddStandardResilienceHandler();
 
@@ -305,7 +307,7 @@ static void AddClients(WebApplicationBuilder builder)
     },
     clientBuilder =>
     {
-        clientBuilder.AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+        clientBuilder.AddHttpMessageHandler<ClientAuthenticationHandler>();
 
         clientBuilder.AddStandardResilienceHandler();
 

@@ -2,7 +2,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Headers;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 using YourBrand.Tenancy;
@@ -10,26 +9,15 @@ using YourBrand.Tenancy;
 namespace YourBrand.Services.Authentication;
 
 /// <summary>
-/// Checks for access token (from user), or uses client credentials.
+/// Client credentials. Does not use users access token.
 /// </summary>
-public class AuthenticationDelegatingHandler(
-    IHttpContextAccessor httpContextAccessor,
+public class ClientAuthenticationHandler(
     ITokenProvider tokenProvider,
     ISettableTenantContext tenantContext,
     ILogger<AuthenticationDelegatingHandler> logger) : DelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var accessToken = httpContextAccessor.HttpContext.User.FindFirst("access_token")?.Value;
-
-        logger.LogInformation("Access token passed: {AccessToken}", accessToken);
-
-        if (!string.IsNullOrEmpty(accessToken))
-        {
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            return await base.SendAsync(request, cancellationToken);
-        }
-
         return await GetClientAuthToken(tokenProvider, tenantContext, logger, request, cancellationToken);
     }
 
