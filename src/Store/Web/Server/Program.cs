@@ -147,8 +147,8 @@ builder.Services.AddAuthentication(options =>
     })
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
-        options.LoginPath = "/login";  // Custom login path
-        options.LogoutPath = "/logout";
+        options.LoginPath = PageRoutes.Login;  // Custom login path
+        options.LogoutPath = PageRoutes.Logout;
         options.ExpireTimeSpan = TimeSpan.FromHours(8); // Cookie expiration time
     })
 .   AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
@@ -272,15 +272,15 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddInteractiveServerRenderMode();
 
-app.MapGet("/login", async (HttpContext httpContext) =>
+app.MapGet(PageRoutes.Login, async (HttpContext httpContext) =>
 {
     await httpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme);
 });
 
-app.MapGet("/logout", async (HttpContext httpContext) =>
+app.MapGet(PageRoutes.Logout, async (HttpContext httpContext) =>
 {
     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    httpContext.Response.Redirect("/");
+    httpContext.Response.Redirect(PageRoutes.Home);
 });
 
 //app.MapGroup("/authentication").MapLoginAndLogout();

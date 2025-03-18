@@ -28,7 +28,7 @@ public partial class CartOffCanvas
             // This only applies to fresh navigations or reloads
             // due to DOM preservation.
 
-            if (!NavigationManager.Uri.ToString().EndsWith("/basket"))
+            if (!NavigationManager.Uri.ToString().EndsWith(PageRoutes.Basket))
             {
                 await CartService.InitializeAsync();
             }
@@ -59,7 +59,7 @@ public partial class CartOffCanvas
         {
             isDeletingItem = true;
 
-            var isProductPage = NavigationManager.Uri.Contains("/products/");
+            var isProductPage = NavigationManager.Uri.Contains(PageRoutes.Products + "/");
 
             await CartService.RemoveCartItem(cartItem.Id);
 

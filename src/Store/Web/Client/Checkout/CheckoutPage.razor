@@ -316,7 +316,7 @@
 
             if(!cart.Items.Any())
             {
-                NavigationManager.NavigateTo("/cart");
+                NavigationManager.NavigateTo(PageRoutes.Basket);
             }
 
             await CheckoutClient.CheckoutAsync(new Checkout
@@ -349,7 +349,7 @@
 
             await CartService.Clear();
 
-            NavigationManager.NavigateTo("/order/confirmation");
+            NavigationManager.NavigateTo(PageRoutes.OrderConfirmation);
         }
         catch(Exception) 
         {
