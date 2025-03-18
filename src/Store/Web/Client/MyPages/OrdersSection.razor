@@ -1,0 +1,152 @@
+@using BlazorApp
+@using Microsoft.AspNetCore.Authorization
+@using StoreWeb
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+@inject IOrdersClient OrdersClient
+
+
+@if (ordersResult is null)
+{
+    <em>Loading orders...</em>
+}
+else
+{
+    @* <h1>@userProfile?.FirstName @userProfile?.LastName</h1>
+        <p role="status">@userProfile?.Ssn</p> *@
+
+    @if (ordersResult is not null)
+    {
+        if (!ordersResult.Items.Any())
+        {
+            <p>No orders
+            </p>
+        }
+        else
+        {
+            <div class="accordion" id="accordionExample">
+                @{
+                    int i = 1;
+                }
+                @if (ordersResult is null)
+                {
+                    <LoadingIndicator />
+                }
+                else
+                {
+                    @foreach (var order in ordersResult.Items)
+                    {
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="@($"heading-order-{i}")">
+                                <button class="accordion-button @(i != 1 ? " collapsed" : string.Empty)" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#@($"order-{i}")"
+                                    aria-expanded="@(i == 1 ? " true" : "false")" aria-controls="@($" order-{i}")">
+                                    @if (order.Status.Id == 1)
+                                    {
+                                        <i class="fa fa-edit me-3"></i>
+                                    }
+                                    else if (order.Status.Id == 3)
+                                    {
+                                        <i class="fa fa-file me-3"></i>
+                                    }
+                                    else if (order.Status.Id == 6)
+                                    {
+                                        <i class="fa fa-file me-3"></i>
+                                    }
+                                    else if (order.Status.Id == 7)
+                                    {
+                                        <i class="fa fa-ban me-3"></i>
+                                    }
+                                    <strong class="me-3">
+                                        #@order.OrderNo
+                                    </strong>
+                                    <span class="me-3">
+                                        @order.Date?.ToString("yyyy-MM-dd")
+                                    </span>
+                                    <span class="me-3" style="width: 90px">
+                                        @order.Total.FormatCurrency(order.Currency)
+                                    </span>
+                                    <span>
+                                        @order.Status.Name
+                                    </span>
+                                </button>
+                            </h2>
+                            <div id="@($"order-{i}")" class="accordion-collapse collapse @(i == 1 ? "show" : string.Empty)"
+                                aria-labelledby="@($"heading-order-{i}")" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <th scope="col">Item Id</th>
+                                                <th scope="col" colspan="2">Description</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">VAT Rate</th>
+                                                <th scope="col">Total</th>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var orderItem in order.Items)
+                                                {
+                                                    <tr>
+                                                        <td><a href="/products/@orderItem.ProductId">@orderItem.ProductId</a></td>
+                                                        <td>@orderItem.Description</td>
+                                                        <td>@orderItem.Notes</td>
+                                                        <td>@orderItem.Quantity @orderItem.Unit</td>
+                                                        <td>@orderItem.UnitPrice.FormatCurrency(order.Currency)</td>
+                                                        <td>@(orderItem.VatRate * 100)%</td>
+                                                        <td>@orderItem.Total.FormatCurrency(order.Currency)</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="list-group-item d-flex justify-content-end">
+                                        <div class="me-2">
+                                            <div class="d-flex justify-content-between">
+                                                <span class="me-5">Total</span>
+                                                <strong>@order.Total.FormatCurrency(order.Currency)</strong>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <small class="me-5">Sub Total</small>
+                                                <small>@order.SubTotal.FormatCurrency(order.Currency)</small>
+                                            </div>
+                                            @*
+                                <div class="d-flex justify-content-between mt-2">
+                                <small class="me-5">Discount</small>
+                                <small>@0m.ToString("c")</small>
+                                </div>
+                                *@
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <small class="me-5">VAT</small>
+                                                <small>@order.Vat.FormatCurrency(order.Currency)</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        i++;
+                    }
+                }
+            </div>
+        }
+    }
+}
+
+@code
+{
+    PagedResultOfOrder? ordersResult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ordersResult = await OrdersClient.GetOrdersAsync(1, 100, null);
+        }
+        catch (Exception exc)
+        {
+
+        }
+    }
+}

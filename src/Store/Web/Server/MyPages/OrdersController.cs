@@ -12,7 +12,7 @@ namespace BlazorApp.MyPages;
 [Route("Orders")]
 public sealed class OrdersController : ControllerBase
 {
-    [HttpGet("GetOrders")]
+    [HttpGet]
     [ProducesDefaultResponseType]
     [ProducesResponseType<PagedResultOfOrder>(StatusCodes.Status200OK)]
     public async Task<ActionResult<PagedResultOfOrder>> GetOrders(int page = 1, int pageSize = 10, string? searchTerm = null, [FromServices] IOrdersClient ordersClient = default!, CancellationToken cancellationToken = default)

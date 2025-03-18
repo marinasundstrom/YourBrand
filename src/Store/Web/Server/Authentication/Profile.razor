@@ -11,6 +11,12 @@
 
 <AuthorizeView>
     <Authorized>
-        Your name is: @context.User.Identity!.Name
+        <div class="mb-4">
+            Your name is: @context.User.Identity!.Name
+        </div>
     </Authorized>
 </AuthorizeView>
+
+<h2>Orders</h2>
+
+<Client.MyPages.OrdersSection />
