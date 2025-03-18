@@ -7,6 +7,45 @@ info:
 servers:
 - url: https://localhost:7188
 paths:
+  /Orders/GetOrders:
+    get:
+      tags:
+      - Orders
+      operationId: Orders_GetOrders
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchTerm
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfOrder'
   /Authentication/GetStatus:
     post:
       tags:
@@ -53,6 +92,633 @@ components:
           nullable: true
         instance:
           type: string
+          nullable: true
+    PagedResultOfOrder:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        total:
+          type: integer
+          format: int32
+    Order:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        orderNo:
+          type: integer
+          format: int32
+          nullable: true
+        date:
+          type: string
+          format: date-time
+          nullable: true
+        type:
+          $ref: '#/components/schemas/OrderType'
+        parent:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ParentOrder'
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        assigneeId:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+        customer:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+        currency:
+          type: string
+        reference:
+          type: string
+          nullable: true
+        note:
+          type: string
+          nullable: true
+        subscription:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Subscription'
+        schedule:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/OrderSchedule'
+        billingDetails:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/BillingDetails2'
+        shippingDetails:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ShippingDetails2'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        subTotal:
+          type: number
+          format: decimal
+        vatAmounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderVatAmount'
+        vatRate:
+          type: number
+          format: double
+          nullable: true
+        vat:
+          type: number
+          format: decimal
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderDiscount'
+        discount:
+          type: number
+          format: decimal
+          nullable: true
+        total:
+          type: number
+          format: decimal
+        created:
+          type: string
+          format: date-time
+        createdBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+        lastModified:
+          type: string
+          format: date-time
+          nullable: true
+        lastModifiedBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+    OrderType:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    ParentOrder:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        orderNo:
+          type: integer
+          format: int32
+          nullable: true
+        date:
+          type: string
+          format: date-time
+          nullable: true
+    OrderStatus:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    User:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    Customer:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        customerNo:
+          type: integer
+          format: int64
+        name:
+          type: string
+    Subscription:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        subscriptionNo:
+          type: integer
+          format: int32
+        type:
+          $ref: '#/components/schemas/SubscriptionType'
+        plan:
+          $ref: '#/components/schemas/SubscriptionPlanShort'
+        status:
+          $ref: '#/components/schemas/SubscriptionStatus'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+        order:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/OrderShort'
+        orderItemId:
+          type: string
+          nullable: true
+        cancellationFinalizationPeriod:
+          type: string
+          format: duration
+          nullable: true
+        renewalOption:
+          $ref: '#/components/schemas/RenewalOption'
+        schedule:
+          $ref: '#/components/schemas/SubscriptionSchedule'
+    SubscriptionType:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    SubscriptionPlanShort:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        name:
+          type: string
+        productId:
+          type: string
+          nullable: true
+    SubscriptionStatus:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        handle:
+          type: string
+        description:
+          type: string
+          nullable: true
+    OrderShort:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        orderNo:
+          type: integer
+          format: int32
+          nullable: true
+        date:
+          type: string
+          format: date-time
+          nullable: true
+    RenewalOption:
+      type: string
+      description: ''
+      x-enumNames:
+      - Manual
+      - Automatic
+      enum:
+      - manual
+      - automatic
+    SubscriptionSchedule:
+      type: object
+      additionalProperties: false
+      properties:
+        frequency:
+          $ref: '#/components/schemas/TimeInterval'
+        everyDays:
+          type: integer
+          format: int32
+          nullable: true
+        everyWeeks:
+          type: integer
+          format: int32
+          nullable: true
+        onWeekDays:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/WeekDays'
+        everyMonths:
+          type: integer
+          format: int32
+          nullable: true
+        everyYears:
+          type: integer
+          format: int32
+          nullable: true
+        onDay:
+          type: integer
+          format: int32
+          nullable: true
+        onDayOfWeek:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/DayOfWeek'
+        inMonth:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Month'
+        startTime:
+          type: string
+          format: duration
+          nullable: true
+        endTime:
+          type: string
+          format: duration
+          nullable: true
+        duration:
+          type: string
+          format: duration
+          nullable: true
+    TimeInterval:
+      type: string
+      description: ''
+      x-enumNames:
+      - Daily
+      - Weekly
+      - Monthly
+      - Quarterly
+      - Yearly
+      enum:
+      - daily
+      - weekly
+      - monthly
+      - quarterly
+      - yearly
+    WeekDays:
+      type: string
+      description: ''
+      x-enumFlags: true
+      x-enumNames:
+      - None
+      - Sunday
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+      - Saturday
+      enum:
+      - none
+      - sunday
+      - monday
+      - tuesday
+      - wednesday
+      - thursday
+      - friday
+      - saturday
+    DayOfWeek:
+      type: string
+      description: ''
+      x-enumNames:
+      - Sunday
+      - Monday
+      - Tuesday
+      - Wednesday
+      - Thursday
+      - Friday
+      - Saturday
+      enum:
+      - sunday
+      - monday
+      - tuesday
+      - wednesday
+      - thursday
+      - friday
+      - saturday
+    Month:
+      type: string
+      description: ''
+      x-enumNames:
+      - January
+      - February
+      - March
+      - April
+      - May
+      - June
+      - July
+      - August
+      - September
+      - October
+      - November
+      - December
+      enum:
+      - january
+      - february
+      - march
+      - april
+      - may
+      - june
+      - july
+      - august
+      - september
+      - october
+      - november
+      - december
+    OrderSchedule:
+      type: object
+      additionalProperties: false
+      properties:
+        plannedStartDate:
+          type: string
+          format: date-time
+          nullable: true
+        plannedEndDate:
+          type: string
+          format: date-time
+          nullable: true
+        actualStartDate:
+          type: string
+          format: date-time
+          nullable: true
+        actualEndDate:
+          type: string
+          format: date-time
+          nullable: true
+    BillingDetails2:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        ssn:
+          type: string
+          nullable: true
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address2'
+    Address2:
+      type: object
+      additionalProperties: false
+      properties:
+        thoroughfare:
+          type: string
+        premises:
+          type: string
+          nullable: true
+        subPremises:
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+        locality:
+          type: string
+        subAdministrativeArea:
+          type: string
+        administrativeArea:
+          type: string
+        country:
+          type: string
+    ShippingDetails2:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        careOf:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/Address2'
+    OrderItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        productType:
+          $ref: '#/components/schemas/ProductType'
+        description:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        sku:
+          type: string
+          nullable: true
+        subscriptionPlan:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SubscriptionPlan'
+        subscription:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Subscription'
+        unitPrice:
+          type: number
+          format: decimal
+        unit:
+          type: string
+          nullable: true
+        discount:
+          type: number
+          format: decimal
+          nullable: true
+        regularPrice:
+          type: number
+          format: decimal
+          nullable: true
+        vatRate:
+          type: number
+          format: double
+          nullable: true
+        quantity:
+          type: number
+          format: double
+        vat:
+          type: number
+          format: decimal
+          nullable: true
+        total:
+          type: number
+          format: decimal
+        notes:
+          type: string
+          nullable: true
+        created:
+          type: string
+          format: date-time
+        createdBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+        lastModified:
+          type: string
+          format: date-time
+          nullable: true
+        lastModifiedBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+    ProductType:
+      type: string
+      description: ''
+      x-enumNames:
+      - Good
+      - Service
+      enum:
+      - good
+      - service
+    SubscriptionPlan:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: guid
+        name:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        schedule:
+          $ref: '#/components/schemas/SubscriptionSchedule'
+        hasTrial:
+          type: boolean
+        trialLength:
+          type: string
+          format: duration
+        cancellationFinalizationPeriod:
+          type: string
+          format: duration
+          nullable: true
+        renewalOption:
+          $ref: '#/components/schemas/RenewalOption'
+    OrderVatAmount:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        vatRate:
+          type: number
+          format: double
+        subTotal:
+          type: number
+          format: decimal
+        vat:
+          type: number
+          format: decimal
+          nullable: true
+        total:
+          type: number
+          format: decimal
+    OrderDiscount:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+        rate:
+          type: number
+          format: double
+          nullable: true
+        amount:
+          type: number
+          format: decimal
+          nullable: true
+        total:
+          type: number
+          format: decimal
+          nullable: true
+        effectiveDate:
+          type: string
+          format: date-time
+          nullable: true
+        expiryDate:
+          type: string
+          format: date-time
           nullable: true
     AuthenticationStatusResponse:
       type: object

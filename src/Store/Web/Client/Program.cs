@@ -43,6 +43,9 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
 builder.Services.AddHttpClient<IAuthenticationClient>("WebAPI")
     .AddTypedClient<IAuthenticationClient>((http, sp) => new AuthenticationClient(http));
 
+builder.Services.AddHttpClient<StoreWeb.IOrdersClient>("WebAPI")
+    .AddTypedClient<StoreWeb.IOrdersClient>((http, sp) => new StoreWeb.OrdersClient(http));
+
 builder.Services.AddSingleton<RenderingContext, ClientRenderingContext>();
 
 var baseUri = new Uri(builder.HostEnvironment.BaseAddress + "storefront/");
