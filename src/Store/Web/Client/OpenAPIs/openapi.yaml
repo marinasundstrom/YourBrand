@@ -7,7 +7,7 @@ info:
 servers:
 - url: https://localhost:7188
 paths:
-  /Orders:
+  /api/Orders:
     get:
       tags:
       - Orders
@@ -46,6 +46,174 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PagedResultOfOrder'
+      security:
+      - JWT: []
+  /api/Checkout:
+    post:
+      tags:
+      - Checkout
+      operationId: Checkout_Checkout
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Checkout'
+        required: true
+        x-position: 1
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        200:
+          description: ''
+  /api/Cart:
+    get:
+      tags:
+      - Cart
+      operationId: Cart_GetCart
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+    delete:
+      tags:
+      - Cart
+      operationId: Cart_ClearCart
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        200:
+          description: ''
+  /api/Cart/Items:
+    post:
+      tags:
+      - Cart
+      operationId: Cart_AddCartItem
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddCartItemRequest'
+        required: true
+        x-position: 1
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+  /api/Cart/Items/{cartItemId}/Quantity:
+    put:
+      tags:
+      - Cart
+      operationId: Cart_UpdateCartItemQuantity
+      parameters:
+      - name: cartItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCartItemQuantityRequest'
+        required: true
+        x-position: 2
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartItem'
+  /api/Cart/Items/{cartItemId}:
+    delete:
+      tags:
+      - Cart
+      operationId: Cart_RemoveCartItem
+      parameters:
+      - name: cartItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfOrder'
+  /api/Cart/Items/{cartItemId}/Data:
+    put:
+      tags:
+      - Cart
+      operationId: Cart_UpdateCartItemData
+      parameters:
+      - name: cartItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCartItemDataRequest'
+        required: true
+        x-position: 2
+      responses:
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        200:
+          description: ''
   /Authentication/GetStatus:
     post:
       tags:
@@ -719,6 +887,150 @@ components:
         expiryDate:
           type: string
           format: date-time
+          nullable: true
+    Checkout:
+      type: object
+      additionalProperties: false
+      properties:
+        billingDetails:
+          $ref: '#/components/schemas/BillingDetails'
+        shippingDetails:
+          $ref: '#/components/schemas/ShippingDetails'
+    BillingDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        ssn:
+          type: string
+          nullable: true
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      additionalProperties: false
+      properties:
+        thoroughfare:
+          type: string
+        premises:
+          type: string
+          nullable: true
+        subPremises:
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+        locality:
+          type: string
+        subAdministrativeArea:
+          type: string
+        administrativeArea:
+          type: string
+        country:
+          type: string
+    ShippingDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        careOf:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/Address'
+    Cart:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        tag:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CartItem'
+    CartItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        image:
+          type: string
+          nullable: true
+        productId:
+          type: integer
+          format: int64
+          nullable: true
+        productHandle:
+          type: string
+          nullable: true
+        description:
+          type: string
+        price:
+          type: number
+          format: decimal
+        vatRate:
+          type: number
+          format: double
+          nullable: true
+        regularPrice:
+          type: number
+          format: decimal
+          nullable: true
+        discountRate:
+          type: number
+          format: double
+          nullable: true
+        quantity:
+          type: integer
+          format: int32
+        total:
+          type: number
+          format: decimal
+        data:
+          type: string
+          nullable: true
+    AddCartItemRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        productId:
+          type: integer
+          format: int64
+          nullable: true
+        quantity:
+          type: integer
+          format: int32
+        data:
+          type: string
+          nullable: true
+    UpdateCartItemQuantityRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int32
+    UpdateCartItemDataRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        data:
+          type: string
           nullable: true
     AuthenticationStatusResponse:
       type: object

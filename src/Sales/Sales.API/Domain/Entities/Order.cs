@@ -35,7 +35,7 @@ public class Order : AggregateRoot<string>, IAuditableEntity<string, User>, IHas
         Subscription? subscription = null,
         OrderSchedule? schedule = null) : this()
     {
-        StatusId = (int)OrderStatusEnum.Draft;
+        StatusId = initialStatus;
         TypeId = typeId ?? 1;
         OrganizationId = organizationId;
         VatIncluded = vatIncluded;

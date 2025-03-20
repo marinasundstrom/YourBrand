@@ -15,6 +15,7 @@ public sealed record Checkout(
     sealed class Handler(
         YourBrand.Sales.IOrdersClient ordersClient,
         YourBrand.Carts.ICartsClient cartsClient,
+        YourBrand.Customers.Client.ICustomersClient customersClient,
         //YourBrand.Inventory.IItemsClient productsClient,
         YourBrand.Inventory.Client.IWarehouseItemsClient warehouseItemsClient,
         YourBrand.Catalog.IProductsClient productsClient2,
@@ -25,11 +26,20 @@ public sealed record Checkout(
         public async Task Handle(Checkout request, CancellationToken cancellationToken)
         {
             var customerId = userContext.CustomerNo;
+            var userId = userContext.UserId;
             var clientId = userContext.ClientId;
+            var ssn = userContext.GetClaim("ssn");
 
-            string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+            string tag = userId is null ? $"cart-{clientId}" : $"cart-{userId}";
 
             var cart = await cartsClient.GetCartByTagAsync(tag, cancellationToken);
+
+            YourBrand.Customers.Client.Customer? customer = null;
+            
+            if(ssn is not null) 
+            {
+                customer = await customersClient.GetCustomerBySSNAsync(ssn);
+            }
 
             var items = new List<CreateOrderItem>();
 
@@ -42,13 +52,14 @@ public sealed record Checkout(
                 Status = OrderStatusOpen,
                 Customer = new SetCustomer
                 {
-                    Id = customerId?.ToString()
+                    Id = customer?.Id.ToString() ?? customerId?.ToString(),
+                    Name = customer?.Name
                 },
                 BillingDetails = new BillingDetails
                 {
                     FirstName = request.BillingDetails.FirstName,
                     LastName = request.BillingDetails.LastName,
-                    Ssn = request.BillingDetails.SSN,
+                    Ssn = ssn ?? request.BillingDetails.SSN,
                     Email = request.BillingDetails.Email,
                     PhoneNumber = request.BillingDetails.PhoneNumber,
                     Address = Map(request.BillingDetails.Address)

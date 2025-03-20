@@ -9,7 +9,7 @@ namespace BlazorApp.MyPages;
 
 [ApiController]
 [Authorize]
-[Route("Orders")]
+[Route("api/Orders")]
 public sealed class OrdersController : ControllerBase
 {
     [HttpGet]

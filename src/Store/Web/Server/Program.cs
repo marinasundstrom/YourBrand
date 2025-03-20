@@ -187,6 +187,8 @@ builder.Services.AddSingleton<RenderingContext, ServerRenderingContext>();
 
 builder.Services.AddSingleton<RequestContext>();
 
+builder.Services.AddSingleton<ICartService, BlazorApp.Shared.Cart.CartService>();
+
 builder.Services.AddLocalization();
 
 builder.Services.AddMassTransit(x =>

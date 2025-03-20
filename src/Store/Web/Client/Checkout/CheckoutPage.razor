@@ -2,11 +2,10 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Components.Forms
 @using YourBrand.StoreFront
-@attribute [StreamRendering(false)]
-@rendermode Microsoft.AspNetCore.Components.Web.RenderMode.InteractiveWebAssembly
-@inject ICartClient CartClient
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+@inject StoreWeb.ICartClient CartClient
 @inject BlazorApp.Cart.ICartService CartService
-@inject ICheckoutClient CheckoutClient
+@inject StoreWeb.ICheckoutClient CheckoutClient
 @* @inject IUserClient UserClient *@
 @inject NavigationManager NavigationManager
 @* @inject Services.IAccessTokenProvider AccessTokenProvider *@
@@ -219,7 +218,7 @@
 
 @code
 {
-    Cart? cart;
+    StoreWeb.Cart? cart;
     ShippingDetailsModel? shippingDetails;
     bool checkingOut;
 
@@ -319,9 +318,9 @@
                 NavigationManager.NavigateTo(PageRoutes.Basket);
             }
 
-            await CheckoutClient.CheckoutAsync(new Checkout
+            await CheckoutClient.CheckoutAsync(new StoreWeb.Checkout
             {
-                BillingDetails = new BillingDetails
+                BillingDetails = new StoreWeb.BillingDetails
                 {
                     FirstName = FirstName,
                     LastName = LastName,
@@ -331,14 +330,14 @@
                     Address = Map(BillingAddress)
                 },
                 ShippingDetails = ShipToSameAddress ?
-                new ShippingDetails
+                new StoreWeb.ShippingDetails
                 {
                     FirstName = FirstName,
                     LastName = LastName,
                     CareOf = string.Empty,
                     Address = Map(BillingAddress),
                 }
-                : new ShippingDetails
+                : new StoreWeb.ShippingDetails
                 {
                     FirstName = ShippingDetails.FirstName,
                     LastName = ShippingDetails.LastName,
@@ -347,12 +346,14 @@
                 }
             });
 
-            await CartService.Clear();
+            await CartService.Clear(server: false);
 
             NavigationManager.NavigateTo(PageRoutes.OrderConfirmation);
         }
-        catch(Exception) 
+        catch(Exception exc) 
         {
+            Console.WriteLine(exc);
+            
             ToastService.ShowInfo("Failed to place order");
         }
         finally 
@@ -361,9 +362,9 @@
         }
     }
 
-    private Address Map(AddressModel address)
+    private StoreWeb.Address Map(AddressModel address)
     {
-        return new Address
+        return new StoreWeb.Address
         {
             Thoroughfare = address.Thoroughfare,
             Premises = address.Premises,

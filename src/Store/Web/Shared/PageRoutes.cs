@@ -20,5 +20,5 @@ public static class PageRoutes
     public const string AuthLogout = "/authentication/logout";
     public const string Profile = "/authentication/profile";
     public const string MyPages = "/mypage";
-    public const string Error = "/error/{code}";
+    public const string Error = "/error";
 }

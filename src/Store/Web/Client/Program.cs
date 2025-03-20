@@ -43,8 +43,14 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
 builder.Services.AddHttpClient<IAuthenticationClient>("WebAPI")
     .AddTypedClient<IAuthenticationClient>((http, sp) => new AuthenticationClient(http));
 
+builder.Services.AddHttpClient<StoreWeb.ICartClient>("WebAPI")
+    .AddTypedClient<StoreWeb.ICartClient>((http, sp) => new StoreWeb.CartClient(http));
+
 builder.Services.AddHttpClient<StoreWeb.IOrdersClient>("WebAPI")
     .AddTypedClient<StoreWeb.IOrdersClient>((http, sp) => new StoreWeb.OrdersClient(http));
+
+builder.Services.AddHttpClient<StoreWeb.ICheckoutClient>("WebAPI")
+    .AddTypedClient<StoreWeb.ICheckoutClient>((http, sp) => new StoreWeb.CheckoutClient(http));
 
 builder.Services.AddSingleton<RenderingContext, ClientRenderingContext>();
 
@@ -63,6 +69,8 @@ builder.Services
     .AddProductCategoriesServices()
     .AddCartServices()
     .AddBrandsServices();
+
+builder.Services.AddSingleton<ICartService, CartService>();
 
 builder.Services.AddBlazoredToast();
 

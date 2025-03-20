@@ -43,6 +43,7 @@ public class SeedData
                             new(JwtClaimTypes.FamilyName, "Smith"),
                             new(JwtClaimTypes.WebSite, "http://alice.com"),
                             new("ssn", "3234234234"),
+                            
                         }).Result;
                 if (!result.Succeeded)
                 {

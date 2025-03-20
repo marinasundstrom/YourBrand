@@ -43,10 +43,10 @@ public static class Endpoints
 
     private static async Task<Results<Ok<Features.Cart.Cart>, NotFound>> GetCart(MassTransitCartsClient cartsClient, IUserContext userContext, CancellationToken cancellationToken)
     {
-        var customerId = userContext.CustomerNo;
         var clientId = userContext.ClientId;
+        var userId = userContext.UserId;
 
-        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+        string tag = userId is null ? $"cart-{clientId}" : $"cart-{userId}";
 
         Cart? cart = null;
 
@@ -64,10 +64,10 @@ public static class Endpoints
 
     private static async Task<Results<Ok<CartItem>, NotFound>> AddCartItem(AddCartItemRequest request, MassTransitCartsClient cartsClient, IConfiguration configuration, IProductsClient productsClient, IUserContext userContext, CancellationToken cancellationToken)
     {
-        var customerId = userContext.CustomerNo;
         var clientId = userContext.ClientId;
+        var userId = userContext.UserId;
 
-        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+        string tag = userId is null ? $"cart-{clientId}" : $"cart-{userId}";
 
         var product = await productsClient.GetProductByIdAsync(configuration["OrganizationId"]!, request.ProductId.ToString()!, cancellationToken);
 
@@ -112,10 +112,10 @@ public static class Endpoints
     {
         if (request.Quantity <= 0) throw new ArgumentException("Invalid quantity", nameof(request));
 
-        var customerId = userContext.CustomerNo;
         var clientId = userContext.ClientId;
+        var userId = userContext.UserId;
 
-        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+        string tag = userId is null ? $"cart-{clientId}" : $"cart-{userId}";
 
         var cart = await cartsClient.GetCartByTag(tag, cancellationToken);
 
@@ -126,10 +126,10 @@ public static class Endpoints
 
     private static async Task<Results<Ok<CartItem>, NotFound>> UpdateCartItemData(string cartItemId, UpdateCartItemDataRequest request, MassTransitCartsClient cartsClient, IConfiguration configuration, IProductsClient productsClient, IUserContext userContext, CancellationToken cancellationToken)
     {
-        var customerId = userContext.CustomerNo;
         var clientId = userContext.ClientId;
+        var userId = userContext.UserId;
 
-        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+        string tag = userId is null ? $"cart-{clientId}" : $"cart-{userId}";
 
         var cart = await cartsClient.GetCartByTag(tag, cancellationToken);
         var cartItem = cart.Items.First(x => x.Id == cartItemId);
@@ -147,10 +147,10 @@ public static class Endpoints
 
     private static async Task<Results<Ok, NotFound>> RemoveCartItem(string cartItemId, MassTransitCartsClient cartsClient, IUserContext userContext, CancellationToken cancellationToken)
     {
-        var customerId = userContext.CustomerNo;
         var clientId = userContext.ClientId;
+        var userId = userContext.UserId;
 
-        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+        string tag = userId is null ? $"cart-{clientId}" : $"cart-{userId}";
 
         var cart = await cartsClient.GetCartByTag(tag, cancellationToken);
 
@@ -161,12 +161,12 @@ public static class Endpoints
 
     private static async Task<Results<Ok, NotFound>> ClearCart(MassTransitCartsClient cartsClient, IUserContext userContext, CancellationToken cancellationToken)
     {
-        var customerId = userContext.CustomerNo;
         var clientId = userContext.ClientId;
+        var userId = userContext.UserId;
 
-        string tag = customerId is null ? $"cart-{clientId}" : $"cart-{customerId}";
+        string tag = userId is null ? $"cart-{clientId}" : $"cart-{userId}";
 
-        var cart = await cartsClient.GetCartById(tag, cancellationToken);
+        var cart = await cartsClient.GetCartByTag(tag, cancellationToken);
 
         await cartsClient.ClearCart(cart.Id, cancellationToken);
 

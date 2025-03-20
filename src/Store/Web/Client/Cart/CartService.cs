@@ -1,12 +1,10 @@
-using BlazorApp.Cart;
+using StoreWeb;
 
-using YourBrand.StoreFront;
+namespace BlazorApp.Cart;
 
-namespace BlazorApp.Shared.Cart;
-
-public sealed class CartService(YourBrand.StoreFront.ICartClient client) : ICartService
+public sealed class CartService(ICartClient client) : ICartService
 {
-    private readonly List<BlazorApp.Cart.CartItem> _items = new();
+    private readonly List<CartItem> _items = new();
 
     public async Task InitializeAsync()
     {
@@ -16,10 +14,10 @@ public sealed class CartService(YourBrand.StoreFront.ICartClient client) : ICart
         CartUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    public async Task<IEnumerable<BlazorApp.Cart.CartItem>> GetCartItemsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<CartItem>> GetCartItemsAsync(CancellationToken cancellationToken = default)
     {
         var cart = await client.GetCartAsync(cancellationToken);
-        return cart.Items!.Select(x => new BlazorApp.Cart.CartItem(x.Id!, x.Name!, x.Image!, x.ProductId, x.ProductHandle, x.Description!, (decimal)x.Price, x.VatRate, (decimal?)x.RegularPrice, x.DiscountRate, (int)x.Quantity, x.Data));
+        return cart.Items!.Select(x => new CartItem(x.Id!, x.Name!, x.Image!, x.ProductId, x.ProductHandle, x.Description!, (decimal)x.Price, x.VatRate, (decimal?)x.RegularPrice, x.DiscountRate, (int)x.Quantity, x.Data));
     }
 
     public async Task AddCartItem(string name, string? image, long? productId, string? productHandle, string description, decimal price, decimal? regularPrice, int quantity, string? data = null)
@@ -28,7 +26,7 @@ public sealed class CartService(YourBrand.StoreFront.ICartClient client) : ICart
         {
             ProductId = productId,
             Quantity = quantity,
-            Data = data,
+            Data = data
         });
 
         var cartItem = _items.FirstOrDefault(x => x.ProductId == productId);
@@ -39,7 +37,7 @@ public sealed class CartService(YourBrand.StoreFront.ICartClient client) : ICart
         }
         else
         {
-            cartItem = new BlazorApp.Cart.CartItem(ci.Id, name, image, productId, productHandle, description, price, ci.VatRate, regularPrice, ci.DiscountRate, quantity, data);
+            cartItem = new CartItem(ci.Id, name, image, productId, productHandle, description, price, ci.VatRate, regularPrice, ci.DiscountRate, quantity, data);
 
             _items.Add(cartItem);
         }
@@ -85,7 +83,7 @@ public sealed class CartService(YourBrand.StoreFront.ICartClient client) : ICart
         });
     }
 
-    public IReadOnlyCollection<BlazorApp.Cart.CartItem> Items => _items;
+    public IReadOnlyCollection<CartItem> Items => _items;
 
     public async Task Clear(bool server = true)
     {

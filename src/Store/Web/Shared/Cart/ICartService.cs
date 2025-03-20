@@ -16,7 +16,7 @@ public interface ICartService
 
     IReadOnlyCollection<CartItem> Items { get; }
 
-    Task Clear();
+    Task Clear(bool server = true);
 
     event EventHandler? CartUpdated;
 }
