@@ -181,10 +181,6 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
         200:
           description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PagedResultOfOrder'
   /api/Cart/Items/{cartItemId}/Data:
     put:
       tags:

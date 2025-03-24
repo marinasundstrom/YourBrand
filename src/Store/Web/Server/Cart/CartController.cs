@@ -44,7 +44,7 @@ public sealed class CartController : ControllerBase
 
     [HttpDelete("Items/{cartItemId}")]
     [ProducesDefaultResponseType]
-    [ProducesResponseType<PagedResultOfOrder>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> RemoveCartItem(string cartItemId, [FromServices] ICartClient cartClient = default!, CancellationToken cancellationToken = default)
     {
         await cartClient.RemoveCartItemAsync(cartItemId, cancellationToken);
