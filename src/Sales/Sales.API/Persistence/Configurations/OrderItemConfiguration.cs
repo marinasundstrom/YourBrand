@@ -15,6 +15,14 @@ public sealed class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
 
         builder.HasIndex(x => x.TenantId);
 
+        builder.HasMany(order => order.Options)
+         .WithOne()
+         .HasForeignKey(o => new { o.OrganizationId, o.OrderId, o.OrderItemId })
+         .IsRequired()
+         .OnDelete(DeleteBehavior.ClientCascade);
+
+        builder.Navigation(x => x.Options).AutoInclude();
+
         builder.HasMany(order => order.PromotionalDiscounts)
                  .WithOne()
                  .HasForeignKey(o => new { o.OrganizationId, o.OrderId, o.OrderItemId })

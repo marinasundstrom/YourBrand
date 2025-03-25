@@ -64,6 +64,7 @@ public record InvoiceItemDto(
     string? SKU,
     decimal UnitPrice,
     string? Unit,
+    IEnumerable<InvoiceItemOptionDto> Options,
     decimal? Discount,
     decimal? RegularPrice,
     double? VatRate,
@@ -73,6 +74,18 @@ public record InvoiceItemDto(
     string? Notes,
     bool IsTaxDeductibleService,
     InvoiceItemDomesticServiceDto? DomesticService,
+    DateTimeOffset Created,
+    string? CreatedBy,
+    DateTimeOffset? LastModified,
+    string? LastModifiedBy);
+
+public sealed record InvoiceItemOptionDto(
+    string Id,
+    string Description,
+    string? ProductId,
+    string? ItemId,
+    decimal? Price,
+    decimal? Discount,
     DateTimeOffset Created,
     string? CreatedBy,
     DateTimeOffset? LastModified,

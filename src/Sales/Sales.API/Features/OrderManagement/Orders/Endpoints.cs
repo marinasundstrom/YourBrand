@@ -85,11 +85,39 @@ public static class Endpoints
         group.MapDelete("{id}/items/{itemId}", RemoveOrderItem)
             .WithName($"Orders_{nameof(RemoveOrderItem)}");
 
+        group.MapPost("{id}/items/{orderItemId}/options", AddOrderItemOption)
+            .WithName($"Orders_{nameof(AddOrderItemOption)}");
+
+        group.MapPut("{id}/items/{itemId}/options/{optionId}", UpdateOrderItemOption)
+            .WithName($"Orders_{nameof(UpdateOrderItemOption)}");
+
+        group.MapDelete("{id}/items/{itemId}/options/{optionId}", RemoveOrderItemOption)
+            .WithName($"Orders_{nameof(RemoveOrderItemOption)}");
+
+
         group.MapPost("{id}/subscription/activate", ActivateSubscriptionOrder)
                     .WithName($"Orders_{nameof(ActivateSubscriptionOrder)}")
                     .AllowAnonymous();
 
         return app;
+    }
+
+    private static async Task<Results<Created<OrderItemOptionDto>, NotFound>> AddOrderItemOption(string organizationId, string id, string itemId, AddOrderItemOptionRequest request, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!)
+    {
+        var result = await mediator.Send(new Items.Options.CreateOrderItemOption(organizationId, id, itemId, request.Description, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
+        return TypedResults.Created("", result.GetValue());
+    }
+
+    private static async Task<Results<Ok<OrderItemOptionDto>, NotFound>> UpdateOrderItemOption(string organizationId, string id, string itemId, string optionId, UpdateOrderItemOptionRequest request, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!)
+    {
+        var result = await mediator.Send(new Items.Options.UpdateOrderItemOption(organizationId, id, itemId, optionId, request.Description, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
+        return TypedResults.Ok(result.GetValue());
+    }
+
+    private static async Task<Results<Ok, NotFound>> RemoveOrderItemOption(string organizationId, string id, string itemId, string optionId, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!)
+    {
+        var result = await mediator.Send(new Items.Options.RemoveOrderItemOption(organizationId, id, itemId, optionId), cancellationToken);
+        return TypedResults.Ok();
     }
 
     private static async Task<Ok<PagedResult<OrderDto>>> GetOrders(string organizationId, int[]? types, int[]? status, string? customerId, string? ssn, string? assigneeId, Guid? subscriptionId, DateTimeOffset? fromDate = null, DateTimeOffset? toDate = null, DateTimeOffset? plannedFromDate = null, DateTimeOffset? plannedToDate = null, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, IMediator mediator = default!, CancellationToken cancellationToken = default!)
@@ -368,3 +396,7 @@ public static class Endpoints
         return TypedResults.Ok();
     }
 }
+
+public record AddOrderItemOptionRequest(string Description, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);
+
+public record UpdateOrderItemOptionRequest(string Description, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);

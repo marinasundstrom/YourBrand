@@ -110,6 +110,10 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
         Invoice?.Update();
     }
 
+    private readonly HashSet<InvoiceItemOption> _options = new HashSet<InvoiceItemOption>();
+    public IReadOnlyCollection<InvoiceItemOption> Options => _options;
+
+
     public decimal Total { get; private set; }
 
     public string? Notes { get; private set; }
@@ -123,6 +127,16 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
         Total = Price * (decimal)Quantity;
         Vat = Math.Round(Total.GetVatFromTotal(VatRate.GetValueOrDefault()), 2, MidpointRounding.ToEven);
     }
+
+    public InvoiceItemOption AddOption(string description, string? productId, string? itemId, decimal? price, decimal? discount)
+    {
+        var option = new InvoiceItemOption(description, productId, itemId, price, discount);
+        _options.Add(option);
+        Update();
+        return option;
+    }
+
+    public void RemoveOption(InvoiceItemOption option) => _options.Remove(option);
 }
 
 public record InvoiceItemDomesticService(DomesticServiceKind Kind, HomeRepairAndMaintenanceServiceType? HomeRepairAndMaintenanceServiceType, HouseholdServiceType? HouseholdServiceType);

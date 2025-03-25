@@ -54,6 +54,7 @@ public static class Mappings
             item.Sku,
             item.Price,
             item.Unit,
+            item.Options.Select(x => x.ToDto()),
             item.Discount,
             item.RegularPrice,
             item.VatRate.GetValueOrDefault(),
@@ -68,6 +69,12 @@ public static class Mappings
             item.LastModified,
             item.LastModifiedById);
     }
+
+    public static InvoiceItemOptionDto ToDto(this InvoiceItemOption invoiceItemOption) => new(invoiceItemOption.Id, invoiceItemOption.Description, invoiceItemOption.ProductId, invoiceItemOption.ItemId, invoiceItemOption.Price, invoiceItemOption.Discount,
+        invoiceItemOption.Created,
+        invoiceItemOption.CreatedById,
+        invoiceItemOption.LastModified,
+        invoiceItemOption.LastModifiedById);
 
     public static CustomerDto ToDto(this Customer customer) => new CustomerDto(customer.Id, customer.CustomerNo, customer.Name);
 

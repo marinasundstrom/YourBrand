@@ -1,5 +1,7 @@
 using Core;
 
+using Microsoft.Extensions.Options;
+
 using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Sales.Domain.ValueObjects;
@@ -60,6 +62,8 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
 
     public string? ProductId { get; set; }
 
+    public string? ItemdId { get; set; }
+
     public string? Sku { get; set; }
 
     public ProductType ProductType { get; set; }
@@ -81,6 +85,12 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
     public decimal? RegularPrice { get; set; } // Original price before any sales or promotional discounts
 
     public bool VatIncluded { get; private set; } // Determines if VAT is included in the price
+
+    private readonly HashSet<OrderItemOption> _options = new HashSet<OrderItemOption>();
+    public IReadOnlyCollection<OrderItemOption> Options => _options;
+
+    public void AddOption(OrderItemOption option) => _options.Add(option);
+    public void RemoveOption(OrderItemOption option) => _options.Remove(option);
 
     // Base Price Discount (difference between RegularPrice and Price)
     public decimal BasePriceDiscount => RegularPrice.HasValue && RegularPrice > Price ? (RegularPrice.Value - Price) * (decimal)Quantity : 0;
@@ -155,7 +165,7 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
     public void Update(TimeProvider timeProvider)
     {
         // Calculate base total after all discounts (before VAT adjustment)
-        var baseTotal = (Price * (decimal)Quantity) - TotalDiscount;
+        var baseTotal = (Price * (decimal)Quantity) - Options.Sum(x => x.Price.GetValueOrDefault()) - TotalDiscount;
 
         // Calculate VAT and Total based on VAT inclusion status
         CalculateVatAndTotal(baseTotal);
@@ -259,5 +269,13 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
         targetOrder.ShippingDetails = orderItem?.Order?.ShippingDetails?.Copy(); // orderItem.HasDeliveryDetails ? orderItem?.DeliveryDetails?.Clone() : orderItem?.Order?.DeliveryDetails?.Clone();
         //delivery.Assignee = orderItem?.Assignee ?? orderItem?.Order?.Assignee;
         targetOrder.Notes = orderItem!.Notes;
+    }
+
+    public OrderItemOption AddOption(string description, string? productId, string? itemId, decimal? price, decimal? discount, TimeProvider timeProvider)
+    {
+        var option = new OrderItemOption(description, productId, itemId, price, discount);
+        _options.Add(option);
+        Update(timeProvider);
+        return option;
     }
 }

@@ -640,6 +640,137 @@ paths:
           description: ''
       security:
       - JWT: []
+  /v1/orders/{id}/items/options:
+    post:
+      tags:
+      - Orders
+      - Orders
+      operationId: Orders_AddOrderItemOption
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: orderItemId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOrderItemOptionRequest'
+        required: true
+        x-position: 4
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItemOption'
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/orders/{id}/items/options/{optionId}:
+    put:
+      tags:
+      - Orders
+      - Orders
+      operationId: Orders_UpdateOrderItemOption
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: orderItemId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      - name: optionId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 4
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrderItemOptionRequest'
+        required: true
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItemOption'
+        404:
+          description: ''
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Orders
+      - Orders
+      operationId: Orders_RemoveOrderItemOption
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: orderItemId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      - name: optionId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 4
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
   /v1/orders/{id}/subscription/activate:
     post:
       tags:
@@ -2283,6 +2414,10 @@ components:
         unit:
           type: string
           nullable: true
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemOption'
         discount:
           type: number
           format: decimal
@@ -2357,6 +2492,43 @@ components:
           nullable: true
         renewalOption:
           $ref: '#/components/schemas/RenewalOption'
+    OrderItemOption:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        itemId:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+        discount:
+          type: number
+          format: decimal
+          nullable: true
+        created:
+          type: string
+          format: date-time
+        createdBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+        lastModified:
+          type: string
+          format: date-time
+          nullable: true
+        lastModifiedBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
     OrderVatAmount:
       type: object
       additionalProperties: false
@@ -2565,6 +2737,46 @@ components:
         quantity:
           type: number
           format: double
+    AddOrderItemOptionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        itemId:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+        discount:
+          type: number
+          format: decimal
+          nullable: true
+    UpdateOrderItemOptionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        itemId:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+        discount:
+          type: number
+          format: decimal
+          nullable: true
     PagedResultOfOrderType:
       type: object
       additionalProperties: false

@@ -677,6 +677,137 @@ paths:
           description: ''
       security:
       - JWT: []
+  /v1/invoices/Items/{invoiceItemId}/options:
+    post:
+      tags:
+      - Invoices
+      - Invoices
+      operationId: Invoices_AddInvoiceItemOption
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: invoiceItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddInvoiceItemOptionRequest'
+        required: true
+        x-position: 4
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceItemOption'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Invoices
+      - Invoices
+      operationId: Invoices_UpdateInvoiceItemOption
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: invoiceItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddInvoiceItemOptionRequest'
+        required: true
+        x-position: 4
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceItemOption'
+      security:
+      - JWT: []
+  /v1/invoices/Items/{invoiceItemId}/options/{optionId}:
+    delete:
+      tags:
+      - Invoices
+      - Invoices
+      operationId: Invoices_RemoveInvoiceItemOption
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: invoiceItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      - name: optionId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 4
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInvoiceItemOptionRequest'
+        required: true
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceItemOption'
+      security:
+      - JWT: []
   /v1/invoices/statuses:
     get:
       tags:
@@ -860,18 +991,21 @@ paths:
         in: query
         schema:
           type: string
+          nullable: true
         x-position: 2
       - name: page
         in: query
         schema:
           type: integer
           format: int32
+          default: 1
         x-position: 3
       - name: pageSize
         in: query
         schema:
           type: integer
           format: int32
+          default: 10
         x-position: 4
       - name: type
         in: query
@@ -909,9 +1043,10 @@ paths:
       - name: sortDirection
         in: query
         schema:
-          nullable: true
           oneOf:
-          - $ref: '#/components/schemas/SortDirection'
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
         x-position: 9
       responses:
         200:
@@ -1124,6 +1259,10 @@ components:
         unit:
           type: string
           nullable: true
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItemOption'
         discount:
           type: number
           format: decimal
@@ -1177,6 +1316,41 @@ components:
       enum:
       - Good
       - Service
+    InvoiceItemOption:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        itemId:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+        discount:
+          type: number
+          format: decimal
+          nullable: true
+        created:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          nullable: true
+        lastModified:
+          type: string
+          format: date-time
+          nullable: true
+        lastModifiedBy:
+          type: string
+          nullable: true
     InvoiceItemDomesticService:
       type: object
       additionalProperties: false
@@ -1405,6 +1579,46 @@ components:
       properties:
         organizationId:
           type: string
+    AddInvoiceItemOptionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        itemId:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+        discount:
+          type: number
+          format: decimal
+          nullable: true
+    UpdateInvoiceItemOptionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+        productId:
+          type: string
+          nullable: true
+        itemId:
+          type: string
+          nullable: true
+        price:
+          type: number
+          format: decimal
+          nullable: true
+        discount:
+          type: number
+          format: decimal
+          nullable: true
     ItemsResultOfInvoiceStatus:
       type: object
       additionalProperties: false

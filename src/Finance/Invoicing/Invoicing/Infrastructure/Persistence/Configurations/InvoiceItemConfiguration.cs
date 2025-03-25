@@ -16,5 +16,13 @@ public class InvoiceItemConfiguration : IEntityTypeConfiguration<InvoiceItem>
         builder.HasIndex(x => x.TenantId);
 
         builder.OwnsOne(x => x.DomesticService);
+
+        builder.HasMany(order => order.Options)
+            .WithOne()
+            .HasForeignKey(o => new { o.OrganizationId, o.InvoiceId, o.InvoiceItemId })
+            .IsRequired()
+            .OnDelete(DeleteBehavior.ClientCascade);
+
+        builder.Navigation(x => x.Options).AutoInclude();
     }
 }

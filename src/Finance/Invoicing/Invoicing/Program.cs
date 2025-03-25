@@ -321,6 +321,27 @@ group.MapDelete("/{invoiceId}/Items/{invoiceItemId}", async (string organization
     .WithTags("Invoices")
     .Produces(StatusCodes.Status200OK);
 
+group.MapPost("{invoiceId}/Items/{invoiceItemId}/options", async (string organizationId, string id, string invoiceItemId, AddInvoiceItemOptionRequest request, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!) =>
+    {
+        var result = await mediator.Send(new YourBrand.Invoicing.Features.InvoiceManagement.Invoices.Items.Options.CreateInvoiceItemOption(organizationId, id, invoiceItemId, request.Description, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
+        return TypedResults.Created("", result.GetValue());
+    })
+    .WithName($"Invoices_AddInvoiceItemOption");
+
+group.MapPut("{invoiceId}/Items/{invoiceItemId}/options/{optionId}", async (string organizationId, string id, string invoiceItemId, [FromBody] AddInvoiceItemOptionRequest request, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!) =>
+    {
+        var result = await mediator.Send(new YourBrand.Invoicing.Features.InvoiceManagement.Invoices.Items.Options.CreateInvoiceItemOption(organizationId, id, invoiceItemId, request.Description, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
+        return TypedResults.Created("", result.GetValue());
+    })
+    .WithName($"Invoices_UpdateInvoiceItemOption");
+
+group.MapDelete("{invoiceId}/Items/{invoiceItemId}/options/{optionId}",async  (string organizationId, string id, string invoiceItemId, string optionId, [FromBody] UpdateInvoiceItemOptionRequest request, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!) =>
+    {
+        var result = await mediator.Send(new YourBrand.Invoicing.Features.InvoiceManagement.Invoices.Items.Options.UpdateInvoiceItemOption(organizationId, id, invoiceItemId, optionId, request.Description, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
+        return TypedResults.Ok(result.GetValue());
+    })
+    .WithName($"Invoices_RemoveInvoiceItemOption");
+
 app.MapInvoiceStatusEndpoints();
 
 app.MapControllers();
@@ -338,3 +359,7 @@ public record AddInvoiceItem(ProductType ProductType, string Description, string
 public record UpdateInvoiceItem(ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool IsTaxDeductibleService);
 
 public record UpdateInvoiceItemQuantity(double Quantity);
+
+public record AddInvoiceItemOptionRequest(string Description, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);
+
+public record UpdateInvoiceItemOptionRequest(string Description, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);

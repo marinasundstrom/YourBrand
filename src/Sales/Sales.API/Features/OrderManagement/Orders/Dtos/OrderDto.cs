@@ -83,6 +83,7 @@ public sealed record OrderItemDto(
     SubscriptionDto? Subscription,
     decimal UnitPrice,
     string? Unit,
+    IEnumerable<OrderItemOptionDto> Options,
     decimal? Discount,
     decimal? RegularPrice,
     double? VatRate,
@@ -90,6 +91,18 @@ public sealed record OrderItemDto(
     decimal? Vat,
     decimal Total,
     string? Notes,
+    DateTimeOffset Created,
+    UserDto? CreatedBy,
+    DateTimeOffset? LastModified,
+    UserDto? LastModifiedBy);
+
+public sealed record OrderItemOptionDto(
+    string Id,
+    string Description,
+    string? ProductId,
+    string? ItemId,
+    decimal? Price,
+    decimal? Discount,
     DateTimeOffset Created,
     UserDto? CreatedBy,
     DateTimeOffset? LastModified,

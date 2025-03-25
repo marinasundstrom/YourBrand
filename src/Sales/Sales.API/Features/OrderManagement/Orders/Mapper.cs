@@ -74,6 +74,7 @@ public static class Mappings
         orderItem.Subscription?.ToDto(),
         orderItem.Price,
         orderItem.Unit,
+        orderItem.Options.Select(x => x.ToDto()),
         orderItem.DirectDiscount,
         orderItem.RegularPrice,
         orderItem.VatRate,
@@ -85,6 +86,12 @@ public static class Mappings
         orderItem.CreatedBy?.ToDto(),
         orderItem.LastModified,
         orderItem.LastModifiedBy?.ToDto());
+
+    public static OrderItemOptionDto ToDto(this OrderItemOption orderItemOption) => new(orderItemOption.Id, orderItemOption.Description, orderItemOption.ProductId, orderItemOption.ItemId, orderItemOption.Price, orderItemOption.Discount, 
+        orderItemOption.Created,
+        orderItemOption.CreatedBy?.ToDto(),
+        orderItemOption.LastModified,
+        orderItemOption.LastModifiedBy?.ToDto());
 
     public static OrderTypeDto ToDto(this OrderType orderType) => new(orderType.Id, orderType.Name, orderType.Handle, orderType.Description);
 
