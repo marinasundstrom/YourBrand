@@ -51,7 +51,7 @@ public sealed record RemoveOrderItemOption(string OrganizationId, string OrderId
                 return OrderItemNotFound;
             }
 
-            orderItem.RemoveOption(option);
+            orderItem.RemoveOption(option, timeProvider);
 
             order.Update(timeProvider);
 

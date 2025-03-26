@@ -1,18 +1,11 @@
-using Core;
-
-using Microsoft.Extensions.Options;
-
 using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Sales.Domain.ValueObjects;
-using YourBrand.Tenancy;
 
 namespace YourBrand.Sales.Domain.Entities;
 
 public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTenant
 {
-    private readonly HashSet<Discount> _discounts = new HashSet<Discount>();
-
     internal OrderItem() : base(Guid.NewGuid().ToString()) { }
 
 
@@ -89,8 +82,19 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
     private readonly HashSet<OrderItemOption> _options = new HashSet<OrderItemOption>();
     public IReadOnlyCollection<OrderItemOption> Options => _options;
 
-    public void AddOption(OrderItemOption option) => _options.Add(option);
-    public void RemoveOption(OrderItemOption option) => _options.Remove(option);
+    public OrderItemOption AddOption(string description, string? productId, string? itemId, decimal? price, decimal? discount, TimeProvider timeProvider)
+    {
+        var option = new OrderItemOption(description, productId, itemId, price, discount);
+        _options.Add(option);
+        Update(timeProvider);
+        return option;
+    }
+
+    public void RemoveOption(OrderItemOption option, TimeProvider timeProvider)  
+    {
+        _options.Remove(option);
+        Update(timeProvider);
+    }
 
     // Base Price Discount (difference between RegularPrice and Price)
     public decimal BasePriceDiscount => RegularPrice.HasValue && RegularPrice > Price ? (RegularPrice.Value - Price) * (decimal)Quantity : 0;
@@ -269,13 +273,5 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
         targetOrder.ShippingDetails = orderItem?.Order?.ShippingDetails?.Copy(); // orderItem.HasDeliveryDetails ? orderItem?.DeliveryDetails?.Clone() : orderItem?.Order?.DeliveryDetails?.Clone();
         //delivery.Assignee = orderItem?.Assignee ?? orderItem?.Order?.Assignee;
         targetOrder.Notes = orderItem!.Notes;
-    }
-
-    public OrderItemOption AddOption(string description, string? productId, string? itemId, decimal? price, decimal? discount, TimeProvider timeProvider)
-    {
-        var option = new OrderItemOption(description, productId, itemId, price, discount);
-        _options.Add(option);
-        Update(timeProvider);
-        return option;
     }
 }

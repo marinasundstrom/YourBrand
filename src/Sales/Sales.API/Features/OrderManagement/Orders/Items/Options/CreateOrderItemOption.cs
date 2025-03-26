@@ -45,7 +45,7 @@ public sealed record CreateOrderItemOption(string OrganizationId, string OrderId
                 return Errors.Orders.OrderItemNotFound;
             }
 
-            var option = orderItem.AddOption(request.Description, request.ProductId, request.ItemId, request.Price, request.Discount);
+            var option = orderItem.AddOption(request.Description, request.ProductId, request.ItemId, request.Price, request.Discount, timeProvider);
 
             order.Update(timeProvider);
 
