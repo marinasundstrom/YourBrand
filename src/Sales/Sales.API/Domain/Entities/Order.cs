@@ -178,7 +178,7 @@ public class Order : AggregateRoot<string>, IAuditableEntity<string, User>, IHas
 
     public IReadOnlyCollection<Discount> Discounts => _discounts;
 
-    public bool AddDiscount(string description, decimal amount, string? discountId = null, TimeProvider timeProvider)
+    public bool AddDiscount(string description, decimal amount, string? discountId = null, TimeProvider timeProvider = null)
     {
         var discount = new Discount { OrganizationId = OrganizationId, Description = description, Amount = amount, DiscountId = discountId };
         if (_discounts.Contains(discount)) return false;
