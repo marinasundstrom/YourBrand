@@ -25,7 +25,7 @@ public sealed record OrderDto(
     IEnumerable<OrderVatAmountDto> VatAmounts,
     double? VatRate,
     decimal Vat,
-    IEnumerable<OrderDiscountDto> Discounts,
+    IEnumerable<DiscountDto> Discounts,
     decimal? Discount,
     decimal Total,
     DateTimeOffset Created,
@@ -64,15 +64,6 @@ public sealed record OrderVatAmountDto(
     decimal? Vat,
     decimal Total);
 
-public sealed record OrderDiscountDto(
-    string Description,
-    double? Rate,
-    decimal? Amount,
-    decimal? Total,
-    DateTimeOffset? EffectiveDate,
-    DateTimeOffset? ExpiryDate
-);
-
 public sealed record OrderItemDto(
     string Id,
     ProductType ProductType,
@@ -84,7 +75,7 @@ public sealed record OrderItemDto(
     decimal UnitPrice,
     string? Unit,
     IEnumerable<OrderItemOptionDto> Options,
-    decimal? Discount,
+    IEnumerable<DiscountDto> Discounts,
     decimal? RegularPrice,
     double? VatRate,
     double Quantity,
@@ -96,9 +87,19 @@ public sealed record OrderItemDto(
     DateTimeOffset? LastModified,
     UserDto? LastModifiedBy);
 
+public sealed record DiscountDto(
+    string Description,
+    double? Rate,
+    decimal? Amount,
+    decimal? Total,
+    DateTimeOffset? EffectiveDate,
+    DateTimeOffset? ExpiryDate);
+
 public sealed record OrderItemOptionDto(
     string Id,
-    string Description,
+    string Name,
+    string? Description,
+    string? Value,
     string? ProductId,
     string? ItemId,
     decimal? Price,

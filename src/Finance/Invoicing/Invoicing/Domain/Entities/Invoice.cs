@@ -243,12 +243,11 @@ public class Invoice : AuditableEntity<string>, IHasTenant, IHasOrganization
         string? productId,
         decimal unitPrice,
         string unit,
-        decimal? discount,
         double vatRate,
         double quantity, 
         TimeProvider timeProvider)
     {
-        var invoiceItem = new InvoiceItem(this, productType, description, productId, unitPrice, unit, discount, vatRate, quantity);
+        var invoiceItem = new InvoiceItem(this, productType, description, productId, unitPrice, unit, vatRate, quantity);
         invoiceItem.OrganizationId = OrganizationId;
         _items.Add(invoiceItem);
 

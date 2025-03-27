@@ -46,7 +46,7 @@ public static class Mappings
         schedule.ActualStartDate,
         schedule.ActualEndDate);
 
-    public static OrderDiscountDto ToDto(this Discount discount) => new(
+    public static DiscountDto ToDto(this Discount discount) => new(
         discount.Description,
         discount.Rate,
         discount.Amount,
@@ -75,7 +75,7 @@ public static class Mappings
         orderItem.Price,
         orderItem.Unit,
         orderItem.Options.Select(x => x.ToDto()),
-        orderItem.DirectDiscount,
+        orderItem.PromotionalDiscounts.Select(x => x.ToDto()),
         orderItem.RegularPrice,
         orderItem.VatRate,
         orderItem.Quantity,
@@ -87,7 +87,15 @@ public static class Mappings
         orderItem.LastModified,
         orderItem.LastModifiedBy?.ToDto());
 
-    public static OrderItemOptionDto ToDto(this OrderItemOption orderItemOption) => new(orderItemOption.Id, orderItemOption.Description, orderItemOption.ProductId, orderItemOption.ItemId, orderItemOption.Price, orderItemOption.Discount, 
+    public static OrderItemOptionDto ToDto(this OrderItemOption orderItemOption) => new(
+        orderItemOption.Id, 
+        orderItemOption.Name,
+        orderItemOption.Description, 
+        orderItemOption.Value,
+        orderItemOption.ProductId, 
+        orderItemOption.ItemId, 
+        orderItemOption.Price, 
+        orderItemOption.Discount, 
         orderItemOption.Created,
         orderItemOption.CreatedBy?.ToDto(),
         orderItemOption.LastModified,

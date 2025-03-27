@@ -104,7 +104,7 @@ public static class Endpoints
 
     private static async Task<Results<Created<OrderItemOptionDto>, NotFound>> AddOrderItemOption(string organizationId, string id, string itemId, AddOrderItemOptionRequest request, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!)
     {
-        var result = await mediator.Send(new Items.Options.CreateOrderItemOption(organizationId, id, itemId, request.Description, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
+        var result = await mediator.Send(new Items.Options.CreateOrderItemOption(organizationId, id, itemId, request.Name, request.Description, request.Value, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
         return TypedResults.Created("", result.GetValue());
     }
 
@@ -397,6 +397,6 @@ public static class Endpoints
     }
 }
 
-public record AddOrderItemOptionRequest(string Description, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);
+public record AddOrderItemOptionRequest(string Name, string? Description, string? Value, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);
 
-public record UpdateOrderItemOptionRequest(string Description, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);
+public record UpdateOrderItemOptionRequest(string Name, string? Description, string? Value, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);

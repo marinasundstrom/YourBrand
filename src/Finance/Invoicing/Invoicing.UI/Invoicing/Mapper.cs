@@ -39,7 +39,7 @@ public static class Mapper
             UnitPrice = dto.UnitPrice,
             Unit = dto.Unit!,
             Quantity = dto.Quantity,
-            RegularPrice = dto.UnitPrice + dto.Discount,
+            //RegularPrice = dto.UnitPrice + dto.Discount,
             VatRate = dto.VatRate.GetValueOrDefault(),
             IsTaxDeductibleService = dto.IsTaxDeductibleService,
             DomesticService = dto.DomesticService is null ?
@@ -80,7 +80,7 @@ public static class Mapper
             UnitPrice = vm.UnitPrice,
             Unit = vm.Unit,
             Quantity = vm.Quantity,
-            Discount = vm.Discount,
+            //Discount = vm.Discount,
             VatRate = vm.VatRate,
             IsTaxDeductibleService = vm.IsTaxDeductibleService,
             DomesticService = !vm.IsTaxDeductibleService ? null

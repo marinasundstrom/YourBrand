@@ -14,7 +14,7 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
 
     }
 
-    public InvoiceItem(Invoice invoice, ProductType productType, string description, string? productId, decimal unitPrice, string unit, decimal? discount, double vatRate, double quantity)
+    public InvoiceItem(Invoice invoice, ProductType productType, string description, string? productId, decimal unitPrice, string unit, double vatRate, double quantity)
      : base(Guid.NewGuid().ToString())
     {
         Invoice = invoice;
@@ -26,7 +26,7 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
         Quantity = quantity;
         VatRate = vatRate;
         //VatIncluded = ;
-        Discount = discount;
+        //Discount = discount;
         //UpdateVatRate(unitPrice, vatRate, timeProvider);
         //UpdateQuantity(quantity, timeProvider);
     }
@@ -101,9 +101,9 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
     private readonly HashSet<InvoiceItemOption> _options = new HashSet<InvoiceItemOption>();
     public IReadOnlyCollection<InvoiceItemOption> Options => _options;
 
-    public InvoiceItemOption AddOption(string description, string? productId, string? itemId, decimal? price, decimal? discount, TimeProvider timeProvider)
+    public InvoiceItemOption AddOption(string name, string? description, string? value, string? productId, string? itemId, decimal? price, decimal? discount, TimeProvider timeProvider)
     {
-        var option = new InvoiceItemOption(description, productId, itemId, price, discount);
+        var option = new InvoiceItemOption(name, description, value, productId, itemId, price, discount);
         _options.Add(option);
         Update(timeProvider);
         return option;
@@ -138,8 +138,10 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
         return true;
     }
 
-    public bool AddPromotionalDiscount(Discount discount, TimeProvider timeProvider)
+    public bool AddPromotionalDiscount(string description, decimal? amount, double? rate, TimeProvider timeProvider)
     {
+        var discount = new Discount { OrganizationId = OrganizationId, Description = description, Amount = amount, /* DiscountId = discountId */ };
+
         if (_promotionalDiscounts.Add(discount))
         {
             Update(timeProvider); // Recalculate totals

@@ -11,7 +11,7 @@ using static YourBrand.Sales.Domain.Errors.Orders;
 
 namespace YourBrand.Sales.Features.OrderManagement.Orders.Items.Options;
 
-public sealed record CreateOrderItemOption(string OrganizationId, string OrderId, string OrderItemId, string Description, string? ProductId, string? ItemId, decimal? Price, decimal? Discount) : IRequest<Result<OrderItemOptionDto>>
+public sealed record CreateOrderItemOption(string OrganizationId, string OrderId, string OrderItemId, string Name, string? Description, string? Value, string? ProductId, string? ItemId, decimal? Price, decimal? Discount) : IRequest<Result<OrderItemOptionDto>>
 {
     public sealed class Validator : AbstractValidator<CreateOrderItemOption>
     {
@@ -45,7 +45,7 @@ public sealed record CreateOrderItemOption(string OrganizationId, string OrderId
                 return Errors.Orders.OrderItemNotFound;
             }
 
-            var option = orderItem.AddOption(request.Description, request.ProductId, request.ItemId, request.Price, request.Discount, timeProvider);
+            var option = orderItem.AddOption(request.Name, request.Description, request.Value, request.ProductId, request.ItemId, request.Price, request.Discount, timeProvider);
 
             order.Update(timeProvider);
 

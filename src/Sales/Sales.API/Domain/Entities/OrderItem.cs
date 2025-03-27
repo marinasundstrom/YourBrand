@@ -82,9 +82,9 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
     private readonly HashSet<OrderItemOption> _options = new HashSet<OrderItemOption>();
     public IReadOnlyCollection<OrderItemOption> Options => _options;
 
-    public OrderItemOption AddOption(string description, string? productId, string? itemId, decimal? price, decimal? discount, TimeProvider timeProvider)
+    public OrderItemOption AddOption(string name, string? description, string? value, string? productId, string? itemId, decimal? price, decimal? discount, TimeProvider timeProvider)
     {
-        var option = new OrderItemOption(description, productId, itemId, price, discount);
+        var option = new OrderItemOption(name, description, value, productId, itemId, price, discount);
         _options.Add(option);
         Update(timeProvider);
         return option;
@@ -119,8 +119,10 @@ public class OrderItem : Entity<string>, IAuditableEntity<string, User>, IHasTen
         return true;
     }
 
-    public bool AddPromotionalDiscount(Discount discount, TimeProvider timeProvider)
+    public bool AddPromotionalDiscount(string description, decimal? amount, double? rate, TimeProvider timeProvider)
     {
+        var discount = new Discount { OrganizationId = OrganizationId, Description = description, Amount = amount, /* DiscountId = discountId */ };
+
         if (_promotionalDiscounts.Add(discount))
         {
             Update(timeProvider); // Recalculate totals

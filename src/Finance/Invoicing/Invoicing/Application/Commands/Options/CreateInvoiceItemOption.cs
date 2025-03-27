@@ -11,7 +11,7 @@ using static YourBrand.Invoicing.Domain.Errors.Invoices;
 
 namespace YourBrand.Invoicing.Features.InvoiceManagement.Invoices.Items.Options;
 
-public sealed record CreateInvoiceItemOption(string OrganizationId, string InvoiceId, string InvoiceItemId, string Description, string? ProductId, string? ItemId, decimal? Price, decimal? Discount) : IRequest<Result<InvoiceItemOptionDto>>
+public sealed record CreateInvoiceItemOption(string OrganizationId, string InvoiceId, string InvoiceItemId, string Name, string? Description, string? Value, string? ProductId, string? ItemId, decimal? Price, decimal? Discount) : IRequest<Result<InvoiceItemOptionDto>>
 {
     public sealed class Validator : AbstractValidator<CreateInvoiceItemOption>
     {
@@ -44,7 +44,7 @@ public sealed record CreateInvoiceItemOption(string OrganizationId, string Invoi
                 return Errors.Invoices.InvoiceItemNotFound;
             }
 
-            var option = orderItem.AddOption(request.Description, request.ProductId, request.ItemId, request.Price, request.Discount, timeProvider);
+            var option = orderItem.AddOption(request.Name, request.Description, request.Value, request.ProductId, request.ItemId, request.Price, request.Discount, timeProvider);
 
             order.Update(timeProvider);
 

@@ -132,6 +132,17 @@ public sealed record Checkout(
                     DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
                 })!;
 
+                List<CreateOrderItemOption> options0 = [];
+
+                foreach (var option in options)
+                {
+                    options0.Add(new CreateOrderItemOption() {
+                        Name = option.Name,
+                        Value = option.TextValue ?? option.NumericalValue?.ToString(),
+                        Price = option.Price
+                    });
+                }
+
                 decimal price = product.Price;
 
                 price += CalculatePrice(product, options);
@@ -204,7 +215,8 @@ public sealed record Checkout(
                     RegularPrice = cartItem.RegularPrice,
                     VatRate = cartItem.VatRate,
                     Quantity = cartItem.Quantity,
-                    Discount = cartItem.RegularPrice is null ? null : cartItem.Price - cartItem.RegularPrice.GetValueOrDefault()
+                    Options = options0
+                    //Discount = cartItem.RegularPrice is null ? null : cartItem.Price - cartItem.RegularPrice.GetValueOrDefault()
                 });
             }
         }

@@ -72,7 +72,7 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
 
             foreach (var orderItem in request.Items)
             {
-                order.AddItem(
+                var item = order.AddItem(
                     orderItem.Description,
                     orderItem.ItemId,
                     orderItem.UnitPrice,
@@ -84,6 +84,22 @@ public sealed record CreateOrder(string OrganizationId, int? Status, SetCustomer
                     orderItem.VatRate,
                     orderItem.Notes,
                     timeProvider);
+
+                if (orderItem.Options is not null)
+                {
+                    foreach (var option in orderItem.Options) 
+                    {
+                        item.AddOption(option.Name, option.Description, option.Value, option.ProductId, option.ItemId, option.Price, null, timeProvider);
+                    }
+                }
+                
+                if(orderItem.Discounts is not null) 
+                {
+                    foreach (var discount in orderItem.Discounts)
+                    {
+                        item.AddPromotionalDiscount(discount.Description, discount.Amount, discount.Rate, timeProvider);
+                    }
+                }
             }
 
             order.Update(timeProvider);

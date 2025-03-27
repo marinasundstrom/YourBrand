@@ -659,7 +659,7 @@ paths:
         schema:
           type: string
         x-position: 2
-      - name: orderItemId
+      - name: itemId
         in: query
         required: true
         schema:
@@ -684,7 +684,7 @@ paths:
           description: ''
       security:
       - JWT: []
-  /v1/orders/{id}/items/options/{optionId}:
+  /v1/orders/{id}/items/{itemId}/options/{optionId}:
     put:
       tags:
       - Orders
@@ -703,8 +703,8 @@ paths:
         schema:
           type: string
         x-position: 2
-      - name: orderItemId
-        in: query
+      - name: itemId
+        in: path
         required: true
         schema:
           type: string
@@ -752,8 +752,8 @@ paths:
         schema:
           type: string
         x-position: 2
-      - name: orderItemId
-        in: query
+      - name: itemId
+        in: path
         required: true
         schema:
           type: string
@@ -1993,7 +1993,7 @@ components:
         discounts:
           type: array
           items:
-            $ref: '#/components/schemas/OrderDiscount'
+            $ref: '#/components/schemas/Discount'
         discount:
           type: number
           format: decimal
@@ -2418,10 +2418,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OrderItemOption'
-        discount:
-          type: number
-          format: decimal
-          nullable: true
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Discount'
         regularPrice:
           type: number
           format: decimal
@@ -2498,8 +2498,14 @@ components:
       properties:
         id:
           type: string
+        name:
+          type: string
         description:
           type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
         productId:
           type: string
           nullable: true
@@ -2529,26 +2535,7 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/User'
-    OrderVatAmount:
-      type: object
-      additionalProperties: false
-      properties:
-        name:
-          type: string
-        vatRate:
-          type: number
-          format: double
-        subTotal:
-          type: number
-          format: decimal
-        vat:
-          type: number
-          format: decimal
-          nullable: true
-        total:
-          type: number
-          format: decimal
-    OrderDiscount:
+    Discount:
       type: object
       additionalProperties: false
       properties:
@@ -2574,6 +2561,25 @@ components:
           type: string
           format: date-time
           nullable: true
+    OrderVatAmount:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        vatRate:
+          type: number
+          format: double
+        subTotal:
+          type: number
+          format: decimal
+        vat:
+          type: number
+          format: decimal
+          nullable: true
+        total:
+          type: number
+          format: decimal
     SortDirection:
       type: string
       description: ''
@@ -2639,16 +2645,60 @@ components:
           type: number
           format: decimal
           nullable: true
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderItemOption'
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateDiscount'
         vatRate:
           type: number
           format: double
           nullable: true
-        discount:
+        notes:
+          type: string
+          nullable: true
+    CreateOrderItemOption:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
+        productId:
+          type: string
+          nullable: true
+        itemId:
+          type: string
+          nullable: true
+        price:
           type: number
           format: decimal
           nullable: true
-        notes:
+    CreateDiscount:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
           type: string
+        rate:
+          type: number
+          format: double
+          nullable: true
+        amount:
+          type: number
+          format: decimal
+          nullable: true
+        total:
+          type: number
+          format: decimal
           nullable: true
     CreateDraftOrderRequest:
       type: object
@@ -2741,8 +2791,14 @@ components:
       type: object
       additionalProperties: false
       properties:
+        name:
+          type: string
         description:
           type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
         productId:
           type: string
           nullable: true
@@ -2761,8 +2817,14 @@ components:
       type: object
       additionalProperties: false
       properties:
+        name:
+          type: string
         description:
           type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
         productId:
           type: string
           nullable: true

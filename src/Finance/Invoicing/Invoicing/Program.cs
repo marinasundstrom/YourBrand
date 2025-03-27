@@ -220,7 +220,7 @@ group.MapGet("/invoices/{invoiceId}/file", async (string organizationId, string 
 group.MapPost("/{invoiceId}/Items", async (string organizationId, string invoiceId,
     AddInvoiceItem dto,
     IMediator mediator, CancellationToken cancellationToken)
-    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.AddItem(organizationId, invoiceId, dto.ProductType, dto.Description, dto.ProductId, dto.UnitPrice, dto.Unit, dto.Discount, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService, dto.DomesticService), cancellationToken))
+    => await mediator.Send(new YourBrand.Invoicing.Application.Commands.AddItem(organizationId, invoiceId, dto.ProductType, dto.Description, dto.ProductId, dto.UnitPrice, dto.Unit, dto.Options, dto.Discounts, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService, dto.DomesticService), cancellationToken))
     .WithName("Invoices_AddItem")
     .WithTags("Invoices")
     .Produces<InvoiceItemDto>(StatusCodes.Status200OK);
@@ -323,14 +323,14 @@ group.MapDelete("/{invoiceId}/Items/{invoiceItemId}", async (string organization
 
 group.MapPost("{invoiceId}/Items/{invoiceItemId}/options", async (string organizationId, string id, string invoiceItemId, AddInvoiceItemOptionRequest request, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!) =>
     {
-        var result = await mediator.Send(new YourBrand.Invoicing.Features.InvoiceManagement.Invoices.Items.Options.CreateInvoiceItemOption(organizationId, id, invoiceItemId, request.Description, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
+        var result = await mediator.Send(new YourBrand.Invoicing.Features.InvoiceManagement.Invoices.Items.Options.CreateInvoiceItemOption(organizationId, id, invoiceItemId, request.Name, request.Description, request.Value, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
         return TypedResults.Created("", result.GetValue());
     })
     .WithName($"Invoices_AddInvoiceItemOption");
 
 group.MapPut("{invoiceId}/Items/{invoiceItemId}/options/{optionId}", async (string organizationId, string id, string invoiceItemId, [FromBody] AddInvoiceItemOptionRequest request, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!) =>
     {
-        var result = await mediator.Send(new YourBrand.Invoicing.Features.InvoiceManagement.Invoices.Items.Options.CreateInvoiceItemOption(organizationId, id, invoiceItemId, request.Description, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
+        var result = await mediator.Send(new YourBrand.Invoicing.Features.InvoiceManagement.Invoices.Items.Options.CreateInvoiceItemOption(organizationId, id, invoiceItemId, request.Name, request.Description, request.Value, request.ProductId, request.ItemId, request.Price, request.Discount), cancellationToken);
         return TypedResults.Created("", result.GetValue());
     })
     .WithName($"Invoices_UpdateInvoiceItemOption");
@@ -354,12 +354,13 @@ if (args.Contains("--seed"))
 
 app.Run();
 
-public record AddInvoiceItem(ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService);
+public record AddInvoiceItem(ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, List<CreateInvoiceItemOptionDto> Options, List<CreateDiscountDto> Discounts, double VatRate, double Quantity,
+   bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService);
 
 public record UpdateInvoiceItem(ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool IsTaxDeductibleService);
 
 public record UpdateInvoiceItemQuantity(double Quantity);
 
-public record AddInvoiceItemOptionRequest(string Description, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);
+public record AddInvoiceItemOptionRequest(string Name, string? Description, string? Value, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);
 
 public record UpdateInvoiceItemOptionRequest(string Description, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);

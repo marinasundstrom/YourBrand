@@ -8,9 +8,11 @@ namespace YourBrand.Invoicing.Domain.Entities;
 
 public class InvoiceItemOption : AuditableEntity<string>, IHasTenant, IHasOrganization
 {
-    public InvoiceItemOption(string description, string? productId, string? itemId, decimal? price, decimal? discount) : base(Guid.NewGuid().ToString())
+    public InvoiceItemOption(string name, string? description, string? value, string? productId, string? itemId, decimal? price, decimal? discount) : base(Guid.NewGuid().ToString())
     {
+        Name = name;
         Description = description;
+        Value = value;
         ProductId = productId;
         ItemId = itemId;
         Price = price;
@@ -30,7 +32,11 @@ public class InvoiceItemOption : AuditableEntity<string>, IHasTenant, IHasOrgani
 
     public string? InvoiceItemId { get; set; }
 
-    public string Description { get; set; }
+    public string Name { get; set;}
+
+    public string? Description { get; set; }
+
+    public string? Value { get; set; }
 
     public string? ProductId { get; set; }
 

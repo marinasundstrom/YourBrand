@@ -65,7 +65,7 @@ public record InvoiceItemDto(
     decimal UnitPrice,
     string? Unit,
     IEnumerable<InvoiceItemOptionDto> Options,
-    decimal? Discount,
+    IEnumerable<DiscountDto> Discounts,
     decimal? RegularPrice,
     double? VatRate,
     double Quantity,
@@ -79,9 +79,19 @@ public record InvoiceItemDto(
     DateTimeOffset? LastModified,
     string? LastModifiedBy);
 
+public sealed record DiscountDto(    
+    string Description,
+    double? Rate,
+    decimal? Amount,
+    decimal? Total,
+    DateTimeOffset? EffectiveDate,
+    DateTimeOffset? ExpiryDate);
+
 public sealed record InvoiceItemOptionDto(
     string Id,
-    string Description,
+    string Name,
+    string? Description,
+    string? Value,
     string? ProductId,
     string? ItemId,
     decimal? Price,
