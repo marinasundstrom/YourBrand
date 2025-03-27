@@ -9,7 +9,7 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record ActivateRotAndRut(string OrganizationId, string InvoiceId, InvoiceDomesticServiceDto? DomesticService) : IRequest<InvoiceDto>
 {
-    public class Handler(IInvoicingContext context) : IRequestHandler<ActivateRotAndRut, InvoiceDto>
+    public class Handler(IInvoicingContext context, TimeProvider timeProvider) : IRequestHandler<ActivateRotAndRut, InvoiceDto>
     {
         public async Task<InvoiceDto> Handle(ActivateRotAndRut request, CancellationToken cancellationToken)
         {
@@ -46,7 +46,7 @@ public record ActivateRotAndRut(string OrganizationId, string InvoiceId, Invoice
                         ) : null;
             }
 
-            invoice.Update();
+            invoice.Update(timeProvider);
 
             await context.SaveChangesAsync(cancellationToken);
 

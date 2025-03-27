@@ -9,7 +9,7 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record UpdateInvoiceItemQuantity(string OrganizationId, string InvoiceId, string InvoiceItemId, double Quantity) : IRequest<InvoiceItemDto>
 {
-    public class Handler(IInvoicingContext context) : IRequestHandler<UpdateInvoiceItemQuantity, InvoiceItemDto>
+    public class Handler(IInvoicingContext context, TimeProvider timeProvider) : IRequestHandler<UpdateInvoiceItemQuantity, InvoiceItemDto>
     {
         public async Task<InvoiceItemDto> Handle(UpdateInvoiceItemQuantity request, CancellationToken cancellationToken)
         {
@@ -35,9 +35,9 @@ public record UpdateInvoiceItemQuantity(string OrganizationId, string InvoiceId,
                 throw new Exception("Not found");
             }
 
-            item.UpdateQuantity(request.Quantity);
+            item.UpdateQuantity(request.Quantity, timeProvider);
 
-            invoice.Update();
+            invoice.Update(timeProvider);
 
             await context.SaveChangesAsync(cancellationToken);
 

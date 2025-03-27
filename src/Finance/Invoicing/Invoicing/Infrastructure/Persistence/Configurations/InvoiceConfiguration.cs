@@ -34,6 +34,14 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
 
         builder.OwnsMany(x => x.VatAmounts, e => e.ToJson());
 
+        builder.HasMany(invoice => invoice.Discounts)
+            .WithOne()
+            .HasForeignKey(o => new { o.OrganizationId, o.InvoiceId })
+            .IsRequired()
+            .OnDelete(DeleteBehavior.ClientCascade);
+
+        builder.Navigation(x => x.Discounts).AutoInclude();
+
         builder.OwnsOne(x => x.DomesticService, e => e.OwnsOne(z => z.PropertyDetails));
     }
 }

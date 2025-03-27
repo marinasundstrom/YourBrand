@@ -22,9 +22,13 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
         Description = description;
         ProductId = productId;
         Unit = unit;
+        Price = unitPrice;
+        Quantity = quantity;
+        VatRate = vatRate;
+        //VatIncluded = ;
         Discount = discount;
-        UpdateVatRate(unitPrice, vatRate);
-        UpdateQuantity(quantity);
+        //UpdateVatRate(unitPrice, vatRate, timeProvider);
+        //UpdateQuantity(quantity, timeProvider);
     }
 
     public TenantId TenantId { get; set; }
@@ -71,13 +75,13 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
 
     public double Quantity { get; private set; }
 
-    public void UpdateQuantity(double quantity)
+    public void UpdateQuantity(double quantity, TimeProvider timeProvider)
     {
         Quantity = quantity;
 
         Total = Price * (decimal)Quantity;
 
-        Invoice?.Update();
+        Invoice?.Update(timeProvider);
     }
 
     public decimal Price { get; private set; }
@@ -92,27 +96,87 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
 
     public decimal? RegularPrice { get; set; }
 
+    public bool VatIncluded { get; private set; }
+
+    private readonly HashSet<InvoiceItemOption> _options = new HashSet<InvoiceItemOption>();
+    public IReadOnlyCollection<InvoiceItemOption> Options => _options;
+
+    public InvoiceItemOption AddOption(string description, string? productId, string? itemId, decimal? price, decimal? discount, TimeProvider timeProvider)
+    {
+        var option = new InvoiceItemOption(description, productId, itemId, price, discount);
+        _options.Add(option);
+        Update(timeProvider);
+        return option;
+    }
+
+    public void RemoveOption(InvoiceItemOption option, TimeProvider timeProvider)
+    {
+        _options.Remove(option);
+        Update(timeProvider);
+    }
+
+    // Base Price Discount (difference between RegularPrice and Price)
+    public decimal BasePriceDiscount => RegularPrice.HasValue && RegularPrice > Price ? (RegularPrice.Value - Price) * (decimal)Quantity : 0;
+
+    // Direct Discount applied directly to the item
+    public decimal DirectDiscount { get; private set; } = 0;
+
+    // Promotional Discounts
+    private readonly HashSet<Discount> _promotionalDiscounts = new HashSet<Discount>();
+    public IReadOnlyCollection<Discount> PromotionalDiscounts => _promotionalDiscounts;
+
+    public decimal PromotionalDiscount => _promotionalDiscounts.Sum(d => d.Amount.GetValueOrDefault() * (decimal)Quantity);
+
+    // Total Discount (sum of all discounts)
+    public decimal TotalDiscount => BasePriceDiscount + DirectDiscount + PromotionalDiscount;
+
+    // Methods for managing discounts
+    public bool ApplyDirectDiscount(decimal discountAmount, TimeProvider timeProvider)
+    {
+        DirectDiscount = discountAmount;
+        Update(timeProvider); // Recalculate totals
+        return true;
+    }
+
+    public bool AddPromotionalDiscount(Discount discount, TimeProvider timeProvider)
+    {
+        if (_promotionalDiscounts.Add(discount))
+        {
+            Update(timeProvider); // Recalculate totals
+            return true;
+        }
+        return false;
+    }
+
+    public bool RemovePromotionalDiscount(Discount discount, TimeProvider timeProvider)
+    {
+        if (_promotionalDiscounts.Remove(discount))
+        {
+            Update(timeProvider); // Recalculate totals
+            return true;
+        }
+        return false;
+    }
+
     public double? DiscountRate { get; set; }
 
     public decimal? Discount { get; set; }
+
+    public decimal SubTotal { get; private set; }
 
     public double? VatRate { get; private set; }
 
     public decimal? Vat { get; private set; }
 
-    public void UpdateVatRate(decimal unitPrice, double vatRate)
+    public void UpdateVatRate(decimal unitPrice, double vatRate, TimeProvider timeProvider)
     {
         Price = unitPrice;
         VatRate = vatRate;
 
         Total = Price * (decimal)Quantity;
 
-        Invoice?.Update();
+        Invoice?.Update(timeProvider);
     }
-
-    private readonly HashSet<InvoiceItemOption> _options = new HashSet<InvoiceItemOption>();
-    public IReadOnlyCollection<InvoiceItemOption> Options => _options;
-
 
     public decimal Total { get; private set; }
 
@@ -122,21 +186,66 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
 
     public InvoiceItemDomesticService? DomesticService { get; set; }
 
-    public void Update()
+    public void Update(TimeProvider timeProvider)
     {
-        Total = Price * (decimal)Quantity;
-        Vat = Math.Round(Total.GetVatFromTotal(VatRate.GetValueOrDefault()), 2, MidpointRounding.ToEven);
+        // Calculate base total after all discounts (before VAT adjustment)
+        var baseTotal = (Price * (decimal)Quantity) - Options.Sum(x => x.Price.GetValueOrDefault()) - TotalDiscount;
+
+        // Calculate VAT and Total based on VAT inclusion status
+        CalculateVatAndTotal(baseTotal);
     }
 
-    public InvoiceItemOption AddOption(string description, string? productId, string? itemId, decimal? price, decimal? discount)
+    private void CalculateVatAndTotal(decimal baseTotal)
     {
-        var option = new InvoiceItemOption(description, productId, itemId, price, discount);
-        _options.Add(option);
-        Update();
-        return option;
+        if (VatRate.HasValue)
+        {
+            if (VatIncluded)
+            {
+                // Extract VAT from baseTotal as VAT is included in Price
+                Vat = PriceCalculations.CalculateVat(baseTotal, VatRate.Value);
+                SubTotal = baseTotal - Vat.GetValueOrDefault();
+                Total = baseTotal;
+            }
+            else
+            {
+                Vat = baseTotal * (decimal)VatRate.Value;
+                SubTotal = baseTotal;
+                Total = baseTotal + Vat.GetValueOrDefault();
+            }
+        }
+        else
+        {
+            Vat = 0;
+            SubTotal = baseTotal;
+            Total = baseTotal;
+        }
     }
 
-    public void RemoveOption(InvoiceItemOption option) => _options.Remove(option);
+    public void AdjustForVatInclusionChange(bool newVatIncluded, TimeProvider timeProvider)
+    {
+        if (VatIncluded == newVatIncluded) return; // No change needed if the VAT inclusion status is the same
+
+        VatIncluded = newVatIncluded;
+
+        decimal adjustedPrice = Price;
+
+        if (VatRate.HasValue)
+        {
+            if (newVatIncluded)
+            {
+                // VAT was not included, but now needs to be included
+                adjustedPrice = Price * (1 + (decimal)VatRate.Value);
+            }
+            else
+            {
+                // VAT was included, but now needs to be excluded
+                adjustedPrice = Price / (1 + (decimal)VatRate.Value);
+            }
+        }
+
+        Price = adjustedPrice;
+        Update(timeProvider); // Recalculate totals with the adjusted price
+    }
 }
 
 public record InvoiceItemDomesticService(DomesticServiceKind Kind, HomeRepairAndMaintenanceServiceType? HomeRepairAndMaintenanceServiceType, HouseholdServiceType? HouseholdServiceType);

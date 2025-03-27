@@ -1123,6 +1123,7 @@ components:
         vat:
           type: number
           format: decimal
+          nullable: true
         discount:
           type: number
           format: decimal

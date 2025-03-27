@@ -13,6 +13,7 @@ namespace YourBrand.Invoicing.Domain.Entities;
 public class Invoice : AuditableEntity<string>, IHasTenant, IHasOrganization
 {
     readonly List<InvoiceItem> _items = new List<InvoiceItem>();
+    readonly HashSet<Discount> _discounts = new HashSet<Discount>();
 
     private Invoice() { }
 
@@ -138,15 +139,50 @@ public class Invoice : AuditableEntity<string>, IHasTenant, IHasOrganization
         }
     }
 
-    public bool VatIncluded { get; set; }
+    public bool VatIncluded { get; private set; }
+
+    public void SetVatIncluded(bool vatIncluded, TimeProvider timeProvider)
+    {
+        if (VatIncluded == vatIncluded) return; // No change needed if the value is the same
+
+        // Update the VatIncluded setting
+        VatIncluded = vatIncluded;
+
+        // Adjust all items based on the new VatIncluded setting
+        foreach (var item in _items)
+        {
+            item.AdjustForVatInclusionChange(VatIncluded, timeProvider);
+        }
+
+        // Recalculate order totals to reflect the changes
+        Update(timeProvider);
+    }
 
     public decimal SubTotal { get; private set; }
 
-    public double? VatRate { get; set; }
+    public IReadOnlyCollection<Discount> Discounts => _discounts;
 
-    public decimal Vat { get; set; }
+    public bool AddDiscount(TimeProvider timeProvider, string description, decimal amount, string? discountId = null)
+    {
+        var discount = new Discount { OrganizationId = OrganizationId, Description = description, Amount = amount, DiscountId = discountId };
+        if (_discounts.Contains(discount)) return false;
+        _discounts.Add(discount);
+        Update(timeProvider);
+        return true;
+    }
+
+    public bool RemoveDiscount(Discount discount, TimeProvider timeProvider)
+    {
+        var removed = _discounts.Remove(discount);
+        if (removed) Update(timeProvider);
+        return removed;
+    }
 
     public decimal Discount { get; set; }
+
+    public double? VatRate { get; set; }
+
+    public decimal? Vat { get; set; }
 
     public List<InvoiceVatAmount> VatAmounts { get; set; } = new List<InvoiceVatAmount>();
 
@@ -155,6 +191,8 @@ public class Invoice : AuditableEntity<string>, IHasTenant, IHasOrganization
     public decimal? Rounded { get; set; }
 
     public decimal Total { get; private set; }
+
+    public decimal TotalDiscount { get; set; }
 
     public decimal? Paid { get; private set; }
 
@@ -207,18 +245,19 @@ public class Invoice : AuditableEntity<string>, IHasTenant, IHasOrganization
         string unit,
         decimal? discount,
         double vatRate,
-        double quantity)
+        double quantity, 
+        TimeProvider timeProvider)
     {
         var invoiceItem = new InvoiceItem(this, productType, description, productId, unitPrice, unit, discount, vatRate, quantity);
         invoiceItem.OrganizationId = OrganizationId;
         _items.Add(invoiceItem);
 
-        Update();
+        Update(timeProvider);
 
         return invoiceItem;
     }
 
-    public void DeleteItem(InvoiceItem item)
+    public void DeleteItem(InvoiceItem item, TimeProvider timeProvider)
     {
         if (Status.Id != (int)Enums.InvoiceStatus.Draft)
         {
@@ -227,28 +266,50 @@ public class Invoice : AuditableEntity<string>, IHasTenant, IHasOrganization
 
         _items.Remove(item);
 
-        Update();
+        Update(timeProvider);
     }
 
-    public void Update()
+    public void Update(TimeProvider timeProvider)
     {
-        UpdateVatAmounts();
+        ApplyDiscounts(timeProvider);
+        ApplyVat(timeProvider);
+        ApplyRounding();
+
+        TotalDiscount = CalculateTotalDiscount(timeProvider);
+    }
+
+    private void ApplyDiscounts(TimeProvider timeProvider)
+    {
+        decimal totalOrderDiscount = 0m;
+        foreach (var discount in _discounts)
+        {
+            if (discount.IsValid(timeProvider))
+            {
+                totalOrderDiscount += discount.ApplyTo(this);
+            }
+        }
+        Discount = totalOrderDiscount;
+    }
+
+    private void ApplyVat(TimeProvider timeProvider)
+    {
+        UpdateVatAmounts(timeProvider);
 
         Vat = Items.Sum(x => x.Vat.GetValueOrDefault());
-        Total = Items.Sum(x => x.Total);
-        SubTotal = Total - Vat;
-        Discount = Items.Sum(x => (decimal)x.Quantity * x.Discount.GetValueOrDefault());
+        Total = Items.Sum(x => x.Total) - Discount;
+        SubTotal = VatIncluded ? (Total - Vat.GetValueOrDefault()) : Total;
+    }
 
+    private void ApplyRounding()
+    {
         Rounded = null;
         if (Rounding)
         {
-            Rounded = Math.Round(0m, MidpointRounding.AwayFromZero);
+            Rounded = Math.Round(Total, MidpointRounding.AwayFromZero);
         }
-
-        Total -= DomesticService?.RequestedAmount ?? 0;
     }
 
-    private void UpdateVatAmounts()
+    private void UpdateVatAmounts(TimeProvider timeProvider)
     {
         VatAmounts.ForEach(x =>
         {
@@ -259,7 +320,7 @@ public class Invoice : AuditableEntity<string>, IHasTenant, IHasOrganization
 
         foreach (var item in Items)
         {
-            item.Update();
+            item.Update(timeProvider);
 
             var vatAmount = VatAmounts.FirstOrDefault(x => x.VatRate == item.VatRate);
             if (vatAmount is null)
@@ -298,6 +359,25 @@ public class Invoice : AuditableEntity<string>, IHasTenant, IHasOrganization
         }
     }
 
+    private decimal CalculateTotalDiscount(TimeProvider timeProvider)
+    {
+        // Calculate total discounts applied to items
+        var itemsDiscount = Items.Sum(x => x.TotalDiscount);
+
+        // Calculate total discounts at the order level
+        decimal orderDiscount = 0m;
+        foreach (var discount in _discounts)
+        {
+            if (discount.IsValid(timeProvider)) // Ensure discount is valid
+            {
+                orderDiscount += discount.ApplyTo(this);
+            }
+        }
+
+        // Sum item-level and order-level discounts
+        return itemsDiscount + orderDiscount;
+    }
+
     public async Task AssignInvoiceNo(InvoiceNumberFetcher invoiceNumberFetcher, CancellationToken cancellationToken = default)
     {
         if (InvoiceNo is not null)
@@ -323,9 +403,9 @@ public class Customer
 
 public class InvoiceVatAmount
 {
-    public double VatRate { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string Name { get; set; }
+    public double VatRate { get; set; }
 
     public decimal SubTotal { get; set; }
 

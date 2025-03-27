@@ -9,7 +9,7 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record UpdateInvoiceItem(string OrganizationId, string InvoiceId, string InvoiceItemId, ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool IsTaxDeductibleService) : IRequest<InvoiceItemDto>
 {
-    public class Handler(IInvoicingContext context) : IRequestHandler<UpdateInvoiceItem, InvoiceItemDto>
+    public class Handler(IInvoicingContext context, TimeProvider timeProvider) : IRequestHandler<UpdateInvoiceItem, InvoiceItemDto>
     {
         private readonly IInvoicingContext _context = context;
 
@@ -43,13 +43,13 @@ public record UpdateInvoiceItem(string OrganizationId, string InvoiceId, string 
             item.UpdateDescription(request.Description);
             item.UpdateUnitPrice(request.UnitPrice);
             item.UpdateUnit(request.Unit);
-            item.UpdateVatRate(request.UnitPrice, request.VatRate);
-            item.UpdateQuantity(request.Quantity);
+            item.UpdateVatRate(request.UnitPrice, request.VatRate, timeProvider);
+            item.UpdateQuantity(request.Quantity, timeProvider);
             item.Discount = request.Discount;
 
             item.IsTaxDeductibleService = request.IsTaxDeductibleService;
 
-            invoice.Update();
+            invoice.Update(timeProvider);
 
             await _context.SaveChangesAsync(cancellationToken);
 

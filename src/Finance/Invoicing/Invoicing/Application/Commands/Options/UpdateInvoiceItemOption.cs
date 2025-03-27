@@ -65,8 +65,8 @@ public sealed record UpdateInvoiceItemOption(string OrganizationId, string Invoi
             orderItem.Notes = request.Notes;
             */
 
-            orderItem.Update(); //timeProvider);
-            order.Update(); //timeProvider);
+            orderItem.Update(timeProvider);
+            order.Update(timeProvider);
 
             await invoicingContext.SaveChangesAsync(cancellationToken);
 

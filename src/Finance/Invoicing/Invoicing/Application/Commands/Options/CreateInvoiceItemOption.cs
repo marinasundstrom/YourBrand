@@ -44,9 +44,9 @@ public sealed record CreateInvoiceItemOption(string OrganizationId, string Invoi
                 return Errors.Invoices.InvoiceItemNotFound;
             }
 
-            var option = orderItem.AddOption(request.Description, request.ProductId, request.ItemId, request.Price, request.Discount);
+            var option = orderItem.AddOption(request.Description, request.ProductId, request.ItemId, request.Price, request.Discount, timeProvider);
 
-            order.Update(); //timeProvider);
+            order.Update(timeProvider);
 
             await invoicingContext.SaveChangesAsync(cancellationToken);
 

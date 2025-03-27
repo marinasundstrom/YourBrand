@@ -50,9 +50,9 @@ public sealed record RemoveInvoiceItemOption(string OrganizationId, string Invoi
                 return InvoiceItemNotFound;
             }
 
-            orderItem.RemoveOption(option);
+            orderItem.RemoveOption(option, timeProvider);
 
-            order.Update(); //timeProvider);
+            order.Update(timeProvider); //timeProvider);
 
             await invoicingContext.SaveChangesAsync(cancellationToken);
 

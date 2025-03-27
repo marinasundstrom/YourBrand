@@ -10,7 +10,7 @@ namespace YourBrand.Invoicing.Application.Commands;
 
 public record AddItem(string OrganizationId, string InvoiceId, ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService) : IRequest<InvoiceItemDto>
 {
-    public class Handler(IInvoicingContext context) : IRequestHandler<AddItem, InvoiceItemDto>
+    public class Handler(IInvoicingContext context, TimeProvider timeProvider) : IRequestHandler<AddItem, InvoiceItemDto>
     {
         private readonly IInvoicingContext _context = context;
 
@@ -31,7 +31,7 @@ public record AddItem(string OrganizationId, string InvoiceId, ProductType Produ
                 throw new Exception();
             }
 
-            var item = invoice.AddItem(request.ProductType, request.Description, request.ProductId, request.UnitPrice, request.Unit, request.Discount, request.VatRate, request.Quantity);
+            var item = invoice.AddItem(request.ProductType, request.Description, request.ProductId, request.UnitPrice, request.Unit, request.Discount, request.VatRate, request.Quantity, timeProvider);
 
             item.IsTaxDeductibleService = request.IsTaxDeductibleService.GetValueOrDefault();
 

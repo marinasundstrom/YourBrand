@@ -14,7 +14,7 @@ using YourBrand.Payments.Client;
 
 namespace YourBrand.Invoicing.Application.Events;
 
-public class InvoiceStatusChangedHandler(IInvoicingContext context, InvoiceNumberFetcher invoiceNumberFetcher, IPaymentsClient paymentsClient, IPublishEndpoint publishEndpoint) : IDomainEventHandler<InvoiceStatusUpdated>
+public class InvoiceStatusChangedHandler(IInvoicingContext context, InvoiceNumberFetcher invoiceNumberFetcher, IPaymentsClient paymentsClient, IPublishEndpoint publishEndpoint, TimeProvider timeProvider) : IDomainEventHandler<InvoiceStatusUpdated>
 {
     public async Task Handle(InvoiceStatusUpdated notification, CancellationToken cancellationToken)
     {
@@ -46,7 +46,7 @@ public class InvoiceStatusChangedHandler(IInvoicingContext context, InvoiceNumbe
 
                 var dueDate = TimeZoneInfo.ConvertTimeToUtc(DateTime.Now.AddDays(30), TimeZoneInfo.Local);
 
-                invoice.Update();
+                invoice.Update(timeProvider);
 
                 /*
                 await paymentsClient.CreatePaymentAsync(invoice.OrganizationId, ()

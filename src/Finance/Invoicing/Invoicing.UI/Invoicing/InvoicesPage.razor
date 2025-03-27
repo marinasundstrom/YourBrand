@@ -67,7 +67,7 @@
         <MudTd DataLabel="Date">@invoice.IssueDate?.ToString("yyyy-MM-dd")</MudTd>
         <MudTd DataLabel="Status">@invoice.Status.Name</MudTd>
         <MudTd DataLabel="Sub Total">@invoice.SubTotal.FormatCurrency(invoice.Currency)</MudTd>
-        <MudTd DataLabel="VAT">@invoice.Vat.FormatCurrency(invoice.Currency)</MudTd>
+        <MudTd DataLabel="VAT">@invoice.Vat?.FormatCurrency(invoice.Currency)</MudTd>
         <MudTd DataLabel="Total">@invoice.Total.FormatCurrency(invoice.Currency)</MudTd>
         <MudTd DataLabel="Paid">@invoice.Paid?.FormatCurrency(invoice.Currency)</MudTd>
         <MudTd DataLabel="Paid">@invoice.Created.ToString("yyyy-MM-dd")</MudTd>

@@ -41,7 +41,7 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.HasMany(order => order.Discounts)
              .WithOne()
-             .HasForeignKey(o => new { o.OrganizationId, o.OrderItemId })
+             .HasForeignKey(o => new { o.OrganizationId, o.OrderId })
              .IsRequired()
              .OnDelete(DeleteBehavior.ClientCascade);
 
