@@ -22,7 +22,7 @@ public static class ServiceExtensions
         services.AddValidatorsFromAssembly(typeof(ServiceExtensions).Assembly);
 
         services.AddSubscriptions();
-
+        
         return services;
     }
 

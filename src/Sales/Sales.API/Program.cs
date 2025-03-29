@@ -99,11 +99,15 @@ builder.Services.AddControllers();
 
 builder.Services.AddSignalR();
 
+builder.Services.AddScoped<AuthForwardHandler>();
+
 builder.Services
     .AddPresentation()
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
     .AddPersistence(builder.Configuration);
+
+builder.Services.AddClients(builder.Configuration);
 
 builder.Services
     .AddUserContext()

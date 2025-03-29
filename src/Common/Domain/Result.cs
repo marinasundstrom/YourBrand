@@ -27,7 +27,7 @@ public class Result
 
     public bool HasError(Error error) => IsFailure && this.error == error;
 
-    public bool HasError<T>(T error) where T : Error => this.error is T;
+    public bool HasError<T>(T error) where T : Error => this.error  == error;
 
     public Error? GetError() => error;
 
@@ -38,7 +38,7 @@ public class Result
         ? throw new InvalidOperationException() : result.error!;
 
     public static implicit operator Result(Error error) =>
-        Result.Failure(error);
+        Failure(error);
 }
 
 public class Result<T> : Result

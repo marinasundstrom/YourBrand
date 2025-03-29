@@ -8,7 +8,7 @@ using YourBrand.Invoicing.Domain.Entities;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, string? Note, SetCustomerDto? Customer) : IRequest<InvoiceDto>
+public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, string? Note, SetCustomerDto? Customer, IEnumerable<CreateInvoiceItemDto> items) : IRequest<InvoiceDto>
 {
     public class Handler(IInvoicingContext context, TimeProvider timeProvider, InvoiceNumberFetcher invoiceNumberFetcher) : IRequestHandler<CreateInvoice, InvoiceDto>
     {
@@ -32,7 +32,7 @@ public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, 
             {
                 if (invoice.Customer is null)
                 {
-                    invoice.Customer = new Domain.Entities.Customer();
+                    invoice.Customer = new Customer();
                 }
 
                 invoice.Customer.Id = request.Customer.Id;

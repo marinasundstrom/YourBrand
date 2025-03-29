@@ -45,6 +45,9 @@ public static class Endpoints
         group.MapDelete("{id}", DeleteOrder)
             .WithName($"Orders_{nameof(DeleteOrder)}");
 
+        group.MapPost("{id}/bill", BillOrder)
+            .WithName($"Orders_{nameof(BillOrder)}");
+
         group.MapPost("{id}/items", AddOrderItem)
             .WithName($"Orders_{nameof(AddOrderItem)}");
 
@@ -192,6 +195,18 @@ public static class Endpoints
         }
 
         return TypedResults.Ok();
+    }
+
+    private static async Task<Results<Ok<BillOrderResponse>, NotFound>> BillOrder(string organizationId, string id, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!)
+    {
+        var result = await mediator.Send(new BillOrderCommand(organizationId, id), cancellationToken);
+
+        if (result.HasError(Errors.Orders.OrderNotFound))
+        {
+            return TypedResults.NotFound();
+        }
+
+        return TypedResults.Ok(new BillOrderResponse(result.GetValue().InvoiceNo.GetValueOrDefault()));
     }
 
     private static async Task<Results<Created<OrderItemDto>, NotFound>> AddOrderItem(string organizationId, string id, AddOrderItemRequest request, IMediator mediator = default!, LinkGenerator linkGenerator = default!, CancellationToken cancellationToken = default!)
@@ -396,6 +411,8 @@ public static class Endpoints
         return TypedResults.Ok();
     }
 }
+
+public record BillOrderResponse(int InvoiceNo);
 
 public record AddOrderItemOptionRequest(string Name, string? Description, string? Value, string? ProductId, string? ItemId, decimal? Price, decimal? Discount);
 

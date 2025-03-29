@@ -49,6 +49,13 @@
                 Delete
             </MudButton>
         }
+
+        @if (order.Status.Id > 1)
+        {
+            <MudButton StartIcon="@Icons.Material.Filled.Money" OnClick="async (e) => await BillOrder(order)">
+                Bill
+            </MudButton>
+        }
     </div>
 
     <MudGrid Class="mb-4">
@@ -636,6 +643,18 @@ Delete
         await OrdersClient.DeleteOrderAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id);
 
         NavigationManager.NavigateTo("/orders");
+    }
+
+    private async Task BillOrder(Order order)
+    {
+        var result = await DialogService.ShowMessageBox("Bill for the order", "Are you sure?", "Yes", "No");
+
+        if (!result.GetValueOrDefault())
+            return;
+
+        var response = await OrdersClient.BillOrderAsync((await OrganizationProvider.GetCurrentOrganizationAsync()).Id, order.Id);
+
+        NavigationManager.NavigateTo($"/invoices/{response.InvoiceNo}");
     }
 
     async Task DeleteItem(OrderItemViewModel orderItem)

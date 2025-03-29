@@ -281,6 +281,36 @@ paths:
           description: ''
       security:
       - JWT: []
+  /v1/orders/{id}/bill:
+    post:
+      tags:
+      - Orders
+      - Orders
+      operationId: Orders_BillOrder
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillOrderResponse'
+        404:
+          description: ''
+      security:
+      - JWT: []
   /v1/orders/{id}/items:
     post:
       tags:
@@ -2703,6 +2733,13 @@ components:
     CreateDraftOrderRequest:
       type: object
       additionalProperties: false
+    BillOrderResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        invoiceNo:
+          type: integer
+          format: int32
     AddOrderItemRequest:
       type: object
       additionalProperties: false
