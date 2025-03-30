@@ -247,7 +247,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddInvoiceItem'
+              $ref: '#/components/schemas/CreateInvoiceItem'
         required: true
         x-position: 3
       responses:
@@ -1509,7 +1509,7 @@ components:
       enum:
       - HousingUnit
       - CooperativeFlat
-    AddInvoiceItem:
+    CreateInvoiceItem:
       type: object
       additionalProperties: false
       properties:
@@ -1642,6 +1642,10 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/SetCustomer'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateInvoiceItem'
     SetCustomer:
       type: object
       additionalProperties: false

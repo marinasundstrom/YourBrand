@@ -23,15 +23,7 @@ public record BillOrderCommand(string OrganizationId, string OrderId) : IRequest
                 return Errors.Orders.OrderNotFound;
             }
 
-            var invoice = await invoicesClient.CreateInvoiceAsync(new CreateInvoice()
-            {
-                OrganizationId = request.OrganizationId,
-                Date = DateTime.Now,
-                Customer = order.Customer is not null ? new Invoicing.Client.SetCustomer {
-                    Id = order.Customer.Id,
-                    Name = order.Customer.Name
-                } : null
-            });
+            List<CreateInvoiceItem> items = new List<CreateInvoiceItem>();
 
             foreach (var item in order.Items)
             {
@@ -45,10 +37,8 @@ public record BillOrderCommand(string OrganizationId, string OrderId) : IRequest
                     Value = x.Value
                 });
 
-                await invoicesClient.AddItemAsync(
-                    request.OrganizationId,
-                    invoice.Id,
-                    new AddInvoiceItem
+                items.Add(
+                    new CreateInvoiceItem
                     {
                         ProductType = (ProductType)item.ProductType,
                         ProductId = item.ProductId,
@@ -61,6 +51,18 @@ public record BillOrderCommand(string OrganizationId, string OrderId) : IRequest
                         Discounts = []
                     });
             }
+
+            var invoice = await invoicesClient.CreateInvoiceAsync(new CreateInvoice()
+            {
+                OrganizationId = request.OrganizationId,
+                Date = DateTime.Now,
+                Customer = order.Customer is not null ? new Invoicing.Client.SetCustomer
+                {
+                    Id = order.Customer.Id,
+                    Name = order.Customer.Name
+                } : null,
+                Items = items
+            });
 
             return Result.SuccessWith(new BillOrderResponse(invoice.Id, invoice.InvoiceNo));
         }

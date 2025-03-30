@@ -39,6 +39,8 @@ public class InvoiceItem : AuditableEntity<string>, IHasTenant
 
     public string InvoiceId { get; private set; }
 
+    public int? OrderNo { get; private set; }
+
     public string Description { get; private set; } = null!;
 
     public void UpdateDescription(string description)

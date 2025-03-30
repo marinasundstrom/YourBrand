@@ -218,7 +218,7 @@ group.MapGet("/invoices/{invoiceId}/file", async (string organizationId, string 
     .Produces<FileResult>(StatusCodes.Status200OK);
 
 group.MapPost("/{invoiceId}/Items", async (string organizationId, string invoiceId,
-    AddInvoiceItem dto,
+    CreateInvoiceItemDto dto,
     IMediator mediator, CancellationToken cancellationToken)
     => await mediator.Send(new YourBrand.Invoicing.Application.Commands.AddItem(organizationId, invoiceId, dto.ProductType, dto.Description, dto.ProductId, dto.UnitPrice, dto.Unit, dto.Options, dto.Discounts, dto.VatRate, dto.Quantity, dto.IsTaxDeductibleService, dto.DomesticService), cancellationToken))
     .WithName("Invoices_AddItem")
@@ -353,9 +353,6 @@ if (args.Contains("--seed"))
 }
 
 app.Run();
-
-public record AddInvoiceItem(ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, List<CreateInvoiceItemOptionDto> Options, List<CreateDiscountDto> Discounts, double VatRate, double Quantity,
-   bool? IsTaxDeductibleService, InvoiceItemDomesticServiceDto? DomesticService);
 
 public record UpdateInvoiceItem(ProductType ProductType, string Description, string? ProductId, decimal UnitPrice, string Unit, decimal? Discount, double VatRate, double Quantity, bool IsTaxDeductibleService);
 

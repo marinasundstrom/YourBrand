@@ -8,7 +8,7 @@ using YourBrand.Invoicing.Domain.Entities;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, string? Note, SetCustomerDto? Customer, IEnumerable<CreateInvoiceItemDto> items) : IRequest<InvoiceDto>
+public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, string? Note, SetCustomerDto? Customer, IEnumerable<CreateInvoiceItemDto> Items) : IRequest<InvoiceDto>
 {
     public class Handler(IInvoicingContext context, TimeProvider timeProvider, InvoiceNumberFetcher invoiceNumberFetcher) : IRequestHandler<CreateInvoice, InvoiceDto>
     {
@@ -40,6 +40,35 @@ public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, 
             }
 
             invoice.OrganizationId = request.OrganizationId;
+
+            foreach (var orderItem in request.Items)
+            {
+                var item = invoice.AddItem(
+                    orderItem.ProductType,
+                    orderItem.Description,
+                    orderItem.ProductId,
+                    orderItem.UnitPrice,
+                    orderItem.Unit,
+                    orderItem.VatRate,
+                    orderItem.Quantity,
+                    timeProvider);
+
+                if (orderItem.Options is not null)
+                {
+                    foreach (var option in orderItem.Options)
+                    {
+                        item.AddOption(option.Name, option.Description, option.Value, option.ProductId, option.ItemId, option.Price, null, timeProvider);
+                    }
+                }
+
+                if (orderItem.Discounts is not null)
+                {
+                    foreach (var discount in orderItem.Discounts)
+                    {
+                        item.AddPromotionalDiscount(discount.Description, discount.Amount, discount.Rate, timeProvider);
+                    }
+                }
+            }
 
             context.Invoices.Add(invoice);
 

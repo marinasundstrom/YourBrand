@@ -70,9 +70,9 @@ public static class Mapper
         };
     }
 
-    public static AddInvoiceItem ToAddInvoiceItem(this InvoiceItemViewModel vm)
+    public static CreateInvoiceItem ToAddInvoiceItem(this InvoiceItemViewModel vm)
     {
-        return new AddInvoiceItem
+        return new CreateInvoiceItem
         {
             Description = vm.Description,
             ProductType = vm.ProductType,

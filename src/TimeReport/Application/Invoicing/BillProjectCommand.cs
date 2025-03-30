@@ -33,12 +33,7 @@ public record BillProjectCommand(string OrganizationId, string ProjectId, DateTi
                 return Result.Success;
             }
 
-            var invoice = await invoicesClient.CreateInvoiceAsync(new CreateInvoice()
-            {
-                OrganizationId = request.OrganizationId,
-                Date = DateTime.Now,
-                Note = entriesByTask.First().Key.Project.Name
-            });
+            List<CreateInvoiceItem> items = new List<CreateInvoiceItem>();
 
             foreach (var entryGroup in entriesByTask)
             {
@@ -47,10 +42,7 @@ public record BillProjectCommand(string OrganizationId, string ProjectId, DateTi
 
                 var hours = entryGroup.Sum(e => e.Hours.GetValueOrDefault());
 
-                await invoicesClient.AddItemAsync(
-                    request.OrganizationId,
-                    invoice.Id,
-                    new AddInvoiceItem
+                items.Add(new CreateInvoiceItem
                     {
                         ProductType = ProductType.Service,
                         Description = description,
@@ -60,6 +52,14 @@ public record BillProjectCommand(string OrganizationId, string ProjectId, DateTi
                         Quantity = hours
                     });
             }
+
+            var invoice = await invoicesClient.CreateInvoiceAsync(new CreateInvoice()
+            {
+                OrganizationId = request.OrganizationId,
+                Date = DateTime.Now,
+                Note = entriesByTask.First().Key.Project.Name,
+                Items = items
+            });
 
             // TODO: Mark TimeSheets as billed.
 
