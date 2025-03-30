@@ -104,7 +104,7 @@ else
             @if (productViewModel.OptionGroups.Any())
             {
                 <h5 class="price2" itemprop="price" content="@productViewModel.Total"
-                    style="display: inline-block; font-weight: 500; color: #ca0000; line-height: 0;">
+                    style="display: inline-block; font-weight: 500; color: #e01c1c; line-height: 0;">
                     @(((decimal)productViewModel.Total).FormatCurrency(currency))</h5>
 
             }
@@ -113,7 +113,7 @@ else
                 <div class="mb-4" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
                     <meta itemprop="priceCurrency" content="@currency">
                     <h5 class="price2" itemprop="price" content="@productViewModel.Price"
-                        style="display: inline-block; font-weight: 500; color: #ca0000; line-height: 0;">
+                        style="display: inline-block; font-weight: 500; color: #e01c1c; line-height: 0;">
                         @(((decimal)productViewModel.Price).FormatCurrency(currency))</h5>
                     @if (productViewModel.RegularPrice is not null)
                     {
