@@ -264,3 +264,9 @@ input[type="checkbox"] {
 .nav-link.active {
     font-weight: 500 !important;
 }
+
+[data-bs-theme='light'] {
+    .theme-selector svg.theme-icon-active {
+        fill: #000;
+    }
+}
