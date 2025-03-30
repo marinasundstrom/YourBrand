@@ -286,3 +286,11 @@ input[type="checkbox"] {
     right: 0;
     width: 100%;
 }
+
+.special-button {
+    background-color: #137cdf;
+    border-radius: 25px;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    color: white;
+}
