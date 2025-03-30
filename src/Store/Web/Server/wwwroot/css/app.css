@@ -125,9 +125,12 @@ h1:focus {
     }
 }
 
+/*
 .bg-dark {
     background-color: #137cdf !important;
 }
+*/ 
+
 .footer a {
     color: var(--bs-body-color);
     text-decoration: none;
@@ -248,4 +251,16 @@ input[type="checkbox"] {
     .form-control, .form-select, .form-check-input:not(:checked) {
         background: #272c31;
     }
+
+        .bg-white {
+            background-color: #131313 !important;
+        }
+}
+
+.nav-item {
+    text-transform: uppercase !important;
+}
+
+.nav-link.active {
+    font-weight: 500 !important;
 }
