@@ -294,3 +294,8 @@ input[type="checkbox"] {
     padding-right: 20px !important;
     color: white;
 }
+
+.special-button:hover {
+    color: rgb(244, 244, 244);
+    background-color: #137cdfcf;
+}
