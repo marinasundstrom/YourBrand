@@ -104,11 +104,13 @@
           <i class="bi bi-search"></i>
         </a></li>
 
-      <li class="list-inline-item"> <a class="nav-link menu-link me-3 text-decoration-none text-uppercase"
-          href="user/profile">
-          <i class="bi bi-person"></i>
-        </a></li>
-
+      <AuthorizeView>
+        <li class="list-inline-item"> <a class="nav-link menu-link me-3 text-decoration-none text-uppercase"
+            href="@PageRoutes.Profile">
+            <i class="bi bi-person"></i>
+          </a></li>
+      </AuthorizeView>
+      
       <li class="list-inline-item">
         <div id="mobileNav" class="menu-link me-3 text-decoration-none text-uppercase">
         </div>

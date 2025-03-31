@@ -138,7 +138,7 @@ public sealed record Checkout(
                 {
                     options0.Add(new CreateOrderItemOption() {
                         Name = option.Name,
-                        Value = option.TextValue ?? option.NumericalValue?.ToString(),
+                        Value = option.SelectedValueId ?? option.TextValue ?? option.NumericalValue?.ToString(),
                         Price = option.Price
                     });
                 }

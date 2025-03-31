@@ -3,12 +3,12 @@
 @implements IDisposable
 
 @inject NavigationManager NavigationManager
-@inject IHttpContextAccessor HttpContextAccessor
 
 <AuthorizeView>
     <Authorized>
         <li class="nav-item col-12 col-md-auto">
-            <a class="nav-link" href="@PageRoutes.Profile">Hello, @context.User.Identity?.Name!</a>
+            <a class="nav-link" href="@PageRoutes.Profile"><i class="bi bi-person"></i> <span
+                    class="d-lg-none">Profile</span></a>
         </li>
 
         <li class="nav-item col-12 col-md-auto">

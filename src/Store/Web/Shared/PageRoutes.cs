@@ -15,8 +15,8 @@ public static class PageRoutes
     public const string AuthPending = "/authentication/pending";
     public const string AuthConfirm = "/authentication/confirm";
     public const string NotCustomer = "/authentication/not-customer";
-    public const string Login = "/login";
-    public const string Logout = "/logout";
+    public const string Login = "/authentication/login";
+    public const string Logout = "/authentication/logout";
     public const string AuthLogout = "/authentication/logout";
     public const string Profile = "/authentication/profile";
     public const string MyPages = "/mypage";

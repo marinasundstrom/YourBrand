@@ -160,6 +160,8 @@ builder.Services.AddAuthentication(options =>
 .   AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.SignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
         builder.Configuration.Bind("Local", options);
 
         options.MapInboundClaims = false;
@@ -290,17 +292,33 @@ app.MapGet(PageRoutes.Login, async (HttpContext httpContext) =>
 {
     await httpContext.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
     {
-        RedirectUri = "https://localhost:7188"
+        RedirectUri = "https://localhost:7188",
+        Items =
+        {
+            { "prompt", "login" } // 👈 This is the key
+        }
     });
 });
 
 app.MapGet(PageRoutes.Logout, async (HttpContext httpContext) =>
 {
     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    httpContext.Response.Redirect(PageRoutes.Home);
+    await httpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+
+    var idToken = await httpContext.GetTokenAsync("id_token");
+
+    var logoutUrl = "https://localhost:5041/connect/endsession" +
+                    $"?id_token_hint={idToken}" +
+                    $"&post_logout_redirect_uri=https://localhost:7188{PageRoutes.Home}";
+
+
+    return TypedResults.Redirect(logoutUrl);
+
+    //httpContext.Response.Redirect(PageRoutes.Home);
 });
 
-//app.MapGroup("/authentication").MapLoginAndLogout();
+//app.MapGroup("/authentication").MapLoginAndLogout()
+//    .DisableAntiforgery();
 
 app.MapGet("/requires-auth", (ClaimsPrincipal user) => $"Hello, {user.Identity?.Name}!").RequireAuthorization();
 
