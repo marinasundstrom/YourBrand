@@ -71,34 +71,45 @@
             <ObjectGraphDataAnnotationsValidator />
 
             <div class="row g-3">
-                <div class="form-floating col-sm-6">
-                    <InputText id="firstName" class="form-control" @bind-Value="FirstName" placeholder="Jane" />
-                    <label for="firstName" class="form-label">First name</label>
-                    <ValidationMessage For="() => FirstName" />
+                
+                <div class="col-sm-6">
+                    <div class="form-floating">
+                        <InputText id="firstName" class="form-control" @bind-Value="FirstName" placeholder="Jane" />
+                        <label for="firstName">First name</label>
+                        <ValidationMessage For="() => FirstName" />
+                    </div>
                 </div>
 
-                <div class="form-floating col-sm-6">
-                    <InputText id="lastName" class="form-control" @bind-Value="LastName" placeholder="Smith" />
-                    <label for="lastName" class="form-label">Last name</label>
-                    <ValidationMessage For="() => LastName" />
+                <div class="col-sm-6">
+                    <div class="form-floating">
+                        <InputText id="lastName" class="form-control" @bind-Value="LastName" placeholder="Smith" />
+                        <label for="lastName">Last name</label>
+                        <ValidationMessage For="() => LastName" />
+                    </div>
                 </div>
 
-                <div class="form-floating col-sm-6">
-                    <InputText id="ssn" class="form-control" @bind-Value="SSN" placeholder="19880306-2345" />
-                    <label for="ssn" class="form-label">SSN</label>
-                    <ValidationMessage For="() => SSN" />
+                <div class="col-sm-6">
+                    <div class="form-floating">
+                        <InputText id="ssn" class="form-control" @bind-Value="SSN" placeholder="19880306-2345" />
+                        <label for="ssn">SSN</label>
+                        <ValidationMessage For="() => SSN" />
+                    </div>
                 </div>
 
-                <div class="form-floating col-12">
-                    <InputText id="email" class="form-control" @bind-Value="Email" placeholder="jane.smith@email.com" />
-                    <label for="email" class="form-label">Email</label>
-                    <ValidationMessage For="() => Email" />
+                <div class="col-12">
+                    <div class="form-floating">
+                        <InputText id="email" class="form-control" @bind-Value="Email" placeholder="jane.smith@email.com" />
+                        <label for="email">Email</label>
+                        <ValidationMessage For="() => Email" />
+                    </div>
                 </div>
 
-                <div class="form-floating col-12">
-                    <InputText id="phoneNumber" class="form-control" @bind-Value="Phone" placeholder="0723347732" />
-                    <label for="phoneNumber" class="form-label">Phone number</label>
-                    <ValidationMessage For="() => Phone" />
+                <div class="col-12">
+                    <div class="form-floating">
+                        <InputText id="phoneNumber" class="form-control" @bind-Value="Phone" placeholder="0723347732" />
+                        <label for="phoneNumber">Phone number</label>
+                        <ValidationMessage For="() => Phone" />
+                    </div>
                 </div>
 
                 <AddressForm Model="BillingAddress" />
@@ -160,7 +171,7 @@
 
                 <div class="row gy-3">
                 <div class="col-md-6">
-                    <label for="cc-name" class="form-label">Name on card</label>
+                    <label for="cc-name">Name on card</label>
                     <input type="text" class="form-control" id="cc-name" placeholder="" required="">
                     <small class="text-muted">Full name as displayed on card</small>
                     <div class="invalid-feedback">
@@ -169,7 +180,7 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="cc-number" class="form-label">Credit card number</label>
+                    <label for="cc-number">Credit card number</label>
                     <input type="text" class="form-control" id="cc-number" placeholder="" required="">
                     <div class="invalid-feedback">
                     Credit card number is required
@@ -177,7 +188,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="cc-expiration" class="form-label">Expiration</label>
+                    <label for="cc-expiration">Expiration</label>
                     <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
                     <div class="invalid-feedback">
                     Expiration date required
@@ -185,7 +196,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="cc-cvv" class="form-label">CVV</label>
+                    <label for="cc-cvv">CVV</label>
                     <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
                     <div class="invalid-feedback">
                     Security code required

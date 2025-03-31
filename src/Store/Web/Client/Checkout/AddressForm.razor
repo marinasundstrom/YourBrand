@@ -1,49 +1,65 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
-<div class="form-floating col-6">
-    <InputText id="throughfare" class="form-control" @bind-Value="Model.Thoroughfare" />
-    <label for="throughfare" class="form-label">Street</label>
-    <ValidationMessage For="() => Model.Thoroughfare" />
+
+<div class="col-6">
+    <div class="form-floating">
+        <InputText id="throughfare" class="form-control" @bind-Value="Model.Thoroughfare" />
+        <label for="throughfare" class="form-label">Street</label>
+        <ValidationMessage For="() => Model.Thoroughfare" />
+    </div>
 </div>
 
-<div class="form-floating col-md-3">
-    <InputText id="premises" class="form-control" @bind-Value="Model.Premises" />
-    <label for="premises" class="form-label">Premise</label>
-    <ValidationMessage For="() => Model.Premises" />
+<div class="col-md-3">
+    <div class="form-floating">
+        <InputText id="premises" class="form-control" @bind-Value="Model.Premises" />
+        <label for="premises" class="form-label">Premise</label>
+        <ValidationMessage For="() => Model.Premises" />
+    </div>
 </div>
 
-<div class="form-floating col-md-3">
-    <InputText id="subPremises" class="form-control" @bind-Value="Model.SubPremises" />
-    <label for="subPremises" class="form-label">Sub Premise <span class="text-muted">(Optional)</span></label>
-    <ValidationMessage For="() => Model.SubPremises" />
+<div class="col-md-3">
+    <div class="form-floating">
+        <InputText id="subPremises" class="form-control" @bind-Value="Model.SubPremises" />
+        <label for="subPremises" class="form-label">Sub Premise <span class="text-muted">(Optional)</span></label>
+        <ValidationMessage For="() => Model.SubPremises" />
+    </div>
 </div>
 
-<div class="form-floating col-md-3">
-    <InputText id="postalCode" class="form-control" @bind-Value="Model.PostalCode" />
-    <label for="postalCode" class="form-label">Postal Code</label>
-    <ValidationMessage For="() => Model.PostalCode" />
+
+<div class="col-md-3">
+    <div class="form-floating">
+        <InputText id="postalCode" class="form-control" @bind-Value="Model.PostalCode" />
+        <label for="postalCode" class="form-label">Postal Code</label>
+        <ValidationMessage For="() => Model.PostalCode" />
+    </div>
 </div>
 
-<div class="form-floating col-md-9">
-    <InputText id="address2" class="form-control" @bind-Value="Model.Locality" />
-    <label for="address2" class="form-label">City</label>
-    <ValidationMessage For="() => Model.Locality" />
+<div class="col-md-9">
+    <div class="form-floating">
+        <InputText id="address2" class="form-control" @bind-Value="Model.Locality" />
+        <label for="address2" class="form-label">City</label>
+        <ValidationMessage For="() => Model.Locality" />
+    </div>
 </div>
 
-<div class="form-floating col-md-3">
-    <InputSelect id="country" class="form-select" @bind-Value="Model.Country">
-        <option value="Sweden">Sweden</option>
-    </InputSelect>
-    <label for="country" class="form-label">Country</label>
-    <ValidationMessage For="() => Model.Country" />
+<div class="col-md-3">
+    <div class="form-floating">
+        <InputSelect id="country" class="form-select" @bind-Value="Model.Country">
+            <option value="Sweden">Sweden</option>
+        </InputSelect>
+        <label for="country" class="form-label">Country</label>
+        <ValidationMessage For="() => Model.Country" />
+    </div>
 </div>
 
-<div class="form-floating col-md-4">
-    <InputSelect id="state" class="form-select" @bind-Value="Model.AdministrativeArea">
-        <option value=""></option>
-        <option value="Skane">Skåne</option>
-    </InputSelect>
-    <label for="state" class="form-label">State</label>
-    <ValidationMessage For="() => Model.AdministrativeArea" />
+<div class="col-md-4">
+    <div class="form-floating">
+        <InputSelect id="state" class="form-select" @bind-Value="Model.AdministrativeArea">
+            <option value=""></option>
+            <option value="Skane">Skåne</option>
+        </InputSelect>
+        <label for="state" class="form-label">State</label>
+        <ValidationMessage For="() => Model.AdministrativeArea" />
+    </div>
 </div>
 
 @code {
