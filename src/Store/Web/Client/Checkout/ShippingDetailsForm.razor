@@ -1,15 +1,21 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
-<div class="form-floating col-sm-6">
-    <InputText class="form-control" @bind-Value="Model.FirstName" />
-    <label for="firstName" class="form-label">First name</label>
-    <ValidationMessage For="() => Model.FirstName" />
+
+<div class="col-sm-6">
+    <div class="form-floating">
+        <InputText class="form-control" @bind-Value="Model.FirstName" />
+        <label for="firstName" class="form-label">First name</label>
+        <ValidationMessage For="() => Model.FirstName" />
+    </div>
 </div>
 
-<div class="form-floating col-sm-6">
-    <InputText class="form-control" @bind-Value="Model.LastName" />
-    <label for="lastName" class="form-label">Last name</label>
-    <ValidationMessage For="() => Model.LastName" />
+<div class="col-sm-6">
+    <div class="form-floating">
+        <InputText class="form-control" @bind-Value="Model.LastName" />
+        <label for="lastName" class="form-label">Last name</label>
+        <ValidationMessage For="() => Model.LastName" />
+    </div>
 </div>
+
 
 <AddressForm Model="Model.Address" />
 

@@ -2,7 +2,7 @@
 
 <div class="col-6">
     <div class="form-floating">
-        <InputText id="throughfare" class="form-control" @bind-Value="Model.Thoroughfare" />
+        <InputText id="throughfare" class="form-control" @bind-Value="Model.Thoroughfare" placeholder=" " />
         <label for="throughfare" class="form-label">Street</label>
         <ValidationMessage For="() => Model.Thoroughfare" />
     </div>
@@ -10,7 +10,7 @@
 
 <div class="col-md-3">
     <div class="form-floating">
-        <InputText id="premises" class="form-control" @bind-Value="Model.Premises" />
+        <InputText id="premises" class="form-control" @bind-Value="Model.Premises" placeholder=" " />
         <label for="premises" class="form-label">Premise</label>
         <ValidationMessage For="() => Model.Premises" />
     </div>
@@ -18,7 +18,7 @@
 
 <div class="col-md-3">
     <div class="form-floating">
-        <InputText id="subPremises" class="form-control" @bind-Value="Model.SubPremises" />
+        <InputText id="subPremises" class="form-control" @bind-Value="Model.SubPremises" placeholder=" " />
         <label for="subPremises" class="form-label">Sub Premise <span class="text-muted">(Optional)</span></label>
         <ValidationMessage For="() => Model.SubPremises" />
     </div>
@@ -27,7 +27,7 @@
 
 <div class="col-md-3">
     <div class="form-floating">
-        <InputText id="postalCode" class="form-control" @bind-Value="Model.PostalCode" />
+        <InputText id="postalCode" class="form-control" @bind-Value="Model.PostalCode" placeholder=" " />
         <label for="postalCode" class="form-label">Postal Code</label>
         <ValidationMessage For="() => Model.PostalCode" />
     </div>
@@ -35,7 +35,7 @@
 
 <div class="col-md-9">
     <div class="form-floating">
-        <InputText id="address2" class="form-control" @bind-Value="Model.Locality" />
+        <InputText id="address2" class="form-control" @bind-Value="Model.Locality" placeholder=" " />
         <label for="address2" class="form-label">City</label>
         <ValidationMessage For="() => Model.Locality" />
     </div>
@@ -43,7 +43,7 @@
 
 <div class="col-md-3">
     <div class="form-floating">
-        <InputSelect id="country" class="form-select" @bind-Value="Model.Country">
+        <InputSelect id="country" class="form-select" @bind-Value="Model.Country" placeholder=" ">
             <option value="Sweden">Sweden</option>
         </InputSelect>
         <label for="country" class="form-label">Country</label>
@@ -53,8 +53,7 @@
 
 <div class="col-md-4">
     <div class="form-floating">
-        <InputSelect id="state" class="form-select" @bind-Value="Model.AdministrativeArea">
-            <option value=""></option>
+        <InputSelect id="state" class="form-select" @bind-Value="Model.AdministrativeArea" placeholder=" ">
             <option value="Skane">Skåne</option>
         </InputSelect>
         <label for="state" class="form-label">State</label>

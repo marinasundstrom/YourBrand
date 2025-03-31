@@ -252,6 +252,11 @@ input[type="checkbox"] {
         background: #272c31;
     }
 
+    .form-floating>.form-select~label::after,
+        .form-floating>label::after {
+        background-color: #272c31 !important;
+    }
+
         .bg-white {
             background-color: #131313 !important;
         }
