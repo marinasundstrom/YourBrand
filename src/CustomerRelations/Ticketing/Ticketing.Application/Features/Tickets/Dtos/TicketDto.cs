@@ -11,13 +11,28 @@ public sealed record TicketDto(
     DateTime? LastMessage,
     string? Text,
     TicketTypeDto Type,
+
+    // Planning
     TicketPriorityDto? Priority,
     TicketUrgencyDto? Urgency,
     TicketImpactDto? Impact,
-    double? EstimatedHours,
-    double? RemainingHours,
+
+    //s Effort
+    TimeSpan? EstimatedTime,
+    TimeSpan? CompletedTime,
+    TimeSpan? RemainingTime,
+
+    // Schedule
+    DateTimeOffset? PlannedStartDate,
+    DateTimeOffset? StartDeadline,
+    DateTimeOffset? ExpectedEndDate,
+    DateTimeOffset? DueDate,
+    DateTimeOffset? ActualStartDate,
+    DateTimeOffset? ActualEndDate,
+
     IEnumerable<TagDto> Tags,
     IEnumerable<AttachmentDto> Attachments,
+    
     DateTimeOffset Created,
     TicketParticipantDto? CreatedBy,
     DateTimeOffset? LastModified,

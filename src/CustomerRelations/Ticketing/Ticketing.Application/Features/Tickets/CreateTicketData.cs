@@ -8,5 +8,5 @@ public record CreateTicketData(
     string? Description,
     int Status,
     string? AssigneeId,
-    double? EstimatedHours, double? RemainingHours,
+    TimeSpan? EstimatedTime, TimeSpan? CompletedTime, TimeSpan? RemainingTime,
     TicketPriorityDto? Priority, TicketImpactDto? Impact, TicketUrgencyDto? Urgency);

@@ -16,7 +16,7 @@ public interface ITicketNotificationService
 
     Task StatusUpdated(int ticketId, TicketStatusDto status);
 
-    Task EstimatedHoursUpdated(int ticketId, double? hours);
+    Task EstimatedTimeUpdated(int ticketId, TimeSpan? time);
 
-    Task RemainingHoursUpdated(int ticketId, double? hours);
+    Task RemainingTimeUpdated(int ticketId, TimeSpan? time);
 }

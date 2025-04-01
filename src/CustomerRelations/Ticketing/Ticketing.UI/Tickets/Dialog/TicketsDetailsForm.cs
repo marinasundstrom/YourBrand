@@ -20,9 +20,11 @@ public class TicketDetailsForm
 
     public TicketStatus Status { get; set; }
 
-    public double? EstimatedHours { get; set; }
+    public TimeSpan? EstimatedTime { get; set; }
 
-    public double? RemainingHours { get; set; }
+    public TimeSpan? CompletedTime { get; set; }
+
+    public TimeSpan? RemainingTime { get; set; }
 
     public TicketPriority? Priority { get; set; }
 
@@ -37,8 +39,8 @@ public class TicketDetailsForm
         Description = ticket.Description;
         Status = ticket.Status;
         Assignee = ticket.Assignee?.ToUser();
-        EstimatedHours = ticket.EstimatedHours;
-        RemainingHours = ticket.RemainingHours;
+        EstimatedTime = ticket.EstimatedTime;
+        RemainingTime = ticket.RemainingTime;
         Priority = ticket.Priority;
         Impact = ticket.Impact;
         Urgency = ticket.Urgency;

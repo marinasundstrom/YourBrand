@@ -188,17 +188,19 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
         return false;
     }
 
-    public double? EstimatedHours { get; private set; }
+    public TimeSpan? EstimatedTime { get; private set; }
 
-    public bool UpdateEstimatedHours(double? hours)
+    public bool UpdateEstimatedTime(TimeSpan? time)
     {
-        var oldHours = EstimatedHours;
-        if (hours != oldHours)
+        var oldHours = EstimatedTime;
+        if (time != oldHours)
         {
-            EstimatedHours = hours;
+            EstimatedTime = time;
+
+            UpdateRemainingTime2();
 
             AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
-            AddDomainEvent(new TicketEstimatedHoursUpdated(TenantId, OrganizationId, Id, hours, oldHours));
+            AddDomainEvent(new TicketEstimatedTimeUpdated(TenantId, OrganizationId, Id, time, oldHours));
 
             return true;
         }
@@ -206,23 +208,76 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
         return false;
     }
 
-    public double? RemainingHours { get; private set; }
+    public TimeSpan? RemainingTime { get; private set; }
 
-    public bool UpdateRemainingHours(double? hours)
+    public bool UpdateRemainingTime(TimeSpan? hours)
     {
-        var oldHours = RemainingHours;
+        /*
+        var oldHours = RemainingTime;
         if (hours != oldHours)
         {
-            RemainingHours = hours;
+            RemainingTime = time;
 
             AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
-            AddDomainEvent(new TicketRemainingHoursUpdated(TenantId, OrganizationId, Id, hours, oldHours));
+            AddDomainEvent(new TicketRemainingTimeUpdated(TenantId, OrganizationId, Id, hours, oldHours));
+
+            return true;
+        }
+        */
+
+        return false;
+    }
+
+    public TimeSpan? CompletedTime { get; private set; }
+
+    public bool UpdateCompletedTime(TimeSpan? time)
+    {
+        var oldHours = CompletedTime;
+        if (time != oldHours)
+        {
+            CompletedTime = time;
+
+            UpdateRemainingTime2();
+
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketCompletedHoursUpdated(TenantId, OrganizationId, Id, time, oldHours));
 
             return true;
         }
 
         return false;
     }
+
+    private void UpdateRemainingTime2()
+    {
+        var oldHours = RemainingTime;
+        RemainingTime = EstimatedTime.HasValue && CompletedTime.HasValue
+               ? EstimatedTime - CompletedTime
+               : null;
+
+        if (RemainingTime != oldHours)
+        {
+            AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
+            AddDomainEvent(new TicketRemainingTimeUpdated(TenantId, OrganizationId, Id, RemainingTime, oldHours));
+        }
+    }
+
+    /// When the work is scheduled or expected to begin
+    public DateTimeOffset? PlannedStartDate { get; set; }
+
+    /// The latest acceptable time to start the work (constraint)
+    public DateTimeOffset? StartDeadline { get; set; }
+
+    /// Forecasted or estimated time when the work should be completed
+    public DateTimeOffset? ExpectedEndDate { get; set; }
+
+    /// The hard due date or contractual deadline for delivery
+    public DateTimeOffset? DueDate { get; set; }
+
+    public DateTimeOffset? ActualStartDate { get; set; }
+
+    public DateTimeOffset? ActualEndDate { get; set; }
+
 
     public HashSet<TicketParticipant> Participants { get; } = new HashSet<TicketParticipant>();
 

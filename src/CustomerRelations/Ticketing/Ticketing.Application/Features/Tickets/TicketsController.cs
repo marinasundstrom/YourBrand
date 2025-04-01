@@ -50,7 +50,7 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<TicketDto>> CreateTicket(string organizationId, CreateTicketData request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateTicket(organizationId, request.ProjectId, request.Title, request.Description, request.Status, request.AssigneeId, request.EstimatedHours, request.RemainingHours, request.Priority, request.Impact, request.Urgency), cancellationToken);
+        var result = await mediator.Send(new CreateTicket(organizationId, request.ProjectId, request.Title, request.Description, request.Status, request.AssigneeId, request.EstimatedTime, request.CompletedTime, request.RemainingTime, request.Priority, request.Impact, request.Urgency), cancellationToken);
         return result.Handle(
             onSuccess: data => CreatedAtAction(nameof(GetTicketById), new { id = data.Id }, data),
             onError: error => Problem(detail: error.Detail, title: error.Title, type: error.Id));
@@ -137,21 +137,31 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
         return this.HandleResult(result);
     }
 
-    [HttpPut("{id}/estimatedHours")]
+    [HttpPut("{id}/estimatedTime")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> UpdateEstimatedHours(string organizationId, int id, [FromBody] double? hours, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateEstimatedTime(string organizationId, int id, [FromBody] TimeSpan? time, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateEstimatedHours(organizationId, id, hours), cancellationToken);
+        var result = await mediator.Send(new UpdateEstimatedTime(organizationId, id, time), cancellationToken);
         return this.HandleResult(result);
     }
 
-    [HttpPut("{id}/remainingHours")]
+
+    [HttpPut("{id}/completedTime")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult> UpdateRemainingHours(string organizationId, int id, [FromBody] double? hours, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateCompletedTime(string organizationId, int id, [FromBody] TimeSpan? time, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new UpdateRemainingHours(organizationId, id, hours), cancellationToken);
+        var result = await mediator.Send(new UpdateCompletedTime(organizationId, id, time), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPut("{id}/remainingTime")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> UpdateRemainingTime(string organizationId, int id, [FromBody] TimeSpan? time, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new UpdateRemainingTime(organizationId, id, time), cancellationToken);
         return this.HandleResult(result);
     }
 
@@ -184,7 +194,7 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
     }
 }
 
-public sealed record CreateTicketRequest(string Title, string? Text, int Status, string? AssigneeId, double? EstimatedHours, double? RemainingHours);
+public sealed record CreateTicketRequest(string Title, string? Text, int Status, string? AssigneeId, double? EstimatedTime, double? RemainingTime);
 
 public sealed record UpdateProjectRequest(int ProjectId);
 

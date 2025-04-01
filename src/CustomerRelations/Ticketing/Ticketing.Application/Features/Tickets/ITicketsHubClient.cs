@@ -16,7 +16,9 @@ public interface ITicketsHubClient
 
     Task StatusUpdated(int todoId, TicketStatusDto status);
 
-    Task EstimatedHoursUpdated(int todoId, double? hours);
+    Task EstimatedTimeUpdated(int todoId, TimeSpan? time);
 
-    Task RemainingHoursUpdated(int todoId, double? hours);
+    Task CompletedTimeUpdated(int todoId, TimeSpan? time);
+
+    Task RemainingTimeUpdated(int todoId, TimeSpan? time);
 }

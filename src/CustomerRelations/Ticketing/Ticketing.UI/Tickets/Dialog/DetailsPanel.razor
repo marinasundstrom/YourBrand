@@ -18,9 +18,9 @@
             </MudItem>
 
             <MudItem xs="12" md="6">
-                
-                <ProjectSelector Label="@T["Project"]" OrganizationId="@(Organization?.Id)"
-                    Variant="Variant.Outlined" @bind-Value="Form.Project" For="() => Form.Project" Class="mb-4" />
+
+                <ProjectSelector Label="@T["Project"]" OrganizationId="@(Organization?.Id)" Variant="Variant.Outlined"
+                    @bind-Value="Form.Project" For="() => Form.Project" Class="mb-4" />
 
                 <MudSelect Label="@T["Status"]" @bind-Value="Form.Status" For="() => Form.Status" Immediate="true"
                     Variant="Variant.Outlined" Class="mb-4" ToStringFunc="(s) => s.Name">
@@ -31,15 +31,25 @@
                 </MudSelect>
 
                 <MudGrid>
+                    <MudItem xs="12" md="12">
+                        <MudText Typo="@Typo.h5" Class="mt-4">Effort</MudText>
+                    </MudItem>
+
                     <MudItem xs="12" md="6">
-                        <MudNumericField Label="@T["EstimatedTime"]" Variant="Variant.Outlined"
-                            @bind-Value="Form.EstimatedHours" For="() => Form.EstimatedHours" Immediate="true"
+                        <MudTimePicker Label="@T["EstimatedTime"]" Variant="Variant.Outlined"
+                            @bind-Value="Form.EstimatedTime" For="() => Form.EstimatedTime" Immediate="true"
                             Class="mb-4" />
                     </MudItem>
 
                     <MudItem xs="12" md="6">
-                        <MudNumericField Label="@T["RemainingTime"]" Variant="Variant.Outlined"
-                            @bind-Value="Form.RemainingHours" For="() => Form.RemainingHours" Immediate="true"
+                        <MudTimePicker Label="@T["CompletedTime"]" Variant="Variant.Outlined"
+                            @bind-Value="Form.CompletedTime" For="() => Form.CompletedTime" Immediate="true"
+                            Class="mb-4" />
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudTimePicker Label="@T["RemainingTime"]" Variant="Variant.Outlined"
+                            @bind-Value="Form.RemainingTime" For="() => Form.RemainingTime" Immediate="true"
                             Class="mb-4" />
                     </MudItem>
                 </MudGrid>
@@ -52,32 +62,46 @@
 
 
             <MudItem xs="12" md="6">
-                <MudSelect Label="Impact" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Form.Impact"
-                    Immediate="true" For="() => Form.Impact">
-                    @foreach (var optionType in Enum.GetValues<TicketImpact>())
-                    {
-                        <MudSelectItem T="TicketImpact?" Value="@optionType">@Enum.GetName(typeof(TicketImpact), optionType)
-                        </MudSelectItem>
-                    }
-                </MudSelect>
+                <MudGrid>
 
-                <MudSelect Label="Urgency" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Form.Urgency"
-                    Immediate="true" For="() => Form.Urgency">
-                    @foreach (var optionType in Enum.GetValues<TicketUrgency>())
-                    {
-                        <MudSelectItem T="TicketUrgency?" Value="@optionType">@Enum.GetName(typeof(TicketUrgency),
-                        optionType)</MudSelectItem>
-                    }
-                </MudSelect>
+                    <MudItem xs="12" md="12">
+                        <MudText Typo="@Typo.h5" Class="mt-4">Planning</MudText>
+                    </MudItem>
 
-                <MudSelect Label="Priority" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Form.Priority"
-                    Immediate="true" For="() => Form.Priority">
-                    @foreach (var optionType in Enum.GetValues<TicketPriority>())
-                    {
-                        <MudSelectItem T="TicketPriority?" Value="@optionType">@Enum.GetName(typeof(TicketPriority),
-                        optionType)</MudSelectItem>
-                    }
-                </MudSelect>
+                    <MudItem xs="12" md="6">
+                        <MudSelect Label="Impact" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Form.Impact"
+                            Immediate="true" For="() => Form.Impact">
+                            @foreach (var optionType in Enum.GetValues<TicketImpact>())
+                            {
+                                <MudSelectItem T="TicketImpact?" Value="@optionType">@Enum.GetName(typeof(TicketImpact),
+                                                                optionType)
+                            </MudSelectItem>
+                                                    }
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect Label="Urgency" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Form.Urgency"
+                            Immediate="true" For="() => Form.Urgency">
+                            @foreach (var optionType in Enum.GetValues<TicketUrgency>())
+                            {
+                                <MudSelectItem T="TicketUrgency?" Value="@optionType">@Enum.GetName(typeof(TicketUrgency),
+                                                                optionType)</MudSelectItem>
+                                                    }
+                        </MudSelect>
+                    </MudItem>
+
+                    <MudItem xs="12" md="6">
+                        <MudSelect Label="Priority" Variant="Variant.Outlined" Class="mb-6" @bind-Value="Form.Priority"
+                            Immediate="true" For="() => Form.Priority">
+                            @foreach (var optionType in Enum.GetValues<TicketPriority>())
+                            {
+                                <MudSelectItem T="TicketPriority?" Value="@optionType">@Enum.GetName(typeof(TicketPriority),
+                                                                optionType)</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </MudItem>
+                </MudGrid>
             </MudItem>
         </MudGrid>
     </EditForm>
@@ -107,7 +131,8 @@
         notFound = false;
         error = false;
 
-        ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(Organization.Id, null, 1, 100, null, null, cts.Token)).Items);
+        ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(Organization.Id, null, 1, 100, null, null,
+        cts.Token)).Items);
 
         if (Id is null)
         {

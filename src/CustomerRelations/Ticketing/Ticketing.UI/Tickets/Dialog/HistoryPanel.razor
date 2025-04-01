@@ -49,34 +49,34 @@
             {
                 <text>User "@ev5.AssignedParticipant.Name" was assigned</text>
             }
-            else if (c is TicketRemainingHoursUpdated ev3)
+            else if (c is TicketRemainingTimeUpdated ev3)
             {
-                if (ev3.OldHours is null)
+                if (ev3.OldTime is null)
                 {
-                    <text>Remaining hours was set to @ev3.NewHours</text>
+                    <text>Remaining hours was set to @ev3.NewTime</text>
                 }
-                else if (ev3.NewHours is null)
+                else if (ev3.NewTime is null)
                 {
                     <text>Remaining hours was cleared</text>
                 }
                 else
                 {
-                    <text>Remaining hours changed to @ev3.NewHours from @ev3.OldHours</text>
+                    <text>Remaining hours changed to @ev3.NewTime from @ev3.OldTime</text>
                 }
             }
-            else if (c is TicketEstimatedHoursUpdated ev4)
+            else if (c is TicketEstimatedTimeUpdated ev4)
             {
-                if (ev4.OldHours is null)
+                if (ev4.OldTime is null)
                 {
-                    <text>Estimated hours was set to @ev4.NewHours</text>
+                    <text>Estimated hours was set to @ev4.NewTime</text>
                 }
-                else if (ev4.NewHours is null)
+                else if (ev4.NewTime is null)
                 {
                     <text>Estimated hours was cleared</text>
                 }
                 else
                 {
-                    <text>Estimated hours changed to @ev4.NewHours from @ev4.OldHours</text>
+                    <text>Estimated hours changed to @ev4.NewTime from @ev4.OldTime</text>
                 }
             }
             else if (c is TicketPriorityUpdated ev6)

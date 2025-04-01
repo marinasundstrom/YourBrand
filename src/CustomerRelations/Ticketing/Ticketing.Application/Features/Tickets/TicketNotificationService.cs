@@ -36,13 +36,18 @@ public class TicketNotificationService(IHubContext<TicketsHub, ITicketsHubClient
         await hubsContext.Clients.All.TitleUpdated(ticketId, title);
     }
 
-    public async Task EstimatedHoursUpdated(int ticketId, double? hours)
+    public async Task EstimatedTimeUpdated(int ticketId, TimeSpan? time)
     {
-        await hubsContext.Clients.All.EstimatedHoursUpdated(ticketId, hours);
+        await hubsContext.Clients.All.EstimatedTimeUpdated(ticketId, time);
     }
 
-    public async Task RemainingHoursUpdated(int ticketId, double? hours)
+    public async Task CompletedTimeUpdated(int ticketId, TimeSpan? time)
     {
-        await hubsContext.Clients.All.RemainingHoursUpdated(ticketId, hours);
+        await hubsContext.Clients.All.CompletedTimeUpdated(ticketId, time);
+    }
+
+    public async Task RemainingTimeUpdated(int ticketId, TimeSpan? time)
+    {
+        await hubsContext.Clients.All.RemainingTimeUpdated(ticketId, time);
     }
 }

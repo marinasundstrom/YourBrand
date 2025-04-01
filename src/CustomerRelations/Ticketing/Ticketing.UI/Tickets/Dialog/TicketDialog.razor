@@ -217,14 +217,19 @@ else
                 await TicketsClient.UpdateAssigneeAsync(Organization.Id, Id.GetValueOrDefault(), Form.Assignee?.Id, cts.Token);
             }
 
-            if (editContext.IsModified(() => Form.EstimatedHours!))
+            if (editContext.IsModified(() => Form.EstimatedTime!))
             {
-                await TicketsClient.UpdateEstimatedHoursAsync(Organization.Id, Id.GetValueOrDefault(), Form.EstimatedHours, cts.Token);
+                await TicketsClient.UpdateEstimatedTimeAsync(Organization.Id, Id.GetValueOrDefault(), Form.EstimatedTime, cts.Token);
             }
 
-            if (editContext.IsModified(() => Form.RemainingHours!))
+            if (editContext.IsModified(() => Form.CompletedTime!))
             {
-                await TicketsClient.UpdateRemainingHoursAsync(Organization.Id, Id.GetValueOrDefault(), Form.RemainingHours, cts.Token);
+                //await TicketsClient.UpdateCompletedTimeAsync(Organization.Id, Id.GetValueOrDefault(), Form.CompletedTime, cts.Token);
+            }
+
+            if (editContext.IsModified(() => Form.RemainingTime!))
+            {
+                await TicketsClient.UpdateRemainingTimeAsync(Organization.Id, Id.GetValueOrDefault(), Form.RemainingTime, cts.Token);
             }
 
              if (editContext.IsModified(() => Form.Priority!))
@@ -263,8 +268,9 @@ else
             Description = Form.Description,
             Status = Form.Status.Id,
             AssigneeId = Form.Assignee?.Id,
-            EstimatedHours = Form.EstimatedHours,
-            RemainingHours = Form.RemainingHours,
+            EstimatedTime = Form.EstimatedTime,
+            CompletedTime = Form.CompletedTime,
+            RemainingTime = Form.RemainingTime,
             Priority = Form.Priority,
             Impact = Form.Impact,
             Urgency = Form.Urgency

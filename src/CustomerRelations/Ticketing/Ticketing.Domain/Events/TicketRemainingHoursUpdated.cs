@@ -5,4 +5,4 @@ using OrganizationId = YourBrand.Domain.OrganizationId;
 
 namespace YourBrand.Ticketing.Domain.Events;
 
-public sealed record TicketRemainingHoursUpdated(TenantId TenantId, OrganizationId OrganizationId, TicketId TicketId, double? NewHours, double? OldHours) : TicketDomainEvent(OrganizationId, TicketId);
+public sealed record TicketRemainingTimeUpdated(TenantId TenantId, OrganizationId OrganizationId, TicketId TicketId, TimeSpan? NewTime, TimeSpan? OldTime) : TicketDomainEvent(OrganizationId, TicketId);

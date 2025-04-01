@@ -32,13 +32,25 @@ public sealed class DtoFactory : IDtoFactory
             ticket.LastMessage,
             ticket.Text,
             ticket.Type!.ToDto(),
+
             ticket.Priority?.ToDto(),
             ticket.Urgency?.ToDto(),
             ticket.Impact?.ToDto(),
-            ticket.EstimatedHours,
-            ticket.RemainingHours,
+
+            ticket.EstimatedTime,
+            ticket.CompletedTime,
+            ticket.RemainingTime,
+
+            ticket.PlannedStartDate,
+            ticket.StartDeadline,
+            ticket.ExpectedEndDate,
+            ticket.DueDate,
+            ticket.ActualStartDate,
+            ticket.ActualEndDate,
+
             ticket.Tags.Select(x => x.Tag).Select(x => x.ToDto()),
             ticket.Attachments.Select(x => x.ToDto()),
+            
             ticket.Created,
             CreateParticipantDto(createdBy, users),
             ticket.LastModified,

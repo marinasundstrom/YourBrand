@@ -20,14 +20,27 @@ public static partial class Mappings
         ticket.LastMessage,
         ticket.Text,
         ticket.Type!.ToDto(),
+
         ticket.Priority?.ToDto(),
         ticket.Urgency?.ToDto(),
         ticket.Impact?.ToDto(),
-        ticket.EstimatedHours,
-        ticket.RemainingHours,
+
+        ticket.EstimatedTime,
+        ticket.CompletedTime,
+        ticket.RemainingTime,
+
+        ticket.PlannedStartDate,
+        ticket.StartDeadline,
+        ticket.ExpectedEndDate,
+        ticket.DueDate,
+        ticket.ActualStartDate,
+        ticket.ActualEndDate,
+
         ticket.Tags.Select(x => x.Tag).Select(x => x.ToDto()),
         ticket.Attachments.Select(x => x.ToDto()),
-        ticket.Created, ticket.CreatedBy?.ToDto(), ticket.LastModified, ticket.LastModifiedBy?.ToDto());
+        
+        ticket.Created, 
+        ticket.CreatedBy?.ToDto(), ticket.LastModified, ticket.LastModifiedBy?.ToDto());
 
     //public static TicketCommentDto ToDto(this TicketComment ticketComment) => new TicketCommentDto(ticketComment.Id, ticketComment.Text, ticketComment.Created, ticketComment.CreatedBy?.ToDto(), ticketComment.LastModified, ticketComment.LastModifiedBy?.ToDto());
 

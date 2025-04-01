@@ -2,6 +2,7 @@ x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))
 openapi: 3.0.0
 info:
   title: Ticketing
+  description: ''
   version: v1
 servers:
 - url: https://localhost:5261
@@ -668,11 +669,11 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Tickets/{id}/estimatedHours:
+  /v1/Tickets/{id}/estimatedTime:
     put:
       tags:
       - Tickets
-      operationId: Tickets_UpdateEstimatedHours
+      operationId: Tickets_UpdateEstimatedTime
       parameters:
       - name: organizationId
         in: query
@@ -687,12 +688,12 @@ paths:
           format: int32
         x-position: 2
       requestBody:
-        x-name: hours
+        x-name: time
         content:
           application/json:
             schema:
-              type: number
-              format: double
+              type: string
+              format: duration
         x-position: 3
       responses:
         200:
@@ -705,11 +706,11 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/Tickets/{id}/remainingHours:
+  /v1/Tickets/{id}/completedTime:
     put:
       tags:
       - Tickets
-      operationId: Tickets_UpdateRemainingHours
+      operationId: Tickets_UpdateCompletedTime
       parameters:
       - name: organizationId
         in: query
@@ -724,12 +725,49 @@ paths:
           format: int32
         x-position: 2
       requestBody:
-        x-name: hours
+        x-name: time
         content:
           application/json:
             schema:
-              type: number
-              format: double
+              type: string
+              format: duration
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Tickets/{id}/remainingTime:
+    put:
+      tags:
+      - Tickets
+      operationId: Tickets_UpdateRemainingTime
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: time
+        content:
+          application/json:
+            schema:
+              type: string
+              format: duration
         x-position: 3
       responses:
         200:
@@ -1031,6 +1069,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TicketStatus'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         429:
           description: ''
           content:
@@ -2147,13 +2191,41 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/TicketImpact'
-        estimatedHours:
-          type: number
-          format: double
+        estimatedTime:
+          type: string
+          format: duration
           nullable: true
-        remainingHours:
-          type: number
-          format: double
+        completedTime:
+          type: string
+          format: duration
+          nullable: true
+        remainingTime:
+          type: string
+          format: duration
+          nullable: true
+        plannedStartDate:
+          type: string
+          format: date-time
+          nullable: true
+        startDeadline:
+          type: string
+          format: date-time
+          nullable: true
+        expectedEndDate:
+          type: string
+          format: date-time
+          nullable: true
+        dueDate:
+          type: string
+          format: date-time
+          nullable: true
+        actualStartDate:
+          type: string
+          format: date-time
+          nullable: true
+        actualEndDate:
+          type: string
+          format: date-time
           nullable: true
         tags:
           type: array
@@ -2328,8 +2400,8 @@ components:
           ProjectUpdated: '#/components/schemas/TicketProjectUpdated'
           AssigneeUpdated: '#/components/schemas/TicketAssigneeUpdated'
           DescriptionUpdated: '#/components/schemas/TicketDescriptionUpdated'
-          EstimatedHoursUpdated: '#/components/schemas/TicketEstimatedHoursUpdated'
-          RemainingHoursUpdated: '#/components/schemas/TicketRemainingHoursUpdated'
+          EstimatedTimeUpdated: '#/components/schemas/TicketEstimatedTimeUpdated'
+          RemainingTimeUpdated: '#/components/schemas/TicketRemainingTimeUpdated'
           StatusUpdated: '#/components/schemas/TicketStatusUpdated'
           SubjectUpdated: '#/components/schemas/TicketSubjectUpdated'
           PriorityUpdated: '#/components/schemas/TicketPriorityUpdated'
@@ -2410,7 +2482,7 @@ components:
           oldDescription:
             type: string
             nullable: true
-    TicketEstimatedHoursUpdated:
+    TicketEstimatedTimeUpdated:
       allOf:
       - $ref: '#/components/schemas/TicketEvent'
       - type: object
@@ -2419,15 +2491,15 @@ components:
           ticketId:
             type: integer
             format: int32
-          newHours:
-            type: number
-            format: double
+          newTime:
+            type: string
+            format: duration
             nullable: true
-          oldHours:
-            type: number
-            format: double
+          oldTime:
+            type: string
+            format: duration
             nullable: true
-    TicketRemainingHoursUpdated:
+    TicketRemainingTimeUpdated:
       allOf:
       - $ref: '#/components/schemas/TicketEvent'
       - type: object
@@ -2436,13 +2508,13 @@ components:
           ticketId:
             type: integer
             format: int32
-          newHours:
-            type: number
-            format: double
+          newTime:
+            type: string
+            format: duration
             nullable: true
-          oldHours:
-            type: number
-            format: double
+          oldTime:
+            type: string
+            format: duration
             nullable: true
     TicketStatusUpdated:
       allOf:
@@ -2557,13 +2629,17 @@ components:
         assigneeId:
           type: string
           nullable: true
-        estimatedHours:
-          type: number
-          format: double
+        estimatedTime:
+          type: string
+          format: duration
           nullable: true
-        remainingHours:
-          type: number
-          format: double
+        completedTime:
+          type: string
+          format: duration
+          nullable: true
+        remainingTime:
+          type: string
+          format: duration
           nullable: true
         priority:
           nullable: true

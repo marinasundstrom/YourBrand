@@ -17,7 +17,7 @@ public sealed record CreateTicket(
     string? Description,
     int Status,
     string? AssigneeUserId,
-    double? EstimatedHours, double? RemainingHours,
+    TimeSpan? EstimatedTime, TimeSpan? CompletedTime, TimeSpan? RemainingTime,
     TicketPriorityDto? Priority, TicketImpactDto? Impact, TicketUrgencyDto? Urgency) : IRequest<Result<TicketDto>>
 {
     public sealed class Validator : AbstractValidator<CreateTicket>
@@ -58,8 +58,9 @@ public sealed record CreateTicket(
             ticket.Impact = (Domain.Enums.TicketImpact?)request.Impact;
             ticket.Urgency = (Domain.Enums.TicketUrgency?)request.Urgency;
 
-            ticket.UpdateEstimatedHours(request.EstimatedHours);
-            ticket.UpdateRemainingHours(request.RemainingHours);
+            ticket.UpdateEstimatedTime(request.EstimatedTime);
+            ticket.UpdateCompletedTime(request.EstimatedTime);
+            //ticket.UpdateRemainingTime(request.RemainingTime);
 
             var creatorParticipant = new TicketParticipant
             {

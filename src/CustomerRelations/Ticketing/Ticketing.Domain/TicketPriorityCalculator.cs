@@ -14,6 +14,12 @@ public sealed class TicketPriorityCalculator
 
     public TicketPriority CalculatePriority(TicketUrgency urgency, TicketImpact impact)
     {
+        if (!Enum.IsDefined(typeof(TicketUrgency), urgency) ||
+            !Enum.IsDefined(typeof(TicketImpact), impact))
+        {
+            throw new ArgumentOutOfRangeException("Invalid urgency or impact value.");
+        }
+
         return priorityMatrix[(int)urgency, (int)impact];
     }
 }

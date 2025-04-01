@@ -4,9 +4,9 @@ using YourBrand.Ticketing.Application.Common;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.EventHandlers;
 
-public sealed class TicketRemainingHoursUpdatedEventHandler(IApplicationDbContext context, ITicketRepository ticketRepository, IEmailService emailService, ITicketNotificationService ticketNotificationService, ISettableTenantContext tenantContext) : IDomainEventHandler<TicketRemainingHoursUpdated>
+public sealed class TicketRemainingTimeUpdatedEventHandler(IApplicationDbContext context, ITicketRepository ticketRepository, IEmailService emailService, ITicketNotificationService ticketNotificationService, ISettableTenantContext tenantContext) : IDomainEventHandler<TicketRemainingTimeUpdated>
 {
-    public async Task Handle(TicketRemainingHoursUpdated notification, CancellationToken cancellationToken)
+    public async Task Handle(TicketRemainingTimeUpdated notification, CancellationToken cancellationToken)
     {
         tenantContext.SetTenantId(notification.TenantId);
 

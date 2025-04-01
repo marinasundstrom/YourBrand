@@ -77,16 +77,16 @@
                                 </CardHeaderContent>
                             </MudCardHeader>
                             <MudCardContent>
-                                @if (context.EstimatedHours is not null)
+                                @if (context.EstimatedTime is not null)
                                 {
                                     <MudText Typo="Typo.caption" Class="mt-2">
-                                        @T["EstimatedTime", TimeSpan.FromHours(context.EstimatedHours.GetValueOrDefault()).ToString("hh\\:mm")]
+                                        @T["EstimatedTime", context.EstimatedTime.GetValueOrDefault().ToString("hh\\:mm")]
                                     </MudText> <br />
                                 }
-                                @if (context.RemainingHours is not null)
+                                @if (context.RemainingTime is not null)
                                 {
                                     <MudText Typo="Typo.caption" Class="mt-2">
-                                        @T["RemainingTime", TimeSpan.FromHours(context.RemainingHours.GetValueOrDefault()).ToString("hh\\:mm")]
+                                        @T["RemainingTime", context.RemainingTime.GetValueOrDefault().ToString("hh\\:mm")]
                                     </MudText>
                                 }
                             </MudCardContent>
@@ -152,8 +152,9 @@
             hubConnection.On<int, string>("SubjectUpdated", OnSubjectUpdated);
             hubConnection.On<int, string?>("DescriptionUpdated", OnDescriptionUpdated);
             hubConnection.On<int, TicketStatus>("StatusUpdated", OnStatusUpdated);
-            hubConnection.On<int, double?>("EstimatedHoursUpdated", OnEstimatedHoursUpdated);
-            hubConnection.On<int, double?>("RemainingHoursUpdated", OnRemainingHoursUpdated);
+            hubConnection.On<int, TimeSpan?>("EstimatedTimeUpdated", OnEstimatedTimeUpdated);
+            hubConnection.On<int, TimeSpan?>("CompletedTimeUpdated", OnCompletedTimeUpdated);
+            hubConnection.On<int, TimeSpan?>("RemainingTimeUpdated", OnRemainingTimeUpdated);
 
             hubConnection.Closed += (error) =>
             {
@@ -313,18 +314,26 @@
         StateHasChanged();
     }
 
-    void OnEstimatedHoursUpdated(int ticketId, double? hours)
+    void OnEstimatedTimeUpdated(int ticketId, TimeSpan? time)
     {
         var item = tickets.First(x => x.Id == ticketId);
-        item.EstimatedHours = hours;
+        item.EstimatedTime = time;
         dropContainer.Refresh();
         StateHasChanged();
     }
 
-    void OnRemainingHoursUpdated(int ticketId, double? hours)
+    void OnCompletedTimeUpdated(int ticketId, TimeSpan? time)
     {
         var item = tickets.First(x => x.Id == ticketId);
-        item.RemainingHours = hours;
+        item.CompletedTime = time;
+        dropContainer.Refresh();
+        StateHasChanged();
+    }
+
+    void OnRemainingTimeUpdated(int ticketId, TimeSpan? time)
+    {
+        var item = tickets.First(x => x.Id == ticketId);
+        item.RemainingTime = time;
         dropContainer.Refresh();
         StateHasChanged();
     }

@@ -6,9 +6,9 @@ using YourBrand.Identity;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Commands;
 
-public sealed record UpdateEstimatedHours(string OrganizationId, int Id, double? Hours) : IRequest<Result>
+public sealed record UpdateRemainingTime(string OrganizationId, int Id, TimeSpan? Time) : IRequest<Result>
 {
-    public sealed class Validator : AbstractValidator<UpdateEstimatedHours>
+    public sealed class Validator : AbstractValidator<UpdateRemainingTime>
     {
         public Validator()
         {
@@ -16,9 +16,9 @@ public sealed record UpdateEstimatedHours(string OrganizationId, int Id, double?
         }
     }
 
-    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<UpdateEstimatedHours, Result>
+    public sealed class Handler(ITicketRepository ticketRepository, IUnitOfWork unitOfWork, IUserContext userContext) : IRequestHandler<UpdateRemainingTime, Result>
     {
-        public async Task<Result> Handle(UpdateEstimatedHours request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UpdateRemainingTime request, CancellationToken cancellationToken)
         {
             var ticket = await ticketRepository.FindByIdAsync(request.Id, cancellationToken);
 
@@ -27,7 +27,7 @@ public sealed record UpdateEstimatedHours(string OrganizationId, int Id, double?
                 return Result.Failure(Errors.Tickets.TicketNotFound);
             }
 
-            ticket.UpdateEstimatedHours(request.Hours);
+            ticket.UpdateRemainingTime(request.Time);
 
             var participant = ticket.Participants.FirstOrDefault(x => x.UserId == userContext.UserId);
 
