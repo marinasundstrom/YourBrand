@@ -276,8 +276,12 @@ input[type="checkbox"] {
     }
 }
 
-.nav-link {
-    position: relative;
+.navbar-nav {
+    & .nav-link {
+        span {
+            position: relative;
+        }
+    } 
 }
 
 .navbar-nav a.nav-link:hover span:before,
@@ -290,6 +294,7 @@ input[type="checkbox"] {
     position: absolute;
     right: 0;
     width: 100%;
+    top: 20px;
 }
 
 .special-button {
