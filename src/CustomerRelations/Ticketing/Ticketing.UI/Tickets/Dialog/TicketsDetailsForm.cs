@@ -40,6 +40,7 @@ public class TicketDetailsForm
         Status = ticket.Status;
         Assignee = ticket.Assignee?.ToUser();
         EstimatedTime = ticket.EstimatedTime;
+        CompletedTime = ticket.CompletedTime;
         RemainingTime = ticket.RemainingTime;
         Priority = ticket.Priority;
         Impact = ticket.Impact;
