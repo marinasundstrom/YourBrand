@@ -297,6 +297,11 @@ input[type="checkbox"] {
     top: 20px;
 }
 
+.navbar-nav #cartDisplay a.nav-link:hover span:before,
+.navbar-nav #cartDisplay a.nav-link.active span:before {
+    background: transparent !important;
+}
+
 .special-button {
     background-color: #137cdf;
     border-radius: 25px;
