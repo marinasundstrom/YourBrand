@@ -31,9 +31,8 @@ public partial class ProductPage
     [SupplyParameterFromQuery(Name = "d")]
     public string? Data { get; set; }
 
-    ProductViewModel? productViewModel;
-
-    private PersistingComponentStateSubscription persistingSubscription;
+    [SupplyParameterFromPersistentComponentState]
+    public ProductViewModel? productViewModel { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,11 +48,7 @@ public partial class ProductPage
 
     private async Task Load()
     {
-        persistingSubscription =
-        ApplicationState.RegisterOnPersisting(PersistItems);
-
-        if (!ApplicationState.TryTakeFromJson<ProductViewModel>(
-        "productViewModel", out var restored))
+        if (productViewModel is null)
         {
             var pwm = new ProductViewModel(ProductsService);
             await pwm.Initialize(Id, VariantId);
@@ -61,7 +56,6 @@ public partial class ProductPage
         }
         else
         {
-            productViewModel = restored!;
             productViewModel.SetClient(ProductsService);
         }
 
@@ -172,18 +166,9 @@ public partial class ProductPage
 
         await JSRuntime.InvokeVoidAsync("changeUrl", sb.ToString());
     }
-
-    private Task PersistItems()
-    {
-        ApplicationState.PersistAsJson("productViewModel", productViewModel);
-
-        return Task.CompletedTask;
-    }
-
     public void Dispose()
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
-        persistingSubscription.Dispose();
     }
 
     static IEnumerable<ProductCategoryParent> IterateCategories(ProductCategoryParent

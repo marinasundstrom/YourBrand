@@ -3,7 +3,6 @@
 @implements IDisposable
 @inject IProductCategoryService ProductCategoryService
 @inject NavigationManager NavigationManager
-@inject PersistentComponentState ApplicationState
 
 @if (categoryTreeNodes is not null)
 {
@@ -29,43 +28,24 @@
 
 @code
 {
-    private PersistingComponentStateSubscription persistingSubscription;
+    [SupplyParameterFromPersistentComponentState]
+    public string? path { get; set; }
 
-    string? path;
+    [SupplyParameterFromPersistentComponentState]
+    public ProductCategoryTreeRootDto? categoryTree { get; set; }
 
-    ProductCategoryTreeRootDto? categoryTree;
-    IEnumerable<ProductCategoryTreeNodeDto>? categoryTreeNodes;
+    public IEnumerable<ProductCategoryTreeNodeDto>? categoryTreeNodes { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-
-        persistingSubscription =
-        ApplicationState.RegisterOnPersisting(PersistData);
-
         path = new Uri(NavigationManager.Uri).LocalPath[1..];
         path = path.Substring(path.IndexOf("/") + 1);
 
-        if (!ApplicationState.TryTakeFromJson<BlazorApp.ProductCategories.ProductCategoryTreeRootDto>(
-        "categoryTree", out var restored))
-        {
-            categoryTree = await ProductCategoryService.GetProductCategoryTree(path);
-        }
-        else
-        {
-            categoryTree = restored!;
-        }
+        categoryTree ??= await ProductCategoryService.GetProductCategoryTree(path);
 
         categoryTreeNodes = categoryTree.Categories;
 
         NavigationManager.LocationChanged += OnLocationChanged;
-    }
-
-    private Task PersistData()
-    {
-        ApplicationState.PersistAsJson("path", path);
-        ApplicationState.PersistAsJson("categoryTree", categoryTree);
-
-        return Task.CompletedTask;
     }
 
     [Parameter] public EventCallback<ProductCategoryTreeNodeDto> OnClick { get; set; } = default!;
@@ -78,7 +58,6 @@
 
     void IDisposable.Dispose()
     {
-        persistingSubscription.Dispose();
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 }

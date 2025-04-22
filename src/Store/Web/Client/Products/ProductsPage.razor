@@ -14,7 +14,6 @@
 @inject IBrandsService BrandsService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
-@inject PersistentComponentState ApplicationState
 @inject RenderingContext RenderingContext
 @inject AnalyticsService AnalyticsService
 
@@ -133,32 +132,29 @@
 
         <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-3 gx-4 gy-4 gx-md-5 gy-md-5 ">
 
-            @foreach (var product in products)
+            @if(products is not null) 
             {
-                <ProductView @key="product.Id" Product="product" />
+                foreach (var product in products)
+                {
+                    <ProductView @key="product.Id" Product="product" />
+                }
             }
 
         </div>
 
-        <Pagination Page="Page.GetValueOrDefault()" PageCount="pageCount" Href="/categories" PageChanged="OnPageChanged"
+        <Pagination Page="Page.GetValueOrDefault()" PageCount="pageCount.GetValueOrDefault()" Href="/categories" PageChanged="OnPageChanged"
             class="mt-5" />
     </div>
 </div>
 
 @code
 {
-    private PersistingComponentStateSubscription persistingSubscription;
-
-    ICollection<BlazorApp.Products.Product> products = [];
-
-    int pageCount = 0;
     bool loading = false;
     bool error = false;
     long? categoryId = null;
     string? categoryName = null;
     string? categoryDescription = null;
 
-    IEnumerable<BlazorApp.Brands.Brand> brands;
 
     [Parameter]
     public int? Page { get; set; } = 1;
@@ -175,60 +171,36 @@
     [Parameter]
     public string? BrandId { get; set; }
 
-    BlazorApp.ProductCategories.ProductCategoryDto? category;
+    [SupplyParameterFromPersistentComponentState]
+    public ICollection<BlazorApp.Products.Product> products { get; set; }
+
+    [SupplyParameterFromPersistentComponentState]
+    public IEnumerable<BlazorApp.Brands.Brand> brands { get; set; }
+
+    [SupplyParameterFromPersistentComponentState]
+    public BlazorApp.ProductCategories.ProductCategoryDto? category { get; set; }
+
+    [SupplyParameterFromPersistentComponentState]
+    public int? pageCount { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         NavigationManager.LocationChanged += OnLocationChanged;
 
-        persistingSubscription =
-        ApplicationState.RegisterOnPersisting(PersistData);
-
         if (!string.IsNullOrEmpty(Path))
         {
-            if (!ApplicationState.TryTakeFromJson<BlazorApp.ProductCategories.ProductCategoryDto>(
-            "productCategory", out var restored2))
-            {
-                category = await ProductCategoryService.GetProductCategoryById(Path);
-            }
-            else
-            {
-                category = restored2!;
-            }
+            category ??= await ProductCategoryService.GetProductCategoryById(Path);
 
             categoryId = category.Id;
             categoryName = category.Name;
             categoryDescription = category.Description;
         }
 
-        if (!ApplicationState.TryTakeFromJson<IEnumerable<BlazorApp.Brands.Brand>>(
-        "brands", out var restored4))
-        {
-            var b = await BrandsService.GetBrands(Path, null, null, null);
-            brands = b.Items;
-        }
-        else
-        {
-            brands = restored4!;
-        }
+            brands ??= (await BrandsService.GetBrands(Path, null, null, null)).Items;
 
         //await FetchItems(Page.GetValueOrDefault());
 
-        if (!ApplicationState.TryTakeFromJson<ICollection<Product>>(
-        "products", out var restored))
-        {
-            await FetchItems(Page.GetValueOrDefault());
-        }
-        else
-        {
-            products = restored!;
-        }
-
-        if (ApplicationState.TryTakeFromJson<int>(
-        "pageCount", out var restored3))
-        {
-            pageCount = restored3!;
-        }
+         await FetchItems(Page.GetValueOrDefault());
 
         if (!RenderingContext.IsPrerendering)
         {
@@ -255,15 +227,6 @@
     return subGroups.FirstOrDefault(x => x.Path == Path)?.Name;
     }
     */
-
-    private Task PersistData()
-    {
-        ApplicationState.PersistAsJson("productCategory", category);
-        ApplicationState.PersistAsJson("products", products);
-        ApplicationState.PersistAsJson("pageCount", pageCount);
-
-        return Task.CompletedTask;
-    }
 
     private async void OnLocationChanged(object? sender, LocationChangedEventArgs eventArgs)
     {
@@ -381,7 +344,6 @@
 
     void IDisposable.Dispose()
     {
-        persistingSubscription.Dispose();
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
 }
