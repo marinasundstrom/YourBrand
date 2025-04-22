@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 
 namespace Microsoft.Extensions.Hosting;
 
+/*
 public class NullabilityTransformer : IOpenApiOperationTransformer
 {
     public Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
@@ -19,7 +20,7 @@ public class NullabilityTransformer : IOpenApiOperationTransformer
         /*
         var x = context.Description.ActionDescriptor.EndpointMetadata
                          .OfType<MethodInfo>()
-                         .FirstOrDefault(); */
+                         .FirstOrDefault(); *
 
         //context.Description.ParameterDescriptions.First(x => x.Name == )
 
@@ -109,7 +110,7 @@ public class NullabilityTransformer : IOpenApiOperationTransformer
 
                 newSchema.Nullable = isNullable;
             }
-        } */
+        } *
     }
 
     private static void TransformResponseTypes(OpenApiOperation operation, OpenApiOperationTransformerContext context, MethodInfo methodInfo)
@@ -141,19 +142,20 @@ public class NullabilityTransformer : IOpenApiOperationTransformer
     }
 
     private static Type UnwrapActionResult(Type returnType, ref NullabilityInfo nullabilityInfo)
+{
+    if (returnType.IsGenericType)
     {
-        if (returnType.IsGenericType)
+        var genericDefinition = returnType.GetGenericTypeDefinition();
+
+        // Check for ActionResult<T>
+        if (genericDefinition == typeof(ActionResult<>))
         {
-            var genericDefinition = returnType.GetGenericTypeDefinition();
-
-            // Check for ActionResult<T>
-            if (genericDefinition == typeof(ActionResult<>))
-            {
-                returnType = returnType.GetGenericArguments()[0];
-                nullabilityInfo = nullabilityInfo.GenericTypeArguments[0];
-            }
+            returnType = returnType.GetGenericArguments()[0];
+            nullabilityInfo = nullabilityInfo.GenericTypeArguments[0];
         }
-
-        return returnType;
     }
+
+    return returnType;
 }
+}
+*/

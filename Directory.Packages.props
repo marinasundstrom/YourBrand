@@ -52,59 +52,60 @@
     <PackageVersion Include="MediatR.Contracts" Version="2.0.1" />
     <PackageVersion Include="Meziantou.Extensions.Logging.XUnit" Version="1.0.6" />
     <PackageVersion Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="8.0.0-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.1-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0-*" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.DataAnnotations.Validation" Version="3.2.0-rc1.20223.4" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="9.0.1-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer"
+      Version=" 10.0.0-preview.4.25221.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.0-*" />
     <PackageVersion Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.1-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.UI" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.0-*" />
     <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client.SourceGenerator" Version="7.0.0-preview.7.22376.6" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0-2.final" />
-    <PackageVersion Include="Microsoft.Data.SqlClient" Version="5.2.1" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.ApiDescription.Client" Version="9.0.1-*" />
+    <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.0.1" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.ApiDescription.Client" Version="10.0.0-*" />
     <PackageVersion Include="Microsoft.Extensions.Azure" Version="1.7.6" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1-*" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0-*" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="6.1.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.1-*" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.0-*" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.2.0" />
-    <PackageVersion Include="Microsoft.Extensions.Localization" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Localization.Abstractions" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.1-*" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.1-*" />
+    <PackageVersion Include="Microsoft.Extensions.Localization" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.0-*" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.0-*" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="8.2.0" />
     <PackageVersion Include="Microsoft.FeatureManagement.AspNetCore" Version="2.5.1" />
     <PackageVersion Include="Microsoft.Identity.Web" Version="2.16.0" />
     <PackageVersion Include="Microsoft.IdentityModel.Logging" Version="8.0.2" />
-    <PackageVersion Include="Microsoft.JSInterop.WebAssembly" Version="9.0.1-*" />
+    <PackageVersion Include="Microsoft.JSInterop.WebAssembly" Version="10.0.0-*" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
     <PackageVersion Include="MiniValidation" Version="0.6.0-pre.20220527.55" />
     <PackageVersion Include="MudBlazor" Version="8.4.0" />
@@ -144,10 +145,10 @@
     <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.1.0" />
     <PackageVersion Include="Shouldly" Version="4.1.0" />
     <PackageVersion Include="Reqnroll.xUnit" Version="2.4.0" />
-    <PackageVersion Include="Sundstrom.CheckedExceptions" Version="1.2.3" />
+    <PackageVersion Include="Sundstrom.CheckedExceptions" Version="1.2.6" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
-    <PackageVersion Include="System.Net.Http.Json" Version="9.0.1-*" />
+    <PackageVersion Include="System.Net.Http.Json" Version="10.0.0-*" />
     <PackageVersion Include="Testcontainers" Version="4.3.0" />
     <PackageVersion Include="Testcontainers.MsSql" Version="4.3.0" />
     <PackageVersion Include="ToastUIEditor" Version="0.1.2" />

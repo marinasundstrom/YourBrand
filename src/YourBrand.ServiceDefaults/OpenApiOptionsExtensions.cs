@@ -21,6 +21,7 @@ using Microsoft.OpenApi.Models;
 
 namespace Microsoft.Extensions.Hosting;
 
+/*
 internal static class OpenApiOptionsExtensions
 {
     public static OpenApiOptions ApplyApiVersionInfo(this OpenApiOptions options, string title, string description)
@@ -224,6 +225,7 @@ internal static class OpenApiOptionsExtensions
         return options;
     }
 
+    /*
     private static IOpenApiAny? CreateOpenApiAnyFromObject(object value)
     {
         return value switch
@@ -235,6 +237,7 @@ internal static class OpenApiOptionsExtensions
             _ => null
         };
     }
+    *
 
     private sealed class SecuritySchemeDefinitionsTransformer(IConfiguration configuration) : IOpenApiDocumentTransformer
     {
@@ -297,3 +300,4 @@ public static class Extensions2
         return type;
     }
 }
+*/

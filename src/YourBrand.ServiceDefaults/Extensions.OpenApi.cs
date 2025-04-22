@@ -66,6 +66,7 @@ public static partial class Extensions
         return builder;
     }
 
+    /*
     private static void MsOpenApi(
         IHostApplicationBuilder builder, IApiVersioningBuilder? apiVersioning)
     {
@@ -82,7 +83,7 @@ public static partial class Extensions
         {
             return builder;
         }
-        */
+        *
 
         if (apiVersioning is not null)
         {
@@ -106,5 +107,5 @@ public static partial class Extensions
                 });
             }
         }
-    }
+    }*/
 }

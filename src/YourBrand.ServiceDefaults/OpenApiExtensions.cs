@@ -91,7 +91,7 @@ public static class OpenApiEndpointRouteBuilderExtensions
         using var streamWriter = new StreamWriter(stream);
         var yamlWriter = new OpenApiYamlWriter(streamWriter);
 
-        document.Serialize(yamlWriter, version);
+        await document.SerializeAsync(yamlWriter, version);
 
         // See https://www.rfc-editor.org/rfc/rfc9512.html
         // TODO Use MediaTypeNames.Application.Yaml when available. See https://github.com/dotnet/runtime/issues/105809.
