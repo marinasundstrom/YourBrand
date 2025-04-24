@@ -56,6 +56,7 @@ public record BillOrderCommand(string OrganizationId, string OrderId) : IRequest
             {
                 OrganizationId = request.OrganizationId,
                 Date = DateTime.Now,
+                OrderNo = order.OrderNo,
                 Customer = order.Customer is not null ? new Invoicing.Client.SetCustomer
                 {
                     Id = order.Customer.Id,

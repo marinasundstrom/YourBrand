@@ -19,6 +19,7 @@ public static class Mappings
             invoice.StatusDate,
             invoice.Customer?.ToDto(),
             invoice.DueDate,
+            invoice.OrderNo,
             invoice.Currency,
             invoice.Reference,
             invoice.Notes,

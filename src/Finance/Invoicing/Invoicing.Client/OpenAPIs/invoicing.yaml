@@ -1089,6 +1089,9 @@ components:
           type: string
           format: date-time
           nullable: true
+        orderNo:
+          type: number
+          nullable: true
         currency:
           type: string
         reference:
@@ -1637,6 +1640,9 @@ components:
           nullable: true
         note:
           type: string
+          nullable: true
+        orderNo:
+          type: number
           nullable: true
         customer:
           nullable: true

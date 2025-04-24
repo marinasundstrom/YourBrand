@@ -8,7 +8,7 @@ using YourBrand.Invoicing.Domain.Entities;
 
 namespace YourBrand.Invoicing.Application.Commands;
 
-public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, string? Note, SetCustomerDto? Customer, IEnumerable<CreateInvoiceItemDto> Items) : IRequest<InvoiceDto>
+public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, string? Note, int? OrderNo, SetCustomerDto? Customer, IEnumerable<CreateInvoiceItemDto> Items) : IRequest<InvoiceDto>
 {
     public class Handler(IInvoicingContext context, TimeProvider timeProvider, InvoiceNumberFetcher invoiceNumberFetcher) : IRequestHandler<CreateInvoice, InvoiceDto>
     {
@@ -40,6 +40,11 @@ public record CreateInvoice(string OrganizationId, DateTime? Date, int? Status, 
             }
 
             invoice.OrganizationId = request.OrganizationId;
+
+            if (request.OrderNo is not null)
+            {
+                invoice.OrderNo = request.OrderNo.GetValueOrDefault();
+             }
 
             foreach (var orderItem in request.Items)
             {

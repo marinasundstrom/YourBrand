@@ -95,6 +95,13 @@
                     <CustomerSelector Value="customer" ValueChanged="OnCustomerChanged" />
                 </MudItem>
 
+                @if(Model.OrderNo is not null) 
+                {
+                    <MudItem xs="12" sm="12" md="12">
+                        <MudField Label="Order No"><a href="/orders/@Model.OrderNo">@Model.OrderNo</a></MudField>
+                    </MudItem>
+                }
+
                 <MudItem xs="12" sm="12" md="12">
                 @if (Model.Status.Id >= 2)
                 {

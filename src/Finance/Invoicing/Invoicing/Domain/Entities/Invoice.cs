@@ -130,7 +130,7 @@ public class Invoice : AuditableEntity<string>, IHasTenant, IHasOrganization
 
     public string? Reference { get; private set; }
 
-    public int? OrderNo { get; private set; }
+    public int? OrderNo { get; set; }
 
     public void SetReference(string? reference)
     {

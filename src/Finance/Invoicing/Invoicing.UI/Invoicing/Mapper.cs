@@ -13,6 +13,7 @@ public static class Mapper
             Status = dto.Status,
             Date = dto.IssueDate is null ? null : dto.IssueDate.GetValueOrDefault(),
             DueDate = dto.DueDate is null ? null : dto.DueDate.GetValueOrDefault(),
+            OrderNo = (int?)dto.OrderNo,
             Reference = dto.Reference,
             Note = dto.Note,
             Paid = dto.Paid

@@ -22,6 +22,8 @@ public class InvoiceViewModel
     [Required]
     public InvoiceStatus Status { get; set; }
 
+    public int? OrderNo { get; set; }
+
     public string? Reference { get; set; }
 
     public string? Note { get; set; }

@@ -13,6 +13,7 @@ public record InvoiceDto(
     DateTimeOffset? StatusDate,
     CustomerDto? Customer,
     DateTimeOffset? DueDate,
+    int? OrderNo,
     string Currency,
     string? Reference,
     string? Note,
