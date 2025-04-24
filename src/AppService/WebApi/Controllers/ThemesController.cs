@@ -61,6 +61,29 @@ public class ThemesController : ControllerBase
         var modules = await mediator.Send(new CopyTheme(id), cancellationToken);
         return Ok(modules);
     }
+
+    [HttpPost("{id}/export")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[AllowAnonymous]
+    public async Task<ActionResult<string>> ExportTheme(
+        string id, [FromServices] IMediator mediator, CancellationToken cancellationToken)
+    {
+        var json = await mediator.Send(new ExportTheme(id), cancellationToken);
+        return Ok(json);
+    }
+
+
+    [HttpPost("{id}/import")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[AllowAnonymous]
+    public async Task<ActionResult<ThemeDto>> ImportTheme(
+        IFormFile file, IMediator mediator, CancellationToken cancellationToken)
+    {
+        var theme = await mediator.Send(new ImportTheme(file.OpenReadStream()), cancellationToken);
+        return Ok(theme);
+    }
 }
 
 public record UpdateThemeRequest(string Name, string? Description, ThemeColorSchemesDto ColorSchemes);

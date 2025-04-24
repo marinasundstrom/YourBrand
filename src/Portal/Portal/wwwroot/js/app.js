@@ -30,6 +30,15 @@ window.helpers = {
     }
 }
 
+window.downloadFileFromString = (filename, contentType, content) => {
+    const blob = new Blob([content], { type: contentType });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+};
+
 window.isDarkMode = () => {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         return true;

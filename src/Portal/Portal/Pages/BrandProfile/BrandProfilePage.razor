@@ -10,12 +10,16 @@
 @inject IDialogService DialogService
 @inject IThemeManager ThemeManager
 @inject IThemesClient ThemesClient
+@inject IJSRuntime JS
+
 
 <AppPageTitle>@T["BrandProfile"]</AppPageTitle>
 
 <MudText Typo="Typo.h3" GutterBottom="true">@T["BrandProfile"]</MudText>
 
 <ThemeSelector Label="Active theme" Class="mb-16" Value="brandProfile?.Theme" ValueChanged="ThemeChanged" ShowCopyButton="true" />
+
+<MudButton OnClick="ExportTheme" Variant="Variant.Filled" Class="mt-4 mb-4">Export theme</MudButton>
 
 @if (brandProfile is not null) 
 {
@@ -78,5 +82,16 @@
         await BrandProfileClient.SetThemeAsync(new SetBrandProfileThemeRequest { ThemeId = theme.Id });
         brandProfile.Theme = theme;
         ThemeManager.SetTheme(brandProfile.Theme!);
+    }
+
+    async Task ExportTheme() 
+    {
+        var str = await ThemesClient.ExportThemeAsync(brandProfile.Theme.Id);
+
+        string content = str;
+        string fileName = $"{brandProfile.Theme.Name}.json";
+        string contentType = "application/json";
+
+        await JS.InvokeVoidAsync("downloadFileFromString", fileName, contentType, content);
     }
 }
