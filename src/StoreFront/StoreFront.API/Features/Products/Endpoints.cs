@@ -29,6 +29,9 @@ public static class Endpoints
             .WithName($"Products_{nameof(GetProductById)}")
             .CacheOutput(OutputCachePolicyNames.GetProductById);
 
+        productsGroup.MapGet("/{productIdOrHandle}/subscriptionPlans", GetProductSubscriptionPlans)
+            .WithName($"Products_{nameof(GetProductSubscriptionPlans)}");
+
         productsGroup.MapPost("/{productIdOrHandle}/findVariant", FindProductVariantByAttributes)
             .WithName($"Products_{nameof(FindProductVariantByAttributes)}");
 
@@ -62,6 +65,20 @@ public static class Endpoints
     {
         var product = await productsClient.GetProductByIdAsync(configuration["OrganizationId"]!, productIdOrHandle, cancellationToken);
         return product is not null ? TypedResults.Ok(product.Map()) : TypedResults.NotFound();
+    }
+
+    private static async Task<Results<Ok<PagedResult<ProductSubscriptionPlan>>, NotFound>> GetProductSubscriptionPlans(string productIdOrHandle, int? page = 1, int? pageSize = 10, IConfiguration configuration = null, IProductsClient productsClient = default!, IStoresClient storesClient = default!, CancellationToken cancellationToken = default)
+    {
+        if (storeId is null)
+        {
+            var store = await storesClient.GetStoreByIdAsync(configuration["OrganizationId"]!, "my-store");
+            storeId = store.Id;
+        }
+
+        var results = await productsClient.GetProductSubscriptionPlansAsync(configuration["OrganizationId"]!, storeId, productIdOrHandle, page, pageSize, null, null, cancellationToken);
+        return results is not null ? TypedResults.Ok(
+                new PagedResult<ProductSubscriptionPlan>(results.Items.Select(x => x), results.Total)
+        ) : TypedResults.NotFound();
     }
 
     private static async Task<Results<Ok<Product>, NotFound>> FindProductVariantByAttributes(string productIdOrHandle, Dictionary<string, string?> selectedAttributeValues, IConfiguration configuration, IProductsClient productsClient = default!, CancellationToken cancellationToken = default)

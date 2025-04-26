@@ -42,6 +42,8 @@ public sealed class CatalogContext(
 
     public DbSet<Product> Products { get; set; } = default!;
 
+    public DbSet<ProductSubscriptionPlan> ProductSubscriptionPlan { get; set; } = default!;
+
     public DbSet<ProductCategory> ProductCategories { get; set; } = default!;
 
     public DbSet<ProductImage> ProductImages { get; set; } = default!;

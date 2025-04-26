@@ -18,6 +18,16 @@ public sealed class ProductsService(IProductsClient productsClient) : IProductsS
         return product.Map();
     }
 
+    /*
+    public async Task<PagedResult<ProductSubscriptionPlan>> GetProductSubscriptionPlans(string productIdOrHandle, int? page = 1, int? pageSize = 10, CancellationToken cancellationToken = default)
+    {
+        //var product = await productsClient.GetProductByIdAsync(productIdOrHandle, cancellationToken);
+        //return product.Map();
+
+        return await productsClient.GetProductSubscriptionPlansAsync(productIdOrHandle, page, pageSize, null, null, cancellationToken);
+    }
+    */
+
     public async Task<Product?> FindProductVariantByAttributes(string productIdOrHandle, Dictionary<string, string?> selectedAttributeValues, CancellationToken cancellationToken = default)
     {
         var product = await productsClient.FindProductVariantByAttributesAsync(productIdOrHandle, selectedAttributeValues, cancellationToken);

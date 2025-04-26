@@ -17,7 +17,7 @@ public sealed class OrdersController : ControllerBase
     [ProducesResponseType<PagedResultOfOrder>(StatusCodes.Status200OK)]
     public async Task<ActionResult<PagedResultOfOrder>> GetOrders(int page = 1, int pageSize = 10, string? searchTerm = null, [FromServices] IOrdersClient ordersClient = default!, CancellationToken cancellationToken = default)
     {
-        var result = await ordersClient.GetOrdersAsync(page, pageSize, searchTerm, null, cancellationToken);
+        var result = await ordersClient.GetOrdersAsync(page, pageSize, searchTerm, cancellationToken);
 
         return Ok(result);
     }

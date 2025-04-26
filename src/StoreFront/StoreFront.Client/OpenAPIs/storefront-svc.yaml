@@ -11,7 +11,6 @@ paths:
     get:
       tags:
       - Cart
-      - Cart
       operationId: Cart_GetCart
       responses:
         200:
@@ -25,7 +24,6 @@ paths:
   /v1/cart/items:
     post:
       tags:
-      - Cart
       - Cart
       operationId: Cart_AddCartItem
       requestBody:
@@ -48,7 +46,6 @@ paths:
     delete:
       tags:
       - Cart
-      - Cart
       operationId: Cart_ClearCart
       responses:
         200:
@@ -58,7 +55,6 @@ paths:
   /v1/cart/items/{cartItemId}/quantity:
     put:
       tags:
-      - Cart
       - Cart
       operationId: Cart_UpdateCartItemQuantity
       parameters:
@@ -89,7 +85,6 @@ paths:
     put:
       tags:
       - Cart
-      - Cart
       operationId: Cart_UpdateCartItemData
       parameters:
       - name: cartItemId
@@ -119,7 +114,6 @@ paths:
     delete:
       tags:
       - Cart
-      - Cart
       operationId: Cart_RemoveCartItem
       parameters:
       - name: cartItemId
@@ -136,7 +130,6 @@ paths:
   /v1/productCategories:
     get:
       tags:
-      - ProductCategories
       - ProductCategories
       operationId: ProductCategories_GetProductCategories
       parameters:
@@ -175,7 +168,6 @@ paths:
     get:
       tags:
       - ProductCategories
-      - ProductCategories
       operationId: ProductCategories_GetProductCategoryById
       parameters:
       - name: id
@@ -197,7 +189,6 @@ paths:
     get:
       tags:
       - ProductCategories
-      - ProductCategories
       operationId: ProductCategories_GetProductCategoryTree
       parameters:
       - name: rootNodeIdOrPath
@@ -218,7 +209,6 @@ paths:
   /v1/products:
     get:
       tags:
-      - Products
       - Products
       operationId: Products_GetProducts
       parameters:
@@ -269,7 +259,6 @@ paths:
     get:
       tags:
       - Products
-      - Products
       operationId: Products_GetProductById
       parameters:
       - name: productIdOrHandle
@@ -287,10 +276,46 @@ paths:
                 $ref: '#/components/schemas/Product'
         404:
           description: ''
+  /v1/products/{productIdOrHandle}/subscriptionPlans:
+    get:
+      tags:
+      - Products
+      operationId: Products_GetProductSubscriptionPlans
+      parameters:
+      - name: productIdOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+          nullable: true
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+          nullable: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfProductSubscriptionPlan'
+        404:
+          description: ''
   /v1/products/{productIdOrHandle}/findVariant:
     post:
       tags:
-      - Products
       - Products
       operationId: Products_FindProductVariantByAttributes
       parameters:
@@ -323,7 +348,6 @@ paths:
   /v1/products/{productIdOrHandle}/find:
     post:
       tags:
-      - Products
       - Products
       operationId: Products_FindProductVariantsByAttributes
       parameters:
@@ -358,7 +382,6 @@ paths:
   /v1/products/{productIdOrHandle}/variants:
     get:
       tags:
-      - Products
       - Products
       operationId: Products_GetProductVariants
       parameters:
@@ -401,7 +424,6 @@ paths:
     post:
       tags:
       - Products
-      - Products
       operationId: Products_GetAvailableVariantAttributeValues
       parameters:
       - name: productIdOrHandle
@@ -442,7 +464,6 @@ paths:
     post:
       tags:
       - Checkout
-      - Checkout
       operationId: Checkout_Checkout
       requestBody:
         x-name: dto
@@ -458,7 +479,6 @@ paths:
   /v1/brands:
     get:
       tags:
-      - Brands
       - Brands
       operationId: Brands_GetBrands
       parameters:
@@ -503,7 +523,6 @@ paths:
     get:
       tags:
       - Orders
-      - Orders
       operationId: Orders_GetOrders
       parameters:
       - name: page
@@ -528,12 +547,6 @@ paths:
           type: string
           nullable: true
         x-position: 3
-      - name: categoryPath
-        in: query
-        schema:
-          type: string
-          nullable: true
-        x-position: 4
       responses:
         200:
           description: ''
@@ -1084,6 +1097,42 @@ components:
           type: integer
           format: int32
           nullable: true
+    PagedResultOfProductSubscriptionPlan:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSubscriptionPlan'
+        total:
+          type: integer
+          format: int32
+    ProductSubscriptionPlan:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        price:
+          type: number
+          format: decimal
+        trial:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ProductSubscriptionPlanTrial'
+    ProductSubscriptionPlanTrial:
+      type: object
+      additionalProperties: false
+      properties:
+        periodLength:
+          type: integer
+          format: int32
+        price:
+          type: number
+          format: decimal
     Checkout:
       type: object
       additionalProperties: false
@@ -1241,7 +1290,7 @@ components:
         discounts:
           type: array
           items:
-            $ref: '#/components/schemas/OrderDiscount'
+            $ref: '#/components/schemas/Discount'
         discount:
           type: number
           format: decimal
@@ -1602,24 +1651,23 @@ components:
       type: object
       additionalProperties: false
       properties:
-        thoroughfare:
+        street:
           type: string
-        premises:
+        city:
           type: string
-          nullable: true
-        subPremises:
-          type: string
-          nullable: true
         postalCode:
-          type: string
-        locality:
-          type: string
-        subAdministrativeArea:
-          type: string
-        administrativeArea:
           type: string
         country:
           type: string
+        addressLine2:
+          type: string
+          nullable: true
+        stateOrProvince:
+          type: string
+          nullable: true
+        careOf:
+          type: string
+          nullable: true
     ShippingDetails2:
       type: object
       additionalProperties: false
@@ -1663,10 +1711,14 @@ components:
         unit:
           type: string
           nullable: true
-        discount:
-          type: number
-          format: decimal
-          nullable: true
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemOption'
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Discount'
         regularPrice:
           type: number
           format: decimal
@@ -1737,26 +1789,50 @@ components:
           nullable: true
         renewalOption:
           $ref: '#/components/schemas/RenewalOption'
-    OrderVatAmount:
+    OrderItemOption:
       type: object
       additionalProperties: false
       properties:
+        id:
+          type: string
         name:
           type: string
-        vatRate:
-          type: number
-          format: double
-        subTotal:
-          type: number
-          format: decimal
-        vat:
+        description:
+          type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
+        productId:
+          type: string
+          nullable: true
+        itemId:
+          type: string
+          nullable: true
+        price:
           type: number
           format: decimal
           nullable: true
-        total:
+        discount:
           type: number
           format: decimal
-    OrderDiscount:
+          nullable: true
+        created:
+          type: string
+          format: date-time
+        createdBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+        lastModified:
+          type: string
+          format: date-time
+          nullable: true
+        lastModifiedBy:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/User'
+    Discount:
       type: object
       additionalProperties: false
       properties:
@@ -1782,6 +1858,25 @@ components:
           type: string
           format: date-time
           nullable: true
+    OrderVatAmount:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        vatRate:
+          type: number
+          format: double
+        subTotal:
+          type: number
+          format: decimal
+        vat:
+          type: number
+          format: decimal
+          nullable: true
+        total:
+          type: number
+          format: decimal
     EventData:
       type: object
       additionalProperties: false

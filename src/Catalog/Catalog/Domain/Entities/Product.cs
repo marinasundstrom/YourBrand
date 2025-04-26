@@ -24,7 +24,7 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
 
     readonly HashSet<ProductImage> _images = new HashSet<ProductImage>();
 
-    readonly HashSet<SubscriptionPlan> _subscriptionPlans = new HashSet<SubscriptionPlan>();
+    readonly HashSet<ProductSubscriptionPlan> _subscriptionPlans = new HashSet<ProductSubscriptionPlan>();
 
     private decimal _price;
     private decimal? _regularPrice;
@@ -336,11 +336,11 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
         }
     }
 
-    public IReadOnlyCollection<SubscriptionPlan> SubscriptionPlans => _subscriptionPlans;
+    public IReadOnlyCollection<ProductSubscriptionPlan> SubscriptionPlans => _subscriptionPlans;
 
     // Add or remove subscription plans
-    public bool AddSubscriptionPlan(SubscriptionPlan subscriptionPlan) => _subscriptionPlans.Add(subscriptionPlan);
-    public void RemoveSubscriptionPlan(SubscriptionPlan subscriptionPlan) => _subscriptionPlans.Remove(subscriptionPlan);
+    public bool AddSubscriptionPlan(ProductSubscriptionPlan subscriptionPlan) => _subscriptionPlans.Add(subscriptionPlan);
+    public void RemoveSubscriptionPlan(ProductSubscriptionPlan subscriptionPlan) => _subscriptionPlans.Remove(subscriptionPlan);
 
     // Calculate final price based on subscription
     public decimal GetSubscriptionPrice(bool isSubscribed)

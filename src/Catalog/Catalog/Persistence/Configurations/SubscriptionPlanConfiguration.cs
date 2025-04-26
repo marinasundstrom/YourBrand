@@ -6,9 +6,9 @@ using YourBrand.Catalog.Domain.Entities;
 
 namespace YourBrand.Catalog.Persistence.Configurations;
 
-public class SubscriptionPlanConfiguration : IEntityTypeConfiguration<SubscriptionPlan>
+public class SubscriptionPlanConfiguration : IEntityTypeConfiguration<ProductSubscriptionPlan>
 {
-    public void Configure(EntityTypeBuilder<SubscriptionPlan> builder)
+    public void Configure(EntityTypeBuilder<ProductSubscriptionPlan> builder)
     {
         builder.ToTable("SubscriptionPlans");
 

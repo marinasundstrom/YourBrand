@@ -1,7 +1,8 @@
-x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))
+x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))
 openapi: 3.0.0
 info:
   title: Catalog
+  description: ''
   version: v1
 servers:
 - url: https://localhost:5120
@@ -9,7 +10,6 @@ paths:
   /v1/brands:
     get:
       tags:
-      - Brands
       - Brands
       operationId: Brands_GetBrands
       parameters:
@@ -71,7 +71,6 @@ paths:
     post:
       tags:
       - Brands
-      - Brands
       operationId: Brands_CreateBrand
       parameters:
       - name: organizationId
@@ -101,7 +100,6 @@ paths:
     get:
       tags:
       - Brands
-      - Brands
       operationId: Brands_GetBrandById
       parameters:
       - name: organizationId
@@ -128,7 +126,6 @@ paths:
       - JWT: []
     put:
       tags:
-      - Brands
       - Brands
       operationId: Brands_UpdateBrand
       parameters:
@@ -161,8 +158,178 @@ paths:
     delete:
       tags:
       - Brands
-      - Brands
       operationId: Brands_DeleteBrand
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+  /v1/producers:
+    get:
+      tags:
+      - Producers
+      operationId: Producers_GetProducers
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: productCategoryId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 2
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 3
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfProducer'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Producers
+      operationId: Producers_CreateProducer
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProducer'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producer'
+      security:
+      - JWT: []
+  /v1/producers/{id}:
+    get:
+      tags:
+      - Producers
+      operationId: Producers_GetProducerById
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producer'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Producers
+      operationId: Producers_UpdateProducer
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProducer'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Producers
+      operationId: Producers_DeleteProducer
       parameters:
       - name: organizationId
         in: query
@@ -185,7 +352,6 @@ paths:
   /v1/currencies:
     get:
       tags:
-      - Currencies
       - Currencies
       operationId: Currencies_GetCurrencies
       parameters:
@@ -236,7 +402,6 @@ paths:
     get:
       tags:
       - VatRates
-      - VatRates
       operationId: VatRates_GetVatRates
       parameters:
       - name: page
@@ -285,7 +450,6 @@ paths:
   /v1/products/{idOrHandle}/variants:
     get:
       tags:
-      - Products
       - Products
       operationId: Products_GetVariants
       parameters:
@@ -350,7 +514,6 @@ paths:
     get:
       tags:
       - Products
-      - Products
       operationId: Products_GetVariant
       parameters:
       - name: organizationId
@@ -386,7 +549,6 @@ paths:
     delete:
       tags:
       - Products
-      - Products
       operationId: Products_DeleteVariant
       parameters:
       - name: organizationId
@@ -419,7 +581,6 @@ paths:
   /v1/products/{idOrHandle}/variants/findVariant:
     post:
       tags:
-      - Products
       - Products
       operationId: Products_FindVariantByAttributeValues
       parameters:
@@ -460,7 +621,6 @@ paths:
   /v1/products/{idOrHandle}/variants/find2:
     post:
       tags:
-      - Products
       - Products
       operationId: Products_FindsVariantsByAttributeValues
       parameters:
@@ -503,7 +663,6 @@ paths:
   /v1/products/{idOrHandle}/attributes/{attributeId}/availableValuesForVariant:
     post:
       tags:
-      - Products
       - Products
       operationId: Products_GetAvailableVariantAttributeValues
       parameters:
@@ -553,7 +712,6 @@ paths:
     post:
       tags:
       - Products
-      - Products
       operationId: Products_CreateVariant
       parameters:
       - name: organizationId
@@ -595,7 +753,6 @@ paths:
   /v1/products/{id}/variants/{variantId}:
     put:
       tags:
-      - Products
       - Products
       operationId: Products_UpdateVariant
       parameters:
@@ -646,7 +803,6 @@ paths:
     post:
       tags:
       - Products
-      - Products
       operationId: Products_UploadVariantImage
       parameters:
       - name: organizationId
@@ -693,7 +849,6 @@ paths:
     get:
       tags:
       - Products
-      - Products
       operationId: Products_GetProductAttributes
       parameters:
       - name: organizationId
@@ -722,7 +877,6 @@ paths:
       - JWT: []
     post:
       tags:
-      - Products
       - Products
       operationId: Products_AddProductAttribute
       parameters:
@@ -759,7 +913,6 @@ paths:
   /v1/products/{productId}/attributes/{attributeId}:
     put:
       tags:
-      - Products
       - Products
       operationId: Products_UpdateProductAttribute
       parameters:
@@ -802,7 +955,6 @@ paths:
     delete:
       tags:
       - Products
-      - Products
       operationId: Products_DeleteProductAttribute
       parameters:
       - name: organizationId
@@ -832,7 +984,6 @@ paths:
   /v1/products/{id}/options:
     get:
       tags:
-      - Products
       - Products
       operationId: ProductOptions_GetProductOptions
       parameters:
@@ -871,7 +1022,6 @@ paths:
     post:
       tags:
       - Products
-      - Products
       operationId: ProductOptions_CreateProductOption
       parameters:
       - name: organizationId
@@ -909,7 +1059,6 @@ paths:
   /v1/products/{id}/options/{optionId}:
     put:
       tags:
-      - Products
       - Products
       operationId: ProductOptions_UpdateProductOption
       parameters:
@@ -954,7 +1103,6 @@ paths:
     delete:
       tags:
       - Products
-      - Products
       operationId: ProductOptions_DeleteProductOption
       parameters:
       - name: organizationId
@@ -986,7 +1134,6 @@ paths:
   /v1/products/{id}/options/{optionId}/values:
     post:
       tags:
-      - Products
       - Products
       operationId: ProductOptions_CreateProductOptionValue
       parameters:
@@ -1032,7 +1179,6 @@ paths:
     delete:
       tags:
       - Products
-      - Products
       operationId: ProductOptions_DeleteProductOptionValue
       parameters:
       - name: organizationId
@@ -1071,7 +1217,6 @@ paths:
     get:
       tags:
       - Products
-      - Products
       operationId: ProductOptions_GetProductOptionGroups
       parameters:
       - name: organizationId
@@ -1102,7 +1247,6 @@ paths:
       - JWT: []
     post:
       tags:
-      - Products
       - Products
       operationId: ProductOptions_CreateProductOptionGroup
       parameters:
@@ -1141,7 +1285,6 @@ paths:
   /v1/products/{id}/options/groups/{optionGroupId}:
     put:
       tags:
-      - Products
       - Products
       operationId: ProductOptions_UpdateProductOptionGroup
       parameters:
@@ -1186,7 +1329,6 @@ paths:
     delete:
       tags:
       - Products
-      - Products
       operationId: ProductOptions_DeleteProductOptionGroup
       parameters:
       - name: organizationId
@@ -1215,10 +1357,72 @@ paths:
           description: ''
       security:
       - JWT: []
+  /v1/products/{idOrId}/subscriptionPlans:
+    get:
+      tags:
+      - ProductSubscriptionPlans
+      - Products
+      operationId: Products_GetProductSubscriptionPlans
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: storeId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 2
+      - name: idOrId
+        in: path
+        required: true
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 4
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResultOfProductSubscriptionPlan'
+      security:
+      - JWT: []
   /v1/products:
     get:
       tags:
-      - Products
       - Products
       operationId: Products_GetProducts
       parameters:
@@ -1304,7 +1508,6 @@ paths:
     post:
       tags:
       - Products
-      - Products
       operationId: Products_CreateProduct
       parameters:
       - name: organizationId
@@ -1335,7 +1538,6 @@ paths:
   /v1/products/ByIds:
     get:
       tags:
-      - Products
       - Products
       operationId: Products_GetProductsByIds
       parameters:
@@ -1383,7 +1585,6 @@ paths:
     get:
       tags:
       - Products
-      - Products
       operationId: Products_GetProductById
       parameters:
       - name: organizationId
@@ -1411,7 +1612,6 @@ paths:
       - JWT: []
     put:
       tags:
-      - Products
       - Products
       operationId: Products_UpdateProductDetails
       parameters:
@@ -1445,7 +1645,6 @@ paths:
     delete:
       tags:
       - Products
-      - Products
       operationId: Products_DeleteProduct
       parameters:
       - name: organizationId
@@ -1470,7 +1669,6 @@ paths:
   /v1/products/{idOrHandle}/price:
     put:
       tags:
-      - Products
       - Products
       operationId: Products_UpdateProductPrice
       parameters:
@@ -1505,7 +1703,6 @@ paths:
     put:
       tags:
       - Products
-      - Products
       operationId: Products_UpdateProductVatRate
       parameters:
       - name: organizationId
@@ -1538,7 +1735,6 @@ paths:
   /v1/products/{idOrHandle}/price/discount:
     post:
       tags:
-      - Products
       - Products
       operationId: Products_SetProductDiscountPrice
       parameters:
@@ -1573,7 +1769,6 @@ paths:
     post:
       tags:
       - Products
-      - Products
       operationId: Products_RestoreProductRegularPrice
       parameters:
       - name: organizationId
@@ -1606,7 +1801,6 @@ paths:
   /v1/products/{idOrHandle}/images:
     post:
       tags:
-      - Products
       - Products
       operationId: Products_UploadProductImage
       parameters:
@@ -1652,7 +1846,6 @@ paths:
     put:
       tags:
       - Products
-      - Products
       operationId: Products_UpdateProductImage
       parameters:
       - name: organizationId
@@ -1695,7 +1888,6 @@ paths:
     delete:
       tags:
       - Products
-      - Products
       operationId: Products_DeleteProductImage
       parameters:
       - name: organizationId
@@ -1730,7 +1922,6 @@ paths:
   /v1/products/{idOrHandle}/images/{productImageId}/setMainImage:
     put:
       tags:
-      - Products
       - Products
       operationId: Products_SetMainProductImage
       parameters:
@@ -1775,7 +1966,6 @@ paths:
     put:
       tags:
       - Products
-      - Products
       operationId: Products_UpdateProductHandle
       parameters:
       - name: organizationId
@@ -1808,7 +1998,6 @@ paths:
   /v1/products/{idOrHandle}/sku:
     put:
       tags:
-      - Products
       - Products
       operationId: Products_UpdateProductSku
       parameters:
@@ -1843,7 +2032,6 @@ paths:
     put:
       tags:
       - Products
-      - Products
       operationId: Products_UpdateProductListingState
       parameters:
       - name: organizationId
@@ -1876,7 +2064,6 @@ paths:
   /v1/products/{idOrHandle}/category:
     put:
       tags:
-      - Products
       - Products
       operationId: Products_UpdateProductCategory
       parameters:
@@ -1911,7 +2098,6 @@ paths:
     put:
       tags:
       - Products
-      - Products
       operationId: Products_UpdateProductBrand
       parameters:
       - name: organizationId
@@ -1945,7 +2131,6 @@ paths:
     post:
       tags:
       - Products
-      - Products
       operationId: Products_ImportProducts
       parameters:
       - name: organizationId
@@ -1977,7 +2162,6 @@ paths:
   /v1/productCategories:
     get:
       tags:
-      - ProductCategories
       - ProductCategories
       operationId: ProductCategories_GetProductCategories
       parameters:
@@ -2058,7 +2242,6 @@ paths:
     post:
       tags:
       - ProductCategories
-      - ProductCategories
       operationId: ProductCategories_CreateProductCategory
       parameters:
       - name: organizationId
@@ -2088,7 +2271,6 @@ paths:
       - JWT: []
     put:
       tags:
-      - ProductCategories
       - ProductCategories
       operationId: ProductCategories_UpdateProductCategoryDetails
       parameters:
@@ -2126,7 +2308,6 @@ paths:
     delete:
       tags:
       - ProductCategories
-      - ProductCategories
       operationId: ProductCategories_DeleteProductCategory
       parameters:
       - name: organizationId
@@ -2151,7 +2332,6 @@ paths:
   /v1/productCategories/tree:
     get:
       tags:
-      - ProductCategories
       - ProductCategories
       operationId: ProductCategories_GetProductCategoryTree
       parameters:
@@ -2187,7 +2367,6 @@ paths:
   /v1/attributes:
     get:
       tags:
-      - Attributes
       - Attributes
       operationId: Attributes_GetAttributes
       parameters:
@@ -2253,7 +2432,6 @@ paths:
     post:
       tags:
       - Attributes
-      - Attributes
       operationId: Attributes_CreateAttribute
       parameters:
       - name: organizationId
@@ -2283,7 +2461,6 @@ paths:
     get:
       tags:
       - Attributes
-      - Attributes
       operationId: Attributes_GetAttributeById
       parameters:
       - name: organizationId
@@ -2307,7 +2484,6 @@ paths:
                 $ref: '#/components/schemas/Attribute'
     put:
       tags:
-      - Attributes
       - Attributes
       operationId: Attributes_UpdateAttribute
       parameters:
@@ -2337,7 +2513,6 @@ paths:
     delete:
       tags:
       - Attributes
-      - Attributes
       operationId: Attributes_DeleteAttribute
       parameters:
       - name: organizationId
@@ -2358,7 +2533,6 @@ paths:
   /v1/attributes/values:
     post:
       tags:
-      - Attributes
       - Attributes
       operationId: Attributes_CreateAttributeValue
       parameters:
@@ -2395,7 +2569,6 @@ paths:
     delete:
       tags:
       - Attributes
-      - Attributes
       operationId: Attributes_DeleteAttributeValue
       parameters:
       - name: organizationId
@@ -2425,7 +2598,6 @@ paths:
     get:
       tags:
       - Attributes
-      - Attributes
       operationId: Attributes_GetAttributeGroups
       parameters:
       - name: organizationId
@@ -2447,7 +2619,6 @@ paths:
           description: ''
     post:
       tags:
-      - Attributes
       - Attributes
       operationId: Attributes_CreateAttributeGroup
       parameters:
@@ -2477,7 +2648,6 @@ paths:
   /v1/attributes/groups/{id}:
     put:
       tags:
-      - Attributes
       - Attributes
       operationId: Attributes_UpdateAttributeGroup
       parameters:
@@ -2513,7 +2683,6 @@ paths:
     delete:
       tags:
       - Attributes
-      - Attributes
       operationId: Attributes_DeleteAttributeGroup
       parameters:
       - name: organizationId
@@ -2536,7 +2705,6 @@ paths:
   /v1/options:
     get:
       tags:
-      - Options
       - Options
       operationId: Options_GetOptions
       parameters:
@@ -2567,7 +2735,6 @@ paths:
     get:
       tags:
       - Options
-      - Options
       operationId: Options_GetOptionValues
       parameters:
       - name: organizationId
@@ -2596,7 +2763,6 @@ paths:
   /v1/stores:
     get:
       tags:
-      - Stores
       - Stores
       operationId: Stores_GetStores
       parameters:
@@ -2652,7 +2818,6 @@ paths:
     post:
       tags:
       - Stores
-      - Stores
       operationId: Stores_CreateStore
       parameters:
       - name: organizationId
@@ -2682,7 +2847,6 @@ paths:
     get:
       tags:
       - Stores
-      - Stores
       operationId: Stores_GetStoreById
       parameters:
       - name: organizationId
@@ -2710,7 +2874,6 @@ paths:
   /v1/stores/{id}:
     put:
       tags:
-      - Stores
       - Stores
       operationId: Stores_UpdateStore
       parameters:
@@ -2741,7 +2904,6 @@ paths:
       - JWT: []
     delete:
       tags:
-      - Stores
       - Stores
       operationId: Stores_DeleteStore
       parameters:
@@ -2834,6 +2996,44 @@ components:
         handle:
           type: string
     UpdateBrand:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+    PagedResultOfProducer:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Producer'
+        total:
+          type: integer
+          format: int32
+    Producer:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        handle:
+          type: string
+    CreateProducer:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        handle:
+          type: string
+    UpdateProducer:
       type: object
       additionalProperties: false
       properties:
@@ -3569,6 +3769,42 @@ components:
           type: integer
           format: int32
           nullable: true
+    PagedResultOfProductSubscriptionPlan:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSubscriptionPlan'
+        total:
+          type: integer
+          format: int32
+    ProductSubscriptionPlan:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        price:
+          type: number
+          format: decimal
+        trial:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/ProductSubscriptionPlanTrial'
+    ProductSubscriptionPlanTrial:
+      type: object
+      additionalProperties: false
+      properties:
+        periodLength:
+          type: integer
+          format: int32
+        price:
+          type: number
+          format: decimal
     CreateProductRequest:
       type: object
       additionalProperties: false

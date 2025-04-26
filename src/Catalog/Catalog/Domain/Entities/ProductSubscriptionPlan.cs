@@ -7,11 +7,11 @@ using YourBrand.Tenancy;
 
 namespace YourBrand.Catalog.Domain.Entities;
 
-public class SubscriptionPlan : Entity<string>, IHasTenant, IAuditableEntity<string>, ISoftDeletableWithAudit
+public class ProductSubscriptionPlan : Entity<string>, IHasTenant, IAuditableEntity<string>, ISoftDeletableWithAudit, IHasOrganization
 {
-    private SubscriptionPlan() { }
+    private ProductSubscriptionPlan() { }
 
-    public SubscriptionPlan(
+    public ProductSubscriptionPlan(
         string title,
         string? description,
         TimeInterval subscriptionCycle,
@@ -47,6 +47,8 @@ public class SubscriptionPlan : Entity<string>, IHasTenant, IAuditableEntity<str
     public OrganizationId OrganizationId { get; set; }
 
     public int ProductId { get; private set; }
+
+    public Product Product { get; private set; }
 
     public string Title { get; private set; }
     public string? Description { get; private set; }

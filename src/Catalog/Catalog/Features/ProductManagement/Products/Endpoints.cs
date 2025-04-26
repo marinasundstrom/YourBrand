@@ -12,6 +12,7 @@ using YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 using YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 using YourBrand.Catalog.Features.ProductManagement.Products.Images;
 using YourBrand.Catalog.Features.ProductManagement.Products.Options;
+using YourBrand.Catalog.Features.ProductManagement.SubscriptionPlans.SubscriptionPlans;
 using YourBrand.Catalog.Features.Stores;
 using YourBrand.Catalog.Model;
 using YourBrand.Extensions;
@@ -25,7 +26,8 @@ public static partial class Endpoints
         MapProductVariantsEndpoints(app);
 
         app.MapProductAttributesEndpoints()
-            .MapProductOptionsEndpoints();
+            .MapProductOptionsEndpoints()
+            .MapProductSubscriptionPlansEndpoints();
 
         var versionedApi = app.NewVersionedApi("Products");
 
