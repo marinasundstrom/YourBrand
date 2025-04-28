@@ -49,6 +49,9 @@ public static partial class Endpoints
             .WithName($"Products_{nameof(GetProductById)}")
             .CacheOutput(OutputCachePolicyNames.GetProductById);
 
+        group.MapPost("/{idOrHandle}/price", CalculateProductPrice)
+            .WithName($"Products_{nameof(CalculateProductPrice)}");
+
         group.MapPost("/", CreateProduct)
             .AddEndpointFilter<ValidationFilter<CreateProductRequest>>()
             .WithName($"Products_{nameof(CreateProduct)}");
@@ -132,6 +135,13 @@ public static partial class Endpoints
         var result = await mediator.Send(new GetProductById(organizationId, idOrHandle), cancellationToken);
 
         return result.IsSuccess ? TypedResults.Ok(result.GetValue()) : TypedResults.NotFound();
+    }
+    
+    private static async Task<Results<Ok<ProductPriceResult>, NotFound>> CalculateProductPrice(string organizationId, string idOrHandle, CalculateProductPriceRequest request, IMediator mediator, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new CalculateProductPrice(organizationId, idOrHandle, request.OptionValues, request.SubscriptionPlanId), cancellationToken);
+
+        return TypedResults.Ok(result);
     }
 
     private static async Task<Results<Ok<ProductDto>, BadRequest, ProblemHttpResult>> CreateProduct(string organizationId, CreateProductRequest request,
@@ -392,3 +402,6 @@ public record class CreateProductImageData(string? Title, string? Text);
 public record class UpdateProductImageData(string? Title, string? Text);
 
 public record class SetMainProductImageData();
+
+public record class CalculateProductPriceRequest(
+        List<ProductOptionValue> OptionValues, string? SubscriptionPlanId = null);

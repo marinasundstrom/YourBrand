@@ -1667,6 +1667,42 @@ paths:
       security:
       - JWT: []
   /v1/products/{idOrHandle}/price:
+    post:
+      tags:
+      - Products
+      operationId: Products_CalculateProductPrice
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculateProductPriceRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPriceResult'
+        404:
+          description: ''
+      security:
+      - JWT: []
     put:
       tags:
       - Products
@@ -3805,6 +3841,43 @@ components:
         price:
           type: number
           format: decimal
+    ProductPriceResult:
+      type: object
+      additionalProperties: false
+      properties:
+        basePrice:
+          type: number
+          format: decimal
+        optionsTotal:
+          type: number
+          format: decimal
+        discountAmount:
+          type: number
+          format: decimal
+        total:
+          type: number
+          format: decimal
+    CalculateProductPriceRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        optionValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductOptionValue'
+        subscriptionPlanId:
+          type: string
+          nullable: true
+    ProductOptionValue:
+      type: object
+      additionalProperties: false
+      properties:
+        optionId:
+          type: string
+        numericValue:
+          type: number
+          format: decimal
+          nullable: true
     CreateProductRequest:
       type: object
       additionalProperties: false

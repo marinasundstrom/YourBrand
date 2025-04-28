@@ -117,7 +117,9 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
         }
     }
 
-    //public decimal Vat { get; set; }
+    public PricingModel PricingModel { get; set; }
+
+    public DiscountApplicationMode DiscountApplicationMode { get; set; }
 
     public double? VatRate { get; set; }
 
@@ -355,4 +357,17 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
     {
         return basePrice - GetSubscriptionPrice(true);
     }
+}
+
+public enum PricingModel
+{
+    FixedPrice,          // Använd Price rakt av, inga options.
+    OptionsBased,        // Price + eventuella optionskostnader.
+    SubscriptionBased    // Prenumerationslogik, kanske med rabatter.
+}
+
+public enum DiscountApplicationMode
+{
+    OnBasePrice,               // Rabatt gäller BasePrice innan options läggs på.
+    AfterOptions               // Rabatt gäller på totalsumman (BasePrice + options).
 }
