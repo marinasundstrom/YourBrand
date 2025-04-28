@@ -7,7 +7,8 @@ public static class ServicesExtensions
     public static IServiceCollection AddProductsServices(this IServiceCollection services)
     {
         services.AddScoped<ProductPricingService>();
-        
+        services.AddScoped<ProductOptionValidationService>();
+
         services.AddScoped<IProductImageUploader, ProductImageUploader>();
 
         return services;

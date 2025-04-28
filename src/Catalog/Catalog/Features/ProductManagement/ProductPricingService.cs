@@ -78,7 +78,7 @@ public class ProductPricingService
             }
             else if (option is ChoiceOption choiceOption)
             {
-                var chosenValue = choiceOption.Values.FirstOrDefault(v => v.Id == selected.OptionId);
+                var chosenValue = choiceOption.Values.FirstOrDefault(v => v.Id == selected.ChoiceValueId);
                 if (chosenValue is not null)
                 {
                     optionsTotal += chosenValue.Price.GetValueOrDefault();
@@ -94,6 +94,7 @@ public class ProductOptionValue
 {
     public string OptionId { get; set; }
     public decimal? NumericValue { get; set; }
+    public string? ChoiceValueId { get; set; }
 }
 
 public class ProductPriceResult

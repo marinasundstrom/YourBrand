@@ -3878,6 +3878,9 @@ components:
           type: number
           format: decimal
           nullable: true
+        choiceValueId:
+          type: string
+          nullable: true
     CreateProductRequest:
       type: object
       additionalProperties: false
