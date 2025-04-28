@@ -39,15 +39,19 @@
           <img src="/logo.svg" class="me-1" alt="Your Brand" />
         </h5>
       </a>
+      <a class="nav-link menu-link me-3 text-decoration-none text-uppercase list-inline mb-0 d-inline-block d-lg-none"
+          href="search">
+          <i class="bi bi-search"></i>
+        </a>
     </div>
 
     <div class="offcanvas offcanvas-start navbar-light bg-white" id="offcanvasNavbar"
       aria-labelledby="offcanvasNavbarLabel">
-      <div class="offcanvas-header text-light">
+      <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
           <img src="/logo.svg" class="me-1 mb-1" alt="YourBrand" /> YourBrand
         </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-start flex-grow-1 gap-md-2 pe-3">
@@ -99,11 +103,6 @@
     </div>
 
     <ul class="navbar-nav list-inline mb-0 d-inline-block d-lg-none">
-      <li class="list-inline-item"> <a class="nav-link menu-link me-3 text-decoration-none text-uppercase"
-          href="search">
-          <i class="bi bi-search"></i>
-        </a></li>
-
       <AuthorizeView>
         <li class="list-inline-item"> <a class="nav-link menu-link me-3 text-decoration-none text-uppercase"
             href="@PageRoutes.Profile">

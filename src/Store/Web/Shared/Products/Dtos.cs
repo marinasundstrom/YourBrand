@@ -5,6 +5,10 @@ using BlazorApp.ProductCategories;
 
 public sealed record Product(long Id, string Name, Brand? brand, ProductCategoryParent? Category, ProductImage? Image, IEnumerable<ProductImage> Images, string Description, decimal Price, double? VatRate, decimal? RegularPrice, double? DiscountRate, string Handle, bool HasVariants, IEnumerable<ProductAttribute> Attributes, IEnumerable<ProductOption> Options);
 
+public sealed record ProductSubscriptionPlan(string Id, string Name, decimal Price, ProductSubscriptionPlanTrial? Trial);
+
+public sealed record ProductSubscriptionPlanTrial(int PeriodLength, decimal Price);
+
 public sealed record ProductImage(string Id, string? Title, string? Text, string Url);
 
 public sealed record ProductAttribute(Attribute Attribute, AttributeValue? Value, bool ForVariant, bool IsMainAttribute);
@@ -35,3 +39,20 @@ public enum OptionType
 }
 
 public sealed record OptionValue(string Id, string Name, string? Sku, decimal? Price, int? Seq);
+
+public static class Mappings
+{
+    public static ProductSubscriptionPlan Map(this YourBrand.StoreFront.ProductSubscriptionPlan subscriptionPlan)
+    {
+        return new ProductSubscriptionPlan(
+            subscriptionPlan.Id,
+            subscriptionPlan.Name,
+            subscriptionPlan.Price,
+            subscriptionPlan.Trial is not null ? subscriptionPlan.Trial.ToDto() : null);
+    }
+
+    public static ProductSubscriptionPlanTrial ToDto(this YourBrand.StoreFront.ProductSubscriptionPlanTrial trialPeriod)
+    {
+        return new ProductSubscriptionPlanTrial(trialPeriod.PeriodLength, trialPeriod.Price);
+    }
+}

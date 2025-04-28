@@ -6,7 +6,7 @@ using YourBrand.Catalog.Domain.Entities;
 
 namespace YourBrand.Catalog.Persistence.Configurations;
 
-public class SubscriptionPlanConfiguration : IEntityTypeConfiguration<ProductSubscriptionPlan>
+public class ProductSubscriptionPlanConfiguration : IEntityTypeConfiguration<ProductSubscriptionPlan>
 {
     public void Configure(EntityTypeBuilder<ProductSubscriptionPlan> builder)
     {

@@ -91,7 +91,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder
             .HasMany(x => x.SubscriptionPlans)
-            .WithOne()
+            .WithOne(x => x.Product)
             .HasForeignKey(x => new { x.OrganizationId, x.ProductId })
             .OnDelete(DeleteBehavior.Cascade);
     }

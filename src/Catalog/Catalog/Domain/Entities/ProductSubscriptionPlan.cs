@@ -12,7 +12,7 @@ public class ProductSubscriptionPlan : Entity<string>, IHasTenant, IAuditableEnt
     private ProductSubscriptionPlan() { }
 
     public ProductSubscriptionPlan(
-        string title,
+        string name,
         string? description,
         TimeInterval subscriptionCycle,
         TimeInterval billingCycle,
@@ -24,7 +24,7 @@ public class ProductSubscriptionPlan : Entity<string>, IHasTenant, IAuditableEnt
         decimal? fixedDiscountAmount = null,
         TrialPeriod? trialPeriod = null) : base(Guid.NewGuid().ToString())
     {
-        Title = title ?? throw new ArgumentNullException(nameof(title));
+        Name = name ?? throw new ArgumentNullException(nameof(name));
         SubscriptionCycle = subscriptionCycle;
         BillingCycle = billingCycle;
         RenewalCycle = renewalCycle;
@@ -50,7 +50,8 @@ public class ProductSubscriptionPlan : Entity<string>, IHasTenant, IAuditableEnt
 
     public Product Product { get; private set; }
 
-    public string Title { get; private set; }
+    // TODO: Change to Name
+    public string Name { get; private set; }
     public string? Description { get; private set; }
 
     public bool IsActive { get; private set; }

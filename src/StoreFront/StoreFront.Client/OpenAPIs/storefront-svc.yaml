@@ -1114,7 +1114,7 @@ components:
       properties:
         id:
           type: string
-        title:
+        name:
           type: string
         price:
           type: number

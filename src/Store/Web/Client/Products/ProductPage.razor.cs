@@ -13,6 +13,8 @@ namespace Client.Products;
 
 public partial class ProductPage
 {
+    IEnumerable<ProductSubscriptionPlan> subscriptionPlans = new List<ProductSubscriptionPlan>();
+
     int quantity = 1;
     readonly string currency = "SEK";
     ProductInfo? productInfo;
@@ -33,6 +35,8 @@ public partial class ProductPage
 
     [SupplyParameterFromPersistentComponentState]
     public ProductViewModel? productViewModel { get; set; }
+
+    public string? SelectedPlanId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -83,6 +87,10 @@ public partial class ProductPage
             var str = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(Data));
             Deserialize(str);
         }
+
+        //TEMP
+
+        subscriptionPlans = (await ProductsService.GetProductSubscriptionPlans(Id, 1, 10)).Items;
     }
 
     private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)

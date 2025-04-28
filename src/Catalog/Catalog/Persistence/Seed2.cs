@@ -1093,10 +1093,16 @@ public static class Seed2
             ImageId = PlaceholderImage.Id
         }, cancellationToken);
 
-        var subscriptionPlan1 = new ProductSubscriptionPlan("Weekly cleaning", "Coming to your house weekly", TimeInterval.Weekly, TimeInterval.Monthly, RenewalOption.Manual, RenewalInterval.Months, 3, TimeSpan.FromDays(14), discountPercentage: 0.1);
+        var areaOption = new NumericalValueOption("Area (m²)");
+        areaOption.MinNumericalValue = 20;
+        areaOption.Price = 50;
+
+        product.AddOption(areaOption);
+
+        var subscriptionPlan1 = new ProductSubscriptionPlan("Weekly cleaning", "Coming to your house weekly", TimeInterval.Weekly, TimeInterval.Monthly, RenewalOption.Manual, RenewalInterval.Months, 3, TimeSpan.FromDays(14), discountPercentage: 10);
         product.AddSubscriptionPlan(subscriptionPlan1);
 
-        var subscriptionPlan2 = new ProductSubscriptionPlan("Monthly cleaning", "Coming to your house monthly", TimeInterval.Monthly, TimeInterval.Monthly, RenewalOption.Manual, RenewalInterval.Years, 1, TimeSpan.FromDays(30), discountPercentage: 0.3);
+        var subscriptionPlan2 = new ProductSubscriptionPlan("Monthly cleaning", "Coming to your house monthly", TimeInterval.Monthly, TimeInterval.Monthly, RenewalOption.Manual, RenewalInterval.Years, 1, TimeSpan.FromDays(30), discountPercentage: 30);
         product.AddSubscriptionPlan(subscriptionPlan2);
 
         services.AddProduct(product);

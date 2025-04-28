@@ -14,6 +14,7 @@ public sealed record GetProductSubscriptionPlans(string OrganizationId, string? 
         public async Task<PagedResult<ProductSubscriptionPlanDto>> Handle(GetProductSubscriptionPlans request, CancellationToken cancellationToken)
         {
             var query = catalogContext.ProductSubscriptionPlan
+                        .Include(x => x.Product)
                         .InOrganization(request.OrganizationId)
                         .AsSplitQuery()
                         .AsNoTracking()
@@ -41,7 +42,7 @@ public sealed record GetProductSubscriptionPlans(string OrganizationId, string? 
 
             if (request.SortBy is null || request.SortDirection is null)
             {
-                query = query.OrderBy(x => x.Title);
+                query = query.OrderBy(x => x.Name);
             }
             else
             {

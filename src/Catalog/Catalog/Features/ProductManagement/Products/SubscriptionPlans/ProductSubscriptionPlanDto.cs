@@ -1,6 +1,6 @@
 namespace YourBrand.Catalog.Features.ProductManagement.SubscriptionPlans.SubscriptionPlans;
 
-public record ProductSubscriptionPlanDto(string Id, string Title, decimal Price, ProductSubscriptionPlanTrialDto? Trial);
+public record ProductSubscriptionPlanDto(string Id, string Name, decimal Price, ProductSubscriptionPlanTrialDto? Trial);
 
 public record ProductSubscriptionPlanTrialDto(int PeriodLength, decimal Price);
 
@@ -10,13 +10,13 @@ public static class Mappings
     {
         return new ProductSubscriptionPlanDto(
             subscriptionPlan.Id,
-            subscriptionPlan.Title,
-            0,
-            subscriptionPlan.Trial.HasTrial ? subscriptionPlan.Trial.ToDto() : null);
+            subscriptionPlan.Name,
+            subscriptionPlan.GetSubscriptionPrice(subscriptionPlan.Product.Price),
+            subscriptionPlan.Trial.HasTrial ? subscriptionPlan.Trial.ToDto(subscriptionPlan.Product) : null);
     }
 
-    public static ProductSubscriptionPlanTrialDto ToDto(this Domain.Entities.TrialPeriod trialPeriod)
+    public static ProductSubscriptionPlanTrialDto ToDto(this Domain.Entities.TrialPeriod trialPeriod, Domain.Entities.Product product)
     {
-        return new ProductSubscriptionPlanTrialDto(trialPeriod.Length, 0);
+        return new ProductSubscriptionPlanTrialDto(trialPeriod.Length, trialPeriod.GetTrialPrice(product.Price));
     }
 }

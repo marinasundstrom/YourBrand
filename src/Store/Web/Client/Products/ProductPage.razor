@@ -324,6 +324,25 @@ else
                 }
             </div>
 
+            @if(subscriptionPlans.Any())
+            {
+            <div class="form-floating mt-4">
+                <InputSelect TValue="string?" @bind-Value="SelectedPlanId"
+                    class="form-select" aria-label="Subscription plan" placeholder="Choose a plan">
+                    @* <option selected>None</option> *@
+                    @foreach (var plan in subscriptionPlans)
+                    {
+                        <option value="@plan.Id">
+                            @plan.Name (@plan.Price.FormatCurrency(currency))
+                        </option>
+                    }
+                </InputSelect>
+                <label for="exampleInputEmail1">
+                    Subscription plan
+                </label>
+            </div>
+            }
+
             <div class="accordion mt-5" id="accordionExample">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingOne">
