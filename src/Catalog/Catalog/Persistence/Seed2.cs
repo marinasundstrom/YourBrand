@@ -1090,7 +1090,8 @@ public static class Seed2
             ListingState = Domain.Enums.ProductListingState.Listed,
             BrandId = brand.Id,
             StoreId = store.Id,
-            ImageId = PlaceholderImage.Id
+            ImageId = PlaceholderImage.Id,
+            Price = 1500,
         }, cancellationToken);
 
         var areaOption = new NumericalValueOption("Area (m²)");

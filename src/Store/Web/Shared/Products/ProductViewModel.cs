@@ -45,6 +45,7 @@ public class ProductViewModel
 
     public decimal Total => Price
                 + OptionGroups.SelectMany(x => x.Options)
+                // Exclude options with default values
                 .Where(x => x.IsSelected || x.SelectedValueId is not null)
                 .Select(x => x.Price.GetValueOrDefault() + (x.Values.FirstOrDefault(x3 => x3.Id == x?.SelectedValueId)?.Price ?? 0))
                 .Sum()
