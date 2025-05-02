@@ -7,6 +7,8 @@ public interface IProductsService
 
     Task<Product> GetProductById(string productIdOrHandle, CancellationToken cancellationToken = default);
 
+    Task<ProductPriceResult> CalculatePrice(string productIdOrHandle, CalculateProductPriceRequest request, CancellationToken cancellationToken = default);
+
     Task<PagedResult<ProductSubscriptionPlan>> GetProductSubscriptionPlans(string productIdOrHandle, int? page = 1, int? pageSize = 10, CancellationToken cancellationToken = default);
 
     Task<Product?> FindProductVariantByAttributes(string productIdOrHandle, Dictionary<string, string?> selectedAttributeValues, CancellationToken cancellationToken = default);

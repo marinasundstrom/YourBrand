@@ -276,6 +276,35 @@ paths:
                 $ref: '#/components/schemas/Product'
         404:
           description: ''
+  /v1/products/{productIdOrHandle}/price:
+    post:
+      tags:
+      - Products
+      operationId: Products_CalculateProductPrice
+      parameters:
+      - name: productIdOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculateProductPriceRequest'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPriceResult'
+        404:
+          description: ''
   /v1/products/{productIdOrHandle}/subscriptionPlans:
     get:
       tags:
@@ -1096,6 +1125,46 @@ components:
         seq:
           type: integer
           format: int32
+          nullable: true
+    ProductPriceResult:
+      type: object
+      additionalProperties: false
+      properties:
+        basePrice:
+          type: number
+          format: decimal
+        optionsTotal:
+          type: number
+          format: decimal
+        discountAmount:
+          type: number
+          format: decimal
+        total:
+          type: number
+          format: decimal
+    CalculateProductPriceRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        optionValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductOptionValue'
+        subscriptionPlanId:
+          type: string
+          nullable: true
+    ProductOptionValue:
+      type: object
+      additionalProperties: false
+      properties:
+        optionId:
+          type: string
+        numericValue:
+          type: number
+          format: decimal
+          nullable: true
+        choiceValueId:
+          type: string
           nullable: true
     PagedResultOfProductSubscriptionPlan:
       type: object

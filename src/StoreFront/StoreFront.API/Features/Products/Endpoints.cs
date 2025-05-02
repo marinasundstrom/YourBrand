@@ -29,6 +29,9 @@ public static class Endpoints
             .WithName($"Products_{nameof(GetProductById)}")
             .CacheOutput(OutputCachePolicyNames.GetProductById);
 
+        productsGroup.MapPost("/{productIdOrHandle}/price", CalculateProductPrice)
+            .WithName($"Products_{nameof(CalculateProductPrice)}");
+
         productsGroup.MapGet("/{productIdOrHandle}/subscriptionPlans", GetProductSubscriptionPlans)
             .WithName($"Products_{nameof(GetProductSubscriptionPlans)}");
 
@@ -65,6 +68,12 @@ public static class Endpoints
     {
         var product = await productsClient.GetProductByIdAsync(configuration["OrganizationId"]!, productIdOrHandle, cancellationToken);
         return product is not null ? TypedResults.Ok(product.Map()) : TypedResults.NotFound();
+    }
+
+    private static async Task<Results<Ok<ProductPriceResult>, NotFound>> CalculateProductPrice(string productIdOrHandle, CalculateProductPriceRequest request, IConfiguration configuration, IProductsClient productsClient = default!, CancellationToken cancellationToken = default)
+    {
+        var result = await productsClient.CalculateProductPriceAsync(configuration["OrganizationId"]!, productIdOrHandle, request, cancellationToken);        
+        return TypedResults.Ok(result);
     }
 
     private static async Task<Results<Ok<PagedResult<ProductSubscriptionPlan>>, NotFound>> GetProductSubscriptionPlans(string productIdOrHandle, int? page = 1, int? pageSize = 10, IConfiguration configuration = null, IProductsClient productsClient = default!, IStoresClient storesClient = default!, CancellationToken cancellationToken = default)

@@ -18,6 +18,12 @@ public sealed class ProductsService(IProductsClient productsClient) : IProductsS
         return product.Map();
     }
 
+    public async Task<ProductPriceResult> CalculatePrice(string productIdOrHandle, CalculateProductPriceRequest request, CancellationToken cancellationToken = default)
+    {
+        var result = await productsClient.CalculateProductPriceAsync(productIdOrHandle, request.Map(), cancellationToken);
+        return result?.Map()!;
+    }
+    
     public async Task<PagedResult<ProductSubscriptionPlan>> GetProductSubscriptionPlans(string productIdOrHandle, int? page = 1, int? pageSize = 10, CancellationToken cancellationToken = default)
     {
         var results = await productsClient.GetProductSubscriptionPlansAsync(productIdOrHandle, page, pageSize, cancellationToken);

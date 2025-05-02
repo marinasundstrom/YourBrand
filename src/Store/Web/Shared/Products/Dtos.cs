@@ -56,3 +56,37 @@ public static class Mappings
         return new ProductSubscriptionPlanTrial(trialPeriod.PeriodLength, trialPeriod.Price);
     }
 }
+
+public record class CalculateProductPriceRequest(
+    List<ProductOptionValue> OptionValues, string? SubscriptionPlanId = null);
+
+public record ProductOptionValue(string OptionId, decimal? NumericValue, string? ChoiceValueId);
+
+public record ProductPriceResult(decimal BasePrice, decimal OptionsTotal, decimal DiscountAmount, decimal Total);
+
+public static class Mappings2
+{
+    public static YourBrand.StoreFront.CalculateProductPriceRequest Map(this CalculateProductPriceRequest request)
+    {
+        return new YourBrand.StoreFront.CalculateProductPriceRequest {
+            OptionValues = request.OptionValues.Select(x => x.ToDto()).ToList(),
+            SubscriptionPlanId =  request.SubscriptionPlanId
+        };
+    }
+
+    public static YourBrand.StoreFront.ProductOptionValue ToDto(this ProductOptionValue productOptionValue)
+    {
+        return new YourBrand.StoreFront.ProductOptionValue
+        {
+            OptionId = productOptionValue.OptionId, 
+            NumericValue = productOptionValue.NumericValue, 
+            ChoiceValueId = productOptionValue.ChoiceValueId
+        };
+    }
+    
+    public static ProductPriceResult Map(this YourBrand.StoreFront.ProductPriceResult productPriceResult)
+    {
+        return new ProductPriceResult(productPriceResult.BasePrice, productPriceResult.OptionsTotal,
+            productPriceResult.DiscountAmount, productPriceResult.Total);
+    }
+}

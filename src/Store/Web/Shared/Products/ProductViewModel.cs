@@ -43,6 +43,11 @@ public class ProductViewModel
 
     public decimal Price => Variant?.Price ?? Product?.Price ?? 0; //Variant?.Price?.Amount ?? Product?.Price?.Amount ?? 0;
 
+    async Task Foo()
+    {
+        await this.productsService.CalculatePrice(Product!.Handle, new CalculateProductPriceRequest([], null));
+    }
+    
     public decimal Total => Price
                 + OptionGroups.SelectMany(x => x.Options)
                 // Exclude options with default values
