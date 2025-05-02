@@ -17,7 +17,7 @@ public class ReminderService(IInvoicesClient invoicesClient, IJournalEntriesClie
 
         logger.LogInformation("Querying for invoices");
 
-        var results = await invoicesClient.GetInvoicesAsync(organizationId, 0, 100, null, [(int)InvoiceStatuses.PartiallyPaid, (int)InvoiceStatuses.Sent], null, null, null);
+        var results = await invoicesClient.GetInvoicesAsync(organizationId, null, 0, 100, null, [(int)InvoiceStatuses.PartiallyPaid, (int)InvoiceStatuses.Sent], null, null, null);
 
         using (var scope = serviceScopeFactory.CreateScope())
         {

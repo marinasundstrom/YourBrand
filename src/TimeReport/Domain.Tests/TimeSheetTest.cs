@@ -22,11 +22,11 @@ public class TimeSheetTest
 
         organization.AddProject(project);
 
-        TaskType taskType = organization.AddActivityType("Test task type", "Desc");
+        TaskType taskType = organization.AddTaskType("Test task type", "Desc");
 
         _task = new("Activity", taskType, "Des");
 
-        project.AddActivity(_task);
+        project.AddTask(_task);
 
         _user = new();
     }
@@ -39,7 +39,7 @@ public class TimeSheetTest
 
         TimeSheet timeSheet = new(_user, year, week);
 
-        var timeSheetActivity = timeSheet.AddActivity(_task);
+        var timeSheetActivity = timeSheet.AddTask(_task);
 
         var date = ISOWeek.ToDateTime(year, week, DayOfWeek.Monday);
         var dateOnly = DateOnly.FromDateTime(date);
@@ -58,7 +58,7 @@ public class TimeSheetTest
 
         TimeSheet timeSheet = new(_user, year, week);
 
-        var timeSheetActivity = timeSheet.AddActivity(_task);
+        var timeSheetActivity = timeSheet.AddTask(_task);
 
         var date = ISOWeek.ToDateTime(year + 1, week + 2, DayOfWeek.Monday);
         var dateOnly = DateOnly.FromDateTime(date);
@@ -77,7 +77,7 @@ public class TimeSheetTest
 
         TimeSheet timeSheet = new(_user, year, week);
 
-        var timeSheetActivity = timeSheet.AddActivity(_task);
+        var timeSheetActivity = timeSheet.AddTask(_task);
 
         var date = ISOWeek.ToDateTime(year, week, DayOfWeek.Monday);
         var dateOnly = DateOnly.FromDateTime(date);
@@ -100,7 +100,7 @@ public class TimeSheetTest
 
         TimeSheet timeSheet = new(_user, year, week);
 
-        var timeSheetActivity = timeSheet.AddActivity(_task);
+        var timeSheetActivity = timeSheet.AddTask(_task);
 
         var date = ISOWeek.ToDateTime(year, week, DayOfWeek.Monday);
         var dateOnly = DateOnly.FromDateTime(date);
