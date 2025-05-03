@@ -43,21 +43,19 @@ public class ProductViewModel
 
     public decimal Price => Variant?.Price ?? Product?.Price ?? 0; //Variant?.Price?.Amount ?? Product?.Price?.Amount ?? 0;
 
-    async Task Foo()
+    public async Task UpdateTotalPrice()
     {
-        await this.productsService.CalculatePrice(Product!.Handle, new CalculateProductPriceRequest([], null));
+        var x = OptionGroups.SelectMany(x => x.Options)
+            .Where(x => x.IsSelected || x.NumericalValue is not null || x.SelectedValueId is not null)
+            .Select(x => new ProductOptionValue(x.Id, x.NumericalValue, x.SelectedValueId));
+        
+        var result = await this.productsService.CalculatePrice(Product!.Handle, new CalculateProductPriceRequest([..x], null));
+        Total = (decimal)Quantity * result.Total;
     }
     
-    public decimal Total => Price
-                + OptionGroups.SelectMany(x => x.Options)
-                // Exclude options with default values
-                .Where(x => x.IsSelected || x.SelectedValueId is not null)
-                .Select(x => x.Price.GetValueOrDefault() + (x.Values.FirstOrDefault(x3 => x3.Id == x?.SelectedValueId)?.Price ?? 0))
-                .Sum()
-                 + OptionGroups.SelectMany(x => x.Options)
-                .Where(x => x.OptionType == OptionType.NumericalValue)
-                .Select(x => x.Price.GetValueOrDefault() * x.NumericalValue.GetValueOrDefault())
-                .Sum();
+    public int Quantity { get; set; }
+    
+    public decimal Total { get; set; }
 
     public decimal? RegularPrice => Product?.RegularPrice; // ?.Amount;
 
@@ -121,6 +119,8 @@ public class ProductViewModel
 
         CreateOptionsVM();
         CreateAttributesVM();
+        
+        await UpdateTotalPrice();
     }
 
     public List<AttributeGroupVM> AttributeGroups { get; set; } = new List<AttributeGroupVM>();

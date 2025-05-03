@@ -146,6 +146,12 @@ public partial class ProductPage
         }
     }
 
+    async Task UpdateFoo()
+    { 
+        await productViewModel.UpdateTotalPrice();
+        await UpdateUrl();
+    }
+
     async Task UpdateUrl()
     {
         string data = Serialize();

@@ -132,7 +132,9 @@ else
 
             <div class="d-flex mt-2">
 
-                <InputQuantity Class="me-2" ButtonClass="btn-lg" MinValue="0" @bind-Value="quantity" />
+                <InputQuantity Class="me-2" ButtonClass="btn-lg" MinValue="0" Value="@productViewModel.Quantity"
+                               ValueExpression="() => productViewModel.Quantity"
+                               ValueChanged="async (v) => { productViewModel.Quantity = v; await UpdateFoo(); }" />
 
                 @if (CartItemId is null)
                 {
@@ -259,7 +261,7 @@ else
                                             <div class="form-check checkbox-lg ms-1">
                                                 <InputCheckbox class="form-check-input" Value="@itemOption.IsSelected"
                                                     ValueExpression="() => itemOption.IsSelected"
-                                                    ValueChanged="async (v) => { itemOption.IsSelected = v; await UpdateUrl(); }"
+                                                    ValueChanged="async (v) => { itemOption.IsSelected = v; await UpdateFoo(); }"
                                                     id="flexCheckDefault" disabled=@(!itemOption.IsSelected && optionGroup.Options.Count(x
                                 => x.IsSelected) >= optionGroup.Max) />
 
@@ -277,7 +279,7 @@ else
                                         {
                                             <InputSelect TValue="string?" Value="@itemOption.SelectedValueId"
                                                 ValueExpression="() => itemOption.SelectedValueId"
-                                                ValueChanged="async (v) => { itemOption.SelectedValueId = v; await UpdateUrl(); }"
+                                                ValueChanged="async (v) => { itemOption.SelectedValueId = v; await UpdateFoo(); }"
                                                 class="form-select" aria-label="@itemOption.Name" placeholder="Choose option">
                                                 @* <option selected>None</option> *@
                                                 @foreach (var value in itemOption.Values!)
@@ -300,7 +302,7 @@ else
                                         {
                                             <InputNumber TValue="int?" Value="@itemOption.NumericalValue"
                                                 ValueExpression="() => itemOption.NumericalValue"
-                                                ValueChanged="async (v) => { itemOption.NumericalValue = v; await UpdateUrl(); }"
+                                                ValueChanged="async (v) => { itemOption.NumericalValue = v; await UpdateFoo(); }"
                                                 type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                                                 placeholder="Enter value" min="@itemOption.MinNumericalValue" step="1"
                                                 max="@itemOption.MaxNumericalValue" />
@@ -310,7 +312,7 @@ else
                                         else if (itemOption.OptionType == OptionType.TextValue)
                                         {
                                             <InputText Value="@itemOption.TextValue" ValueExpression="() => itemOption.TextValue"
-                                                ValueChanged="async (v) => { itemOption.TextValue = v; await UpdateUrl(); }" type="text"
+                                                ValueChanged="async (v) => { itemOption.TextValue = v; await UpdateFoo(); }" type="text"
                                                 class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                                                 placeholder="Enter value" />
                                             <label for="exampleInputEmail1">@itemOption.Name</label>
