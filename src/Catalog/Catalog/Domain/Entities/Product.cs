@@ -92,6 +92,12 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
     public string Name { get; set; } = default!;
 
     public ProductType? Type { get; set; } = ProductType.Good;
+    
+    public SaleModel SaleModel  { get; set; } = SaleModel.Unit;
+    
+    public bool AllowsQuantity => SaleModel is SaleModel.Unit;
+    
+    public bool IsRecurring => SaleModel is SaleModel.Subscription;
 
     public ProductCategory? Category { get; internal set; }
 
@@ -116,9 +122,8 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
             _price = value;
         }
     }
-
     public PricingModel PricingModel { get; set; }
-
+    
     public DiscountApplicationMode DiscountApplicationMode { get; set; }
 
     public double? VatRate { get; set; }
@@ -154,11 +159,18 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
     public void RemoveImage(ProductImage productImage) => _images.Remove(productImage);
 
     public string Handle { get; set; } = default!;
+    
 
-    public bool? IsCustomizable { get; set; } = false;
-
-    public bool HasVariants { get; set; } = false;
-
+    public bool? HasOptions { get; set; } = false;
+    
+    public ProductStructure Structure { get; set; } = ProductStructure.Single;
+    
+    public bool IsBuyable => Structure is ProductStructure.Single or ProductStructure.IsVariant;
+    
+    public bool RequiresVariantSelection => Structure is ProductStructure.WithVariants;
+    public bool HasVariants => Structure is ProductStructure.WithVariants;
+    public bool IsVariant => Structure is ProductStructure.IsVariant;
+    
     public Product? Parent { get; internal set; }
 
     public int? ParentId { get; internal set; }
@@ -181,20 +193,43 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
 
     public bool AddVariant(Product variant)
     {
+        if (Structure is not ProductStructure.WithVariants)
+            throw new InvalidOperationException("The product doesn't support variants.");
+        
+        if (variant.SaleModel != SaleModel)
+            throw new InvalidOperationException("All variants must have the same SaleModel as the parent product.");
+        
         if (_variants.Add(variant))
         {
             variant.OrganizationId = OrganizationId;
             variant.Store = Store;
             variant.Category = Category;
             variant.Parent = this;
+            variant.Structure = ProductStructure.IsVariant;
             return true;
         }
         return false;
     }
 
-    public bool RemoveVariant(Product variant)
+    public bool RemoveVariant(Product variant, bool detachVariant = false)
     {
-        return _variants.Remove(variant);
+        if (_variants.Remove(variant))
+        {
+            if (detachVariant)
+            {
+                variant.Parent = null;
+                variant.Structure = ProductStructure.Single;
+
+                if (!_variants.Any())
+                {
+                    Structure = ProductStructure.Single;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public bool AddProductAttribute(ProductAttribute productAttribute)
@@ -363,11 +398,24 @@ public enum PricingModel
 {
     FixedPrice,          // Använd Price rakt av, inga options.
     OptionsBased,        // Price + eventuella optionskostnader.
-    SubscriptionBased    // Prenumerationslogik, kanske med rabatter.
 }
 
 public enum DiscountApplicationMode
 {
     OnBasePrice,               // Rabatt gäller BasePrice innan options läggs på.
     AfterOptions               // Rabatt gäller på totalsumman (BasePrice + options).
+}
+
+public enum ProductStructure
+{
+    Single,     // Ingen variant – säljs som den är
+    WithVariants, // Har varianter – ej direkt köpbar
+    IsVariant    // En variant av en annan produkt
+}
+
+public enum SaleModel
+{
+    Unit,           // Buy by quantity (e.g., 5 items or 3 sessions)
+    Subscription,   // Recurring purchase
+    OneTime         // Single-use, no quantity (e.g., activation fee)
 }

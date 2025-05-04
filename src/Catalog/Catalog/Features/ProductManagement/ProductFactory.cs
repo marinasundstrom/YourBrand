@@ -47,7 +47,7 @@ public class ProductFactory(CatalogContext catalogContext, ITenantContext tenant
 
         product.BrandId = options.BrandId;
 
-        product.HasVariants = options.HasVariants;
+        product.Structure = options.HasVariants ? ProductStructure.WithVariants : ProductStructure.Single;
 
         product.ListingState = options.ListingState;
 

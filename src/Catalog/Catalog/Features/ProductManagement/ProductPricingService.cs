@@ -10,8 +10,9 @@ public class ProductPricingService
         ProductSubscriptionPlan? subscriptionPlan = null)
     {
         var basePrice = product.Price;
+        var optionDetails = new List<ProductOptionPriceDetail>();
 
-        var optionsTotal = CalculateOptionsTotal(product, selectedOptionValues);
+        var optionsTotal = CalculateOptionsTotal(product, selectedOptionValues, optionDetails);
 
         decimal subtotal = basePrice;
 
@@ -20,69 +21,94 @@ public class ProductPricingService
             subtotal += optionsTotal;
         }
 
-        decimal discountAmount = 0;
+        decimal productDiscount = 0;
 
         if (product.DiscountRate.HasValue)
         {
             if (product.DiscountApplicationMode == DiscountApplicationMode.OnBasePrice)
             {
-                var discountedBase = basePrice * (1 - (decimal)product.DiscountRate.Value / 100);
-                discountAmount = basePrice - discountedBase;
+                var discountedBase = ApplyDiscount(basePrice, product.DiscountRate.Value);
+                productDiscount = basePrice - discountedBase;
                 subtotal = discountedBase + optionsTotal;
             }
             else if (product.DiscountApplicationMode == DiscountApplicationMode.AfterOptions)
             {
-                discountAmount = subtotal * (decimal)product.DiscountRate.Value / 100;
-                subtotal -= discountAmount;
+                productDiscount = subtotal * (decimal)product.DiscountRate.Value / 100;
+                subtotal -= productDiscount;
             }
         }
 
-        // Optional: override with subscription plan discount
+        decimal subscriptionDiscount = 0;
+
         if (subscriptionPlan?.DiscountPercentage is not null)
         {
-            discountAmount = subtotal * (decimal)subscriptionPlan.DiscountPercentage.Value / 100;
-            subtotal -= discountAmount;
+            subscriptionDiscount = subtotal * (decimal)subscriptionPlan.DiscountPercentage.Value / 100;
+            subtotal -= subscriptionDiscount;
         }
 
         return new ProductPriceResult
         {
             BasePrice = basePrice,
             OptionsTotal = optionsTotal,
-            DiscountAmount = discountAmount,
-            Total = subtotal
+            ProductDiscount = productDiscount,
+            SubscriptionDiscount = subscriptionDiscount,
+            Total = subtotal,
+            OptionBreakdown = optionDetails
         };
     }
 
-    private decimal CalculateOptionsTotal(Product product, IEnumerable<ProductOptionValue> selectedOptionValues)
+    private decimal ApplyDiscount(decimal amount, double discountRate)
+    {
+        return amount * (1 - (decimal)discountRate / 100);
+    }
+
+    private decimal CalculateOptionsTotal(
+        Product product,
+        IEnumerable<ProductOptionValue> selectedOptionValues,
+        List<ProductOptionPriceDetail> breakdown)
     {
         decimal optionsTotal = 0;
 
         foreach (var selected in selectedOptionValues)
         {
             var option = product.ProductOptions
-                .FirstOrDefault(po => po.Option.Id == selected.OptionId)?
-                .Option;
+                .FirstOrDefault(po => po.Option.Id == selected.OptionId)?.Option;
 
             if (option is null)
             {
-                throw new Exception("Option not found");
+                throw new InvalidOperationException($"Option with ID '{selected.OptionId}' not found on product '{product.Name}'.");
             }
 
-            if (option is NumericalValueOption numericalValueOption)
+            decimal price = 0;
+
+            switch (option)
             {
-                optionsTotal += numericalValueOption.Price.GetValueOrDefault() * (selected.NumericValue ?? 0);
+                case NumericalValueOption numericalValueOption:
+                    price = numericalValueOption.Price.GetValueOrDefault() * (selected.NumericValue ?? 0);
+                    break;
+
+                case SelectableOption selectableOption:
+                    price = selectableOption.Price.GetValueOrDefault();
+                    break;
+
+                case ChoiceOption choiceOption:
+                    var chosenValue = choiceOption.Values.FirstOrDefault(v => v.Id == selected.ChoiceValueId);
+                    if (chosenValue is not null)
+                    {
+                        price = chosenValue.Price.GetValueOrDefault();
+                    }
+                    break;
             }
-            else if (option is SelectableOption selectableOption)
+
+            if (price > 0)
             {
-                optionsTotal += selectableOption.Price.GetValueOrDefault();
-            }
-            else if (option is ChoiceOption choiceOption)
-            {
-                var chosenValue = choiceOption.Values.FirstOrDefault(v => v.Id == selected.ChoiceValueId);
-                if (chosenValue is not null)
+                breakdown.Add(new ProductOptionPriceDetail
                 {
-                    optionsTotal += chosenValue.Price.GetValueOrDefault();
-                }
+                    OptionId = selected.OptionId,
+                    Price = price
+                });
+
+                optionsTotal += price;
             }
         }
 
@@ -92,7 +118,7 @@ public class ProductPricingService
 
 public class ProductOptionValue
 {
-    public string OptionId { get; set; }
+    public string OptionId { get; set; } = default!;
     public decimal? NumericValue { get; set; }
     public string? ChoiceValueId { get; set; }
 }
@@ -101,10 +127,11 @@ public class ProductPriceResult
 {
     public decimal BasePrice { get; set; }
     public decimal OptionsTotal { get; set; }
-    public decimal DiscountAmount { get; set; }
+    public decimal ProductDiscount { get; set; }
+    public decimal SubscriptionDiscount { get; set; }
     public decimal Total { get; set; }
-    
-    //public List<ProductOptionPriceDetail>? OptionBreakdown { get; set; } // Om du vill visa options individuellt
+
+    public List<ProductOptionPriceDetail>? OptionBreakdown { get; set; }
 }
 
 public class ProductOptionPriceDetail

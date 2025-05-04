@@ -41,7 +41,7 @@ public sealed record CreateProduct(string OrganizationId, string Name, string St
             var product = new Domain.Entities.Product(request.OrganizationId, productId, request.Name)
             {
                 Description = request.Description,
-                HasVariants = request.IsGroupedProduct,
+                Structure = request.IsGroupedProduct ? ProductStructure.WithVariants : ProductStructure.Single,
                 Handle = request.Handle,
                 Store = store
             };
