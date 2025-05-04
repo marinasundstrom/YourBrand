@@ -52,8 +52,8 @@ public class ProductViewModel
         var result = await this.productsService.CalculatePrice(Product!.Handle, new CalculateProductPriceRequest([..x], null));
         Total = (decimal)Quantity * result.Total;
     }
-    
-    public int Quantity { get; set; }
+
+    public int Quantity { get; set; } = 1;
     
     public decimal Total { get; set; }
 

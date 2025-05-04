@@ -15,7 +15,6 @@ public partial class ProductPage
 {
     IEnumerable<ProductSubscriptionPlan> subscriptionPlans = new List<ProductSubscriptionPlan>();
 
-    int quantity = 1;
     readonly string currency = "SEK";
     ProductInfo? productInfo;
 
@@ -73,7 +72,7 @@ public partial class ProductPage
             {
                 var items = await CartService.GetCartItemsAsync();
                 var item = items.First(x => x.Id == CartItemId);
-                quantity = item.Quantity;
+                productViewModel.Quantity = item.Quantity;
 
                 if (item.Data is not null)
                 {
@@ -227,7 +226,7 @@ public partial class ProductPage
             var productId = (productViewModel?.Variant?.Id ?? productViewModel?.Product?.Id);
 
             await CartService.AddCartItem(product.Name, product.Image.Url, productId, product.Handle, product.Description,
-                productViewModel.Total, product.RegularPrice, quantity, Serialize());
+                productViewModel.Total, product.RegularPrice, productViewModel.Quantity, Serialize());
 
             ToastService.ShowInfo($"{productViewModel.Name} was added to your basket");
         }
@@ -249,7 +248,7 @@ public partial class ProductPage
 
             var product = productViewModel.Product;
 
-            await CartService.UpdateCartItem(CartItemId, quantity, Serialize());
+            await CartService.UpdateCartItem(CartItemId, productViewModel.Quantity, Serialize());
 
             //hasAddedToCart = true;
 
