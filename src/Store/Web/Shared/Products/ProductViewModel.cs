@@ -359,7 +359,7 @@ public class ProductViewModel
 
     public Product? Variant { get => variant; set => variant = value; }
 
-    public void LoadData(IEnumerable<Option> options)
+    public async Task LoadData(IEnumerable<Option> options)
     {
         foreach (var option in options)
         {
@@ -375,6 +375,8 @@ public class ProductViewModel
                 o.TextValue = option.TextValue;
             }
         }
+
+        await UpdateTotalPrice();
     }
 
     public IEnumerable<Option> GetData()

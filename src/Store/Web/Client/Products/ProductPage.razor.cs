@@ -1,5 +1,5 @@
 using System.Text.Json;
-
+using System.Threading.Tasks;
 using BlazorApp;
 using BlazorApp.Cart;
 using BlazorApp.ProductCategories;
@@ -84,7 +84,7 @@ public partial class ProductPage
         if (Data is not null)
         {
             var str = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(Data));
-            Deserialize(str);
+            await Deserialize(str);
         }
 
         //TEMP
@@ -202,14 +202,14 @@ public partial class ProductPage
         });
     }
 
-    void Deserialize(string str)
+    async Task Deserialize(string str)
     {
         var options = JsonSerializer.Deserialize<IEnumerable<ProductViewModel.Option>>(str, new JsonSerializerOptions
         {
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
         });
 
-        productViewModel!.LoadData(options!);
+        await productViewModel!.LoadData(options!);
     }
 
     bool isAddingItem;
