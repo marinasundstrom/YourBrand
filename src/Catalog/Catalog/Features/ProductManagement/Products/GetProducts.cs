@@ -18,6 +18,8 @@ public sealed record GetProducts(string OrganizationId, string? StoreId = null, 
                         .Where(x => x.Category != null)
                         .IncludeAll()
                         .Include(x => x.Prices)
+                        .Include(x => x.Parent)
+                        .ThenInclude(x => x.Prices)
                         .AsSplitQuery()
                         .AsNoTracking()
                         .AsQueryable()

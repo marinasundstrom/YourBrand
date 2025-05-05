@@ -43,6 +43,9 @@ public record GetProductVariants(string OrganizationId, string ProductIdOrHandle
 
             var variants = await query
                 .IncludeAll()
+                .Include(x => x.Prices)
+                .Include(x => x.Parent)
+                .ThenInclude(x => x.Prices)
                 .Skip(request.PageSize * (request.Page - 1))
                 .Take(request.PageSize).AsQueryable()
                 .ToArrayAsync();

@@ -20,6 +20,7 @@ public record GetProductVariant(string OrganizationId, string ProductIdOrHandle,
                 .AsSplitQuery()
                 .AsNoTracking()
                 .IncludeAll()
+                .Include(x => x.Prices)
                 .AsQueryable();
 
             query = isProductId ?

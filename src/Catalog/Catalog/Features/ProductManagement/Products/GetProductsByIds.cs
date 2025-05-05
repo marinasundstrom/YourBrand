@@ -19,6 +19,8 @@ public sealed record GetProductsByIds(string OrganizationId, long[] ProductIds, 
                         .Where(x => productIds.Any(id => id == x.Id))
                         .IncludeAll()
                         .Include(x => x.Prices)
+                        .Include(x => x.Parent)
+                        .ThenInclude(x => x.Prices)
                         .AsSplitQuery()
                         .AsNoTracking()
                         .AsQueryable()

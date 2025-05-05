@@ -18,6 +18,8 @@ public sealed record GetProductById(string OrganizationId, string IdOrHandle) : 
                 .InOrganization(request.OrganizationId)
                 .IncludeAll()
                 .Include(x => x.Prices)
+                .Include(x => x.Parent)
+                .ThenInclude(x => x.Prices)
                 .AsSplitQuery()
                 .AsQueryable();
 

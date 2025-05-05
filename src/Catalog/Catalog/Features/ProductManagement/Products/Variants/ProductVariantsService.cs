@@ -16,6 +16,9 @@ public class ProductVariantsService(CatalogContext context)
             .AsSplitQuery()
             .AsNoTracking()
             .IncludeAll()
+            .Include(x => x.Prices)
+            .Include(x => x.Parent)
+            .ThenInclude(x => x.Prices)
             .AsQueryable()
             .TagWith(nameof(FindVariants));
 
