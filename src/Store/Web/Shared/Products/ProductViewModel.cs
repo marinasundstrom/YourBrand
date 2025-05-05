@@ -43,13 +43,15 @@ public class ProductViewModel
 
     public decimal Price => Variant?.Price ?? Product?.Price ?? 0; //Variant?.Price?.Amount ?? Product?.Price?.Amount ?? 0;
 
+    public string? SubscriptionPlanId { get; set;  }
+
     public async Task UpdateTotalPrice()
     {
         var x = OptionGroups.SelectMany(x => x.Options)
             .Where(x => x.IsSelected || x.NumericalValue is not null || x.SelectedValueId is not null)
             .Select(x => new ProductOptionValue(x.Id, x.NumericalValue, x.SelectedValueId));
-        
-        var result = await this.productsService.CalculatePrice(Product!.Handle, new CalculateProductPriceRequest([..x], null));
+
+        var result = await this.productsService.CalculatePrice(Product!.Handle, new CalculateProductPriceRequest([.. x], SubscriptionPlanId));
         Total = (decimal)Quantity * result.Total;
     }
 

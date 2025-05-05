@@ -145,7 +145,7 @@ public partial class ProductPage
         }
     }
 
-    async Task UpdateFoo()
+    async Task UpdateTotalPrice()
     { 
         await productViewModel.UpdateTotalPrice();
         await UpdateUrl();

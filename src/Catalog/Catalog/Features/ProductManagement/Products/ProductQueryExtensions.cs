@@ -12,7 +12,8 @@ public static class ProductQueryExtensions
                 .IncludeBasics()
                 .IncludeImages()
                 .IncludeAttributes()
-                .IncludeOptions();
+                .IncludeOptions()
+                .Include(pv => pv.SubscriptionPlans);
     }
 
     public static IQueryable<Product> IncludeBasics(this IQueryable<Product> source)

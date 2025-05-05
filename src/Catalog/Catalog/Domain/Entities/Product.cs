@@ -397,7 +397,7 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
 public enum PricingModel
 {
     FixedPrice,          // Använd Price rakt av, inga options.
-    OptionsBased,        // Price + eventuella optionskostnader.
+    OptionsBased        // Price + eventuella optionskostnader.
 }
 
 public enum DiscountApplicationMode

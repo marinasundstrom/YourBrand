@@ -134,7 +134,7 @@ else
 
                 <InputQuantity Class="me-2" ButtonClass="btn-lg" MinValue="0" Value="@productViewModel.Quantity"
                                ValueExpression="() => productViewModel.Quantity"
-                               ValueChanged="async (v) => { productViewModel.Quantity = v; await UpdateFoo(); }" />
+                               ValueChanged="async (v) => { productViewModel.Quantity = v; await UpdateTotalPrice(); }" />
 
                 @if (CartItemId is null)
                 {
@@ -261,7 +261,7 @@ else
                                             <div class="form-check checkbox-lg ms-1">
                                                 <InputCheckbox class="form-check-input" Value="@itemOption.IsSelected"
                                                     ValueExpression="() => itemOption.IsSelected"
-                                                    ValueChanged="async (v) => { itemOption.IsSelected = v; await UpdateFoo(); }"
+                                                    ValueChanged="async (v) => { itemOption.IsSelected = v; await UpdateTotalPrice(); }"
                                                     id="flexCheckDefault" disabled=@(!itemOption.IsSelected && optionGroup.Options.Count(x
                                 => x.IsSelected) >= optionGroup.Max) />
 
@@ -279,7 +279,7 @@ else
                                         {
                                             <InputSelect TValue="string?" Value="@itemOption.SelectedValueId"
                                                 ValueExpression="() => itemOption.SelectedValueId"
-                                                ValueChanged="async (v) => { itemOption.SelectedValueId = v; await UpdateFoo(); }"
+                                                ValueChanged="async (v) => { itemOption.SelectedValueId = v; await UpdateTotalPrice(); }"
                                                 class="form-select" aria-label="@itemOption.Name" placeholder="Choose option">
                                                 @* <option selected>None</option> *@
                                                 @foreach (var value in itemOption.Values!)
@@ -302,7 +302,7 @@ else
                                         {
                                             <InputNumber TValue="int?" Value="@itemOption.NumericalValue"
                                                 ValueExpression="() => itemOption.NumericalValue"
-                                                ValueChanged="async (v) => { itemOption.NumericalValue = v; await UpdateFoo(); }"
+                                                ValueChanged="async (v) => { itemOption.NumericalValue = v; await UpdateTotalPrice(); }"
                                                 type="number" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                                                 placeholder="Enter value" min="@itemOption.MinNumericalValue" step="1"
                                                 max="@itemOption.MaxNumericalValue" />
@@ -312,7 +312,7 @@ else
                                         else if (itemOption.OptionType == OptionType.TextValue)
                                         {
                                             <InputText Value="@itemOption.TextValue" ValueExpression="() => itemOption.TextValue"
-                                                ValueChanged="async (v) => { itemOption.TextValue = v; await UpdateFoo(); }" type="text"
+                                                ValueChanged="async (v) => { itemOption.TextValue = v; await UpdateTotalPrice(); }" type="text"
                                                 class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                                                 placeholder="Enter value" />
                                             <label for="exampleInputEmail1">@itemOption.Name</label>
@@ -329,7 +329,9 @@ else
             @if(subscriptionPlans.Any())
             {
             <div class="form-floating mt-4">
-                <InputSelect TValue="string?" @bind-Value="SelectedPlanId"
+                <InputSelect TValue="string?" Value="@productViewModel.SubscriptionPlanId"
+                               ValueExpression="() => productViewModel.SubscriptionPlanId"
+                               ValueChanged="async (v) => { productViewModel.SubscriptionPlanId = v; await UpdateTotalPrice(); }" 
                     class="form-select" aria-label="Subscription plan" placeholder="Choose a plan">
                     @* <option selected>None</option> *@
                     @foreach (var plan in subscriptionPlans)
