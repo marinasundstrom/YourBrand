@@ -9,7 +9,9 @@ public class ProductPricingService
         IEnumerable<ProductOptionValue> selectedOptionValues,
         ProductSubscriptionPlan? subscriptionPlan = null)
     {
-        var basePrice = product.Price;
+        var p = product.Prices.First();
+            
+        var basePrice = p.Price;
         var optionDetails = new List<ProductOptionPriceDetail>();
 
         var optionsTotal = CalculateOptionsTotal(product, selectedOptionValues, optionDetails);
@@ -23,17 +25,17 @@ public class ProductPricingService
 
         decimal productDiscount = 0;
 
-        if (product.DiscountRate.HasValue)
+        if (p.DiscountRate.HasValue)
         {
             if (product.DiscountApplicationMode == DiscountApplicationMode.OnBasePrice)
             {
-                var discountedBase = ApplyDiscount(basePrice, product.DiscountRate.Value);
+                var discountedBase = ApplyDiscount(basePrice, p.DiscountRate.Value);
                 productDiscount = basePrice - discountedBase;
                 subtotal = discountedBase + optionsTotal;
             }
             else if (product.DiscountApplicationMode == DiscountApplicationMode.AfterOptions)
             {
-                productDiscount = subtotal * (decimal)product.DiscountRate.Value / 100;
+                productDiscount = subtotal * (decimal)p.DiscountRate.Value / 100;
                 subtotal -= productDiscount;
             }
         }

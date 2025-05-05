@@ -17,6 +17,7 @@ public sealed record GetProductById(string OrganizationId, string IdOrHandle) : 
             var query = catalogContext.Products
                 .InOrganization(request.OrganizationId)
                 .IncludeAll()
+                .Include(x => x.Prices)
                 .AsSplitQuery()
                 .AsQueryable();
 

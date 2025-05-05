@@ -42,6 +42,23 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasIndex(p => p.Handle);
 
+        builder.HasMany(x => x.Prices)
+            .WithOne(x => x.Product)
+            .HasForeignKey(o => new { o.OrganizationId, o.ProductId })
+            .OnDelete(DeleteBehavior.ClientCascade);
+
+        builder
+            .Ignore(b => b.Price);
+
+        builder
+            .Ignore(b => b.RegularPrice);
+        
+        builder
+            .Ignore(b => b.VatRate);
+        
+        builder
+            .Ignore(b => b.VatRateId);
+
         builder
             .HasMany(p => p.Images)
             .WithOne(x => x.Product)

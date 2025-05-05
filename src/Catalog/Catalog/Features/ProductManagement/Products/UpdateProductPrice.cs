@@ -19,9 +19,11 @@ public sealed record UpdateProductPrice(string OrganizationId, string IdOrHandle
             var product = isId ?
                 await catalogContext.Products
                 .InOrganization(request.OrganizationId)
+                .Include(x => x.Prices)
                 .FirstOrDefaultAsync(product => product.Id == id, cancellationToken)
                 : await catalogContext.Products
                 .InOrganization(request.OrganizationId)
+                .Include(x => x.Prices)
                 .FirstOrDefaultAsync(product => product.Handle == request.IdOrHandle, cancellationToken);
 
             if (product is null)

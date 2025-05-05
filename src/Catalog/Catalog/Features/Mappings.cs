@@ -30,6 +30,8 @@ public static class Mappings
 
     public static ProductDto ToDto(this Domain.Entities.Product product)
     {
+        var price = product.Prices.First();
+        
         return new ProductDto(
             product.Id,
             product.OrganizationId,
@@ -39,11 +41,11 @@ public static class Mappings
             product.Category?.ToProductCategory2(),
             product.Parent?.ToParentProductDto(),
             product.Description,
-            product.Price,
-            product.VatRate,
-            product.VatRateId,
-            product.RegularPrice,
-            product.DiscountRate,
+            price.Price,
+            price.VatRate,
+            price.VatRateId,
+            price.RegularPrice,
+            price.DiscountRate,
             product.Image?.ToDto(),
             product.Images.Select(x => x.ToDto()),
             product.Handle,
@@ -81,17 +83,19 @@ public static class Mappings
     }
     */
 
-    public static ParentProductDto ToParentProductDto(this Domain.Entities.Product item)
+    public static ParentProductDto ToParentProductDto(this Domain.Entities.Product product)
     {
+        var price = product.Prices.First();
+
         return new ParentProductDto(
-                item.Id,
-                item.Name,
-                item.Category?.ToDto(),
-                item.Description,
-                item.Price,
-                item.RegularPrice,
-                item.Image?.ToDto(),
-                item.Handle);
+                product.Id,
+                product.Name,
+                product.Category?.ToDto(),
+                product.Description,
+                price.Price,
+                price.RegularPrice,
+                product.Image?.ToDto(),
+                product.Handle);
     }
 
     public static ProductImageDto ToDto(this Domain.Entities.ProductImage x)

@@ -8,6 +8,8 @@ namespace YourBrand.Catalog.Domain.Entities;
 
 public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasStore, IHasBrand
 {
+    readonly HashSet<ProductPrice> _prices = new HashSet<ProductPrice>();
+
     readonly HashSet<ProductAttribute> _productAttributes = new HashSet<ProductAttribute>();
 
     readonly HashSet<AttributeGroup> _attributeGroups = new HashSet<AttributeGroup>();
@@ -61,10 +63,10 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
         StoreId = storeId ?? throw new ArgumentNullException(nameof(storeId));
         Name = name ?? throw new ArgumentNullException(nameof(name));
         Handle = handle ?? throw new ArgumentNullException(nameof(handle));
-        Price = price;
+        //Price = price;
         Type = type;
         Description = description;
-        RegularPrice = regularPrice;
+        //RegularPrice = regularPrice;
         Brand = brand;
         Category = category;
 
@@ -110,41 +112,22 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
     public string? Sku { get; set; }
 
     public string? Gtin { get; set; }
+    
+    public IReadOnlyCollection<ProductPrice> Prices => _prices;
 
-    public decimal Price
+    public ProductPrice? GetPrice(string? currencyCode = null, int? regionId = null, string? countryCode = null)
     {
-        get => _price;
-        internal set
-        {
-            if (RegularPrice is not null && value >= RegularPrice)
-                throw new ArgumentException("Price cannot exceed or equal the Regular Price.");
-
-            _price = value;
-        }
+        return _prices
+            .Where(p => p.CurrencyCode == currencyCode || currencyCode == null)
+            .Where(p => p.RegionId == regionId || regionId == null)
+            .Where(p => p.CountryCode == countryCode || countryCode == null)
+            .OrderBy(p => p.ValidFrom ?? DateTimeOffset.MinValue)
+            .LastOrDefault();
     }
+
     public PricingModel PricingModel { get; set; }
     
     public DiscountApplicationMode DiscountApplicationMode { get; set; }
-
-    public double? VatRate { get; set; }
-
-    public int? VatRateId { get; set; }
-
-    public decimal? Discount { get; private set; }
-
-    public double? DiscountRate { get; private set; }
-
-    public decimal? RegularPrice
-    {
-        get => _regularPrice;
-        internal set
-        {
-            if (value is not null && value < Price)
-                throw new ArgumentException("Regular Price cannot be less than Price.");
-
-            _regularPrice = value;
-        }
-    }
 
     public decimal? PurchasePrice { get; set; }
 
@@ -327,52 +310,6 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
         return (price, regularPrice);
     }
 
-    public void SetPrice(decimal price)
-    {
-        Price = price;
-
-        if (RegularPrice is not null)
-        {
-            DiscountRate = PriceCalculations.CalculateDiscountRate(Price, RegularPrice.GetValueOrDefault());
-            Discount = RegularPrice - Price;
-        }
-    }
-
-    public void SetDiscountPrice(decimal discountPrice)
-    {
-        if (discountPrice >= Price)
-            throw new ArgumentException("Discount price must be less than the base price.");
-
-        RegularPrice = Price;
-        Price = discountPrice;
-        DiscountRate = PriceCalculations.CalculateDiscountRate(Price, RegularPrice.GetValueOrDefault());
-        Discount = RegularPrice - Price;
-    }
-
-    public void ApplyPercentageDiscount(double percentage)
-    {
-        if (percentage < 0 || percentage > 100)
-            throw new ArgumentOutOfRangeException(nameof(percentage), "Discount percentage must be between 0 and 100.");
-
-        if (!RegularPrice.HasValue)
-            throw new InvalidOperationException("Regular Price must be set before applying a discount percentage.");
-
-        DiscountRate = percentage;
-        Price = PriceCalculations.CalculateDiscountedPrice(RegularPrice.GetValueOrDefault(), percentage);
-        Discount = RegularPrice - Price;
-    }
-
-    public void RestoreRegularPrice()
-    {
-        if (RegularPrice.HasValue)
-        {
-            Price = RegularPrice.Value;
-            RegularPrice = null;
-            DiscountRate = null;
-            Discount = null;
-        }
-    }
-
     public IReadOnlyCollection<ProductSubscriptionPlan> SubscriptionPlans => _subscriptionPlans;
 
     // Add or remove subscription plans
@@ -382,15 +319,96 @@ public sealed class Product : Entity<int>, IHasTenant, IHasOrganization, IHasSto
     // Calculate final price based on subscription
     public decimal GetSubscriptionPrice(bool isSubscribed)
     {
-        if (isSubscribed && _subscriptionPlans.Any())
-            return _subscriptionPlans.Min(plan => plan.GetSubscriptionPrice(Price));
+        var price = Prices.First();
 
-        return Price;
+        if (isSubscribed && _subscriptionPlans.Any())
+            return _subscriptionPlans.Min(plan => plan.GetSubscriptionPrice(price.Price));
+        
+        return price.Price;
     }
 
     public decimal GetSavingsWithSubscription(decimal basePrice)
     {
         return basePrice - GetSubscriptionPrice(true);
+    }
+    
+    public ProductPrice CurrentPrice
+    {
+        get
+        {
+            var priceEntry = _prices.FirstOrDefault();
+
+            if (priceEntry is null)
+            {
+                priceEntry = new ProductPrice(Id, null, null, "SEK", 0, null, null);
+                _prices.Add(priceEntry);
+            }
+
+            return priceEntry;
+        }
+    }
+
+    public decimal Price
+    {
+        get => CurrentPrice.Price;
+        set => CurrentPrice.Price = value;
+    }
+    
+    public double? VatRate
+    {
+        get => CurrentPrice.VatRate;
+        set => CurrentPrice.VatRate = value;
+    }
+    
+    public int? VatRateId
+    {
+        get => CurrentPrice.VatRateId;
+        set => CurrentPrice.VatRateId = value;
+    }
+    
+    public decimal? RegularPrice
+    {
+        get => CurrentPrice.RegularPrice;
+        set => CurrentPrice.RegularPrice = value;
+    }
+    
+    public decimal? Discount => CurrentPrice.Discount;
+
+    public double? DiscountRate => CurrentPrice.DiscountRate;
+
+    public void SetPrice(decimal price)
+    {
+        var priceEntry = _prices.FirstOrDefault();
+
+        if (priceEntry is null)
+        {
+            priceEntry = new ProductPrice(Id, null, null, "SEK", price, null, null);
+            _prices.Add(priceEntry);
+        }
+        else
+        {
+            priceEntry.SetPrice(price);
+        }
+    }
+
+    public void SetDiscountPrice(decimal price)
+    {
+        var priceEntry = Prices.FirstOrDefault();
+
+        if (priceEntry is not null)
+        {
+            priceEntry.SetDiscountPrice(price);
+        }
+    }
+
+    public void RestoreRegularPrice()
+    {
+        var priceEntry = Prices.FirstOrDefault();
+
+        if (priceEntry is not null)
+        {
+            priceEntry.RestoreRegularPrice();
+        }
     }
 }
 

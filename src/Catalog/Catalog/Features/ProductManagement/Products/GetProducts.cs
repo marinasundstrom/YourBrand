@@ -17,6 +17,7 @@ public sealed record GetProducts(string OrganizationId, string? StoreId = null, 
                         .InOrganization(request.OrganizationId)
                         .Where(x => x.Category != null)
                         .IncludeAll()
+                        .Include(x => x.Prices)
                         .AsSplitQuery()
                         .AsNoTracking()
                         .AsQueryable()
