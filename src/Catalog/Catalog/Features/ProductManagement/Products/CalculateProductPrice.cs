@@ -18,6 +18,7 @@ public sealed record CalculateProductPrice(string OrganizationId, string IdOrHan
             var query = catalogContext.Products
                 .InOrganization(request.OrganizationId)
                 .IncludeAll()
+                .Include(x => x.Prices)
                 .AsSplitQuery()
                 .AsQueryable();
 

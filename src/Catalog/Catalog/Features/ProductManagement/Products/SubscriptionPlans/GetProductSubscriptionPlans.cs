@@ -15,6 +15,7 @@ public sealed record GetProductSubscriptionPlans(string OrganizationId, string? 
         {
             var query = catalogContext.ProductSubscriptionPlan
                         .Include(x => x.Product)
+                        .ThenInclude(x => x.Prices)
                         .InOrganization(request.OrganizationId)
                         .AsSplitQuery()
                         .AsNoTracking()
