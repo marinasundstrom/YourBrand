@@ -231,6 +231,8 @@ public static class Seed2
             StoreId = store.Id,
             ImageId = PlaceholderImage.Id
         }, cancellationToken);
+        
+        product.Structure = ProductStructure.WithVariants;
 
         tshirts.AddProduct(product);
 
@@ -263,6 +265,8 @@ public static class Seed2
             StoreId = store.Id,
             ImageId = PlaceholderImage.Id,
         }, cancellationToken);
+        
+        product.Structure = ProductStructure.IsVariant;
 
         variantBlueSmall.AddProductAttribute(new ProductAttribute
         {
@@ -294,6 +298,8 @@ public static class Seed2
             StoreId = store.Id,
             ImageId = PlaceholderImage.Id,
         }, cancellationToken);
+        
+        product.Structure = ProductStructure.IsVariant;
 
         variantBlueMedium.AddProductAttribute(new ProductAttribute
         {
@@ -323,6 +329,8 @@ public static class Seed2
             StoreId = store.Id,
             ImageId = PlaceholderImage.Id,
         }, cancellationToken);
+        
+        product.Structure = ProductStructure.IsVariant;
 
         variantBlueLarge.AddProductAttribute(new ProductAttribute
         {
@@ -354,6 +362,8 @@ public static class Seed2
             StoreId = store.Id,
             ImageId = PlaceholderImage.Id,
         }, cancellationToken);
+        
+        product.Structure = ProductStructure.IsVariant;
 
         variantRedSmall.AddProductAttribute(new ProductAttribute
         {
@@ -383,6 +393,8 @@ public static class Seed2
             StoreId = store.Id,
             ImageId = PlaceholderImage.Id,
         }, cancellationToken);
+        
+        product.Structure = ProductStructure.IsVariant;
 
         variantRedMedium.AddProductAttribute(new ProductAttribute
         {
@@ -412,6 +424,8 @@ public static class Seed2
             StoreId = store.Id,
             ImageId = PlaceholderImage.Id,
         }, cancellationToken);
+        
+        product.Structure = ProductStructure.IsVariant;
 
         variantRedLarge.AddProductAttribute(new ProductAttribute
         {
@@ -1093,6 +1107,11 @@ public static class Seed2
             ImageId = PlaceholderImage.Id,
             Price = 1500,
         }, cancellationToken);
+
+        product.HasOptions = true;
+        product.Structure = ProductStructure.Single;
+        product.SaleModel = SaleModel.Subscription;
+        product.PricingModel = PricingModel.OptionsBased;
 
         var areaOption = new NumericalValueOption("Area (m²)");
         areaOption.MinNumericalValue = 20;
