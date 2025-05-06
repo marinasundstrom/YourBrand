@@ -1114,6 +1114,7 @@ public static class Seed2
         product.PricingModel = PricingModel.OptionsBased;
 
         var areaOption = new NumericalValueOption("Area (m²)");
+        areaOption.DefaultNumericalValue = 23;
         areaOption.MinNumericalValue = 20;
         areaOption.Price = 50;
 
