@@ -2396,18 +2396,18 @@ components:
       discriminator:
         propertyName: event
         mapping:
-          Created: '#/components/schemas/TicketCreated'
-          ProjectUpdated: '#/components/schemas/TicketProjectUpdated'
-          AssigneeUpdated: '#/components/schemas/TicketAssigneeUpdated'
-          DescriptionUpdated: '#/components/schemas/TicketDescriptionUpdated'
-          EstimatedTimeUpdated: '#/components/schemas/TicketEstimatedTimeUpdated'
-          RemainingTimeUpdated: '#/components/schemas/TicketRemainingTimeUpdated'
-          StatusUpdated: '#/components/schemas/TicketStatusUpdated'
-          SubjectUpdated: '#/components/schemas/TicketSubjectUpdated'
-          PriorityUpdated: '#/components/schemas/TicketPriorityUpdated'
-          UrgencyUpdated: '#/components/schemas/TicketUrgencyUpdated'
-          ImpactUpdated: '#/components/schemas/TicketImpactUpdated'
-          CommentAdded: '#/components/schemas/TicketCommentAdded'
+          TicketCreated: '#/components/schemas/TicketCreated'
+          TicketProjectUpdated: '#/components/schemas/TicketProjectUpdated'
+          TicketAssigneeUpdated: '#/components/schemas/TicketAssigneeUpdated'
+          TicketDescriptionUpdated: '#/components/schemas/TicketDescriptionUpdated'
+          TicketEstimatedTimeUpdated: '#/components/schemas/TicketEstimatedTimeUpdated'
+          TicketRemainingTimeUpdated: '#/components/schemas/TicketRemainingTimeUpdated'
+          TicketStatusUpdated: '#/components/schemas/TicketStatusUpdated'
+          TicketSubjectUpdated: '#/components/schemas/TicketSubjectUpdated'
+          TicketPriorityUpdated: '#/components/schemas/TicketPriorityUpdated'
+          TicketUrgencyUpdated: '#/components/schemas/TicketUrgencyUpdated'
+          TicketImpactUpdated: '#/components/schemas/TicketImpactUpdated'
+          TicketCommentAdded: '#/components/schemas/TicketCommentAdded'
       x-abstract: true
       additionalProperties: false
       required:

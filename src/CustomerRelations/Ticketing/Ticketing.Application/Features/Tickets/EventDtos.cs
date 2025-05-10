@@ -6,21 +6,22 @@ using YourBrand.Ticketing.Application.Features.Tickets.Dtos;
 namespace YourBrand.Ticketing.Application;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "event")]
-[JsonDerivedType(typeof(TicketCreatedDto), "Created")]
-[JsonDerivedType(typeof(TicketProjectUpdatedDto), "ProjectUpdated")]
-[JsonDerivedType(typeof(TicketAssigneeUpdatedDto), "AssigneeUpdated")]
-[JsonDerivedType(typeof(TicketDescriptionUpdatedDto), "DescriptionUpdated")]
-[JsonDerivedType(typeof(TicketEstimatedTimeUpdatedDto), "EstimatedTimeUpdated")]
-[JsonDerivedType(typeof(TicketRemainingTimeUpdatedDto), "RemainingTimeUpdated")]
-[JsonDerivedType(typeof(TicketStatusUpdatedDto), "StatusUpdated")]
-[JsonDerivedType(typeof(TicketSubjectUpdatedDto), "SubjectUpdated")]
-[JsonDerivedType(typeof(TicketPriorityUpdatedDto), "PriorityUpdated")]
-[JsonDerivedType(typeof(TicketUrgencyUpdatedDto), "UrgencyUpdated")]
-[JsonDerivedType(typeof(TicketImpactUpdatedDto), "ImpactUpdated")]
-[JsonDerivedType(typeof(TicketCommentAddedDto), "CommentAdded")]
+[JsonDerivedType(typeof(TicketCreatedDto), typeDiscriminator: "TicketCreated")]
+[JsonDerivedType(typeof(TicketProjectUpdatedDto), typeDiscriminator: "TicketProjectUpdated")]
+[JsonDerivedType(typeof(TicketAssigneeUpdatedDto), typeDiscriminator: "TicketAssigneeUpdated")]
+[JsonDerivedType(typeof(TicketDescriptionUpdatedDto), typeDiscriminator: "TicketDescriptionUpdated")]
+[JsonDerivedType(typeof(TicketEstimatedTimeUpdatedDto), typeDiscriminator: "TicketEstimatedTimeUpdated")]
+[JsonDerivedType(typeof(TicketRemainingTimeUpdatedDto), typeDiscriminator: "TicketRemainingTimeUpdated")]
+[JsonDerivedType(typeof(TicketStatusUpdatedDto), typeDiscriminator: "TicketStatusUpdated")]
+[JsonDerivedType(typeof(TicketSubjectUpdatedDto), typeDiscriminator: "TicketSubjectUpdated")]
+[JsonDerivedType(typeof(TicketPriorityUpdatedDto), typeDiscriminator: "TicketPriorityUpdated")]
+[JsonDerivedType(typeof(TicketUrgencyUpdatedDto), typeDiscriminator: "TicketUrgencyUpdated")]
+[JsonDerivedType(typeof(TicketImpactUpdatedDto), typeDiscriminator: "TicketImpactUpdated")]
+[JsonDerivedType(typeof(TicketCommentAddedDto), typeDiscriminator: "TicketCommentAdded")]
 public abstract record TicketEventDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, TicketParticipantDto Participant)
 {
-    public string Event => GetType().Name.Replace("Ticket", string.Empty).Replace("Dto", string.Empty);
+    //[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+    //public string Event => GetType().Name.Replace("Ticket", string.Empty).Replace("Dto", string.Empty);
 }
 
 public sealed record TicketCreatedDto(DateTimeOffset OccurredAt, string TenantId, string OrganizationId, int TicketId, TicketParticipantDto Participant) : TicketEventDto(OccurredAt, TenantId, OrganizationId, Participant);

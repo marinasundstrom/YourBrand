@@ -8,6 +8,7 @@ using OrganizationId = YourBrand.Domain.OrganizationId;
 
 namespace YourBrand.Ticketing.Domain.Events;
 
+//[JsonPolymorphic(TypeDiscriminatorPropertyName = "Event")]
 [JsonDerivedType(typeof(TicketCreated), typeDiscriminator: nameof(TicketCreated))]
 [JsonDerivedType(typeof(TicketDeleted), typeDiscriminator: nameof(TicketDeleted))]
 [JsonDerivedType(typeof(TicketProjectUpdated), typeDiscriminator: nameof(TicketProjectUpdated))]
