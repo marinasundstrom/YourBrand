@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ServiceDiscovery;
-using Microsoft.OpenApi.Models;
 
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
