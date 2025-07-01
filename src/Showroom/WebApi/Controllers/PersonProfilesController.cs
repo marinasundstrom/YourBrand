@@ -91,9 +91,9 @@ public class PersonProfilesController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("{id}/Experiences")]
-    public async Task<Results<ExperienceDto>> GetExperiences(string? id, int page = 1, int? pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<Results<ExperienceDto>> GetExperiences(string? id, ExperiencesFilter filter, ExperiencesDisplayMode displayMode, int page = 1, int? pageSize = 10, string? searchString = null, string? sortBy = null, Application.Common.Models.SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
-        return await mediator.Send(new GetExperiencesQuery(page - 1, pageSize, id, searchString, sortBy, sortDirection), cancellationToken);
+        return await mediator.Send(new GetExperiencesQuery(filter, displayMode, page - 1, pageSize, id, searchString, sortBy, sortDirection), cancellationToken);
     }
 
     [HttpGet("{id}/Experiences/{experienceId}")]

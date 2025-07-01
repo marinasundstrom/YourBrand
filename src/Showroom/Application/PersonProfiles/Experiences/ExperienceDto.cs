@@ -6,7 +6,7 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Experiences;
 
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "kind")]
 [JsonDerivedType(typeof(EmploymentDto), "Employment")]
 [JsonDerivedType(typeof(AssignmentDto), "Assignment")]
 [JsonDerivedType(typeof(ProjectDto), "Project")]
@@ -30,12 +30,21 @@ public record EmploymentDto(
     DateTime StartDate, DateTime? EndDate,
     string? Description,
     IEnumerable<RoleDto> Roles, 
-    IEnumerable<PersonProfileSkillDto> Skills)
+    IEnumerable<PersonProfileSkillDto> Skills,
+    IEnumerable<AssignmentDto> Assignments)
     : ExperienceDto(ExperienceType.Employment, StartDate, EndDate, Description);
+
+public record EmploymentShortDto(
+    string Id,
+    CompanyDto Employer,
+    string? Location,
+    EmploymentType EmploymentType,
+    DateTime StartDate, DateTime? EndDate
+);
 
 public record AssignmentDto(
     string Id,
-    EmploymentDto Employment,
+    EmploymentShortDto Employment,
     CompanyDto? Company,
     string? Location,
     AssignmentType AssignmentType,
@@ -45,11 +54,20 @@ public record AssignmentDto(
     IEnumerable<PersonProfileSkillDto> Skills)
     : ExperienceDto(ExperienceType.Assignment, StartDate, EndDate, Description);
 
+public record AssignmentShortDto(
+    string Id,
+    EmploymentShortDto Employment,
+    CompanyDto? Company,
+    string? Location,
+    AssignmentType AssignmentType,
+    DateTime StartDate, DateTime? EndDate
+);
+
 public record ProjectDto(
     string Id,
     string Name,
-    EmploymentDto? Employment,
-    AssignmentDto? Assignment,
+    EmploymentShortDto? Employment,
+    AssignmentShortDto? Assignment,
     CompanyDto? Company,
     string? Location,
     DateTime StartDate, DateTime? EndDate,

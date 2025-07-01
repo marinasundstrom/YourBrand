@@ -10,7 +10,11 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Application.PersonProfiles.Experiences.Queries;
 
-public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? PersonProfileId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<ExperienceDto>>
+public enum ExperiencesFilter { All = 1, Employments, Assignments }
+
+public enum ExperiencesDisplayMode { Flat = 1, Hierarchical }
+
+public record GetExperiencesQuery(ExperiencesFilter Filter, ExperiencesDisplayMode DisplayMode, int Page = 0, int? PageSize = 10, string? PersonProfileId = null, string? SearchString = null, string? SortBy = null, Application.Common.Models.SortDirection? SortDirection = null) : IRequest<Results<ExperienceDto>>
 {
     sealed class GetExperiencesQueryHandler(
         IShowroomContext context,
@@ -20,6 +24,7 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
         {
             IQueryable<Employment> result = context
                     .Employments
+                    .Include(x => x.Assignments) //?
                     .OrderByDescending(x => x.StartDate)
                     .ThenByDescending(x => x.EndDate)
                     .AsNoTracking()
@@ -42,7 +47,7 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
 
             var totalCount = await result
                 .CountAsync(cancellationToken);
-                
+
             totalCount += await result
                 .SelectMany(x => x.Assignments)
                 .CountAsync(cancellationToken);
@@ -98,18 +103,19 @@ public record GetExperiencesQuery(int Page = 0, int? PageSize = 10, string? Pers
 
             List<ExperienceDto> experience = new List<ExperienceDto>();
 
-            foreach (var item in items) 
+            var flatDisplayMode = request.DisplayMode == ExperiencesDisplayMode.Flat;
+            var hierarchicalDisplayMode = !flatDisplayMode;
+
+            foreach (var item in items)
             {
-                if(item.Assignments.Any()) 
+                experience.Add(item.ToDto(hierarchicalDisplayMode));
+
+                if (flatDisplayMode)
                 {
-                    foreach(var assignment in item.Assignments) 
+                    foreach (var assignment in item.Assignments)
                     {
                         experience.Add(assignment.ToDto());
                     }
-                }
-                else 
-                {
-                    experience.Add(item.ToDto());
                 }
             }
 

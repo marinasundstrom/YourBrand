@@ -72,7 +72,7 @@
 
         if (PersonProfileSkillId is null) 
         {
-            var experiences2 = (await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, 1, 120, null, null, null)).Items;
+            var experiences2 = (await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, ExperiencesFilter.All, ExperiencesDisplayMode.Flat, 1, 120, null, null, null)).Items;
 
             foreach (var experience in experiences2)
             {
@@ -95,7 +95,7 @@
             Comment = skill.Comment;
             var selectedExperiences = skill.Experiences;
 
-            var experiences2 = (await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, 1, 120, null, null, null)).Items;
+            var experiences2 = (await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, ExperiencesFilter.All, ExperiencesDisplayMode.Flat, 1, 120, null, null, null)).Items;
 
             foreach (var experience in experiences2)
             {

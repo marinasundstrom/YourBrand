@@ -3,6 +3,30 @@
         {
             "title": "Software Developer",
             "employer": "Itm8",
+            "employmentType": "Contract",
+            "highlight": false,
+            "company": "Solid Försäkring",
+            "companyLogo": "/assets/logos/solidab.jpg",
+            "industry": "Insurance",
+            "link": "https://www.solidab.se/",
+            "location": "Malm\u00F6, Sweden",
+            "current": false,
+            "startDate": "2025-01-25T00:00:00",
+            "endDate": "2025-05-06T00:00:00",
+            "description": "My initial role was as a Frontend developer. However, because of my experience with both Blazor and ASP.NET Core, I have been working on Backend as well. Helping influencing and designing the software solution. Implementing BankID integration.",
+            "skills": [
+                "C#",
+                "Software development",
+                "ASP.NET Core",
+                "Insurance",
+                "Backend development",
+                "Web",
+                ".NET"
+            ]
+        },
+        {
+            "title": "Software Developer",
+            "employer": "Itm8",
             "employmentType": "FullTime",
             "highlight": true,
             "company": "Itm8",
@@ -12,7 +36,7 @@
             "location": "Malm\u00F6, Sweden",
             "current": true,
             "startDate": "2025-01-01T00:00:00",
-            "endDate": null,
+            "endDate": "2025-05-06T00:00:00",
             "description": "Consulting as part of Itm8.",
             "skills": [
                 "Software development"

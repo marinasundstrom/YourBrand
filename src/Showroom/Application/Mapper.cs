@@ -73,7 +73,7 @@ public static class Mapper
     }
     */
 
-    public static EmploymentDto ToDto(this Domain.Entities.Employment employment)
+    public static EmploymentDto ToDto(this Domain.Entities.Employment employment, bool hierarchical = true)
     {
         return new EmploymentDto(
             employment.Id,
@@ -81,15 +81,24 @@ public static class Mapper
             employment.StartDate, employment.EndDate, 
             employment.Description, 
             employment.Roles.Select(x => x.ToDto()),
-            employment.Skills.OrderBy(s => s.PersonProfileSkill.Skill.Name).Select(x => x.PersonProfileSkill.ToDto()));
+            employment.Skills.OrderBy(s => s.PersonProfileSkill.Skill.Name).Select(x => x.PersonProfileSkill.ToDto()),
+            hierarchical ? employment.Assignments.Select(a => a.ToDto()) : []);
+    }
+
+    public static EmploymentShortDto ToShortDto(this Domain.Entities.Employment employment)
+    {
+        return new EmploymentShortDto(
+            employment.Id,
+            employment.Employer.ToDto(), employment.Location, employment.EmploymentType,
+            employment.StartDate, employment.EndDate);
     }
 
     public static AssignmentDto ToDto(this Domain.Entities.Assignment assignment)
     {
         return new AssignmentDto(
             assignment.Id,
-            assignment.Employment.ToDto(), assignment.Company.ToDto(), assignment.Location, assignment.AssignmentType, 
-            assignment.StartDate, assignment.EndDate, 
+            assignment.Employment.ToShortDto(), assignment.Company.ToDto(), assignment.Location, assignment.AssignmentType,
+            assignment.StartDate, assignment.EndDate,
             assignment.Description,
             assignment.Roles.Select(x => x.ToDto()),
             assignment.Skills.OrderBy(s => s.PersonProfileSkill.Skill.Name).Select(x => x.PersonProfileSkill.ToDto()));

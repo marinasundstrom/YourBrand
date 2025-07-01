@@ -1,4 +1,4 @@
-x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))
+x-generator: NSwag v14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))
 openapi: 3.0.0
 info:
   title: Showroom
@@ -994,13 +994,23 @@ paths:
         schema:
           type: string
         x-position: 1
+      - name: filter
+        in: query
+        schema:
+          $ref: '#/components/schemas/ExperiencesFilter'
+        x-position: 2
+      - name: displayMode
+        in: query
+        schema:
+          $ref: '#/components/schemas/ExperiencesDisplayMode'
+        x-position: 3
       - name: page
         in: query
         schema:
           type: integer
           format: int32
           default: 1
-        x-position: 2
+        x-position: 4
       - name: pageSize
         in: query
         schema:
@@ -1008,19 +1018,19 @@ paths:
           format: int32
           default: 10
           nullable: true
-        x-position: 3
+        x-position: 5
       - name: searchString
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 4
+        x-position: 6
       - name: sortBy
         in: query
         schema:
           type: string
           nullable: true
-        x-position: 5
+        x-position: 7
       - name: sortDirection
         in: query
         schema:
@@ -1028,7 +1038,7 @@ paths:
           - nullable: true
             oneOf:
             - $ref: '#/components/schemas/SortDirection'
-        x-position: 6
+        x-position: 8
       responses:
         200:
           description: ''
@@ -2179,7 +2189,7 @@ components:
     Experience:
       type: object
       discriminator:
-        propertyName: type
+        propertyName: kind
         mapping:
           Assignment: '#/components/schemas/Assignment'
           Employment: '#/components/schemas/Employment'
@@ -2188,7 +2198,7 @@ components:
       x-abstract: true
       additionalProperties: false
       required:
-      - type
+      - kind
       properties:
         type:
           $ref: '#/components/schemas/ExperienceType'
@@ -2202,6 +2212,8 @@ components:
         description:
           type: string
           nullable: true
+        kind:
+          type: string
     ExperienceType:
       type: string
       description: ''
@@ -2240,6 +2252,10 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/PersonProfileSkill'
+          assignments:
+            type: array
+            items:
+              $ref: '#/components/schemas/Assignment'
     EmploymentType:
       type: integer
       description: ''
@@ -2279,14 +2295,6 @@ components:
           type: string
         title:
           type: string
-        employment:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/Employment'
-        assignment:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/Assignment'
         location:
           type: string
           nullable: true
@@ -2304,68 +2312,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PersonProfileSkill'
-    Assignment:
-      allOf:
-      - $ref: '#/components/schemas/Experience'
-      - type: object
-        additionalProperties: false
-        properties:
-          id:
-            type: string
-          employment:
-            $ref: '#/components/schemas/Employment'
-          company:
-            nullable: true
-            oneOf:
-            - $ref: '#/components/schemas/Company'
-          location:
-            type: string
-            nullable: true
-          assignmentType:
-            $ref: '#/components/schemas/AssignmentType'
-          roles:
-            type: array
-            items:
-              $ref: '#/components/schemas/Role'
-          skills:
-            type: array
-            items:
-              $ref: '#/components/schemas/PersonProfileSkill'
-    AssignmentType:
-      type: integer
-      description: ''
-      x-enumNames:
-      - ShortTerm
-      - LongTerm
-      - ProjectBased
-      - Consulting
-      - Training
-      - Leadership
-      - Research
-      - ContractedTask
-      - ClientEngagement
-      - InternalRotation
-      - Mentoring
-      - SupportRole
-      - Developmental
-      - RemoteAssignment
-      - TemporaryCover
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      - 12
-      - 13
-      - 14
     PersonProfileSkill:
       type: object
       additionalProperties: false
@@ -2413,6 +2359,88 @@ components:
           type: string
         href:
           type: string
+    Assignment:
+      allOf:
+      - $ref: '#/components/schemas/Experience'
+      - type: object
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+          employment:
+            $ref: '#/components/schemas/EmploymentShort'
+          company:
+            nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/Company'
+          location:
+            type: string
+            nullable: true
+          assignmentType:
+            $ref: '#/components/schemas/AssignmentType'
+          roles:
+            type: array
+            items:
+              $ref: '#/components/schemas/Role'
+          skills:
+            type: array
+            items:
+              $ref: '#/components/schemas/PersonProfileSkill'
+    EmploymentShort:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        employer:
+          $ref: '#/components/schemas/Company'
+        location:
+          type: string
+          nullable: true
+        employmentType:
+          $ref: '#/components/schemas/EmploymentType'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+    AssignmentType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - ShortTerm
+      - LongTerm
+      - ProjectBased
+      - Consulting
+      - Training
+      - Leadership
+      - Research
+      - ContractedTask
+      - ClientEngagement
+      - InternalRotation
+      - Mentoring
+      - SupportRole
+      - Developmental
+      - RemoteAssignment
+      - TemporaryCover
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
     Project:
       allOf:
       - $ref: '#/components/schemas/Experience'
@@ -2426,11 +2454,11 @@ components:
           employment:
             nullable: true
             oneOf:
-            - $ref: '#/components/schemas/Employment'
+            - $ref: '#/components/schemas/EmploymentShort'
           assignment:
             nullable: true
             oneOf:
-            - $ref: '#/components/schemas/Assignment'
+            - $ref: '#/components/schemas/AssignmentShort'
           company:
             nullable: true
             oneOf:
@@ -2438,6 +2466,30 @@ components:
           location:
             type: string
             nullable: true
+    AssignmentShort:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        employment:
+          $ref: '#/components/schemas/EmploymentShort'
+        company:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Company'
+        location:
+          type: string
+          nullable: true
+        assignmentType:
+          $ref: '#/components/schemas/AssignmentType'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
     CareerBreak:
       allOf:
       - $ref: '#/components/schemas/Experience'
@@ -2446,6 +2498,26 @@ components:
         properties:
           id:
             type: string
+    ExperiencesFilter:
+      type: integer
+      description: ''
+      x-enumNames:
+      - All
+      - Employments
+      - Assignments
+      enum:
+      - 1
+      - 2
+      - 3
+    ExperiencesDisplayMode:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Flat
+      - Hierarchical
+      enum:
+      - 1
+      - 2
     ExperienceDetails:
       type: object
       discriminator:

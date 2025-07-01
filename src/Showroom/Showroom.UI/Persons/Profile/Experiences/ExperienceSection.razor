@@ -19,7 +19,7 @@
         @{
             var groups = experiences
                    .OrderByDescending(x => Default(x.EndDate))
-            .GroupBy(e => (e as Assignment)?.Company?.Name ?? (e as Employment)?.Employer?.Name ?? DateTime.Now.Ticks.ToString());
+            .GroupBy(e => (e as Assignment)?.Employment?.Id ?? (e as Employment)?.Id ?? DateTime.Now.Ticks.ToString());
         }
 
         <ExperienceList Groups="groups" AddOrEditExperience="AddOrEditExperience" DeleteExperience="DeleteExperience"  />
@@ -59,7 +59,7 @@
         {
             page = 1;
 
-            var experiencesResult = await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, page++, 3, null, null, null);
+            var experiencesResult = await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, ExperiencesFilter.All, ExperiencesDisplayMode.Flat, page++, 3, null, null, null);
             experiences = experiencesResult.Items.ToList();
             total = experiencesResult.TotalCount;
         }
@@ -84,7 +84,7 @@
 
         isLoading = true;
 
-        var experiencesResult = await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, page++, 3, null, null, null);
+        var experiencesResult = await PersonProfilesClient.GetExperiencesAsync(PersonProfileId, ExperiencesFilter.All, ExperiencesDisplayMode.Flat, page++, 3, null, null, null);
         experiences.AddRange(experiencesResult.Items);
 
         isLoading = false;
