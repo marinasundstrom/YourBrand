@@ -18,7 +18,7 @@
                     </div>
                 </div>
 
-                <RoleList Roles="Employment.Roles" />
+                <RolesList Roles="Employment.Roles.Where(x => x.Assignment is null)" />
             }
             else 
             {

@@ -77,8 +77,8 @@ public record ProjectDto(
 public record RoleDto(
     string Id,
     string Title,
-    //EmploymentDto? Employment,
-    //AssignmentDto? Assignment,
+    EmploymentShortDto? Employment,
+    AssignmentShortDto? Assignment,
     string? Location,
     DateTime StartDate, DateTime? EndDate,
     string? Description,

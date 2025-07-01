@@ -27,7 +27,7 @@ public record GetExperiencesQuery(ExperiencesFilter Filter, ExperiencesDisplayMo
                     .Include(x => x.Assignments) //?
                     .OrderByDescending(x => x.StartDate)
                     .ThenByDescending(x => x.EndDate)
-                    .AsNoTracking()
+                    //.AsNoTracking()
                     .AsQueryable();
 
             if (!string.IsNullOrEmpty(request.PersonProfileId))

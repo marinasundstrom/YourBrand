@@ -2295,6 +2295,14 @@ components:
           type: string
         title:
           type: string
+        employment:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/EmploymentShort'
+        assignment:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/AssignmentShort'
         location:
           type: string
           nullable: true
@@ -2312,6 +2320,85 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PersonProfileSkill'
+    EmploymentShort:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        employer:
+          $ref: '#/components/schemas/Company'
+        location:
+          type: string
+          nullable: true
+        employmentType:
+          $ref: '#/components/schemas/EmploymentType'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+    AssignmentShort:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        employment:
+          $ref: '#/components/schemas/EmploymentShort'
+        company:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Company'
+        location:
+          type: string
+          nullable: true
+        assignmentType:
+          $ref: '#/components/schemas/AssignmentType'
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+          nullable: true
+    AssignmentType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - ShortTerm
+      - LongTerm
+      - ProjectBased
+      - Consulting
+      - Training
+      - Leadership
+      - Research
+      - ContractedTask
+      - ClientEngagement
+      - InternalRotation
+      - Mentoring
+      - SupportRole
+      - Developmental
+      - RemoteAssignment
+      - TemporaryCover
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      - 11
+      - 12
+      - 13
+      - 14
     PersonProfileSkill:
       type: object
       additionalProperties: false
@@ -2386,61 +2473,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/PersonProfileSkill'
-    EmploymentShort:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        employer:
-          $ref: '#/components/schemas/Company'
-        location:
-          type: string
-          nullable: true
-        employmentType:
-          $ref: '#/components/schemas/EmploymentType'
-        startDate:
-          type: string
-          format: date-time
-        endDate:
-          type: string
-          format: date-time
-          nullable: true
-    AssignmentType:
-      type: integer
-      description: ''
-      x-enumNames:
-      - ShortTerm
-      - LongTerm
-      - ProjectBased
-      - Consulting
-      - Training
-      - Leadership
-      - Research
-      - ContractedTask
-      - ClientEngagement
-      - InternalRotation
-      - Mentoring
-      - SupportRole
-      - Developmental
-      - RemoteAssignment
-      - TemporaryCover
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      - 6
-      - 7
-      - 8
-      - 9
-      - 10
-      - 11
-      - 12
-      - 13
-      - 14
     Project:
       allOf:
       - $ref: '#/components/schemas/Experience'
@@ -2466,30 +2498,6 @@ components:
           location:
             type: string
             nullable: true
-    AssignmentShort:
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-        employment:
-          $ref: '#/components/schemas/EmploymentShort'
-        company:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/Company'
-        location:
-          type: string
-          nullable: true
-        assignmentType:
-          $ref: '#/components/schemas/AssignmentType'
-        startDate:
-          type: string
-          format: date-time
-        endDate:
-          type: string
-          format: date-time
-          nullable: true
     CareerBreak:
       allOf:
       - $ref: '#/components/schemas/Experience'
