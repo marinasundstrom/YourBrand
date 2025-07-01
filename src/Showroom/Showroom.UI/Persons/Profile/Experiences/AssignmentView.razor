@@ -1,8 +1,12 @@
-<div class="d-flex mt-4">
+<div class="d-flex @(!Mini ? "mt-4" : string.Empty)">
+
+    @if (!Mini) 
+    {
     <div class="col-logo">
         <Logo Src="@Assignment.Company.Logo" Alt="@($"{Assignment.Company.Name} logo")" Class="me-4"
             Href="@Assignment.Company.Link" />
     </div>
+    }
 
     <div class="flex-grow-1">
         <div class="mb-5">
@@ -54,4 +58,7 @@
     [Parameter]
     [EditorRequired]
     public Assignment Assignment { get; set; } = null!;
+
+    [Parameter]
+    public bool Mini { get; set; }
 }

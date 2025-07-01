@@ -25,21 +25,35 @@
     }
     else
     {
-        foreach(var experience in experiences) 
-        {
-            if (experience is Employment employment) 
+        var employment = experiences.OfType<Employment>().First();
+
+        <EmploymentView Employment="employment"></EmploymentView>
+
+        <MudTimeline TimelinePosition="@TimelinePosition.Start" TimelineAlign="@TimelineAlign.Start">
+            @foreach(var experience in experiences.OfType<Assignment>()) 
             {
-                <EmploymentView Employment="employment"></EmploymentView>
+                <MudTimelineItem>  
+
+                    <ItemDot>
+                        <MudAvatar Size="@Size.Medium" Style="margin-top: 14px;">
+                            <MudImage Src="@experience.Company.Logo" />
+                        </MudAvatar>
+                    </ItemDot>
+
+                    <ChildContent>
+                        @if (experience is Assignment assignment)
+                        {
+                            <AssignmentView Assignment="assignment" Mini="true" />
+                        }
+                        else
+                        {
+                            @experience.Description
+                        }
+                    </ChildContent>
+                </MudTimelineItem>
             }
-            else if (experience is Assignment assignment)
-            {
-                <AssignmentView Assignment="assignment"></AssignmentView>
-            }
-            else 
-            {
-                @experience.Description
-            }
-        }
+        </MudTimeline>
+
     }
 
     @if (Groups.LastOrDefault() != group)
