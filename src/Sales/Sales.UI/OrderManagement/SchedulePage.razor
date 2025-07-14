@@ -72,6 +72,11 @@ EnableResizeItems="true" DateRangeChanged="OnDateRangeChanged" ItemChanged="OnIt
         var end = DateTime.SpecifyKind(dateRange.End.GetValueOrDefault(), DateTimeKind.Local);
         DateTimeOffset localTime2 = end;
 
+        if (localTime1 == localTime2) 
+        {
+            localTime2 = localTime2.AddHours(24);
+        }
+
         await GetOrders(organization.Id, localTime1, localTime2);
     }
 
