@@ -11,8 +11,8 @@
             "link": "https://www.solidab.se/",
             "location": "Malm\u00F6, Sweden",
             "current": false,
-            "startDate": "2025-01-25T00:00:00",
-            "endDate": "2025-05-06T00:00:00",
+            "startDate": "2025-01-26T00:00:00",
+            "endDate": "2025-05-05T00:00:00",
             "description": "My initial role was as a Frontend developer. However, because of my experience with both Blazor and ASP.NET Core, I have been working on Backend as well. Helping influencing and designing the software solution. Implementing BankID integration.",
             "skills": [
                 "C#",
