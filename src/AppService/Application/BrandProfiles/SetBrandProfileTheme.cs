@@ -18,6 +18,12 @@ public record SetBrandProfileTheme(string ThemeId) : IRequest<BrandProfileDto>
                 .OrderBy(x => x.Created)
                 .FirstOrDefaultAsync(cancellationToken);
 
+            if(brandProfile is null)
+            {
+                brandProfile = new BrandProfile("Brand", null);
+                appServiceContext.BrandProfiles.Add(brandProfile);
+            }
+
             brandProfile.Theme = await appServiceContext.Themes.FirstOrDefaultAsync(t => t.Id == request.ThemeId, cancellationToken);
 
             await appServiceContext.SaveChangesAsync(cancellationToken);

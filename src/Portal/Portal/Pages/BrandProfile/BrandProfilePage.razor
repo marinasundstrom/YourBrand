@@ -21,6 +21,16 @@
 
 <MudButton OnClick="ExportTheme" Variant="Variant.Filled" Class="mt-4 mb-4">Export theme</MudButton>
 
+<MudFileUpload T="IBrowserFile" FilesChanged="ImportTheme">
+    <ActivatorContent>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.CloudUpload">
+            Import theme
+        </MudButton>
+    </ActivatorContent>
+</MudFileUpload>
+
 @if (brandProfile is not null) 
 {
     <MudTabs Elevation="25" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
@@ -93,5 +103,11 @@
         string contentType = "application/json";
 
         await JS.InvokeVoidAsync("downloadFileFromString", fileName, contentType, content);
+    }
+
+    async Task ImportTheme(IBrowserFile file)
+    {
+        await ThemesClient.ImportThemeAsync(brandProfile.Theme.Id,
+            new FileParameter(file.OpenReadStream(3 * 1000000), file.Name));
     }
 }
