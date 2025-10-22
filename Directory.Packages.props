@@ -11,11 +11,11 @@
     <PackageVersion Include="AspNetCore.HealthChecks.Rabbitmq" Version="9.0.0" />
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.2.0" />
-    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="9.2.0" />
-    <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="9.2.0" />
-    <PackageVersion Include="Aspire.Hosting.Redis" Version="9.2.0" />
-    <PackageVersion Include="Aspire.Hosting.SqlServer" Version="9.2.0" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.5.1" />
+    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="9.5.1" />
+    <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="9.5.1" />
+    <PackageVersion Include="Aspire.Hosting.Redis" Version="9.5.1" />
+    <PackageVersion Include="Aspire.Hosting.SqlServer" Version="9.5.1" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
     <PackageVersion Include="Azure.Identity" Version="1.14.2" />
     <PackageVersion Include="Azure.Security.KeyVault.Secrets" Version="4.5.0" />
@@ -58,8 +58,8 @@
     <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="10.0.0-rc.2.*" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.0-rc.2.*" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="10.0.0-rc.2.*" />
-    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer"
-      Version="10.0.0-preview.4.25221.3" />
+<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer"
+      Version="[10.0.0-rc.2.25502.107]" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server"
       Version="10.0.0-rc.2.*" />
     <PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore"
@@ -158,7 +158,7 @@
     <PackageVersion Include="Serilog.Sinks.OpenTelemetry" Version="4.1.0" />
     <PackageVersion Include="Shouldly" Version="4.1.0" />
     <PackageVersion Include="Reqnroll.xUnit" Version="2.4.0" />
-    <PackageVersion Include="Sundstrom.CheckedExceptions" Version="1.6.0" />
+    <PackageVersion Include="Sundstrom.CheckedExceptions" Version="2.5.1" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
     <PackageVersion Include="System.Net.Http.Json" Version="10.0.0-rc.2.*" />
