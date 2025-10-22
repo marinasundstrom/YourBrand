@@ -19,17 +19,17 @@
 
 <ThemeSelector Label="Active theme" Class="mb-16" Value="brandProfile?.Theme" ValueChanged="ThemeChanged" ShowCopyButton="true" />
 
-<MudButton OnClick="ExportTheme" Variant="Variant.Filled" Class="mt-4 mb-4">Export theme</MudButton>
+<div class="d-flex mt-4 mb-4">
+    <MudButton OnClick="ExportTheme" Variant="Variant.Filled" Class="me-4">Export theme</MudButton>
 
-<MudFileUpload T="IBrowserFile" FilesChanged="ImportTheme">
-    <ActivatorContent>
-        <MudButton Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   StartIcon="@Icons.Material.Filled.CloudUpload">
-            Import theme
-        </MudButton>
-    </ActivatorContent>
-</MudFileUpload>
+    <MudFileUpload T="IBrowserFile" FilesChanged="ImportTheme">
+        <ActivatorContent>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload">
+                Import theme
+            </MudButton>
+        </ActivatorContent>
+    </MudFileUpload>
+</div>
 
 @if (brandProfile is not null) 
 {
