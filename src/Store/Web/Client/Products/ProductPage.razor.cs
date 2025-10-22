@@ -32,7 +32,7 @@ public partial class ProductPage
     [SupplyParameterFromQuery(Name = "d")]
     public string? Data { get; set; }
 
-    [SupplyParameterFromPersistentComponentState]
+    [PersistentState]
     public ProductViewModel? productViewModel { get; set; }
 
     public string? SelectedPlanId { get; set; }

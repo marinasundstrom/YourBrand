@@ -28,10 +28,10 @@
 
 @code
 {
-    [SupplyParameterFromPersistentComponentState]
+    [PersistentState]
     public string? path { get; set; }
 
-    [SupplyParameterFromPersistentComponentState]
+    [PersistentState]
     public ProductCategoryTreeRootDto? categoryTree { get; set; }
 
     public IEnumerable<ProductCategoryTreeNodeDto>? categoryTreeNodes { get; set; }

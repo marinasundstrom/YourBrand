@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
-using Microsoft.OpenApi.Models;
 
 namespace Microsoft.Extensions.Hosting;
 

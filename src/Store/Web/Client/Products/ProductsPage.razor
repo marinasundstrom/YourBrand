@@ -171,16 +171,16 @@
     [Parameter]
     public string? BrandId { get; set; }
 
-    [SupplyParameterFromPersistentComponentState]
+    [PersistentState]
     public ICollection<BlazorApp.Products.Product> products { get; set; }
 
-    [SupplyParameterFromPersistentComponentState]
+    [PersistentState]
     public IEnumerable<BlazorApp.Brands.Brand> brands { get; set; }
 
-    [SupplyParameterFromPersistentComponentState]
+    [PersistentState]
     public BlazorApp.ProductCategories.ProductCategoryDto? category { get; set; }
 
-    [SupplyParameterFromPersistentComponentState]
+    [PersistentState]
     public int? pageCount { get; set; }
 
     protected override async Task OnInitializedAsync()
