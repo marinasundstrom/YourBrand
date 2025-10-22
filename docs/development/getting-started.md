@@ -1,6 +1,6 @@
 # Getting started
 
-1. Run services in Aspire (Requires .NET 9 SDK and Docker):
+1. Run services in Aspire (Requires .NET 10 SDK and Docker):
 
 ``dotnet run --project src/YourBrand.AppHost/YourBrand.AppHost.csproj;``
 
