@@ -46,6 +46,15 @@ else
                         <MudText Typo="@Typo.body1" GutterBottom="true">@agendaItem.State</MudText>
                     }
                 }
+                else if (meeting.State == MeetingState.Adjourned)
+                {
+                    <MudText Typo="@Typo.body1" GutterBottom="true">Meeting is adjourned</MudText>
+
+                    @if (!string.IsNullOrWhiteSpace(meeting.AdjournmentMessage))
+                    {
+                        <MudAlert Severity="Severity.Info" Variant="Variant.Filled">@meeting.AdjournmentMessage</MudAlert>
+                    }
+                }
                 else if (meeting.State == MeetingState.Completed)
                 {
                     <MudText Typo="@Typo.body1" GutterBottom="true">Meeting has concluded</MudText>

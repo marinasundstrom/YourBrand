@@ -1,7 +1,7 @@
 namespace YourBrand.Meetings.Features;
 
-public sealed record MeetingDto(int Id, string Title, string? Description, MeetingState State, DateTimeOffset? ScheduledAt, string Location, 
-    MeetingQuorumDto Quorum, IEnumerable<MeetingAttendeeDto> Attendees, int? CurrentAgendaItemIndex, int? CurrentAgendaSubItemIndex,
+public sealed record MeetingDto(int Id, string Title, string? Description, MeetingState State, DateTimeOffset? ScheduledAt, string Location,
+    string? AdjournmentMessage, DateTimeOffset? AdjournedAt, MeetingQuorumDto Quorum, IEnumerable<MeetingAttendeeDto> Attendees, int? CurrentAgendaItemIndex, int? CurrentAgendaSubItemIndex,
     IDictionary<string, DtoAction> Actions);
 
 public sealed record MeetingQuorumDto(int RequiredNumber);

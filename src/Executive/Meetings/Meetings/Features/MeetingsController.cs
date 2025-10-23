@@ -27,6 +27,8 @@ public sealed record ChangeMeetingQuorumDto(int RequiredNumber);
 
 public sealed record ChangeMeetingStateDto(MeetingState State);
 
+public sealed record AdjournMeetingDto(string Message);
+
 public sealed record AddMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
 
 public sealed record EditMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
@@ -197,6 +199,26 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
     public async Task<ActionResult> StartMeeting([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new StartMeeting(organizationId, id), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/Adjourn")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> AdjournMeeting([FromQuery] string organizationId, int id, AdjournMeetingDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new AdjournMeeting(organizationId, id, request.Message), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/Resume")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> ResumeMeeting([FromQuery] string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new ResumeMeeting(organizationId, id), cancellationToken);
         return this.HandleResult(result);
     }
 

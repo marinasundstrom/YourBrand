@@ -7,7 +7,8 @@ namespace YourBrand.Meetings.Features;
 public static partial class Mappings
 {
     public static MeetingDto ToDto(this Meeting meeting) => 
-        new(meeting.Id, meeting.Title!, meeting.Description, meeting.State, meeting.ScheduledAt, meeting.Location, meeting.Quorum.ToDto(), 
+        new(meeting.Id, meeting.Title!, meeting.Description, meeting.State, meeting.ScheduledAt, meeting.Location,
+        meeting.AdjournmentMessage, meeting.AdjournedAt, meeting.Quorum.ToDto(),
         meeting.Attendees.Select(x => x.ToDto()), meeting.CurrentAgendaItemIndex, meeting.CurrentAgendaSubItemIndex, PrepareActions(meeting));
 
     private static IDictionary<string, DtoAction> PrepareActions(Meeting meeting)
@@ -32,6 +33,16 @@ public static partial class Mappings
         if (meeting.CanEnd)
         {
             actions.Add("end", new DtoAction("POST", $"/v1/Meetings/{meeting.Id}/End"));
+        }
+
+        if (meeting.State == MeetingState.InProgress)
+        {
+            actions.Add("adjourn", new DtoAction("POST", $"/v1/Meetings/{meeting.Id}/Adjourn"));
+        }
+
+        if (meeting.State == MeetingState.Adjourned)
+        {
+            actions.Add("resume", new DtoAction("POST", $"/v1/Meetings/{meeting.Id}/Resume"));
         }
 
         return actions;

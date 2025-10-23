@@ -13,6 +13,7 @@ public enum MeetingState
     Draft,
     Scheduled,
     InProgress,
+    Adjourned,
     Completed,
     Canceled
 }
@@ -45,6 +46,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
     public string Location { get; set; }
     public string? Description { get; set; }
     public MeetingState State { get; set; } = MeetingState.Draft;
+    public DateTimeOffset? AdjournedAt { get; private set; }
+    public string? AdjournmentMessage { get; private set; }
     public IReadOnlyCollection<MeetingAttendee> Attendees => _attendees;
     public Agenda? Agenda { get; set; }
     public int? CurrentAgendaItemIndex { get; private set; } = null;
@@ -113,15 +116,52 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         StartedAt = DateTimeOffset.UtcNow;
 
         State = MeetingState.InProgress;
+        ClearAdjournment();
 
         CurrentAgendaItemIndex = 0;
         CurrentAgendaSubItemIndex = null;
     }
 
     [Throws(typeof(InvalidOperationException))]
+    public void AdjournMeeting(string message)
+    {
+        if (State != MeetingState.InProgress)
+        {
+            throw new InvalidOperationException("Only in-progress meetings can be adjourned.");
+        }
+
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            throw new InvalidOperationException("Adjournment message is required.");
+        }
+
+        AdjournedAt = DateTimeOffset.UtcNow;
+        AdjournmentMessage = message;
+        State = MeetingState.Adjourned;
+    }
+
+    [Throws(typeof(InvalidOperationException))]
+    public void ResumeMeeting()
+    {
+        if (State != MeetingState.Adjourned)
+        {
+            throw new InvalidOperationException("Only adjourned meetings can be resumed.");
+        }
+
+        State = MeetingState.InProgress;
+        ClearAdjournment();
+    }
+
+    public void ClearAdjournment()
+    {
+        AdjournmentMessage = null;
+        AdjournedAt = null;
+    }
+
+    [Throws(typeof(InvalidOperationException))]
     public void CancelMeeting()
     {
-        if (State != MeetingState.Scheduled && State != MeetingState.InProgress)
+        if (State != MeetingState.Scheduled && State != MeetingState.InProgress && State != MeetingState.Adjourned)
         {
             throw new InvalidOperationException("Only scheduled or in-progress meetings can be canceled.");
         }
@@ -129,6 +169,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         CanceledAt = DateTimeOffset.UtcNow;
 
         State = MeetingState.Canceled;
+        ClearAdjournment();
 
         // Skip remaining agenda items and their sub-items
         var remainingItems = Agenda.Items
@@ -156,6 +197,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
         EndedAt = DateTimeOffset.UtcNow;
         State = MeetingState.Completed;
+        ClearAdjournment();
 
         // Skip remaining agenda items and their sub-items
         var remainingItems = Agenda.Items
@@ -377,6 +419,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
     {
         State = MeetingState.Scheduled;
 
+        ClearAdjournment();
+
         CurrentAgendaItemIndex = null;
         CurrentAgendaSubItemIndex = null;
 
@@ -482,7 +526,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
     // Determines if the meeting can be canceled
     public bool CanCancel =>
-        State == MeetingState.Scheduled || State == MeetingState.InProgress;
+        State == MeetingState.Scheduled || State == MeetingState.InProgress || State == MeetingState.Adjourned;
 
     // Determines if the meeting can be ended
     public bool CanEnd

@@ -38,6 +38,10 @@ public static partial class Errors
 
         public static readonly Error OnlyChairpersonCanEndTheMeeting = new Error(nameof(OnlyChairpersonCanEndTheMeeting), "Only the chairperson can end the meeting.", string.Empty);
 
+        public static readonly Error OnlyChairpersonCanAdjournTheMeeting = new Error(nameof(OnlyChairpersonCanAdjournTheMeeting), "Only the chairperson can adjourn the meeting.", string.Empty);
+
+        public static readonly Error OnlyChairpersonCanResumeTheMeeting = new Error(nameof(OnlyChairpersonCanResumeTheMeeting), "Only the chairperson can resume the meeting.", string.Empty);
+
         public static readonly Error OnlyChairpersonCanResetTheMeetingProcedure = new Error(nameof(OnlyChairpersonCanResetTheMeetingProcedure), "Only the chairperson can reset the meeting procedure.", string.Empty);
 
         public static readonly Error OnlyChairpersonCanStartDiscussion = new Error(nameof(OnlyChairpersonCanStartDiscussion), "Only the Chairperson can start a discussion.", string.Empty);

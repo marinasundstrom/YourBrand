@@ -42,7 +42,7 @@ public sealed record StartMeeting(string OrganizationId, int Id) : IRequest<Resu
 
             await hubContext.Clients
                 .Group($"meeting-{meeting.Id}")
-                .OnMeetingStateChanged((Dtos.MeetingState)meeting.State);
+                .OnMeetingStateChanged((Dtos.MeetingState)meeting.State, meeting.AdjournmentMessage);
 
             await hubContext.Clients
                 .Group($"meeting-{meeting.Id}")

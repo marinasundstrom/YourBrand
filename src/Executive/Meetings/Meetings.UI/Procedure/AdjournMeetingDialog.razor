@@ -1,0 +1,40 @@
+@using System.ComponentModel.DataAnnotations
+
+<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.h6" GutterBottom="true">Confirm adjournment</MudText>
+        <MudText Typo="Typo.body2" GutterBottom="true">
+            Provide a message that will be shown to attendees while the meeting is adjourned.
+        </MudText>
+
+        <EditForm Model="this" OnValidSubmit="SubmitAsync">
+            <DataAnnotationsValidator />
+            <MudTextField Label="Message" @bind-Value="AdjournmentMessage" Lines="4" Required="true" Immediate="true" />
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SubmitAsync" Disabled="string.IsNullOrWhiteSpace(AdjournmentMessage)">Adjourn</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Required]
+    public string AdjournmentMessage { get; set; } = string.Empty;
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private Task SubmitAsync()
+    {
+        if(string.IsNullOrWhiteSpace(AdjournmentMessage))
+        {
+            return Task.CompletedTask;
+        }
+
+        MudDialog.Close(DialogResult.Ok(AdjournmentMessage.Trim()));
+        return Task.CompletedTask;
+    }
+}

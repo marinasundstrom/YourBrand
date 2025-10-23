@@ -64,13 +64,27 @@ else
                                     <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="me-2" OnClick="MoveToNextAgendaItem"
                                         Disabled="@(lastItem || currentAgendaItem?.State == AgendaItemState.Pending)">Next Agenda Item</MudButton>
                                     <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="me-2"  OnClick="ResetProcedure">Reset procedure</MudButton>
+                                    <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="AdjournMeeting">Adjourn</MudButton>
                                 </div>
                                 <div>
                                     <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="me-2" OnClick="EndMeeting"
                                         Disabled="@(!lastItem || currentAgendaItem?.State != AgendaItemState.Completed)">End Meeting</MudButton>
-                                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="me-2" OnClick="CancelMeeting" 
+                                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="me-2" OnClick="CancelMeeting"
                                         Disabled="@(lastItem && currentAgendaItem?.State == AgendaItemState.Completed)">Cancel Meeting</MudButton>
                                 </div>
+                            </div>
+                        }
+                        else if (meeting.State == MeetingState.Adjourned)
+                        {
+                            <div class="d-flex flex-column flex-grow-1 gap-2">
+                                <MudText Typo="Typo.subtitle1">The meeting is currently adjourned.</MudText>
+
+                                @if (!string.IsNullOrWhiteSpace(meeting.AdjournmentMessage))
+                                {
+                                    <MudAlert Severity="Severity.Info" Variant="Variant.Filled">@meeting.AdjournmentMessage</MudAlert>
+                                }
+
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ResumeMeeting">Resume meeting</MudButton>
                             </div>
                         }
                         else if (meeting.State == MeetingState.Completed)
@@ -564,12 +578,37 @@ else
     {
         var r = await DialogService.ShowMessageBox("Cancel the meeting?", "This can't be undone.", "Yes", "No");
 
-        if(!r.GetValueOrDefault()) 
+        if(!r.GetValueOrDefault())
         {
             return;
         }
 
         await MeetingsClient.CancelMeetingAsync(organization.Id, MeetingId);
+        await LoadMeetingDetails();
+    }
+
+    private async Task AdjournMeeting()
+    {
+        var dialog = await DialogService.ShowAsync<AdjournMeetingDialog>("Adjourn meeting");
+
+        var result = await dialog.Result;
+
+        if(result.Canceled)
+        {
+            return;
+        }
+
+        var message = (string)result.Data!;
+
+        await MeetingsClient.AdjournMeetingAsync(organization.Id, MeetingId, new global::YourBrand.Meetings.AdjournMeeting { Message = message });
+
+        await LoadMeetingDetails();
+    }
+
+    private async Task ResumeMeeting()
+    {
+        await MeetingsClient.ResumeMeetingAsync(organization.Id, MeetingId);
+
         await LoadMeetingDetails();
     }
 
