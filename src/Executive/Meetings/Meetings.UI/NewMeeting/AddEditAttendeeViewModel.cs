@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace YourBrand.Meetings.NewMeeting;
@@ -17,6 +18,8 @@ public class AddEditAttendeeViewModel
 
     public bool? HasVotingRights { get; set; }
 
+    public List<int> FunctionIds { get; set; } = new();
+
     public AddEditAttendeeViewModel Clone()
     {
         return new AddEditAttendeeViewModel
@@ -25,7 +28,8 @@ public class AddEditAttendeeViewModel
             Role = Role,
             Email = Email,
             User = User,
-            HasVotingRights = HasVotingRights
+            HasVotingRights = HasVotingRights,
+            FunctionIds = new List<int>(FunctionIds)
         };
     }
 }

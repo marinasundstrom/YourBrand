@@ -1,4 +1,5 @@
 using System;
+using YourBrand.Meetings.Domain.Entities;
 
 using MediatR;
 
@@ -39,7 +40,7 @@ public sealed record ResetSpeakerClock(string OrganizationId, int Id, string Age
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (attendee.Role != AttendeeRole.Chairperson)
+            if (!meeting.CanAttendeeActAsChair(attendee))
             {
                 return Errors.Meetings.OnlyChairpersonCanManageSpeakerQueue;
             }

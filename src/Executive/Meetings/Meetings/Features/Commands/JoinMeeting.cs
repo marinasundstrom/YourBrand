@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +46,7 @@ public sealed record JoinMeeting(string OrganizationId, int Id) : IRequest<Resul
                     ?? throw new Exception("Invalid role");
             }
 
-            if (meeting.CanAnyoneJoin && joinRole.Id != AttendeeRole.Attendee.Id && joinRole.Id != AttendeeRole.Observer.Id)
+            if (meeting.CanAnyoneJoin && joinRole.Id != AttendeeRole.Member.Id && joinRole.Id != AttendeeRole.Observer.Id)
             {
                 return Errors.Meetings.InvalidOpenAccessRole;
             }
@@ -56,7 +59,7 @@ public sealed record JoinMeeting(string OrganizationId, int Id) : IRequest<Resul
 
             if (attendee is null)
             {
-                attendee = meeting.AddAttendee(displayName, userId, email, joinRole, joinRole.CanSpeak, joinRole.CanVote);
+                attendee = meeting.AddAttendee(displayName, userId, email, joinRole, joinRole.CanSpeak, joinRole.CanVote, Enumerable.Empty<MeetingFunction>());
             }
             else
             {
@@ -67,6 +70,7 @@ public sealed record JoinMeeting(string OrganizationId, int Id) : IRequest<Resul
                 attendee.RoleId = joinRole.Id;
                 attendee.HasSpeakingRights = joinRole.CanSpeak;
                 attendee.HasVotingRights = joinRole.CanVote;
+                attendee.SetFunctions(Array.Empty<MeetingFunction>());
             }
 
             attendee.JoinedAt = now;

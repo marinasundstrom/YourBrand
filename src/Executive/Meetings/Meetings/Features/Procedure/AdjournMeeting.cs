@@ -1,4 +1,5 @@
 using FluentValidation;
+using YourBrand.Meetings.Domain.Entities;
 
 using MediatR;
 
@@ -39,7 +40,7 @@ public sealed record AdjournMeeting(string OrganizationId, int Id, string Messag
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (attendee.Role != AttendeeRole.Chairperson)
+            if (!meeting.CanAttendeeActAsChair(attendee))
             {
                 return Errors.Meetings.OnlyChairpersonCanAdjournTheMeeting;
             }

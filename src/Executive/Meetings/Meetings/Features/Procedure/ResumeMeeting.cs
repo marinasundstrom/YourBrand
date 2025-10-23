@@ -1,4 +1,5 @@
 using MediatR;
+using YourBrand.Meetings.Domain.Entities;
 
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,7 @@ public sealed record ResumeMeeting(string OrganizationId, int Id) : IRequest<Res
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (attendee.Role != AttendeeRole.Chairperson)
+            if (!meeting.CanAttendeeActAsChair(attendee))
             {
                 return Errors.Meetings.OnlyChairpersonCanResumeTheMeeting;
             }

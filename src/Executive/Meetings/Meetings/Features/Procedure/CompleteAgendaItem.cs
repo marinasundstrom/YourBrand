@@ -1,4 +1,5 @@
 using MediatR;
+using YourBrand.Meetings.Domain.Entities;
 
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,7 @@ public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IReques
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (attendee.Role != AttendeeRole.Chairperson)
+            if (!meeting.CanAttendeeActAsChair(attendee))
             {
                 return Errors.Meetings.OnlyChairpersonCanCompleteAgendaItem;
             }

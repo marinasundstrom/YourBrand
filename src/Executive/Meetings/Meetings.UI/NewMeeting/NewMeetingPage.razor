@@ -1,6 +1,7 @@
 @page "/meetings/new"
 
 @using System
+@using System.Collections.Generic
 @using System.ComponentModel.DataAnnotations
 @using System.Linq
 @using YourBrand.Portal.Services
@@ -136,7 +137,7 @@
             .ToList() ?? new List<AttendeeRole>();
 
         JoinAsRole = allowedRoles.FirstOrDefault(r => string.Equals(r.Name, "Observer", StringComparison.OrdinalIgnoreCase))
-            ?? allowedRoles.FirstOrDefault(r => string.Equals(r.Name, "Attendee", StringComparison.OrdinalIgnoreCase))
+            ?? allowedRoles.FirstOrDefault(r => string.Equals(r.Name, "Member", StringComparison.OrdinalIgnoreCase))
             ?? new AttendeeRole();
     }
 
@@ -168,7 +169,8 @@
                         Role = model.Role.Id,
                         Email = model.Email,
                         UserId = model.User?.Id,
-                        HasVotingRights = model.HasVotingRights
+                        HasVotingRights = model.HasVotingRights,
+                        FunctionIds = model.FunctionIds
                     };
                 }).ToList()
             });
@@ -231,5 +233,5 @@
 
     private static bool IsAllowedOpenAccessRole(AttendeeRole role) =>
         string.Equals(role.Name, "Observer", StringComparison.OrdinalIgnoreCase)
-            || string.Equals(role.Name, "Attendee", StringComparison.OrdinalIgnoreCase);
+            || string.Equals(role.Name, "Member", StringComparison.OrdinalIgnoreCase);
 }

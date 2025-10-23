@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace YourBrand.Meetings.MeetingDetails;
@@ -21,6 +22,8 @@ public class AttendeeViewModel
 
     public bool IsPresent { get; set; }
 
+    public List<int> FunctionIds { get; set; } = new();
+
     public AttendeeViewModel Clone()
     {
         return new AttendeeViewModel
@@ -31,7 +34,8 @@ public class AttendeeViewModel
             Email = Email,
             User = User,
             HasVotingRights = HasVotingRights,
-            IsPresent = IsPresent
+            IsPresent = IsPresent,
+            FunctionIds = new List<int>(FunctionIds)
         };
     }
 }

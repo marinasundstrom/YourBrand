@@ -25,6 +25,12 @@ public sealed class ElectionConfiguration : IEntityTypeConfiguration<Election>
 
         builder.Navigation(x => x.Ballots).AutoInclude();
 
+        builder.HasOne(x => x.MeetingFunction)
+            .WithMany()
+            .HasForeignKey(x => x.MeetingFunctionId);
+
+        builder.Navigation(x => x.MeetingFunction).AutoInclude();
+
         builder.HasOne(x => x.ElectedCandidate)
             .WithMany()
             .HasForeignKey(x => new { x.OrganizationId, x.ElectedCandidateId });

@@ -1,4 +1,6 @@
+using System.Linq;
 using MediatR;
+using YourBrand.Meetings.Domain.Entities;
 
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,9 @@ public sealed record EndElection(string OrganizationId, int Id) : IRequest<Resul
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
+                .Include(x => x.Attendees)
+                .ThenInclude(x => x.Functions)
+                .ThenInclude(x => x.Function)
                 .Include(x => x.Agenda)
                 .ThenInclude(x => x.Items.OrderBy(x => x.Order))
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
@@ -39,12 +44,32 @@ public sealed record EndElection(string OrganizationId, int Id) : IRequest<Resul
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (attendee.Role != AttendeeRole.Chairperson)
+            if (!meeting.CanAttendeeActAsChair(attendee))
             {
                 return Errors.Meetings.OnlyChairpersonCanEndVoting;
             }
 
             agendaItem.EndElection();
+
+            var election = agendaItem.Election;
+
+            if (election?.MeetingFunctionId is int meetingFunctionId &&
+                election.ElectedCandidate?.AttendeeId is { } electedAttendeeId)
+            {
+                var winningAttendee = meeting.Attendees
+                    .FirstOrDefault(x => x.Id == electedAttendeeId);
+
+                if (winningAttendee is not null)
+                {
+                    var meetingFunction = await context.MeetingFunctions
+                        .FirstOrDefaultAsync(x => x.Id == meetingFunctionId, cancellationToken);
+
+                    if (meetingFunction is not null)
+                    {
+                        meeting.AssignFunctionToAttendee(winningAttendee, meetingFunction);
+                    }
+                }
+            }
 
             context.Meetings.Update(meeting);
 

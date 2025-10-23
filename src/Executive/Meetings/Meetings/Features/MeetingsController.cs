@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Asp.Versioning;
 
 using MediatR;
@@ -32,9 +33,9 @@ public sealed record ChangeMeetingOpenAccessDto(bool CanAnyoneJoin, int? JoinAsR
 
 public sealed record AdjournMeetingDto(string Message);
 
-public sealed record AddMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
+public sealed record AddMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights, IEnumerable<int>? FunctionIds);
 
-public sealed record EditMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
+public sealed record EditMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights, IEnumerable<int>? FunctionIds);
 
 public sealed record AddAttendeesFromGroupDto(int GroupId);
 
@@ -171,7 +172,7 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
     [ProducesDefaultResponseType]
     public async Task<ActionResult<MeetingAttendeeDto>> AddAttendee(string organizationId, int id, AddMeetingAttendeeDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new AddAttendee(organizationId, id, request.Name, request.UserId, request.Email, request.Role, request.HasSpeakingRights, request.HasVotingRights), cancellationToken);
+        var result = await mediator.Send(new AddAttendee(organizationId, id, request.Name, request.UserId, request.Email, request.Role, request.HasSpeakingRights, request.HasVotingRights, request.FunctionIds), cancellationToken);
         return this.HandleResult(result);
     }
 
@@ -191,7 +192,7 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
     [ProducesDefaultResponseType]
     public async Task<ActionResult<MeetingAttendeeDto>> EditAttendee(string organizationId, int id, string attendeeId, EditMeetingAttendeeDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new EditAttendee(organizationId, id, attendeeId, request.Name, request.UserId, request.Email, request.Role, request.HasSpeakingRights, request.HasVotingRights), cancellationToken);
+        var result = await mediator.Send(new EditAttendee(organizationId, id, attendeeId, request.Name, request.UserId, request.Email, request.Role, request.HasSpeakingRights, request.HasVotingRights, request.FunctionIds), cancellationToken);
         return this.HandleResult(result);
     }
 

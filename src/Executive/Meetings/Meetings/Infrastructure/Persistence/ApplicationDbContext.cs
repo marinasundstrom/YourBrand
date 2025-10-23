@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain;
 using YourBrand.Identity;
+using YourBrand.Meetings.Domain.Entities;
 using YourBrand.Meetings.Domain.ValueObjects;
 using YourBrand.Meetings.Infrastructure.Persistence.ValueConverters;
 using YourBrand.Tenancy;
@@ -37,6 +38,7 @@ public sealed class ApplicationDbContext(
 
         configurationBuilder.Properties<MeetingId>().HaveConversion<MeetingIdConverter>();
         configurationBuilder.Properties<MeetingAttendeeId>().HaveConversion<MeetingAttendeeIdConverter>();
+        configurationBuilder.Properties<MeetingAttendeeFunctionId>().HaveConversion<MeetingAttendeeFunctionIdConverter>();
 
         configurationBuilder.Properties<DebateId>().HaveConversion<DebateIdConverter>();
         configurationBuilder.Properties<DebateEntryId>().HaveConversion<DebateEntryIdConverter>();
@@ -72,7 +74,11 @@ public sealed class ApplicationDbContext(
 
     public DbSet<MeetingAttendee> MeetingAttendees { get; set; }
 
+    public DbSet<MeetingAttendeeFunction> MeetingAttendeeFunctions { get; set; }
+
     public DbSet<AttendeeRole> AttendeeRoles { get; set; }
+
+    public DbSet<MeetingFunction> MeetingFunctions { get; set; }
 
     public DbSet<Agenda> Agendas { get; set; }
 

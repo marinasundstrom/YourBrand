@@ -1,4 +1,5 @@
 using System;
+using YourBrand.Meetings.Domain.Entities;
 
 using MediatR;
 
@@ -36,7 +37,7 @@ public sealed record StopSpeakerClock(string OrganizationId, int Id, string Agen
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (attendee.Role != AttendeeRole.Chairperson)
+            if (!meeting.CanAttendeeActAsChair(attendee))
             {
                 return Errors.Meetings.OnlyChairpersonCanManageSpeakerQueue;
             }

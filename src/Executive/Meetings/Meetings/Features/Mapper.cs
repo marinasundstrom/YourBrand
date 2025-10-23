@@ -1,4 +1,5 @@
-﻿
+﻿using System.Linq;
+
 using YourBrand.Meetings.Features.Organizations;
 using YourBrand.Meetings.Features.Users;
 
@@ -31,7 +32,6 @@ public static partial class Mappings
         {
             actions.Add("cancel", new DtoAction("POST", $"/v1/Meetings/{meeting.Id}/Cancel"));
         }
-
         if (meeting.CanEnd)
         {
             actions.Add("end", new DtoAction("POST", $"/v1/Meetings/{meeting.Id}/End"));
@@ -52,9 +52,12 @@ public static partial class Mappings
 
     public static MeetingQuorumDto ToDto(this Quorum quorum) => new(quorum.RequiredNumber);
 
-    public static MeetingAttendeeDto ToDto(this MeetingAttendee attendee) => 
-        new(attendee.Id, attendee.Name!, attendee.Role.ToDto(), attendee.Email, attendee.UserId, attendee.HasSpeakingRights, attendee.HasVotingRights, attendee.IsPresent);
+    public static MeetingAttendeeDto ToDto(this MeetingAttendee attendee) =>
+        new(attendee.Id, attendee.Name!, attendee.Role.ToDto(), attendee.Functions.Select(x => x.Function.ToDto()), attendee.Email, attendee.UserId, attendee.HasSpeakingRights, attendee.HasVotingRights, attendee.IsPresent);
 
     public static AttendeeRoleDto ToDto(this AttendeeRole role) =>
         new(role.Id, role.Name, role.Description);
+
+    public static MeetingFunctionDto ToDto(this MeetingFunction function) =>
+        new(function.Id, function.Name, function.Description);
 }

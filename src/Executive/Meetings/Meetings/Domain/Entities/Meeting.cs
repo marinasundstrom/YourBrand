@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Auditability;
 using YourBrand.Domain;
@@ -348,6 +350,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
     [Throws(typeof(InvalidOperationException))]
     public MeetingAttendee AddAttendee(string name, string? userId, string email, AttendeeRole role, bool? hasSpeakingRights, bool? hasVotingRights,
+        IEnumerable<MeetingFunction>? functions = null,
         MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
     {
         if (_attendees.Any(a => (a.UserId != null && a.UserId == userId) || a.Email.Equals(email, StringComparison.OrdinalIgnoreCase)))
@@ -366,6 +369,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
         var attendee = new MeetingAttendee
         {
+            TenantId = TenantId,
             OrganizationId = OrganizationId,
             MeetingId = Id,
             Name = name,
@@ -379,6 +383,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
             AddedAt = DateTimeOffset.UtcNow
         };
         attendee.Order = order;
+        attendee.SetFunctions(functions ?? Enumerable.Empty<MeetingFunction>());
 
         _attendees.Add(attendee);
 
@@ -397,7 +402,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
                 throw new Exception("Invalid role");
             }
 
-            var attendee = AddAttendee(member.Name, member.UserId, member.Email, role, member.HasSpeakingRights, member.HasVotingRights, member.MeetingGroupId, member.Id);
+            var attendee = AddAttendee(member.Name, member.UserId, member.Email, role, member.HasSpeakingRights, member.HasVotingRights, functions: null, meetingGroupId: member.MeetingGroupId, meetingGroupMemberId: member.Id);
         }
     }
 
@@ -420,9 +425,9 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
     public void SetOpenAccess(bool canAnyoneJoin, AttendeeRole joinAs)
     {
-        if (canAnyoneJoin && joinAs != AttendeeRole.Attendee && joinAs != AttendeeRole.Observer)
+        if (canAnyoneJoin && joinAs != AttendeeRole.Member && joinAs != AttendeeRole.Observer)
         {
-            throw new InvalidOperationException("Only attendee or observer roles can be used for open access.");
+            throw new InvalidOperationException("Only member or observer roles can be used for open access.");
         }
 
         CanAnyoneJoin = canAnyoneJoin;
@@ -498,6 +503,52 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         }
 
         return false;
+    }
+
+    public bool HasFunctionAssigned(MeetingFunction function) =>
+        Attendees.Any(a => a.HasFunction(function));
+
+    public bool CanAttendeeActAsChair(MeetingAttendee attendee)
+    {
+        if (attendee.HasFunction(MeetingFunction.Chairperson))
+        {
+            return true;
+        }
+
+        if (!HasFunctionAssigned(MeetingFunction.Chairperson))
+        {
+            if (attendee.HasFunction(MeetingFunction.Facilitator))
+            {
+                return true;
+            }
+
+            if (CreatedById is not null && attendee.UserId is not null && attendee.UserId == CreatedById)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void AssignFunctionToAttendee(MeetingAttendee attendee, MeetingFunction function)
+    {
+        foreach (var other in Attendees)
+        {
+            var retainedFunctions = other.Functions
+                .Where(f => f.MeetingFunctionId != function.Id)
+                .Select(f => f.Function ?? MeetingFunction.AllFunctions.FirstOrDefault(mf => mf.Id == f.MeetingFunctionId))
+                .Where(f => f is not null)
+                .Cast<MeetingFunction>()
+                .ToList();
+
+            if (other == attendee && !retainedFunctions.Any(f => f.Id == function.Id))
+            {
+                retainedFunctions.Add(function);
+            }
+
+            other.SetFunctions(retainedFunctions);
+        }
     }
 
 

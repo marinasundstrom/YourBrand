@@ -1,6 +1,8 @@
 @page "/meetings/{id:int}"
 
 @using System
+@using System.Collections.Generic
+@using System.Linq
 @using System.ComponentModel.DataAnnotations
 @using YourBrand.Meetings.Dtos
 @using YourBrand.Meetings.MeetingDetails.Agenda
@@ -231,7 +233,8 @@
                 Email = attendee.Email,
                 //User = x.User,
                 HasVotingRights = attendee.HasVotingRights,
-                IsPresent = attendee.IsPresent
+                IsPresent = attendee.IsPresent,
+                FunctionIds = attendee.Functions?.Select(f => f.Id).ToList() ?? new List<int>()
             }));
     
         await LoadMinutes();
@@ -390,11 +393,13 @@
             Email = attendeeModel.Email,
             UserId = attendeeModel.User?.Id,
             HasVotingRights = attendeeModel.HasVotingRights,
+            FunctionIds = attendeeModel.FunctionIds
         };
 
         var model = await MeetingsClient.AddAttendeeAsync(organization.Id, Id, dto);
 
         attendeeModel.Id = model.Id;
+        attendeeModel.FunctionIds = model.Functions?.Select(f => f.Id).ToList() ?? new List<int>();
 
         Attendees.Add(attendeeModel);
     }
@@ -416,7 +421,7 @@
             GroupId = meetingGroup.Id
         });
 
-        foreach(var attendee in meeting.Attendees) 
+        foreach(var attendee in meeting.Attendees)
         {
             Attendees.Add(new AttendeeViewModel ()
             {
@@ -426,7 +431,8 @@
                 Email = attendee.Email,
                 //User = x.User,
                 HasVotingRights = attendee.HasVotingRights,
-                IsPresent = attendee.IsPresent
+                IsPresent = attendee.IsPresent,
+                FunctionIds = attendee.Functions?.Select(f => f.Id).ToList() ?? new List<int>()
             });
         }
     }
@@ -453,10 +459,13 @@
             Role = editedModel.Role.Id,
             Email = editedModel.Email,
             UserId = editedModel.User?.Id,
-            HasVotingRights = editedModel.HasVotingRights
+            HasVotingRights = editedModel.HasVotingRights,
+            FunctionIds = editedModel.FunctionIds
         };
-        
-        await MeetingsClient.EditAttendeeAsync(organization.Id, Id, attendee.Id, dto);
+
+        var updatedAttendee = await MeetingsClient.EditAttendeeAsync(organization.Id, Id, attendee.Id, dto);
+
+        editedModel.FunctionIds = updatedAttendee.Functions?.Select(f => f.Id).ToList() ?? new List<int>();
 
         var index = Attendees.IndexOf(originalAttendee);
         Attendees[index] = editedModel;
@@ -518,5 +527,5 @@
 
     private static bool IsAllowedOpenAccessRole(string? roleName) =>
         string.Equals(roleName, "Observer", StringComparison.OrdinalIgnoreCase)
-            || string.Equals(roleName, "Attendee", StringComparison.OrdinalIgnoreCase);
+            || string.Equals(roleName, "Member", StringComparison.OrdinalIgnoreCase);
 }

@@ -4081,6 +4081,18 @@ components:
         description:
           type: string
           nullable: true
+    MeetingFunction:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
     PagedResultOfMeeting:
       type: object
       additionalProperties: false
@@ -4178,6 +4190,10 @@ components:
           type: string
         role:
           $ref: '#/components/schemas/AttendeeRole'
+        functions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeetingFunction'
         email:
           type: string
           nullable: true
@@ -4252,6 +4268,12 @@ components:
           nullable: true
         hasVotingRights:
           type: boolean
+          nullable: true
+        functionIds:
+          type: array
+          items:
+            type: integer
+            format: int32
           nullable: true
     UpdateMeetingTitle:
       type: object
@@ -4346,6 +4368,12 @@ components:
         hasVotingRights:
           type: boolean
           nullable: true
+        functionIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
     AddAttendeesFromGroup:
       type: object
       additionalProperties: false
@@ -4372,6 +4400,12 @@ components:
           nullable: true
         hasVotingRights:
           type: boolean
+          nullable: true
+        functionIds:
+          type: array
+          items:
+            type: integer
+            format: int32
           nullable: true
     MarkAttendeeAsPresent:
       type: object
@@ -4612,6 +4646,9 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/ElectionCandidate'
+        meetingFunction:
+          nullable: true
+          $ref: '#/components/schemas/MeetingFunction'
     ElectionState:
       type: integer
       description: ''

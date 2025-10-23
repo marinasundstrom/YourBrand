@@ -1,4 +1,5 @@
 using MediatR;
+using YourBrand.Meetings.Domain.Entities;
 
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,7 @@ public sealed record SetDiscussionSpeakingTime(string OrganizationId, int Id, st
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (attendee.Role != AttendeeRole.Chairperson)
+            if (!meeting.CanAttendeeActAsChair(attendee))
             {
                 return Errors.Meetings.OnlyChairpersonCanManageSpeakerQueue;
             }

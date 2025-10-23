@@ -32,7 +32,7 @@ public class MeetingGroupMember : Entity<MeetingGroupMemberId>, IAuditableEntity
 
     public UserId? UserId { get; set; }
 
-    public AttendeeRole Role { get; set; } = AttendeeRole.Attendee;
+    public AttendeeRole Role { get; set; } = AttendeeRole.Member;
     public int RoleId{ get; set; }
 
     public bool? HasSpeakingRights { get; set; }

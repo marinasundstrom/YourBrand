@@ -38,13 +38,14 @@ public class AttendeeRole : IEntity
         !Equals(left, right);
 
     // Static readonly instances for each attendee role
-    public static readonly AttendeeRole Chairperson = new(1, "Chairperson", true, true, true, "Leads the meeting");
-    public static readonly AttendeeRole Secretary = new(2, "Secretary", false, true, false, "Takes notes and records minutes");
-    public static readonly AttendeeRole Attendee = new(3, "Attendee", true, true, true, "Active participant");
-    public static readonly AttendeeRole Observer = new(4, "Observer", false, false, false, "Present without active participation");
+    public static readonly AttendeeRole Member = new(1, "Member", true, true, true, "Full member with standard participation rights.");
+    public static readonly AttendeeRole Alternate = new(2, "Alternate", true, true, true, "Alternate member who can step in for a full member.");
+    public static readonly AttendeeRole Observer = new(3, "Observer", false, false, false, "Present without active participation.");
+    public static readonly AttendeeRole Guest = new(4, "Guest", false, true, false, "Invited guest with limited rights.");
+    public static readonly AttendeeRole ExternalPresenter = new(5, "External Presenter", false, true, false, "External presenter invited to share information.");
 
     // List of all static instances for seeding purposes
     public static readonly AttendeeRole[] AllRoles = {
-        Chairperson, Secretary, Attendee, Observer
+        Member, Alternate, Observer, Guest, ExternalPresenter
     };
 }

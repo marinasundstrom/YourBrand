@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
@@ -41,9 +44,46 @@ public class MeetingAttendee : Entity<MeetingAttendeeId>, IAuditableEntity<Meeti
     public bool IsPresent { get; set; }
     public bool? HasSpeakingRights { get; set; }
     public bool? HasVotingRights { get; set; }
-    
+
     public AttendeeRole Role { get; set; }
     public int RoleId { get; set; }
+
+    public ICollection<MeetingAttendeeFunction> Functions { get; } = new HashSet<MeetingAttendeeFunction>();
+
+    public bool HasFunction(MeetingFunction function) =>
+        Functions.Any(x => x.MeetingFunctionId == function.Id);
+
+    public void SetFunctions(IEnumerable<MeetingFunction> functions)
+    {
+        var desired = functions?.DistinctBy(x => x.Id).ToList() ?? new List<MeetingFunction>();
+
+        var toRemove = Functions.Where(x => desired.All(f => f.Id != x.MeetingFunctionId)).ToList();
+        foreach (var item in toRemove)
+        {
+            item.RevokedAt = DateTimeOffset.UtcNow;
+            Functions.Remove(item);
+        }
+
+        foreach (var function in desired)
+        {
+            if (Functions.Any(x => x.MeetingFunctionId == function.Id))
+            {
+                continue;
+            }
+
+            Functions.Add(new MeetingAttendeeFunction
+            {
+                TenantId = TenantId,
+                OrganizationId = OrganizationId,
+                MeetingId = MeetingId,
+                MeetingAttendeeId = Id,
+                MeetingAttendee = this,
+                MeetingFunctionId = function.Id,
+                Function = function,
+                AssignedAt = DateTimeOffset.UtcNow
+            });
+        }
+    }
 
     public User? CreatedBy { get; set; } = null!;
     public UserId? CreatedById { get; set; } = null!;

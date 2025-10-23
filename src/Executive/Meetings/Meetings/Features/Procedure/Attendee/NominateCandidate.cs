@@ -47,7 +47,7 @@ public sealed record NominateCandidate(string OrganizationId, int Id, string Att
                 return Errors.Meetings.NoOngoingVoting;
             }
 
-            var candidateAttendee = meeting.GetAttendeeByUserId(request.AttendeeId);
+            var candidateAttendee = meeting.GetAttendeeById(request.AttendeeId);
 
             if (candidateAttendee is null)
             {
@@ -61,7 +61,7 @@ public sealed record NominateCandidate(string OrganizationId, int Id, string Att
                 return Errors.Meetings.CandidateAlreadyProposed;
             }
 
-            election.NominateCandidate(timeProvider, candidateAttendee.Id, "", request.Statement, "", null);
+            election.NominateCandidate(timeProvider, candidateAttendee, request.Statement);
 
             context.Meetings.Update(meeting);
 

@@ -1,4 +1,5 @@
 using MediatR;
+using YourBrand.Meetings.Domain.Entities;
 
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +41,7 @@ public sealed record StartElection(string OrganizationId, int Id) : IRequest<Res
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (attendee.Role != AttendeeRole.Chairperson)
+            if (!meeting.CanAttendeeActAsChair(attendee))
             {
                 return Errors.Meetings.OnlyChairpersonCanStartVoting;
             }
