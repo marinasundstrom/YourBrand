@@ -58,6 +58,7 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
     public AttendeeAccessLevel VotingRightsAccessLevel { get; set; } = AttendeeAccessLevel.Participants;
 
     public bool CanAnyoneJoin { get; set; } = false;
+    public int JoinAsId { get; set; } = AttendeeRole.Observer.Id;
     public AttendeeRole JoinAs { get; set; } = AttendeeRole.Observer;
 
     public Minutes? Minutes { get; set; }
@@ -415,6 +416,18 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
     public MeetingAttendee? GetAttendeeByUserId(string userId)
     {
         return Attendees.FirstOrDefault(x => x.UserId == userId);
+    }
+
+    public void SetOpenAccess(bool canAnyoneJoin, AttendeeRole joinAs)
+    {
+        if (canAnyoneJoin && joinAs != AttendeeRole.Attendee && joinAs != AttendeeRole.Observer)
+        {
+            throw new InvalidOperationException("Only attendee or observer roles can be used for open access.");
+        }
+
+        CanAnyoneJoin = canAnyoneJoin;
+        JoinAs = joinAs;
+        JoinAsId = joinAs.Id;
     }
 
     public void ResetMeetingProgress()

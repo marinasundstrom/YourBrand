@@ -13,7 +13,7 @@ using YourBrand.Meetings.Models;
 
 namespace YourBrand.Meetings.Features;
 
-public sealed record CreateMeetingDto(string Title, string Description, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingAttendeeDto> Attendees);
+public sealed record CreateMeetingDto(string Title, string Description, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingAttendeeDto> Attendees, bool CanAnyoneJoin = false, int? JoinAsRoleId = null);
 
 public sealed record UpdateMeetingTitleDto(string Title);
 
@@ -28,6 +28,7 @@ public sealed record ChangeMeetingQuorumDto(int RequiredNumber);
 public sealed record ChangeMeetingStateDto(MeetingState State);
 
 public sealed record ChangeMeetingAgendaDisplayDto(bool ShowAgendaTimeEstimates);
+public sealed record ChangeMeetingOpenAccessDto(bool CanAnyoneJoin, int? JoinAsRoleId);
 
 public sealed record AdjournMeetingDto(string Message);
 
@@ -62,7 +63,7 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
     [ProducesDefaultResponseType]
     public async Task<ActionResult<MeetingDto>> CreateMeeting(string organizationId, CreateMeetingDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CreateMeeting(organizationId, request.Title, request.Description, request.ScheduledAt, request.Location, request.Quorum, request.Attendees), cancellationToken);
+        var result = await mediator.Send(new CreateMeeting(organizationId, request.Title, request.Description, request.ScheduledAt, request.Location, request.Quorum, request.Attendees, request.CanAnyoneJoin, request.JoinAsRoleId), cancellationToken);
         return this.HandleResult(result);
     }
 
@@ -136,6 +137,16 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
         return this.HandleResult(result);
     }
 
+    [HttpPut("{id}/OpenAccess")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<MeetingDto>> ChangeMeetingOpenAccess(string organizationId, int id, ChangeMeetingOpenAccessDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new ChangeMeetingOpenAccess(organizationId, id, request.CanAnyoneJoin, request.JoinAsRoleId), cancellationToken);
+        return this.HandleResult(result);
+    }
+
     [HttpPut("{id}/State")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
@@ -201,6 +212,16 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
     public async Task<ActionResult> RemoveAttendee(string organizationId, int id, string attendeeId, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new RemoveAttendee(organizationId, id, attendeeId), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPost("{id}/Join")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<MeetingDto>> JoinMeeting(string organizationId, int id, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new JoinMeeting(organizationId, id), cancellationToken);
         return this.HandleResult(result);
     }
 

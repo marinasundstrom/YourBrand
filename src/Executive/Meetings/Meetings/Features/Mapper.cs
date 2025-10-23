@@ -10,7 +10,7 @@ public static partial class Mappings
         new(meeting.Id, meeting.Title!, meeting.Description, meeting.State, meeting.ScheduledAt, meeting.Location,
         meeting.AdjournmentMessage, meeting.AdjournedAt, meeting.Quorum.ToDto(),
         meeting.Attendees.Select(x => x.ToDto()), meeting.CurrentAgendaItemIndex, meeting.CurrentAgendaSubItemIndex,
-        meeting.ShowAgendaTimeEstimates,
+        meeting.ShowAgendaTimeEstimates, meeting.CanAnyoneJoin, meeting.JoinAs?.ToDto(),
         PrepareActions(meeting));
 
     private static IDictionary<string, DtoAction> PrepareActions(Meeting meeting)

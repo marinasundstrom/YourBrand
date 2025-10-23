@@ -2,7 +2,7 @@ namespace YourBrand.Meetings.Features;
 
 public sealed record MeetingDto(int Id, string Title, string? Description, MeetingState State, DateTimeOffset? ScheduledAt, string Location,
     string? AdjournmentMessage, DateTimeOffset? AdjournedAt, MeetingQuorumDto Quorum, IEnumerable<MeetingAttendeeDto> Attendees, int? CurrentAgendaItemIndex, int? CurrentAgendaSubItemIndex,
-    bool ShowAgendaTimeEstimates,
+    bool ShowAgendaTimeEstimates, bool CanAnyoneJoin, AttendeeRoleDto? JoinAs,
     IDictionary<string, DtoAction> Actions);
 
 public sealed record MeetingQuorumDto(int RequiredNumber);

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 using MudBlazor;
 
+using System.Linq;
+
 using YourBrand.Meetings;
 using YourBrand.Meetings.Procedure.Elections;
 
@@ -37,6 +39,8 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         var currentUserId = await UserContext.GetUserId()!;
 
         meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
+
+        await PromptToJoinIfNeeded();
 
         await LoadAgenda();
 
@@ -154,6 +158,50 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
             {
                 election = await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
             }
+        }
+    }
+
+    private async Task PromptToJoinIfNeeded()
+    {
+        if (meeting is null || organization is null)
+        {
+            return;
+        }
+
+        if (!meeting.CanAnyoneJoin)
+        {
+            return;
+        }
+
+        var currentUserId = await UserContext.GetUserId();
+
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            return;
+        }
+
+        if (meeting.Attendees.Any(a => a.UserId == currentUserId))
+        {
+            return;
+        }
+
+        var roleName = meeting.JoinAs?.Name ?? "attendee";
+
+        var result = await DialogService.ShowMessageBox("Join meeting", $"Welcome! This meeting is open to guests. Would you like to join as {roleName.ToLowerInvariant()}?", yesText: "Join", cancelText: "Not now");
+
+        if (!result.GetValueOrDefault())
+        {
+            return;
+        }
+
+        try
+        {
+            meeting = await MeetingsClient.JoinMeetingAsync(organization.Id, MeetingId);
+            Snackbar.Add($"You joined the meeting as {meeting.JoinAs?.Name ?? roleName}.", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
         }
     }
 

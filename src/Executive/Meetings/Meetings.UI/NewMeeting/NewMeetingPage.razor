@@ -1,8 +1,12 @@
 @page "/meetings/new"
 
+@using System
 @using System.ComponentModel.DataAnnotations
+@using System.Linq
+@using YourBrand.Meetings.Components
 @using YourBrand.Portal.Services
 @inject IMeetingsClient MeetingsClient
+@inject IAttendeeRolesClient AttendeeRolesClient
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
@@ -34,6 +38,10 @@
                     For="@(() => Location)"  Immediate="true" />
                 <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Description"
                     For="@(() => Description)" Immediate="true" Lines="5" />
+                <MudSwitch @bind-Checked="CanAnyoneJoin" Class="mt-4"
+                           For="@(() => CanAnyoneJoin)" Color="Color.Primary" Label="Allow anyone to join" />
+                <AttendeeRoleSelector OrganizationId="organization?.Id" Class="mt-4" Label="Join as role"
+                    Variant="Variant.Outlined" @bind-Value="JoinAsRole" For="() => JoinAsRole" Disabled="!CanAnyoneJoin" />
                 <MudNumericField Label="Quorum" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuorumRequiredNumber"
                     For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of attendees" />
             </MudPaper>
@@ -108,6 +116,10 @@
     [Required]
     public int QuorumRequiredNumber { get; set; }
 
+    public bool CanAnyoneJoin { get; set; }
+
+    public AttendeeRole JoinAsRole { get; set; } = new();
+
     public List<AddEditAttendeeViewModel> Attendees { get; set; } = new List<AddEditAttendeeViewModel>();
 
     protected override async Task OnInitializedAsync()
@@ -117,6 +129,16 @@
         organization = await OrganizationProvider.GetCurrentOrganizationAsync()!;
 
         OrganizationProvider.CurrentOrganizationChanged += OnCurrentOrganizationChanged;
+
+        var roles = await AttendeeRolesClient.GetAttendeeRolesAsync(organization.Id, 1, 20, null, null, null);
+
+        var allowedRoles = roles.Items?
+            .Where(IsAllowedOpenAccessRole)
+            .ToList() ?? new List<AttendeeRole>();
+
+        JoinAsRole = allowedRoles.FirstOrDefault(r => string.Equals(r.Name, "Observer", StringComparison.OrdinalIgnoreCase))
+            ?? allowedRoles.FirstOrDefault(r => string.Equals(r.Name, "Attendee", StringComparison.OrdinalIgnoreCase))
+            ?? new AttendeeRole();
     }
 
     YourBrand.Portal.Services.Organization organization = default!;
@@ -138,6 +160,8 @@
                 {
                     RequiredNumber = QuorumRequiredNumber
                 },
+                CanAnyoneJoin = CanAnyoneJoin,
+                JoinAsRoleId = JoinAsRole?.Id,
                 Attendees = Attendees.Select(model => {
                     return new CreateMeetingAttendee
                     {
@@ -206,3 +230,7 @@
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
     }
 }
+
+    private static bool IsAllowedOpenAccessRole(AttendeeRole role) =>
+        string.Equals(role.Name, "Observer", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(role.Name, "Attendee", StringComparison.OrdinalIgnoreCase);
