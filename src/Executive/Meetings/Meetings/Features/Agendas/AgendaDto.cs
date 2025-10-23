@@ -1,3 +1,5 @@
+using System;
+
 using YourBrand.Meetings.Features.Procedure.Discussions;
 using YourBrand.Meetings.Features.Procedure.Voting;
 using YourBrand.Meetings.Features.Procedure.Elections;
@@ -10,13 +12,16 @@ public sealed record AgendaItemDto(
     string Id, 
     string? ParentId, 
     int Order, 
-    AgendaItemTypeDto Type, 
-    string Title, 
-    AgendaItemState State, 
+    AgendaItemTypeDto Type,
+    string Title,
+    AgendaItemState State,
     string Description,
     bool IsMandatory,
     DiscussionActions DiscussionActions,
     VoteActions VoteActions,
+    TimeSpan? EstimatedStartTime,
+    TimeSpan? EstimatedEndTime,
+    TimeSpan? EstimatedDuration,
     bool IsDiscussionCompleted,
     bool IsVoteCompleted,
     int? MotionId,

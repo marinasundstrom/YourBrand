@@ -6,10 +6,12 @@ namespace YourBrand.Meetings.Features;
 
 public static partial class Mappings
 {
-    public static MeetingDto ToDto(this Meeting meeting) => 
+    public static MeetingDto ToDto(this Meeting meeting) =>
         new(meeting.Id, meeting.Title!, meeting.Description, meeting.State, meeting.ScheduledAt, meeting.Location,
         meeting.AdjournmentMessage, meeting.AdjournedAt, meeting.Quorum.ToDto(),
-        meeting.Attendees.Select(x => x.ToDto()), meeting.CurrentAgendaItemIndex, meeting.CurrentAgendaSubItemIndex, PrepareActions(meeting));
+        meeting.Attendees.Select(x => x.ToDto()), meeting.CurrentAgendaItemIndex, meeting.CurrentAgendaSubItemIndex,
+        meeting.ShowAgendaTimeEstimates,
+        PrepareActions(meeting));
 
     private static IDictionary<string, DtoAction> PrepareActions(Meeting meeting)
     {

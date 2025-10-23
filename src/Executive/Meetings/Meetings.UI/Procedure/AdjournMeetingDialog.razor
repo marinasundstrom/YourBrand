@@ -1,4 +1,5 @@
 @using System.ComponentModel.DataAnnotations
+@using MudBlazor
 
 <MudDialog>
     <DialogContent>
@@ -20,7 +21,7 @@
 
 @code {
     [CascadingParameter]
-    private MudDialogInstance MudDialog { get; set; } = null!;
+    private IMudDialogInstance MudDialog { get; set; } = null!;
 
     [Required]
     public string AdjournmentMessage { get; set; } = string.Empty;

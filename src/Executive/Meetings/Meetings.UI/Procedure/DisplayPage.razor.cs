@@ -294,4 +294,20 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
     {
         return Task.CompletedTask;
     }
+
+    private static string FormatTime(TimeSpan? timeSpan) => timeSpan is null ? "-" : timeSpan.Value.ToString(@"hh\:mm");
+
+    private static string FormatDuration(TimeSpan? duration)
+    {
+        if (duration is null)
+        {
+            return "-";
+        }
+
+        var minutes = duration.Value.TotalMinutes;
+
+        return minutes % 1 == 0
+            ? $"{minutes:0} min"
+            : $"{minutes:0.##} min";
+    }
 }

@@ -1,3 +1,5 @@
+@using System
+
 @inject IAgendasClient AgendasClient
 @inject IMeetingsClient MeetingsClient
 @inject IDialogService DialogService
@@ -26,6 +28,9 @@
                 <MudTh>Type</MudTh>
                 <MudTh>State</MudTh>
                 <MudTh>Description</MudTh>
+                <MudTh>Est. start</MudTh>
+                <MudTh>Est. end</MudTh>
+                <MudTh>Est. duration</MudTh>
                 <MudTh>Motion</MudTh>
                 <MudTh></MudTh>
                 <MudTh></MudTh>
@@ -37,6 +42,9 @@
                 <MudTd DataLabel="Type">@item.Type.Name</MudTd>
                 <MudTd DataLabel="State">@item.State</MudTd>
                 <MudTd DataLabel="Description">@item.Description</MudTd>
+                <MudTd DataLabel="Est. start">@FormatTime(item.EstimatedStartTime)</MudTd>
+                <MudTd DataLabel="Est. end">@FormatTime(item.EstimatedEndTime)</MudTd>
+                <MudTd DataLabel="Est. duration">@FormatDuration(item.EstimatedDuration)</MudTd>
                 <MudTd DataLabel="Motion">@item.Motion?.Id</MudTd>
                 <MudTd>
                     @if (item.Order > 1)
@@ -63,8 +71,8 @@
                 </MudTd>
             </RowTemplate>
             <ChildRowContent Context="item">
-                <td colspan="9">
-                @if(item.SubItems.Any()) 
+                <td colspan="12">
+                @if(item.SubItems.Any())
                 {
                 <MudTable T="AgendaItemViewModel" @ref="table" Items="@item.SubItems" Dense="true" Hover="true" Elevation="0"
                     Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await EditItem(e.Item)">
@@ -79,6 +87,9 @@
                         <MudTh>Type</MudTh>
                         <MudTh>State</MudTh>
                         <MudTh>Description</MudTh>
+                        <MudTh>Est. start</MudTh>
+                        <MudTh>Est. end</MudTh>
+                        <MudTh>Est. duration</MudTh>
                         <MudTh>Motion</MudTh>
                         <MudTh></MudTh>
                         <MudTh></MudTh>
@@ -90,6 +101,9 @@
                         <MudTd DataLabel="Type">@subItem.Type.Name</MudTd>
                         <MudTd DataLabel="State">@subItem.State</MudTd>
                         <MudTd DataLabel="Description">@subItem.Description</MudTd>
+                        <MudTd DataLabel="Est. start">@FormatTime(subItem.EstimatedStartTime)</MudTd>
+                        <MudTd DataLabel="Est. end">@FormatTime(subItem.EstimatedEndTime)</MudTd>
+                        <MudTd DataLabel="Est. duration">@FormatDuration(subItem.EstimatedDuration)</MudTd>
                         <MudTd DataLabel="Motion">@subItem.Motion?.Id</MudTd>
                         <MudTd>
                             @if (subItem.Order > 1)
@@ -164,6 +178,9 @@
                 Type = item.Type,
                 State = item.State,
                 Description = item.Description,
+                EstimatedStartTime = item.EstimatedStartTime,
+                EstimatedEndTime = item.EstimatedEndTime,
+                EstimatedDuration = item.EstimatedDuration,
                 //Motion = item.Motion,
                 SubItems = item.SubItems.Select(x => new AgendaItemViewModel()
                 {
@@ -173,6 +190,9 @@
                     Type = x.Type,
                     State = x.State,
                     Description = x.Description,
+                    EstimatedStartTime = x.EstimatedStartTime,
+                    EstimatedEndTime = x.EstimatedEndTime,
+                    EstimatedDuration = x.EstimatedDuration,
                     //Motion = x.Motion
                 }).ToList()
             }
@@ -204,13 +224,19 @@
                 Title = agendaItemModel.Title,
                 Type = agendaItemModel.Type.Id,
                 Description = agendaItemModel.Description,
-                MotionId = agendaItemModel.Motion?.Id
+                MotionId = agendaItemModel.Motion?.Id,
+                EstimatedStartTime = agendaItemModel.EstimatedStartTime,
+                EstimatedEndTime = agendaItemModel.EstimatedEndTime,
+                EstimatedDuration = agendaItemModel.EstimatedDuration
             };
 
         var model = await AgendasClient.AddAgendaItemAsync(OrganizationId, agenda!.Id, dto);
 
         agendaItemModel.Id = model.Id;
         agendaItemModel.Order = model.Order;
+        agendaItemModel.EstimatedStartTime = model.EstimatedStartTime;
+        agendaItemModel.EstimatedEndTime = model.EstimatedEndTime;
+        agendaItemModel.EstimatedDuration = model.EstimatedDuration;
 
         Items.Add(agendaItemModel);
     }
@@ -326,12 +352,55 @@
                 Title = editedModel.Title,
                 Type = editedModel.Type.Id,
                 Description = editedModel.Description,
-                MotionId = editedModel.Motion?.Id
+                MotionId = editedModel.Motion?.Id,
+                EstimatedStartTime = editedModel.EstimatedStartTime,
+                EstimatedEndTime = editedModel.EstimatedEndTime,
+                EstimatedDuration = editedModel.EstimatedDuration
             };
 
-        await AgendasClient.EditAgendaItemAsync(OrganizationId, agenda!.Id, item.Id, dto);
+        var updatedItem = await AgendasClient.EditAgendaItemAsync(OrganizationId, agenda!.Id, item.Id, dto);
+
+        editedModel.Id = updatedItem.Id;
+        editedModel.Order = updatedItem.Order;
+        editedModel.EstimatedStartTime = updatedItem.EstimatedStartTime;
+        editedModel.EstimatedEndTime = updatedItem.EstimatedEndTime;
+        editedModel.EstimatedDuration = updatedItem.EstimatedDuration;
 
         var index = Items.IndexOf(originalItem);
-        Items[index] = editedModel;
+
+        if (index >= 0)
+        {
+            Items[index] = editedModel;
+        }
+        else
+        {
+            foreach (var parent in Items)
+            {
+                var subIndex = parent.SubItems.IndexOf(originalItem);
+
+                if (subIndex >= 0)
+                {
+                    parent.SubItems[subIndex] = editedModel;
+                    break;
+                }
+            }
+        }
+    }
+
+    private static string FormatTime(TimeSpan? timeSpan)
+        => timeSpan is null ? "-" : timeSpan.Value.ToString(@"hh\:mm");
+
+    private static string FormatDuration(TimeSpan? duration)
+    {
+        if (duration is null)
+        {
+            return "-";
+        }
+
+        var minutes = duration.Value.TotalMinutes;
+
+        return minutes % 1 == 0
+            ? $"{minutes:0} min"
+            : $"{minutes:0.##} min";
     }
 }

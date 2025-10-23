@@ -27,6 +27,8 @@ public sealed record ChangeMeetingQuorumDto(int RequiredNumber);
 
 public sealed record ChangeMeetingStateDto(MeetingState State);
 
+public sealed record ChangeMeetingAgendaDisplayDto(bool ShowAgendaTimeEstimates);
+
 public sealed record AdjournMeetingDto(string Message);
 
 public sealed record AddMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
@@ -121,6 +123,16 @@ public sealed partial class MeetingsController(IMediator mediator) : ControllerB
     public async Task<ActionResult<MeetingDto>> ChangeMeetingQuorum(string organizationId, int id, ChangeMeetingQuorumDto request, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new ChangeMeetingQuorum(organizationId, id, request.RequiredNumber), cancellationToken);
+        return this.HandleResult(result);
+    }
+
+    [HttpPut("{id}/AgendaDisplay")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MeetingDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ProblemDetails))]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult<MeetingDto>> ChangeMeetingAgendaDisplay(string organizationId, int id, ChangeMeetingAgendaDisplayDto request, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new ChangeMeetingAgendaDisplay(organizationId, id, request.ShowAgendaTimeEstimates), cancellationToken);
         return this.HandleResult(result);
     }
 

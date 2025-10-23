@@ -92,8 +92,11 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     public DiscussionActions DiscussionActions { get; set; } = DiscussionActions.Optional;
     public VoteActions VoteActions { get; set; } = VoteActions.Optional;
 
-    // Estimated time for item to be completed
-    public TimeSpan? EstimatedTime { get; private set; }
+    public TimeSpan? EstimatedStartTime { get; set; }
+
+    public TimeSpan? EstimatedEndTime { get; set; }
+
+    public TimeSpan? EstimatedDuration { get; set; }
 
     public bool IsDiscussionCompleted { get; private set; }
     public bool IsVoteCompleted { get; private set; }
