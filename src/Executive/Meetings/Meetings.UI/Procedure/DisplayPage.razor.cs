@@ -158,16 +158,20 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
     }
 
-    public Task OnMeetingStateChanged(MeetingState state)
+    public async Task OnMeetingStateChanged(MeetingState state, string? adjournmentMessage)
     {
+        meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
+
         if (state == MeetingState.Scheduled || state == MeetingState.Canceled || state == MeetingState.Completed)
         {
             agendaItem = null;
         }
+        else if (meeting?.CurrentAgendaItemIndex is not null)
+        {
+            await LoadAgendaItem();
+        }
 
         StateHasChanged();
-
-        return Task.CompletedTask;
     }
 
     public async Task OnAgendaItemStateChanged(string agendaItemId, AgendaItemState state)

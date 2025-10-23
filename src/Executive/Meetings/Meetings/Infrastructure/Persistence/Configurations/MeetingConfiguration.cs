@@ -34,6 +34,9 @@ public sealed class MeetingConfiguration : IEntityTypeConfiguration<Meeting>
 
         builder.OwnsOne(x => x.Quorum);
 
+        builder.Property(x => x.AdjournmentMessage)
+            .HasMaxLength(1024);
+
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);

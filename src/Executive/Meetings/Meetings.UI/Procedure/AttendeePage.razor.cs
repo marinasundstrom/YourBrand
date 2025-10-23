@@ -162,7 +162,7 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
     }
 
-    public async Task OnMeetingStateChanged(MeetingState state)
+    public async Task OnMeetingStateChanged(MeetingState state, string? adjournmentMessage)
     {
         meeting = await MeetingsClient.GetMeetingByIdAsync(organization.Id, MeetingId);
 

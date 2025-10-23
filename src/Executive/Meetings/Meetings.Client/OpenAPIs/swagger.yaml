@@ -912,6 +912,84 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Meetings/{id}/Adjourn:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_AdjournMeeting
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdjournMeeting'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Resume:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_ResumeMeeting
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/Agenda:
     get:
       tags:
@@ -3901,6 +3979,13 @@ components:
           nullable: true
         location:
           type: string
+        adjournmentMessage:
+          type: string
+          nullable: true
+        adjournedAt:
+          type: string
+          format: date-time
+          nullable: true
         quorum:
           $ref: '#/components/schemas/MeetingQuorum'
         attendees:
@@ -3926,6 +4011,7 @@ components:
       - Draft
       - Scheduled
       - InProgress
+      - Adjourned
       - Completed
       - Canceled
       enum:
@@ -3934,6 +4020,7 @@ components:
       - 2
       - 3
       - 4
+      - 5
     MeetingQuorum:
       type: object
       additionalProperties: false
@@ -4058,6 +4145,14 @@ components:
       properties:
         state:
           $ref: '#/components/schemas/MeetingState'
+    AdjournMeeting:
+      type: object
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+      required:
+      - message
     PagedResultOfMeetingAttendee:
       type: object
       additionalProperties: false

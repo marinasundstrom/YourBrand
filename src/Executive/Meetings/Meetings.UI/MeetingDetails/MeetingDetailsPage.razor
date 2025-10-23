@@ -40,7 +40,7 @@
                     For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of attendees"  />
                 <MudSelect T="MeetingState" Label="State" Variant="Variant.Outlined" @bind-Value="State" Immediate="true"
                     Class="mt-4">
-                    @foreach (var state in Enum.GetValues<MeetingState>())
+                    @foreach (var state in Enum.GetValues<MeetingState>().Where(s => s != MeetingState.Adjourned))
                     {
                         <MudSelectItem T="MeetingState" Value="@state">@Enum.GetName(typeof(MeetingState), state)</MudSelectItem>
                     }

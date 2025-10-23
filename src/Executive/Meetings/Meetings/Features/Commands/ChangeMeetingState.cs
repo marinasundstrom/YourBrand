@@ -33,6 +33,11 @@ public record ChangeMeetingState(string OrganizationId, int Id, MeetingState New
 
             meeting.State = request.NewState;
 
+            if (meeting.State != MeetingState.Adjourned)
+            {
+                meeting.ClearAdjournment();
+            }
+
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);

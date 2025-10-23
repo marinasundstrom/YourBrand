@@ -4,7 +4,7 @@ namespace YourBrand.Meetings;
 
 public interface IMeetingsProcedureHubClient : IVotingHubClient, IElectionsHubClient, IDiscussionsHubClient
 {
-    Task OnMeetingStateChanged(MeetingState state);
+    Task OnMeetingStateChanged(MeetingState state, string? adjournmentMessage);
 
     Task OnAgendaUpdated();
 
