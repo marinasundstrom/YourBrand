@@ -1,3 +1,5 @@
+using System;
+
 using Asp.Versioning;
 
 using MediatR;
@@ -17,9 +19,9 @@ public sealed record CreateAgendaDto(IEnumerable<CreateAgendaItemDto> Items);
 
 public sealed record EditAgendaDetailsDto();
 
-public sealed record AddAgendaItemDto(int Type, string Title, string Description, int? MotionId, int? Order);
+public sealed record AddAgendaItemDto(int Type, string Title, string Description, int? MotionId, int? Order, TimeSpan? EstimatedStartTime, TimeSpan? EstimatedEndTime, TimeSpan? EstimatedDuration);
 
-public sealed record EditAgendaItemDto(int Type, string Title, string Description, int? MotionId);
+public sealed record EditAgendaItemDto(int Type, string Title, string Description, int? MotionId, TimeSpan? EstimatedStartTime, TimeSpan? EstimatedEndTime, TimeSpan? EstimatedDuration);
 
 public sealed record ReorderAgendaItemDto(int Order);
 
@@ -72,7 +74,7 @@ public sealed class AgendasController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<AgendaItemDto>> AddAgendaItem(string organizationId, int id, AddAgendaItemDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new AddAgendaItem(organizationId, id, request.Type, request.Title, request.Description, request.MotionId, request.Order), cancellationToken);
+        var result = await mediator.Send(new AddAgendaItem(organizationId, id, request.Type, request.Title, request.Description, request.MotionId, request.Order, request.EstimatedStartTime, request.EstimatedEndTime, request.EstimatedDuration), cancellationToken);
         return this.HandleResult(result);
     }
 
@@ -82,7 +84,7 @@ public sealed class AgendasController(IMediator mediator) : ControllerBase
     [ProducesDefaultResponseType]
     public async Task<ActionResult<AgendaItemDto>> EditAgendaItem(string organizationId, int id, string itemId, EditAgendaItemDto request, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new EditAgendaItem(organizationId, id, itemId, request.Type, request.Title, request.Description, request.MotionId), cancellationToken);
+        var result = await mediator.Send(new EditAgendaItem(organizationId, id, itemId, request.Type, request.Title, request.Description, request.MotionId, request.EstimatedStartTime, request.EstimatedEndTime, request.EstimatedDuration), cancellationToken);
         return this.HandleResult(result);
     }
 

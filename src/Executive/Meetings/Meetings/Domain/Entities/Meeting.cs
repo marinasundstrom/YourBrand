@@ -66,6 +66,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
     public DateTimeOffset? CanceledAt { get; set; }
     public DateTimeOffset? EndedAt { get; set; }
 
+    public bool ShowAgendaTimeEstimates { get; set; }
+
     [Throws(typeof(InvalidOperationException))]
     public bool IsQuorumMet()
     {

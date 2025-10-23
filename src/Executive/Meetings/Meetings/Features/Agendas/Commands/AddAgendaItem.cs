@@ -1,3 +1,5 @@
+using System;
+
 using FluentValidation;
 
 using MediatR;
@@ -10,7 +12,17 @@ using YourBrand.Meetings.Features.Procedure;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public record AddAgendaItem(string OrganizationId, int Id, int Type, string Title, string Description, int? MotionId, int? Order) : IRequest<Result<AgendaItemDto>>
+public record AddAgendaItem(
+    string OrganizationId,
+    int Id,
+    int Type,
+    string Title,
+    string Description,
+    int? MotionId,
+    int? Order,
+    TimeSpan? EstimatedStartTime,
+    TimeSpan? EstimatedEndTime,
+    TimeSpan? EstimatedDuration) : IRequest<Result<AgendaItemDto>>
 {
     public class Validator : AbstractValidator<AddAgendaItem>
     {
@@ -48,6 +60,9 @@ public record AddAgendaItem(string OrganizationId, int Id, int Type, string Titl
             }
 
             agendaItem.MotionId = request.MotionId;
+            agendaItem.EstimatedStartTime = request.EstimatedStartTime;
+            agendaItem.EstimatedEndTime = request.EstimatedEndTime;
+            agendaItem.EstimatedDuration = request.EstimatedDuration;
 
             context.Agendas.Update(agenda);
 

@@ -36,6 +36,8 @@
                     For="@(() => Location)" Immediate="true" />
                 <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Description"
                     For="@(() => Description)" Immediate="true" Lines="5" />
+                <MudSwitch @bind-Checked="ShowAgendaTimeEstimates" Class="mt-4"
+                           For="@(() => ShowAgendaTimeEstimates)" Color="Color.Primary" Label="Show agenda time estimates" />
                 <MudNumericField Label="Quorum" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuorumRequiredNumber"
                     For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of attendees"  />
                 <MudSelect T="MeetingState" Label="State" Variant="Variant.Outlined" @bind-Value="State" Immediate="true"
@@ -157,6 +159,8 @@
 
     public MeetingState State { get; set; }
 
+    public bool ShowAgendaTimeEstimates { get; set; }
+
     public List<AttendeeViewModel> Attendees { get; set; } = new List<AttendeeViewModel>();
 
     MeetingState oldState;
@@ -182,6 +186,7 @@
         Description = meeting.Description;
         QuorumRequiredNumber = meeting.Quorum.RequiredNumber;
         State = meeting.State;
+        ShowAgendaTimeEstimates = meeting.ShowAgendaTimeEstimates;
         oldState = State;
 
         if(Attendees.Any()) Attendees.Clear();
@@ -249,14 +254,24 @@
             Snackbar.Add("Location updated");  
         }
 
-        if(context.IsModified(() => Description)) 
+        if(context.IsModified(() => Description))
         {
             var meeting = await MeetingsClient.UpdateMeetingDescriptionAsync(organization.Id, Id, new UpdateMeetingDescription
             {
                 Description = Description
             });
 
-            Snackbar.Add("Description updated");  
+            Snackbar.Add("Description updated");
+        }
+
+        if(context.IsModified(() => ShowAgendaTimeEstimates))
+        {
+            var meeting = await MeetingsClient.ChangeMeetingAgendaDisplayAsync(organization.Id, Id, new ChangeMeetingAgendaDisplay
+            {
+                ShowAgendaTimeEstimates = ShowAgendaTimeEstimates
+            });
+
+            Snackbar.Add("Agenda display updated");
         }
 
         if(context.IsModified(() => QuorumRequiredNumber)) 

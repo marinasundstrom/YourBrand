@@ -118,6 +118,18 @@ else
                                 <MudItem xs="12">
                                     <MudText Typo="Typo.body1"><b>Description:</b> @currentAgendaItem.Description</MudText>
                                 </MudItem>
+                                @if (meeting.ShowAgendaTimeEstimates)
+                                {
+                                    <MudItem xs="12" sm="6">
+                                        <MudText Typo="Typo.subtitle1"><b>Estimated start:</b> @FormatTime(currentAgendaItem.EstimatedStartTime)</MudText>
+                                    </MudItem>
+                                    <MudItem xs="12" sm="6">
+                                        <MudText Typo="Typo.subtitle1"><b>Estimated end:</b> @FormatTime(currentAgendaItem.EstimatedEndTime)</MudText>
+                                    </MudItem>
+                                    <MudItem xs="12" sm="6">
+                                        <MudText Typo="Typo.subtitle1"><b>Estimated duration:</b> @FormatDuration(currentAgendaItem.EstimatedDuration)</MudText>
+                                    </MudItem>
+                                }
                             </MudGrid>
 
                             <MudDivider Class="mt-4" />
@@ -261,7 +273,7 @@ else
                     }
                 }
                 
-                <AgendaDisplay Agenda="@agenda" AgendaItemId="@currentItemId"  AgendaSubItemId="@currentSubItemId"  />
+                <AgendaDisplay Agenda="@agenda" AgendaItemId="@currentItemId"  AgendaSubItemId="@currentSubItemId" ShowTimeEstimates="@meeting.ShowAgendaTimeEstimates"  />
 
             </MudPaper>
             }
@@ -304,6 +316,22 @@ else
 
     private bool CanResetSpeakerClock =>
         discussion?.CurrentSpeaker is not null && discussion.CurrentSpeakerClock is not null;
+
+    private static string FormatTime(TimeSpan? timeSpan) => timeSpan is null ? "-" : timeSpan.Value.ToString(@"hh\:mm");
+
+    private static string FormatDuration(TimeSpan? duration)
+    {
+        if (duration is null)
+        {
+            return "-";
+        }
+
+        var minutes = duration.Value.TotalMinutes;
+
+        return minutes % 1 == 0
+            ? $"{minutes:0} min"
+            : $"{minutes:0.##} min";
+    }
 
     HubConnection procedureHub = null!;
     IDiscussionsHub hubProxy = default!;
@@ -600,7 +628,7 @@ else
 
         var message = (string)result.Data!;
 
-        await MeetingsClient.AdjournMeetingAsync(organization.Id, MeetingId, new global::YourBrand.Meetings.AdjournMeeting { Message = message });
+        await MeetingsClient.AdjournMeetingAsync(organization.Id, MeetingId, new AdjournMeeting { Message = message });
 
         await LoadMeetingDetails();
     }

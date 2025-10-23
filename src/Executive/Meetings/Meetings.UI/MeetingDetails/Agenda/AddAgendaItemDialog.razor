@@ -1,4 +1,5 @@
 @using System.ComponentModel.DataAnnotations
+@using MudBlazor
 @inject IMeetingsClient MeetingsClient
 @inject ISnackbar Snackbar
 
@@ -13,6 +14,12 @@
                     Variant="Variant.Outlined" @bind-Value="Model.Type" For="() => Model.Type" />
                 <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4"
                     @bind-Value="Model.Description" For="@(() =>Model.Description)" Lines="5" />
+                <MudTimePicker Label="Estimated start time" Variant="Variant.Outlined" Class="mt-4"
+                                @bind-Time="Model.EstimatedStartTime" For="@(() => Model.EstimatedStartTime)" />
+                <MudTimePicker Label="Estimated end time" Variant="Variant.Outlined" Class="mt-4"
+                                @bind-Time="Model.EstimatedEndTime" For="@(() => Model.EstimatedEndTime)" />
+                <MudTimePicker Label="Estimated duration" Variant="Variant.Outlined" Class="mt-4"
+                                @bind-Time="Model.EstimatedDuration" For="@(() => Model.EstimatedDuration)" />
                 <MotionSelector OrganizationId="@OrganizationId" Label="Motion" Variant="Variant.Outlined" Class="mt-4"
                     @bind-Value="Model.Motion" For="@(() => Model.Motion)" />
             </MudContainer>
@@ -53,6 +60,9 @@
             Title = Model.Title,
             Type = Model.Type,
             Description = Model.Description,
+            EstimatedStartTime = Model.EstimatedStartTime,
+            EstimatedEndTime = Model.EstimatedEndTime,
+            EstimatedDuration = Model.EstimatedDuration,
             Motion = Model.Motion
         });
     }

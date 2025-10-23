@@ -11,6 +11,10 @@
                 {
                     <text>@item.Order. @item.Title</text>
                 }
+                @if (!string.IsNullOrEmpty(GetEstimateLabel(item)))
+                {
+                    <span class="ms-2 text-secondary">(@GetEstimateLabel(item))</span>
+                }
                 @*
                 @if (item.SubItems.Any())
                 {
@@ -31,6 +35,10 @@
                                 else
                                 {
                                     <text>@item2.Order. @item2.Title</text>
+                                }
+                                @if (!string.IsNullOrEmpty(GetEstimateLabel(item2)))
+                                {
+                                    <span class="ms-2 text-secondary">(@GetEstimateLabel(item2))</span>
                                 }
                             </MudText>
                         </li>
@@ -54,4 +62,45 @@
 
     [Parameter]
     public bool DisplaySubItems { get; set; }
+
+    [Parameter]
+    public bool ShowTimeEstimates { get; set; }
+
+    private string? GetEstimateLabel(AgendaItem item)
+    {
+        if (!ShowTimeEstimates)
+        {
+            return null;
+        }
+
+        List<string> parts = new();
+
+        if (item.EstimatedStartTime is not null)
+        {
+            parts.Add($"Start {FormatTime(item.EstimatedStartTime.Value)}");
+        }
+
+        if (item.EstimatedEndTime is not null)
+        {
+            parts.Add($"End {FormatTime(item.EstimatedEndTime.Value)}");
+        }
+
+        if (item.EstimatedDuration is not null)
+        {
+            parts.Add($"Duration {FormatDuration(item.EstimatedDuration.Value)}");
+        }
+
+        return parts.Count == 0 ? null : string.Join(" • ", parts);
+    }
+
+    private static string FormatTime(TimeSpan value) => value.ToString(@"hh\:mm");
+
+    private static string FormatDuration(TimeSpan value)
+    {
+        var minutes = value.TotalMinutes;
+
+        return minutes % 1 == 0
+            ? $"{minutes:0} min"
+            : $"{minutes:0.##} min";
+    }
 }

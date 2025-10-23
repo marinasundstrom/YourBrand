@@ -1,3 +1,5 @@
+using System;
+
 using FluentValidation;
 
 using MediatR;
@@ -8,7 +10,13 @@ using YourBrand.Identity;
 
 namespace YourBrand.Meetings.Features.Agendas.Command;
 
-public sealed record CreateAgendaItemDto(int Type, string Title, string Description);
+public sealed record CreateAgendaItemDto(
+    int Type,
+    string Title,
+    string Description,
+    TimeSpan? EstimatedStartTime = null,
+    TimeSpan? EstimatedEndTime = null,
+    TimeSpan? EstimatedDuration = null);
 
 public record CreateAgenda(string OrganizationId, int MeetingId, IEnumerable<CreateAgendaItemDto> Items) : IRequest<Result<AgendaDto>>
 {
@@ -49,7 +57,10 @@ public record CreateAgenda(string OrganizationId, int MeetingId, IEnumerable<Cre
                     throw new Exception("Invalid type");
                 }
 
-                agenda.AddItem(type, agendaItem.Title, agendaItem.Description);
+                var item = agenda.AddItem(type, agendaItem.Title, agendaItem.Description);
+                item.EstimatedStartTime = agendaItem.EstimatedStartTime;
+                item.EstimatedEndTime = agendaItem.EstimatedEndTime;
+                item.EstimatedDuration = agendaItem.EstimatedDuration;
             }
 
             context.Agendas.Add(agenda);

@@ -518,6 +518,53 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Meetings/{id}/AgendaDisplay:
+    put:
+      tags:
+      - Meetings
+      operationId: Meetings_ChangeMeetingAgendaDisplay
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeMeetingAgendaDisplay'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/State:
     put:
       tags:
@@ -4000,6 +4047,8 @@ components:
           type: integer
           format: int32
           nullable: true
+        showAgendaTimeEstimates:
+          type: boolean
         actions:
           type: object
           additionalProperties:
@@ -4139,6 +4188,12 @@ components:
         requiredNumber:
           type: integer
           format: int32
+    ChangeMeetingAgendaDisplay:
+      type: object
+      additionalProperties: false
+      properties:
+        showAgendaTimeEstimates:
+          type: boolean
     ChangeMeetingState:
       type: object
       additionalProperties: false
@@ -4267,6 +4322,18 @@ components:
           $ref: '#/components/schemas/DiscussionActions'
         voteActions:
           $ref: '#/components/schemas/VoteActions'
+        estimatedStartTime:
+          type: string
+          format: duration
+          nullable: true
+        estimatedEndTime:
+          type: string
+          format: duration
+          nullable: true
+        estimatedDuration:
+          type: string
+          format: duration
+          nullable: true
         isDiscussionCompleted:
           type: boolean
         isVoteCompleted:
@@ -5118,6 +5185,18 @@ components:
           type: string
         description:
           type: string
+        estimatedStartTime:
+          type: string
+          format: duration
+          nullable: true
+        estimatedEndTime:
+          type: string
+          format: duration
+          nullable: true
+        estimatedDuration:
+          type: string
+          format: duration
+          nullable: true
     EditAgendaDetails:
       type: object
       additionalProperties: false
@@ -5140,6 +5219,18 @@ components:
           type: integer
           format: int32
           nullable: true
+        estimatedStartTime:
+          type: string
+          format: duration
+          nullable: true
+        estimatedEndTime:
+          type: string
+          format: duration
+          nullable: true
+        estimatedDuration:
+          type: string
+          format: duration
+          nullable: true
     EditAgendaItem:
       type: object
       additionalProperties: false
@@ -5154,6 +5245,18 @@ components:
         motionId:
           type: integer
           format: int32
+          nullable: true
+        estimatedStartTime:
+          type: string
+          format: duration
+          nullable: true
+        estimatedEndTime:
+          type: string
+          format: duration
+          nullable: true
+        estimatedDuration:
+          type: string
+          format: duration
           nullable: true
     ReorderAgendaItem:
       type: object

@@ -51,6 +51,12 @@ else
                         <MudText Typo="@Typo.h4" GutterBottom="true">@currentAgendaItem?.Order. @currentAgendaItem?.Title</MudText>
 
                         <MudText Typo="@Typo.body1" GutterBottom="true">@currentAgendaItem.State</MudText>
+                        @if (meeting.ShowAgendaTimeEstimates)
+                        {
+                            <MudText Typo="@Typo.body1" GutterBottom="true">Estimated start: @FormatTime(currentAgendaItem.EstimatedStartTime)</MudText>
+                            <MudText Typo="@Typo.body1" GutterBottom="true">Estimated end: @FormatTime(currentAgendaItem.EstimatedEndTime)</MudText>
+                            <MudText Typo="@Typo.body1" GutterBottom="true">Estimated duration: @FormatDuration(currentAgendaItem.EstimatedDuration)</MudText>
+                        }
                     }
                 }
                 else if (meeting.State == MeetingState.Adjourned)
@@ -158,7 +164,7 @@ else
                         }
                     }
 
-                    <AgendaDisplay Agenda="@agenda" AgendaItemId="@currentItemId" AgendaSubItemId="@currentSubItemId" />
+                    <AgendaDisplay Agenda="@agenda" AgendaItemId="@currentItemId" AgendaSubItemId="@currentSubItemId" ShowTimeEstimates="@meeting.ShowAgendaTimeEstimates" />
                 </MudPaper>
             </MudItem>
         }
