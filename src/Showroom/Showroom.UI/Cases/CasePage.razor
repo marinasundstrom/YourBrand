@@ -1,7 +1,10 @@
 @page "/cases/{Id}"
 @attribute [Authorize]
 @using Humanizer
+@using YourBrand.TimeReport.Client
+@using YourBrand.Portal.Modules
 @inject ICasesClient CasesClient
+@inject IProjectsClient ProjectsClient
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
@@ -27,6 +30,13 @@ else
         Test
 
         @(@case.Pricing?.Total?.FormatCurrency("SEK"))
+
+
+        <ModuleBoundary ModuleId="@KnownsModulesIds.TimeReportModule">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="CreateProject">Create project
+            </MudButton>
+
+        </ModuleBoundary>
     </MudPaper>
 }
 
@@ -38,7 +48,7 @@ else
     [Parameter]
     public string Id { get; set; } = null!;
 
-    protected override async Task OnInitializedAsync()
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
         loadingFailed = false;
 
@@ -51,5 +61,19 @@ else
             loadingFailed = true;
             //await JSHelpers.Alert(exc.Message);
         }
+    }
+    
+    async System.Threading.Tasks.Task CreateProject() 
+    {
+        var profile = @case.CaseProfiles.First();
+
+        var project = await ProjectsClient.CreateProjectAsync(profile.Profile.Organization.Id, new CreateProject
+        {
+            OrganizationId = profile.Profile.Organization.Id,
+            Name = $"Case {@case.Description} - {profile.Profile.FirstName} {profile.Profile.LastName}",
+            Description = "Assignment"
+        });
+
+        NavigationManager.NavigateTo($"/projects/{project.Id}");
     }
 }
