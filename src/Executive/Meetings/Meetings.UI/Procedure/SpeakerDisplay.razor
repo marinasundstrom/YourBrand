@@ -24,11 +24,23 @@
         @if (CurrentSpeaker is not null)
         {
             <MudText Typo="@Typo.body1" GutterBottom="true">@CurrentSpeaker.Name</MudText>
+            <MudText Typo="@Typo.caption" GutterBottom="true">Allocated time: @FormatDuration(CurrentSpeaker.AllocatedSpeakingTimeSeconds)</MudText>
+            <MudText Typo="@Typo.h3" Class="mb-1">@GetRemainingTimeDisplay()</MudText>
+            @if (!string.IsNullOrWhiteSpace(GetClockStatusDisplay()))
+            {
+                <MudText Typo="@Typo.caption" GutterBottom="true">@GetClockStatusDisplay()</MudText>
+            }
+            @if (CurrentSpeaker.HasExtendedSpeakingTime)
+            {
+                <MudChip T="string" Color="Color.Primary" Variant="Variant.Outlined" Class="mb-2">Extended</MudChip>
+            }
         }
         else
         {
             <MudText Typo="@Typo.body1" GutterBottom="true"><i>No speaker</i></MudText>
         }
+
+        <MudText Typo="@Typo.caption" GutterBottom="true">Default speaking time: @FormatDuration(speakingTimeLimitSeconds)</MudText>
 
     </MudItem>
 
@@ -40,13 +52,17 @@
             @foreach (var speakerRequest in speakerQueue)
             {
                 <li @key="speakerRequest.Id">
-                    @if (speakerRequest.Id == currentSpeaker?.Id)
+                    @if (speakerRequest.Id == CurrentSpeaker?.Id)
                     {
-                        <MudText Typo="@Typo.body1" Class="mb-2"><b>@speakerRequest.Name</b></MudText>
+                        <MudText Typo="@Typo.body1" Class="mb-2"><b>@speakerRequest.Name</b> (@FormatDuration(speakerRequest.AllocatedSpeakingTimeSeconds))</MudText>
                     }
                     else
                     {
-                        <MudText Typo="@Typo.body1" Class="mb-2">@speakerRequest.Name</MudText>
+                        <MudText Typo="@Typo.body1" Class="mb-2">@speakerRequest.Name (@FormatDuration(speakerRequest.AllocatedSpeakingTimeSeconds))</MudText>
+                    }
+                    @if (speakerRequest.HasExtendedSpeakingTime)
+                    {
+                        <MudChip T="string" Color="Color.Primary" Variant="Variant.Outlined" Dense="true" Class="mb-2">Extended</MudChip>
                     }
                 </li>
             }

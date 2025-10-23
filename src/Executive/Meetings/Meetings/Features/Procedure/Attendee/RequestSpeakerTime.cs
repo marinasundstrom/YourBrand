@@ -50,6 +50,11 @@ public sealed record RequestSpeakerTime(string OrganizationId, int Id, string Ag
                 return Errors.Meetings.NoOngoingDiscussionSession;
             }
 
+            if (agendaItem.Discussion.SpeakingTimeLimit is null)
+            {
+                return Errors.Meetings.SpeakingTimeNotConfigured;
+            }
+
             var speakerRequest = agendaItem.Discussion!.AddSpeakerRequest(attendee);
 
             context.Meetings.Update(meeting);
@@ -59,6 +64,10 @@ public sealed record RequestSpeakerTime(string OrganizationId, int Id, string Ag
             await hubContext.Clients
                .Group($"meeting-{meeting.Id}")
                .OnSpeakerRequestAdded(agendaItem.Id, speakerRequest.Id, speakerRequest.AttendeeId, speakerRequest.Name);
+
+            await hubContext.Clients
+               .Group($"meeting-{meeting.Id}")
+               .OnSpeakerTimeExtended(agendaItem.Id, speakerRequest.Id, (int?)speakerRequest.AllocatedSpeakingTime?.TotalSeconds);
 
             return Result.Success;
         }

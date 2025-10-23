@@ -1,4 +1,4 @@
-
+using System;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -262,6 +262,31 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
     }
 
     public Task OnMovedToNextSpeaker(string agendaItemId, string? id)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnSpeakerTimeExtended(string agendaItemId, string speakerRequestId, int? allocatedSeconds)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnDiscussionSpeakingTimeChanged(string agendaItemId, int? speakingTimeLimitSeconds)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnSpeakerClockStarted(string agendaItemId, string speakerRequestId, int elapsedSeconds, DateTimeOffset startedAtUtc)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnSpeakerClockStopped(string agendaItemId, string speakerRequestId, int elapsedSeconds)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task OnSpeakerClockReset(string agendaItemId, string speakerRequestId, int elapsedSeconds)
     {
         return Task.CompletedTask;
     }

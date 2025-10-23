@@ -82,6 +82,56 @@ public sealed class MeetingsProcedureHub(IMediator mediator, ISettableUserContex
               new RevokeSpeakerTime(connectionState.OrganizationId, connectionState.MeetingId, agendaItemId));
     }
 
+    public async Task SetDiscussionSpeakingTime(string agendaItemId, int? speakingTimeLimitSeconds)
+    {
+        var connectionState = state[Context.ConnectionId];
+
+        SetContext(userContext, tenantContext, connectionState);
+
+        await mediator.Send(
+            new SetDiscussionSpeakingTime(connectionState.OrganizationId, connectionState.MeetingId, agendaItemId, speakingTimeLimitSeconds));
+    }
+
+    public async Task ExtendSpeakerTime(string agendaItemId, string speakerRequestId, int additionalSeconds)
+    {
+        var connectionState = state[Context.ConnectionId];
+
+        SetContext(userContext, tenantContext, connectionState);
+
+        await mediator.Send(
+            new ExtendSpeakerTime(connectionState.OrganizationId, connectionState.MeetingId, agendaItemId, speakerRequestId, additionalSeconds));
+    }
+
+    public async Task StartCurrentSpeakerClock(string agendaItemId)
+    {
+        var connectionState = state[Context.ConnectionId];
+
+        SetContext(userContext, tenantContext, connectionState);
+
+        await mediator.Send(
+            new StartSpeakerClock(connectionState.OrganizationId, connectionState.MeetingId, agendaItemId));
+    }
+
+    public async Task StopCurrentSpeakerClock(string agendaItemId)
+    {
+        var connectionState = state[Context.ConnectionId];
+
+        SetContext(userContext, tenantContext, connectionState);
+
+        await mediator.Send(
+            new StopSpeakerClock(connectionState.OrganizationId, connectionState.MeetingId, agendaItemId));
+    }
+
+    public async Task ResetCurrentSpeakerClock(string agendaItemId)
+    {
+        var connectionState = state[Context.ConnectionId];
+
+        SetContext(userContext, tenantContext, connectionState);
+
+        await mediator.Send(
+            new ResetSpeakerClock(connectionState.OrganizationId, connectionState.MeetingId, agendaItemId));
+    }
+
     private void SetContext(ISettableUserContext userContext, ISettableTenantContext tenantContext, ConnectionState s)
     {
         tenantContext.SetTenantId(s.TenantId);

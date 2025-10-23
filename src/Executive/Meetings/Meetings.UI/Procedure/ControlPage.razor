@@ -1,5 +1,7 @@
 @page "/meetings/{MeetingId:int}/control"
 @using Microsoft.AspNetCore.SignalR.Client
+@using System
+@using System.Linq
 @using YourBrand.Portal.Services
 @inject IStringLocalizer<DisplayPage> T
 @inject IMeetingsClient MeetingsClient
@@ -178,18 +180,52 @@ else
                     </MudPaper>
                 }
 
-                @if (@currentAgendaItem?.State == AgendaItemState.UnderDiscussion) 
+                @if (@currentAgendaItem?.State == AgendaItemState.UnderDiscussion)
                 {
                     <MudPaper Class="pa-6 mb-4" Elevation="25">
                         <MudText Typo="@Typo.h4" GutterBottom="true">Discussion</MudText>
 
-                        <MudButton Variant="Variant.Filled" Class="me-2"
-                            OnClick="async () => await hubProxy.MoveToNextSpeaker()">Next speaker</MudButton>
-                            
+                        @if (discussion is not null)
+                        {
+                            <MudGrid Class="mb-4">
+                                <MudItem xs="12" md="6">
+                                    <MudNumericField T="int?" @bind-Value="speakingTimeLimitSecondsInput" Immediate="true" Clearable="true" Label="Default speaking time (seconds)" />
+                                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" Class="mt-2"
+                                               OnClick="SetDiscussionSpeakingTimeAsync">Save</MudButton>
+                                </MudItem>
+                                <MudItem xs="12" md="6">
+                                    <MudSelect T="string" @bind-Value="selectedSpeakerRequestId" Dense="true" Label="Select speaker">
+                                        @foreach (var speaker in SpeakerRequestsForExtension)
+                                        {
+                                            <MudSelectItem Value="@speaker.Id">@speaker.Name</MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                    <MudNumericField T="int" @bind-Value="additionalSpeakingTimeSeconds" Immediate="true" Min="1" Label="Additional speaking time (seconds)" />
+                                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" Class="mt-2"
+                                               Disabled="@(!CanExtendSpeakerTime)"
+                                               OnClick="ExtendSpeakerTimeAsync">Extend</MudButton>
+                                </MudItem>
+                            </MudGrid>
+                        }
+
+                        <MudStack Direction="Row" Spacing="1" Class="mb-4">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+                                       Disabled="@(!CanStartSpeakerClock)"
+                                       OnClick="StartSpeakerClockAsync">Start clock</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Secondary"
+                                       Disabled="@(!CanStopSpeakerClock)"
+                                       OnClick="StopSpeakerClockAsync">Stop clock</MudButton>
+                            <MudButton Variant="Variant.Filled" Color="Color.Info"
+                                       Disabled="@(!CanResetSpeakerClock)"
+                                       OnClick="ResetSpeakerClockAsync">Reset clock</MudButton>
+                            <MudButton Variant="Variant.Filled"
+                                OnClick="async () => await hubProxy.MoveToNextSpeaker()">Next speaker</MudButton>
+                        </MudStack>
+
                         <SpeakerDisplay MeetingId="@MeetingId" />
 
                     </MudPaper>
-                } 
+                }
         </MudItem>
 
         <MudItem xs="12" md="4">
@@ -232,6 +268,28 @@ else
     private Discussion? discussion;
     private Voting? voting;
     private Election? election;
+
+    private int? speakingTimeLimitSecondsInput;
+    private string? selectedSpeakerRequestId;
+    private int additionalSpeakingTimeSeconds = 60;
+
+    private IEnumerable<SpeakerRequest> SpeakerRequestsForExtension =>
+        discussion is null
+            ? Enumerable.Empty<SpeakerRequest>()
+            : (discussion.CurrentSpeaker is not null
+                ? new[] { discussion.CurrentSpeaker }.Concat(discussion.SpeakerQueue ?? Enumerable.Empty<SpeakerRequest>())
+                : discussion.SpeakerQueue ?? Enumerable.Empty<SpeakerRequest>());
+
+    private bool CanExtendSpeakerTime => !string.IsNullOrEmpty(selectedSpeakerRequestId) && additionalSpeakingTimeSeconds > 0;
+
+    private bool CanStartSpeakerClock =>
+        discussion?.CurrentSpeaker is not null && discussion.CurrentSpeakerClock?.IsRunning != true;
+
+    private bool CanStopSpeakerClock =>
+        discussion?.CurrentSpeaker is not null && discussion.CurrentSpeakerClock?.IsRunning == true;
+
+    private bool CanResetSpeakerClock =>
+        discussion?.CurrentSpeaker is not null && discussion.CurrentSpeakerClock is not null;
 
     HubConnection procedureHub = null!;
     IDiscussionsHub hubProxy = default!;
@@ -302,6 +360,108 @@ else
         await procedureHub.StartAsync();
     }
 
+    private async Task RefreshDiscussionAsync()
+    {
+        if (currentAgendaItem is null || currentAgendaItem.State != AgendaItemState.UnderDiscussion)
+        {
+            discussion = null;
+            speakingTimeLimitSecondsInput = null;
+            selectedSpeakerRequestId = null;
+            return;
+        }
+
+        try
+        {
+            var previousSelection = selectedSpeakerRequestId;
+
+            discussion = await DiscussionsClient.GetDiscussionAsync(organization.Id, MeetingId);
+            speakingTimeLimitSecondsInput = discussion.SpeakingTimeLimitSeconds;
+
+            if (previousSelection is not null && SpeakerRequestsForExtension.Any(x => x.Id == previousSelection))
+            {
+                selectedSpeakerRequestId = previousSelection;
+            }
+            else
+            {
+                selectedSpeakerRequestId = null;
+            }
+
+            StateHasChanged();
+        }
+        catch (ApiException ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task SetDiscussionSpeakingTimeAsync()
+    {
+        if (currentAgendaItem is null)
+        {
+            return;
+        }
+
+        if (speakingTimeLimitSecondsInput is not null && speakingTimeLimitSecondsInput <= 0)
+        {
+            Snackbar.Add("Speaking time must be greater than zero.", Severity.Warning);
+            return;
+        }
+
+        await hubProxy.SetDiscussionSpeakingTime(currentAgendaItem.Id, speakingTimeLimitSecondsInput);
+    }
+
+    private async Task ExtendSpeakerTimeAsync()
+    {
+        if (currentAgendaItem is null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(selectedSpeakerRequestId))
+        {
+            Snackbar.Add("Select a speaker before extending time.", Severity.Warning);
+            return;
+        }
+
+        if (additionalSpeakingTimeSeconds <= 0)
+        {
+            Snackbar.Add("Additional speaking time must be greater than zero.", Severity.Warning);
+            return;
+        }
+
+        await hubProxy.ExtendSpeakerTime(currentAgendaItem.Id, selectedSpeakerRequestId, additionalSpeakingTimeSeconds);
+    }
+
+    private async Task StartSpeakerClockAsync()
+    {
+        if (currentAgendaItem is null)
+        {
+            return;
+        }
+
+        await hubProxy.StartCurrentSpeakerClock(currentAgendaItem.Id);
+    }
+
+    private async Task StopSpeakerClockAsync()
+    {
+        if (currentAgendaItem is null)
+        {
+            return;
+        }
+
+        await hubProxy.StopCurrentSpeakerClock(currentAgendaItem.Id);
+    }
+
+    private async Task ResetSpeakerClockAsync()
+    {
+        if (currentAgendaItem is null)
+        {
+            return;
+        }
+
+        await hubProxy.ResetCurrentSpeakerClock(currentAgendaItem.Id);
+    }
+
     private async Task ResetProcedure() 
     {
         var r = await DialogService.ShowMessageBox("Reset the procedure?", "This can't be undone.", "Yes", "No");
@@ -354,20 +514,23 @@ else
 
         if (currentAgendaItem is not null)
         {
+            discussion = null;
+            speakingTimeLimitSecondsInput = null;
+            selectedSpeakerRequestId = null;
+
             // Load the current motion associated with the agenda item
             if (currentAgendaItem.MotionId is not null)
             {
                 currentMotion = await MotionsClient.GetMotionByIdAsync(organization.Id, currentAgendaItem.MotionId.GetValueOrDefault());
             }
 
-            if(currentAgendaItem.State == AgendaItemState.UnderDiscussion) 
+            if(currentAgendaItem.State == AgendaItemState.UnderDiscussion)
             {
-                // fetch disc
-                discussion = await DiscussionsClient.GetDiscussionAsync(organization.Id, MeetingId);
+                await RefreshDiscussionAsync();
             }
-            else if(currentAgendaItem.State == AgendaItemState.Voting) 
+            else if(currentAgendaItem.State == AgendaItemState.Voting)
             {
-                if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting) 
+                if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting)
                 {
                     voting = await VotingClient.GetVotingAsync(organization.Id, MeetingId);
                 }
@@ -450,18 +613,99 @@ else
         return Task.CompletedTask;
     }
 
-    public Task OnSpeakerRequestRevoked(string agendaItemId, string id)
+    public async Task OnSpeakerRequestRevoked(string agendaItemId, string id)
     {
-        return Task.CompletedTask;
+        await RefreshDiscussionAsync();
     }
 
-    public Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId, string name)
+    public async Task OnSpeakerRequestAdded(string agendaItemId, string id, string attendeeId, string name)
     {
-        return Task.CompletedTask;
+        await RefreshDiscussionAsync();
     }
 
-    public Task OnMovedToNextSpeaker(string agendaItemId, string? id)
+    public async Task OnMovedToNextSpeaker(string agendaItemId, string? id)
     {
-        return Task.CompletedTask;
+        await RefreshDiscussionAsync();
+    }
+
+    public async Task OnSpeakerTimeExtended(string agendaItemId, string speakerRequestId, int? allocatedSeconds)
+    {
+        if (discussion is null)
+        {
+            return;
+        }
+
+        if (discussion.CurrentSpeaker?.Id == speakerRequestId)
+        {
+            discussion.CurrentSpeaker.AllocatedSpeakingTimeSeconds = allocatedSeconds;
+        }
+
+        if (discussion.SpeakerQueue is not null)
+        {
+            foreach (var speaker in discussion.SpeakerQueue)
+            {
+                if (speaker.Id == speakerRequestId)
+                {
+                    speaker.AllocatedSpeakingTimeSeconds = allocatedSeconds;
+                    break;
+                }
+            }
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task OnDiscussionSpeakingTimeChanged(string agendaItemId, int? speakingTimeLimitSeconds)
+    {
+        speakingTimeLimitSecondsInput = speakingTimeLimitSeconds;
+        await RefreshDiscussionAsync();
+    }
+
+    public async Task OnSpeakerClockStarted(string agendaItemId, string speakerRequestId, int elapsedSeconds, DateTimeOffset startedAtUtc)
+    {
+        if (discussion?.CurrentSpeaker?.Id != speakerRequestId)
+        {
+            await RefreshDiscussionAsync();
+            return;
+        }
+
+        discussion.CurrentSpeakerClock ??= new SpeakerClock();
+        discussion.CurrentSpeakerClock.IsRunning = true;
+        discussion.CurrentSpeakerClock.ElapsedSeconds = elapsedSeconds;
+        discussion.CurrentSpeakerClock.StartedAtUtc = startedAtUtc;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task OnSpeakerClockStopped(string agendaItemId, string speakerRequestId, int elapsedSeconds)
+    {
+        if (discussion?.CurrentSpeaker?.Id != speakerRequestId)
+        {
+            await RefreshDiscussionAsync();
+            return;
+        }
+
+        discussion.CurrentSpeakerClock ??= new SpeakerClock();
+        discussion.CurrentSpeakerClock.IsRunning = false;
+        discussion.CurrentSpeakerClock.ElapsedSeconds = elapsedSeconds;
+        discussion.CurrentSpeakerClock.StartedAtUtc = null;
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task OnSpeakerClockReset(string agendaItemId, string speakerRequestId, int elapsedSeconds)
+    {
+        if (discussion?.CurrentSpeaker?.Id != speakerRequestId)
+        {
+            await RefreshDiscussionAsync();
+            return;
+        }
+
+        discussion.CurrentSpeakerClock ??= new SpeakerClock();
+        discussion.CurrentSpeakerClock.IsRunning = false;
+        discussion.CurrentSpeakerClock.ElapsedSeconds = elapsedSeconds;
+        discussion.CurrentSpeakerClock.StartedAtUtc = null;
+
+        await InvokeAsync(StateHasChanged);
     }
 }
