@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 
 using MediatR;
@@ -9,7 +12,7 @@ using YourBrand.Meetings.Domain.Entities;
 
 namespace YourBrand.Meetings.Features.Command;
 
-public sealed record CreateMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights);
+public sealed record CreateMeetingAttendeeDto(string Name, string? UserId, string Email, int Role, bool? HasSpeakingRights, bool? HasVotingRights, IEnumerable<int>? FunctionIds);
 
 public sealed record CreateMeetingQuorumDto(int RequiredNumber);
 
@@ -48,7 +51,7 @@ public record CreateMeeting(string OrganizationId, string Title, string Descript
                 throw new Exception("Invalid role");
             }
 
-            if (request.CanAnyoneJoin && joinRole.Id != AttendeeRole.Attendee.Id && joinRole.Id != AttendeeRole.Observer.Id)
+            if (request.CanAnyoneJoin && joinRole.Id != AttendeeRole.Member.Id && joinRole.Id != AttendeeRole.Observer.Id)
             {
                 return Errors.Meetings.InvalidOpenAccessRole;
             }
@@ -73,7 +76,20 @@ public record CreateMeeting(string OrganizationId, string Title, string Descript
                     throw new Exception("Invalid role");
                 }
 
-                meeting.AddAttendee(attendee.Name, attendee.UserId, attendee.Email, role, attendee.HasSpeakingRights, attendee.HasVotingRights);
+                var functionIds = attendee.FunctionIds?.Distinct().ToArray();
+
+                var functions = functionIds is null || functionIds.Length == 0
+                    ? new List<MeetingFunction>()
+                    : await context.MeetingFunctions
+                        .Where(x => functionIds.Contains(x.Id))
+                        .ToListAsync(cancellationToken);
+
+                if (functionIds is not null && functions.Count != functionIds.Length)
+                {
+                    throw new Exception("Invalid meeting function");
+                }
+
+                meeting.AddAttendee(attendee.Name, attendee.UserId, attendee.Email, role, attendee.HasSpeakingRights, attendee.HasVotingRights, functions);
             }
 
             context.Meetings.Add(meeting);

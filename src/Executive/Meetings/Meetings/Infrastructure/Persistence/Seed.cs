@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
+using YourBrand.Meetings.Domain.Entities;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Meetings.Infrastructure.Persistence;
@@ -26,6 +28,12 @@ public static class Seed
         if (!await context.AttendeeRoles.AnyAsync())
         {
             await context.AttendeeRoles.AddRangeAsync(AttendeeRole.AllRoles);
+            await context.SaveChangesAsync();
+        }
+
+        if (!await context.MeetingFunctions.AnyAsync())
+        {
+            await context.MeetingFunctions.AddRangeAsync(MeetingFunction.AllFunctions);
             await context.SaveChangesAsync();
         }
 
@@ -130,6 +138,20 @@ public static class Seed
 
             await annualGeneralMeeting.AddAttendeesFromGroup(housingCooperative, context);
 
+            var orderedAttendees = annualGeneralMeeting.Attendees
+                .OrderBy(x => x.Order)
+                .ToList();
+
+            if (orderedAttendees.Count > 0)
+            {
+                orderedAttendees[0].SetFunctions(new[] { MeetingFunction.Chairperson });
+            }
+
+            if (orderedAttendees.Count > 1)
+            {
+                orderedAttendees[1].SetFunctions(new[] { MeetingFunction.Secretary });
+            }
+
             context.Meetings.Add(annualGeneralMeeting);
 
             await context.SaveChangesAsync();
@@ -176,7 +198,7 @@ public static class Seed
         meetingGroup.AddMember(
             name: "Alice Smith",
             email: "alice.smith@example.com",
-            role: AttendeeRole.Chairperson,
+            role: AttendeeRole.Member,
             userId: TenantConstants.UserAliceId,
             hasSpeakingRights: true,
             hasVotingRights: true
@@ -186,7 +208,7 @@ public static class Seed
         meetingGroup.AddMember(
             name: "Bob Smith",
             email: "bob.smith@example.com",
-            role: AttendeeRole.Attendee,
+            role: AttendeeRole.Member,
             userId: TenantConstants.UserBobId,
             hasSpeakingRights: true,
             hasVotingRights: true
@@ -198,7 +220,7 @@ public static class Seed
             meetingGroup.AddMember(
                 name: $"Member {i}",
                 email: $"member{i}@example.com",
-                role: AttendeeRole.Attendee,
+                role: AttendeeRole.Member,
                 userId: null,
                 hasSpeakingRights: true,
                 hasVotingRights: true
@@ -227,7 +249,7 @@ public static class Seed
         meetingGroup.AddMember(
             name: "Alice Smith",
             email: "alice.smith@example.com",
-            role: AttendeeRole.Attendee,
+            role: AttendeeRole.Member,
             userId: TenantConstants.UserAliceId,
             hasSpeakingRights: true,
             hasVotingRights: true
@@ -237,7 +259,7 @@ public static class Seed
         meetingGroup.AddMember(
             name: "Bob Smith",
             email: "bob.smith@example.com",
-            role: AttendeeRole.Attendee,
+            role: AttendeeRole.Member,
             userId: TenantConstants.UserBobId,
             hasSpeakingRights: true,
             hasVotingRights: true
@@ -249,7 +271,7 @@ public static class Seed
             meetingGroup.AddMember(
                 name: $"Member {i}",
                 email: $"member{i}@example.com",
-                role: AttendeeRole.Attendee,
+                role: AttendeeRole.Member,
                 userId: null,
                 hasSpeakingRights: true,
                 hasVotingRights: true
@@ -482,10 +504,11 @@ public static class Seed
             description: "Election of board members and officials as per organizational bylaws."
         );
 
-        var election = new Election() 
-        { 
+        var election = new Election()
+        {
             OrganizationId = TenantConstants.OrganizationId,
-            Position = MemberRole.Chairperson,
+            MeetingFunction = MeetingFunction.Chairperson,
+            MeetingFunctionId = MeetingFunction.Chairperson.Id,
             GroupId = 3
         };
 
@@ -502,7 +525,8 @@ public static class Seed
         election = new Election()
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Position = MemberRole.ViceChairperson,
+            MeetingFunction = MeetingFunction.Facilitator,
+            MeetingFunctionId = MeetingFunction.Facilitator.Id,
             GroupId = 3
         };
 
@@ -518,7 +542,8 @@ public static class Seed
         election = new Election()
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Position = MemberRole.Secretary,
+            MeetingFunction = MeetingFunction.Secretary,
+            MeetingFunctionId = MeetingFunction.Secretary.Id,
             GroupId = 3
         };
 
@@ -534,7 +559,8 @@ public static class Seed
         election = new Election()
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Position = MemberRole.Treasurer,
+            MeetingFunction = MeetingFunction.Timekeeper,
+            MeetingFunctionId = MeetingFunction.Timekeeper.Id,
             GroupId = 3
         };
 
@@ -550,7 +576,7 @@ public static class Seed
         election = new Election()
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Position = MemberRole.Member,
+            MeetingFunctionId = null,
             GroupId = 3
         };
 
@@ -566,7 +592,7 @@ public static class Seed
         election = new Election()
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Position = MemberRole.Member,
+            MeetingFunctionId = null,
             GroupId = 3
         };
 
@@ -582,7 +608,7 @@ public static class Seed
         election = new Election()
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Position = MemberRole.Member,
+            MeetingFunctionId = null,
             GroupId = 3
         };
 
@@ -598,7 +624,7 @@ public static class Seed
         election = new Election()
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Position = MemberRole.Alternate,
+            MeetingFunctionId = null,
             GroupId = 3
         };
 
@@ -614,7 +640,7 @@ public static class Seed
         election = new Election()
         {
             OrganizationId = TenantConstants.OrganizationId,
-            Position = MemberRole.Alternate,
+            MeetingFunctionId = null,
             GroupId = 3
         };
 

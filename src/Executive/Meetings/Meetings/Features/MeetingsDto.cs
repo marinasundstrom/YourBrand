@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace YourBrand.Meetings.Features;
 
 public sealed record MeetingDto(int Id, string Title, string? Description, MeetingState State, DateTimeOffset? ScheduledAt, string Location,
@@ -7,8 +9,10 @@ public sealed record MeetingDto(int Id, string Title, string? Description, Meeti
 
 public sealed record MeetingQuorumDto(int RequiredNumber);
 
-public sealed record MeetingAttendeeDto(string Id, string Name, AttendeeRoleDto Role, string? Email, string? UserId, bool? HasSpeakingRights, bool? HasVotingRights, bool IsPresent);
+public sealed record MeetingAttendeeDto(string Id, string Name, AttendeeRoleDto Role, IEnumerable<MeetingFunctionDto> Functions, string? Email, string? UserId, bool? HasSpeakingRights, bool? HasVotingRights, bool IsPresent);
 
 public sealed record AttendeeRoleDto(int Id, string Name, string? Description);
+
+public sealed record MeetingFunctionDto(int Id, string Name, string? Description);
 
 public sealed record DtoAction(string Method, string Href);

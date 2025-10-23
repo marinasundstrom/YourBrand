@@ -10,7 +10,11 @@ public interface IApplicationDbContext
 
     DbSet<MeetingAttendee> MeetingAttendees { get; }
 
+    DbSet<MeetingAttendeeFunction> MeetingAttendeeFunctions { get; }
+
     DbSet<AttendeeRole> AttendeeRoles { get; }
+
+    DbSet<MeetingFunction> MeetingFunctions { get; }
 
     DbSet<Agenda> Agendas { get; }
 

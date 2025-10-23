@@ -360,6 +360,11 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         item.Order = order;
         item.Election = election;
 
+        if (election?.MeetingFunction is not null)
+        {
+            item.Position = election.MeetingFunction.Name;
+        }
+
         _subItems.Add(item);
         return item;
     }

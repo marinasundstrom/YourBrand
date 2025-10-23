@@ -30,7 +30,7 @@ public sealed record ChangeMeetingOpenAccess(string OrganizationId, int Id, bool
                 throw new Exception("Invalid role");
             }
 
-            if (request.CanAnyoneJoin && joinRole.Id != AttendeeRole.Attendee.Id && joinRole.Id != AttendeeRole.Observer.Id)
+            if (request.CanAnyoneJoin && joinRole.Id != AttendeeRole.Member.Id && joinRole.Id != AttendeeRole.Observer.Id)
             {
                 return Errors.Meetings.InvalidOpenAccessRole;
             }

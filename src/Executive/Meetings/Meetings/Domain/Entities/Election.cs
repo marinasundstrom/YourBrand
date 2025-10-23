@@ -35,8 +35,8 @@ public sealed class Election : AggregateRoot<ElectionId>, IAuditableEntity<Elect
     public DateTimeOffset? StartTime { get; private set; }
     public DateTimeOffset? EndTime { get; private set; }
 
-    public MemberRole? Position { get; set; }
-    public int? PositionId { get; set; }
+    public MeetingFunction? MeetingFunction { get; set; }
+    public int? MeetingFunctionId { get; set; }
     public MeetingGroupId? GroupId { get; set; }
 
     public int MinimumVotesToWin { get; set; } = 1;

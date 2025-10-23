@@ -1,4 +1,5 @@
 using FluentValidation;
+using YourBrand.Meetings.Domain.Entities;
 
 using MediatR;
 
@@ -41,7 +42,7 @@ public record ResetMeetingProcedure(string OrganizationId, int Id) : IRequest<Re
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (attendee.Role != AttendeeRole.Chairperson)
+            if (!meeting.CanAttendeeActAsChair(attendee))
             {
                 return Errors.Meetings.OnlyChairpersonCanResetTheMeetingProcedure;
             }

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using YourBrand.Meetings.Domain.Entities;
+
 namespace YourBrand.Agendas.Infrastructure.Persistence.Configurations;
 
 public sealed class AgendaItemTypeConfiguration : IEntityTypeConfiguration<AgendaItemType>
@@ -19,6 +21,11 @@ public sealed class AgendaItemTypeConfiguration : IEntityTypeConfiguration<Agend
             
         builder.Property(e => e.Description)
             .HasMaxLength(250); // Adjust length as needed
+
+        builder.HasOne(x => x.HandledByFunction)
+            .WithMany()
+            .HasForeignKey(x => x.HandledByFunctionId)
+            .OnDelete(DeleteBehavior.NoAction);
 
     }
 }
