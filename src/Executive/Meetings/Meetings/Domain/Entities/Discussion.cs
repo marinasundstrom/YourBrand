@@ -17,6 +17,7 @@ public enum DiscussionState
 public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<DiscussionId>, IHasTenant, IHasOrganization
 {
     private readonly List<SpeakerRequest> _speakerQueue = new List<SpeakerRequest>();
+    private TimeSpan _currentSpeakerClockAccumulated = TimeSpan.Zero;
 
     public Discussion() : base(new DiscussionId())
     {
@@ -35,11 +36,17 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
         .Where(x => x.Status == SpeakerRequestStatus.Pending)
         .OrderBy(x => x.RequestedTime);
 
-    public TimeSpan? SpeakingTimeLimit { get; set; }
+    public TimeSpan? SpeakingTimeLimit { get; private set; }
 
     // Property to store the current speaker
     public SpeakerRequest? CurrentSpeaker { get; private set; }
     public SpeakerRequestId? CurrentSpeakerId { get; private set; }
+
+    public bool IsCurrentSpeakerClockRunning => CurrentSpeakerClockStartedAt is not null;
+
+    public DateTimeOffset? CurrentSpeakerClockStartedAt { get; private set; }
+
+    public TimeSpan CurrentSpeakerClockAccumulated => _currentSpeakerClockAccumulated;
 
     // Method to add a speaker request to the queue
     [Throws(typeof(InvalidOperationException))]
@@ -55,9 +62,12 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
             OrganizationId = OrganizationId,
             AttendeeId = attendee.Id,
             Name = attendee.Name!,
+            SpeakerId = Id,
             RequestedTime = DateTimeOffset.UtcNow,
             Status = SpeakerRequestStatus.Pending
         };
+
+        request.ApplyDefaultSpeakingTime(SpeakingTimeLimit);
 
         _speakerQueue.Add(request);
 
@@ -86,41 +96,56 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
     }
 
     // Method to advance to the next speaker in the queue
-    public SpeakerRequest? MoveToNextSpeaker()
+    public SpeakerTransition MoveToNextSpeaker()
     {
-        if (_speakerQueue.Count == 0)
+        var now = DateTimeOffset.UtcNow;
+
+        SpeakerRequest? previousSpeaker = null;
+        TimeSpan? previousElapsed = null;
+
+        if (CurrentSpeaker != null)
         {
-            CurrentSpeaker = null;
-            CurrentSpeakerId = null;
-            State = DiscussionState.Completed;
+            previousSpeaker = CurrentSpeaker;
+
+            if (IsCurrentSpeakerClockRunning)
+            {
+                StopCurrentSpeakerClock(now);
+            }
+            else
+            {
+                CurrentSpeaker.ActualSpeakingTime = _currentSpeakerClockAccumulated;
+            }
+
+            previousElapsed = CurrentSpeaker.ActualSpeakingTime ?? _currentSpeakerClockAccumulated;
+            CurrentSpeaker.Status = SpeakerRequestStatus.Completed;
+        }
+
+        SpeakerRequest? nextSpeaker = null;
+
+        if (_speakerQueue.Count > 0)
+        {
+            nextSpeaker = _speakerQueue
+                .OrderBy(x => x.RequestedTime)
+                .FirstOrDefault(s => s.Status == SpeakerRequestStatus.Pending);
+        }
+
+        if (nextSpeaker != null)
+        {
+            CurrentSpeaker = nextSpeaker;
+            CurrentSpeaker.Status = SpeakerRequestStatus.InProgress;
+            CurrentSpeakerId = CurrentSpeaker.Id;
+            ResetCurrentSpeakerClockState();
+            State = DiscussionState.InProgress;
         }
         else
         {
-            // Mark the current speaker as completed
-            if (CurrentSpeaker != null)
-            {
-                CurrentSpeaker.Status = SpeakerRequestStatus.Completed;
-            }
-
-            // Skip completed speakers and set the next speaker as the current speaker
-            CurrentSpeaker = _speakerQueue
-                .OrderBy(x => x.RequestedTime)
-                .FirstOrDefault(s => s.Status == SpeakerRequestStatus.Pending);
-
-            if (CurrentSpeaker != null)
-            {
-                CurrentSpeaker.Status = SpeakerRequestStatus.InProgress;
-                CurrentSpeakerId = CurrentSpeaker.Id;
-            }
-
-            if (CurrentSpeaker == null)
-            {
-                State = DiscussionState.Completed;
-                CurrentSpeakerId = null;
-            }
+            CurrentSpeaker = null;
+            CurrentSpeakerId = null;
+            ResetCurrentSpeakerClockState();
+            State = DiscussionState.Completed;
         }
 
-        return CurrentSpeaker;
+        return new SpeakerTransition(previousSpeaker, CurrentSpeaker, previousElapsed);
     }
 
     // Method to start the session
@@ -187,6 +212,112 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
         _speakerQueue.Clear();
         CurrentSpeaker = null;
         State = DiscussionState.NotStarted;
+        ResetCurrentSpeakerClockState();
+    }
+
+    public void SetSpeakingTimeLimit(TimeSpan? speakingTimeLimit)
+    {
+        if (speakingTimeLimit.HasValue && speakingTimeLimit.Value <= TimeSpan.Zero)
+        {
+            throw new InvalidOperationException("Speaking time must be greater than zero.");
+        }
+
+        SpeakingTimeLimit = speakingTimeLimit;
+
+        foreach (var speaker in _speakerQueue.Where(s => s.Status != SpeakerRequestStatus.Completed))
+        {
+            speaker.ApplyDefaultSpeakingTime(SpeakingTimeLimit);
+        }
+
+        if (CurrentSpeaker is not null && CurrentSpeaker.Status == SpeakerRequestStatus.InProgress)
+        {
+            CurrentSpeaker.ApplyDefaultSpeakingTime(SpeakingTimeLimit);
+        }
+    }
+
+    [Throws(typeof(InvalidOperationException))]
+    public void ExtendSpeakerTime(SpeakerRequestId speakerRequestId, TimeSpan additionalSpeakingTime)
+    {
+        var speakerRequest = _speakerQueue.FirstOrDefault(s => s.Id == speakerRequestId)
+            ?? (CurrentSpeaker?.Id == speakerRequestId ? CurrentSpeaker : null);
+
+        if (speakerRequest is null)
+        {
+            throw new InvalidOperationException("Speaker request not found for the specified attendee.");
+        }
+
+        speakerRequest.ExtendSpeakingTime(additionalSpeakingTime);
+    }
+
+    public void StartCurrentSpeakerClock(DateTimeOffset now)
+    {
+        if (CurrentSpeaker is null)
+        {
+            throw new InvalidOperationException("No current speaker to start clock for.");
+        }
+
+        if (IsCurrentSpeakerClockRunning)
+        {
+            throw new InvalidOperationException("Clock already running for current speaker.");
+        }
+
+        CurrentSpeakerClockStartedAt = now;
+    }
+
+    public void StopCurrentSpeakerClock(DateTimeOffset now)
+    {
+        if (CurrentSpeaker is null)
+        {
+            throw new InvalidOperationException("No current speaker to stop clock for.");
+        }
+
+        if (!IsCurrentSpeakerClockRunning)
+        {
+            throw new InvalidOperationException("Clock is not running for current speaker.");
+        }
+
+        _currentSpeakerClockAccumulated += now - CurrentSpeakerClockStartedAt!.Value;
+        CurrentSpeakerClockStartedAt = null;
+        CurrentSpeaker.ActualSpeakingTime = _currentSpeakerClockAccumulated;
+    }
+
+    public TimeSpan GetCurrentSpeakerClockElapsed(DateTimeOffset now)
+    {
+        var elapsed = _currentSpeakerClockAccumulated;
+
+        if (IsCurrentSpeakerClockRunning)
+        {
+            elapsed += now - CurrentSpeakerClockStartedAt!.Value;
+        }
+
+        return elapsed < TimeSpan.Zero ? TimeSpan.Zero : elapsed;
+    }
+
+    public SpeakerClockSnapshot GetCurrentSpeakerClockSnapshot(DateTimeOffset now)
+    {
+        var elapsed = GetCurrentSpeakerClockElapsed(now);
+
+        return new SpeakerClockSnapshot(IsCurrentSpeakerClockRunning, elapsed, CurrentSpeakerClockStartedAt);
+    }
+
+    public void ResetCurrentSpeakerClock()
+    {
+        if (CurrentSpeaker is null)
+        {
+            throw new InvalidOperationException("No current speaker to reset clock for.");
+        }
+
+        ResetCurrentSpeakerClockState();
+    }
+
+    private void ResetCurrentSpeakerClockState()
+    {
+        CurrentSpeakerClockStartedAt = null;
+        _currentSpeakerClockAccumulated = TimeSpan.Zero;
+        if (CurrentSpeaker is not null)
+        {
+            CurrentSpeaker.ActualSpeakingTime = null;
+        }
     }
 
     public User? CreatedBy { get; set; } = null!;
@@ -196,3 +327,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
     public UserId? LastModifiedById { get; set; }
     public DateTimeOffset? LastModified { get; set; }
 }
+
+public sealed record SpeakerTransition(SpeakerRequest? PreviousSpeaker, SpeakerRequest? CurrentSpeaker, TimeSpan? PreviousElapsed);
+
+public sealed record SpeakerClockSnapshot(bool IsRunning, TimeSpan Elapsed, DateTimeOffset? StartedAtUtc);

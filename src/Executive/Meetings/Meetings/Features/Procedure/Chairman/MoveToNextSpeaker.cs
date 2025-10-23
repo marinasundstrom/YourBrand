@@ -1,3 +1,5 @@
+using System;
+
 using MediatR;
 
 using Microsoft.AspNetCore.SignalR;
@@ -51,17 +53,28 @@ public sealed record MoveToNextSpeaker(string OrganizationId, int Id) : IRequest
                 return Errors.Meetings.NoOngoingDiscussionSession;
             }
 
-            var speakerRequest = agendaItem.Discussion!.MoveToNextSpeaker();
+            var transition = agendaItem.Discussion!.MoveToNextSpeaker();
 
-            var speakerRequestId = speakerRequest is null ? null : speakerRequest.Id.Value;
+            var nextSpeakerId = transition.CurrentSpeaker is null ? null : transition.CurrentSpeaker.Id.Value;
+            var previousSpeakerId = transition.PreviousSpeaker is null ? null : transition.PreviousSpeaker.Id.Value;
+            var previousElapsedSeconds = transition.PreviousElapsed.HasValue
+                ? (int)Math.Max(0, Math.Round(transition.PreviousElapsed.Value.TotalSeconds))
+                : 0;
 
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
 
+            if (previousSpeakerId is not null)
+            {
+                await hubContext.Clients
+                    .Group($"meeting-{meeting.Id}")
+                    .OnSpeakerClockStopped(agendaItem.Id, previousSpeakerId, previousElapsedSeconds);
+            }
+
             await hubContext.Clients
                .Group($"meeting-{meeting.Id}")
-               .OnMovedToNextSpeaker(agendaItem.Id, speakerRequestId);
+               .OnMovedToNextSpeaker(agendaItem.Id, nextSpeakerId);
 
             return Result.Success;
         }

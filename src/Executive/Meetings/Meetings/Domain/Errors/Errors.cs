@@ -50,6 +50,17 @@ public static partial class Errors
 
         public static readonly Error OnlyChairpersonCanManageSpeakerQueue = new Error(nameof(OnlyChairpersonCanManageSpeakerQueue), "Only the chairperson can manage the speaker queue.", string.Empty);
 
+        public static readonly Error SpeakingTimeNotConfigured = new Error(nameof(SpeakingTimeNotConfigured), "Speaking time limit has not been configured for the discussion.", string.Empty);
+
+        public static readonly Error SpeakerRequestNotFound = new Error(nameof(SpeakerRequestNotFound), "Speaker request not found.", string.Empty);
+
+        public static readonly Error InvalidSpeakingTimeLimit = new Error(nameof(InvalidSpeakingTimeLimit), "Speaking time limit must be greater than zero.", string.Empty);
+
+        public static readonly Error InvalidAdditionalSpeakingTime = new Error(nameof(InvalidAdditionalSpeakingTime), "Additional speaking time must be greater than zero.", string.Empty);
+        public static readonly Error NoCurrentSpeaker = new Error(nameof(NoCurrentSpeaker), "No current speaker is active.", string.Empty);
+        public static readonly Error SpeakerClockAlreadyRunning = new Error(nameof(SpeakerClockAlreadyRunning), "The speaker clock is already running.", string.Empty);
+        public static readonly Error SpeakerClockNotRunning = new Error(nameof(SpeakerClockNotRunning), "The speaker clock is not running.", string.Empty);
+
         public static readonly Result NotAnAttendantOfMeeting = new Error(nameof(NotAnAttendantOfMeeting), "Not an attendee of this meeting.", string.Empty);
 
         public static readonly Result CandidateAlreadyProposed = new Error(nameof(CandidateAlreadyProposed), "Attendee has already been proposed as a candidate.", string.Empty);
