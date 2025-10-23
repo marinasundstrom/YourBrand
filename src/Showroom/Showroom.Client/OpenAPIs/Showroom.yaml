@@ -1697,6 +1697,8 @@ components:
       properties:
         id:
           type: string
+        organizationId:
+          type: string
         status:
           type: string
         description:

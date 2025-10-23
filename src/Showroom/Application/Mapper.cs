@@ -139,7 +139,7 @@ public static class Mapper
 
     public static CaseDto ToDto(this Domain.Entities.Case @case, IUrlHelper urlHelper)
     {
-        return new (@case.Id, @case.Status.ToString(), @case.Description, @case.CandidateProfiles.Select(x => x.ToDto(urlHelper)),
+        return new (@case.Id, @case.OrganizationId, @case.Status.ToString(), @case.Description, @case.CandidateProfiles.Select(x => x.ToDto(urlHelper)),
             new CasePricingDto(@case.Pricing.HourlyPrice, @case.Pricing.Hours, @case.Pricing.Total));
     }
 

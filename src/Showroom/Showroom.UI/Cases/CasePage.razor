@@ -67,9 +67,9 @@ else
     {
         var profile = @case.CaseProfiles.First();
 
-        var project = await ProjectsClient.CreateProjectAsync(profile.Profile.Organization.Id, new CreateProject
+        var project = await ProjectsClient.CreateProjectAsync(@case.OrganizationId, new CreateProject
         {
-            OrganizationId = profile.Profile.Organization.Id,
+            OrganizationId = @case.OrganizationId,
             Name = $"Case {@case.Description} - {profile.Profile.FirstName} {profile.Profile.LastName}",
             Description = "Assignment"
         });
