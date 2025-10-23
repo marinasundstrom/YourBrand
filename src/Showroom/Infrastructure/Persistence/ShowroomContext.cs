@@ -61,7 +61,7 @@ public class ShowroomContext(
 
     public DbSet<Case> Cases { get; set; } = null!;
 
-    public DbSet<CaseProfile> CaseProfiles { get; set; } = null!;
+    public DbSet<CaseCandidateProfile> CaseCandidateProfiles { get; set; } = null!;
 
     public DbSet<SkillArea> SkillAreas { get; set; } = null!;
 

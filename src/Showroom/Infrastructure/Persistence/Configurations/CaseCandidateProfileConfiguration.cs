@@ -6,9 +6,9 @@ using YourBrand.Showroom.Domain.Entities;
 
 namespace YourBrand.Showroom.Infrastructure.Persistence.Configurations;
 
-sealed class CaseProfileConfiguration : IEntityTypeConfiguration<CaseProfile>
+sealed class CaseCandidateProfileConfiguration : IEntityTypeConfiguration<CaseCandidateProfile>
 {
-    public void Configure(EntityTypeBuilder<CaseProfile> builder)
+    public void Configure(EntityTypeBuilder<CaseCandidateProfile> builder)
     {
         builder.ToTable("CaseProfiles");
         builder.Property(x => x.Id).ValueGeneratedNever();

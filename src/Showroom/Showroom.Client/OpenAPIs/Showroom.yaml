@@ -1864,7 +1864,12 @@ components:
       type: object
       additionalProperties: false
       properties:
+        organizationId:
+          type: string
         description:
+          type: string
+          nullable: true
+        personProfileId:
           type: string
           nullable: true
         pricing:

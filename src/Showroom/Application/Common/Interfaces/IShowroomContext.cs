@@ -20,7 +20,7 @@ public interface IShowroomContext
 
     DbSet<Case> Cases { get; }
 
-    DbSet<CaseProfile> CaseProfiles { get; }
+    DbSet<CaseCandidateProfile> CaseCandidateProfiles { get; }
 
     DbSet<SkillArea> SkillAreas { get; }
 

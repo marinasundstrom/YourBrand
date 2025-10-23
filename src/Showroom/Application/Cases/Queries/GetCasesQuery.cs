@@ -36,7 +36,15 @@ public record GetCasesQuery(int Page = 0, int PageSize = 10, string? SearchStrin
             }
 
             var items = await result
-                .Include(c => c.CaseProfiles)
+                .Include(c => c.CandidateProfiles)
+                .ThenInclude(c => c.PersonProfile)
+                .ThenInclude(c => c.Organization)
+                .Include(c => c.CandidateProfiles)
+                .ThenInclude(c => c.PersonProfile)
+                .ThenInclude(c => c.Industry)
+                .Include(c => c.CandidateProfiles)
+                .ThenInclude(c => c.PersonProfile)
+                .ThenInclude(c => c.CompetenceArea)
                 .Include(c => c.CreatedBy)
                 .Include(c => c.LastModifiedBy)
                 .Skip((request.Page) * request.PageSize)

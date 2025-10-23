@@ -22,7 +22,7 @@ public class Case : AuditableEntity<string>, IHasTenant, ISoftDeletableWithAudit
 
     public CaseStatus Status { get; set; }
 
-    public ICollection<CaseProfile> CaseProfiles { get; set; } = null!;
+    public ICollection<CaseCandidateProfile> CandidateProfiles { get; set; } = [];
 
     public CasePricing Pricing { get; set; }
 

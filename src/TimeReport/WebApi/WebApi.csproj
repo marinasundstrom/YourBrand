@@ -19,7 +19,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
     <PackageReference Include="Microsoft.Extensions.Azure" />
     <PackageReference Include="NSwag.AspNetCore" />
-    <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="MediatR" />
   </ItemGroup>
 

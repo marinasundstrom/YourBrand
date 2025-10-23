@@ -92,7 +92,9 @@
     private async Task Submit()
     {
         var dto = await CasesClient.CreateCaseAsync(new CreateCase {
+            OrganizationId = Organization!.Id,
             Description = Description,
+            PersonProfileId = Profile?.Id,
             Pricing = new UpdatePricing {
                 HourlyPrice = HourlyPrice,
                 Hours = Hours

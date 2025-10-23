@@ -1,12 +1,20 @@
-﻿using YourBrand.Domain;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+using YourBrand.Domain;
 using YourBrand.Identity;
 using YourBrand.Showroom.Domain.Common;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Domain.Entities;
 
-public class CaseProfile : AuditableEntity<string>, IHasTenant, ISoftDeletableWithAudit<User>
+public class CaseCandidateProfile : AuditableEntity<string>, IHasTenant, ISoftDeletableWithAudit<User>
 {
+    public CaseCandidateProfile()
+        : base(Guid.NewGuid().ToString())
+    {
+
+    }
+
     public TenantId TenantId { get; set; } = null!;
 
     public OrganizationId OrganizationId { get; set; } = null!;

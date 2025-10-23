@@ -34,7 +34,7 @@ public class CasesController(IMediator mediator) : ControllerBase
     [ProducesResponseType(typeof(CaseDto), StatusCodes.Status201Created)]
     public async Task<ActionResult> CreateCase(CreateCaseDto dto, CancellationToken cancellationToken)
     {
-        var dto2 = await mediator.Send(new CreateCaseCommand(dto.Description, new CasePricing(dto.Pricing.HourlyPrice, dto.Pricing.Hours)), cancellationToken);
+        var dto2 = await mediator.Send(new CreateCaseCommand(dto.OrganizationId, dto.Description, dto.PersonProfileId, new CasePricing(dto.Pricing.HourlyPrice, dto.Pricing.Hours)), cancellationToken);
         return CreatedAtAction(nameof(GetCase), new { id = dto2.Id }, dto2);
     }
 
@@ -53,6 +53,6 @@ public class CasesController(IMediator mediator) : ControllerBase
 
 public record UpdatePricingDto(decimal? HourlyPrice, double? Hours);
 
-public record CreateCaseDto(string? Description, UpdatePricingDto Pricing);
+public record CreateCaseDto(string OrganizationId, string? Description, string? PersonProfileId, UpdatePricingDto Pricing);
 
 public record UpdateCaseDto(string? Description);
