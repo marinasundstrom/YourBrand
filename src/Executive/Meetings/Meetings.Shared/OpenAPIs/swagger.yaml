@@ -565,6 +565,53 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
+  /v1/Meetings/{id}/OpenAccess:
+    put:
+      tags:
+      - Meetings
+      operationId: Meetings_ChangeMeetingOpenAccess
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeMeetingOpenAccess'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/Meetings/{id}/State:
     put:
       tags:
@@ -910,6 +957,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MeetingAttendee'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Meetings/{id}/Join:
+    post:
+      tags:
+      - Meetings
+      operationId: Meetings_JoinMeeting
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meeting'
         404:
           description: ''
           content:
@@ -4049,6 +4135,11 @@ components:
           nullable: true
         showAgendaTimeEstimates:
           type: boolean
+        canAnyoneJoin:
+          type: boolean
+        joinAs:
+          $ref: '#/components/schemas/AttendeeRole'
+          nullable: true
         actions:
           type: object
           additionalProperties:
@@ -4125,6 +4216,12 @@ components:
           type: string
         quorum:
           $ref: '#/components/schemas/CreateMeetingQuorum'
+        canAnyoneJoin:
+          type: boolean
+        joinAsRoleId:
+          type: integer
+          format: int32
+          nullable: true
         attendees:
           type: array
           items:
@@ -4194,6 +4291,16 @@ components:
       properties:
         showAgendaTimeEstimates:
           type: boolean
+    ChangeMeetingOpenAccess:
+      type: object
+      additionalProperties: false
+      properties:
+        canAnyoneJoin:
+          type: boolean
+        joinAsRoleId:
+          type: integer
+          format: int32
+          nullable: true
     ChangeMeetingState:
       type: object
       additionalProperties: false

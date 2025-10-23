@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
+using YourBrand.Meetings.Domain.Entities;
 
 namespace YourBrand.Meetings.Features.Command;
 
@@ -12,7 +13,7 @@ public sealed record CreateMeetingAttendeeDto(string Name, string? UserId, strin
 
 public sealed record CreateMeetingQuorumDto(int RequiredNumber);
 
-public record CreateMeeting(string OrganizationId, string Title, string Description, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingAttendeeDto> Attendees) : IRequest<Result<MeetingDto>>
+public record CreateMeeting(string OrganizationId, string Title, string Description, DateTimeOffset? ScheduledAt, string Location, CreateMeetingQuorumDto Quorum, IEnumerable<CreateMeetingAttendeeDto> Attendees, bool CanAnyoneJoin, int? JoinAsRoleId) : IRequest<Result<MeetingDto>>
 {
     public class Validator : AbstractValidator<CreateMeeting>
     {
@@ -38,10 +39,25 @@ public record CreateMeeting(string OrganizationId, string Title, string Descript
             }
             catch { }
 
+            var joinRoleId = request.JoinAsRoleId ?? AttendeeRole.Observer.Id;
+
+            var joinRole = await context.AttendeeRoles.FirstOrDefaultAsync(x => x.Id == joinRoleId, cancellationToken);
+
+            if (joinRole is null)
+            {
+                throw new Exception("Invalid role");
+            }
+
+            if (request.CanAnyoneJoin && joinRole.Id != AttendeeRole.Attendee.Id && joinRole.Id != AttendeeRole.Observer.Id)
+            {
+                return Errors.Meetings.InvalidOpenAccessRole;
+            }
+
             var meeting = new Meeting(id, request.Title);
             meeting.OrganizationId = request.OrganizationId;
             meeting.Location = request.Location ?? string.Empty;
             meeting.Quorum.RequiredNumber = request.Quorum.RequiredNumber;
+            meeting.SetOpenAccess(request.CanAnyoneJoin, joinRole);
 
             if (request.ScheduledAt is not null)
             {

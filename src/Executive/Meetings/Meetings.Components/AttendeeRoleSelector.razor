@@ -1,3 +1,5 @@
+@using System
+@using System.Linq
 @using System.Linq.Expressions
 @inject IAttendeeRolesClient AttendeeRolesClient
 @inject IDialogService DialogService
@@ -47,13 +49,19 @@
         try
         {
             var results = await AttendeeRolesClient.GetAttendeeRolesAsync(OrganizationId, 1, 10, text, null, null, cancellationToken);
-            return results.Items;
+
+            return results.Items?
+                .Where(r => string.Equals(r.Name, "Observer", StringComparison.OrdinalIgnoreCase)
+                    || string.Equals(r.Name, "Attendee", StringComparison.OrdinalIgnoreCase))
+                .OrderBy(r => r.Name)
+                .ToList()
+                ?? Enumerable.Empty<AttendeeRole>();
         }
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
         }
 
-        return null;
+        return Enumerable.Empty<AttendeeRole>();
     }
 }

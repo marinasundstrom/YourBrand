@@ -1,6 +1,8 @@
 @page "/meetings/{id:int}"
 
+@using System
 @using System.ComponentModel.DataAnnotations
+@using YourBrand.Meetings.Components
 @using YourBrand.Meetings.MeetingDetails.Agenda
 @using YourBrand.Portal.Services
 @inject IMeetingsClient MeetingsClient
@@ -38,6 +40,10 @@
                     For="@(() => Description)" Immediate="true" Lines="5" />
                 <MudSwitch @bind-Checked="ShowAgendaTimeEstimates" Class="mt-4"
                            For="@(() => ShowAgendaTimeEstimates)" Color="Color.Primary" Label="Show agenda time estimates" />
+                <MudSwitch @bind-Checked="CanAnyoneJoin" Class="mt-4"
+                           For="@(() => CanAnyoneJoin)" Color="Color.Primary" Label="Allow anyone to join" />
+                <AttendeeRoleSelector OrganizationId="organization?.Id" Class="mt-4" Label="Join as role"
+                    Variant="Variant.Outlined" @bind-Value="JoinAsRole" For="() => JoinAsRole" Disabled="!CanAnyoneJoin" />
                 <MudNumericField Label="Quorum" Variant="Variant.Outlined" Class="mt-4" @bind-Value="QuorumRequiredNumber"
                     For="@(() => QuorumRequiredNumber)" Immediate="true" HelperText="Required number of attendees"  />
                 <MudSelect T="MeetingState" Label="State" Variant="Variant.Outlined" @bind-Value="State" Immediate="true"
@@ -161,9 +167,17 @@
 
     public bool ShowAgendaTimeEstimates { get; set; }
 
+    public bool CanAnyoneJoin { get; set; }
+
+    public AttendeeRole JoinAsRole { get; set; } = new();
+
     public List<AttendeeViewModel> Attendees { get; set; } = new List<AttendeeViewModel>();
 
     MeetingState oldState;
+
+    bool originalCanAnyoneJoin;
+
+    int? originalJoinAsRoleId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -187,7 +201,11 @@
         QuorumRequiredNumber = meeting.Quorum.RequiredNumber;
         State = meeting.State;
         ShowAgendaTimeEstimates = meeting.ShowAgendaTimeEstimates;
+        CanAnyoneJoin = meeting.CanAnyoneJoin;
+        JoinAsRole = CreateJoinRoleOrDefault(meeting.JoinAs);
         oldState = State;
+        originalCanAnyoneJoin = CanAnyoneJoin;
+        originalJoinAsRoleId = JoinAsRole?.Id;
 
         if(Attendees.Any()) Attendees.Clear();
 
@@ -274,17 +292,33 @@
             Snackbar.Add("Agenda display updated");
         }
 
-        if(context.IsModified(() => QuorumRequiredNumber)) 
+        if(context.IsModified(() => QuorumRequiredNumber))
         {
             var meeting = await MeetingsClient.ChangeMeetingQuorumAsync(organization.Id, Id, new ChangeMeetingQuorum
             {
                 RequiredNumber = QuorumRequiredNumber
             });
 
-            Snackbar.Add("Quorum updated");  
+            Snackbar.Add("Quorum updated");
         }
 
-        if(State != oldState) 
+        if(CanAnyoneJoin != originalCanAnyoneJoin || (JoinAsRole?.Id ?? 0) != originalJoinAsRoleId)
+        {
+            var meeting = await MeetingsClient.ChangeMeetingOpenAccessAsync(organization.Id, Id, new ChangeMeetingOpenAccess
+            {
+                CanAnyoneJoin = CanAnyoneJoin,
+                JoinAsRoleId = JoinAsRole?.Id
+            });
+
+            Snackbar.Add("Open access updated");
+
+            CanAnyoneJoin = meeting.CanAnyoneJoin;
+            JoinAsRole = CreateJoinRoleOrDefault(meeting.JoinAs);
+            originalCanAnyoneJoin = CanAnyoneJoin;
+            originalJoinAsRoleId = JoinAsRole?.Id;
+        }
+
+        if(State != oldState)
         {
             var meeting = await MeetingsClient.ChangeMeetingStateAsync(organization.Id, Id, new ChangeMeetingState
             {
@@ -432,3 +466,22 @@
         Snackbar.Add("Procedure was reset");
     }
 }
+
+    private static AttendeeRole CreateJoinRoleOrDefault(AttendeeRoleDto? roleDto)
+    {
+        if (roleDto is null || !IsAllowedOpenAccessRole(roleDto.Name))
+        {
+            return new AttendeeRole();
+        }
+
+        return new AttendeeRole
+        {
+            Id = roleDto.Id,
+            Name = roleDto.Name,
+            Description = roleDto.Description
+        };
+    }
+
+    private static bool IsAllowedOpenAccessRole(string? roleName) =>
+        string.Equals(roleName, "Observer", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(roleName, "Attendee", StringComparison.OrdinalIgnoreCase);
