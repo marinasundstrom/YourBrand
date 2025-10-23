@@ -3,7 +3,6 @@
 @using System
 @using System.ComponentModel.DataAnnotations
 @using System.Linq
-@using YourBrand.Meetings.Components
 @using YourBrand.Portal.Services
 @inject IMeetingsClient MeetingsClient
 @inject IAttendeeRolesClient AttendeeRolesClient
@@ -229,8 +228,8 @@
     {
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
     }
-}
 
     private static bool IsAllowedOpenAccessRole(AttendeeRole role) =>
         string.Equals(role.Name, "Observer", StringComparison.OrdinalIgnoreCase)
             || string.Equals(role.Name, "Attendee", StringComparison.OrdinalIgnoreCase);
+}

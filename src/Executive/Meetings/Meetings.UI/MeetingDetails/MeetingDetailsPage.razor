@@ -2,10 +2,11 @@
 
 @using System
 @using System.ComponentModel.DataAnnotations
-@using YourBrand.Meetings.Components
+@using YourBrand.Meetings.Dtos
 @using YourBrand.Meetings.MeetingDetails.Agenda
 @using YourBrand.Portal.Services
 @inject IMeetingsClient MeetingsClient
+@inject IMinutesClient MinutesClient
 @inject IChairmanClient ChairmanClient
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
@@ -129,6 +130,17 @@
 
     <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="@($"/meetings/{Id}/attendee")" Class="ms-2 mb-4">Attendee</MudButton>
 
+    @if (MinutesId is not null)
+    {
+        <MudButton Variant="Variant.Filled" Color="Color.Info" Href="@($"/meetings/minutes/{MinutesId}/secretary")" Class="ms-2 mb-4">Secretary minutes</MudButton>
+    }
+    else
+    {
+        <MudTooltip Text="Create minutes to enable the secretary workspace">
+            <MudButton Variant="Variant.Filled" Color="Color.Info" Disabled="true" Class="ms-2 mb-4">Secretary minutes</MudButton>
+        </MudTooltip>
+    }
+
     <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="ResetMeetingProcedure" Class="ms-2 mb-4">Reset</MudButton>
 </MudPaper>
 
@@ -164,6 +176,8 @@
     public int QuorumRequiredNumber { get; set; }
 
     public MeetingState State { get; set; }
+
+    public int? MinutesId { get; set; }
 
     public bool ShowAgendaTimeEstimates { get; set; }
 
@@ -220,10 +234,31 @@
                 IsPresent = attendee.IsPresent
             }));
     
+        await LoadMinutes();
+
         context.OnFieldChanged += OnFieldChanged;
         context.MarkAsUnmodified();
 
         isDetailsModified = false;
+    }
+
+    private async Task LoadMinutes()
+    {
+        if (organization is null)
+        {
+            MinutesId = null;
+            return;
+        }
+
+        try
+        {
+            var result = await MinutesClient.GetMinutesAsync(organization.Id, Id, 1, 1, null, null, null);
+            MinutesId = result.Items.FirstOrDefault()?.Id;
+        }
+        catch (ApiException)
+        {
+            MinutesId = null;
+        }
     }
 
     bool isDetailsModified = false;
@@ -455,7 +490,7 @@
         OrganizationProvider.CurrentOrganizationChanged -= OnCurrentOrganizationChanged;
     }
 
-    async Task ResetMeetingProcedure() 
+    async Task ResetMeetingProcedure()
     {
         await ChairmanClient.ResetMeetingProcedureAsync(organization.Id, Id);
 
@@ -465,9 +500,8 @@
 
         Snackbar.Add("Procedure was reset");
     }
-}
 
-    private static AttendeeRole CreateJoinRoleOrDefault(AttendeeRoleDto? roleDto)
+    private static AttendeeRole CreateJoinRoleOrDefault(AttendeeRole? roleDto)
     {
         if (roleDto is null || !IsAllowedOpenAccessRole(roleDto.Name))
         {
@@ -485,3 +519,4 @@
     private static bool IsAllowedOpenAccessRole(string? roleName) =>
         string.Equals(roleName, "Observer", StringComparison.OrdinalIgnoreCase)
             || string.Equals(roleName, "Attendee", StringComparison.OrdinalIgnoreCase);
+}
