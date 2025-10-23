@@ -3,6 +3,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 
+using System.Linq;
+
 using MudBlazor;
 
 using YourBrand.Meetings;
@@ -108,11 +110,12 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
 
     public Task OnSpeakerRequestRevoked(string agendaItemId, string id)
     {
-        var list = speakerQueue.ToList();
-        list.Remove(speakerQueue.First(x => x.Id == id));
+        var list = speakerQueue.Where(x => x.Id != id).ToList();
         speakerQueue = new Queue<SpeakerRequest>(list);
-
-        Console.WriteLine("Removed");
+        if (CurrentSpeaker?.Id == id)
+        {
+            CurrentSpeaker = null;
+        }
 
         StateHasChanged();
 
@@ -140,19 +143,50 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
         return Task.CompletedTask;
     }
 
-    public Task OnMovedToNextSpeaker(string id)
+    public Task OnMovedToNextSpeaker(string agendaItemId, string? id)
     {
-        var first = speakerQueue.Peek();
-        if(first is null) 
+        if (string.IsNullOrEmpty(id))
         {
             CurrentSpeaker = null;
+            speakerQueue.Clear();
 
             StateHasChanged();
 
             return Task.CompletedTask;
         }
-        CurrentSpeaker = first;
-        speakerQueue.Dequeue();
+
+        var originalQueue = speakerQueue.ToList();
+        SpeakerRequest? nextSpeaker = null;
+        var remaining = new Queue<SpeakerRequest>();
+        var found = false;
+
+        foreach (var candidate in originalQueue)
+        {
+            if (!found && candidate.Id == id)
+            {
+                nextSpeaker = candidate;
+                found = true;
+                continue;
+            }
+
+            if (found)
+            {
+                remaining.Enqueue(candidate);
+            }
+        }
+
+        if (!found)
+        {
+            speakerQueue = new Queue<SpeakerRequest>(originalQueue);
+
+            StateHasChanged();
+
+            return Task.CompletedTask;
+        }
+
+        speakerQueue = remaining;
+
+        CurrentSpeaker = nextSpeaker;
 
         StateHasChanged();
 

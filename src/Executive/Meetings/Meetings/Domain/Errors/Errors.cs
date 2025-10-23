@@ -24,6 +24,8 @@ public static partial class Errors
 
         public static readonly Error YouHaveNoVotingRights = new Error(nameof(YouHaveNoVotingRights), "You have no voting rights.", string.Empty);
 
+        public static readonly Error YouHaveNoSpeakingRights = new Error(nameof(YouHaveNoSpeakingRights), "You have no speaking rights.", string.Empty);
+
         public static readonly Error OnlyChairpersonCanStartTheMeeting = new Error(nameof(OnlyChairpersonCanStartTheMeeting), "Only the chairperson can start the meeting.", string.Empty);
 
         public static readonly Error OnlyChairpersonCanMoveToNextAgendaItem = new Error(nameof(OnlyChairpersonCanMoveToNextAgendaItem), "Only the chairperson can move to the next agenda item.", string.Empty);
@@ -45,6 +47,8 @@ public static partial class Errors
         public static readonly Error OnlyChairpersonCanStartVoting = new Error(nameof(OnlyChairpersonCanStartVoting), "Only the Chairperson can start a voting session.", string.Empty);
 
         public static readonly Error OnlyChairpersonCanEndVoting = new Error(nameof(OnlyChairpersonCanEndVoting), "Only the Chairperson can end a voting session.", string.Empty);
+
+        public static readonly Error OnlyChairpersonCanManageSpeakerQueue = new Error(nameof(OnlyChairpersonCanManageSpeakerQueue), "Only the chairperson can manage the speaker queue.", string.Empty);
 
         public static readonly Result NotAnAttendantOfMeeting = new Error(nameof(NotAnAttendantOfMeeting), "Not an attendee of this meeting.", string.Empty);
 

@@ -261,7 +261,7 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         return Task.CompletedTask;
     }
 
-    public Task OnMovedToNextSpeaker(string id)
+    public Task OnMovedToNextSpeaker(string agendaItemId, string? id)
     {
         return Task.CompletedTask;
     }
