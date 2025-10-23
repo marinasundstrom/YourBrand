@@ -33,9 +33,9 @@ public sealed record RequestSpeakerTime(string OrganizationId, int Id, string Ag
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.IsAttendeeAllowedToVote(attendee))
+            if (!meeting.IsAttendeeAllowedToSpeak(attendee))
             {
-                return Errors.Meetings.YouHaveNoVotingRights;
+                return Errors.Meetings.YouHaveNoSpeakingRights;
             }
 
             var agendaItem = meeting.GetAgendaItem(request.AgendaItemId);

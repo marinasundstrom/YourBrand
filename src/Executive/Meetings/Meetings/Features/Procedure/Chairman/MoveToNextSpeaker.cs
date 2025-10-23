@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
+using YourBrand.Meetings.Features.Agendas;
 using YourBrand.Meetings.Features.Procedure.Command;
 using YourBrand.Meetings.Features.Procedure.Discussions;
 
@@ -33,9 +34,9 @@ public sealed record MoveToNextSpeaker(string OrganizationId, int Id) : IRequest
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.IsAttendeeAllowedToVote(attendee))
+            if (attendee.Role != AttendeeRole.Chairperson)
             {
-                return Errors.Meetings.YouHaveNoVotingRights;
+                return Errors.Meetings.OnlyChairpersonCanManageSpeakerQueue;
             }
 
             var agendaItem = meeting.GetCurrentAgendaItem();
@@ -52,13 +53,15 @@ public sealed record MoveToNextSpeaker(string OrganizationId, int Id) : IRequest
 
             var speakerRequest = agendaItem.Discussion!.MoveToNextSpeaker();
 
+            var speakerRequestId = speakerRequest is null ? null : speakerRequest.Id.Value;
+
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
 
             await hubContext.Clients
                .Group($"meeting-{meeting.Id}")
-               .OnMovedToNextSpeaker(speakerRequest.Id);
+               .OnMovedToNextSpeaker(agendaItem.Id, speakerRequestId);
 
             return Result.Success;
         }

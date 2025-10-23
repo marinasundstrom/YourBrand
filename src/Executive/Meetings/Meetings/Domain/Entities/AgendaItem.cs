@@ -158,18 +158,29 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         if (State != AgendaItemState.UnderDiscussion)
             throw new InvalidOperationException("Cannot start voting.");
 
-        if (Voting != null)
-            throw new InvalidOperationException("Voting session already in progress.");
-
-        Voting = new Voting(VotingType.SimpleMajority)
+        if (Voting is null)
         {
-            OrganizationId = OrganizationId,
-            TenantId = TenantId
-        };
+            Voting = new Voting(VotingType.SimpleMajority)
+            {
+                OrganizationId = OrganizationId,
+                TenantId = TenantId
+            };
+        }
+        else
+        {
+            if (Voting.State != VotingState.RedoRequired)
+            {
+                throw new InvalidOperationException("Voting session already in progress.");
+            }
+
+            Voting.RedoVoting();
+        }
 
         Voting.StartVoting();
 
         VotingStartedAt = DateTimeOffset.UtcNow;
+        VotingEndedAt = null;
+        IsVoteCompleted = false;
         State = AgendaItemState.Voting;
     }
 
@@ -179,13 +190,15 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         if (Voting == null)
             throw new InvalidOperationException("No active voting session.");
 
-        Voting.TallyVotes();
-
         Voting.EndVoting();
 
+        Voting.TallyVotes();
+
         VotingEndedAt = DateTimeOffset.UtcNow;
-        IsVoteCompleted = true;
-        State = AgendaItemState.Completed;
+        IsVoteCompleted = Voting.State == VotingState.ResultReady;
+        State = Voting.State == VotingState.ResultReady
+            ? AgendaItemState.Completed
+            : AgendaItemState.Voting;
     }
 
     [Throws(typeof(InvalidOperationException))]

@@ -91,6 +91,7 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
         if (_speakerQueue.Count == 0)
         {
             CurrentSpeaker = null;
+            CurrentSpeakerId = null;
             State = DiscussionState.Completed;
         }
         else
@@ -109,11 +110,13 @@ public sealed class Discussion : AggregateRoot<DiscussionId>, IAuditableEntity<D
             if (CurrentSpeaker != null)
             {
                 CurrentSpeaker.Status = SpeakerRequestStatus.InProgress;
+                CurrentSpeakerId = CurrentSpeaker.Id;
             }
 
             if (CurrentSpeaker == null)
             {
                 State = DiscussionState.Completed;
+                CurrentSpeakerId = null;
             }
         }
 
