@@ -300,16 +300,32 @@ public static class Seed
             description: "Chairperson calls the meeting to order."
         );
 
+        var secretaryElection = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            MeetingFunction = MeetingFunction.Secretary,
+            MeetingFunctionId = MeetingFunction.Secretary.Id
+        };
+
         agenda.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Secretary",
-            description: "Election to appoint the Secretary for the meeting."
+            description: "Election to appoint the Secretary for the meeting.",
+            election: secretaryElection
         );
+
+        var adjusterElection = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            MeetingFunction = MeetingFunction.MinuteAdjuster,
+            MeetingFunctionId = MeetingFunction.MinuteAdjuster.Id
+        };
 
         agenda.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Adjuster of Minutes",
-            description: "Election to appoint an Adjuster of Minutes for this meeting."
+            description: "Election to appoint an Adjuster of Minutes for this meeting.",
+            election: adjusterElection
         );
 
         agenda.AddItem(
@@ -435,22 +451,54 @@ public static class Seed
         );
 
         // Election of AGM roles
+        var defaultGroupId = meeting.Attendees
+            .OrderBy(x => x.Order)
+            .Select(x => x.MeetingGroupId)
+            .FirstOrDefault(x => x is not null);
+
+        var chairpersonElection = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            MeetingFunction = MeetingFunction.Chairperson,
+            MeetingFunctionId = MeetingFunction.Chairperson.Id,
+            GroupId = defaultGroupId
+        };
+
         agenda.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Chairperson",
-            description: "Election to appoint the Chairperson for the meeting."
+            description: "Election to appoint the Chairperson for the meeting.",
+            election: chairpersonElection
         );
+
+        var secretaryElectionAgm = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            MeetingFunction = MeetingFunction.Secretary,
+            MeetingFunctionId = MeetingFunction.Secretary.Id,
+            GroupId = defaultGroupId
+        };
 
         agenda.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Secretary",
-            description: "Election to appoint the Secretary for the meeting."
+            description: "Election to appoint the Secretary for the meeting.",
+            election: secretaryElectionAgm
         );
+
+        var minuteAdjusterElection = new Election()
+        {
+            OrganizationId = TenantConstants.OrganizationId,
+            MeetingFunction = MeetingFunction.MinuteAdjuster,
+            MeetingFunctionId = MeetingFunction.MinuteAdjuster.Id,
+            GroupId = defaultGroupId
+        };
 
         agenda.AddItem(
             type: AgendaItemType.Election,
             title: "Election of Adjuster of Minutes",
-            description: "Election to appoint an Adjuster of Minutes for this meeting."
+            description: "Election to appoint an Adjuster of Minutes for this meeting.",
+            election: minuteAdjusterElection
         );
 
         // Formalities and approvals
