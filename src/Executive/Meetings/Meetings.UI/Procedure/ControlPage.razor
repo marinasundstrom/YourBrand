@@ -147,6 +147,10 @@ else
                             {
                                 <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartDiscussion" Class="me-2">Start
                                     Discussion</MudButton>
+                                @if (CanCompleteCurrentAgendaItem)
+                                {
+                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CompleteAgendaItem" Class="me-2">Complete Agenda Item</MudButton>
+                                }
                                 <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="PostponeAgendaItem" Class="me-2">Postpone
                                 </MudButton>
                                 <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="CancelAgendaItem" Class="me-2">Cancel
@@ -298,6 +302,12 @@ else
     private int? speakingTimeLimitSecondsInput;
     private string? selectedSpeakerRequestId;
     private int additionalSpeakingTimeSeconds = 60;
+
+    private bool CanCompleteCurrentAgendaItem =>
+        currentAgendaItem is not null &&
+        currentAgendaItem.State == AgendaItemState.Pending &&
+        (currentAgendaItem.DiscussionActions != DiscussionActions.Required || currentAgendaItem.IsDiscussionCompleted) &&
+        (currentAgendaItem.VoteActions != VoteActions.Required || currentAgendaItem.IsVoteCompleted);
 
     private IEnumerable<SpeakerRequest> SpeakerRequestsForExtension =>
         discussion is null
