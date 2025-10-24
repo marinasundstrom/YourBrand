@@ -423,6 +423,11 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         return Attendees.FirstOrDefault(x => x.UserId == userId);
     }
 
+    public IEnumerable<MeetingAttendee> GetAttendeesByFunction(MeetingFunction function)
+    {
+        return Attendees.Where(x => x.HasFunction(function));
+    }
+
     public void SetOpenAccess(bool canAnyoneJoin, AttendeeRole joinAs)
     {
         if (canAnyoneJoin && joinAs != AttendeeRole.Member && joinAs != AttendeeRole.Observer)

@@ -1119,6 +1119,87 @@ namespace YourBrand.Meetings.Infrastructure.Persistence.Migrations
                     b.ToTable("MinutesItems", (string)null);
                 });
 
+            modelBuilder.Entity("YourBrand.Meetings.Domain.Entities.MinutesTask", b =>
+                {
+                    b.Property<string>("OrganizationId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("MinutesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("AssignedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("AssignedToEmail")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("AssignedToId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AssignedToName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTimeOffset?>("CompletedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CompletedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("DueAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrganizationId", "MinutesId", "Id");
+
+                    b.HasIndex("AssignedToId");
+
+                    b.HasIndex("CompletedById");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("LastModifiedById");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("MinutesTasks", (string)null);
+                });
+
             modelBuilder.Entity("YourBrand.Meetings.Domain.Entities.Motion", b =>
                 {
                     b.Property<string>("OrganizationId")
@@ -2040,6 +2121,43 @@ namespace YourBrand.Meetings.Infrastructure.Persistence.Migrations
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("YourBrand.Meetings.Domain.Entities.MinutesTask", b =>
+                {
+                    b.HasOne("YourBrand.Meetings.Domain.Entities.User", "AssignedTo")
+                        .WithMany()
+                        .HasForeignKey("AssignedToId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("YourBrand.Meetings.Domain.Entities.User", "CompletedBy")
+                        .WithMany()
+                        .HasForeignKey("CompletedById")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("YourBrand.Meetings.Domain.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("YourBrand.Meetings.Domain.Entities.User", "LastModifiedBy")
+                        .WithMany()
+                        .HasForeignKey("LastModifiedById")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("YourBrand.Meetings.Domain.Entities.Minutes", null)
+                        .WithMany("Tasks")
+                        .HasForeignKey("OrganizationId", "MinutesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssignedTo");
+
+                    b.Navigation("CompletedBy");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("LastModifiedBy");
+                });
+
             modelBuilder.Entity("YourBrand.Meetings.Domain.Entities.Motion", b =>
                 {
                     b.HasOne("YourBrand.Meetings.Domain.Entities.User", "CreatedBy")
@@ -2268,6 +2386,8 @@ namespace YourBrand.Meetings.Infrastructure.Persistence.Migrations
                     b.Navigation("Attendees");
 
                     b.Navigation("Items");
+
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("YourBrand.Meetings.Domain.Entities.Motion", b =>

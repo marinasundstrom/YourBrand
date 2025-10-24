@@ -3142,6 +3142,109 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
+  /v1/Minutes/{minutesId}/tasks:
+    get:
+      tags:
+      - Minutes
+      operationId: Minutes_GetMinutesTasks
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: minutesId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MinutesTask'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /v1/Minutes/tasks/my:
+    get:
+      tags:
+      - Minutes
+      operationId: Minutes_GetMyMinutesTasks
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: status
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/MinutesTaskStatus'
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MinutesTask'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
+  /v1/Minutes/tasks/{taskId}/complete:
+    post:
+      tags:
+      - Minutes
+      operationId: Minutes_CompleteMinutesTask
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        default:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - JWT: []
   /v1/MeetingGroups:
     get:
       tags:
@@ -5004,6 +5107,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MinutesItem'
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/MinutesTask'
     MinutesState:
       type: integer
       description: ''
@@ -5041,6 +5148,61 @@ components:
           type: integer
           format: int32
           nullable: true
+    MinutesTask:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/MinutesTaskType'
+        status:
+          $ref: '#/components/schemas/MinutesTaskStatus'
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        assignedAt:
+          type: string
+          format: date-time
+        dueAt:
+          type: string
+          format: date-time
+          nullable: true
+        assignedToId:
+          type: string
+          nullable: true
+        assignedToName:
+          type: string
+          nullable: true
+        assignedToEmail:
+          type: string
+          nullable: true
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+    MinutesTaskType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - AdjustMinutes
+      - ApproveMinutes
+      enum:
+      - 0
+      - 1
+    MinutesTaskStatus:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Pending
+      - Completed
+      - Cancelled
+      enum:
+      - 0
+      - 1
+      - 2
     MinutesItemState:
       type: integer
       description: ''

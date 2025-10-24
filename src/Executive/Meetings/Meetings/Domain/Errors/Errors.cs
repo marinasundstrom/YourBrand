@@ -88,6 +88,10 @@ public static partial class Errors
         public static readonly Error MinuteNotFound = new Error(nameof(MinuteNotFound), "Minutes not found", string.Empty);
 
         public static readonly Error MinutesItemNotFound = new Error(nameof(MinutesItemNotFound), "Minutes item not found", string.Empty);
+
+        public static readonly Error MinutesTaskNotFound = new Error(nameof(MinutesTaskNotFound), "Minutes task not found", string.Empty);
+
+        public static readonly Error YouAreNotAssignedToThisTask = new Error(nameof(YouAreNotAssignedToThisTask), "You are not assigned to this task.", string.Empty);
     }
 
     public static class Motions

@@ -37,6 +37,24 @@ public sealed record EndMeeting(string OrganizationId, int Id) : IRequest<Result
 
             meeting.EndMeeting();
 
+            var minutes = meeting.Minutes;
+
+            if (minutes is null)
+            {
+                minutes = await context.Minutes
+                    .InOrganization(request.OrganizationId)
+                    .Include(x => x.Tasks)
+                    .FirstOrDefaultAsync(x => x.MeetingId == meeting.Id, cancellationToken);
+            }
+
+            if (minutes is not null)
+            {
+                minutes.EnsurePostMeetingWorkflowTasks(meeting);
+                minutes.UpdateStateFromTasks();
+
+                context.Minutes.Update(minutes);
+            }
+
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);

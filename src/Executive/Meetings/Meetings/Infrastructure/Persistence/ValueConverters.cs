@@ -158,6 +158,14 @@ internal sealed class MinutesItemIdConverter : ValueConverter<MinutesItemId, str
     }
 }
 
+internal sealed class MinutesTaskIdConverter : ValueConverter<MinutesTaskId, string>
+{
+    public MinutesTaskIdConverter()
+        : base(v => v.Value, v => new(v))
+    {
+    }
+}
+
 internal sealed class MeetingGroupIdConverter : ValueConverter<MeetingGroupId, int>
 {
     public MeetingGroupIdConverter()
