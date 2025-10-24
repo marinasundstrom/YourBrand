@@ -41,9 +41,9 @@
                     For="@(() => Location)" Immediate="true" />
                 <MudTextField Label="Description" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Description"
                     For="@(() => Description)" Immediate="true" Lines="5" />
-                <MudSwitch @bind-Checked="ShowAgendaTimeEstimates" Class="mt-4"
+                <MudSwitch @bind-Value="ShowAgendaTimeEstimates" Class="mt-4"
                            For="@(() => ShowAgendaTimeEstimates)" Color="Color.Primary" Label="Show agenda time estimates" />
-                <MudSwitch @bind-Checked="CanAnyoneJoin" Class="mt-4"
+                <MudSwitch @bind-Value="CanAnyoneJoin" Class="mt-4"
                            For="@(() => CanAnyoneJoin)" Color="Color.Primary" Label="Allow anyone to join" />
                 <AttendeeRoleSelector OrganizationId="organization?.Id" Class="mt-4" Label="Join as role"
                     Variant="Variant.Outlined" @bind-Value="JoinAsRole" For="() => JoinAsRole" Disabled="!CanAnyoneJoin" />

@@ -6,7 +6,7 @@
 
 <div class="d-flex flex-grow-1">
     <div class="flex-1 d-flex">
-        <MudAutocomplete T="AttendeeRole" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchAttendeeRoles" ToStringFunc="(x) => x.Name"
+        <MudAutocomplete T="AttendeeRole" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged" Disabled="@Disabled" For="For" SearchFunc="SearchAttendeeRoles" ToStringFunc="(x) => x.Name"
             ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
             <ItemTemplate Context="context2">
                 <MudText Typo="Typo.body1">@context2.Name</MudText>
@@ -40,6 +40,9 @@
 
     [Parameter]
     public Variant Variant { get; set; }
+
+    [Parameter]
+    public bool Disabled { get; set; }
 
     [Parameter]
     public string? OrganizationId { get; set; }
