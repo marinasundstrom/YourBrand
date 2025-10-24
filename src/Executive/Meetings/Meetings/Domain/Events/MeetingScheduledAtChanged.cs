@@ -6,4 +6,8 @@ using OrganizationId = YourBrand.Domain.OrganizationId;
 
 namespace YourBrand.Meetings.Domain.Events;
 
-public sealed record MeetingUpdated(TenantId TenantId, OrganizationId OrganizationId, MeetingId MeetingId) : DomainEvent;
+public sealed record MeetingScheduledAtChanged(
+    TenantId TenantId,
+    OrganizationId OrganizationId,
+    MeetingId MeetingId,
+    DateTimeOffset ScheduledAt) : DomainEvent;

@@ -3,7 +3,6 @@ using YourBrand.Meetings.Domain.Entities;
 
 using MediatR;
 
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
@@ -20,7 +19,7 @@ public sealed record AdjournMeeting(string OrganizationId, int Id, string Messag
         }
     }
 
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<AdjournMeeting, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<AdjournMeeting, Result>
     {
         public async Task<Result> Handle(AdjournMeeting request, CancellationToken cancellationToken)
         {
@@ -50,10 +49,6 @@ public sealed record AdjournMeeting(string OrganizationId, int Id, string Messag
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
-
-            await hubContext.Clients
-                .Group($"meeting-{meeting.Id}")
-                .OnMeetingStateChanged((Dtos.MeetingState)meeting.State, meeting.AdjournmentMessage);
 
             return Result.Success;
         }

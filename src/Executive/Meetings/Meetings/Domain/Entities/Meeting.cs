@@ -69,6 +69,13 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
     public DateTimeOffset? CanceledAt { get; set; }
     public DateTimeOffset? EndedAt { get; set; }
 
+    public void Reschedule(DateTimeOffset scheduledAt)
+    {
+        ScheduledAt = scheduledAt;
+
+        AddDomainEvent(new MeetingScheduledAtChanged(TenantId, OrganizationId, Id, ScheduledAt));
+    }
+
     public bool ShowAgendaTimeEstimates { get; set; }
 
     [Throws(typeof(InvalidOperationException))]
@@ -125,6 +132,14 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
         CurrentAgendaItemIndex = 0;
         CurrentAgendaSubItemIndex = null;
+
+        RaiseMeetingStateChanged();
+
+        var currentAgendaItem = GetCurrentAgendaItem();
+        if (currentAgendaItem is not null)
+        {
+            RaiseAgendaItemChanged(currentAgendaItem.Id.Value);
+        }
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -143,6 +158,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
         AdjournedAt = DateTimeOffset.UtcNow;
         AdjournmentMessage = message;
         State = MeetingState.Adjourned;
+
+        RaiseMeetingStateChanged();
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -155,6 +172,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
         State = MeetingState.InProgress;
         ClearAdjournment();
+
+        RaiseMeetingStateChanged();
     }
 
     public void ClearAdjournment()
@@ -190,6 +209,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
                 subItem.Cancel();
             }
         }
+
+        RaiseMeetingStateChanged();
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -218,6 +239,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
                 subItem.Skip();
             }
         }
+
+        RaiseMeetingStateChanged();
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -235,54 +258,69 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
         var agendaItems = Agenda.Items.OrderBy(ai => ai.Order).ToList();
 
+        AgendaItem? result = null;
+
         // Start from the first agenda item if index is null
         if (CurrentAgendaItemIndex == null)
         {
+            if (!agendaItems.Any())
+            {
+                throw new InvalidOperationException("No agenda items available.");
+            }
+
             CurrentAgendaItemIndex = 0;
-            return agendaItems[CurrentAgendaItemIndex.Value];
+            result = agendaItems[CurrentAgendaItemIndex.Value];
         }
-
-        var currentItem = agendaItems[CurrentAgendaItemIndex.Value];
-
-        // Check if the current main item has sub-items
-        if (currentItem.SubItems.Any())
+        else if (CurrentAgendaItemIndex < 0 || CurrentAgendaItemIndex >= agendaItems.Count)
         {
-            var subItems = currentItem.SubItems.OrderBy(si => si.Order).ToList();
-
-            // Process the main item first if sub-items haven't started
-            if (CurrentAgendaSubItemIndex == null)
-            {
-                CurrentAgendaSubItemIndex = 0; // Start processing sub-items after the main item
-                return currentItem; // Return the main item first
-            }
-
-            // Process each sub-item in order
-            if (CurrentAgendaSubItemIndex < subItems.Count)
-            {
-                var subItem = subItems[CurrentAgendaSubItemIndex.Value];
-                CurrentAgendaSubItemIndex++;
-
-                // After the last sub-item, reset `CurrentAgendaSubItemIndex` and increment `CurrentAgendaItemIndex`
-                if (CurrentAgendaSubItemIndex >= subItems.Count)
-                {
-                    CurrentAgendaSubItemIndex = null;
-                    CurrentAgendaItemIndex++; // Move to the next main item
-                }
-
-                return subItem;
-            }
+            throw new InvalidOperationException("No more items in the agenda.");
         }
         else
         {
-            // If there are no sub-items, directly move to the next main agenda item
-            if (CurrentAgendaItemIndex < agendaItems.Count - 1)
+            var currentItem = agendaItems[CurrentAgendaItemIndex.Value];
+
+            // Check if the current main item has sub-items
+            if (currentItem.SubItems.Any())
             {
+                var subItems = currentItem.SubItems.OrderBy(si => si.Order).ToList();
+
+                // Process the main item first if sub-items haven't started
+                if (CurrentAgendaSubItemIndex == null)
+                {
+                    CurrentAgendaSubItemIndex = 0; // Start processing sub-items after the main item
+                    result = currentItem; // Return the main item first
+                }
+                else if (CurrentAgendaSubItemIndex < subItems.Count)
+                {
+                    var subItem = subItems[CurrentAgendaSubItemIndex.Value];
+                    CurrentAgendaSubItemIndex++;
+
+                    // After the last sub-item, reset `CurrentAgendaSubItemIndex` and increment `CurrentAgendaItemIndex`
+                    if (CurrentAgendaSubItemIndex >= subItems.Count)
+                    {
+                        CurrentAgendaSubItemIndex = null;
+                        CurrentAgendaItemIndex++; // Move to the next main item
+                    }
+
+                    result = subItem;
+                }
+            }
+            else if (CurrentAgendaItemIndex < agendaItems.Count - 1)
+            {
+                // If there are no sub-items, directly move to the next main agenda item
                 CurrentAgendaItemIndex++;
-                return agendaItems[CurrentAgendaItemIndex.Value];
+                result = agendaItems[CurrentAgendaItemIndex.Value];
             }
         }
 
-        throw new InvalidOperationException("No more items in the agenda.");
+        if (result is null)
+        {
+            throw new InvalidOperationException("No more items in the agenda.");
+        }
+
+        RaiseAgendaItemChanged(result.Id.Value);
+
+        return result;
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -458,6 +496,37 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
                 subItem.Reset();
             }
         }
+
+        RaiseMeetingStateChanged();
+    }
+
+    public void ChangeState(MeetingState newState, string? adjournmentMessage = null)
+    {
+        State = newState;
+
+        if (newState == MeetingState.Adjourned)
+        {
+            if (!string.IsNullOrWhiteSpace(adjournmentMessage))
+            {
+                AdjournmentMessage = adjournmentMessage;
+            }
+        }
+        else
+        {
+            ClearAdjournment();
+        }
+
+        RaiseMeetingStateChanged();
+    }
+
+    private void RaiseMeetingStateChanged()
+    {
+        AddDomainEvent(new MeetingStateChanged(TenantId, OrganizationId, Id, State, AdjournmentMessage));
+    }
+
+    private void RaiseAgendaItemChanged(string? agendaItemId)
+    {
+        AddDomainEvent(new MeetingAgendaItemChanged(TenantId, OrganizationId, Id, agendaItemId));
     }
 
     public bool IsAttendeeAllowedToSpeak(MeetingAttendee attendee)
