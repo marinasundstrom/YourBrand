@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Serilog;
 
+using YourBrand;
 using YourBrand.Documents.Client;
 using YourBrand.Extensions;
 using YourBrand.Identity;
@@ -348,7 +349,13 @@ app.MapControllers();
 
 if (args.Contains("--seed"))
 {
-    await SeedData.EnsureSeedData(app);
+    if (!SeedArguments.TryGetTenantId(args, out var tenantId))
+    {
+        Console.Error.WriteLine("Tenant id is required when running with --seed. Usage: dotnet run -- --seed -- <tenantId>");
+        return;
+    }
+
+    await SeedData.EnsureSeedData(app, tenantId);
     return;
 }
 

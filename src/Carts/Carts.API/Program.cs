@@ -184,8 +184,14 @@ try
 
         if (args.Contains("--seed"))
         {
+            if (!SeedArguments.TryGetTenantId(args, out var tenantId))
+            {
+                Console.Error.WriteLine("Tenant id is required when running with --seed. Usage: dotnet run -- --seed -- <tenantId>");
+                return;
+            }
+
             var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
-            tenantContext.SetTenantId(TenantConstants.TenantId);
+            tenantContext.SetTenantId(tenantId);
 
             var context = scope.ServiceProvider.GetRequiredService<CartsContext>();
             var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();

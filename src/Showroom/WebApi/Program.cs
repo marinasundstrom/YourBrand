@@ -162,7 +162,13 @@ app.MapControllers();
 
 if (args.Contains("--seed"))
 {
-    await app.Services.SeedAsync();
+    if (!SeedArguments.TryGetTenantId(args, out var tenantId))
+    {
+        Console.Error.WriteLine("Tenant id is required when running with --seed. Usage: dotnet run -- --seed -- <tenantId>");
+        return;
+    }
+
+    await app.Services.SeedAsync(tenantId);
 
     return;
 }

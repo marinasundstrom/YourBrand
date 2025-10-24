@@ -7,14 +7,15 @@ namespace YourBrand.TimeReport.Infrastructure.Persistence;
 
 public static class Seed
 {
-    public static async System.Threading.Tasks.Task SeedAsync(this IServiceProvider app)
+    public static async System.Threading.Tasks.Task SeedAsync(this IServiceProvider app, string? tenantId = null)
     {
         using var scope = app.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<TimeReportContext>();
 
         var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
 
-        tenantContext.SetTenantId("e2dc3bf2-1619-46bf-bcc9-cfc169ca7e78");
+        var tenantIdValue = string.IsNullOrWhiteSpace(tenantId) ? TenantConstants.TenantId : tenantId;
+        tenantContext.SetTenantId(tenantIdValue);
 
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();

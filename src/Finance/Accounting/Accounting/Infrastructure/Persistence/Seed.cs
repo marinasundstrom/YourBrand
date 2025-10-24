@@ -17,7 +17,7 @@ public static class Seed
 
     public static bool SeedVerifications { get; set; } = true;
 
-    public static async Task SeedAsync(this IServiceProvider serviceProvider)
+    public static async Task SeedAsync(this IServiceProvider serviceProvider, string? tenantId = null)
     {
         if (!Run)
         {
@@ -27,7 +27,7 @@ public static class Seed
         using var scope = serviceProvider.CreateScope();
 
         var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
-        tenantContext.SetTenantId(TenantConstants.TenantId);
+        tenantContext.SetTenantId(string.IsNullOrWhiteSpace(tenantId) ? TenantConstants.TenantId : tenantId);
 
         using var context = scope.ServiceProvider.GetRequiredService<AccountingContext>();
 
