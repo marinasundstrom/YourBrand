@@ -1,3 +1,5 @@
+using System.Linq;
+
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +11,26 @@ namespace YourBrand.Meetings.Features.Procedure.Command;
 
 public sealed record GetCurrentAgendaItem(string OrganizationId, int Id) : IRequest<Result<AgendaItemDto?>>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<GetCurrentAgendaItem, Result<AgendaItemDto?>>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IAgendaValidator agendaValidator) : IRequestHandler<GetCurrentAgendaItem, Result<AgendaItemDto?>>
     {
         public async Task<Result<AgendaItemDto?>> Handle(GetCurrentAgendaItem request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
+                .AsSplitQuery()
+                .Include(x => x.Attendees)
+                    .ThenInclude(a => a.Functions)
                 .Include(x => x.Agenda)
-                .ThenInclude(x => x.Items.OrderBy(x => x.Order))
-                .FirstOrDefaultAsync(x => x.Id == request.Id);
+                    .ThenInclude(x => x.Items)
+                        .ThenInclude(i => i.SubItems)
+                .Include(x => x.Agenda)
+                    .ThenInclude(x => x.Items)
+                        .ThenInclude(i => i.Election)
+                .Include(x => x.Agenda)
+                    .ThenInclude(x => x.Items)
+                        .ThenInclude(i => i.SubItems)
+                            .ThenInclude(si => si.Election)
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (meeting is null)
             {
@@ -31,7 +44,9 @@ public sealed record GetCurrentAgendaItem(string OrganizationId, int Id) : IRequ
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            return agendaItem?.ToDto();
+            var validations = agendaValidator.Validate(meeting);
+
+            return agendaItem?.ToDto(validations);
         }
     }
 }

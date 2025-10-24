@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 using YourBrand.Meetings.Behaviors;
+using YourBrand.Meetings.Features.Agendas;
 
 namespace YourBrand.Meetings;
 
@@ -16,6 +17,8 @@ public static class ServiceExtensions2
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         services.AddValidatorsFromAssembly(typeof(ServiceExtensions).Assembly);
+
+        services.AddScoped<IAgendaValidator, AgendaValidator>();
 
         /*
         services.AddScoped<IDtoFactory, DtoFactory>();

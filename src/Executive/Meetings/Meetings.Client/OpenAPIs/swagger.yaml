@@ -4586,6 +4586,10 @@ components:
           type: integer
           format: int32
           nullable: true
+        validations:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgendaItemValidation'
         subItems:
           type: array
           items:
@@ -4600,8 +4604,18 @@ components:
           - $ref: '#/components/schemas/Voting'
         election:
           nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/Election'
+      oneOf:
+      - $ref: '#/components/schemas/Election'
+    AgendaItemValidation:
+      type: object
+      additionalProperties: false
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        isBlocking:
+          type: boolean
     AgendaItemState:
       type: integer
       description: ''

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace YourBrand.Meetings.MeetingDetails.Agenda;
@@ -28,6 +29,8 @@ public class AgendaItemViewModel
 
     public List<AgendaItemViewModel> SubItems { get; set; }
 
+    public List<AgendaItemValidationViewModel> Validations { get; set; } = new();
+
     public AgendaItemViewModel Clone()
     {
         return new AgendaItemViewModel
@@ -42,7 +45,24 @@ public class AgendaItemViewModel
             EstimatedEndTime = EstimatedEndTime,
             EstimatedDuration = EstimatedDuration,
             Motion = Motion,
-            SubItems = SubItems?.Select(x => x.Clone()).ToList() ?? new List<AgendaItemViewModel>()
+            SubItems = SubItems?.Select(x => x.Clone()).ToList() ?? new List<AgendaItemViewModel>(),
+            Validations = Validations?.Select(x => x.Clone()).ToList() ?? new List<AgendaItemValidationViewModel>()
         };
     }
+}
+
+public class AgendaItemValidationViewModel
+{
+    public string Code { get; set; } = string.Empty;
+
+    public string Message { get; set; } = string.Empty;
+
+    public bool IsBlocking { get; set; }
+
+    public AgendaItemValidationViewModel Clone() => new()
+    {
+        Code = Code,
+        Message = Message,
+        IsBlocking = IsBlocking
+    };
 }

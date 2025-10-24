@@ -46,7 +46,7 @@ public class AgendaItemType : IEntity
     public static readonly AgendaItemType ApprovalOfMinutes = new(4, "Approval Of Minutes", "Approval of previous meeting's minutes", requiresVoting: true);
     public static readonly AgendaItemType ApprovalOfAgenda = new(5, "Approval Of Agenda", "Approval of the current meeting's agenda", requiresVoting: true, canBePostponed: false);
     public static readonly AgendaItemType ConsentAgenda = new(6, "Consent Agenda", "Routine items grouped for a single vote", requiresVoting: true);
-    public static readonly AgendaItemType ChairpersonRemarks = new(7, "Chairperson Remarks", "Opening remarks by the chairperson");
+    public static readonly AgendaItemType ChairpersonRemarks = new(7, "Chairperson Remarks", "Opening remarks by the chairperson", handledByFunction: MeetingFunction.Chairperson);
     public static readonly AgendaItemType PublicComment = new(8, "Public Comment", "Time allocated for public comments", requiresDiscussion: true);
     public static readonly AgendaItemType Reports = new(9, "Reports", "Presentation of reports");
     public static readonly AgendaItemType FinancialReport = new(10, "Financial Report", "Specific item for financial reports");
@@ -66,8 +66,8 @@ public class AgendaItemType : IEntity
     public static readonly AgendaItemType Recess = new(24, "Recess", "Planned break", canBeSkipped: true);  // Allow recess to be skipped
     public static readonly AgendaItemType GuestSpeakers = new(25, "Guest Speakers", "Guest speakers", requiresDiscussion: true);
     public static readonly AgendaItemType FollowUpItems = new(26, "Follow Up Items", "Review of follow-up actions", requiresDiscussion: true);
-    public static readonly AgendaItemType Adjournment = new(27, "Adjournment", "Closing of the meeting", isMandatory: true, canBePostponed: false, canBeSkipped: false);
-    public static readonly AgendaItemType ClosingRemarks = new(28, "Closing Remarks", "Concluding remarks");
+    public static readonly AgendaItemType Adjournment = new(27, "Adjournment", "Closing of the meeting", isMandatory: true, canBePostponed: false, canBeSkipped: false, handledByFunction: MeetingFunction.Chairperson);
+    public static readonly AgendaItemType ClosingRemarks = new(28, "Closing Remarks", "Concluding remarks", handledByFunction: MeetingFunction.Chairperson);
 
     // List of all types for reference
     public static readonly AgendaItemType[] AllTypes = {

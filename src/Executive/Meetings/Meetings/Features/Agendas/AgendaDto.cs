@@ -25,6 +25,7 @@ public sealed record AgendaItemDto(
     bool IsDiscussionCompleted,
     bool IsVoteCompleted,
     int? MotionId,
+    IEnumerable<AgendaItemValidationDto> Validations,
     IEnumerable<AgendaItemDto> SubItems,
     DiscussionDto? Discussion,
     VotingDto? Voting,
@@ -33,3 +34,5 @@ public sealed record AgendaItemDto(
 public sealed record AgendaItemTypeDto(int Id, string Name, string? Description);
 
 public sealed record ElectionCandidateDto(string Id, string Name, string? AttendeeId, string? Statement);
+
+public sealed record AgendaItemValidationDto(string Code, string Message, bool IsBlocking);

@@ -1,4 +1,5 @@
 @using System
+@using System.Linq
 
 @inject IAgendasClient AgendasClient
 @inject IMeetingsClient MeetingsClient
@@ -28,6 +29,7 @@
                 <MudTh>Type</MudTh>
                 <MudTh>State</MudTh>
                 <MudTh>Description</MudTh>
+                <MudTh>Requirements</MudTh>
                 <MudTh>Est. start</MudTh>
                 <MudTh>Est. end</MudTh>
                 <MudTh>Est. duration</MudTh>
@@ -42,6 +44,17 @@
                 <MudTd DataLabel="Type">@item.Type.Name</MudTd>
                 <MudTd DataLabel="State">@item.State</MudTd>
                 <MudTd DataLabel="Description">@item.Description</MudTd>
+                <MudTd DataLabel="Requirements">
+                    @if (item.Validations.Any())
+                    {
+                        <MudStack Row="true" Spacing="1">
+                            @foreach (var validation in item.Validations)
+                            {
+                                <MudChip Color="Color.Error" Variant="Variant.Filled" Size="Size.Small">@validation.Message</MudChip>
+                            }
+                        </MudStack>
+                    }
+                </MudTd>
                 <MudTd DataLabel="Est. start">@FormatTime(item.EstimatedStartTime)</MudTd>
                 <MudTd DataLabel="Est. end">@FormatTime(item.EstimatedEndTime)</MudTd>
                 <MudTd DataLabel="Est. duration">@FormatDuration(item.EstimatedDuration)</MudTd>
@@ -71,7 +84,7 @@
                 </MudTd>
             </RowTemplate>
             <ChildRowContent Context="item">
-                <td colspan="12">
+                <td colspan="13">
                 @if(item.SubItems.Any())
                 {
                 <MudTable T="AgendaItemViewModel" @ref="table" Items="@item.SubItems" Dense="true" Hover="true" Elevation="0"
@@ -87,6 +100,7 @@
                         <MudTh>Type</MudTh>
                         <MudTh>State</MudTh>
                         <MudTh>Description</MudTh>
+                        <MudTh>Requirements</MudTh>
                         <MudTh>Est. start</MudTh>
                         <MudTh>Est. end</MudTh>
                         <MudTh>Est. duration</MudTh>
@@ -101,6 +115,17 @@
                         <MudTd DataLabel="Type">@subItem.Type.Name</MudTd>
                         <MudTd DataLabel="State">@subItem.State</MudTd>
                         <MudTd DataLabel="Description">@subItem.Description</MudTd>
+                        <MudTd DataLabel="Requirements">
+                            @if (subItem.Validations.Any())
+                            {
+                                <MudStack Row="true" Spacing="1">
+                                    @foreach (var validation in subItem.Validations)
+                                    {
+                                        <MudChip Color="Color.Error" Variant="Variant.Filled" Size="Size.Small">@validation.Message</MudChip>
+                                    }
+                                </MudStack>
+                            }
+                        </MudTd>
                         <MudTd DataLabel="Est. start">@FormatTime(subItem.EstimatedStartTime)</MudTd>
                         <MudTd DataLabel="Est. end">@FormatTime(subItem.EstimatedEndTime)</MudTd>
                         <MudTd DataLabel="Est. duration">@FormatDuration(subItem.EstimatedDuration)</MudTd>
@@ -182,6 +207,12 @@
                 EstimatedEndTime = item.EstimatedEndTime,
                 EstimatedDuration = item.EstimatedDuration,
                 //Motion = item.Motion,
+                Validations = item.Validations.Select(v => new AgendaItemValidationViewModel
+                {
+                    Code = v.Code,
+                    Message = v.Message,
+                    IsBlocking = v.IsBlocking
+                }).ToList(),
                 SubItems = item.SubItems.Select(x => new AgendaItemViewModel()
                 {
                     Id = x.Id,
@@ -194,6 +225,12 @@
                     EstimatedEndTime = x.EstimatedEndTime,
                     EstimatedDuration = x.EstimatedDuration,
                     //Motion = x.Motion
+                    Validations = x.Validations.Select(v => new AgendaItemValidationViewModel
+                    {
+                        Code = v.Code,
+                        Message = v.Message,
+                        IsBlocking = v.IsBlocking
+                    }).ToList()
                 }).ToList()
             }
         ));
@@ -230,15 +267,8 @@
                 EstimatedDuration = agendaItemModel.EstimatedDuration
             };
 
-        var model = await AgendasClient.AddAgendaItemAsync(OrganizationId, agenda!.Id, dto);
-
-        agendaItemModel.Id = model.Id;
-        agendaItemModel.Order = model.Order;
-        agendaItemModel.EstimatedStartTime = model.EstimatedStartTime;
-        agendaItemModel.EstimatedEndTime = model.EstimatedEndTime;
-        agendaItemModel.EstimatedDuration = model.EstimatedDuration;
-
-        Items.Add(agendaItemModel);
+        await AgendasClient.AddAgendaItemAsync(OrganizationId, agenda!.Id, dto);
+        await ReloadAsync();
     }
 
     async Task MoveUp(AgendaItemViewModel item)
@@ -247,12 +277,7 @@
             {
                 Order = item.Order - 1
             });
-
-        MoveItem(item, item.Order - 1);
-
-        Items = Items.OrderBy(x => x.Order).ToList();
-
-        await InvokeAsync(StateHasChanged);
+        await ReloadAsync();
     }
 
     async Task MoveDown(AgendaItemViewModel item)
@@ -261,60 +286,7 @@
             {
                 Order = item.Order + 1
             });
-
-        MoveItem(item, item.Order + 1);
-
-        Items = Items.OrderBy(x => x.Order).ToList();
-
-        await InvokeAsync(StateHasChanged);
-    }
-
-    public bool MoveItem(AgendaItemViewModel agendaItem, int newOrderPosition)
-    {
-        if (!Items.Contains(agendaItem))
-        {
-            throw new InvalidOperationException("Agenda item does not exist in this agenda.");
-        }
-
-        if (newOrderPosition < 1 || newOrderPosition > Items.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(newOrderPosition), "New order position is out of range.");
-        }
-
-        int oldOrderPosition = agendaItem.Order;
-
-        if (oldOrderPosition == newOrderPosition)
-            return false;
-
-        // Flyttar objektet uppåt i listan
-        if (newOrderPosition < oldOrderPosition)
-        {
-            var itemsToIncrement = Items
-            .Where(i => i.Order >= newOrderPosition && i.Order < oldOrderPosition)
-            .ToList();
-
-            foreach (var item in itemsToIncrement)
-            {
-                item.Order += 1;
-            }
-        }
-        // Flyttar objektet nedåt i listan
-        else
-        {
-            var itemsToDecrement = Items
-            .Where(i => i.Order > oldOrderPosition && i.Order <= newOrderPosition)
-            .ToList();
-
-            foreach (var item in itemsToDecrement)
-            {
-                item.Order -= 1;
-            }
-        }
-
-        // Uppdatera order för objektet som flyttas
-        agendaItem.Order = newOrderPosition;
-
-        return true;
+        await ReloadAsync();
     }
 
     async Task RemoveItem(AgendaItemViewModel item)
@@ -328,7 +300,7 @@
         }
 
         await AgendasClient.RemoveAgendaItemAsync(OrganizationId, agenda!.Id, item.Id);
-        Items.Remove(item);
+        await ReloadAsync();
     }
 
     async Task EditItem(AgendaItemViewModel item)
@@ -358,33 +330,9 @@
                 EstimatedDuration = editedModel.EstimatedDuration
             };
 
-        var updatedItem = await AgendasClient.EditAgendaItemAsync(OrganizationId, agenda!.Id, item.Id, dto);
+        await AgendasClient.EditAgendaItemAsync(OrganizationId, agenda!.Id, item.Id, dto);
 
-        editedModel.Id = updatedItem.Id;
-        editedModel.Order = updatedItem.Order;
-        editedModel.EstimatedStartTime = updatedItem.EstimatedStartTime;
-        editedModel.EstimatedEndTime = updatedItem.EstimatedEndTime;
-        editedModel.EstimatedDuration = updatedItem.EstimatedDuration;
-
-        var index = Items.IndexOf(originalItem);
-
-        if (index >= 0)
-        {
-            Items[index] = editedModel;
-        }
-        else
-        {
-            foreach (var parent in Items)
-            {
-                var subIndex = parent.SubItems.IndexOf(originalItem);
-
-                if (subIndex >= 0)
-                {
-                    parent.SubItems[subIndex] = editedModel;
-                    break;
-                }
-            }
-        }
+        await ReloadAsync();
     }
 
     private static string FormatTime(TimeSpan? timeSpan)
