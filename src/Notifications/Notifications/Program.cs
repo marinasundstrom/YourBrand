@@ -131,7 +131,13 @@ var configuration2 = app.Services.GetRequiredService<IConfiguration>();
 
 if (args.Contains("--seed"))
 {
-    await app.Services.SeedAsync();
+    if (!SeedArguments.TryGetTenantId(args, out var tenantId))
+    {
+        Console.Error.WriteLine("Unable to determine tenant id when running with --seed. Usage: dotnet run -- --seed [--tenantId <tenantId>]");
+        return;
+    }
+
+    await app.Services.SeedAsync(tenantId);
 
     using (var connection = new SqlConnection(configuration.GetConnectionString("HangfireConnection")))
     {

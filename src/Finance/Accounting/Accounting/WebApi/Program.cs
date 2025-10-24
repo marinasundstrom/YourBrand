@@ -12,6 +12,7 @@ using Microsoft.Extensions.Azure;
 
 using Serilog;
 
+using YourBrand;
 using YourBrand.Accounting;
 using YourBrand.Accounting.Application;
 using YourBrand.Accounting.Application.Common.Interfaces;
@@ -165,9 +166,15 @@ app.MapControllers();
 
 if (args.Contains("--seed"))
 {
+    if (!SeedArguments.TryGetTenantId(args, out var tenantId))
+    {
+        Console.Error.WriteLine("Unable to determine tenant id when running with --seed. Usage: dotnet run -- --seed [--tenantId <tenantId>]");
+        return;
+    }
+
     Console.WriteLine("Seeding");
 
-    await app.Services.SeedAsync();
+    await app.Services.SeedAsync(tenantId);
     return;
 }
 

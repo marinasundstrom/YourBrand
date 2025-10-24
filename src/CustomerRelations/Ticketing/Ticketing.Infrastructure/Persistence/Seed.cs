@@ -6,12 +6,12 @@ namespace YourBrand.Ticketing.Infrastructure.Persistence;
 
 public static class Seed
 {
-    public static async Task SeedData(IServiceProvider serviceProvider)
+    public static async Task SeedData(IServiceProvider serviceProvider, string? tenantId = null)
     {
         using var scope = serviceProvider.CreateScope();
 
         var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
-        tenantContext.SetTenantId(TenantConstants.TenantId);
+        tenantContext.SetTenantId(string.IsNullOrWhiteSpace(tenantId) ? TenantConstants.TenantId : tenantId);
 
         using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 

@@ -14,19 +14,21 @@ namespace YourBrand.IdentityManagement;
 
 public static class SeedData
 {
-    public static async Task EnsureSeedData(this WebApplication app)
+    public static async Task EnsureSeedData(this WebApplication app, string tenantId)
     {
         using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
         {
+            var tenantIdValue = string.IsNullOrWhiteSpace(tenantId) ? TenantConstants.TenantId : tenantId;
+
             var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
-            tenantContext.SetTenantId(TenantConstants.TenantId);
+            tenantContext.SetTenantId(tenantIdValue);
 
             using var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            var tenant = new Tenant(TenantConstants.TenantId, TenantConstants.TenantName, null);
+            var tenant = new Tenant(tenantIdValue, TenantConstants.TenantName, null);
 
             context.Tenants.Add(tenant);
 

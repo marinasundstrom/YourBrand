@@ -7,12 +7,13 @@ namespace YourBrand.IdentityManagement.Infrastructure.Persistence;
 
 public static class SeedData
 {
-    public static async Task SeedAsync(this IServiceProvider serviceProvider)
+    public static async Task SeedAsync(this IServiceProvider serviceProvider, string? tenantId = null)
     {
         using (var scope = serviceProvider.CreateScope())
         {
+            var tenantIdValue = string.IsNullOrWhiteSpace(tenantId) ? TenantConstants.TenantId : tenantId;
             var tenantContext = scope.ServiceProvider.GetRequiredService<ISettableTenantContext>();
-            tenantContext.SetTenantId(TenantConstants.TenantId);
+            tenantContext.SetTenantId(tenantIdValue);
 
             using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 

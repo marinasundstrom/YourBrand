@@ -177,7 +177,13 @@ app.MapHub<NotificationHub>("/hubs/notifications");
 
 if (args.Contains("--seed"))
 {
-    await app.Services.SeedAsync();
+    if (!SeedArguments.TryGetTenantId(args, out var tenantId))
+    {
+        Console.Error.WriteLine("Unable to determine tenant id when running with --seed. Usage: dotnet run -- --seed [--tenantId <tenantId>]");
+        return;
+    }
+
+    await app.Services.SeedAsync(tenantId);
 
     return;
 }
