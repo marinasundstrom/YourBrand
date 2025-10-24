@@ -151,6 +151,12 @@ else
                                 </MudButton>
                                 <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="CancelAgendaItem" Class="me-2">Cancel
                                 </MudButton>
+
+                                @if (CanCompleteCurrentAgendaItem)
+                                {
+                                    <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="CompleteAgendaItem">Complete
+                                        Agenda Item</MudButton>
+                                }
                             }
                             else if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
                             {
@@ -316,6 +322,14 @@ else
 
     private bool CanResetSpeakerClock =>
         discussion?.CurrentSpeaker is not null && discussion.CurrentSpeakerClock is not null;
+
+    private bool CanCompleteCurrentAgendaItem =>
+        currentAgendaItem is not null &&
+        currentAgendaItem.State != AgendaItemState.Completed &&
+        currentAgendaItem.State != AgendaItemState.Canceled &&
+        currentAgendaItem.State != AgendaItemState.Skipped &&
+        (currentAgendaItem.DiscussionActions != DiscussionActions.Required || currentAgendaItem.IsDiscussionCompleted) &&
+        (currentAgendaItem.VoteActions != VoteActions.Required || currentAgendaItem.IsVoteCompleted);
 
     private static string FormatTime(TimeSpan? timeSpan) => timeSpan is null ? "-" : timeSpan.Value.ToString(@"hh\:mm");
 
