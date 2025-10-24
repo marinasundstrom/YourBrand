@@ -294,11 +294,14 @@ public static class Seed
         };
 
         // Opening and formalities
-        agenda.AddItem(
+        var callToOrder = agenda.AddItem(
             type: AgendaItemType.CallToOrder,
             title: "Call to Order",
             description: "Chairperson calls the meeting to order."
         );
+        callToOrder.IsMandatory = AgendaItemType.CallToOrder.IsMandatory;
+        callToOrder.DiscussionActions = DiscussionActions.None;
+        callToOrder.VoteActions = VoteActions.None;
 
         var secretaryElection = new Election()
         {
@@ -444,11 +447,14 @@ public static class Seed
         };
 
         // Opening of the AGM
-        agenda.AddItem(
+        var callToOrder = agenda.AddItem(
             type: AgendaItemType.CallToOrder,
             title: "Call to Order",
             description: "Temporary chairperson calls the meeting to order."
         );
+        callToOrder.IsMandatory = AgendaItemType.CallToOrder.IsMandatory;
+        callToOrder.DiscussionActions = DiscussionActions.None;
+        callToOrder.VoteActions = VoteActions.None;
 
         // Election of AGM roles
         var defaultGroupId = meeting.Attendees
