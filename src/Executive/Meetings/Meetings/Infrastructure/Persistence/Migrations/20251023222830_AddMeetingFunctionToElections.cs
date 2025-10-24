@@ -125,6 +125,86 @@ namespace YourBrand.Meetings.Infrastructure.Persistence.Migrations
                 table: "MeetingAttendeeFunctions",
                 column: "TenantId");
 
+            migrationBuilder.CreateTable(
+                name: "MinutesTasks",
+                columns: table => new
+                {
+                    OrganizationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MinutesId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TenantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AssignedToId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AssignedToName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    AssignedToEmail = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    AssignedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    DueAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CompletedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CompletedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LastModifiedById = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MinutesTasks", x => new { x.OrganizationId, x.MinutesId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_MinutesTasks_Minutes_OrganizationId_MinutesId",
+                        columns: x => new { x.OrganizationId, x.MinutesId },
+                        principalTable: "Minutes",
+                        principalColumns: new[] { "OrganizationId", "Id" },
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MinutesTasks_Users_AssignedToId",
+                        column: x => x.AssignedToId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MinutesTasks_Users_CompletedById",
+                        column: x => x.CompletedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MinutesTasks_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MinutesTasks_Users_LastModifiedById",
+                        column: x => x.LastModifiedById,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MinutesTasks_AssignedToId",
+                table: "MinutesTasks",
+                column: "AssignedToId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MinutesTasks_CompletedById",
+                table: "MinutesTasks",
+                column: "CompletedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MinutesTasks_CreatedById",
+                table: "MinutesTasks",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MinutesTasks_LastModifiedById",
+                table: "MinutesTasks",
+                column: "LastModifiedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MinutesTasks_TenantId",
+                table: "MinutesTasks",
+                column: "TenantId");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_AgendaItemTypes_MeetingFunctions_HandledByFunctionId",
                 table: "AgendaItemTypes",
@@ -161,6 +241,9 @@ namespace YourBrand.Meetings.Infrastructure.Persistence.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Meetings_AttendeeRoles_JoinAsId",
                 table: "Meetings");
+
+            migrationBuilder.DropTable(
+                name: "MinutesTasks");
 
             migrationBuilder.DropTable(
                 name: "MeetingAttendeeFunctions");

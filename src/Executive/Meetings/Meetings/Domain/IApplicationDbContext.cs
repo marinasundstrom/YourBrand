@@ -22,6 +22,8 @@ public interface IApplicationDbContext
 
     DbSet<Entities.Minutes> Minutes { get; }
 
+    DbSet<MinutesTask> MinutesTasks { get; }
+
     DbSet<Motion> Motions { get; }
 
     DbSet<MeetingGroup> MeetingGroups { get; }

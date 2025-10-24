@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace YourBrand.Minutes.Infrastructure.Persistence.Configurations;
+namespace YourBrand.Meetings.Infrastructure.Persistence.Configurations;
 
 public sealed class MinuteConfiguration : IEntityTypeConfiguration<Meetings.Domain.Entities.Minutes>
 {
@@ -30,6 +30,12 @@ public sealed class MinuteConfiguration : IEntityTypeConfiguration<Meetings.Doma
             .HasForeignKey(x => new { x.OrganizationId, x.MinutesId });
 
         builder.Navigation(x => x.Items).AutoInclude();
+
+        builder.HasMany(x => x.Tasks)
+            .WithOne()
+            .HasForeignKey(x => new { x.OrganizationId, x.MinutesId });
+
+        builder.Navigation(x => x.Tasks).AutoInclude();
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()

@@ -17,6 +17,7 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditableEntity<MinutesId>, IH
 {
     readonly HashSet<MinutesItem> _items = new HashSet<MinutesItem>();
     readonly HashSet<MinutesAttendee> _attendees = new HashSet<MinutesAttendee>();
+    readonly HashSet<MinutesTask> _tasks = new HashSet<MinutesTask>();
 
     // Apologies / Absentees
 
@@ -44,6 +45,8 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditableEntity<MinutesId>, IH
     public Agenda? Agenda { get; set; }
 
     public IReadOnlyCollection<MinutesAttendee> Attendees => _attendees;
+
+    public IReadOnlyCollection<MinutesTask> Tasks => _tasks;
 
     public MinutesAttendee AddAttendee(string name, string? userId, string email, AttendeeRole role, bool? hasSpeakingRights, bool? hasVotingRights,
         MeetingGroupId? meetingGroupId = null, MeetingGroupMemberId? meetingGroupMemberId = null)
@@ -80,6 +83,124 @@ public class Minutes : AggregateRoot<MinutesId>, IAuditableEntity<MinutesId>, IH
     public bool RemoveAttendee(MinutesAttendee attendee)
     {
         return _attendees.Remove(attendee);
+    }
+
+    public MinutesTask EnsureTask(
+        MinutesTaskType type,
+        MeetingAttendee attendee,
+        DateTimeOffset? dueAt,
+        string title,
+        string? description)
+    {
+        if (attendee.UserId is null)
+        {
+            throw new InvalidOperationException("Cannot assign a minutes task to an attendee without a linked user.");
+        }
+
+        var existing = _tasks
+            .FirstOrDefault(x => x.Type == type && x.AssignedToId == attendee.UserId && x.Status != MinutesTaskStatus.Cancelled);
+
+        if (existing is not null)
+        {
+            existing.DueAt = dueAt;
+            existing.Title = title;
+            existing.Description = description;
+            return existing;
+        }
+
+        var task = new MinutesTask
+        {
+            TenantId = TenantId,
+            OrganizationId = OrganizationId,
+            MinutesId = Id,
+            Type = type,
+            Title = title,
+            Description = description,
+            AssignedToId = attendee.UserId,
+            AssignedToName = attendee.Name ?? attendee.Email ?? attendee.UserId?.ToString(),
+            AssignedToEmail = attendee.Email,
+            DueAt = dueAt,
+            AssignedAt = DateTimeOffset.UtcNow
+        };
+
+        _tasks.Add(task);
+
+        return task;
+    }
+
+    public void RemoveTasksForAssignee(MeetingAttendee attendee, MinutesTaskType type)
+    {
+        var toRemove = _tasks.Where(x => x.Type == type && x.AssignedToId == attendee.UserId).ToList();
+
+        foreach (var item in toRemove)
+        {
+            _tasks.Remove(item);
+        }
+    }
+
+    public void EnsurePostMeetingWorkflowTasks(Meeting meeting)
+    {
+        if (meeting.EndedAt is null)
+        {
+            return;
+        }
+
+        var endedAt = meeting.EndedAt.Value;
+
+        var adjusters = meeting.GetAttendeesByFunction(MeetingFunction.MinuteAdjuster)
+            .Where(x => x.UserId is not null)
+            .ToList();
+
+        foreach (var adjuster in adjusters)
+        {
+            EnsureTask(
+                MinutesTaskType.AdjustMinutes,
+                adjuster,
+                endedAt.AddDays(2),
+                $"Adjust minutes for {meeting.Title}",
+                "Review and refine the minutes to ensure accuracy before approvals.");
+        }
+
+        var approvers = meeting.GetAttendeesByFunction(MeetingFunction.Chairperson)
+            .Concat(meeting.GetAttendeesByFunction(MeetingFunction.Secretary))
+            .Where(x => x.UserId is not null)
+            .DistinctBy(x => x.UserId)
+            .ToList();
+
+        foreach (var approver in approvers)
+        {
+            EnsureTask(
+                MinutesTaskType.ApproveMinutes,
+                approver,
+                endedAt.AddDays(5),
+                $"Approve minutes for {meeting.Title}",
+                "Review and approve the finalized meeting minutes.");
+        }
+
+        if (_tasks.Any())
+        {
+            State = MinutesState.UnderReview;
+        }
+    }
+
+    public void UpdateStateFromTasks()
+    {
+        var activeTasks = _tasks.Where(x => x.Status != MinutesTaskStatus.Cancelled).ToList();
+
+        if (!activeTasks.Any())
+        {
+            State = MinutesState.Draft;
+            return;
+        }
+
+        if (activeTasks.All(x => x.Status == MinutesTaskStatus.Completed))
+        {
+            State = MinutesState.Approved;
+        }
+        else
+        {
+            State = MinutesState.UnderReview;
+        }
     }
 
     public DateTimeOffset? Started { get; set; }

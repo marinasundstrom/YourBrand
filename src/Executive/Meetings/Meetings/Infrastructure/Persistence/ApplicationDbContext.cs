@@ -59,6 +59,7 @@ public sealed class ApplicationDbContext(
         configurationBuilder.Properties<MinutesId>().HaveConversion<MinutesIdConverter>();
         configurationBuilder.Properties<MinutesAttendeeId>().HaveConversion<MinutesAttendeeIdConverter>();
         configurationBuilder.Properties<MinutesItemId>().HaveConversion<MinutesItemIdConverter>();
+        configurationBuilder.Properties<MinutesTaskId>().HaveConversion<MinutesTaskIdConverter>();
         
         configurationBuilder.Properties<MeetingGroupId>().HaveConversion<MeetingGroupIdConverter>();
         configurationBuilder.Properties<MeetingGroupMemberId>().HaveConversion<MeetingGroupMemberIdConverter>();
@@ -85,6 +86,8 @@ public sealed class ApplicationDbContext(
     public DbSet<AgendaItemType> AgendaItemTypes { get; set; }
 
     public DbSet<Domain.Entities.Minutes> Minutes { get; set; }
+
+    public DbSet<MinutesTask> MinutesTasks { get; set; }
 
     public DbSet<Motion> Motions { get; set; }
 
