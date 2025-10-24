@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 namespace YourBrand;
@@ -6,27 +7,26 @@ public static class SeedArguments
 {
     public static bool TryGetTenantId(string[] args, out string tenantId)
     {
-        tenantId = string.Empty;
+        tenantId = TenantConstants.TenantId;
 
         if (args is null || args.Length == 0)
-        {
-            return false;
-        }
-
-        if (!args.Contains("--seed"))
-        {
-            return false;
-        }
-
-        string? parsed = Parse(args);
-
-        if (string.IsNullOrWhiteSpace(parsed))
         {
             tenantId = string.Empty;
             return false;
         }
 
-        tenantId = parsed;
+        if (!args.Contains("--seed"))
+        {
+            tenantId = string.Empty;
+            return false;
+        }
+
+        string? parsed = Parse(args);
+
+        tenantId = string.IsNullOrWhiteSpace(parsed)
+            ? TenantConstants.TenantId
+            : parsed;
+
         return true;
     }
 
@@ -42,11 +42,28 @@ public static class SeedArguments
             return null;
         }
 
-        return Parse(args);
+        string? parsed = Parse(args);
+
+        return string.IsNullOrWhiteSpace(parsed)
+            ? TenantConstants.TenantId
+            : parsed;
     }
 
     private static string? Parse(string[] args)
     {
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (args[i] == "--tenantId")
+            {
+                if (i + 1 < args.Length && !IsOption(args[i + 1]))
+                {
+                    return args[i + 1];
+                }
+
+                return null;
+            }
+        }
+
         for (int i = 0; i < args.Length; i++)
         {
             if (args[i] == "--")
@@ -73,4 +90,6 @@ public static class SeedArguments
 
         return null;
     }
+
+    private static bool IsOption(string value) => value.StartsWith("--", StringComparison.Ordinal);
 }

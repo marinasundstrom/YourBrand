@@ -192,7 +192,7 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
     {
         if (!SeedArguments.TryGetTenantId(args, out var tenantId))
         {
-            Console.Error.WriteLine("Tenant id is required when running with --seed. Usage: dotnet run -- --seed -- <tenantId>");
+            Console.Error.WriteLine("Unable to determine tenant id when running with --seed. Usage: dotnet run -- --seed [--tenantId <tenantId>]");
             return;
         }
 
