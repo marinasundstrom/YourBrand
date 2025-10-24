@@ -4,6 +4,7 @@ using YourBrand.Auditability;
 using YourBrand.Domain.Persistence;
 using YourBrand.Sales.Features.OrderManagement.Repositories;
 using YourBrand.Sales.Persistence.Repositories.Mocks;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Sales.Persistence;
 
@@ -25,6 +26,7 @@ public static class ServiceExtensions
             options
                 .UseDomainInterceptors(serviceProvider)
                 .UseTenancyInterceptor(serviceProvider)
+                .UseTenantDatabasePerTenant<SalesContext>(serviceProvider)
                 .UseAuditabilityInterceptor(serviceProvider)
                 .UseSoftDeleteInterceptor(serviceProvider);
 
@@ -38,6 +40,11 @@ public static class ServiceExtensions
         services.AddScoped<ISalesContext>(sp => sp.GetRequiredService<SalesContext>());
 
         services.AddTenancyInterceptor();
+        services.AddTenantDatabasePerTenant(builder =>
+        {
+            builder.ForContext<SalesContext>()
+                .WithDatabase(tenantId => $"Orders_{tenantId.Value}");
+        });
         services.AddAuditabilityInterceptor();
         services.AddSoftDeleteInterceptor();
 
