@@ -31,12 +31,7 @@ public record ChangeMeetingState(string OrganizationId, int Id, MeetingState New
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            meeting.State = request.NewState;
-
-            if (meeting.State != MeetingState.Adjourned)
-            {
-                meeting.ClearAdjournment();
-            }
+            meeting.ChangeState(request.NewState);
 
             context.Meetings.Update(meeting);
 

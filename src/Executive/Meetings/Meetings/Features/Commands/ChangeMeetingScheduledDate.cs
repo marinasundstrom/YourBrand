@@ -31,7 +31,7 @@ public record ChangeMeetingScheduledDate(string OrganizationId, int Id, DateTime
                 return Errors.Meetings.MeetingNotFound;
             }
 
-            meeting.ScheduledAt = request.Date;
+            meeting.Reschedule(request.Date);
 
             context.Meetings.Update(meeting);
 
