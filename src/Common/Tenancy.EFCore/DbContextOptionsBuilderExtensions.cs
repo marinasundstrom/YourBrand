@@ -12,4 +12,17 @@ public static class DbContextOptionsBuilderExtensions
 
         return options;
     }
+
+    public static DbContextOptionsBuilder UseTenantDatabasePerTenant<TContext>(this DbContextOptionsBuilder options, IServiceProvider serviceProvider)
+        where TContext : DbContext
+    {
+        var interceptor = serviceProvider.GetService<TenantDbConnectionInterceptor<TContext>>();
+
+        if (interceptor is not null)
+        {
+            options.AddInterceptors(interceptor);
+        }
+
+        return options;
+    }
 }
