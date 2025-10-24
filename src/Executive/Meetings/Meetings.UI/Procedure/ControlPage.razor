@@ -143,10 +143,18 @@ else
                     <MudCardActions>
                         @if (currentAgendaItem is not null)
                         {
+                            var requiresDiscussion = currentAgendaItem.DiscussionActions == DiscussionActions.Required;
+                            var requiresVoting = currentAgendaItem.VoteActions == VoteActions.Required;
+                            var canCompleteImmediately = !requiresDiscussion && !requiresVoting;
+
                             if (currentAgendaItem.State == AgendaItemState.Pending)
                             {
                                 <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartDiscussion" Class="me-2">Start
                                     Discussion</MudButton>
+                                @if (canCompleteImmediately)
+                                {
+                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="CompleteAgendaItem" Class="me-2">Complete Agenda Item</MudButton>
+                                }
                                 <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="PostponeAgendaItem" Class="me-2">Postpone
                                 </MudButton>
                                 <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="CancelAgendaItem" Class="me-2">Cancel
