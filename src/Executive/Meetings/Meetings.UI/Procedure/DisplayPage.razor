@@ -105,7 +105,7 @@ else
         </MudItem>
     </MudGrid>
 
-    @if (@agendaItem?.State == AgendaItemState.UnderDiscussion) 
+    @if (@agendaItem?.State == AgendaItemState.Active && @agendaItem?.Phase == AgendaItemPhase.Discussion)
     {
         <MudPaper Class="pa-8 mb-4" Elevation="25">
             <MudText Typo="@Typo.h4" GutterBottom="true">Discussion</MudText>
@@ -113,8 +113,8 @@ else
             <SpeakerDisplay MeetingId="@MeetingId" />
 
         </MudPaper>
-    } 
-    else if (@agendaItem?.State == AgendaItemState.Voting) 
+    }
+    else if (@agendaItem?.State == AgendaItemState.Active && @agendaItem?.Phase == AgendaItemPhase.Voting)
     {
         <MudPaper Class="pa-8 mb-4" Elevation="25">
             <MudText Typo="@Typo.h4" GutterBottom="true">Voting</MudText>

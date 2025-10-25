@@ -8,7 +8,7 @@ public static partial class Mappings
 {
     public static AgendaDto ToDto(this Agenda agenda) => new(agenda.Id, agenda.State, agenda.Items.Select(x => x.ToDto()));
     public static AgendaItemDto ToDto(this AgendaItem item) => new(
-        item.Id, item.ParentId, item.Order, item.Type.ToDto(), item.Title!, item.State, item.Description,
+        item.Id, item.ParentId, item.Order, item.Type.ToDto(), item.Title!, item.State, item.Phase, item.Description,
         item.IsMandatory,
         item.DiscussionActions,
         item.VoteActions,

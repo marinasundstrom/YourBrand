@@ -78,7 +78,7 @@ else
                 }
             </MudPaper>
 
-        @if (currentAgendaItem?.State == AgendaItemState.UnderDiscussion)
+        @if (currentAgendaItem?.State == AgendaItemState.Active && currentAgendaItem?.Phase == AgendaItemPhase.Discussion)
         {
             <MudPaper Elevation="25" Class="pa-6 mb-4">
                 <MudText Typo="@Typo.h4" GutterBottom="true">Discussion</MudText>
@@ -97,15 +97,15 @@ else
         }
 
         @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election
-                        && currentAgendaItem?.State != AgendaItemState.Voting)
+                    && currentAgendaItem?.Phase != AgendaItemPhase.Voting)
         {
                 <MudPaper Elevation="25" Class="pa-6 mb-4">
 
                     <MudText Typo="@Typo.h4" GutterBottom="true">Candidates</MudText>
 
-                    @if (currentAgendaItem?.State != AgendaItemState.Canceled 
-                        && currentAgendaItem?.State != AgendaItemState.Skipped 
-                        && currentAgendaItem?.State != AgendaItemState.Voting 
+                    @if (currentAgendaItem?.State != AgendaItemState.Canceled
+                        && currentAgendaItem?.State != AgendaItemState.Skipped
+                        && !(currentAgendaItem?.State == AgendaItemState.Active && currentAgendaItem?.Phase == AgendaItemPhase.Voting)
                         && currentAgendaItem?.State != AgendaItemState.Completed)
                     {
                         <MudButton Variant="Variant.Filled" Class="me-2" OnClick="Nominate">Nominate</MudButton>
@@ -119,7 +119,7 @@ else
         }
 
         @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
-        && currentAgendaItem?.State == AgendaItemState.Voting)
+        && currentAgendaItem?.State == AgendaItemState.Active && currentAgendaItem?.Phase == AgendaItemPhase.Voting)
         {
             <MudPaper Elevation="25" Class="pa-6 mb-4">
                 

@@ -62,7 +62,7 @@ else
                             <div class="d-flex justify-space-between flex-grow-1 gap-4">
                                 <div>
                                     <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="me-2" OnClick="MoveToNextAgendaItem"
-                                        Disabled="@(lastItem || currentAgendaItem?.State == AgendaItemState.Pending)">Next Agenda Item</MudButton>
+                                        Disabled="@(lastItem || (currentAgendaItem?.State == AgendaItemState.Active && currentAgendaItem?.Phase == AgendaItemPhase.Default))">Next Agenda Item</MudButton>
                                     <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="me-2"  OnClick="ResetProcedure">Reset procedure</MudButton>
                                     <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="AdjournMeeting">Adjourn</MudButton>
                                 </div>
@@ -143,7 +143,7 @@ else
                     <MudCardActions>
                         @if (currentAgendaItem is not null)
                         {
-                            if (currentAgendaItem.State == AgendaItemState.Pending)
+                            if (currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Default)
                             {
                                 <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartDiscussion" Class="me-2">Start
                                     Discussion</MudButton>
@@ -158,13 +158,13 @@ else
                                         Agenda Item</MudButton>
                                 }
                             }
-                            else if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
+                            else if (currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Discussion)
                             {
                                 <!-- Include Debate Component -->
                                 <Debate Motion="@currentMotion" />
                                 <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="StartVoting">Start Voting</MudButton>
                             }
-                            else if (currentAgendaItem.State == AgendaItemState.Voting)
+                            else if (currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Voting)
                             {
                                 <!-- Include Voting Component -->
                                 <VoteComponent Motion="@currentMotion" />
@@ -179,8 +179,8 @@ else
                     </MudCardActions>
                 </MudCard>
 
-                @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.RollCall 
-                    && currentAgendaItem?.State != AgendaItemState.Voting 
+                @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.RollCall
+                    && currentAgendaItem?.Phase != AgendaItemPhase.Voting
                     && currentAgendaItem?.State != AgendaItemState.Completed)
                 {
                     <MudPaper Class="pa-6 mb-4" Elevation="25">
@@ -192,8 +192,8 @@ else
                     </MudPaper>
                 }
 
-                @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
-                    && currentAgendaItem?.State != AgendaItemState.Voting 
+                @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election
+                    && currentAgendaItem?.Phase != AgendaItemPhase.Voting
                     && currentAgendaItem?.State != AgendaItemState.Completed)
                 {
                     <MudPaper Class="pa-6 mb-4" Elevation="25">
@@ -212,7 +212,7 @@ else
                     </MudPaper>
                 }
 
-                @if (@currentAgendaItem?.State == AgendaItemState.UnderDiscussion)
+                @if (@currentAgendaItem?.State == AgendaItemState.Active && @currentAgendaItem?.Phase == AgendaItemPhase.Discussion)
                 {
                     <MudPaper Class="pa-6 mb-4" Elevation="25">
                         <MudText Typo="@Typo.h4" GutterBottom="true">Discussion</MudText>
@@ -325,7 +325,7 @@ else
 
     private bool CanCompleteCurrentAgendaItem =>
         currentAgendaItem is not null &&
-        currentAgendaItem.State != AgendaItemState.Completed &&
+        currentAgendaItem.State == AgendaItemState.Active &&
         currentAgendaItem.State != AgendaItemState.Canceled &&
         currentAgendaItem.State != AgendaItemState.Skipped &&
         (currentAgendaItem.DiscussionActions != DiscussionActions.Required || currentAgendaItem.IsDiscussionCompleted) &&
@@ -418,7 +418,7 @@ else
 
     private async Task RefreshDiscussionAsync()
     {
-        if (currentAgendaItem is null || currentAgendaItem.State != AgendaItemState.UnderDiscussion)
+        if (currentAgendaItem is null || currentAgendaItem.State != AgendaItemState.Active || currentAgendaItem.Phase != AgendaItemPhase.Discussion)
         {
             discussion = null;
             speakingTimeLimitSecondsInput = null;
@@ -580,11 +580,11 @@ else
                 currentMotion = await MotionsClient.GetMotionByIdAsync(organization.Id, currentAgendaItem.MotionId.GetValueOrDefault());
             }
 
-            if(currentAgendaItem.State == AgendaItemState.UnderDiscussion)
+            if(currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Discussion)
             {
                 await RefreshDiscussionAsync();
             }
-            else if(currentAgendaItem.State == AgendaItemState.Voting)
+            else if(currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Voting)
             {
                 if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting)
                 {

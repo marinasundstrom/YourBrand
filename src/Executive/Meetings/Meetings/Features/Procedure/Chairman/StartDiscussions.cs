@@ -53,7 +53,7 @@ public sealed record StartDiscussions(string OrganizationId, int Id) : IRequest<
 
             await hubContext.Clients
                 .Group($"meeting-{meeting.Id}")
-               .OnAgendaItemStateChanged(agendaItem.Id, (Dtos.AgendaItemState)agendaItem.State);
+               .OnAgendaItemStateChanged(agendaItem.Id, (Dtos.AgendaItemState)agendaItem.State, (Dtos.AgendaItemPhase)agendaItem.Phase);
 
             return Result.Success;
         }

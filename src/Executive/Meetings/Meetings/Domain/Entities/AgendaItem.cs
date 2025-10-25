@@ -9,12 +9,19 @@ namespace YourBrand.Meetings.Domain.Entities;
 public enum AgendaItemState
 {
     Pending,
-    UnderDiscussion,
-    Voting,
+    Active,
     Completed,
     Postponed,
     Skipped,
     Canceled
+}
+
+public enum AgendaItemPhase
+{
+    Default,
+    Discussion,
+    Voting,
+    Ended
 }
 
 public enum DiscussionActions
@@ -85,7 +92,8 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     public string Title { get; set; }
     public string Description { get; set; }
-    public AgendaItemState State { get; set; } = AgendaItemState.Pending;
+    public AgendaItemState State { get; private set; } = AgendaItemState.Pending;
+    public AgendaItemPhase Phase { get; private set; } = AgendaItemPhase.Default;
     public int Order { get; set; }
 
     public bool IsMandatory { get; set; }
@@ -119,10 +127,30 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     public string? Position { get; set; }
 
     [Throws(typeof(InvalidOperationException))]
+    public void Activate()
+    {
+        if (State == AgendaItemState.Active)
+        {
+            return;
+        }
+
+        if (State != AgendaItemState.Pending && State != AgendaItemState.Postponed)
+        {
+            throw new InvalidOperationException("Agenda item cannot be activated.");
+        }
+
+        State = AgendaItemState.Active;
+        Phase = AgendaItemPhase.Default;
+    }
+
+    [Throws(typeof(InvalidOperationException))]
     public void StartDiscussion()
     {
-        if (State != AgendaItemState.Pending && State != AgendaItemState.Postponed)
-            throw new InvalidOperationException("Discussion can only be started when the agenda item is pending or postponed.");
+        if (State != AgendaItemState.Active)
+            throw new InvalidOperationException("Discussion can only be started when the agenda item is active.");
+
+        if (Phase == AgendaItemPhase.Discussion)
+            throw new InvalidOperationException("Discussion already in progress.");
 
         if (IsDiscussionCompleted)
             throw new InvalidOperationException("Discussion already completed.");
@@ -132,7 +160,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         Discussion.StartSession();
 
         DiscussionStartedAt = DateTimeOffset.UtcNow;
-        State = AgendaItemState.UnderDiscussion;
+        Phase = AgendaItemPhase.Discussion;
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -142,13 +170,14 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
         IsDiscussionCompleted = true;
         DiscussionEndedAt = DateTimeOffset.UtcNow;
+        Phase = AgendaItemPhase.Default;
     }
 
     [Throws(typeof(InvalidOperationException))]
     public void RequestSpeakerSlot(MeetingAttendee attendee)
     {
-        if (State != AgendaItemState.Pending)
-            throw new InvalidOperationException("Speaker slots can only be requested when the item is pending.");
+        if (State != AgendaItemState.Pending && State != AgendaItemState.Active)
+            throw new InvalidOperationException("Speaker slots can only be requested when the item is pending or active.");
 
         // Create Discussion only if it doesn't exist
         Discussion ??= new Discussion { OrganizationId = OrganizationId };
@@ -158,8 +187,11 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     [Throws(typeof(InvalidOperationException))]
     public void StartVoting()
     {
-        if (State != AgendaItemState.UnderDiscussion)
-            throw new InvalidOperationException("Cannot start voting.");
+        if (State != AgendaItemState.Active)
+            throw new InvalidOperationException("Cannot start voting when the agenda item is not active.");
+
+        if (Phase == AgendaItemPhase.Voting)
+            throw new InvalidOperationException("Voting session already in progress.");
 
         if (Voting is null)
         {
@@ -184,7 +216,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         VotingStartedAt = DateTimeOffset.UtcNow;
         VotingEndedAt = null;
         IsVoteCompleted = false;
-        State = AgendaItemState.Voting;
+        Phase = AgendaItemPhase.Voting;
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -199,16 +231,26 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
         VotingEndedAt = DateTimeOffset.UtcNow;
         IsVoteCompleted = Voting.State == VotingState.ResultReady;
-        State = Voting.State == VotingState.ResultReady
-            ? AgendaItemState.Completed
-            : AgendaItemState.Voting;
+
+        if (Voting.State == VotingState.ResultReady)
+        {
+            Phase = AgendaItemPhase.Ended;
+            State = AgendaItemState.Completed;
+        }
+        else
+        {
+            Phase = AgendaItemPhase.Voting;
+        }
     }
 
     [Throws(typeof(InvalidOperationException))]
     public void StartElection()
     {
-        if (State != AgendaItemState.UnderDiscussion)
-            throw new InvalidOperationException("Cannot start an election.");
+        if (State != AgendaItemState.Active)
+            throw new InvalidOperationException("Cannot start an election when the agenda item is not active.");
+
+        if (Phase == AgendaItemPhase.Voting)
+            throw new InvalidOperationException("Election already in progress.");
 
         if (Election != null)
             throw new InvalidOperationException("Election already in progress.");
@@ -223,7 +265,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         Election.StartElection();
 
         VotingStartedAt = DateTimeOffset.UtcNow;
-        State = AgendaItemState.Voting;
+        Phase = AgendaItemPhase.Voting;
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -238,6 +280,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
         VotingEndedAt = DateTimeOffset.UtcNow;
         IsVoteCompleted = true;
+        Phase = AgendaItemPhase.Ended;
         State = AgendaItemState.Completed;
     }
 
@@ -255,6 +298,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         }
 
         State = AgendaItemState.Completed;
+        Phase = AgendaItemPhase.Ended;
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -266,6 +310,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         }
 
         State = AgendaItemState.Skipped;
+        Phase = AgendaItemPhase.Ended;
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -277,6 +322,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         }
 
         State = AgendaItemState.Postponed;
+        Phase = AgendaItemPhase.Default;
     }
 
     [Throws(typeof(InvalidOperationException))]
@@ -288,6 +334,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
         }
 
         State = AgendaItemState.Canceled;
+        Phase = AgendaItemPhase.Ended;
     }
 
     private void ValidateAgendaItemType()
@@ -313,22 +360,24 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
 
     // Determines if the item can start discussion
     public bool CanStartDiscussion =>
-        (State == AgendaItemState.Pending || State == AgendaItemState.Postponed) &&
+        State == AgendaItemState.Active &&
+        Phase == AgendaItemPhase.Default &&
         DiscussionActions != DiscussionActions.None &&
         !IsDiscussionCompleted;
 
     // Determines if the item can start voting
     public bool CanStartVoting =>
-        State == AgendaItemState.UnderDiscussion &&
+        State == AgendaItemState.Active &&
+        Phase != AgendaItemPhase.Voting &&
         VoteActions != VoteActions.None &&
         (DiscussionActions != DiscussionActions.Required || IsDiscussionCompleted) &&
         !IsVoteCompleted;
 
     // Determines if the item can be marked as completed
     public bool CanComplete =>
+        State == AgendaItemState.Active &&
         (DiscussionActions != DiscussionActions.Required || IsDiscussionCompleted) &&
-        (VoteActions != VoteActions.Required || IsVoteCompleted) &&
-        (State != AgendaItemState.Completed && State != AgendaItemState.Canceled && State != AgendaItemState.Skipped);
+        (VoteActions != VoteActions.Required || IsVoteCompleted);
 
     public IReadOnlyCollection<AgendaItem> SubItems => _subItems;
 
@@ -433,6 +482,7 @@ public class AgendaItem : Entity<AgendaItemId>, IAuditableEntity<AgendaItemId>, 
     public void Reset()
     {
         State = AgendaItemState.Pending;
+        Phase = AgendaItemPhase.Default;
         IsDiscussionCompleted = false;
         IsVoteCompleted = false;
         DiscussionStartedAt = null;
