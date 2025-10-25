@@ -64,6 +64,6 @@ public sealed class PresentElectionResultsHandler(
             .Group($"meeting-{meeting.Id}")
             .OnElectionResultsPresented(agendaItem.Id, request.Options);
 
-        return Result.SuccessWith(agendaItem.Id);
+        return Result.SuccessWith<string>(agendaItem.Id);
     }
 }

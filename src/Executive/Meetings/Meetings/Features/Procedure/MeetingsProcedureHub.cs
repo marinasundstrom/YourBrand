@@ -176,11 +176,11 @@ public sealed class MeetingsProcedureHub(IMediator mediator, ISettableUserContex
 
         if (result.IsFailure)
         {
-            throw new HubException(result.Error.Message);
+            throw new HubException(result.GetError().Title);
         }
 
         var presentation = presentationStates.GetOrAdd(connectionState.MeetingId, _ => new PresentationState());
-        presentation.VotingAgendaItemId = result.Value;
+        presentation.VotingAgendaItemId = result.GetValue();
         presentation.VotingOptions = options;
     }
 
@@ -194,11 +194,11 @@ public sealed class MeetingsProcedureHub(IMediator mediator, ISettableUserContex
 
         if (result.IsFailure)
         {
-            throw new HubException(result.Error.Message);
+            throw new HubException(result.GetError().Title);
         }
 
         var presentation = presentationStates.GetOrAdd(connectionState.MeetingId, _ => new PresentationState());
-        presentation.ElectionAgendaItemId = result.Value;
+        presentation.ElectionAgendaItemId = result.GetValue();
         presentation.ElectionOptions = options;
     }
 
