@@ -4558,6 +4558,8 @@ components:
           type: string
         state:
           $ref: '#/components/schemas/AgendaItemState'
+        phase:
+          $ref: '#/components/schemas/AgendaItemPhase'
         description:
           type: string
         isMandatory:
@@ -4607,8 +4609,7 @@ components:
       description: ''
       x-enumNames:
       - Pending
-      - UnderDiscussion
-      - Voting
+      - Active
       - Completed
       - Postponed
       - Skipped
@@ -4620,7 +4621,19 @@ components:
       - 3
       - 4
       - 5
-      - 6
+    AgendaItemPhase:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Default
+      - Discussion
+      - Voting
+      - Ended
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
     DiscussionActions:
       type: integer
       description: ''

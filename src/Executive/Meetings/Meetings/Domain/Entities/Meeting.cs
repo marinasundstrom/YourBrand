@@ -318,6 +318,11 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
             throw new InvalidOperationException("No more items in the agenda.");
         }
 
+        if (result.State == AgendaItemState.Pending || result.State == AgendaItemState.Postponed)
+        {
+            result.Activate();
+        }
+
         RaiseAgendaItemChanged(result.Id.Value);
 
         return result;
@@ -652,14 +657,16 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
             if (currentItem.SubItems.Any(subItem =>
                 subItem.State != AgendaItemState.Completed &&
                 subItem.State != AgendaItemState.Skipped &&
-                subItem.State != AgendaItemState.Canceled))
+                subItem.State != AgendaItemState.Canceled &&
+                subItem.State != AgendaItemState.Postponed))
             {
                 return false;
             }
 
             return (currentItem.State == AgendaItemState.Completed ||
                     currentItem.State == AgendaItemState.Skipped ||
-                    currentItem.State == AgendaItemState.Canceled) &&
+                    currentItem.State == AgendaItemState.Canceled ||
+                    currentItem.State == AgendaItemState.Postponed) &&
                    CurrentAgendaItemIndex < Agenda.Items.Count - 1;
         }
     }
@@ -682,7 +689,8 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
             return Agenda.Items.All(item =>
                 item.State == AgendaItemState.Completed ||
                 item.State == AgendaItemState.Skipped ||
-                item.State == AgendaItemState.Canceled);
+                item.State == AgendaItemState.Canceled ||
+                item.State == AgendaItemState.Postponed);
         }
     }
 

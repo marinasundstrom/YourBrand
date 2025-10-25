@@ -16,6 +16,8 @@ public class AgendaItemViewModel
 
     public AgendaItemState State { get; set; }
 
+    public AgendaItemPhase Phase { get; set; }
+
     public string Description { get; set; }
 
     public TimeSpan? EstimatedStartTime { get; set; }
@@ -37,6 +39,7 @@ public class AgendaItemViewModel
             Title = Title,
             Type = Type,
             State = State,
+            Phase = Phase,
             Description = Description,
             EstimatedStartTime = EstimatedStartTime,
             EstimatedEndTime = EstimatedEndTime,

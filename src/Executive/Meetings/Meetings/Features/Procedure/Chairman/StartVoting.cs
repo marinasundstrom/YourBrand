@@ -54,7 +54,7 @@ public sealed record StartVoting(string OrganizationId, int Id) : IRequest<Resul
 
             await hubContext.Clients
                 .Group($"meeting-{meeting.Id}")
-               .OnAgendaItemStateChanged(agendaItem.Id, (Dtos.AgendaItemState)agendaItem.State);
+               .OnAgendaItemStateChanged(agendaItem.Id, (Dtos.AgendaItemState)agendaItem.State, (Dtos.AgendaItemPhase)agendaItem.Phase);
 
             return Result.Success;
         }

@@ -174,15 +174,15 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         StateHasChanged();
     }
 
-    public async Task OnAgendaItemStateChanged(string agendaItemId, AgendaItemState state)
+    public async Task OnAgendaItemStateChanged(string agendaItemId, AgendaItemState state, AgendaItemPhase phase)
     {
         await LoadAgendaItem();
 
-        if(state == AgendaItemState.UnderDiscussion) 
+        if(state == AgendaItemState.Active && phase == AgendaItemPhase.Discussion)
         {
             Console.WriteLine("Under discussion");
         }
-        else if (state == AgendaItemState.Voting)
+        else if (state == AgendaItemState.Active && phase == AgendaItemPhase.Voting)
         {
             Console.WriteLine("Voting");
         }

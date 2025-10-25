@@ -144,11 +144,11 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
             currentMotion = await MotionsClient.GetMotionByIdAsync(organization.Id, currentAgendaItem.MotionId.GetValueOrDefault());
         }
 
-        if (currentAgendaItem.State == AgendaItemState.UnderDiscussion)
+        if (currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Discussion)
         {
             discussion = await DiscussionsClient.GetDiscussionAsync(organization.Id, MeetingId);
         }
-        else if (currentAgendaItem.State == AgendaItemState.Voting)
+        else if (currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Voting)
         {
             if (currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting)
             {
@@ -222,7 +222,7 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         StateHasChanged();
     }
 
-    public async Task OnAgendaItemStateChanged(string agendaItemId, AgendaItemState state)
+    public async Task OnAgendaItemStateChanged(string agendaItemId, AgendaItemState state, AgendaItemPhase phase)
     {
         await LoadAgendaItem();
 

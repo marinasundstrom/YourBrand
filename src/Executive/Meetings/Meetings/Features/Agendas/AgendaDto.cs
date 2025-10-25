@@ -15,6 +15,7 @@ public sealed record AgendaItemDto(
     AgendaItemTypeDto Type,
     string Title,
     AgendaItemState State,
+    AgendaItemPhase Phase,
     string Description,
     bool IsMandatory,
     DiscussionActions DiscussionActions,

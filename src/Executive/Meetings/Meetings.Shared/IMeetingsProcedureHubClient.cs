@@ -9,5 +9,5 @@ public interface IMeetingsProcedureHubClient : IVotingHubClient, IElectionsHubCl
     Task OnAgendaUpdated();
 
     Task OnAgendaItemChanged(string agendaItemId);
-    Task OnAgendaItemStateChanged(string agendaItemId, AgendaItemState state);
+    Task OnAgendaItemStateChanged(string agendaItemId, AgendaItemState state, AgendaItemPhase phase);
 }
