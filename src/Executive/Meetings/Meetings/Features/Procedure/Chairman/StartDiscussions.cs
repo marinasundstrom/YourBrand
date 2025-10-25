@@ -40,12 +40,14 @@ public sealed record StartDiscussions(string OrganizationId, int Id) : IRequest<
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanStartDiscussion;
             }
 
-            agendaItem.StartDiscussion();
+            chairFunction.StartDiscussion(agendaItem);
 
             context.Meetings.Update(meeting);
 

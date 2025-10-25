@@ -41,12 +41,14 @@ public sealed record StartElection(string OrganizationId, int Id) : IRequest<Res
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanStartVoting;
             }
 
-            agendaItem.StartElection();
+            chairFunction.StartElection(agendaItem);
 
             context.Meetings.Update(meeting);
 

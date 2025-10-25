@@ -37,7 +37,9 @@ public sealed record MoveToNextSpeaker(string OrganizationId, int Id) : IRequest
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanManageSpeakerQueue;
             }
@@ -54,7 +56,7 @@ public sealed record MoveToNextSpeaker(string OrganizationId, int Id) : IRequest
                 return Errors.Meetings.NoOngoingDiscussionSession;
             }
 
-            var transition = agendaItem.Discussion!.MoveToNextSpeaker();
+            var transition = chairFunction.MoveToNextSpeaker(agendaItem);
 
             var nextSpeakerId = transition.CurrentSpeaker is null ? null : transition.CurrentSpeaker.Id.Value;
             var previousSpeakerId = transition.PreviousSpeaker is null ? null : transition.PreviousSpeaker.Id.Value;

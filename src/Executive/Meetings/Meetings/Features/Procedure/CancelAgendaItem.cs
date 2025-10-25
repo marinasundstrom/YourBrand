@@ -39,12 +39,14 @@ public sealed record CancelAgendaItem(string OrganizationId, int Id) : IRequest<
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanCancelAgendaItem;
             }
 
-            agendaItem.Cancel();
+            chairFunction.CancelAgendaItem(agendaItem);
 
             context.Meetings.Update(meeting);
 

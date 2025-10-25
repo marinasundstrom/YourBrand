@@ -33,12 +33,14 @@ public sealed record MoveToNextAgendaItem(string OrganizationId, int Id) : IRequ
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanMoveToNextAgendaItem;
             }
 
-            var nextItem = meeting.MoveToNextAgendaItem();
+            var nextItem = chairFunction.MoveToNextAgendaItem();
 
             context.Meetings.Update(meeting);
 

@@ -39,12 +39,14 @@ public sealed record AdjournMeeting(string OrganizationId, int Id, string Messag
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanAdjournTheMeeting;
             }
 
-            meeting.AdjournMeeting(request.Message.Trim());
+            chairFunction.AdjournMeeting(request.Message.Trim());
 
             context.Meetings.Update(meeting);
 
