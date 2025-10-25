@@ -1,27 +1,39 @@
 using System.Linq;
 using MediatR;
-using YourBrand.Meetings.Domain.Entities;
-
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
 using YourBrand.Meetings.Features.Agendas;
+using YourBrand.Meetings.Domain.Entities;
+using YourBrand.Meetings.Features.Minutes;
 
 namespace YourBrand.Meetings.Features.Procedure.Chairman;
 
 public sealed record EndElection(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<EndElection, Result>
+    public sealed class Handler(
+        IApplicationDbContext context,
+        IUserContext userContext,
+        IHubContext<SecretaryHub, ISecretaryHubClient> secretaryHubContext) : IRequestHandler<EndElection, Result>
     {
         public async Task<Result> Handle(EndElection request, CancellationToken cancellationToken)
         {
             var meeting = await context.Meetings
                 .InOrganization(request.OrganizationId)
                 .Include(x => x.Attendees)
-                .ThenInclude(x => x.Functions)
-                .ThenInclude(x => x.Function)
-                .Include(x => x.Agenda)
-                .ThenInclude(x => x.Items.OrderBy(x => x.Order))
+                    .ThenInclude(x => x.Functions)
+                    .ThenInclude(x => x.Function)
+                .Include(x => x.Minutes)
+                    .ThenInclude(m => m.Items)
+                .Include(x => x.Agenda!)
+                    .ThenInclude(a => a.Items)
+                        .ThenInclude(i => i.Election)
+                            .ThenInclude(e => e.Candidates)
+                .Include(x => x.Agenda!)
+                    .ThenInclude(a => a.Items)
+                        .ThenInclude(i => i.Election)
+                            .ThenInclude(e => e.Ballots)
                 .FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (meeting is null)
@@ -72,9 +84,18 @@ public sealed record EndElection(string OrganizationId, int Id) : IRequest<Resul
                 }
             }
 
+            var minutesItem = await context.RecordAgendaItemMinutesAsync(meeting, agendaItem, cancellationToken);
+
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
+
+            if (minutesItem is not null)
+            {
+                await secretaryHubContext.Clients
+                    .Group($"meeting-{meeting.Id}")
+                    .OnMinutesItemChanged(minutesItem.Id);
+            }
 
             return Result.Success;
         }
