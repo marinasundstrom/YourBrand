@@ -133,6 +133,57 @@ else
                             </MudGrid>
 
                             <MudDivider Class="mt-4" />
+
+                            @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Voting
+                                && (currentAgendaItem?.IsVoteCompleted == true || currentAgendaItem?.State == AgendaItemState.Completed))
+                            {
+                                var voteResult = voting ?? currentAgendaItem?.Voting;
+
+                                if (voteResult is not null)
+                                {
+                                    <MudAlert Severity="@(voteResult.HasPassed ? Severity.Success : Severity.Error)" Variant="Variant.Filled" Class="mt-4">
+                                        <MudText Typo="Typo.subtitle1" Class="mb-0">
+                                            @(voteResult.HasPassed ? "The motion passed." : "The motion did not pass.")
+                                        </MudText>
+                                    </MudAlert>
+                                }
+                            }
+
+                            @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election
+                                && (currentAgendaItem?.State == AgendaItemState.Completed || currentAgendaItem?.Election?.ElectedCandidate is not null))
+                            {
+                                var electionResult = election ?? currentAgendaItem?.Election;
+
+                                if (electionResult is not null)
+                                {
+                                    var hasWinner = electionResult.ElectedCandidate is not null;
+
+                                    <MudAlert Severity="@(hasWinner ? Severity.Success : Severity.Warning)" Variant="Variant.Filled" Class="mt-4">
+                                        <MudStack Spacing="1">
+                                            <MudText Typo="Typo.subtitle1" Class="mb-0">Election result</MudText>
+
+                                            @if (electionResult.MeetingFunction?.Name is { } functionName)
+                                            {
+                                                <MudText Typo="Typo.body2" Class="mb-0">Position: @functionName</MudText>
+                                            }
+
+                                            @if (hasWinner)
+                                            {
+                                                <MudText Typo="Typo.h6" Class="mb-0">@electionResult.ElectedCandidate!.Name</MudText>
+
+                                                @if (!string.IsNullOrWhiteSpace(electionResult.ElectedCandidate!.Statement))
+                                                {
+                                                    <MudText Typo="Typo.body2">@electionResult.ElectedCandidate!.Statement</MudText>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <MudText Typo="Typo.body2" Class="mb-0">No candidate was elected.</MudText>
+                                            }
+                                        </MudStack>
+                                    </MudAlert>
+                                }
+                            }
                         }
                         else
                         {
@@ -567,6 +618,8 @@ else
         lastItem = agenda.Items.OrderBy(ai => ai.Order).LastOrDefault()?.Id == currentAgendaItem?.Id;
 
         currentMotion = null;
+        voting = null;
+        election = null;
 
         if (currentAgendaItem is not null)
         {
@@ -584,15 +637,30 @@ else
             {
                 await RefreshDiscussionAsync();
             }
-            else if(currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Voting)
+            
+            var isVotingItem = currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting;
+            var isElectionItem = currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Election;
+
+            if(currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Voting)
             {
-                if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting)
+                if(isVotingItem)
                 {
                     voting = await VotingClient.GetVotingAsync(organization.Id, MeetingId);
                 }
-                else if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Election) 
+                else if(isElectionItem)
                 {
                     election = await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
+                }
+            }
+            else
+            {
+                if(isVotingItem && (currentAgendaItem.IsVoteCompleted || currentAgendaItem.State == AgendaItemState.Completed))
+                {
+                    voting = currentAgendaItem.Voting ?? await VotingClient.GetVotingAsync(organization.Id, MeetingId);
+                }
+                else if(isElectionItem && (currentAgendaItem.State == AgendaItemState.Completed || currentAgendaItem.Election?.ElectedCandidate is not null))
+                {
+                    election = currentAgendaItem.Election ?? await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
                 }
             }
         }

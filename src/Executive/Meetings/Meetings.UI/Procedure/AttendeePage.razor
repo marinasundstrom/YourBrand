@@ -130,16 +130,59 @@ else
             </MudPaper>
         }
 
-        @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election 
-        && currentAgendaItem?.State == AgendaItemState.Completed)
+        @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Voting
+            && (currentAgendaItem?.IsVoteCompleted == true || currentAgendaItem?.State == AgendaItemState.Completed))
         {
-            <MudPaper Elevation="25" Class="pa-6 mb-4">
-                
-                <MudText Typo="@Typo.h4" GutterBottom="true">Elected </MudText>
+            var voteResult = voting ?? currentAgendaItem?.Voting;
 
-                @* <CandidatesSelector OrganizationId="@organization?.Id" Meeting="meeting" AgendaItem="currentAgendaItem" /> *@
+            if (voteResult is not null)
+            {
+                <MudPaper Elevation="25" Class="pa-6 mb-4">
+                    <MudText Typo="@Typo.h4" GutterBottom="true">Vote result</MudText>
 
-            </MudPaper>
+                    <MudAlert Severity="@(voteResult.HasPassed ? Severity.Success : Severity.Error)" Variant="Variant.Filled">
+                        @(voteResult.HasPassed ? "The motion passed." : "The motion did not pass.")
+                    </MudAlert>
+                </MudPaper>
+            }
+        }
+
+        @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election
+            && (currentAgendaItem?.State == AgendaItemState.Completed
+                || currentAgendaItem?.Election?.ElectedCandidate is not null))
+        {
+            var electionResult = election ?? currentAgendaItem?.Election;
+
+            if (electionResult is not null)
+            {
+                <MudPaper Elevation="25" Class="pa-6 mb-4">
+
+                    <MudText Typo="@Typo.h4" GutterBottom="true">Election result</MudText>
+
+                    @if (electionResult.MeetingFunction?.Name is { } functionName)
+                    {
+                        <MudText Typo="@Typo.subtitle1" Class="mb-2">Position: @functionName</MudText>
+                    }
+
+                    @if (electionResult.ElectedCandidate is { } electedCandidate)
+                    {
+                        <MudAlert Severity="Severity.Success" Variant="Variant.Filled" Class="mb-2">
+                            <MudText Typo="@Typo.h6" Class="mb-0">@electedCandidate.Name</MudText>
+                        </MudAlert>
+
+                        @if (!string.IsNullOrWhiteSpace(electedCandidate.Statement))
+                        {
+                            <MudText Typo="@Typo.body1">@electedCandidate.Statement</MudText>
+                        }
+                    }
+                    else
+                    {
+                        <MudAlert Severity="Severity.Warning" Variant="Variant.Filled">
+                            No candidate was elected.
+                        </MudAlert>
+                    }
+                </MudPaper>
+            }
         }
 
         </MudItem>
