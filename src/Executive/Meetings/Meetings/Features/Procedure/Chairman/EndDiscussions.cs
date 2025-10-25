@@ -1,7 +1,6 @@
 using MediatR;
 using YourBrand.Meetings.Domain.Entities;
 
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Identity;
@@ -11,7 +10,7 @@ namespace YourBrand.Meetings.Features.Procedure.Chairman;
 
 public sealed record EndDiscussions(string OrganizationId, int Id) : IRequest<Result>
 {
-    public sealed class Handler(IApplicationDbContext context, IUserContext userContext, IHubContext<MeetingsProcedureHub, IMeetingsProcedureHubClient> hubContext) : IRequestHandler<EndDiscussions, Result>
+    public sealed class Handler(IApplicationDbContext context, IUserContext userContext) : IRequestHandler<EndDiscussions, Result>
     {
         public async Task<Result> Handle(EndDiscussions request, CancellationToken cancellationToken)
         {
@@ -52,10 +51,6 @@ public sealed record EndDiscussions(string OrganizationId, int Id) : IRequest<Re
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
-
-            await hubContext.Clients
-                .Group($"meeting-{meeting.Id}")
-               .OnAgendaItemStateChanged(agendaItem.Id, (Dtos.AgendaItemState)agendaItem.State, (Dtos.AgendaItemPhase)agendaItem.Phase);
 
             return Result.Success;
         }

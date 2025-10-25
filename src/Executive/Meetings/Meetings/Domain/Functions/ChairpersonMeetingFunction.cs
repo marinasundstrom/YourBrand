@@ -39,13 +39,29 @@ public sealed class ChairpersonMeetingFunction
 
     public void PostponeAgendaItem(AgendaItem agendaItem) => agendaItem.Postpone();
 
-    public void StartDiscussion(AgendaItem agendaItem) => agendaItem.StartDiscussion();
+    public void StartDiscussion(AgendaItem agendaItem)
+    {
+        agendaItem.StartDiscussion();
+        _meeting.NotifyAgendaItemStateChanged(agendaItem);
+    }
 
-    public void EndDiscussion(AgendaItem agendaItem) => agendaItem.EndDiscussion();
+    public void EndDiscussion(AgendaItem agendaItem)
+    {
+        agendaItem.EndDiscussion();
+        _meeting.NotifyAgendaItemStateChanged(agendaItem);
+    }
 
-    public void StartVoting(AgendaItem agendaItem) => agendaItem.StartVoting();
+    public void StartVoting(AgendaItem agendaItem)
+    {
+        agendaItem.StartVoting();
+        _meeting.NotifyAgendaItemStateChanged(agendaItem);
+    }
 
-    public void EndVoting(AgendaItem agendaItem) => agendaItem.EndVoting();
+    public void EndVoting(AgendaItem agendaItem)
+    {
+        agendaItem.EndVoting();
+        _meeting.NotifyAgendaItemStateChanged(agendaItem);
+    }
 
     public void StartElection(AgendaItem agendaItem) => agendaItem.StartElection();
 
