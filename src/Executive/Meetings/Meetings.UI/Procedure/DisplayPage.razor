@@ -1,8 +1,11 @@
 @page "/meetings/{MeetingId:int}/procedure"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.SignalR.Client
+@using System.Collections.Generic
+@using System.Linq
 @using YourBrand.Portal.Services
 @using YourBrand.Meetings
+@using YourBrand.Meetings.Procedure
 @attribute [Authorize]
 @inject IStringLocalizer<DisplayPage> T
 @inject IMeetingsClient MeetingsClient
@@ -133,11 +136,58 @@ else
         if (voteResult is not null)
         {
             <MudPaper Class="pa-8 mb-4" Elevation="25">
-                <MudText Typo="@Typo.h4" GutterBottom="true">Vote result</MudText>
+                <MudStack Spacing="2">
+                    <MudText Typo="@Typo.h4" GutterBottom="true">Vote result</MudText>
 
-                <MudAlert Severity="@(voteResult.HasPassed ? Severity.Success : Severity.Error)" Variant="Variant.Filled">
-                    @(voteResult.HasPassed ? "The motion passed." : "The motion did not pass.")
-                </MudAlert>
+                    <MudAlert Severity="@(voteResult.HasPassed ? Severity.Success : Severity.Error)" Variant="Variant.Filled">
+                        @(voteResult.HasPassed ? "The motion passed." : "The motion did not pass.")
+                    </MudAlert>
+
+                @if (voteResult.Breakdown is not null && votingPresentation is not null)
+                {
+                    var valueLabel = ResultsPresentationHelper.ValueLabel(votingPresentation.ValueMode);
+                    var voteChartSeries = ResultsPresentationHelper.BuildVoteSeries(voteResult.Breakdown, votingPresentation.ValueMode);
+
+                    if (votingPresentation.DisplayMode == ResultsDisplayMode.Diagram)
+                    {
+                        <MudChart ChartType="ChartType.Pie"
+                                  Class="mt-4"
+                                  ChartSeries="@voteChartSeries"
+                                  XAxisLabels="@VoteLabels" />
+                    }
+                    else
+                    {
+                        <MudSimpleTable Dense="true" Class="mt-4">
+                            <thead>
+                                <tr>
+                                    <th>Option</th>
+                                    <th class="text-end">@valueLabel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>For</td>
+                                    <td class="text-end">@ResultsPresentationHelper.FormatVoteValue(voteResult.Breakdown.ForVotes, voteResult.Breakdown, votingPresentation.ValueMode)</td>
+                                </tr>
+                                <tr>
+                                    <td>Against</td>
+                                    <td class="text-end">@ResultsPresentationHelper.FormatVoteValue(voteResult.Breakdown.AgainstVotes, voteResult.Breakdown, votingPresentation.ValueMode)</td>
+                                </tr>
+                                <tr>
+                                    <td>Abstain</td>
+                                    <td class="text-end">@ResultsPresentationHelper.FormatVoteValue(voteResult.Breakdown.AbstainVotes, voteResult.Breakdown, votingPresentation.ValueMode)</td>
+                                </tr>
+                            </tbody>
+                        </MudSimpleTable>
+                    }
+                }
+                    else
+                    {
+                        <MudAlert Severity="Severity.Info" Variant="Variant.Outlined" Class="mt-4">
+                            Waiting for the chairperson to present the detailed results.
+                        </MudAlert>
+                    }
+                </MudStack>
             </MudPaper>
         }
     }
@@ -172,6 +222,50 @@ else
                 {
                     <MudAlert Severity="Severity.Warning" Variant="Variant.Filled">
                         No candidate was elected.
+                    </MudAlert>
+                }
+
+                @{ var electionResults = electionResult.Results?.ToList() ?? new List<ElectionResult>(); }
+
+                @if (electionResults.Count > 0 && electionPresentation is not null)
+                {
+                    var totalVotes = electionResults.Sum(r => r.Votes);
+                    var labels = electionResults.Select(r => r.CandidateName).ToArray();
+                    var electionChartSeries = ResultsPresentationHelper.BuildElectionSeries(electionResults, electionPresentation.ValueMode);
+                    var valueLabel = ResultsPresentationHelper.ValueLabel(electionPresentation.ValueMode);
+
+                    if (electionPresentation.DisplayMode == ResultsDisplayMode.Diagram)
+                    {
+                        <MudChart ChartType="ChartType.Pie"
+                                  Class="mt-4"
+                                  ChartSeries="@electionChartSeries"
+                                  XAxisLabels="@labels" />
+                    }
+                    else
+                    {
+                        <MudSimpleTable Dense="true" Class="mt-4">
+                            <thead>
+                                <tr>
+                                    <th>Candidate</th>
+                                    <th class="text-end">@valueLabel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var candidateResult in electionResults)
+                                {
+                                    <tr>
+                                        <td>@candidateResult.CandidateName</td>
+                                        <td class="text-end">@ResultsPresentationHelper.FormatElectionValue(candidateResult.Votes, totalVotes, electionPresentation.ValueMode)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </MudSimpleTable>
+                    }
+                }
+                else
+                {
+                    <MudAlert Severity="Severity.Info" Variant="Variant.Outlined" Class="mt-4">
+                        Waiting for the chairperson to present the detailed results.
                     </MudAlert>
                 }
             </MudPaper>

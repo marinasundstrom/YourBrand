@@ -24,6 +24,11 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
     private Voting? voting;
     private Election? election;
 
+    private VotingResultsPresentationOptions? votingPresentation;
+    private ElectionResultsPresentationOptions? electionPresentation;
+
+    private static readonly string[] VoteLabels = new[] { "For", "Against", "Abstain" };
+
     HubConnection procedureHub = null!;
     IDiscussionsHub hubProxy = default!;
 
@@ -140,6 +145,8 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         currentMotion = null;
         voting = null;
         election = null;
+        votingPresentation = null;
+        electionPresentation = null;
 
         if (currentAgendaItem is null)
         {
@@ -182,6 +189,28 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
                 election = currentAgendaItem.Election ?? await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
             }
         }
+    }
+
+    public Task OnVotingResultsPresented(string agendaItemId, VotingResultsPresentationOptions options)
+    {
+        if (currentAgendaItem?.Id == agendaItemId)
+        {
+            votingPresentation = options;
+            InvokeAsync(StateHasChanged);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public Task OnElectionResultsPresented(string agendaItemId, ElectionResultsPresentationOptions options)
+    {
+        if (currentAgendaItem?.Id == agendaItemId)
+        {
+            electionPresentation = options;
+            InvokeAsync(StateHasChanged);
+        }
+
+        return Task.CompletedTask;
     }
 
     private async Task PromptToJoinIfNeeded()

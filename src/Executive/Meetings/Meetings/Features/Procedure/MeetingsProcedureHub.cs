@@ -18,28 +18,62 @@ public record ConnectionState(string TenantId, string OrganizationId, int Meetin
 public sealed class MeetingsProcedureHub(IMediator mediator, ISettableUserContext userContext, ISettableTenantContext tenantContext) : Hub<IMeetingsProcedureHubClient>, IMeetingsProcedureHub
 {
     private readonly static ConcurrentDictionary<string, ConnectionState> state = new ConcurrentDictionary<string, ConnectionState>();
+    private readonly static ConcurrentDictionary<int, PresentationState> presentationStates = new();
 
-    public override Task OnConnectedAsync()
+    private sealed class PresentationState
+    {
+        public string? VotingAgendaItemId { get; set; }
+        public VotingResultsPresentationOptions? VotingOptions { get; set; }
+        public string? ElectionAgendaItemId { get; set; }
+        public ElectionResultsPresentationOptions? ElectionOptions { get; set; }
+    }
+
+    public override async Task OnConnectedAsync()
     {
         var httpContext = Context.GetHttpContext();
+        int? meetingIdValue = null;
         if (httpContext is not null)
         {
             var tenantId = httpContext?.User?.FindFirst("tenant_id")?.Value;
+            string? organizationIdValue = null;
+            string? meetingIdString = null;
 
             if (httpContext.Request.Query.TryGetValue("organizationId", out var organizationId))
             {
-
+                organizationIdValue = organizationId.FirstOrDefault();
             }
 
             if (httpContext.Request.Query.TryGetValue("meetingId", out var meetingId))
             {
-                Groups.AddToGroupAsync(this.Context.ConnectionId, GetChannelName(meetingId.First()));
+                meetingIdString = meetingId.First();
+                await Groups.AddToGroupAsync(this.Context.ConnectionId, GetChannelName(meetingIdString));
+
+                if (int.TryParse(meetingIdString, out var parsedMeetingId))
+                {
+                    meetingIdValue = parsedMeetingId;
+                }
             }
 
-            state.TryAdd(Context.ConnectionId, new ConnectionState(tenantId, organizationId, int.Parse(meetingId)));
+            if (meetingIdString is not null && meetingIdValue is not null && organizationIdValue is not null)
+            {
+                state.TryAdd(Context.ConnectionId, new ConnectionState(tenantId, organizationIdValue, meetingIdValue.Value));
+            }
         }
 
-        return base.OnConnectedAsync();
+        if (meetingIdValue is not null && presentationStates.TryGetValue(meetingIdValue.Value, out var presentation))
+        {
+            if (presentation.VotingOptions is not null && presentation.VotingAgendaItemId is not null)
+            {
+                await Clients.Caller.OnVotingResultsPresented(presentation.VotingAgendaItemId, presentation.VotingOptions);
+            }
+
+            if (presentation.ElectionOptions is not null && presentation.ElectionAgendaItemId is not null)
+            {
+                await Clients.Caller.OnElectionResultsPresented(presentation.ElectionAgendaItemId, presentation.ElectionOptions);
+            }
+        }
+
+        await base.OnConnectedAsync();
     }
 
     public async Task ChangeAgendaItem(string agendaItemId)
@@ -130,6 +164,42 @@ public sealed class MeetingsProcedureHub(IMediator mediator, ISettableUserContex
 
         await mediator.Send(
             new ResetSpeakerClock(connectionState.OrganizationId, connectionState.MeetingId, agendaItemId));
+    }
+
+    public async Task PresentVotingResults(VotingResultsPresentationOptions options)
+    {
+        var connectionState = state[Context.ConnectionId];
+
+        SetContext(userContext, tenantContext, connectionState);
+
+        var result = await mediator.Send(new PresentVotingResults(connectionState.OrganizationId, connectionState.MeetingId, options));
+
+        if (result.IsFailure)
+        {
+            throw new HubException(result.Error.Message);
+        }
+
+        var presentation = presentationStates.GetOrAdd(connectionState.MeetingId, _ => new PresentationState());
+        presentation.VotingAgendaItemId = result.Value;
+        presentation.VotingOptions = options;
+    }
+
+    public async Task PresentElectionResults(ElectionResultsPresentationOptions options)
+    {
+        var connectionState = state[Context.ConnectionId];
+
+        SetContext(userContext, tenantContext, connectionState);
+
+        var result = await mediator.Send(new PresentElectionResults(connectionState.OrganizationId, connectionState.MeetingId, options));
+
+        if (result.IsFailure)
+        {
+            throw new HubException(result.Error.Message);
+        }
+
+        var presentation = presentationStates.GetOrAdd(connectionState.MeetingId, _ => new PresentationState());
+        presentation.ElectionAgendaItemId = result.Value;
+        presentation.ElectionOptions = options;
     }
 
     private void SetContext(ISettableUserContext userContext, ISettableTenantContext tenantContext, ConnectionState s)
