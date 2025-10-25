@@ -39,7 +39,7 @@ public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IReques
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (agendaItem.Type == AgendaItemType.CallToOrder)
+            if (agendaItem.Type is AgendaItemType.CallToOrder or AgendaItemType.ElectionOfChairperson)
             {
                 agendaItem.Complete();
             }
