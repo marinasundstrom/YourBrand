@@ -6,7 +6,7 @@ Has not been implemented by all services.
 
 Reference: Sales service
 
-Projects: 
+Projects:
 * Domain
 * Domain.Infrastructure
 * Domain.Persistence
@@ -14,6 +14,10 @@ Projects:
 * Identity*
 * SoftDelete*
 * Tenancy*
+
+Related reading:
+
+* [Agenda item orchestration](./agenda-items.md) – explains how agenda item actions, handlers, and minute creation work together in the meetings domain.
 
 ## Domain objects
 
