@@ -1,8 +1,10 @@
 @page "/meetings/{MeetingId:int}/control"
+@using Microsoft.AspNetCore.SignalR
 @using Microsoft.AspNetCore.SignalR.Client
 @using System
 @using System.Linq
 @using YourBrand.Portal.Services
+@using YourBrand.Meetings.Procedure
 @inject IStringLocalizer<DisplayPage> T
 @inject IMeetingsClient MeetingsClient
 @inject IChairmanClient ChairmanClient
@@ -133,6 +135,190 @@ else
                             </MudGrid>
 
                             <MudDivider Class="mt-4" />
+
+                            @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Voting
+                                && (currentAgendaItem?.IsVoteCompleted == true || currentAgendaItem?.State == AgendaItemState.Completed))
+                            {
+                                var voteResult = voting ?? currentAgendaItem?.Voting;
+
+                                if (voteResult is not null)
+                                {
+                                    var canPresentVote = voteResult.Breakdown is not null;
+
+                                    <MudPaper Class="pa-4 mt-4" Elevation="1">
+                                        <MudStack Spacing="2">
+                                            <MudText Typo="Typo.subtitle1" Class="mb-0">Vote result</MudText>
+
+                                            <MudAlert Severity="@(voteResult.HasPassed ? Severity.Success : Severity.Error)" Variant="Variant.Filled">
+                                                <MudText Typo="Typo.subtitle1" Class="mb-0">
+                                                    @(voteResult.HasPassed ? "The motion passed." : "The motion did not pass.")
+                                                </MudText>
+                                            </MudAlert>
+
+                                            <MudStack Direction="Row" Spacing="1" AlignItems="AlignItems.Center">
+                                                <MudRadioGroup T="ResultsDisplayMode" Orientation="Orientation.Horizontal" @bind-SelectedOption="votingDisplayMode">
+                                                    <MudRadio T="ResultsDisplayMode" Option="ResultsDisplayMode.Diagram">Diagram</MudRadio>
+                                                    <MudRadio T="ResultsDisplayMode" Option="ResultsDisplayMode.Numbers">Numbers</MudRadio>
+                                                </MudRadioGroup>
+
+                                                <MudRadioGroup T="ResultsValueMode" Orientation="Orientation.Horizontal" @bind-SelectedOption="votingValueMode">
+                                                    <MudRadio T="ResultsValueMode" Option="ResultsValueMode.Votes">Votes</MudRadio>
+                                                    <MudRadio T="ResultsValueMode" Option="ResultsValueMode.Percent">Percent</MudRadio>
+                                                </MudRadioGroup>
+                                            </MudStack>
+
+                                            @if (canPresentVote)
+                                            {
+                                                var valueLabel = ResultsPresentationHelper.ValueLabel(votingValueMode);
+                                                var voteChartSeries = ResultsPresentationHelper.BuildVoteSeries(voteResult.Breakdown, votingValueMode);
+
+                                                @if (votingDisplayMode == ResultsDisplayMode.Diagram)
+                                                {
+                                                    <MudChart ChartType="ChartType.Pie"
+                                                              Class="mt-2"
+                                                              ChartSeries="@voteChartSeries"
+                                                              XAxisLabels="@VoteLabels" />
+                                                }
+                                                else
+                                                {
+                                                    <MudSimpleTable Dense="true" Class="mt-2">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Option</th>
+                                                                <th class="text-end">@valueLabel</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>For</td>
+                                                                <td class="text-end">@ResultsPresentationHelper.FormatVoteValue(voteResult.Breakdown.ForVotes, voteResult.Breakdown, votingValueMode)</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Against</td>
+                                                                <td class="text-end">@ResultsPresentationHelper.FormatVoteValue(voteResult.Breakdown.AgainstVotes, voteResult.Breakdown, votingValueMode)</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Abstain</td>
+                                                                <td class="text-end">@ResultsPresentationHelper.FormatVoteValue(voteResult.Breakdown.AbstainVotes, voteResult.Breakdown, votingValueMode)</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </MudSimpleTable>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">
+                                                    Results are not yet tallied.
+                                                </MudAlert>
+                                            }
+
+                                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!canPresentVote)" OnClick="PresentVotingResultsAsync">
+                                                Present results
+                                            </MudButton>
+                                        </MudStack>
+                                    </MudPaper>
+                                }
+                            }
+
+                            @if (currentAgendaItem?.Type.Id == (int)AgendaItemTypeEnum.Election
+                                && (currentAgendaItem?.State == AgendaItemState.Completed || currentAgendaItem?.Election?.ElectedCandidate is not null))
+                            {
+                                var electionResult = election ?? currentAgendaItem?.Election;
+
+                                if (electionResult is not null)
+                                {
+                                    var hasWinner = electionResult.ElectedCandidate is not null;
+                                    var electionResults = electionResult.Results?.ToList() ?? new List<ElectionResult>();
+                                    var canPresentElection = electionResults.Count > 0;
+
+                                    <MudPaper Class="pa-4 mt-4" Elevation="1">
+                                        <MudStack Spacing="2">
+                                            <MudText Typo="Typo.subtitle1" Class="mb-0">Election result</MudText>
+
+                                            <MudAlert Severity="@(hasWinner ? Severity.Success : Severity.Warning)" Variant="Variant.Filled">
+                                                <MudStack Spacing="1">
+                                                    @if (electionResult.MeetingFunction?.Name is { } functionName)
+                                                    {
+                                                        <MudText Typo="Typo.body2" Class="mb-0">Position: @functionName</MudText>
+                                                    }
+
+                                                    @if (hasWinner)
+                                                    {
+                                                        <MudText Typo="Typo.h6" Class="mb-0">@electionResult.ElectedCandidate!.Name</MudText>
+
+                                                        @if (!string.IsNullOrWhiteSpace(electionResult.ElectedCandidate!.Statement))
+                                                        {
+                                                            <MudText Typo="Typo.body2">@electionResult.ElectedCandidate!.Statement</MudText>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudText Typo="Typo.body2" Class="mb-0">No candidate was elected.</MudText>
+                                                    }
+                                                </MudStack>
+                                            </MudAlert>
+
+                                            <MudStack Direction="Row" Spacing="1" AlignItems="AlignItems.Center">
+                                                <MudRadioGroup T="ResultsDisplayMode" Orientation="Orientation.Horizontal" @bind-SelectedOption="electionDisplayMode">
+                                                    <MudRadio T="ResultsDisplayMode" Option="ResultsDisplayMode.Diagram">Diagram</MudRadio>
+                                                    <MudRadio T="ResultsDisplayMode" Option="ResultsDisplayMode.Numbers">Numbers</MudRadio>
+                                                </MudRadioGroup>
+
+                                                <MudRadioGroup T="ResultsValueMode" Orientation="Orientation.Horizontal" @bind-SelectedOption="electionValueMode">
+                                                    <MudRadio T="ResultsValueMode" Option="ResultsValueMode.Votes">Votes</MudRadio>
+                                                    <MudRadio T="ResultsValueMode" Option="ResultsValueMode.Percent">Percent</MudRadio>
+                                                </MudRadioGroup>
+                                            </MudStack>
+
+                                            @if (canPresentElection)
+                                            {
+                                                var totalVotes = electionResults.Sum(r => r.Votes);
+                                                var labels = electionResults.Select(r => r.CandidateName).ToArray();
+                                                var electionChartSeries = ResultsPresentationHelper.BuildElectionSeries(electionResults, electionValueMode);
+                                                var valueLabel = ResultsPresentationHelper.ValueLabel(electionValueMode);
+
+                                                @if (electionDisplayMode == ResultsDisplayMode.Diagram)
+                                                {
+                                                    <MudChart ChartType="ChartType.Pie"
+                                                              Class="mt-2"
+                                                              ChartSeries="@electionChartSeries"
+                                                              XAxisLabels="@labels" />
+                                                }
+                                                else
+                                                {
+                                                    <MudSimpleTable Dense="true" Class="mt-2">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Candidate</th>
+                                                                <th class="text-end">@valueLabel</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var candidateResult in electionResults)
+                                                            {
+                                                                <tr>
+                                                                    <td>@candidateResult.CandidateName</td>
+                                                                    <td class="text-end">@ResultsPresentationHelper.FormatElectionValue(candidateResult.Votes, totalVotes, electionValueMode)</td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </MudSimpleTable>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">
+                                                    Results are not yet tallied.
+                                                </MudAlert>
+                                            }
+
+                                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!canPresentElection)" OnClick="PresentElectionResultsAsync">
+                                                Present results
+                                            </MudButton>
+                                        </MudStack>
+                                    </MudPaper>
+                                }
+                            }
                         }
                         else
                         {
@@ -349,6 +535,13 @@ else
 
     HubConnection procedureHub = null!;
     IDiscussionsHub hubProxy = default!;
+    IMeetingsProcedureHub meetingsHubProxy = default!;
+
+    private ResultsDisplayMode votingDisplayMode = ResultsDisplayMode.Diagram;
+    private ResultsValueMode votingValueMode = ResultsValueMode.Votes;
+    private ResultsDisplayMode electionDisplayMode = ResultsDisplayMode.Diagram;
+    private ResultsValueMode electionValueMode = ResultsValueMode.Votes;
+    private static readonly string[] VoteLabels = new[] { "For", "Against", "Abstain" };
 
 
     protected override async Task OnInitializedAsync()
@@ -373,6 +566,7 @@ else
         }).WithAutomaticReconnect().Build();
 
         hubProxy = procedureHub.ServerProxy<IDiscussionsHub>();
+        meetingsHubProxy = procedureHub.ServerProxy<IMeetingsProcedureHub>();
         _ = procedureHub.ClientRegistration<IDiscussionsHubClient>(this);
 
         procedureHub.Closed += (error) =>
@@ -414,6 +608,46 @@ else
         };
 
         await procedureHub.StartAsync();
+    }
+
+    private async Task PresentVotingResultsAsync()
+    {
+        if (meetingsHubProxy is null)
+        {
+            return;
+        }
+
+        var options = new VotingResultsPresentationOptions(votingDisplayMode, votingValueMode);
+
+        try
+        {
+            await meetingsHubProxy.PresentVotingResults(options);
+            Snackbar.Add("Vote results presented.", Severity.Success);
+        }
+        catch (HubException ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task PresentElectionResultsAsync()
+    {
+        if (meetingsHubProxy is null)
+        {
+            return;
+        }
+
+        var options = new ElectionResultsPresentationOptions(electionDisplayMode, electionValueMode);
+
+        try
+        {
+            await meetingsHubProxy.PresentElectionResults(options);
+            Snackbar.Add("Election results presented.", Severity.Success);
+        }
+        catch (HubException ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
     }
 
     private async Task RefreshDiscussionAsync()
@@ -567,6 +801,8 @@ else
         lastItem = agenda.Items.OrderBy(ai => ai.Order).LastOrDefault()?.Id == currentAgendaItem?.Id;
 
         currentMotion = null;
+        voting = null;
+        election = null;
 
         if (currentAgendaItem is not null)
         {
@@ -584,15 +820,30 @@ else
             {
                 await RefreshDiscussionAsync();
             }
-            else if(currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Voting)
+            
+            var isVotingItem = currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting;
+            var isElectionItem = currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Election;
+
+            if(currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Voting)
             {
-                if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting)
+                if(isVotingItem)
                 {
                     voting = await VotingClient.GetVotingAsync(organization.Id, MeetingId);
                 }
-                else if(currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Election) 
+                else if(isElectionItem)
                 {
                     election = await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
+                }
+            }
+            else
+            {
+                if(isVotingItem && (currentAgendaItem.IsVoteCompleted || currentAgendaItem.State == AgendaItemState.Completed))
+                {
+                    voting = currentAgendaItem.Voting ?? await VotingClient.GetVotingAsync(organization.Id, MeetingId);
+                }
+                else if(isElectionItem && (currentAgendaItem.State == AgendaItemState.Completed || currentAgendaItem.Election?.ElectedCandidate is not null))
+                {
+                    election = currentAgendaItem.Election ?? await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
                 }
             }
         }

@@ -24,6 +24,11 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
     private Voting? voting;
     private Election? election;
 
+    private VotingResultsPresentationOptions? votingPresentation;
+    private ElectionResultsPresentationOptions? electionPresentation;
+
+    private static readonly string[] VoteLabels = new[] { "For", "Against", "Abstain" };
+
     HubConnection procedureHub = null!;
     IDiscussionsHub hubProxy = default!;
 
@@ -138,6 +143,16 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         currentAgendaItem = await MeetingsClient.GetCurrentAgendaItemAsync(organization.Id, MeetingId);
 
         currentMotion = null;
+        voting = null;
+        election = null;
+        votingPresentation = null;
+        electionPresentation = null;
+
+        if (currentAgendaItem is null)
+        {
+            discussion = null;
+            return;
+        }
 
         if (currentAgendaItem.MotionId is not null)
         {
@@ -148,17 +163,54 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         {
             discussion = await DiscussionsClient.GetDiscussionAsync(organization.Id, MeetingId);
         }
-        else if (currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Voting)
+
+        var isVotingItem = currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting;
+        var isElectionItem = currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Election;
+
+        if (currentAgendaItem.State == AgendaItemState.Active && currentAgendaItem.Phase == AgendaItemPhase.Voting)
         {
-            if (currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting)
+            if (isVotingItem)
             {
                 voting = await VotingClient.GetVotingAsync(organization.Id, MeetingId);
             }
-            else if (currentAgendaItem.Type.Id == (int)AgendaItemTypeEnum.Election)
+            else if (isElectionItem)
             {
                 election = await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
             }
         }
+        else
+        {
+            if (isVotingItem && (currentAgendaItem.IsVoteCompleted || currentAgendaItem.State == AgendaItemState.Completed))
+            {
+                voting = currentAgendaItem.Voting ?? await VotingClient.GetVotingAsync(organization.Id, MeetingId);
+            }
+            else if (isElectionItem && (currentAgendaItem.State == AgendaItemState.Completed || currentAgendaItem.Election?.ElectedCandidate is not null))
+            {
+                election = currentAgendaItem.Election ?? await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
+            }
+        }
+    }
+
+    public Task OnVotingResultsPresented(string agendaItemId, VotingResultsPresentationOptions options)
+    {
+        if (currentAgendaItem?.Id == agendaItemId)
+        {
+            votingPresentation = options;
+            InvokeAsync(StateHasChanged);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    public Task OnElectionResultsPresented(string agendaItemId, ElectionResultsPresentationOptions options)
+    {
+        if (currentAgendaItem?.Id == agendaItemId)
+        {
+            electionPresentation = options;
+            InvokeAsync(StateHasChanged);
+        }
+
+        return Task.CompletedTask;
     }
 
     private async Task PromptToJoinIfNeeded()
@@ -217,6 +269,8 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         if (meeting.State == MeetingState.Scheduled || meeting.State == MeetingState.Canceled || meeting.State == MeetingState.Completed)
         {
             currentAgendaItem = null;
+            voting = null;
+            election = null;
         }
 
         StateHasChanged();
@@ -229,14 +283,18 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         StateHasChanged();
     }
 
-    public Task OnVotingStatusChanged(VotingState state)
+    public async Task OnVotingStatusChanged(VotingState state)
     {
-        return Task.CompletedTask;
+        await LoadAgendaItem();
+
+        await InvokeAsync(StateHasChanged);
     }
 
-    public Task OnElectionStatusChanged(ElectionState state)
+    public async Task OnElectionStatusChanged(ElectionState state)
     {
-        return Task.CompletedTask;
+        await LoadAgendaItem();
+
+        await InvokeAsync(StateHasChanged);
     }
 
     public Task OnDiscussionStatusChanged(int status)

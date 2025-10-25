@@ -4731,6 +4731,26 @@ components:
           $ref: '#/components/schemas/VotingState'
         hasPassed:
           type: boolean
+        breakdown:
+          nullable: true
+          $ref: '#/components/schemas/VoteBreakdown'
+    VoteBreakdown:
+      type: object
+      additionalProperties: false
+      properties:
+        forVotes:
+          type: integer
+          format: int32
+        againstVotes:
+          type: integer
+          format: int32
+        abstainVotes:
+          type: integer
+          format: int32
+      required:
+      - forVotes
+      - againstVotes
+      - abstainVotes
     VotingState:
       type: integer
       description: ''
@@ -4765,6 +4785,10 @@ components:
         meetingFunction:
           nullable: true
           $ref: '#/components/schemas/MeetingFunction'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ElectionResult'
     ElectionState:
       type: integer
       description: ''
@@ -4794,6 +4818,21 @@ components:
         statement:
           type: string
           nullable: true
+    ElectionResult:
+      type: object
+      additionalProperties: false
+      properties:
+        candidateId:
+          type: string
+        candidateName:
+          type: string
+        votes:
+          type: integer
+          format: int32
+      required:
+      - candidateId
+      - candidateName
+      - votes
     PagedResultOfMemberRole:
       type: object
       additionalProperties: false

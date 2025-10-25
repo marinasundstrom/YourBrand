@@ -52,6 +52,12 @@ public static partial class Errors
 
         public static readonly Error OnlyChairpersonCanEndVoting = new Error(nameof(OnlyChairpersonCanEndVoting), "Only the Chairperson can end a voting session.", string.Empty);
 
+        public static readonly Error OnlyChairpersonCanPresentResults = new Error(nameof(OnlyChairpersonCanPresentResults), "Only the chairperson can present results.", string.Empty);
+
+        public static readonly Error VotingResultsNotReady = new Error(nameof(VotingResultsNotReady), "Voting results are not ready to present.", string.Empty);
+
+        public static readonly Error ElectionResultsNotReady = new Error(nameof(ElectionResultsNotReady), "Election results are not ready to present.", string.Empty);
+
         public static readonly Error OnlyChairpersonCanManageSpeakerQueue = new Error(nameof(OnlyChairpersonCanManageSpeakerQueue), "Only the chairperson can manage the speaker queue.", string.Empty);
 
         public static readonly Error SpeakingTimeNotConfigured = new Error(nameof(SpeakingTimeNotConfigured), "Speaking time limit has not been configured for the discussion.", string.Empty);

@@ -16,6 +16,13 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
     Agenda? agenda;
     AgendaItem? agendaItem;
     Motion? currentMotion;
+    Voting? voting;
+    Election? election;
+
+    private VotingResultsPresentationOptions? votingPresentation;
+    private ElectionResultsPresentationOptions? electionPresentation;
+
+    private static readonly string[] VoteLabels = new[] { "For", "Against", "Abstain" };
 
     HubConnection hubConnection = null!;
     IMeetingsProcedureHub hubProxy = default!;
@@ -146,10 +153,45 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         agendaItem = await MeetingsClient.GetCurrentAgendaItemAsync(organization.Id, MeetingId);
 
         currentMotion = null;
+        voting = null;
+        election = null;
+        votingPresentation = null;
+        electionPresentation = null;
+
+        if (agendaItem is null)
+        {
+            return;
+        }
 
         if (agendaItem.MotionId is not null)
         {
             currentMotion = await MotionsClient.GetMotionByIdAsync(organization.Id, agendaItem.MotionId.GetValueOrDefault());
+        }
+
+        var isVotingItem = agendaItem.Type.Id == (int)AgendaItemTypeEnum.Voting;
+        var isElectionItem = agendaItem.Type.Id == (int)AgendaItemTypeEnum.Election;
+
+        if (agendaItem.State == AgendaItemState.Active && agendaItem.Phase == AgendaItemPhase.Voting)
+        {
+            if (isVotingItem)
+            {
+                voting = await VotingClient.GetVotingAsync(organization.Id, MeetingId);
+            }
+            else if (isElectionItem)
+            {
+                election = await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
+            }
+        }
+        else
+        {
+            if (isVotingItem && (agendaItem.IsVoteCompleted || agendaItem.State == AgendaItemState.Completed))
+            {
+                voting = agendaItem.Voting ?? await VotingClient.GetVotingAsync(organization.Id, MeetingId);
+            }
+            else if (isElectionItem && (agendaItem.State == AgendaItemState.Completed || agendaItem.Election?.ElectedCandidate is not null))
+            {
+                election = agendaItem.Election ?? await ElectionsClient.GetElectionAsync(organization.Id, MeetingId);
+            }
         }
     }
 
@@ -165,6 +207,8 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         if (state == MeetingState.Scheduled || state == MeetingState.Canceled || state == MeetingState.Completed)
         {
             agendaItem = null;
+            voting = null;
+            election = null;
         }
         else if (meeting?.CurrentAgendaItemIndex is not null)
         {
@@ -206,48 +250,40 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
         StateHasChanged();
     }
 
-    public Task OnVotingStatusChanged(VotingState state)
+    public async Task OnVotingStatusChanged(VotingState state)
     {
-        if (state == VotingState.Voting)
+        await LoadAgendaItem();
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public Task OnVotingResultsPresented(string agendaItemId, VotingResultsPresentationOptions options)
+    {
+        if (this.agendaItem?.Id == agendaItemId)
         {
-            Console.WriteLine("Voting");
-        }
-        else if (state == VotingState.RedoRequired)
-        {
-            Console.WriteLine("Voting redo required");
-        }
-        else if (state == VotingState.ResultReady)
-        {
-            Console.WriteLine("Voting result ready");
-        }
-        else if (state == VotingState.Completed)
-        {
-            Console.WriteLine("Voting completed");
+            votingPresentation = options;
+            InvokeAsync(StateHasChanged);
         }
 
         return Task.CompletedTask;
     }
 
-    public Task OnElectionStatusChanged(ElectionState state)
+    public Task OnElectionResultsPresented(string agendaItemId, ElectionResultsPresentationOptions options)
     {
-        if (state == ElectionState.Voting)
+        if (this.agendaItem?.Id == agendaItemId)
         {
-            Console.WriteLine("Election");
-        }
-        else if (state == ElectionState.RedoRequired)
-        {
-            Console.WriteLine("Election redo required");
-        }
-        else if (state == ElectionState.ResultReady)
-        {
-            Console.WriteLine("Election result ready");
-        }
-        else if (state == ElectionState.Completed)
-        {
-            Console.WriteLine("Election completed");
+            electionPresentation = options;
+            InvokeAsync(StateHasChanged);
         }
 
         return Task.CompletedTask;
+    }
+
+    public async Task OnElectionStatusChanged(ElectionState state)
+    {
+        await LoadAgendaItem();
+
+        await InvokeAsync(StateHasChanged);
     }
 
     public Task OnDiscussionStatusChanged(int status)
