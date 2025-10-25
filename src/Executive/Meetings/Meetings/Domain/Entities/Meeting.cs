@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
+using YourBrand.Meetings.Domain.Events;
 using YourBrand.Meetings.Domain.Functions;
 using YourBrand.Meetings.Domain.ValueObjects;
 using YourBrand.Tenancy;
@@ -533,6 +534,11 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
     private void RaiseAgendaItemChanged(string? agendaItemId)
     {
         AddDomainEvent(new MeetingAgendaItemChanged(TenantId, OrganizationId, Id, agendaItemId));
+    }
+
+    internal void NotifyAgendaItemStateChanged(AgendaItem agendaItem)
+    {
+        AddDomainEvent(new MeetingAgendaItemStateChanged(TenantId, OrganizationId, Id, agendaItem.Id, agendaItem.State, agendaItem.Phase));
     }
 
     public bool IsAttendeeAllowedToSpeak(MeetingAttendee attendee)
