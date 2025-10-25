@@ -39,14 +39,21 @@ public sealed record CompleteAgendaItem(string OrganizationId, int Id) : IReques
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            var chairFunction = meeting.GetChairpersonFunction(attendee);
-
-            if (chairFunction is null)
+            if (agendaItem.Type == AgendaItemType.CallToOrder)
             {
-                return Errors.Meetings.OnlyChairpersonCanCompleteAgendaItem;
+                agendaItem.Complete();
             }
+            else
+            {
+                var chairFunction = meeting.GetChairpersonFunction(attendee);
 
-            chairFunction.CompleteAgendaItem(agendaItem);
+                if (chairFunction is null)
+                {
+                    return Errors.Meetings.OnlyChairpersonCanCompleteAgendaItem;
+                }
+
+                chairFunction.CompleteAgendaItem(agendaItem);
+            }
 
             context.Meetings.Update(meeting);
 
