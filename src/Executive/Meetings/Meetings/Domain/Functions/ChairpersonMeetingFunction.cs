@@ -63,9 +63,17 @@ public sealed class ChairpersonMeetingFunction
         _meeting.NotifyAgendaItemStateChanged(agendaItem);
     }
 
-    public void StartElection(AgendaItem agendaItem) => agendaItem.StartElection();
+    public void StartElection(AgendaItem agendaItem)
+    {
+        agendaItem.StartElection();
+        _meeting.NotifyAgendaItemStateChanged(agendaItem);
+    }
 
-    public void EndElection(AgendaItem agendaItem) => agendaItem.EndElection();
+    public void EndElection(AgendaItem agendaItem)
+    {
+        agendaItem.EndElection();
+        _meeting.NotifyAgendaItemStateChanged(agendaItem);
+    }
 
     public void SetDiscussionSpeakingTime(AgendaItem agendaItem, TimeSpan? speakingTimeLimit)
     {
