@@ -40,7 +40,9 @@ public sealed record ResetSpeakerClock(string OrganizationId, int Id, string Age
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanManageSpeakerQueue;
             }
@@ -62,7 +64,7 @@ public sealed record ResetSpeakerClock(string OrganizationId, int Id, string Age
                 return Errors.Meetings.NoCurrentSpeaker;
             }
 
-            agendaItem.Discussion.ResetCurrentSpeakerClock();
+            chairFunction.ResetSpeakerClock(agendaItem);
 
             context.Meetings.Update(meeting);
 

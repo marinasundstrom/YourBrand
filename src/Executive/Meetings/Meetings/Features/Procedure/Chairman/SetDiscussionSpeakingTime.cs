@@ -36,7 +36,9 @@ public sealed record SetDiscussionSpeakingTime(string OrganizationId, int Id, st
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanManageSpeakerQueue;
             }
@@ -48,20 +50,13 @@ public sealed record SetDiscussionSpeakingTime(string OrganizationId, int Id, st
                 return Errors.Meetings.AgendaItemNotFound;
             }
 
-            agendaItem.Discussion ??= new Discussion
-            {
-                OrganizationId = meeting.OrganizationId,
-                TenantId = meeting.TenantId,
-                AgendaItemId = agendaItem.Id
-            };
-
             TimeSpan? speakingTime = request.SpeakingTimeLimitSeconds is null
                 ? null
                 : TimeSpan.FromSeconds(request.SpeakingTimeLimitSeconds.Value);
 
             try
             {
-                agendaItem.Discussion.SetSpeakingTimeLimit(speakingTime);
+                chairFunction.SetDiscussionSpeakingTime(agendaItem, speakingTime);
             }
             catch (InvalidOperationException)
             {

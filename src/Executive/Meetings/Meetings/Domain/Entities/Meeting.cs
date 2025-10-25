@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using YourBrand.Auditability;
 using YourBrand.Domain;
 using YourBrand.Identity;
+using YourBrand.Meetings.Domain.Functions;
 using YourBrand.Meetings.Domain.ValueObjects;
 using YourBrand.Tenancy;
 
@@ -609,6 +610,9 @@ public class Meeting : AggregateRoot<MeetingId>, IAuditableEntity<MeetingId>, IH
 
         return false;
     }
+
+    public ChairpersonMeetingFunction? GetChairpersonFunction(MeetingAttendee attendee) =>
+        CanAttendeeActAsChair(attendee) ? new ChairpersonMeetingFunction(this, attendee) : null;
 
     public void AssignFunctionToAttendee(MeetingAttendee attendee, MeetingFunction function)
     {

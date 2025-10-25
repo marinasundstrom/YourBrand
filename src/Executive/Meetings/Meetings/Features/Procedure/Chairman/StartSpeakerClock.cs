@@ -37,7 +37,9 @@ public sealed record StartSpeakerClock(string OrganizationId, int Id, string Age
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanManageSpeakerQueue;
             }
@@ -66,13 +68,11 @@ public sealed record StartSpeakerClock(string OrganizationId, int Id, string Age
 
             var now = DateTimeOffset.UtcNow;
 
-            agendaItem.Discussion.StartCurrentSpeakerClock(now);
+            var snapshot = chairFunction.StartSpeakerClock(agendaItem, now);
 
             context.Meetings.Update(meeting);
 
             await context.SaveChangesAsync(cancellationToken);
-
-            var snapshot = agendaItem.Discussion.GetCurrentSpeakerClockSnapshot(now);
             var currentSpeakerId = agendaItem.Discussion.CurrentSpeaker!.Id.Value;
             var elapsedSeconds = (int)Math.Max(0, Math.Round(snapshot.Elapsed.TotalSeconds));
             var startedAtUtc = snapshot.StartedAtUtc ?? now;

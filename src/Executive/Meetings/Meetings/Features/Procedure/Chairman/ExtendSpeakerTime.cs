@@ -43,7 +43,9 @@ public sealed record ExtendSpeakerTime(string OrganizationId, int Id, string Age
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanManageSpeakerQueue;
             }
@@ -62,7 +64,7 @@ public sealed record ExtendSpeakerTime(string OrganizationId, int Id, string Age
 
             try
             {
-                agendaItem.Discussion.ExtendSpeakerTime(request.SpeakerRequestId, TimeSpan.FromSeconds(request.AdditionalSeconds));
+                chairFunction.ExtendSpeakerTime(agendaItem, request.SpeakerRequestId, TimeSpan.FromSeconds(request.AdditionalSeconds));
             }
             catch (InvalidOperationException)
             {

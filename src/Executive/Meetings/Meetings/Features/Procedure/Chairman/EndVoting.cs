@@ -40,12 +40,14 @@ public sealed record EndVoting(string OrganizationId, int Id) : IRequest<Result>
                 return Errors.Meetings.NoActiveAgendaItem;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanEndVoting;
             }
 
-            agendaItem.EndVoting();
+            chairFunction.EndVoting(agendaItem);
 
             context.Meetings.Update(meeting);
 

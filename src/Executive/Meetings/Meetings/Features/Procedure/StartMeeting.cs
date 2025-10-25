@@ -29,12 +29,14 @@ public sealed record StartMeeting(string OrganizationId, int Id) : IRequest<Resu
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanStartTheMeeting;
             }
 
-            meeting.StartMeeting();
+            chairFunction.StartMeeting();
 
             context.Meetings.Update(meeting);
 

@@ -41,12 +41,14 @@ public record ResetMeetingProcedure(string OrganizationId, int Id) : IRequest<Re
                 return Errors.Meetings.YouAreNotAttendeeOfMeeting;
             }
 
-            if (!meeting.CanAttendeeActAsChair(attendee))
+            var chairFunction = meeting.GetChairpersonFunction(attendee);
+
+            if (chairFunction is null)
             {
                 return Errors.Meetings.OnlyChairpersonCanResetTheMeetingProcedure;
             }
 
-            meeting.ResetMeetingProgress();
+            chairFunction.ResetMeetingProgress();
 
             context.Meetings.Update(meeting);
 
