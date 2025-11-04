@@ -61,6 +61,12 @@ public class SuppliersController(IMediator mediator) : ControllerBase
 
         return await mediator.Send(new CreateSupplierOrder(supplierId, dto.OrderNumber, dto.OrderedAt, dto.ExpectedDelivery, lines), cancellationToken);
     }
+
+    [HttpPut("{supplierId}/Orders/{orderId}/ExpectedDelivery")]
+    public async Task<SupplierOrderDto> UpdateSupplierOrderExpectedDelivery(string supplierId, string orderId, UpdateSupplierOrderExpectedDeliveryDto dto, CancellationToken cancellationToken)
+    {
+        return await mediator.Send(new UpdateSupplierOrderExpectedDelivery(supplierId, orderId, dto.ExpectedDelivery), cancellationToken);
+    }
 }
 
 public record CreateSupplierDto(string Id, string Name);
@@ -70,3 +76,5 @@ public record AddSupplierItemDto(string ItemId, string? SupplierItemId, decimal?
 public record CreateSupplierOrderDto(string OrderNumber, DateTime OrderedAt, DateTime? ExpectedDelivery, IReadOnlyCollection<CreateSupplierOrderLineDto> Lines);
 
 public record CreateSupplierOrderLineDto(string SupplierItemId, int ExpectedQuantity, DateTime? ExpectedOn);
+
+public record UpdateSupplierOrderExpectedDeliveryDto(DateTime? ExpectedDelivery);
