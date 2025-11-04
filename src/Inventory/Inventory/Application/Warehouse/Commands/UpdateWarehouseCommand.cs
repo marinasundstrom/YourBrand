@@ -12,12 +12,25 @@ public record UpdateWarehouseCommand(string Id, string Name, string SiteId) : IR
     {
         public async Task Handle(UpdateWarehouseCommand request, CancellationToken cancellationToken)
         {
-            var warehouse = await context.Warehouses.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
+            var warehouse = await context.Warehouses
+                .Include(x => x.Site)
+                .FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (warehouse is null) throw new Exception();
 
-            warehouse.Name = request.Name;
-            warehouse.SiteId = request.SiteId;
+            warehouse.Rename(request.Name);
+
+            if (warehouse.SiteId != request.SiteId)
+            {
+                var site = await context.Sites.FirstOrDefaultAsync(x => x.Id == request.SiteId, cancellationToken);
+
+                if (site is null)
+                {
+                    throw new InvalidOperationException($"Site '{request.SiteId}' was not found.");
+                }
+
+                warehouse.ChangeSite(site);
+            }
 
             await context.SaveChangesAsync(cancellationToken);
 
