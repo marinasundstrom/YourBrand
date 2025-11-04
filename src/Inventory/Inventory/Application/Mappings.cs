@@ -5,6 +5,7 @@ using YourBrand.Inventory.Application.Items.Groups;
 using YourBrand.Inventory.Application.Sites;
 using YourBrand.Inventory.Application.Warehouses;
 using YourBrand.Inventory.Application.Warehouses.Items;
+using YourBrand.Inventory.Application.Warehouses.Shipments;
 using YourBrand.Inventory.Application.Suppliers;
 using YourBrand.Inventory.Domain.Entities;
 
@@ -106,5 +107,28 @@ public static class Mappings
             line.QuantityReceived,
             line.QuantityOutstanding,
             line.ExpectedOn);
+    }
+
+    public static ShipmentDto ToDto(this Shipment shipment)
+    {
+        return new ShipmentDto(
+            shipment.Id,
+            shipment.OrderNo,
+            shipment.Warehouse.ToDto(),
+            shipment.Destination,
+            shipment.Service,
+            shipment.Created,
+            shipment.ShippedAt,
+            shipment.Items.Select(x => x.ToDto()).ToList());
+    }
+
+    public static ShipmentItemDto ToDto(this ShipmentItem shipmentItem)
+    {
+        return new ShipmentItemDto(
+            shipmentItem.Id,
+            shipmentItem.WarehouseItem.ToDto(),
+            shipmentItem.Quantity,
+            shipmentItem.IsShipped,
+            shipmentItem.ShippedAt);
     }
 }
