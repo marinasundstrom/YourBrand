@@ -33,14 +33,14 @@ public class SeedData
                 var site = new Site("main-site", "Main Site");
                 context.Sites.Add(site);
 
-                var warehouse = new Warehouse("main-warehouse", "Main Warehouse", site.Id);
+                var warehouse = new Warehouse("main-warehouse", "Main Warehouse", site);
                 context.Warehouses.Add(warehouse);
 
                 await context.SaveChangesAsync();
 
-                var wt1 = new WarehouseItem(t1.Id, warehouse.Id, "1-2-3", 100);
-                var wt2 = new WarehouseItem(t2.Id, warehouse.Id, "1-2-4", 100);
-                var wt3 = new WarehouseItem(t3.Id, warehouse.Id, "1-2-5", 100);
+                var wt1 = new WarehouseItem(t1, warehouse, "1-2-3", 100);
+                var wt2 = new WarehouseItem(t2, warehouse, "1-2-4", 100);
+                var wt3 = new WarehouseItem(t3, warehouse, "1-2-5", 100);
 
                 context.WarehouseItems.Add(wt1);
                 context.WarehouseItems.Add(wt2);
@@ -51,13 +51,13 @@ public class SeedData
                 var shop1site = new Site("shop-1", "Shop 1");
                 context.Sites.Add(shop1site);
 
-                var shop1warehouse = new Warehouse("shop-1-main", "Main", site.Id);
+                var shop1warehouse = new Warehouse("shop-1-main", "Main", shop1site);
                 context.Warehouses.Add(shop1warehouse);
 
                 var shop2site = new Site("shop-2", "Shop 2");
                 context.Sites.Add(shop2site);
 
-                var shop2warehouse = new Warehouse("shop-2-main", "Main", site.Id);
+                var shop2warehouse = new Warehouse("shop-2-main", "Main", shop2site);
                 context.Warehouses.Add(shop2warehouse);
 
                 await context.SaveChangesAsync();

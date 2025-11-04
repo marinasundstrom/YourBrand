@@ -10,4 +10,4 @@ public record ItemDto(
     ItemGroupDto Group,
     string Unit,
     int QuantityAvailable,
-    bool? Discontinued);
+    bool Discontinued);

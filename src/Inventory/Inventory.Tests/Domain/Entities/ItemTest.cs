@@ -1,5 +1,10 @@
 ﻿using System;
 
+using Shouldly;
+using Xunit;
+
+using YourBrand.Inventory.Domain.Enums;
+
 namespace YourBrand.Inventory.Domain.Entities;
 
 public class WarehouseItemTest
@@ -7,7 +12,7 @@ public class WarehouseItemTest
     [Fact]
     public void AdjustQuantityOnHand()
     {
-        var item = new WarehouseItem("ts-b-l", "wh1", "test", 100);
+        var item = CreateWarehouseItem(100);
         item.AdjustQuantityOnHand(98);
 
         item.QuantityOnHand.ShouldBe(98);
@@ -16,7 +21,7 @@ public class WarehouseItemTest
     [Fact]
     public void ReserveQuantity()
     {
-        var item = new WarehouseItem("ts-b-l", "wh1", "test", 100);
+        var item = CreateWarehouseItem(100);
         item.Reserve(20);
 
         item.QuantityReserved.ShouldBe(20);
@@ -27,7 +32,7 @@ public class WarehouseItemTest
     [Fact]
     public void PickQuantity()
     {
-        var item = new WarehouseItem("ts-b-l", "wh1", "test", 100);
+        var item = CreateWarehouseItem(100);
         item.Pick(20);
 
         item.QuantityPicked.ShouldBe(20);
@@ -37,7 +42,7 @@ public class WarehouseItemTest
     [Fact]
     public void ShipQuantity()
     {
-        var item = new WarehouseItem("ts-b-l", "wh1", "test", 100);
+        var item = CreateWarehouseItem(100);
         item.Pick(20);
         item.Ship(20, true);
 
@@ -48,7 +53,7 @@ public class WarehouseItemTest
     [Fact]
     public void ShippingDirectlyFromShelfReducesOnHandAndReservations()
     {
-        var item = new WarehouseItem("ts-b-l", "wh1", "test", 100);
+        var item = CreateWarehouseItem(100);
         item.Reserve(30);
 
         item.Ship(10);
@@ -61,7 +66,7 @@ public class WarehouseItemTest
     [Fact]
     public void ReserveCannotExceedAvailability()
     {
-        var item = new WarehouseItem("ts-b-l", "wh1", "test", 10);
+        var item = CreateWarehouseItem(10);
 
         Should.Throw<InvalidOperationException>(() => item.Reserve(11));
     }
@@ -69,7 +74,7 @@ public class WarehouseItemTest
     [Fact]
     public void PickCannotExceedOnHand()
     {
-        var item = new WarehouseItem("ts-b-l", "wh1", "test", 5);
+        var item = CreateWarehouseItem(5);
 
         Should.Throw<InvalidOperationException>(() => item.Pick(6));
     }
@@ -77,7 +82,7 @@ public class WarehouseItemTest
     [Fact]
     public void PickFromReservedCannotExceedReservedAmount()
     {
-        var item = new WarehouseItem("ts-b-l", "wh1", "test", 10);
+        var item = CreateWarehouseItem(10);
         item.Reserve(5);
 
         Should.Throw<InvalidOperationException>(() => item.Pick(6, true));
@@ -86,9 +91,20 @@ public class WarehouseItemTest
     [Fact]
     public void ShipCannotExceedPickedQuantity()
     {
-        var item = new WarehouseItem("ts-b-l", "wh1", "test", 10);
+        var item = CreateWarehouseItem(10);
         item.Pick(4);
 
         Should.Throw<InvalidOperationException>(() => item.Ship(5, true));
+    }
+
+    private static WarehouseItem CreateWarehouseItem(int quantity)
+    {
+        var site = new Site(Guid.NewGuid().ToString(), "Site");
+        var warehouse = new Warehouse(Guid.NewGuid().ToString(), "Warehouse", site);
+        var group = new ItemGroup("Group");
+        var item = new Item("ts-b-l", "Test", ItemType.Inventory, "gtin", group.Id, "pcs");
+        item.SetGroup(group);
+
+        return new WarehouseItem(item, warehouse, "A-1", quantity);
     }
 }

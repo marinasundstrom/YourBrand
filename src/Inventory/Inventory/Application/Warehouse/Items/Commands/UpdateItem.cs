@@ -17,7 +17,7 @@ public record UpdateWarehouseItem(string WarehouseId, string Id, string Location
 
             if (item is null) throw new Exception();
 
-            item.Location = request.Location;
+            item.ChangeLocation(request.Location);
 
             await context.SaveChangesAsync(cancellationToken);
 
