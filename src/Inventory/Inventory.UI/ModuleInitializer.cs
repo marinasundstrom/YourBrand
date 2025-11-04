@@ -38,7 +38,7 @@ public class ModuleInitializer : IModuleInitializer
 
         group.CreateItem("items", () => resources["Items"], MudBlazor.Icons.Material.Filled.ListAlt, "/inventory/items");
         group.CreateItem("warehouses", () => resources["Warehouses"], MudBlazor.Icons.Material.Filled.ListAlt, "/inventory/warehouses");
-        group.CreateItem("shipments", () => resources["Shipments"], MudBlazor.Icons.Material.Filled.LocalShipping, "/inventory/warehouses/shipments");
+        group.CreateItem("shipments", () => resources["Shipments"], MudBlazor.Icons.Material.Filled.LocalShipping, "/inventory/shipments");
         group.CreateItem("sites", () => resources["Sites"], MudBlazor.Icons.Material.Filled.ListAlt, "/inventory/sites");
 
         return Task.CompletedTask;

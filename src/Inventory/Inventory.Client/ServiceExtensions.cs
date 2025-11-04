@@ -11,7 +11,8 @@ public static class ServiceExtensions
             .AddItemGroupsClient(configureClient, builder)
             .AddSitesClient(configureClient, builder)
             .AddWarehousesClient(configureClient, builder)
-            .AddWarehouseItemsClient(configureClient, builder);
+            .AddWarehouseItemsClient(configureClient, builder)
+            .AddShipmentsClient(configureClient, builder);
 
         return services;
     }
@@ -65,6 +66,17 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(WarehouseItemsClient) + "WH", configureClient)
             .AddTypedClient<IWarehouseItemsClient>((http, sp) => new WarehouseItemsClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddShipmentsClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(ShipmentsClient) + "WH", configureClient)
+            .AddTypedClient<IShipmentsClient>((http, sp) => new ShipmentsClient(http));
 
         builder?.Invoke(b);
 
