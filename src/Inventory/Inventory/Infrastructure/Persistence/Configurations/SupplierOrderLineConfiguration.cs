@@ -29,5 +29,10 @@ public class SupplierOrderLineConfiguration : IEntityTypeConfiguration<SupplierO
 
         builder.Property(x => x.QuantityReceived)
             .IsRequired();
+
+        builder.HasOne(x => x.SupplierItem)
+            .WithMany()
+            .HasForeignKey(x => x.SupplierItemId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -1,9 +1,9 @@
 {
-    "ignoredExceptions": [
-    ],
-    "informationalExceptions": {
-        "System.IO.NotImplementedException": "Always",
-        "System.IO.IOException": "Propagation",
-        "System.TimeoutException": "Always"
+    "defaultExceptionClassification": "Strict",
+    "exceptions": {
+        "System.ArgumentNullException": "Ignored",
+        "System.IO.IOException": "Informational",
+        "System.TimeoutException": "NonStrict",
+        "System.Exception": "Strict"
     }
 }

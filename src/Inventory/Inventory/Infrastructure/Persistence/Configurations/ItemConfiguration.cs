@@ -11,6 +11,9 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
     {
         builder.ToTable("Items");
 
+        builder.Property(i => i.Id)
+            .HasMaxLength(64);
+
         builder.Property(i => i.Name)
             .IsRequired()
             .HasMaxLength(200);
