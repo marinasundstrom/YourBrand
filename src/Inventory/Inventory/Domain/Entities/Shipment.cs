@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using YourBrand.Inventory.Domain.Common;
+using YourBrand.Inventory.Domain.ValueObjects;
 
 namespace YourBrand.Inventory.Domain.Entities;
 
@@ -12,7 +13,7 @@ public class Shipment : AuditableEntity<string>
 
     protected Shipment() { }
 
-    public Shipment(Warehouse warehouse, string orderNo, string destination, string service)
+    public Shipment(Warehouse warehouse, string orderNo, ShippingDetails destination, string service)
         : base(Guid.NewGuid().ToString())
     {
         Warehouse = warehouse ?? throw new ArgumentNullException(nameof(warehouse));
@@ -29,7 +30,7 @@ public class Shipment : AuditableEntity<string>
 
     public string OrderNo { get; private set; } = null!;
 
-    public string Destination { get; private set; } = null!;
+    public ShippingDetails Destination { get; private set; } = null!;
 
     public string Service { get; private set; } = null!;
 
@@ -54,19 +55,39 @@ public class Shipment : AuditableEntity<string>
         OrderNo = orderNo.Trim();
     }
 
-    public void ChangeDestination(string destination)
+    public void ChangeDestination(ShippingDetails destination)
     {
         if (IsShipped)
         {
             throw new InvalidOperationException("Cannot modify a shipment that has already been shipped.");
         }
 
-        if (string.IsNullOrWhiteSpace(destination))
+        if (destination is null)
         {
-            throw new ArgumentException("Destination cannot be empty.", nameof(destination));
+            throw new ArgumentNullException(nameof(destination));
         }
 
-        Destination = destination.Trim();
+        if (string.IsNullOrWhiteSpace(destination.FirstName))
+        {
+            throw new ArgumentException("Destination first name cannot be empty.", nameof(destination));
+        }
+
+        if (string.IsNullOrWhiteSpace(destination.LastName))
+        {
+            throw new ArgumentException("Destination last name cannot be empty.", nameof(destination));
+        }
+
+        if (destination.Address is null)
+        {
+            throw new ArgumentException("Destination address is required.", nameof(destination));
+        }
+
+        if (string.IsNullOrWhiteSpace(destination.Address.Street) || string.IsNullOrWhiteSpace(destination.Address.City) || string.IsNullOrWhiteSpace(destination.Address.PostalCode) || string.IsNullOrWhiteSpace(destination.Address.Country))
+        {
+            throw new ArgumentException("Destination address must include street, city, postal code, and country.", nameof(destination));
+        }
+
+        Destination = destination.Copy();
     }
 
     public void ChangeService(string service)

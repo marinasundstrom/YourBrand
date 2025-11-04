@@ -1,5 +1,6 @@
 using System;
 
+using YourBrand.Domain;
 using YourBrand.Inventory.Application.Warehouses;
 using YourBrand.Inventory.Application.Warehouses.Items;
 
@@ -9,7 +10,7 @@ public record ShipmentDto(
     string Id,
     string OrderNo,
     WarehouseDto Warehouse,
-    string Destination,
+    ShippingDetailsDto Destination,
     string Service,
     DateTimeOffset Created,
     DateTimeOffset? ShippedAt,
@@ -22,9 +23,11 @@ public record ShipmentItemDto(
     bool IsShipped,
     DateTimeOffset? ShippedAt);
 
-public record CreateShipmentDto(string OrderNo, string Destination, string Service);
+public record ShippingDetailsDto(string FirstName, string LastName, string? CareOf, AddressDto Address);
 
-public record UpdateShipmentDto(string Destination, string Service);
+public record CreateShipmentDto(string OrderNo, ShippingDetailsDto Destination, string Service);
+
+public record UpdateShipmentDto(ShippingDetailsDto Destination, string Service);
 
 public record AddShipmentItemDto(string WarehouseItemId, int Quantity);
 

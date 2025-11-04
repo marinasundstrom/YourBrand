@@ -17,9 +17,49 @@ public class ShipmentConfiguration : IEntityTypeConfiguration<Shipment>
             .IsRequired()
             .HasMaxLength(64);
 
-        builder.Property(x => x.Destination)
-            .IsRequired()
-            .HasMaxLength(256);
+        builder.OwnsOne(x => x.Destination, destination =>
+        {
+            destination.Property(x => x.FirstName)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            destination.Property(x => x.LastName)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            destination.Property(x => x.CareOf)
+                .HasMaxLength(128);
+
+            destination.OwnsOne(x => x.Address, address =>
+            {
+                address.Property(x => x.Street)
+                    .IsRequired()
+                    .HasMaxLength(256);
+
+                address.Property(x => x.AddressLine2)
+                    .HasMaxLength(256);
+
+                address.Property(x => x.City)
+                    .IsRequired()
+                    .HasMaxLength(128);
+
+                address.Property(x => x.StateOrProvince)
+                    .HasMaxLength(128);
+
+                address.Property(x => x.PostalCode)
+                    .IsRequired()
+                    .HasMaxLength(32);
+
+                address.Property(x => x.Country)
+                    .IsRequired()
+                    .HasMaxLength(128);
+
+                address.Property(x => x.CareOf)
+                    .HasMaxLength(128);
+            });
+        });
+
+        builder.Navigation(x => x.Destination).IsRequired();
 
         builder.Property(x => x.Service)
             .IsRequired()

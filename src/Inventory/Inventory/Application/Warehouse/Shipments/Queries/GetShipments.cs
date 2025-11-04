@@ -28,7 +28,20 @@ public class GetShipmentsHandler(IInventoryContext context) : IRequestHandler<Ge
 
         if (!string.IsNullOrWhiteSpace(request.SearchString))
         {
-            query = query.Where(x => x.OrderNo.Contains(request.SearchString) || x.Destination.Contains(request.SearchString));
+            var search = request.SearchString;
+
+            query = query.Where(x =>
+                x.OrderNo.Contains(search) ||
+                x.Destination.FirstName.Contains(search) ||
+                x.Destination.LastName.Contains(search) ||
+                (x.Destination.CareOf != null && x.Destination.CareOf.Contains(search)) ||
+                x.Destination.Address.Street.Contains(search) ||
+                (x.Destination.Address.AddressLine2 != null && x.Destination.Address.AddressLine2.Contains(search)) ||
+                x.Destination.Address.City.Contains(search) ||
+                (x.Destination.Address.StateOrProvince != null && x.Destination.Address.StateOrProvince.Contains(search)) ||
+                (x.Destination.Address.CareOf != null && x.Destination.Address.CareOf.Contains(search)) ||
+                x.Destination.Address.PostalCode.Contains(search) ||
+                x.Destination.Address.Country.Contains(search));
         }
 
         var sortDirectionIsDesc = request.SortDirection switch
@@ -42,8 +55,12 @@ public class GetShipmentsHandler(IInventoryContext context) : IRequestHandler<Ge
         {
             "orderNo" when sortDirectionIsDesc => query.OrderByDescending(x => x.OrderNo),
             "orderNo" => query.OrderBy(x => x.OrderNo),
-            "destination" when sortDirectionIsDesc => query.OrderByDescending(x => x.Destination),
-            "destination" => query.OrderBy(x => x.Destination),
+            "destination" when sortDirectionIsDesc => query
+                .OrderByDescending(x => x.Destination.LastName)
+                .ThenByDescending(x => x.Destination.FirstName),
+            "destination" => query
+                .OrderBy(x => x.Destination.LastName)
+                .ThenBy(x => x.Destination.FirstName),
             "shippedAt" when sortDirectionIsDesc => query.OrderByDescending(x => x.ShippedAt),
             "shippedAt" => query.OrderBy(x => x.ShippedAt),
             _ when sortDirectionIsDesc => query.OrderByDescending(x => x.Created),
