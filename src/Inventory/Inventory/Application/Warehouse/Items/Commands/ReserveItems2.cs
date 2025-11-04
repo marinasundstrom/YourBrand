@@ -5,29 +5,45 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using YourBrand.Inventory.Application.Warehouses.Items;
 using YourBrand.Inventory.Domain;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items.Commands;
 
-public record ReserveWarehouseItems2(string WarehouseId, string Id, int Quantity) : IRequest
+public record CreateWarehouseItemReservation(string WarehouseId, string Id, int Quantity, int? HoldDurationMinutes = null, string? Reference = null) : IRequest<WarehouseItemReservationDto>
 {
-    public class Handler(IInventoryContext context) : IRequestHandler<ReserveWarehouseItems2>
+    private const int DefaultHoldDurationMinutes = 15;
+
+    public class Handler(IInventoryContext context) : IRequestHandler<CreateWarehouseItemReservation, WarehouseItemReservationDto>
     {
-        public async Task Handle(ReserveWarehouseItems2 request, CancellationToken cancellationToken)
+        public async Task<WarehouseItemReservationDto> Handle(CreateWarehouseItemReservation request, CancellationToken cancellationToken)
         {
             if (request.Quantity <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(request.Quantity));
             }
 
-            var item = await context.WarehouseItems.FirstOrDefaultAsync(i => i.WarehouseId == request.WarehouseId && i.ItemId == request.Id, cancellationToken);
+            if (request.HoldDurationMinutes.HasValue && request.HoldDurationMinutes.Value <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(request.HoldDurationMinutes));
+            }
 
-            if (item is null) throw new Exception();
+            var item = await context.WarehouseItems
+                .Include(i => i.Reservations)
+                .FirstOrDefaultAsync(i => i.WarehouseId == request.WarehouseId && i.ItemId == request.Id, cancellationToken);
 
-            item.Reserve(request.Quantity);
+            if (item is null)
+            {
+                throw new Exception();
+            }
+
+            var duration = TimeSpan.FromMinutes(request.HoldDurationMinutes ?? DefaultHoldDurationMinutes);
+
+            var reservation = item.Reserve(request.Quantity, duration, request.Reference);
 
             await context.SaveChangesAsync(cancellationToken);
 
+            return reservation.ToDto();
         }
     }
 }

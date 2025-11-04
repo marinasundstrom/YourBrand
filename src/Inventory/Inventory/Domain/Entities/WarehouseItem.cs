@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using YourBrand.Inventory.Domain.Common;
 using YourBrand.Inventory.Domain.Enums;
@@ -9,6 +11,10 @@ namespace YourBrand.Inventory.Domain.Entities;
 
 public class WarehouseItem : AuditableEntity<string>
 {
+    private static readonly TimeSpan DefaultReservationDuration = TimeSpan.FromMinutes(15);
+
+    private readonly List<WarehouseItemReservation> _reservations = new();
+
     protected WarehouseItem() { }
 
     public WarehouseItem(Item item, Warehouse warehouse, string location, int quantityOnHand, int quantityThreshold = 10)
@@ -42,6 +48,8 @@ public class WarehouseItem : AuditableEntity<string>
     public Warehouse Warehouse { get; private set; } = null!;
 
     public StorageLocation Location { get; private set; } = null!;
+
+    public IReadOnlyCollection<WarehouseItemReservation> Reservations => _reservations.AsReadOnly();
 
     public WarehouseItemAvailability Availability { get; private set; }
 
@@ -134,6 +142,7 @@ public class WarehouseItem : AuditableEntity<string>
 
         if (fromReserved)
         {
+            ConsumeReservedQuantity(quantity);
             QuantityReserved -= quantity;
             AddDomainEvent(new WarehouseItemsReservationReleased(Id, WarehouseId, quantity));
         }
@@ -202,6 +211,7 @@ public class WarehouseItem : AuditableEntity<string>
 
             if (reservedReduction > 0)
             {
+                ConsumeReservedQuantity(reservedReduction);
                 QuantityReserved -= reservedReduction;
                 AddDomainEvent(new WarehouseItemsReservationReleased(Id, WarehouseId, reservedReduction));
             }
@@ -230,6 +240,21 @@ public class WarehouseItem : AuditableEntity<string>
 
     public void Reserve(int quantity)
     {
+        Reserve(quantity, DefaultReservationDuration, null);
+    }
+
+    public WarehouseItemReservation Reserve(int quantity, TimeSpan duration, string? reference = null)
+    {
+        if (duration <= TimeSpan.Zero)
+        {
+            throw new ArgumentOutOfRangeException(nameof(duration));
+        }
+
+        return Reserve(quantity, DateTimeOffset.UtcNow.Add(duration), reference);
+    }
+
+    public WarehouseItemReservation Reserve(int quantity, DateTimeOffset expiresAt, string? reference = null)
+    {
         if (quantity <= 0)
         {
             throw new ArgumentOutOfRangeException(nameof(quantity));
@@ -240,7 +265,15 @@ public class WarehouseItem : AuditableEntity<string>
             throw new InvalidOperationException("Cannot reserve more items than are available.");
         }
 
+        if (expiresAt <= DateTimeOffset.UtcNow)
+        {
+            throw new ArgumentOutOfRangeException(nameof(expiresAt), "Expiration must be in the future.");
+        }
+
         var oldQuantityAvailable = QuantityAvailable;
+
+        var reservation = new WarehouseItemReservation(this, quantity, DateTimeOffset.UtcNow, expiresAt, reference);
+        _reservations.Add(reservation);
 
         QuantityReserved += quantity;
 
@@ -248,6 +281,21 @@ public class WarehouseItem : AuditableEntity<string>
         AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
 
         UpdateAvailability();
+
+        return reservation;
+    }
+
+    public void ConfirmReservation(string reservationId)
+    {
+        if (string.IsNullOrWhiteSpace(reservationId))
+        {
+            throw new ArgumentNullException(nameof(reservationId));
+        }
+
+        var reservation = _reservations.FirstOrDefault(r => r.Id == reservationId)
+            ?? throw new InvalidOperationException($"Reservation '{reservationId}' does not exist.");
+
+        reservation.Confirm();
     }
 
     public void ReleaseReservation(int quantity)
@@ -264,9 +312,57 @@ public class WarehouseItem : AuditableEntity<string>
 
         var oldQuantityAvailable = QuantityAvailable;
 
+        var remaining = quantity;
+
+        foreach (var reservation in _reservations
+                     .Where(r => r.RemainingQuantity > 0)
+                     .OrderBy(r => r.ReservedAt))
+        {
+            if (remaining == 0)
+            {
+                break;
+            }
+
+            var releaseAmount = Math.Min(remaining, reservation.RemainingQuantity);
+            reservation.Release(releaseAmount, WarehouseItemReservationStatus.Released);
+            remaining -= releaseAmount;
+        }
+
+        if (remaining > 0)
+        {
+            throw new InvalidOperationException("Unable to release the requested reservation quantity.");
+        }
+
         QuantityReserved -= quantity;
 
         AddDomainEvent(new WarehouseItemsReservationReleased(Id, WarehouseId, quantity));
+        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
+
+        UpdateAvailability();
+    }
+
+    public void ReleaseReservation(string reservationId, WarehouseItemReservationStatus status)
+    {
+        if (string.IsNullOrWhiteSpace(reservationId))
+        {
+            throw new ArgumentNullException(nameof(reservationId));
+        }
+
+        var reservation = _reservations.FirstOrDefault(r => r.Id == reservationId)
+            ?? throw new InvalidOperationException($"Reservation '{reservationId}' does not exist.");
+
+        var oldQuantityAvailable = QuantityAvailable;
+
+        var releasedQuantity = reservation.ReleaseRemaining(status);
+
+        if (releasedQuantity == 0)
+        {
+            return;
+        }
+
+        QuantityReserved -= releasedQuantity;
+
+        AddDomainEvent(new WarehouseItemsReservationReleased(Id, WarehouseId, releasedQuantity));
         AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
 
         UpdateAvailability();
@@ -309,6 +405,32 @@ public class WarehouseItem : AuditableEntity<string>
         Warehouse = warehouse ?? throw new ArgumentNullException(nameof(warehouse));
         WarehouseId = warehouse.Id;
         Warehouse.AttachItem(this);
+    }
+
+    private void ConsumeReservedQuantity(int quantity)
+    {
+        var remaining = quantity;
+
+        foreach (var reservation in _reservations
+                     .Where(r => r.RemainingQuantity > 0
+                         && r.Status is WarehouseItemReservationStatus.Pending or WarehouseItemReservationStatus.Confirmed)
+                     .OrderBy(r => r.Status == WarehouseItemReservationStatus.Confirmed ? 0 : 1)
+                     .ThenBy(r => r.ReservedAt))
+        {
+            if (remaining == 0)
+            {
+                break;
+            }
+
+            var consumeAmount = Math.Min(remaining, reservation.RemainingQuantity);
+            reservation.Consume(consumeAmount);
+            remaining -= consumeAmount;
+        }
+
+        if (remaining > 0)
+        {
+            throw new InvalidOperationException("Unable to consume the requested reserved quantity.");
+        }
     }
 
     private void SetQuantityOnHand(int quantity)

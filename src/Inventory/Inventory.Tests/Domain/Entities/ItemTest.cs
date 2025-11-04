@@ -22,11 +22,29 @@ public class WarehouseItemTest
     public void ReserveQuantity()
     {
         var item = CreateWarehouseItem(100);
-        item.Reserve(20);
+        var reservation = item.Reserve(20, TimeSpan.FromMinutes(5));
 
         item.QuantityReserved.ShouldBe(20);
         item.QuantityOnHand.ShouldBe(100);
         item.QuantityAvailable.ShouldBe(80);
+        reservation.ShouldNotBeNull();
+        reservation.Status.ShouldBe(WarehouseItemReservationStatus.Pending);
+        reservation.RemainingQuantity.ShouldBe(20);
+        reservation.ExpiresAt.ShouldBeGreaterThan(DateTimeOffset.UtcNow);
+    }
+
+    [Fact]
+    public void ExpiredReservationIsReleased()
+    {
+        var item = CreateWarehouseItem(50);
+        var reservation = item.Reserve(10, TimeSpan.FromMinutes(5));
+
+        item.ReleaseReservation(reservation.Id, WarehouseItemReservationStatus.Expired);
+
+        item.QuantityReserved.ShouldBe(0);
+        item.QuantityAvailable.ShouldBe(50);
+        reservation.Status.ShouldBe(WarehouseItemReservationStatus.Expired);
+        reservation.RemainingQuantity.ShouldBe(0);
     }
 
     [Fact]

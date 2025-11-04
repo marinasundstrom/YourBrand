@@ -51,7 +51,27 @@ public static class Mappings
             item.QuantityPicked,
             item.QuantityReserved,
             item.QuantityAvailable,
-            item.QuantityThreshold);
+            item.QuantityThreshold,
+            item.Reservations
+                .OrderBy(r => r.ReservedAt)
+                .Select(r => r.ToDto())
+                .ToList());
+    }
+
+    public static WarehouseItemReservationDto ToDto(this WarehouseItemReservation reservation)
+    {
+        return new WarehouseItemReservationDto(
+            reservation.Id,
+            reservation.Quantity,
+            reservation.ConsumedQuantity,
+            reservation.ReleasedQuantity,
+            reservation.RemainingQuantity,
+            (WarehouseItemReservationStatusDto)reservation.Status,
+            reservation.ReservedAt,
+            reservation.ExpiresAt,
+            reservation.ConfirmedAt,
+            reservation.ReleasedAt,
+            reservation.Reference);
     }
 
     public static SiteDto ToDto(this Site item)

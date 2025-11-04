@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using YourBrand.Inventory.Domain.Entities;
@@ -30,5 +31,13 @@ public class WarehouseItemConfiguration : IEntityTypeConfiguration<WarehouseItem
             .WithMany(warehouse => warehouse.Items)
             .HasForeignKey(w => w.WarehouseId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(w => w.Reservations)
+            .WithOne(r => r.WarehouseItem)
+            .HasForeignKey(r => r.WarehouseItemId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(w => w.Reservations)
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 }

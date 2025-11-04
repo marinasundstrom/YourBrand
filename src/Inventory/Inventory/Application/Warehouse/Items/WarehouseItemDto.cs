@@ -1,4 +1,6 @@
-﻿using YourBrand.Inventory.Application.Items;
+﻿using System.Collections.Generic;
+
+using YourBrand.Inventory.Application.Items;
 
 namespace YourBrand.Inventory.Application.Warehouses.Items;
 
@@ -11,4 +13,5 @@ public record WarehouseItemDto(
     int QuantityPicked,
     int QuantityReserved,
     int QuantityAvailable,
-    int QuantityThreshold);
+    int QuantityThreshold,
+    IReadOnlyCollection<WarehouseItemReservationDto> Reservations);
