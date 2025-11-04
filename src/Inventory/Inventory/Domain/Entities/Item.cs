@@ -11,6 +11,7 @@ namespace YourBrand.Inventory.Domain.Entities;
 public class Item : AuditableEntity<string>
 {
     private readonly HashSet<WarehouseItem> warehouseItems = new();
+    private readonly HashSet<SupplierItem> supplierItems = new();
 
     protected Item() { }
 
@@ -44,6 +45,8 @@ public class Item : AuditableEntity<string>
     public int QuantityAvailable => warehouseItems.Sum(x => x.QuantityAvailable);
 
     public IReadOnlyCollection<WarehouseItem> WarehouseItems => warehouseItems;
+
+    public IReadOnlyCollection<SupplierItem> SupplierItems => supplierItems;
 
     public void Rename(string name)
     {
@@ -122,6 +125,19 @@ public class Item : AuditableEntity<string>
         {
             RecalculateAvailability();
         }
+    }
+
+    internal void AttachSupplierItem(SupplierItem supplierItem)
+    {
+        if (!supplierItems.Contains(supplierItem))
+        {
+            supplierItems.Add(supplierItem);
+        }
+    }
+
+    internal void DetachSupplierItem(SupplierItem supplierItem)
+    {
+        supplierItems.Remove(supplierItem);
     }
 
     internal void RecalculateAvailability()

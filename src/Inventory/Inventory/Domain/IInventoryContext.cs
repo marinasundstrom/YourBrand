@@ -11,6 +11,10 @@ public interface IInventoryContext
     DbSet<WarehouseItem> WarehouseItems { get; }
     DbSet<ItemGroup> ItemGroups { get; }
     DbSet<Item> Items { get; }
+    DbSet<Supplier> Suppliers { get; }
+    DbSet<SupplierItem> SupplierItems { get; }
+    DbSet<SupplierOrder> SupplierOrders { get; }
+    DbSet<SupplierOrderLine> SupplierOrderLines { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

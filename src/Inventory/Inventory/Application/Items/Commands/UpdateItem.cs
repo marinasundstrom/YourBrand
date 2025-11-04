@@ -17,9 +17,9 @@ public record UpdateItem(string Id, string NewId, string Name, string GroupId, s
 
             if (item is null) throw new Exception();
 
-            item.Name = request.Name;
-            item.GroupId = request.GroupId;
-            item.Unit = request.Unit;
+            item.Rename(request.Name);
+            item.ChangeGroup(request.GroupId);
+            item.ChangeUnit(request.Unit);
 
             await context.SaveChangesAsync(cancellationToken);
         }

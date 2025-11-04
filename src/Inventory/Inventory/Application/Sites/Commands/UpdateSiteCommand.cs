@@ -16,7 +16,7 @@ public record UpdateSiteCommand(string Id, string Name) : IRequest
 
             if (site is null) throw new Exception();
 
-            site.Name = request.Name;
+            site.Rename(request.Name);
 
             await context.SaveChangesAsync(cancellationToken);
 

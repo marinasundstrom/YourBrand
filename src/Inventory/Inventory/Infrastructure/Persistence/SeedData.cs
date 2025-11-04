@@ -48,6 +48,27 @@ public class SeedData
 
                 await context.SaveChangesAsync();
 
+                var supplier = new Supplier("default-supplier", "Default Supplier");
+                context.Suppliers.Add(supplier);
+
+                await context.SaveChangesAsync();
+
+                var supplierItem1 = new SupplierItem(supplier, t1, "TS-B-S", 5.75m, 7);
+                var supplierItem2 = new SupplierItem(supplier, t2, "TS-B-M", 5.75m, 7);
+                var supplierItem3 = new SupplierItem(supplier, t3, "TS-B-L", 5.75m, 7);
+
+                context.SupplierItems.AddRange(supplierItem1, supplierItem2, supplierItem3);
+
+                await context.SaveChangesAsync();
+
+                var supplierOrder = new SupplierOrder(supplier, "PO-1001", DateTime.UtcNow, DateTime.UtcNow.AddDays(10));
+                supplierOrder.AddLine(supplierItem1, 50, DateTime.UtcNow.AddDays(10));
+                supplierOrder.AddLine(supplierItem2, 50, DateTime.UtcNow.AddDays(10));
+
+                context.SupplierOrders.Add(supplierOrder);
+
+                await context.SaveChangesAsync();
+
                 var shop1site = new Site("shop-1", "Shop 1");
                 context.Sites.Add(shop1site);
 
