@@ -5,8 +5,11 @@ using YourBrand.Inventory.Application.Items.Groups;
 using YourBrand.Inventory.Application.Sites;
 using YourBrand.Inventory.Application.Warehouses;
 using YourBrand.Inventory.Application.Warehouses.Items;
+using YourBrand.Inventory.Application.Warehouses.Shipments;
 using YourBrand.Inventory.Application.Suppliers;
 using YourBrand.Inventory.Domain.Entities;
+using YourBrand.Inventory.Domain.ValueObjects;
+using YourBrand.Domain;
 
 namespace YourBrand.Inventory.Application;
 
@@ -106,5 +109,53 @@ public static class Mappings
             line.QuantityReceived,
             line.QuantityOutstanding,
             line.ExpectedOn);
+    }
+
+    public static ShipmentDto ToDto(this Shipment shipment)
+    {
+        return new ShipmentDto(
+            shipment.Id,
+            shipment.OrderNo,
+            shipment.Warehouse.ToDto(),
+            shipment.Destination.ToDto(),
+            shipment.Service,
+            shipment.Created,
+            shipment.ShippedAt,
+            shipment.Items.Select(x => x.ToDto()).ToList());
+    }
+
+    public static ShipmentItemDto ToDto(this ShipmentItem shipmentItem)
+    {
+        return new ShipmentItemDto(
+            shipmentItem.Id,
+            shipmentItem.WarehouseItem.ToDto(),
+            shipmentItem.Quantity,
+            shipmentItem.IsShipped,
+            shipmentItem.ShippedAt);
+    }
+
+    public static ShippingDetailsDto ToDto(this ShippingDetails destination)
+    {
+        return new ShippingDetailsDto(
+            destination.FirstName,
+            destination.LastName,
+            destination.CareOf,
+            destination.Address.ToDto());
+    }
+
+    public static ShippingDetails ToValueObject(this ShippingDetailsDto destination)
+    {
+        if (destination.Address is null)
+        {
+            throw new ArgumentException("Destination address is required.", nameof(destination));
+        }
+
+        return new ShippingDetails
+        {
+            FirstName = destination.FirstName,
+            LastName = destination.LastName,
+            CareOf = destination.CareOf,
+            Address = destination.Address.ToAddress()
+        };
     }
 }

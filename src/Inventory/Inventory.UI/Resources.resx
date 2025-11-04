@@ -21,6 +21,9 @@
     <data name="Warehouses">
         <value>Warehouses</value>
     </data>
+    <data name="Shipments">
+        <value>Shipments</value>
+    </data>
     <data name="Sites">
         <value>Sites</value>
     </data>

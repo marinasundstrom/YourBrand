@@ -1,0 +1,152 @@
+@using System.Linq
+@inject IShipmentsClient ShipmentsClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer Style="max-height: 600px; overflow-y: auto;">
+            <MudStack Spacing="2">
+                <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Disabled="@Loading"
+                               OnClick="async () => await OnAddItem()">
+                        Add item
+                    </MudButton>
+                </MudStack>
+
+                <MudTable T="ShipmentItem" Dense="true" Hover="true" Bordered="false" Striped="true" Items="Items">
+                    <HeaderContent>
+                        <MudTh>Item</MudTh>
+                        <MudTh>Quantity</MudTh>
+                        <MudTh>Shipped</MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate Context="item">
+                        <MudTd DataLabel="Item">@item.WarehouseItem?.Item?.Name</MudTd>
+                        <MudTd DataLabel="Quantity">@item.Quantity</MudTd>
+                        <MudTd DataLabel="Shipped">@(item.IsShipped ? item.ShippedAt?.ToLocalTime().ToString("g") : "No")</MudTd>
+                        <MudTd>
+                            <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnEditItem(item)" Disabled="@(Loading || item.IsShipped)" />
+                            <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="async () => await OnRemoveItem(item)" Disabled="@(Loading || item.IsShipped)" />
+                        </MudTd>
+                    </RowTemplate>
+                </MudTable>
+            </MudStack>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => Dialog.Close(DialogResult.Ok(true))">Done</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private bool Loading { get; set; }
+    private IReadOnlyList<ShipmentItem> Items { get; set; } = Array.Empty<ShipmentItem>();
+
+    [CascadingParameter]
+    public IMudDialogInstance Dialog { get; set; } = default!;
+
+    [Parameter]
+    public string WarehouseId { get; set; } = default!;
+
+    [Parameter]
+    public string ShipmentId { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadItems();
+    }
+
+    private async Task LoadItems()
+    {
+        Loading = true;
+        try
+        {
+            var shipment = await ShipmentsClient.GetShipmentAsync(WarehouseId, ShipmentId);
+            IReadOnlyList<ShipmentItem>? shipmentItems = shipment?.Items?.ToList();
+            Items = shipmentItems ?? Array.Empty<ShipmentItem>();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        finally
+        {
+            Loading = false;
+        }
+    }
+
+    private async Task OnAddItem()
+    {
+        var parameters = new DialogParameters
+        {
+            { nameof(ShipmentItemDialog.WarehouseId), WarehouseId },
+            { nameof(ShipmentItemDialog.ShipmentId), ShipmentId }
+        };
+
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.ExtraLarge
+        };
+
+        var dialog = await DialogService.ShowAsync<ShipmentItemDialog>("Add item", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await LoadItems();
+        }
+    }
+
+    private async Task OnEditItem(ShipmentItem item)
+    {
+        var parameters = new DialogParameters
+        {
+            { nameof(ShipmentItemDialog.WarehouseId), WarehouseId },
+            { nameof(ShipmentItemDialog.ShipmentId), ShipmentId },
+            { nameof(ShipmentItemDialog.ShipmentItemId), item.Id }
+        };
+
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.ExtraLarge
+        };
+
+        var dialog = await DialogService.ShowAsync<ShipmentItemDialog>($"Update {item.WarehouseItem?.Item?.Name}", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await LoadItems();
+        }
+    }
+
+    private async Task OnRemoveItem(ShipmentItem item)
+    {
+        bool? confirmed = await DialogService.ShowMessageBox("Remove item", $"Remove {item.WarehouseItem?.Item?.Name} from shipment?", yesText: "Remove", cancelText: "Cancel");
+
+        if (confirmed != true)
+        {
+            return;
+        }
+
+        try
+        {
+            await ShipmentsClient.RemoveShipmentItemAsync(WarehouseId, ShipmentId, item.Id);
+            Snackbar.Add($"Removed {item.WarehouseItem?.Item?.Name}", Severity.Success);
+            await LoadItems();
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+}

@@ -1,0 +1,127 @@
+@using System.ComponentModel.DataAnnotations
+@using System.Linq
+@inject IShipmentsClient ShipmentsClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog>
+        <DialogContent>
+            <MudContainer Style="max-height: 400px; overflow-y: auto;">
+                @if (IsNew)
+                {
+                    <WarehouseItemSelector Label="Warehouse item" Variant="Variant.Outlined" WarehouseId="WarehouseId" Class="mt-4" @bind-Value="Model.WarehouseItem" For="() => Model.WarehouseItem" AllowOnlyAvailable="true" />
+                }
+
+                <MudNumericField Label="Quantity" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Quantity" For="() => Model.Quantity" Min="1" />
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @(IsNew ? "Add" : "Save")
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    private readonly ShipmentItemFormModel Model = new();
+    private EditContext? editContext;
+
+    [CascadingParameter]
+    public IMudDialogInstance Dialog { get; set; } = default!;
+
+    [Parameter]
+    public string WarehouseId { get; set; } = default!;
+
+    [Parameter]
+    public string ShipmentId { get; set; } = default!;
+
+    [Parameter]
+    public string? ShipmentItemId { get; set; }
+
+    private bool IsNew => string.IsNullOrEmpty(ShipmentItemId);
+
+    protected override async Task OnInitializedAsync()
+    {
+        editContext = new EditContext(Model);
+
+        if (IsNew)
+        {
+            Model.Quantity = 1;
+            return;
+        }
+
+        var shipment = await ShipmentsClient.GetShipmentAsync(WarehouseId, ShipmentId);
+        var item = shipment?.Items?.FirstOrDefault(x => x.Id == ShipmentItemId);
+
+        if (item is null)
+        {
+            throw new InvalidOperationException("Shipment item not found");
+        }
+
+        Model.Quantity = item.Quantity;
+        Model.WarehouseItem = item.WarehouseItem;
+    }
+
+    private async Task OnValidSubmit()
+    {
+        if (IsNew)
+        {
+            if (Model.WarehouseItem is null)
+            {
+                Snackbar.Add("Select a warehouse item", Severity.Error);
+                return;
+            }
+
+            try
+            {
+                await ShipmentsClient.AddShipmentItemAsync(WarehouseId, ShipmentId, new AddShipmentItem
+                {
+                    WarehouseItemId = Model.WarehouseItem.Id,
+                    Quantity = Model.Quantity
+                });
+
+                Dialog.Close(DialogResult.Ok(true));
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+        else if (ShipmentItemId is not null)
+        {
+            try
+            {
+                await ShipmentsClient.UpdateShipmentItemAsync(WarehouseId, ShipmentId, ShipmentItemId, new UpdateShipmentItem
+                {
+                    Quantity = Model.Quantity
+                });
+
+                Dialog.Close(DialogResult.Ok(true));
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error);
+            }
+        }
+    }
+
+    public class ShipmentItemFormModel
+    {
+        public WarehouseItem? WarehouseItem { get; set; }
+
+        [Range(1, int.MaxValue)]
+        public int Quantity { get; set; } = 1;
+    }
+}

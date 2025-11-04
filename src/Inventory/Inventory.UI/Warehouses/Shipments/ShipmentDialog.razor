@@ -1,0 +1,239 @@
+@using System.ComponentModel.DataAnnotations
+@inject IShipmentsClient ShipmentsClient
+@inject ISnackbar Snackbar
+
+<EditForm EditContext="@editContext" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudDialog>
+        <DialogContent>
+            <MudContainer Style="max-height: 600px; overflow-y: auto;">
+                <MudTextField Label="Order number" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.OrderNo" For="() => Model.OrderNo" Disabled="@Model.IsExisting" />
+
+                <MudTextField Label="Service" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Model.Service" For="() => Model.Service" />
+
+                <MudText Typo="Typo.subtitle1" Class="mt-6">Shipping details</MudText>
+
+                <MudGrid Class="mt-2">
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="First name" Variant="Variant.Outlined" @bind-Value="Model.Destination.FirstName" For="() => Model.Destination.FirstName" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Last name" Variant="Variant.Outlined" @bind-Value="Model.Destination.LastName" For="() => Model.Destination.LastName" />
+                    </MudItem>
+                    <MudItem xs="12" md="12">
+                        <MudTextField Label="Care of" Variant="Variant.Outlined" @bind-Value="Model.Destination.CareOf" For="() => Model.Destination.CareOf" />
+                    </MudItem>
+                    <MudItem xs="12" md="12">
+                        <MudTextField Label="Address line 1" Variant="Variant.Outlined" @bind-Value="Model.Destination.Address.Street" For="() => Model.Destination.Address.Street" />
+                    </MudItem>
+                    <MudItem xs="12" md="12">
+                        <MudTextField Label="Address line 2" Variant="Variant.Outlined" @bind-Value="Model.Destination.Address.AddressLine2" For="() => Model.Destination.Address.AddressLine2" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Postal code" Variant="Variant.Outlined" @bind-Value="Model.Destination.Address.PostalCode" For="() => Model.Destination.Address.PostalCode" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="City" Variant="Variant.Outlined" @bind-Value="Model.Destination.Address.City" For="() => Model.Destination.Address.City" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="State or province" Variant="Variant.Outlined" @bind-Value="Model.Destination.Address.StateOrProvince" For="() => Model.Destination.Address.StateOrProvince" />
+                    </MudItem>
+                    <MudItem xs="12" md="6">
+                        <MudTextField Label="Country" Variant="Variant.Outlined" @bind-Value="Model.Destination.Address.Country" For="() => Model.Destination.Address.Country" />
+                    </MudItem>
+                </MudGrid>
+            </MudContainer>
+        </DialogContent>
+
+        <DialogActions>
+            <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="() => Dialog.Cancel()">Cancel</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" Color="Color.Primary">
+                @(Model.IsExisting ? "Save" : "Create")
+            </MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    private readonly ShipmentFormModel Model = new();
+    private EditContext? editContext;
+
+    [CascadingParameter]
+    public IMudDialogInstance Dialog { get; set; } = default!;
+
+    [Parameter]
+    public string WarehouseId { get; set; } = default!;
+
+    [Parameter]
+    public string? ShipmentId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        editContext = new EditContext(Model);
+
+        if (!string.IsNullOrEmpty(ShipmentId))
+        {
+            Model.IsExisting = true;
+            var shipment = await ShipmentsClient.GetShipmentAsync(WarehouseId, ShipmentId);
+
+            if (shipment is null)
+            {
+                throw new InvalidOperationException("Shipment not found");
+            }
+
+            Model.OrderNo = shipment.OrderNo;
+            Model.Service = shipment.Service;
+            Model.Destination = ShippingDetailsModel.FromDto(shipment.Destination);
+        }
+        else
+        {
+            Model.IsExisting = false;
+        }
+    }
+
+    private async Task OnValidSubmit()
+    {
+        if (string.IsNullOrEmpty(WarehouseId))
+        {
+            return;
+        }
+
+        try
+        {
+            if (Model.IsExisting && ShipmentId is not null)
+            {
+                await ShipmentsClient.UpdateShipmentAsync(WarehouseId, ShipmentId, new UpdateShipment
+                {
+                    Destination = Model.Destination.ToDto(),
+                    Service = Model.Service
+                });
+
+                Dialog.Close(DialogResult.Ok(true));
+            }
+            else
+            {
+                var shipment = await ShipmentsClient.CreateShipmentAsync(WarehouseId, new CreateShipment
+                {
+                    OrderNo = Model.OrderNo,
+                    Service = Model.Service,
+                    Destination = Model.Destination.ToDto()
+                });
+
+                Dialog.Close(DialogResult.Ok(shipment));
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    public class ShipmentFormModel
+    {
+        [Required]
+        public string OrderNo { get; set; } = string.Empty;
+
+        [Required]
+        public string Service { get; set; } = string.Empty;
+
+        [Required]
+        public ShippingDetailsModel Destination { get; set; } = new();
+
+        public bool IsExisting { get; set; }
+    }
+
+    public class ShippingDetailsModel
+    {
+        [Required]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required]
+        public string LastName { get; set; } = string.Empty;
+
+        public string? CareOf { get; set; }
+
+        [Required]
+        public AddressModel Address { get; set; } = new();
+
+        public ShippingDetails ToDto()
+        {
+            return new ShippingDetails
+            {
+                FirstName = FirstName,
+                LastName = LastName,
+                CareOf = CareOf,
+                Address = Address.ToDto()
+            };
+        }
+
+        public static ShippingDetailsModel FromDto(ShippingDetails? dto)
+        {
+            if (dto is null)
+            {
+                return new ShippingDetailsModel();
+            }
+
+            return new ShippingDetailsModel
+            {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                CareOf = dto.CareOf,
+                Address = AddressModel.FromDto(dto.Address)
+            };
+        }
+    }
+
+    public class AddressModel
+    {
+        [Required]
+        public string Street { get; set; } = string.Empty;
+
+        public string? AddressLine2 { get; set; }
+
+        [Required]
+        public string PostalCode { get; set; } = string.Empty;
+
+        [Required]
+        public string City { get; set; } = string.Empty;
+
+        public string? StateOrProvince { get; set; }
+
+        [Required]
+        public string Country { get; set; } = string.Empty;
+
+        public Address ToDto()
+        {
+            return new Address
+            {
+                Street = Street,
+                AddressLine2 = AddressLine2,
+                PostalCode = PostalCode,
+                City = City,
+                StateOrProvince = StateOrProvince,
+                Country = Country
+            };
+        }
+
+        public static AddressModel FromDto(Address? dto)
+        {
+            if (dto is null)
+            {
+                return new AddressModel();
+            }
+
+            return new AddressModel
+            {
+                Street = dto.Street,
+                AddressLine2 = dto.AddressLine2,
+                PostalCode = dto.PostalCode,
+                City = dto.City,
+                StateOrProvince = dto.StateOrProvince,
+                Country = dto.Country
+            };
+        }
+    }
+}

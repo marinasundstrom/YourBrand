@@ -1,0 +1,75 @@
+@using System.Linq
+@using System.Linq.Expressions
+@inject IWarehouseItemsClient WarehouseItemsClient
+
+<MudAutocomplete T="WarehouseItem" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
+    For="For" SearchFunc="SearchWarehouseItems" ToStringFunc="DisplayText"
+    ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
+    <ItemTemplate Context="context">
+        <MudText Typo="Typo.body1">@context.Item.Name</MudText>
+        <MudText Typo="Typo.body2">@context.Warehouse.Name</MudText>
+    </ItemTemplate>
+
+    <ItemSelectedTemplate Context="context">
+        <MudText Typo="Typo.body1">@context.Item.Name</MudText>
+        <MudText Typo="Typo.body2">@context.Warehouse.Name</MudText>
+    </ItemSelectedTemplate>
+</MudAutocomplete>
+
+@code {
+    [Parameter]
+    public string Label { get; set; } = "Warehouse Item";
+
+    [Parameter]
+    public WarehouseItem? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<WarehouseItem?> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<WarehouseItem?>>? For { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public Variant Variant { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public string WarehouseId { get; set; } = default!;
+
+    [Parameter]
+    public bool AllowOnlyAvailable { get; set; }
+
+    private string DisplayText(WarehouseItem item) => $"{item.Item.Name} ({item.QuantityAvailable})";
+
+    private async Task<IEnumerable<WarehouseItem>?> SearchWarehouseItems(string text, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(WarehouseId))
+        {
+            return Array.Empty<WarehouseItem>();
+        }
+
+        try
+        {
+            var result = await WarehouseItemsClient.GetItemsAsync(WarehouseId, 1, 10, null, text, null, null, cancellationToken);
+
+            if (AllowOnlyAvailable)
+            {
+                return result.Items.Where(x => x.QuantityAvailable > 0);
+            }
+
+            return result.Items;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+
+        return Array.Empty<WarehouseItem>();
+    }
+}

@@ -436,6 +436,295 @@ paths:
       responses:
         200:
           description: ''
+  /v1/Warehouses/{warehouseId}/Shipments:
+    get:
+      tags:
+      - Shipments
+      operationId: Shipments_GetShipments
+      parameters:
+      - name: warehouseId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: orderNo
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfShipment'
+    post:
+      tags:
+      - Shipments
+      operationId: Shipments_CreateShipment
+      parameters:
+      - name: warehouseId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShipment'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shipment'
+  /v1/Warehouses/{warehouseId}/Shipments/{shipmentId}:
+    get:
+      tags:
+      - Shipments
+      operationId: Shipments_GetShipment
+      parameters:
+      - name: warehouseId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shipment'
+    put:
+      tags:
+      - Shipments
+      operationId: Shipments_UpdateShipment
+      parameters:
+      - name: warehouseId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateShipment'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Shipments
+      operationId: Shipments_DeleteShipment
+      parameters:
+      - name: warehouseId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+  /v1/Warehouses/{warehouseId}/Shipments/{shipmentId}/Items:
+    post:
+      tags:
+      - Shipments
+      operationId: Shipments_AddShipmentItem
+      parameters:
+      - name: warehouseId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddShipmentItem'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipmentItem'
+  /v1/Warehouses/{warehouseId}/Shipments/{shipmentId}/Items/{shipmentItemId}:
+    put:
+      tags:
+      - Shipments
+      operationId: Shipments_UpdateShipmentItem
+      parameters:
+      - name: warehouseId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: shipmentItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateShipmentItem'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipmentItem'
+    delete:
+      tags:
+      - Shipments
+      operationId: Shipments_RemoveShipmentItem
+      parameters:
+      - name: warehouseId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: shipmentItemId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+  /v1/Warehouses/{warehouseId}/Shipments/{shipmentId}/Ship:
+    post:
+      tags:
+      - Shipments
+      operationId: Shipments_ShipShipment
+      parameters:
+      - name: warehouseId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: shipmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipShipment'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shipment'
   /v1/Sites:
     get:
       tags:
@@ -964,6 +1253,135 @@ components:
         quantityThreshold:
           type: integer
           format: int32
+    ItemsResultOfShipment:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shipment'
+        totalItems:
+          type: integer
+          format: int32
+    Shipment:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        orderNo:
+          type: string
+        warehouse:
+          $ref: '#/components/schemas/Warehouse'
+        destination:
+          $ref: '#/components/schemas/ShippingDetails'
+        service:
+          type: string
+        created:
+          type: string
+          format: date-time
+        shippedAt:
+          type: string
+          format: date-time
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentItem'
+    ShipmentItem:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        warehouseItem:
+          $ref: '#/components/schemas/WarehouseItem'
+        quantity:
+          type: integer
+          format: int32
+        isShipped:
+          type: boolean
+        shippedAt:
+          type: string
+          format: date-time
+          nullable: true
+    ShippingDetails:
+      type: object
+      additionalProperties: false
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        careOf:
+          type: string
+          nullable: true
+        address:
+          $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      additionalProperties: false
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        addressLine2:
+          type: string
+          nullable: true
+        stateOrProvince:
+          type: string
+          nullable: true
+        careOf:
+          type: string
+          nullable: true
+    CreateShipment:
+      type: object
+      additionalProperties: false
+      properties:
+        orderNo:
+          type: string
+        destination:
+          $ref: '#/components/schemas/ShippingDetails'
+        service:
+          type: string
+    UpdateShipment:
+      type: object
+      additionalProperties: false
+      properties:
+        destination:
+          $ref: '#/components/schemas/ShippingDetails'
+        service:
+          type: string
+    AddShipmentItem:
+      type: object
+      additionalProperties: false
+      properties:
+        warehouseItemId:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+    UpdateShipmentItem:
+      type: object
+      additionalProperties: false
+      properties:
+        quantity:
+          type: integer
+          format: int32
+    ShipShipment:
+      type: object
+      additionalProperties: false
+      properties:
+        shippedAt:
+          type: string
+          format: date-time
+          nullable: true
     Item:
       type: object
       additionalProperties: false
