@@ -43,7 +43,7 @@ public static class Mappings
             item.Id,
             item.Item.ToDto(),
             item.Warehouse.ToDto(),
-            item.Location,
+            item.Location.ToString(),
             item.QuantityOnHand,
             item.QuantityPicked,
             item.QuantityReserved,

@@ -3,6 +3,7 @@
 using YourBrand.Inventory.Domain.Common;
 using YourBrand.Inventory.Domain.Enums;
 using YourBrand.Inventory.Domain.Events;
+using YourBrand.Inventory.Domain.ValueObjects;
 
 namespace YourBrand.Inventory.Domain.Entities;
 
@@ -10,27 +11,39 @@ public class WarehouseItem : AuditableEntity<string>
 {
     protected WarehouseItem() { }
 
-    public WarehouseItem(string itemId, string warehouseId, string location, int quantityOnHand, int quantityThreshold = 10)
-        : base(Guid.NewGuid().ToString())
+    public WarehouseItem(Item item, Warehouse warehouse, string location, int quantityOnHand, int quantityThreshold = 10)
+        : this(item, warehouse, StorageLocation.Create(location), quantityOnHand, quantityThreshold)
     {
-        ItemId = itemId;
-        WarehouseId = warehouseId;
-        Location = location;
-        QuantityOnHand = quantityOnHand;
-        QuantityThreshold = quantityThreshold;
     }
 
-    public Item Item { get; set; } = null!;
+    public WarehouseItem(Item item, Warehouse warehouse, StorageLocation location, int quantityOnHand, int quantityThreshold = 10)
+        : base(Guid.NewGuid().ToString())
+    {
+        Item = item ?? throw new ArgumentNullException(nameof(item));
+        Warehouse = warehouse ?? throw new ArgumentNullException(nameof(warehouse));
+        ItemId = item.Id;
+        WarehouseId = warehouse.Id;
+        Location = location ?? throw new ArgumentNullException(nameof(location));
 
-    public string ItemId { get; set; } = null!;
+        ChangeQuantityThreshold(quantityThreshold);
+        SetQuantityOnHand(quantityOnHand);
 
-    public string WarehouseId { get; set; } = null!;
+        Item.AttachWarehouseItem(this);
+        Warehouse.AttachItem(this);
+        UpdateAvailability();
+    }
 
-    public Warehouse Warehouse { get; set; } = null!;
+    public Item Item { get; private set; } = null!;
 
-    public string Location { get; set; }
+    public string ItemId { get; private set; } = null!;
 
-    public WarehouseItemAvailability Availability { get; set; }
+    public string WarehouseId { get; private set; } = null!;
+
+    public Warehouse Warehouse { get; private set; } = null!;
+
+    public StorageLocation Location { get; private set; } = null!;
+
+    public WarehouseItemAvailability Availability { get; private set; }
 
     /// <summary>
     /// This number is the total you have physically available (including Qty Reserved),
@@ -40,6 +53,16 @@ public class WarehouseItem : AuditableEntity<string>
 
     public void AdjustQuantityOnHand(int quantity)
     {
+        if (quantity < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity), "Quantity on hand cannot be negative.");
+        }
+
+        if (quantity < QuantityReserved)
+        {
+            throw new InvalidOperationException("Quantity on hand cannot fall below the reserved quantity.");
+        }
+
         var oldQuantityOnHand = QuantityOnHand;
         var oldQuantityAvailable = QuantityAvailable;
 
@@ -47,10 +70,17 @@ public class WarehouseItem : AuditableEntity<string>
 
         AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand, oldQuantityOnHand));
         AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
+
+        UpdateAvailability();
     }
 
     public void Receive(int quantity)
     {
+        if (quantity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
         var oldQuantityOnHand = QuantityOnHand;
         var oldQuantityAvailable = QuantityAvailable;
 
@@ -58,6 +88,19 @@ public class WarehouseItem : AuditableEntity<string>
 
         AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand, oldQuantityOnHand));
         AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
+
+        UpdateAvailability();
+    }
+
+    public void Return(int quantity)
+    {
+        if (quantity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        Receive(quantity);
+        AddDomainEvent(new WarehouseItemsReturned(Id, WarehouseId, quantity));
     }
 
     /// <summary>
@@ -73,9 +116,9 @@ public class WarehouseItem : AuditableEntity<string>
             throw new ArgumentOutOfRangeException(nameof(quantity));
         }
 
-        if (quantity > QuantityOnHand)
+        if (quantity > QuantityAvailable)
         {
-            throw new InvalidOperationException("Cannot pick more items than are on hand.");
+            throw new InvalidOperationException("Cannot pick more items than are available.");
         }
 
         if (fromReserved && quantity > QuantityReserved)
@@ -92,12 +135,39 @@ public class WarehouseItem : AuditableEntity<string>
         if (fromReserved)
         {
             QuantityReserved -= quantity;
-            //AddDomainEvent(new WarehouseItemQuantityReservedUpdated(Id, WarehouseId, quantity));
+            AddDomainEvent(new WarehouseItemsReservationReleased(Id, WarehouseId, quantity));
         }
 
         AddDomainEvent(new WarehouseItemsPicked(Id, WarehouseId, quantity));
         AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand, oldQuantityOnHand));
         AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
+
+        UpdateAvailability();
+    }
+
+    public void Unpick(int quantity)
+    {
+        if (quantity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        if (quantity > QuantityPicked)
+        {
+            throw new InvalidOperationException("Cannot unpick more items than have been picked.");
+        }
+
+        QuantityPicked -= quantity;
+        var oldQuantityOnHand = QuantityOnHand;
+        var oldQuantityAvailable = QuantityAvailable;
+
+        QuantityOnHand += quantity;
+
+        AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand, oldQuantityOnHand));
+        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
+        AddDomainEvent(new WarehouseItemsUnpicked(Id, WarehouseId, quantity));
+
+        UpdateAvailability();
     }
 
     public void Ship(int quantity, bool fromPicked = false)
@@ -133,6 +203,7 @@ public class WarehouseItem : AuditableEntity<string>
             if (reservedReduction > 0)
             {
                 QuantityReserved -= reservedReduction;
+                AddDomainEvent(new WarehouseItemsReservationReleased(Id, WarehouseId, reservedReduction));
             }
         }
 
@@ -145,6 +216,10 @@ public class WarehouseItem : AuditableEntity<string>
         {
             AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
         }
+
+        AddDomainEvent(new WarehouseItemsShipped(Id, WarehouseId, quantity));
+
+        UpdateAvailability();
     }
 
     /// <summary>
@@ -171,6 +246,30 @@ public class WarehouseItem : AuditableEntity<string>
 
         AddDomainEvent(new WarehouseItemsReserved(Id, WarehouseId, quantity));
         AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
+
+        UpdateAvailability();
+    }
+
+    public void ReleaseReservation(int quantity)
+    {
+        if (quantity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        if (quantity > QuantityReserved)
+        {
+            throw new InvalidOperationException("Cannot release more reservations than exist.");
+        }
+
+        var oldQuantityAvailable = QuantityAvailable;
+
+        QuantityReserved -= quantity;
+
+        AddDomainEvent(new WarehouseItemsReservationReleased(Id, WarehouseId, quantity));
+        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
+
+        UpdateAvailability();
     }
 
     /// <summary>
@@ -179,5 +278,69 @@ public class WarehouseItem : AuditableEntity<string>
     /// </summary>
     public int QuantityAvailable => QuantityOnHand - QuantityReserved;
 
-    public int QuantityThreshold { get; set; } = 10;
+    public int QuantityThreshold { get; private set; } = 10;
+
+    public bool IsBelowThreshold => QuantityAvailable <= QuantityThreshold;
+
+    public void ChangeQuantityThreshold(int threshold)
+    {
+        if (threshold < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(threshold));
+        }
+
+        QuantityThreshold = threshold;
+    }
+
+    public void ChangeLocation(string location)
+    {
+        Location = StorageLocation.Create(location);
+    }
+
+    internal void ChangeLocation(StorageLocation location)
+    {
+        Location = location ?? throw new ArgumentNullException(nameof(location));
+    }
+
+    internal void AssignWarehouse(Warehouse warehouse)
+    {
+        Warehouse?.DetachItem(this);
+
+        Warehouse = warehouse ?? throw new ArgumentNullException(nameof(warehouse));
+        WarehouseId = warehouse.Id;
+        Warehouse.AttachItem(this);
+    }
+
+    private void SetQuantityOnHand(int quantity)
+    {
+        if (quantity < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        QuantityOnHand = quantity;
+    }
+
+    private void UpdateAvailability()
+    {
+        var previousAvailability = Availability;
+
+        if (QuantityAvailable > 0)
+        {
+            Availability = WarehouseItemAvailability.InStock;
+        }
+        else if (QuantityOnHand > 0)
+        {
+            Availability = WarehouseItemAvailability.StockedOnDemand;
+        }
+        else
+        {
+            Availability = WarehouseItemAvailability.SupplierOutOfStock;
+        }
+
+        if (previousAvailability != Availability)
+        {
+            Item?.RecalculateAvailability();
+        }
+    }
 }
