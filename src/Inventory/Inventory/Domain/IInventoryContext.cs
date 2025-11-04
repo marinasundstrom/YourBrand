@@ -9,6 +9,7 @@ public interface IInventoryContext
     DbSet<Site> Sites { get; }
     DbSet<Warehouse> Warehouses { get; }
     DbSet<WarehouseItem> WarehouseItems { get; }
+    DbSet<WarehouseItemReservation> WarehouseItemReservations { get; }
     DbSet<ItemGroup> ItemGroups { get; }
     DbSet<Item> Items { get; }
     DbSet<Supplier> Suppliers { get; }

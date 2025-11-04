@@ -35,6 +35,7 @@ public class InventoryContext(
     public DbSet<Site> Sites { get; set; } = null!;
     public DbSet<Warehouse> Warehouses { get; set; } = null!;
     public DbSet<WarehouseItem> WarehouseItems { get; set; } = null!;
+    public DbSet<WarehouseItemReservation> WarehouseItemReservations { get; set; } = null!;
     public DbSet<ItemGroup> ItemGroups { get; set; } = null!;
 
     public DbSet<Item> Items { get; set; } = null!;

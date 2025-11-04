@@ -64,6 +64,7 @@ public record GetWarehouseItems(int Page = 0, int PageSize = 10, string? Warehou
                 .ThenInclude(x => x.Group)
                 .Include(x => x.Warehouse)
                 .ThenInclude(x => x.Site)
+                .Include(x => x.Reservations)
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);

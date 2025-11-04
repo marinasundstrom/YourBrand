@@ -20,7 +20,9 @@ public record ShipWarehouseItems(string WarehouseId, string Id, int Quantity, bo
                 throw new ArgumentOutOfRangeException(nameof(request.Quantity));
             }
 
-            var item = await context.WarehouseItems.FirstOrDefaultAsync(i => i.WarehouseId == request.WarehouseId && i.ItemId == request.Id, cancellationToken);
+            var item = await context.WarehouseItems
+                .Include(i => i.Reservations)
+                .FirstOrDefaultAsync(i => i.WarehouseId == request.WarehouseId && i.ItemId == request.Id, cancellationToken);
 
             if (item is null) throw new Exception();
 

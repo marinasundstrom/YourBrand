@@ -45,9 +45,21 @@ public class WarehouseItemsController(IMediator mediator) : ControllerBase
     }
 
     [HttpPut("{id}/Reserve")]
-    public async Task ReserveItems(string warehouseId, string id, ReserveItemsDto dto, CancellationToken cancellationToken)
+    public async Task<WarehouseItemReservationDto> ReserveItems(string warehouseId, string id, ReserveItemsDto dto, CancellationToken cancellationToken)
     {
-        await mediator.Send(new ReserveWarehouseItems2(warehouseId, id, dto.Quantity), cancellationToken);
+        return await mediator.Send(new CreateWarehouseItemReservation(warehouseId, id, dto.Quantity, dto.HoldDurationMinutes, dto.Reference), cancellationToken);
+    }
+
+    [HttpPut("{id}/Reservations/{reservationId}/Confirm")]
+    public async Task ConfirmReservation(string warehouseId, string id, string reservationId, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new ConfirmWarehouseItemReservation(warehouseId, id, reservationId), cancellationToken);
+    }
+
+    [HttpDelete("{id}/Reservations/{reservationId}")]
+    public async Task ReleaseReservation(string warehouseId, string id, string reservationId, CancellationToken cancellationToken)
+    {
+        await mediator.Send(new ReleaseWarehouseItemReservation(warehouseId, id, reservationId), cancellationToken);
     }
 
     [HttpPut("{id}/Pick")]
@@ -77,7 +89,7 @@ public class WarehouseItemsController(IMediator mediator) : ControllerBase
 
 public record AdjustQuantityOnHandDto(int Quantity);
 
-public record ReserveItemsDto(int Quantity);
+public record ReserveItemsDto(int Quantity, int? HoldDurationMinutes = null, string? Reference = null);
 
 public record PickItemsDto(int Quantity, bool FromReserved = false);
 

@@ -17,6 +17,7 @@ public record GetWarehouseItem(string WarehouseId, string Id) : IRequest<Warehou
                 .ThenInclude(x => x.Group)
                 .Include(x => x.Warehouse)
                 .ThenInclude(x => x.Site)
+                .Include(x => x.Reservations)
                 .AsSplitQuery()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.WarehouseId == request.WarehouseId && x.ItemId == request.Id, cancellationToken);

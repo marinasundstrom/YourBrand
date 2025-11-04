@@ -1,3 +1,5 @@
+using System;
+
 using MediatR;
 
 using Quartz;
@@ -42,6 +44,15 @@ public static class ServiceCollectionExtensions
                     .AddTrigger(trigger => trigger.ForJob(jobKey)
                         .WithSimpleSchedule(schedule => schedule
                             .WithIntervalInSeconds(10)
+                            .RepeatForever()));
+
+                var releaseReservationsJobKey = new JobKey(nameof(ReleaseExpiredReservationsJob));
+
+                configure
+                    .AddJob<ReleaseExpiredReservationsJob>(releaseReservationsJobKey)
+                    .AddTrigger(trigger => trigger.ForJob(releaseReservationsJobKey)
+                        .WithSimpleSchedule(schedule => schedule
+                            .WithInterval(TimeSpan.FromMinutes(1))
                             .RepeatForever()));
             });
 
