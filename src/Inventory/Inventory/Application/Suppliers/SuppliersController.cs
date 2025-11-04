@@ -67,6 +67,20 @@ public class SuppliersController(IMediator mediator) : ControllerBase
     {
         return await mediator.Send(new UpdateSupplierOrderExpectedDelivery(supplierId, orderId, dto.ExpectedDelivery), cancellationToken);
     }
+
+    [HttpPut("{supplierId}/Orders/{orderId}/Receipt")]
+    public async Task<SupplierOrderDto> RegisterSupplierOrderReceipt(string supplierId, string orderId, RegisterSupplierOrderReceiptDto dto, CancellationToken cancellationToken)
+    {
+        return await mediator.Send(new RegisterSupplierOrderReceipt(supplierId, orderId, dto.ReceivedAt), cancellationToken);
+    }
+
+    [HttpPut("{supplierId}/Orders/{orderId}/Receipt/Verification")]
+    public async Task<SupplierOrderDto> VerifySupplierOrderReceipt(string supplierId, string orderId, VerifySupplierOrderReceiptDto dto, CancellationToken cancellationToken)
+    {
+        var lines = dto.Lines.Select(line => new VerifySupplierOrderReceiptLine(line.LineId, line.QuantityReceived)).ToList();
+
+        return await mediator.Send(new VerifySupplierOrderReceipt(supplierId, orderId, lines), cancellationToken);
+    }
 }
 
 public record CreateSupplierDto(string Id, string Name);
@@ -78,3 +92,9 @@ public record CreateSupplierOrderDto(string OrderNumber, DateTime OrderedAt, Dat
 public record CreateSupplierOrderLineDto(string SupplierItemId, int ExpectedQuantity, DateTime? ExpectedOn);
 
 public record UpdateSupplierOrderExpectedDeliveryDto(DateTime? ExpectedDelivery);
+
+public record RegisterSupplierOrderReceiptDto(DateTime ReceivedAt);
+
+public record VerifySupplierOrderReceiptDto(IReadOnlyCollection<VerifySupplierOrderReceiptLineDto> Lines);
+
+public record VerifySupplierOrderReceiptLineDto(string LineId, int QuantityReceived);

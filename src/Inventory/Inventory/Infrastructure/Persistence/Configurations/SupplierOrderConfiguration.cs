@@ -26,6 +26,8 @@ public class SupplierOrderConfiguration : IEntityTypeConfiguration<SupplierOrder
 
         builder.Property(x => x.ExpectedDelivery);
 
+        builder.Property(x => x.ReceivedAt);
+
         builder.HasMany(x => x.Lines)
             .WithOne(x => x.Order)
             .HasForeignKey(x => x.OrderId)

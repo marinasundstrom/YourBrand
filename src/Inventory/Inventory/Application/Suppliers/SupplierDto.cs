@@ -14,6 +14,7 @@ public record SupplierOrderDto(
     string OrderNumber,
     DateTime OrderedAt,
     DateTime? ExpectedDelivery,
+    DateTime? ReceivedAt,
     IReadOnlyCollection<SupplierOrderLineDto> Lines,
     int TotalQuantityOutstanding);
 

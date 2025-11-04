@@ -89,6 +89,7 @@ public static class Mappings
             order.OrderNumber,
             order.OrderedAt,
             order.ExpectedDelivery,
+            order.ReceivedAt,
             order.Lines.Select(x => x.ToDto()).ToList(),
             order.TotalQuantityOutstanding);
     }

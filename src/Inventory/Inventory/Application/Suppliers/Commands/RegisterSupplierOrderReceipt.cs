@@ -1,0 +1,35 @@
+using System;
+using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.Inventory.Application;
+using YourBrand.Inventory.Domain;
+
+namespace YourBrand.Inventory.Application.Suppliers.Commands;
+
+public record RegisterSupplierOrderReceipt(string SupplierId, string OrderId, DateTime ReceivedAt) : IRequest<SupplierOrderDto>;
+
+public class RegisterSupplierOrderReceiptHandler(IInventoryContext context) : IRequestHandler<RegisterSupplierOrderReceipt, SupplierOrderDto>
+{
+    public async Task<SupplierOrderDto> Handle(RegisterSupplierOrderReceipt request, CancellationToken cancellationToken)
+    {
+        var order = await context.SupplierOrders
+            .Include(x => x.Supplier)
+            .Include(x => x.Lines)
+                .ThenInclude(x => x.SupplierItem)
+                    .ThenInclude(x => x.Item)
+            .FirstOrDefaultAsync(x => x.Id == request.OrderId && x.SupplierId == request.SupplierId, cancellationToken);
+
+        if (order is null)
+        {
+            throw new InvalidOperationException($"Supplier order '{request.OrderId}' for supplier '{request.SupplierId}' was not found.");
+        }
+
+        order.RegisterReceipt(request.ReceivedAt);
+
+        await context.SaveChangesAsync(cancellationToken);
+
+        return order.ToDto();
+    }
+}

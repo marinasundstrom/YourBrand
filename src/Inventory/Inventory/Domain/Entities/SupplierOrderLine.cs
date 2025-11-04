@@ -77,4 +77,19 @@ public class SupplierOrderLine : AuditableEntity<string>
     {
         ExpectedOn = expectedOn;
     }
+
+    public void UpdateQuantityReceived(int quantity)
+    {
+        if (quantity < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        if (quantity > ExpectedQuantity)
+        {
+            throw new InvalidOperationException("Cannot receive more items than expected.");
+        }
+
+        QuantityReceived = quantity;
+    }
 }

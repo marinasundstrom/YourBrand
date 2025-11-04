@@ -38,6 +38,10 @@ public class SupplierOrder : AuditableEntity<string>
 
     public DateTime? ExpectedDelivery { get; private set; }
 
+    public DateTime? ReceivedAt { get; private set; }
+
+    public bool IsReceived => ReceivedAt is not null;
+
     public IReadOnlyCollection<SupplierOrderLine> Lines => lines;
 
     public int TotalQuantityOrdered => lines.Sum(x => x.QuantityOrdered);
@@ -71,6 +75,16 @@ public class SupplierOrder : AuditableEntity<string>
     public void UpdateExpectedDelivery(DateTime? expectedDelivery)
     {
         ExpectedDelivery = expectedDelivery;
+    }
+
+    public void RegisterReceipt(DateTime receivedAt)
+    {
+        if (receivedAt < OrderedAt)
+        {
+            throw new InvalidOperationException("Receipt date cannot be earlier than the order date.");
+        }
+
+        ReceivedAt = receivedAt;
     }
 
     internal void AttachLine(SupplierOrderLine line)
