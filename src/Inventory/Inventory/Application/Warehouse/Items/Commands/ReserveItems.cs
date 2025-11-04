@@ -1,4 +1,6 @@
 
+using System;
+
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +15,11 @@ public record ReserveWarehouseItems(string WarehouseId, string Id, int Quantity)
     {
         public async Task Handle(ReserveWarehouseItems request, CancellationToken cancellationToken)
         {
+            if (request.Quantity <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(request.Quantity));
+            }
+
             var item = await context.WarehouseItems.FirstOrDefaultAsync(i => i.Id == request.Id, cancellationToken);
 
             if (item is null) throw new Exception();

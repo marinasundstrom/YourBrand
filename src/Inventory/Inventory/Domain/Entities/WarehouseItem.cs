@@ -1,4 +1,6 @@
-﻿using YourBrand.Inventory.Domain.Common;
+﻿using System;
+
+using YourBrand.Inventory.Domain.Common;
 using YourBrand.Inventory.Domain.Enums;
 using YourBrand.Inventory.Domain.Events;
 
@@ -66,6 +68,21 @@ public class WarehouseItem : AuditableEntity<string>
 
     public void Pick(int quantity, bool fromReserved = false)
     {
+        if (quantity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        if (quantity > QuantityOnHand)
+        {
+            throw new InvalidOperationException("Cannot pick more items than are on hand.");
+        }
+
+        if (fromReserved && quantity > QuantityReserved)
+        {
+            throw new InvalidOperationException("Cannot pick more items than are reserved.");
+        }
+
         var oldQuantityOnHand = QuantityOnHand;
         var oldQuantityAvailable = QuantityAvailable;
 
@@ -85,16 +102,49 @@ public class WarehouseItem : AuditableEntity<string>
 
     public void Ship(int quantity, bool fromPicked = false)
     {
+        if (quantity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
         var oldQuantityOnHand = QuantityOnHand;
         var oldQuantityAvailable = QuantityAvailable;
 
         if (fromPicked)
         {
+            if (quantity > QuantityPicked)
+            {
+                throw new InvalidOperationException("Cannot ship more items than have been picked.");
+            }
+
             QuantityPicked -= quantity;
-            AddDomainEvent(new WarehouseItemsPicked(Id, WarehouseId, quantity));
+        }
+        else
+        {
+            if (quantity > QuantityOnHand)
+            {
+                throw new InvalidOperationException("Cannot ship more items than are on hand.");
+            }
+
+            QuantityOnHand -= quantity;
+
+            var reservedReduction = Math.Min(quantity, QuantityReserved);
+
+            if (reservedReduction > 0)
+            {
+                QuantityReserved -= reservedReduction;
+            }
         }
 
-        AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
+        if (QuantityOnHand != oldQuantityOnHand)
+        {
+            AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand, oldQuantityOnHand));
+        }
+
+        if (QuantityAvailable != oldQuantityAvailable)
+        {
+            AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
+        }
     }
 
     /// <summary>
@@ -105,6 +155,16 @@ public class WarehouseItem : AuditableEntity<string>
 
     public void Reserve(int quantity)
     {
+        if (quantity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        if (quantity > QuantityAvailable)
+        {
+            throw new InvalidOperationException("Cannot reserve more items than are available.");
+        }
+
         var oldQuantityAvailable = QuantityAvailable;
 
         QuantityReserved += quantity;
