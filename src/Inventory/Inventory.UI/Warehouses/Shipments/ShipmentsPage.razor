@@ -1,0 +1,279 @@
+@page "/inventory/warehouses/shipments"
+@attribute [Authorize]
+@inject IShipmentsClient ShipmentsClient
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<AppPageTitle>Shipments</AppPageTitle>
+
+<MudText Typo="Typo.h3" Class="mb-4">Shipments</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnShipmentClicked(null)" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2" Disabled="@(!CanEdit)">
+    New shipment
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="Shipment" Elevation="0" ServerData="LoadData" Dense="false" Hover="true" Bordered="false"
+              Striped="true" OnRowClick="ShipmentOnClick">
+        <ToolBarContent>
+
+            <WarehouseSelector Value="Warehouse" ValueChanged="OnWarehouseChanged" For="() => Warehouse" />
+
+            <MudSpacer />
+
+            <MudTextField T="string" Value="orderNo" ValueChanged="OnOrderNoChanged" Placeholder="Order No" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.ConfirmationNumber" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+
+            <MudTextField T="string" Value="searchString" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="Shipment" SortLabel="OrderNo">Order No</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Shipment" SortLabel="Created">Created</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Shipment" SortLabel="Destination.FirstName">Recipient</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Shipment" SortLabel="Service">Service</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel T="Shipment" SortLabel="ShippedAt">Shipped</MudTableSortLabel></MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate Context="shipment">
+            <MudTd DataLabel="Order No">@shipment.OrderNo</MudTd>
+            <MudTd DataLabel="Created">@shipment.Created.ToLocalTime().ToString("g")</MudTd>
+            <MudTd DataLabel="Recipient">@GetRecipient(shipment)</MudTd>
+            <MudTd DataLabel="Service">@shipment.Service</MudTd>
+            <MudTd DataLabel="Shipped">@shipment.ShippedAt?.ToLocalTime().ToString("g")</MudTd>
+            <MudTd>
+                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Inventory2" OnClick="async () => await OnManageItems(shipment)" Disabled="@(!CanEdit)" />
+                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Edit" OnClick="async () => await OnShipmentClicked(shipment)" Disabled="@(!CanEdit)" />
+                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.LocalShipping" OnClick="async () => await OnShip(shipment)" Disabled="@(shipment.ShippedAt.HasValue || !CanEdit)" />
+                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="async () => await OnDelete(shipment)" Disabled="@(!CanEdit)" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+@code {
+    MudTable<Shipment>? table;
+    string? searchString;
+    string? orderNo;
+
+    public Warehouse? Warehouse { get; set; }
+
+    private bool CanEdit => Warehouse is not null;
+
+    private async Task<TableData<Shipment>> LoadData(TableState state, CancellationToken cancellationToken)
+    {
+        if (Warehouse is null)
+        {
+            return new TableData<Shipment>
+            {
+                Items = Array.Empty<Shipment>(),
+                TotalItems = 0
+            };
+        }
+
+        try
+        {
+            var sortLabel = state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel;
+            var sortDirection = state.SortDirection == MudBlazor.SortDirection.None
+                ? (YourBrand.Inventory.Client.SortDirection?)null
+                : (state.SortDirection == MudBlazor.SortDirection.Ascending
+                    ? YourBrand.Inventory.Client.SortDirection.Asc
+                    : YourBrand.Inventory.Client.SortDirection.Desc);
+
+            var results = await ShipmentsClient.GetShipmentsAsync(Warehouse.Id, state.Page + 1, state.PageSize, orderNo, searchString, sortLabel, sortDirection, cancellationToken);
+            return new TableData<Shipment> { Items = results.Items, TotalItems = results.TotalItems };
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+        return new TableData<Shipment>
+        {
+            Items = Array.Empty<Shipment>(),
+            TotalItems = 0
+        };
+    }
+
+    private async Task ShipmentOnClick(TableRowClickEventArgs<Shipment> ev)
+    {
+        await OnShipmentClicked(ev.Item);
+    }
+
+    private void OnSearch(string text)
+    {
+        searchString = string.IsNullOrWhiteSpace(text) ? null : text;
+        table?.ReloadServerData();
+    }
+
+    private void OnOrderNoChanged(string? value)
+    {
+        orderNo = string.IsNullOrWhiteSpace(value) ? null : value;
+        table?.ReloadServerData();
+    }
+
+    private async Task OnWarehouseChanged(Warehouse warehouse)
+    {
+        Warehouse = warehouse;
+
+        if (table is not null)
+        {
+            await table.ReloadServerData();
+        }
+    }
+
+    private async Task OnShipmentClicked(Shipment? shipment)
+    {
+        if (Warehouse is null)
+        {
+            return;
+        }
+
+        try
+        {
+            var parameters = new DialogParameters
+            {
+                { nameof(ShipmentDialog.WarehouseId), Warehouse.Id },
+                { nameof(ShipmentDialog.ShipmentId), shipment?.Id }
+            };
+
+            var options = new DialogOptions
+            {
+                MaxWidth = MaxWidth.ExtraLarge
+            };
+
+            var dialog = await DialogService.ShowAsync<ShipmentDialog>(shipment is null ? "New Shipment" : $"Edit {shipment.OrderNo}", parameters, options);
+            var result = await dialog.Result;
+
+            if (!result.Canceled && table is not null)
+            {
+                await table.ReloadServerData();
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    private async Task OnManageItems(Shipment shipment)
+    {
+        if (Warehouse is null)
+        {
+            return;
+        }
+
+        try
+        {
+            var parameters = new DialogParameters
+            {
+                { nameof(ShipmentItemsDialog.WarehouseId), Warehouse.Id },
+                { nameof(ShipmentItemsDialog.ShipmentId), shipment.Id }
+            };
+
+            var options = new DialogOptions
+            {
+                FullWidth = true,
+                MaxWidth = MaxWidth.Large
+            };
+
+            var dialog = await DialogService.ShowAsync<ShipmentItemsDialog>($"Items for {shipment.OrderNo}", parameters, options);
+            var result = await dialog.Result;
+
+            if (!result.Canceled && table is not null)
+            {
+                await table.ReloadServerData();
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    private async Task OnShip(Shipment shipment)
+    {
+        if (Warehouse is null)
+        {
+            return;
+        }
+
+        bool? confirmed = await DialogService.ShowMessageBox("Ship shipment", $"Mark shipment {shipment.OrderNo} as shipped?", yesText: "Ship", cancelText: "Cancel");
+
+        if (confirmed != true)
+        {
+            return;
+        }
+
+        try
+        {
+            await ShipmentsClient.ShipShipmentAsync(Warehouse.Id, shipment.Id, new ShipShipment { ShippedAt = null });
+            Snackbar.Add($"Shipment {shipment.OrderNo} marked as shipped.", Severity.Success);
+
+            if (table is not null)
+            {
+                await table.ReloadServerData();
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private async Task OnDelete(Shipment shipment)
+    {
+        if (Warehouse is null)
+        {
+            return;
+        }
+
+        bool? confirmed = await DialogService.ShowMessageBox("Delete shipment", $"Are you sure you want to delete shipment {shipment.OrderNo}?", yesText: "Delete", cancelText: "Cancel");
+
+        if (confirmed != true)
+        {
+            return;
+        }
+
+        try
+        {
+            await ShipmentsClient.DeleteShipmentAsync(Warehouse.Id, shipment.Id);
+            Snackbar.Add($"Shipment {shipment.OrderNo} deleted.", Severity.Success);
+
+            if (table is not null)
+            {
+                await table.ReloadServerData();
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private static string GetRecipient(Shipment shipment)
+    {
+        if (shipment.Destination is null)
+        {
+            return string.Empty;
+        }
+
+        return string.IsNullOrWhiteSpace(shipment.Destination.CareOf)
+            ? $"{shipment.Destination.FirstName} {shipment.Destination.LastName}"
+            : $"{shipment.Destination.FirstName} {shipment.Destination.LastName} ({shipment.Destination.CareOf})";
+    }
+}

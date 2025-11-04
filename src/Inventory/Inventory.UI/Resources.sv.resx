@@ -21,6 +21,9 @@
     <data name="Warehouses">
         <value>Lagerlokaler</value>
     </data>
+    <data name="Shipments">
+        <value>Leveranser</value>
+    </data>
     <data name="Sites">
         <value>Platser</value>
     </data>
