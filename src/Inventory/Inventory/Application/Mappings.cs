@@ -6,6 +6,7 @@ using YourBrand.Inventory.Application.Sites;
 using YourBrand.Inventory.Application.Warehouses;
 using YourBrand.Inventory.Application.Warehouses.Items;
 using YourBrand.Inventory.Application.Warehouses.Shipments;
+using YourBrand.Inventory.Application.Warehouses.TransferOrders;
 using YourBrand.Inventory.Application.Suppliers;
 using YourBrand.Inventory.Domain.Entities;
 using YourBrand.Inventory.Domain.ValueObjects;
@@ -132,6 +133,26 @@ public static class Mappings
             shipmentItem.Quantity,
             shipmentItem.IsShipped,
             shipmentItem.ShippedAt);
+    }
+
+    public static TransferOrderDto ToDto(this TransferOrder transferOrder)
+    {
+        return new TransferOrderDto(
+            transferOrder.Id,
+            transferOrder.SourceWarehouse.ToDto(),
+            transferOrder.DestinationWarehouse.ToDto(),
+            transferOrder.Created,
+            transferOrder.CompletedAt,
+            transferOrder.IsCompleted,
+            transferOrder.Lines.Select(x => x.ToDto()).ToList());
+    }
+
+    public static TransferOrderLineDto ToDto(this TransferOrderLine line)
+    {
+        return new TransferOrderLineDto(
+            line.Id,
+            line.Item.ToDto(),
+            line.Quantity);
     }
 
     public static ShippingDetailsDto ToDto(this ShippingDetails destination)

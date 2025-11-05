@@ -1,0 +1,167 @@
+@page "/inventory/transfer-orders"
+@using System.Linq
+@attribute [Authorize]
+@inject ITransferOrdersClient TransferOrdersClient
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<AppPageTitle>Transfer Orders</AppPageTitle>
+
+<MudText Typo="Typo.h3" Class="mb-4">Transfer Orders</MudText>
+
+<MudButton Variant="Variant.Filled" OnClick="async () => await OnCreateTransferOrder()" StartIcon="@Icons.Material.Filled.Add" Color="Color.Default" Class="mb-2 me-2">
+    New transfer order
+</MudButton>
+
+<MudPaper Class="pa-4" Elevation="25">
+    <MudTable @ref="table" T="TransferOrder" Elevation="0" ServerData="LoadData" Hover="true" Bordered="false" Striped="true">
+        <ToolBarContent>
+            <WarehouseSelector Label="Source" Value="SourceWarehouse" ValueChanged="OnSourceWarehouseChanged" For="() => SourceWarehouse" Class="me-4" />
+            <WarehouseSelector Label="Destination" Value="DestinationWarehouse" ValueChanged="OnDestinationWarehouseChanged" For="() => DestinationWarehouse" />
+            <MudSpacer />
+            <MudTextField T="string" Value="searchString" ValueChanged="OnSearch" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Immediate="true" DebounceInterval="200" />
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel T="TransferOrder" SortLabel="Created">Created</MudTableSortLabel></MudTh>
+            <MudTh>Source</MudTh>
+            <MudTh>Destination</MudTh>
+            <MudTh>Items</MudTh>
+            <MudTh><MudTableSortLabel T="TransferOrder" SortLabel="CompletedAt">Completed</MudTableSortLabel></MudTh>
+            <MudTh>Status</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate Context="order">
+            <MudTd DataLabel="Created">@order.Created.ToLocalTime().ToString("g")</MudTd>
+            <MudTd DataLabel="Source">@order.SourceWarehouse.Name</MudTd>
+            <MudTd DataLabel="Destination">@order.DestinationWarehouse.Name</MudTd>
+            <MudTd DataLabel="Items">@GetItemsSummary(order)</MudTd>
+            <MudTd DataLabel="Completed">@order.CompletedAt?.ToLocalTime().ToString("g")</MudTd>
+            <MudTd DataLabel="Status">
+                @if (order.IsCompleted)
+                {
+                    <MudChip Color="Color.Success" Variant="Variant.Filled" Size="Size.Small">Completed</MudChip>
+                }
+                else
+                {
+                    <MudChip Color="Color.Info" Variant="Variant.Filled" Size="Size.Small">Pending</MudChip>
+                }
+            </MudTd>
+            <MudTd>
+                <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Primary" OnClick="async () => await OnComplete(order)" Disabled="@order.IsCompleted" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</MudPaper>
+
+@code {
+    private MudTable<TransferOrder>? table;
+    private string? searchString;
+    public Warehouse? SourceWarehouse { get; set; }
+    public Warehouse? DestinationWarehouse { get; set; }
+
+    private async Task<TableData<TransferOrder>> LoadData(TableState state, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var sortLabel = state.SortDirection == MudBlazor.SortDirection.None ? null : state.SortLabel;
+            var sortDirection = state.SortDirection == MudBlazor.SortDirection.None
+                ? (YourBrand.Inventory.Client.SortDirection?)null
+                : (state.SortDirection == MudBlazor.SortDirection.Ascending ? YourBrand.Inventory.Client.SortDirection.Asc : YourBrand.Inventory.Client.SortDirection.Desc);
+
+            var results = await TransferOrdersClient.GetTransferOrdersAsync(state.Page + 1, state.PageSize, SourceWarehouse?.Id, DestinationWarehouse?.Id, searchString, sortLabel, sortDirection, cancellationToken);
+            return new TableData<TransferOrder> { Items = results.Items, TotalItems = results.TotalItems };
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+
+        return new TableData<TransferOrder>
+        {
+            Items = Array.Empty<TransferOrder>(),
+            TotalItems = 0
+        };
+    }
+
+    private void OnSearch(string? value)
+    {
+        searchString = string.IsNullOrWhiteSpace(value) ? null : value;
+        table?.ReloadServerData();
+    }
+
+    private Task OnSourceWarehouseChanged(Warehouse warehouse)
+    {
+        SourceWarehouse = warehouse;
+        table?.ReloadServerData();
+        return Task.CompletedTask;
+    }
+
+    private Task OnDestinationWarehouseChanged(Warehouse warehouse)
+    {
+        DestinationWarehouse = warehouse;
+        table?.ReloadServerData();
+        return Task.CompletedTask;
+    }
+
+    private async Task OnCreateTransferOrder()
+    {
+        try
+        {
+            var options = new DialogOptions
+            {
+                MaxWidth = MaxWidth.ExtraLarge,
+                FullWidth = true
+            };
+
+            var dialog = await DialogService.ShowAsync<TransferOrderDialog>("New Transfer Order", options: options);
+            var result = await dialog.Result;
+
+            if (!result.Canceled && table is not null)
+            {
+                await table.ReloadServerData();
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    private async Task OnComplete(TransferOrder order)
+    {
+        try
+        {
+            await TransferOrdersClient.CompleteTransferOrderAsync(order.Id, new CompleteTransferOrder());
+
+            if (table is not null)
+            {
+                await table.ReloadServerData();
+            }
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private static string GetItemsSummary(TransferOrder order)
+    {
+        if (order.Lines is null || order.Lines.Count == 0)
+        {
+            return "-";
+        }
+
+        return string.Join(", ", order.Lines.Select(x => $"{x.Item.Name} ({x.Quantity})"));
+    }
+}

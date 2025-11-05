@@ -51,6 +51,10 @@ public class InventoryContext(
 
     public DbSet<ShipmentItem> ShipmentItems { get; set; } = null!;
 
+    public DbSet<TransferOrder> TransferOrders { get; set; } = null!;
+
+    public DbSet<TransferOrderLine> TransferOrderLines { get; set; } = null!;
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entities = ChangeTracker

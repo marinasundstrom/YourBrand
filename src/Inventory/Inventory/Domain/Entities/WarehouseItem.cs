@@ -222,6 +222,55 @@ public class WarehouseItem : AuditableEntity<string>
         UpdateAvailability();
     }
 
+    public void TransferTo(WarehouseItem destination, int quantity)
+    {
+        if (destination is null)
+        {
+            throw new ArgumentNullException(nameof(destination));
+        }
+
+        if (destination.ItemId != ItemId)
+        {
+            throw new InvalidOperationException("Destination item must represent the same catalog item.");
+        }
+
+        if (destination.WarehouseId == WarehouseId)
+        {
+            throw new InvalidOperationException("Destination warehouse must be different from the source warehouse.");
+        }
+
+        if (quantity <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+        }
+
+        if (quantity > QuantityAvailable)
+        {
+            throw new InvalidOperationException("Cannot transfer more items than are available.");
+        }
+
+        var oldQuantityOnHand = QuantityOnHand;
+        var oldQuantityAvailable = QuantityAvailable;
+
+        QuantityOnHand -= quantity;
+
+        if (QuantityOnHand != oldQuantityOnHand)
+        {
+            AddDomainEvent(new WarehouseItemQuantityOnHandUpdated(Id, WarehouseId, QuantityOnHand, oldQuantityOnHand));
+        }
+
+        if (QuantityAvailable != oldQuantityAvailable)
+        {
+            AddDomainEvent(new WarehouseItemQuantityAvailableUpdated(Id, WarehouseId, QuantityAvailable, oldQuantityAvailable));
+        }
+
+        AddDomainEvent(new WarehouseItemsTransferred(Id, WarehouseId, destination.WarehouseId, quantity));
+
+        destination.Receive(quantity);
+
+        UpdateAvailability();
+    }
+
     /// <summary>
     /// This number is the total ordered by your customers (across all open sales orders/work orders).
     /// This number is what you need to be fulfilling to complete sales/production!

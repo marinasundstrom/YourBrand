@@ -17,6 +17,8 @@ public interface IInventoryContext
     DbSet<SupplierOrderLine> SupplierOrderLines { get; }
     DbSet<Shipment> Shipments { get; }
     DbSet<ShipmentItem> ShipmentItems { get; }
+    DbSet<TransferOrder> TransferOrders { get; }
+    DbSet<TransferOrderLine> TransferOrderLines { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

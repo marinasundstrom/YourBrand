@@ -1,0 +1,150 @@
+@using System.Linq
+@inject ITransferOrdersClient TransferOrdersClient
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <DialogContent>
+        <MudStack Spacing="2">
+            <WarehouseSelector Label="Source warehouse" Value="SourceWarehouse" ValueChanged="OnSourceWarehouseChanged" For="() => SourceWarehouse" />
+            <WarehouseSelector Label="Destination warehouse" Value="DestinationWarehouse" ValueChanged="OnDestinationWarehouseChanged" For="() => DestinationWarehouse" />
+
+            @if (SourceWarehouse is not null && DestinationWarehouse is not null && SourceWarehouse.Id == DestinationWarehouse.Id)
+            {
+                <MudAlert Severity="Severity.Warning">Source and destination warehouses must be different.</MudAlert>
+            }
+
+            <MudDivider Class="my-2" />
+
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Add" OnClick="AddLine" Disabled="@(SourceWarehouse is null)">
+                Add item
+            </MudButton>
+
+            <MudTable Items="Lines" Hover="true" Bordered="false" Dense="true">
+                <HeaderContent>
+                    <MudTh>Item</MudTh>
+                    <MudTh>Quantity</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate Context="line">
+                    <MudTd>
+                        <ItemSelector Value="line.Item" ValueChanged="item => OnItemChanged(line, item)" WarehouseId="SourceWarehouse?.Id" Class="w-100" />
+                    </MudTd>
+                    <MudTd>
+                        <MudNumericField T="int" Min="1" Value="line.Quantity" ValueChanged="quantity => OnQuantityChanged(line, quantity)" Immediate="true" Class="w-100" />
+                    </MudTd>
+                    <MudTd Align="Align.Right">
+                        <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => RemoveLine(line)" />
+                    </MudTd>
+                </RowTemplate>
+                <NoRecordsContent>
+                    <MudText Typo="Typo.caption">Select a source warehouse and add at least one item.</MudText>
+                </NoRecordsContent>
+            </MudTable>
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" Color="Color.Secondary" OnClick="Cancel">Cancel</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!CanSave)" OnClick="Save">Create</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    public IMudDialogInstance Dialog { get; set; } = null!;
+
+    private Warehouse? SourceWarehouse { get; set; }
+    private Warehouse? DestinationWarehouse { get; set; }
+    private readonly List<TransferOrderLineModel> Lines = new();
+
+    private bool CanSave => SourceWarehouse is not null
+        && DestinationWarehouse is not null
+        && SourceWarehouse.Id != DestinationWarehouse.Id
+        && Lines.Count > 0
+        && Lines.All(x => x.Item is not null && x.Quantity > 0);
+
+    private void AddLine()
+    {
+        Lines.Add(new TransferOrderLineModel());
+    }
+
+    private void RemoveLine(TransferOrderLineModel line)
+    {
+        Lines.Remove(line);
+    }
+
+    private void OnItemChanged(TransferOrderLineModel line, Item? item)
+    {
+        line.Item = item;
+    }
+
+    private void OnQuantityChanged(TransferOrderLineModel line, int quantity)
+    {
+        line.Quantity = Math.Max(1, quantity);
+    }
+
+    private Task OnSourceWarehouseChanged(Warehouse warehouse)
+    {
+        SourceWarehouse = warehouse;
+
+        foreach (var line in Lines)
+        {
+            line.Item = null;
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private Task OnDestinationWarehouseChanged(Warehouse warehouse)
+    {
+        DestinationWarehouse = warehouse;
+        return Task.CompletedTask;
+    }
+
+    private async Task Save()
+    {
+        if (!CanSave)
+        {
+            return;
+        }
+
+        try
+        {
+            var dto = new CreateTransferOrder
+            {
+                SourceWarehouseId = SourceWarehouse!.Id,
+                DestinationWarehouseId = DestinationWarehouse!.Id,
+                Lines = Lines.Select(x => new CreateTransferOrderLine
+                {
+                    ItemId = x.Item!.Id,
+                    Quantity = x.Quantity
+                }).ToList()
+            };
+
+            await TransferOrdersClient.CreateTransferOrderAsync(dto);
+            Dialog.Close(DialogResult.Ok(true));
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (ApiException ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private void Cancel()
+    {
+        Dialog.Cancel();
+    }
+
+    private class TransferOrderLineModel
+    {
+        public Item? Item { get; set; }
+        public int Quantity { get; set; } = 1;
+    }
+}
