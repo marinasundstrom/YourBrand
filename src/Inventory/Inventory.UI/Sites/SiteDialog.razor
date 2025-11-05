@@ -9,10 +9,15 @@
             <MudContainer Style="max-height: 500px; overflow-y: scroll">
                 <MudTextField Label="Name" Variant="Variant.Outlined" Class="mt-4" @bind-Value="Name"
                               For="@(() => Name)" />
-                @if(SiteId is null) 
+                @if(SiteId is null)
                 {
                     <MudCheckBox Label="Create warehouse" Variant="Variant.Outlined" Class="mt-4" @bind-Value="CreateWarehouse"
                                 For="@(() => CreateWarehouse)" />
+
+                    @if(CreateWarehouse)
+                    {
+                        <CompanySelector Label="Company" Class="mt-4" Variant="Variant.Outlined" @bind-Value="Company" For="() => Company" />
+                    }
                 }
             </MudContainer>
         </DialogContent>
@@ -49,24 +54,41 @@
 
     public bool CreateWarehouse { get; set; }
 
+    [Required]
+    public Company Company { get; set; } = null!;
+
     protected override async Task OnInitializedAsync()
     {
-        context = new EditContext(this);
-
-        if (SiteId is not null) 
+        if (SiteId is not null)
         {
             var site = await SitesClient.GetSiteAsync(SiteId);
             Name = site.Name;
+            Company = new Company
+            {
+                Id = string.Empty,
+                Name = string.Empty,
+                Currency = string.Empty,
+                TotalStockValue = 0d
+            };
         }
+
+        context = new EditContext(this);
     }
 
     public async Task OnValidSubmit()
     {
-        if(SiteId is null) 
+        if(SiteId is null)
         {
+            if(CreateWarehouse && Company is null)
+            {
+                Snackbar.Add("Please select a company to create the warehouse.", Severity.Error);
+                return;
+            }
+
             await SitesClient.CreateSiteAsync(new CreateSite {
                 Name = Name,
-                CreateWarehouse = CreateWarehouse
+                CreateWarehouse = CreateWarehouse,
+                CompanyId = CreateWarehouse ? Company.Id : null
             });
 
             //Dialog.Close(site);

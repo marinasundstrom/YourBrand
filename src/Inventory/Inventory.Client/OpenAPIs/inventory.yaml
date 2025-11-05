@@ -133,6 +133,127 @@ paths:
       responses:
         200:
           description: ''
+  /v1/Companies:
+    get:
+      tags:
+      - Companies
+      operationId: Companies_GetCompanies
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 5
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfCompany'
+    post:
+      tags:
+      - Companies
+      operationId: Companies_CreateCompany
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCompany'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+  /v1/Companies/{id}:
+    get:
+      tags:
+      - Companies
+      operationId: Companies_GetCompany
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+    put:
+      tags:
+      - Companies
+      operationId: Companies_UpdateCompany
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCompany'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+    delete:
+      tags:
+      - Companies
+      operationId: Companies_DeleteCompany
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
   /v1/Warehouses/{warehouseId}/Items:
     get:
       tags:
@@ -1296,6 +1417,17 @@ components:
         totalItems:
           type: integer
           format: int32
+    ItemsResultOfCompany:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Company'
+        totalItems:
+          type: integer
+          format: int32
     Warehouse:
       type: object
       additionalProperties: false
@@ -1306,6 +1438,8 @@ components:
           type: string
         site:
           $ref: '#/components/schemas/Site'
+        company:
+          $ref: '#/components/schemas/Company'
     Site:
       type: object
       additionalProperties: false
@@ -1314,6 +1448,19 @@ components:
           type: string
         name:
           type: string
+    Company:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        currency:
+          type: string
+        totalStockValue:
+          type: number
+          format: double
     SortDirection:
       type: string
       description: ''
@@ -1331,6 +1478,8 @@ components:
           type: string
         siteId:
           type: string
+        companyId:
+          type: string
     UpdateWarehouse:
       type: object
       additionalProperties: false
@@ -1338,6 +1487,24 @@ components:
         name:
           type: string
         siteId:
+          type: string
+        companyId:
+          type: string
+    CreateCompany:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        currency:
+          type: string
+    UpdateCompany:
+      type: object
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+        currency:
           type: string
     ItemsResultOfWarehouseItem:
       type: object
@@ -1377,6 +1544,12 @@ components:
         quantityThreshold:
           type: integer
           format: int32
+        unitCost:
+          type: number
+          format: double
+        stockValue:
+          type: number
+          format: double
     ItemsResultOfShipment:
       type: object
       additionalProperties: false
@@ -1636,6 +1809,9 @@ components:
         quantityThreshold:
           type: integer
           format: int32
+        unitCost:
+          type: number
+          format: double
     UpdateWarehouseItem:
       type: object
       additionalProperties: false
@@ -1681,6 +1857,9 @@ components:
         quantity:
           type: integer
           format: int32
+        unitCost:
+          type: number
+          format: double
     ItemsResultOfSite:
       type: object
       additionalProperties: false
@@ -1700,6 +1879,8 @@ components:
           type: string
         createWarehouse:
           type: boolean
+        companyId:
+          type: string
     UpdateSite:
       type: object
       additionalProperties: false
