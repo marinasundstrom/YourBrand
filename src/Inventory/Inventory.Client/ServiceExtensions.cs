@@ -12,7 +12,9 @@ public static class ServiceExtensions
             .AddSitesClient(configureClient, builder)
             .AddWarehousesClient(configureClient, builder)
             .AddWarehouseItemsClient(configureClient, builder)
-            .AddShipmentsClient(configureClient, builder);
+            .AddShipmentsClient(configureClient, builder)
+            .AddTransferOrdersClient(configureClient, builder)
+            .AddCompaniesClient(configureClient, builder);
 
         return services;
     }
@@ -77,6 +79,28 @@ public static class ServiceExtensions
         var b = services
             .AddHttpClient(nameof(ShipmentsClient) + "WH", configureClient)
             .AddTypedClient<IShipmentsClient>((http, sp) => new ShipmentsClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddTransferOrdersClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(TransferOrdersClient) + "WH", configureClient)
+            .AddTypedClient<ITransferOrdersClient>((http, sp) => new TransferOrdersClient(http));
+
+        builder?.Invoke(b);
+
+        return services;
+    }
+
+    public static IServiceCollection AddCompaniesClient(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    {
+        var b = services
+            .AddHttpClient(nameof(CompaniesClient) + "WH", configureClient)
+            .AddTypedClient<ICompaniesClient>((http, sp) => new CompaniesClient(http));
 
         builder?.Invoke(b);
 

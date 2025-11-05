@@ -59,6 +59,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        context = new EditContext(this);
+
         if (SiteId is not null)
         {
             var site = await SitesClient.GetSiteAsync(SiteId);
@@ -71,8 +73,6 @@
                 TotalStockValue = 0d
             };
         }
-
-        context = new EditContext(this);
     }
 
     public async Task OnValidSubmit()

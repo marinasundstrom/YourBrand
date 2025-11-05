@@ -39,11 +39,11 @@
             <MudTd DataLabel="Status">
                 @if (order.IsCompleted)
                 {
-                    <MudChip Color="Color.Success" Variant="Variant.Filled" Size="Size.Small">Completed</MudChip>
+                    <MudChip T="string" Color="Color.Success" Variant="Variant.Filled" Size="Size.Small">Completed</MudChip>
                 }
                 else
                 {
-                    <MudChip Color="Color.Info" Variant="Variant.Filled" Size="Size.Small">Pending</MudChip>
+                    <MudChip T="string" Color="Color.Info" Variant="Variant.Filled" Size="Size.Small">Pending</MudChip>
                 }
             </MudTd>
             <MudTd>
