@@ -24,6 +24,9 @@
     <data name="Shipments">
         <value>Leveranser</value>
     </data>
+    <data name="TransferOrders">
+        <value>Interna överföringar</value>
+    </data>
     <data name="Sites">
         <value>Platser</value>
     </data>

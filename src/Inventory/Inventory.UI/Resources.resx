@@ -24,6 +24,9 @@
     <data name="Shipments">
         <value>Shipments</value>
     </data>
+    <data name="TransferOrders">
+        <value>Transfer orders</value>
+    </data>
     <data name="Sites">
         <value>Sites</value>
     </data>

@@ -725,6 +725,130 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Shipment'
+  /v1/TransferOrders:
+    get:
+      tags:
+      - TransferOrders
+      operationId: TransferOrders_GetTransferOrders
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 1
+        x-position: 1
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 2
+      - name: sourceWarehouseId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 3
+      - name: destinationWarehouseId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 5
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 7
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfTransferOrder'
+    post:
+      tags:
+      - TransferOrders
+      operationId: TransferOrders_CreateTransferOrder
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransferOrder'
+        required: true
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferOrder'
+  /v1/TransferOrders/{id}:
+    get:
+      tags:
+      - TransferOrders
+      operationId: TransferOrders_GetTransferOrder
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferOrder'
+  /v1/TransferOrders/{id}/Complete:
+    post:
+      tags:
+      - TransferOrders
+      operationId: TransferOrders_CompleteTransferOrder
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      requestBody:
+        x-name: dto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteTransferOrder'
+        required: true
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferOrder'
   /v1/Sites:
     get:
       tags:
@@ -1264,6 +1388,17 @@ components:
         totalItems:
           type: integer
           format: int32
+    ItemsResultOfTransferOrder:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransferOrder'
+        totalItems:
+          type: integer
+          format: int32
     Shipment:
       type: object
       additionalProperties: false
@@ -1306,6 +1441,40 @@ components:
           type: string
           format: date-time
           nullable: true
+    TransferOrder:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        sourceWarehouse:
+          $ref: '#/components/schemas/Warehouse'
+        destinationWarehouse:
+          $ref: '#/components/schemas/Warehouse'
+        created:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+        isCompleted:
+          type: boolean
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransferOrderLine'
+    TransferOrderLine:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        item:
+          $ref: '#/components/schemas/Item'
+        quantity:
+          type: integer
+          format: int32
     ShippingDetails:
       type: object
       additionalProperties: false
@@ -1379,6 +1548,35 @@ components:
       additionalProperties: false
       properties:
         shippedAt:
+          type: string
+          format: date-time
+          nullable: true
+    CreateTransferOrder:
+      type: object
+      additionalProperties: false
+      properties:
+        sourceWarehouseId:
+          type: string
+        destinationWarehouseId:
+          type: string
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateTransferOrderLine'
+    CreateTransferOrderLine:
+      type: object
+      additionalProperties: false
+      properties:
+        itemId:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+    CompleteTransferOrder:
+      type: object
+      additionalProperties: false
+      properties:
+        completedAt:
           type: string
           format: date-time
           nullable: true

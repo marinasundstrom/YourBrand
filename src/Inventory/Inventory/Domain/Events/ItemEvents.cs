@@ -25,3 +25,5 @@ public record WarehouseItemsReturned(string ItemId, string WarehouseId, int Quan
 public record WarehouseItemsUnpicked(string ItemId, string WarehouseId, int Quantity) : DomainEvent;
 
 public record WarehouseItemsShipped(string ItemId, string WarehouseId, int Quantity) : DomainEvent;
+
+public record WarehouseItemsTransferred(string ItemId, string SourceWarehouseId, string DestinationWarehouseId, int Quantity) : DomainEvent;
