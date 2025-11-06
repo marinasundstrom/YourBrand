@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
@@ -23,6 +24,11 @@ public sealed record ImportProducts(string OrganizationId, Stream Stream) : IReq
     {
         public async Task<Result<ProductImportResult>> Handle(ImportProducts request, CancellationToken cancellationToken)
         {
+            categories.Clear();
+            brands.Clear();
+            stores.Clear();
+            products.Clear();
+
             var name = DateTime.UtcNow.Ticks.ToString();
 
             await UploadAndExtractFiles(request.Stream, name);
@@ -32,6 +38,8 @@ public sealed record ImportProducts(string OrganizationId, Stream Stream) : IReq
             using var fileStream = File.OpenRead(filePath);
 
             List<string> diagnostics = new();
+            var importedProducts = new List<Product>();
+            var productImageFiles = new Dictionary<Product, string>(ReferenceEqualityComparer.Instance);
 
             var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -70,41 +78,54 @@ public sealed record ImportProducts(string OrganizationId, Stream Stream) : IReq
                     {
                         Sku = record.Sku,
                         Description = record.Description ?? string.Empty,
-                        //Image = record.Image,
                         Parent = parentProduct,
                         Store = store,
+                        StoreId = store.Id,
+                        TenantId = store.TenantId,
+                        OrganizationId = request.OrganizationId,
+                        Brand = brand,
+                        BrandId = brand?.Id,
                         ListingState = record.Listed.GetValueOrDefault() ? Domain.Enums.ProductListingState.Listed : Domain.Enums.ProductListingState.Unlisted
                     };
 
-                    if (record.RegularPrice is not null)
+                    product.SetPrice(record.RegularPrice ?? record.Price);
+
+                    if (record.RegularPrice.HasValue)
                     {
-                        product.SetPrice(record.RegularPrice.GetValueOrDefault());
+                        product.RegularPrice = record.RegularPrice;
+
+                        if (record.Price < record.RegularPrice)
+                        {
+                            product.SetDiscountPrice(record.Price);
+                        }
                     }
 
-                    product.SetDiscountPrice(record.Price);
-
                     products.Add(record.Sku, product);
+                    importedProducts.Add(product);
+
+                    if (!string.IsNullOrWhiteSpace(record.Image))
+                    {
+                        productImageFiles[product] = record.Image;
+                    }
 
                     category.AddProduct(product);
                 }
             }
 
-            context.Products.AddRange(products.Select(x => x.Value));
+            context.Products.AddRange(importedProducts);
 
             await context.SaveChangesAsync(cancellationToken);
 
             string ArchiveDirPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $"uploads/{name}");
 
-            foreach (var product in products.Select(x => x.Value))
+            foreach (var product in importedProducts)
             {
-                if (product.Image is null)
+                if (!productImageFiles.TryGetValue(product, out var fileName))
                 {
                     continue;
                 }
 
-                var image = product.Image is null ? null : Path.Combine(ArchiveDirPath, product.Image.Url!);
-
-                var fileName = product.Image.Url;
+                var image = Path.Combine(ArchiveDirPath, fileName);
 
                 await productImageUploader.TryDeleteProductImage(product.Id, fileName);
 
@@ -137,6 +158,8 @@ public sealed record ImportProducts(string OrganizationId, Stream Stream) : IReq
 
                     var image2 = new ProductImage("Image", string.Empty, path);
                     image2.OrganizationId = request.OrganizationId;
+                    image2.Store = product.Store;
+                    image2.StoreId = product.StoreId;
                     product.AddImage(image2);
                     product.Image = image2;
 
