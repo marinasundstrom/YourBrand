@@ -24,6 +24,7 @@ public sealed record CalculateProductPrice(
                 .InOrganization(request.OrganizationId)
                 .IncludeAll()
                 .Include(x => x.Prices)
+                    .ThenInclude(x => x.PriceTiers)
                 .AsSplitQuery()
                 .AsQueryable();
 
