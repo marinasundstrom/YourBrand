@@ -70,6 +70,8 @@ public sealed class CatalogContext(
 
     public DbSet<Option> Options { get; set; } = null!;
 
+    public DbSet<ProductPriceTier> ProductPriceTiers { get; set; } = null!;
+
     public DbSet<SelectableOption> SelectableOptions { get; set; } = null!;
 
     public DbSet<ChoiceOption> ChoiceOptions { get; set; } = null!;

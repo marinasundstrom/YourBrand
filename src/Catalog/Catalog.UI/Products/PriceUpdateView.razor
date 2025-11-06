@@ -1,3 +1,5 @@
+@implements IDisposable
+
 <EditForm Model="@Model" OnValidSubmit="Model.UpdatePrice">
     <DataAnnotationsValidator />
 
@@ -23,8 +25,98 @@
     <MudButton Variant="Variant.Filled" Class="mt-4" OnClick="@Model.RestoreRegularPrice">Restore regular price</MudButton>
 }
 
+<MudPaper Class="mt-6 pa-4">
+    <MudStack Spacing="2">
+        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+            <MudText Typo="Typo.h6">Price tiers</MudText>
+            <MudButton Variant="Variant.Outlined" OnClick="AddPriceTier">Add price tier</MudButton>
+        </MudStack>
+
+        @if (Model.PriceTiers.Count == 0)
+        {
+            <MudText Color="Color.Secondary">No price tiers configured.</MudText>
+        }
+        else
+        {
+            <MudTable Items="Model.PriceTiers" Dense="true" Hover="true">
+                <HeaderContent>
+                    <MudTh>From</MudTh>
+                    <MudTh>To</MudTh>
+                    <MudTh>Type</MudTh>
+                    <MudTh>Value</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="From">@context.FromQuantity</MudTd>
+                    <MudTd DataLabel="To">@(context.ToQuantity is null ? "∞" : context.ToQuantity?.ToString())</MudTd>
+                    <MudTd DataLabel="Type">@context.TierType</MudTd>
+                    <MudTd DataLabel="Value">@context.Value</MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="() => EditPriceTier(context)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => RemovePriceTier(context)" />
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </MudStack>
+</MudPaper>
+
 @code
 {
     [Parameter]
     public PriceUpdateViewModel Model { get; set; }
+
+    private Func<Task>? _priceTiersChangedHandler;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Model is not null)
+        {
+            _priceTiersChangedHandler = OnPriceTiersChanged;
+            Model.PriceTiersChanged += _priceTiersChangedHandler;
+            await Model.InitializeAsync();
+        }
+    }
+
+    private Task OnPriceTiersChanged()
+    {
+        return InvokeAsync(StateHasChanged);
+    }
+
+    private async Task AddPriceTier()
+    {
+        var formData = await Model.PromptPriceTierAsync("Add price tier");
+        if (formData is null)
+        {
+            return;
+        }
+
+        await Model.CreatePriceTier(formData);
+    }
+
+    private async Task EditPriceTier(ProductPriceTier tier)
+    {
+        var existing = new PriceUpdateViewModel.PriceTierFormData(tier.FromQuantity, tier.ToQuantity, tier.TierType, tier.Value);
+        var formData = await Model.PromptPriceTierAsync("Edit price tier", existing);
+        if (formData is null)
+        {
+            return;
+        }
+
+        await Model.UpdatePriceTier(tier, formData);
+    }
+
+    private async Task RemovePriceTier(ProductPriceTier tier)
+    {
+        await Model.DeletePriceTier(tier);
+    }
+
+    public void Dispose()
+    {
+        if (Model is not null && _priceTiersChangedHandler is not null)
+        {
+            Model.PriceTiersChanged -= _priceTiersChangedHandler;
+        }
+
+    }
 }

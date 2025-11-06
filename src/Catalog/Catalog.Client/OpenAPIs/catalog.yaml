@@ -1834,6 +1834,152 @@ paths:
           description: ''
       security:
       - JWT: []
+  /v1/products/{idOrHandle}/price/tiers:
+    get:
+      tags:
+      - Products
+      operationId: Products_GetProductPriceTiers
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductPriceTier'
+        404:
+          description: ''
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Products
+      operationId: Products_CreateProductPriceTier
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductPriceTierRequest'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPriceTier'
+        400:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+  /v1/products/{idOrHandle}/price/tiers/{tierId}:
+    put:
+      tags:
+      - Products
+      operationId: Products_UpdateProductPriceTier
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: tierId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductPriceTierRequest'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPriceTier'
+        400:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Products
+      operationId: Products_DeleteProductPriceTier
+      parameters:
+      - name: organizationId
+        in: query
+        required: true
+        schema:
+          type: string
+        x-position: 1
+      - name: idOrHandle
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: tierId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        204:
+          description: ''
+        400:
+          description: ''
+        404:
+          description: ''
+      security:
+      - JWT: []
   /v1/products/{idOrHandle}/images:
     post:
       tags:
@@ -3851,12 +3997,34 @@ components:
         optionsTotal:
           type: number
           format: decimal
-        discountAmount:
+        quantity:
+          type: integer
+          format: int32
+        unitPrice:
+          type: number
+          format: decimal
+        tierDiscount:
+          type: number
+          format: decimal
+        productDiscount:
+          type: number
+          format: decimal
+        subscriptionDiscount:
           type: number
           format: decimal
         total:
           type: number
           format: decimal
+        discountAmount:
+          type: number
+          format: decimal
+          readOnly: true
+        priceTier:
+          $ref: '#/components/schemas/ProductPriceTierApplication'
+        optionBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductOptionPriceDetail'
     CalculateProductPriceRequest:
       type: object
       additionalProperties: false
@@ -3865,6 +4033,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductOptionValue'
+        quantity:
+          type: integer
+          format: int32
+          default: 1
         subscriptionPlanId:
           type: string
           nullable: true
@@ -3881,6 +4053,103 @@ components:
         choiceValueId:
           type: string
           nullable: true
+    ProductOptionPriceDetail:
+      type: object
+      additionalProperties: false
+      properties:
+        optionId:
+          type: string
+        price:
+          type: number
+          format: decimal
+    ProductPriceTier:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        fromQuantity:
+          type: integer
+          format: int32
+        toQuantity:
+          type: integer
+          format: int32
+          nullable: true
+        tierType:
+          $ref: '#/components/schemas/ProductPriceTierType'
+        value:
+          type: number
+          format: decimal
+    ProductPriceTierApplication:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        fromQuantity:
+          type: integer
+          format: int32
+        toQuantity:
+          type: integer
+          format: int32
+          nullable: true
+        tierType:
+          $ref: '#/components/schemas/ProductPriceTierType'
+        value:
+          type: number
+          format: decimal
+        discountedUnits:
+          type: integer
+          format: int32
+        effectiveUnitPrice:
+          type: number
+          format: decimal
+    ProductPriceTierType:
+      type: string
+      enum:
+      - PricePerUnit
+      - DiscountPerUnit
+      - DiscountPerAdditionalUnit
+    CreateProductPriceTierRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        fromQuantity:
+          type: integer
+          format: int32
+        toQuantity:
+          type: integer
+          format: int32
+          nullable: true
+        tierType:
+          $ref: '#/components/schemas/ProductPriceTierType'
+        value:
+          type: number
+          format: decimal
+      required:
+      - fromQuantity
+      - tierType
+      - value
+    UpdateProductPriceTierRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        fromQuantity:
+          type: integer
+          format: int32
+        toQuantity:
+          type: integer
+          format: int32
+          nullable: true
+        tierType:
+          $ref: '#/components/schemas/ProductPriceTierType'
+        value:
+          type: number
+          format: decimal
+      required:
+      - fromQuantity
+      - tierType
+      - value
     CreateProductRequest:
       type: object
       additionalProperties: false

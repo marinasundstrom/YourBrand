@@ -12,6 +12,7 @@ using YourBrand.Catalog.Features.ProductManagement.ProductCategories;
 using YourBrand.Catalog.Features.ProductManagement.Products.Attributes;
 using YourBrand.Catalog.Features.ProductManagement.Products.Images;
 using YourBrand.Catalog.Features.ProductManagement.Products.Options;
+using YourBrand.Catalog.Features.ProductManagement.Products.PriceTiers;
 using YourBrand.Catalog.Features.ProductManagement.SubscriptionPlans.SubscriptionPlans;
 using YourBrand.Catalog.Features.Stores;
 using YourBrand.Catalog.Model;
@@ -27,6 +28,7 @@ public static partial class Endpoints
 
         app.MapProductAttributesEndpoints()
             .MapProductOptionsEndpoints()
+            .MapProductPriceTiersEndpoints()
             .MapProductSubscriptionPlansEndpoints();
 
         var versionedApi = app.NewVersionedApi("Products");
@@ -139,7 +141,8 @@ public static partial class Endpoints
     
     private static async Task<Results<Ok<ProductPriceResult>, NotFound>> CalculateProductPrice(string organizationId, string idOrHandle, CalculateProductPriceRequest request, IMediator mediator, CancellationToken cancellationToken)
     {
-        var result = await mediator.Send(new CalculateProductPrice(organizationId, idOrHandle, request.OptionValues, request.SubscriptionPlanId), cancellationToken);
+        var quantity = request.Quantity <= 0 ? 1 : request.Quantity;
+        var result = await mediator.Send(new CalculateProductPrice(organizationId, idOrHandle, request.OptionValues, quantity, request.SubscriptionPlanId), cancellationToken);
 
         return TypedResults.Ok(result);
     }
@@ -404,4 +407,6 @@ public record class UpdateProductImageData(string? Title, string? Text);
 public record class SetMainProductImageData();
 
 public record class CalculateProductPriceRequest(
-        List<ProductOptionValue> OptionValues, string? SubscriptionPlanId = null);
+    List<ProductOptionValue> OptionValues,
+    int Quantity = 1,
+    string? SubscriptionPlanId = null);

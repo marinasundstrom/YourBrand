@@ -17,4 +17,8 @@ public static class Errors
     public readonly static Error BrandNotFound = new("brand-not-found", "Brand not found", "");
 
     public readonly static Error VatRateNotFound = new("vatrate-not-found", "VAT Rate not found", "");
+
+    public readonly static Error ProductPriceMissing = new("product-price-missing", "Product is missing price information", "");
+
+    public readonly static Error ProductPriceTierNotFound = new("product-price-tier-not-found", "Product price tier not found", "");
 }
