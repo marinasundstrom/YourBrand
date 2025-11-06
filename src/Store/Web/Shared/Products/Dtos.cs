@@ -1,7 +1,8 @@
-﻿namespace BlazorApp.Products;
+namespace BlazorApp.Products;
 
 using BlazorApp.Brands;
 using BlazorApp.ProductCategories;
+using ProductPriceTierType = YourBrand.StoreFront.ProductPriceTierType;
 
 public sealed record Product(long Id, string Name, Brand? brand, ProductCategoryParent? Category, ProductImage? Image, IEnumerable<ProductImage> Images, string Description, decimal Price, double? VatRate, decimal? RegularPrice, double? DiscountRate, string Handle, bool HasVariants, IEnumerable<ProductAttribute> Attributes, IEnumerable<ProductOption> Options);
 
@@ -58,11 +59,34 @@ public static class Mappings
 }
 
 public record class CalculateProductPriceRequest(
-    List<ProductOptionValue> OptionValues, string? SubscriptionPlanId = null);
+    List<ProductOptionValue> OptionValues,
+    int Quantity = 1,
+    string? SubscriptionPlanId = null);
 
 public record ProductOptionValue(string OptionId, decimal? NumericValue, string? ChoiceValueId);
 
-public record ProductPriceResult(decimal BasePrice, decimal OptionsTotal, decimal DiscountAmount, decimal Total);
+public record ProductPriceResult(
+    decimal BasePrice,
+    decimal OptionsTotal,
+    int Quantity,
+    decimal UnitPrice,
+    decimal TierDiscount,
+    decimal ProductDiscount,
+    decimal SubscriptionDiscount,
+    decimal Total,
+    ProductPriceTierApplication? PriceTier)
+{
+    public decimal DiscountAmount => TierDiscount + ProductDiscount + SubscriptionDiscount;
+}
+
+public record ProductPriceTierApplication(
+    string Id,
+    int FromQuantity,
+    int? ToQuantity,
+    ProductPriceTierType TierType,
+    decimal Value,
+    int DiscountedUnits,
+    decimal EffectiveUnitPrice);
 
 public static class Mappings2
 {
@@ -70,7 +94,8 @@ public static class Mappings2
     {
         return new YourBrand.StoreFront.CalculateProductPriceRequest {
             OptionValues = request.OptionValues.Select(x => x.ToDto()).ToList(),
-            SubscriptionPlanId =  request.SubscriptionPlanId
+            SubscriptionPlanId =  request.SubscriptionPlanId,
+            Quantity = request.Quantity
         };
     }
 
@@ -86,7 +111,27 @@ public static class Mappings2
     
     public static ProductPriceResult Map(this YourBrand.StoreFront.ProductPriceResult productPriceResult)
     {
-        return new ProductPriceResult(productPriceResult.BasePrice, productPriceResult.OptionsTotal,
-            productPriceResult.DiscountAmount, productPriceResult.Total);
+        return new ProductPriceResult(
+            productPriceResult.BasePrice,
+            productPriceResult.OptionsTotal,
+            productPriceResult.Quantity,
+            productPriceResult.UnitPrice,
+            productPriceResult.TierDiscount,
+            productPriceResult.ProductDiscount,
+            productPriceResult.SubscriptionDiscount,
+            productPriceResult.Total,
+            productPriceResult.PriceTier?.ToDto());
+    }
+
+    public static ProductPriceTierApplication ToDto(this YourBrand.StoreFront.ProductPriceTierApplication priceTier)
+    {
+        return new ProductPriceTierApplication(
+            priceTier.Id!,
+            priceTier.FromQuantity,
+            priceTier.ToQuantity,
+            priceTier.TierType,
+            priceTier.Value,
+            priceTier.DiscountedUnits,
+            priceTier.EffectiveUnitPrice);
     }
 }

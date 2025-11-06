@@ -7,7 +7,12 @@ using YourBrand.Catalog.Persistence;
 
 namespace YourBrand.Catalog.Features.ProductManagement.Products;
 
-public sealed record CalculateProductPrice(string OrganizationId, string IdOrHandle, List<ProductOptionValue> OptionValues, string? SubscriptionPlanId = null) : IRequest<ProductPriceResult>
+public sealed record CalculateProductPrice(
+    string OrganizationId,
+    string IdOrHandle,
+    List<ProductOptionValue> OptionValues,
+    int Quantity,
+    string? SubscriptionPlanId = null) : IRequest<ProductPriceResult>
 {
     public sealed class Handler(CatalogContext catalogContext, ProductPricingService productPricingService) : IRequestHandler<CalculateProductPrice, ProductPriceResult>
     {
@@ -33,7 +38,7 @@ public sealed record CalculateProductPrice(string OrganizationId, string IdOrHan
                 subscriptionPlan = product.SubscriptionPlans.FirstOrDefault(x => x.Id == request.SubscriptionPlanId);
             }
 
-            return productPricingService.CalculatePrice(product, request.OptionValues, subscriptionPlan);
+            return productPricingService.CalculatePrice(product, request.OptionValues, subscriptionPlan, request.Quantity);
         }
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using Core;
 
 using YourBrand.Auditability;
@@ -9,6 +11,8 @@ namespace YourBrand.Catalog.Domain.Entities;
 
 public class ProductPrice : IAuditableEntity<string>, ISoftDeletableWithAudit, IHasTenant, IHasOrganization
 {
+    readonly HashSet<ProductPriceTier> _priceTiers = new();
+
     decimal _price;
     decimal? _regularPrice;
 
@@ -132,6 +136,46 @@ public class ProductPrice : IAuditableEntity<string>, ISoftDeletableWithAudit, I
 
     public DateTimeOffset? ValidFrom { get; set; }
     public DateTimeOffset? ValidTo { get; set; }
+
+    public IReadOnlyCollection<ProductPriceTier> PriceTiers => _priceTiers;
+
+    public void AddPriceTier(ProductPriceTier priceTier)
+    {
+        ArgumentNullException.ThrowIfNull(priceTier);
+
+        if (priceTier.ProductPriceId != Id)
+        {
+            throw new InvalidOperationException("The price tier must belong to this price instance.");
+        }
+
+        _priceTiers.Add(priceTier);
+    }
+
+    public ProductPriceTier? GetPriceTier(string tierId)
+    {
+        ArgumentNullException.ThrowIfNull(tierId);
+
+        return _priceTiers.FirstOrDefault(x => x.Id == tierId);
+    }
+
+    public void UpdatePriceTier(ProductPriceTier priceTier, int fromQuantity, int? toQuantity, ProductPriceTierType tierType, decimal value)
+    {
+        ArgumentNullException.ThrowIfNull(priceTier);
+
+        if (!_priceTiers.Contains(priceTier))
+        {
+            throw new InvalidOperationException("The price tier must belong to this price instance.");
+        }
+
+        priceTier.Update(fromQuantity, toQuantity, tierType, value);
+    }
+
+    public void RemovePriceTier(ProductPriceTier priceTier)
+    {
+        ArgumentNullException.ThrowIfNull(priceTier);
+
+        _priceTiers.Remove(priceTier);
+    }
 
     public UserId? CreatedById { get; set; }
     public DateTimeOffset Created { get; set; }

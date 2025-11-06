@@ -1136,12 +1136,34 @@ components:
         optionsTotal:
           type: number
           format: decimal
-        discountAmount:
+        quantity:
+          type: integer
+          format: int32
+        unitPrice:
+          type: number
+          format: decimal
+        tierDiscount:
+          type: number
+          format: decimal
+        productDiscount:
+          type: number
+          format: decimal
+        subscriptionDiscount:
           type: number
           format: decimal
         total:
           type: number
           format: decimal
+        discountAmount:
+          type: number
+          format: decimal
+          readOnly: true
+        priceTier:
+          $ref: '#/components/schemas/ProductPriceTierApplication'
+        optionBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductOptionPriceDetail'
     CalculateProductPriceRequest:
       type: object
       additionalProperties: false
@@ -1150,6 +1172,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductOptionValue'
+        quantity:
+          type: integer
+          format: int32
+          default: 1
         subscriptionPlanId:
           type: string
           nullable: true
@@ -1166,6 +1192,45 @@ components:
         choiceValueId:
           type: string
           nullable: true
+    ProductOptionPriceDetail:
+      type: object
+      additionalProperties: false
+      properties:
+        optionId:
+          type: string
+        price:
+          type: number
+          format: decimal
+    ProductPriceTierApplication:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        fromQuantity:
+          type: integer
+          format: int32
+        toQuantity:
+          type: integer
+          format: int32
+          nullable: true
+        tierType:
+          $ref: '#/components/schemas/ProductPriceTierType'
+        value:
+          type: number
+          format: decimal
+        discountedUnits:
+          type: integer
+          format: int32
+        effectiveUnitPrice:
+          type: number
+          format: decimal
+    ProductPriceTierType:
+      type: string
+      enum:
+      - PricePerUnit
+      - DiscountPerUnit
+      - DiscountPerAdditionalUnit
     PagedResultOfProductSubscriptionPlan:
       type: object
       additionalProperties: false

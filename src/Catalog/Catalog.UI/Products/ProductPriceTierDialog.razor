@@ -1,0 +1,108 @@
+@using System.ComponentModel.DataAnnotations
+@using MudBlazor
+@using YourBrand.Catalog
+@using YourBrand.Catalog.Products
+
+<MudDialog>
+    <DialogTitle>@Title</DialogTitle>
+    <EditForm Model="_model" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <DialogContent>
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudNumericField Label="From quantity" @bind-Value="_model.FromQuantity" Variant="Variant.Outlined" Required="true"
+                        For="() => _model.FromQuantity" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudNumericField Label="To quantity" @bind-Value="_model.ToQuantity" Variant="Variant.Outlined"
+                        For="() => _model.ToQuantity" HelperText="Leave empty for no upper limit" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudSelect @bind-Value="_model.TierType" Label="Tier type" Variant="Variant.Outlined">
+                        @foreach (var value in Enum.GetValues<ProductPriceTierType>())
+                        {
+                            <MudSelectItem Value="value">@value</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudNumericField Label="Value" @bind-Value="_model.Value" Variant="Variant.Outlined" For="() => _model.Value"
+                        Adornment="Adornment.End" AdornmentText="@ValueLabel" />
+                </MudItem>
+            </MudGrid>
+        </DialogContent>
+        <DialogActions>
+            <MudButton Variant="Variant.Text" OnClick="Cancel">Cancel</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Save</MudButton>
+        </DialogActions>
+    </EditForm>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    public IMudDialogInstance MudDialog { get; set; } = default!;
+
+    [Parameter]
+    public string Title { get; set; } = "Price tier";
+
+    [Parameter]
+    public PriceUpdateViewModel.PriceTierFormData? InitialData { get; set; }
+
+    private PriceTierFormModel _model = new();
+
+    private string ValueLabel => _model.TierType switch
+    {
+        ProductPriceTierType.PricePerUnit => "Price",
+        ProductPriceTierType.DiscountPerUnit => "Discount",
+        ProductPriceTierType.DiscountPerAdditionalUnit => "Discount",
+        _ => string.Empty
+    };
+
+    protected override void OnInitialized()
+    {
+        if (InitialData is PriceUpdateViewModel.PriceTierFormData data)
+        {
+            _model = PriceTierFormModel.FromData(data);
+        }
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+
+    private void HandleValidSubmit()
+    {
+        var data = new PriceUpdateViewModel.PriceTierFormData(
+            _model.FromQuantity,
+            _model.ToQuantity,
+            _model.TierType,
+            _model.Value);
+
+        MudDialog.Close(DialogResult.Ok(data));
+    }
+
+    private sealed record PriceTierFormModel
+    {
+        [Required]
+        [Range(1, int.MaxValue)]
+        public int FromQuantity { get; set; } = 1;
+
+        [Range(1, int.MaxValue)]
+        public int? ToQuantity { get; set; }
+
+        [Required]
+        public ProductPriceTierType TierType { get; set; } = ProductPriceTierType.PricePerUnit;
+
+        [Range(typeof(decimal), "0", "79228162514264337593543950335")]
+        public decimal Value { get; set; }
+
+        public static PriceTierFormModel FromData(PriceUpdateViewModel.PriceTierFormData data)
+        {
+            return new PriceTierFormModel
+            {
+                FromQuantity = data.FromQuantity,
+                ToQuantity = data.ToQuantity,
+                TierType = data.TierType,
+                Value = data.Value
+            };
+        }
+    }
+}

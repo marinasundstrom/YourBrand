@@ -51,8 +51,8 @@ public class ProductViewModel
             .Where(x => x.IsSelected || x.NumericalValue is not null || x.SelectedValueId is not null)
             .Select(x => new ProductOptionValue(x.Id, x.NumericalValue, x.SelectedValueId));
 
-        var result = await this.productsService.CalculatePrice(Product!.Handle, new CalculateProductPriceRequest([.. x], SubscriptionPlanId));
-        Total = (decimal)Quantity * result.Total;
+        var result = await productsService.CalculatePrice(Product!.Handle, new CalculateProductPriceRequest([.. x], Quantity, SubscriptionPlanId));
+        Total = result.Total;
     }
 
     public int Quantity { get; set; } = 1;
