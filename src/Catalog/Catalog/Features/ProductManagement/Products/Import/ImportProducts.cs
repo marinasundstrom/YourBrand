@@ -1,5 +1,6 @@
+using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
+using System.IO;
 
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -19,19 +20,25 @@ public record ProductImportResult(IEnumerable<string> Diagnostics);
 
 public sealed record ImportProducts(string OrganizationId, Stream Stream) : IRequest<Result<ProductImportResult>>
 {
-    public sealed class Handler(CatalogContext context, IProductImageUploader productImageUploader) : IRequestHandler<ImportProducts, Result<ProductImportResult>>
+    public sealed class Handler(
+        CatalogContext context,
+        IProductImageUploader productImageUploader,
+        IProductImportArchiveManager archiveManager) : IRequestHandler<ImportProducts, Result<ProductImportResult>>
     {
         public async Task<Result<ProductImportResult>> Handle(ImportProducts request, CancellationToken cancellationToken)
         {
-            var name = DateTime.UtcNow.Ticks.ToString();
+            categories.Clear();
+            brands.Clear();
+            stores.Clear();
+            products.Clear();
 
-            await UploadAndExtractFiles(request.Stream, name);
+            await using var archive = await archiveManager.CreateArchive(request.Stream, cancellationToken);
 
-            string filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $"uploads/{name}/products.csv");
-
-            using var fileStream = File.OpenRead(filePath);
+            await using var fileStream = await archive.OpenFileAsync("products.csv", cancellationToken);
 
             List<string> diagnostics = new();
+            var importedProducts = new List<Product>();
+            var productImageFiles = new Dictionary<Product, string>(ReferenceEqualityComparer.Instance);
 
             var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -70,41 +77,53 @@ public sealed record ImportProducts(string OrganizationId, Stream Stream) : IReq
                     {
                         Sku = record.Sku,
                         Description = record.Description ?? string.Empty,
-                        //Image = record.Image,
                         Parent = parentProduct,
                         Store = store,
+                        StoreId = store.Id,
+                        TenantId = store.TenantId,
+                        OrganizationId = request.OrganizationId,
+                        Brand = brand,
+                        BrandId = brand?.Id,
                         ListingState = record.Listed.GetValueOrDefault() ? Domain.Enums.ProductListingState.Listed : Domain.Enums.ProductListingState.Unlisted
                     };
 
-                    if (record.RegularPrice is not null)
+                    product.SetPrice(record.RegularPrice ?? record.Price);
+                    product.CurrentPrice.TenantId = store.TenantId;
+                    product.CurrentPrice.OrganizationId = request.OrganizationId;
+                    product.CurrentPrice.CurrencyCode = store.Currency.Code;
+
+                    if (record.RegularPrice.HasValue)
                     {
-                        product.SetPrice(record.RegularPrice.GetValueOrDefault());
+                        product.RegularPrice = record.RegularPrice;
+
+                        if (record.Price < record.RegularPrice)
+                        {
+                            product.SetDiscountPrice(record.Price);
+                        }
                     }
 
-                    product.SetDiscountPrice(record.Price);
-
                     products.Add(record.Sku, product);
+                    importedProducts.Add(product);
+
+                    if (!string.IsNullOrWhiteSpace(record.Image))
+                    {
+                        productImageFiles[product] = record.Image;
+                    }
 
                     category.AddProduct(product);
                 }
             }
 
-            context.Products.AddRange(products.Select(x => x.Value));
+            context.Products.AddRange(importedProducts);
 
             await context.SaveChangesAsync(cancellationToken);
 
-            string ArchiveDirPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $"uploads/{name}");
-
-            foreach (var product in products.Select(x => x.Value))
+            foreach (var product in importedProducts)
             {
-                if (product.Image is null)
+                if (!productImageFiles.TryGetValue(product, out var fileName))
                 {
                     continue;
                 }
-
-                var image = product.Image is null ? null : Path.Combine(ArchiveDirPath, product.Image.Url!);
-
-                var fileName = product.Image.Url;
 
                 await productImageUploader.TryDeleteProductImage(product.Id, fileName);
 
@@ -112,45 +131,45 @@ public sealed record ImportProducts(string OrganizationId, Stream Stream) : IReq
 
                 try
                 {
-                    stream = File.OpenRead(image!);
+                    stream = await archive.OpenFileAsync(fileName, cancellationToken);
                 }
                 catch (FileNotFoundException)
                 {
-                    diagnostics.Add($"Image \"{image}\" not found for SKU \"{product.Sku}\".");
+                    diagnostics.Add($"Image \"{fileName}\" not found for SKU \"{product.Sku}\".");
 
                     continue;
                 }
 
                 try
                 {
-                    string? path = null;
-
-                    if (!string.IsNullOrEmpty(fileName))
+                    await using (stream)
                     {
                         var mimeType = GetMimeTypeForFileExtension(fileName);
-                        path = await productImageUploader.UploadProductImage(product.Id, fileName, stream!, mimeType);
-                    }
-                    else
-                    {
-                        path = await productImageUploader.GetPlaceholderImageUrl();
-                    }
+                        var path = await productImageUploader.UploadProductImage(product.Id, fileName, stream!, mimeType);
 
-                    var image2 = new ProductImage("Image", string.Empty, path);
-                    image2.OrganizationId = request.OrganizationId;
-                    product.AddImage(image2);
-                    product.Image = image2;
+                        var image2 = new ProductImage("Image", string.Empty, path)
+                        {
+                            TenantId = product.TenantId,
+                            OrganizationId = request.OrganizationId,
+                            Store = product.Store,
+                            StoreId = product.StoreId
+                        };
 
-                    File.Delete(image!);
+                        product.AddImage(image2);
+                        product.Image = image2;
+                    }
                 }
                 catch (Exception exc)
                 {
                     diagnostics.Add($"{exc.Message}");
                 }
+                finally
+                {
+                    await archive.DeleteFileAsync(fileName, cancellationToken);
+                }
             }
 
             await context.SaveChangesAsync(cancellationToken);
-
-            Directory.Delete(ArchiveDirPath, true);
 
             return Result.SuccessWith(new ProductImportResult(diagnostics));
         }
@@ -222,37 +241,6 @@ public sealed record ImportProducts(string OrganizationId, Stream Stream) : IReq
                 products.Add(sku, product);
             }
             return product;
-        }
-
-        async Task UploadAndExtractFiles(Stream stream, string name)
-        {
-            string UploadDirPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $"uploads");
-
-            try
-            {
-                Directory.CreateDirectory(UploadDirPath);
-            }
-            catch (IOException) { }
-
-            string ArchiveFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $"uploads/{name}.zip");
-
-            using (var file = File.Open(ArchiveFilePath, FileMode.OpenOrCreate))
-            {
-                await stream.CopyToAsync(file);
-                file.Seek(0, SeekOrigin.Begin);
-            }
-
-            string ArchiveDirPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $"uploads/{name}");
-
-            try
-            {
-                Directory.CreateDirectory(ArchiveDirPath);
-            }
-            catch (IOException) { }
-
-            System.IO.Compression.ZipFile.ExtractToDirectory(ArchiveFilePath, ArchiveDirPath);
-
-            File.Delete(ArchiveFilePath);
         }
 
         public string GetMimeTypeForFileExtension(string filePath)
