@@ -71,12 +71,12 @@ var notifications = builder.AddProject<Notifications>("notifications")
     .WaitFor(notificationsDb)
     .WaitFor(messaging);
 
-var salesDb = sqlServer.AddDatabase("salesDb", "Sales");
+//var salesDb = sqlServer.AddDatabase("salesDb", "Sales");
 var sales = builder.AddProject<Sales>("sales")
-    .WithReference(salesDb)
+    //.WithReference(salesDb)
     .WithReference(messaging)
     .WithReference(blobStorage)
-    .WaitFor(salesDb)
+    //.WaitFor(salesDb)
     .WaitFor(messaging);
 
 var catalogDb = sqlServer.AddDatabase("catalogDb", "Catalog");

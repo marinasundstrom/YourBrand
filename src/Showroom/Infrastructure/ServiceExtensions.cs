@@ -14,6 +14,7 @@ using YourBrand.Showroom.Infrastructure.Idempotence;
 using YourBrand.Showroom.Infrastructure.Persistence;
 using YourBrand.Showroom.Infrastructure.Persistence.Interceptors;
 using YourBrand.Showroom.Infrastructure.Services;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Showroom.Infrastructure;
 
@@ -42,7 +43,10 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
+        const string DatabaseName = "Showroom";
+
         var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var databasePerTenant = configuration.IsDatabasePerTenantEnabled("Showroom");
 
         services.AddDbContext<ShowroomContext>((sp, options) =>
         {
@@ -51,6 +55,8 @@ public static class ServiceExtensions
             options.AddInterceptors(
                 sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
 
+            options.UseTenantDatabasePerTenant<ShowroomContext>(sp, databasePerTenant);
+
 #if DEBUG
             options.EnableSensitiveDataLogging();
 #endif
@@ -58,6 +64,11 @@ public static class ServiceExtensions
         services.AddScoped<IShowroomContext>(sp => sp.GetRequiredService<ShowroomContext>());
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+        services.AddTenantDatabasePerTenant(databasePerTenant, builder =>
+        {
+            builder.ForContext<ShowroomContext>()
+                .WithDatabasePrefix(DatabaseName);
+        });
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 

@@ -49,7 +49,13 @@ public class ClientAuthenticationHandler(
 
         logger.LogInformation("Claims: " + string.Join(", ", stoken?.Claims.Select(x => x.Type)));
 
-        tenantContext.SetTenantId(stoken?.Claims?.FirstOrDefault(x => x.Type == "client_tenant_id")?.Value!);
+        var tenantId = stoken?.Claims?.FirstOrDefault(x => x.Type == "tenant_id")?.Value
+            ?? stoken?.Claims?.FirstOrDefault(x => x.Type == "client_tenant_id")?.Value;
+
+        if (!string.IsNullOrWhiteSpace(tenantId))
+        {
+            tenantContext.SetTenantId(tenantId);
+        }
 
         return response;
     }

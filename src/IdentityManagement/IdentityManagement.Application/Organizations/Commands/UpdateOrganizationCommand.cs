@@ -28,7 +28,7 @@ public record UpdateOrganizationCommand(string OrganizationId, string Name) : IR
 
             await context.SaveChangesAsync(cancellationToken);
 
-            await eventPublisher.PublishEvent(new OrganizationUpdated(organization.Id, organization.Name));
+            await eventPublisher.PublishEvent(new OrganizationUpdated(organization.Id, organization.Name, organization.TenantId));
 
             return organization.ToDto();
         }

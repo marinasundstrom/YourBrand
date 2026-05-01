@@ -4,30 +4,30 @@ namespace YourBrand.Tenancy;
 
 public sealed class TenantContext(IHttpContextAccessor httpContextAccessor) : ISettableTenantContext
 {
+    private const string TenantIdHeader = "TenantId";
+    private const string TenantIdClaim = "tenant_id";
+    private const string ClientTenantIdClaim = "client_tenant_id";
+
     private TenantId? _tenantId;
 
-    /*
-        public TenantId? TenantId
-        {
-            get
-            {
-                if(_tenantId is null)  
-                {
-                    var tenantIdStr = httpContextAccessor.HttpContext?.User?.FindFirst("tenant_id")?.Value;
+    public TenantId? TenantId => _tenantId ??= GetTenantIdFromRequest();
 
-                    if(tenantIdStr is not null) 
-                    {
-                        return (TenantId)tenantIdStr;
-                    }
-                }
+    public void SetTenantId(TenantId tenantId)
+    {
+        _tenantId = string.IsNullOrWhiteSpace(tenantId.Value)
+            ? default(TenantId?)
+            : tenantId;
+    }
 
-                return _tenantId;
-            }
-        }
-        */
+    private TenantId? GetTenantIdFromRequest()
+    {
+        var httpContext = httpContextAccessor.HttpContext;
 
-    public TenantId? TenantId => _tenantId ??= (httpContextAccessor.HttpContext?.User?.FindFirst("tenant_id")?.Value ?? null)! ?? (httpContextAccessor.HttpContext?.User?.FindFirst("client_tenant_id")?.Value ?? null)!;
+        return GetTenantId(httpContext?.Request.Headers[TenantIdHeader].FirstOrDefault())
+            ?? GetTenantId(httpContext?.User.FindFirst(TenantIdClaim)?.Value)
+            ?? GetTenantId(httpContext?.User.FindFirst(ClientTenantIdClaim)?.Value);
+    }
 
-
-    public void SetTenantId(TenantId tenantId) => _tenantId = tenantId;
+    private static TenantId? GetTenantId(string? value)
+        => string.IsNullOrWhiteSpace(value) ? null : value;
 }

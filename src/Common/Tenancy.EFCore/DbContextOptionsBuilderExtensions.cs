@@ -25,4 +25,18 @@ public static class DbContextOptionsBuilderExtensions
 
         return options;
     }
+
+    public static DbContextOptionsBuilder UseTenantDatabasePerTenant<TContext>(
+        this DbContextOptionsBuilder options,
+        IServiceProvider serviceProvider,
+        bool enabled)
+        where TContext : DbContext
+    {
+        if (!enabled)
+        {
+            return options;
+        }
+
+        return options.UseTenantDatabasePerTenant<TContext>(serviceProvider);
+    }
 }

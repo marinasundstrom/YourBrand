@@ -1,5 +1,6 @@
 using System;
 using System.Data.Common;
+using System.Globalization;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -67,6 +68,16 @@ public sealed class TenantDatabasePerTenantRuleBuilder(IServiceCollection servic
         });
     }
 
+    public TenantDatabasePerTenantRuleBuilder WithDatabasePrefix(string databaseNamePrefix)
+    {
+        if (string.IsNullOrWhiteSpace(databaseNamePrefix))
+        {
+            throw new ArgumentException("Database name prefix must be provided.", nameof(databaseNamePrefix));
+        }
+
+        return WithDatabase(tenantId => $"{databaseNamePrefix}_{NormalizeDatabaseNamePart(tenantId.Value)}");
+    }
+
     public TenantDatabasePerTenantRuleBuilder WithTemplate(string template, string placeholder = "{tenantId}")
     {
         ArgumentNullException.ThrowIfNull(template);
@@ -77,5 +88,22 @@ public sealed class TenantDatabasePerTenantRuleBuilder(IServiceCollection servic
         }
 
         return UseConnectionString((tenantId, _) => template.Replace(placeholder, tenantId.Value, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static string NormalizeDatabaseNamePart(object value)
+    {
+        var text = Convert.ToString(value, CultureInfo.InvariantCulture);
+
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new InvalidOperationException("Tenant id cannot be empty when resolving the tenant database name.");
+        }
+
+        if (Guid.TryParse(text, out var guid))
+        {
+            return guid.ToString("N", CultureInfo.InvariantCulture);
+        }
+
+        return text.Replace("-", string.Empty, StringComparison.Ordinal);
     }
 }

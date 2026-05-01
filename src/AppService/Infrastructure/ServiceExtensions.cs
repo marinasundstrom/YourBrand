@@ -14,6 +14,7 @@ using YourBrand.Infrastructure.Idempotence;
 using YourBrand.Infrastructure.Persistence;
 using YourBrand.Infrastructure.Persistence.Interceptors;
 using YourBrand.Infrastructure.Services;
+using YourBrand.Tenancy;
 
 namespace YourBrand.Infrastructure;
 
@@ -42,7 +43,10 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
+        const string DatabaseName = "AppService";
+
         var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var databasePerTenant = configuration.IsDatabasePerTenantEnabled("AppService");
 
         services.AddDbContext<AppServiceContext>((sp, options) =>
         {
@@ -50,6 +54,8 @@ public static class ServiceExtensions
 
             options.AddInterceptors(
                 sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+            options.UseTenantDatabasePerTenant<AppServiceContext>(sp, databasePerTenant);
 
 #if DEBUG
             options.EnableSensitiveDataLogging();
@@ -59,6 +65,11 @@ public static class ServiceExtensions
         services.AddScoped<IAppServiceContext>(sp => sp.GetRequiredService<AppServiceContext>());
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+        services.AddTenantDatabasePerTenant(databasePerTenant, builder =>
+        {
+            builder.ForContext<AppServiceContext>()
+                .WithDatabasePrefix(DatabaseName);
+        });
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 

@@ -24,4 +24,17 @@ public static class ServiceExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddTenantDatabasePerTenant(
+        this IServiceCollection services,
+        bool enabled,
+        Action<TenantDatabasePerTenantBuilder> configure)
+    {
+        if (!enabled)
+        {
+            return services;
+        }
+
+        return services.AddTenantDatabasePerTenant(configure);
+    }
 }

@@ -4,6 +4,7 @@ using YourBrand.ChatApp.Domain;
 using YourBrand.ChatApp.Infrastructure.Persistence.Repositories;
 using YourBrand.ChatApp.Persistence.Interceptors;
 using YourBrand.Domain.Persistence.Interceptors;
+using YourBrand.Tenancy;
 
 namespace YourBrand.ChatApp.Infrastructure.Persistence;
 
@@ -12,9 +13,11 @@ public static class ServiceExtensions
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         const string ConnectionStringKey = "mssql";
+        const string DatabaseName = "ChatApp";
 
-        var connectionString = Infrastructure.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "ChatApp")
+        var connectionString = Infrastructure.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, DatabaseName)
             ?? configuration.GetConnectionString("DefaultConnection");
+        var databasePerTenant = configuration.IsDatabasePerTenantEnabled("ChatApp");
 
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
@@ -24,6 +27,8 @@ public static class ServiceExtensions
                 sp.GetRequiredService<OutboxSaveChangesInterceptor>(),
                 sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
 
+            options.UseTenantDatabasePerTenant<ApplicationDbContext>(sp, databasePerTenant);
+
 #if DEBUG
             options
                 .EnableSensitiveDataLogging();
@@ -32,6 +37,11 @@ public static class ServiceExtensions
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
         services.AddScoped<OutboxSaveChangesInterceptor>();
+        services.AddTenantDatabasePerTenant(databasePerTenant, builder =>
+        {
+            builder.ForContext<ApplicationDbContext>()
+                .WithDatabasePrefix(DatabaseName);
+        });
 
         RegisterRepositories(services);
 

@@ -112,6 +112,9 @@ builder.Services.AddProductsServices();
 //builder.Services.AddObservability("Catalog.API", "1.0", builder.Configuration);
 
 builder.Services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+var catalogDatabasePerTenant = builder.Configuration.IsDatabasePerTenantEnabled(
+    ServiceName,
+    additionalKeys: new[] { "yourbrand:catalog-svc:db:databasepertenant" });
 
 builder.Services.AddDbContext<CatalogContext>((sp, options) =>
 {
@@ -123,11 +126,19 @@ builder.Services.AddDbContext<CatalogContext>((sp, options) =>
         //sp.GetRequiredService<OutboxSaveChangesInterceptor>(),
         sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
 
+    options.UseTenantDatabasePerTenant<CatalogContext>(sp, catalogDatabasePerTenant);
+
 #if DEBUG
     options
         //.LogTo(Console.WriteLine)
         .EnableSensitiveDataLogging();
 #endif
+});
+
+builder.Services.AddTenantDatabasePerTenant(catalogDatabasePerTenant, tenancy =>
+{
+    tenancy.ForContext<CatalogContext>()
+        .WithDatabasePrefix(ServiceName);
 });
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblyContaining<Program>());

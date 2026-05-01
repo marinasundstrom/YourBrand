@@ -20,9 +20,9 @@ public record CreateOrganizationResponse(string OrganizationId, string Name, str
 
 public record OrganizationCreated(string OrganizationId, string TenantId, string Name);
 
-public record OrganizationUpdated(string OrganizationId, string Name);
+public record OrganizationUpdated(string OrganizationId, string Name, string? TenantId = null);
 
-public record OrganizationDeleted(string OrganizationId);
+public record OrganizationDeleted(string OrganizationId, string? TenantId = null);
 
 public record AddOrganizationUser(string OrganizationId, string UserId);
 

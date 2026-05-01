@@ -33,7 +33,7 @@ public record UpdateOrganizationCommand(string UserId, string FirstName, string 
 
             await context.SaveChangesAsync(cancellationToken);
 
-            await eventPublisher.PublishEvent(new UserUpdated(user.Id));
+            await eventPublisher.PublishEvent(new UserUpdated(user.Id, user.TenantId));
 
             return user.ToDto();
         }

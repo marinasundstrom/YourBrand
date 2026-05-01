@@ -25,9 +25,9 @@ public record CreateUserResponse(string UserId, string TenantId, string FirstNam
 
 public record UserCreated(string UserId, string TenantId, string OrganizationId);
 
-public record UserUpdated(string UserId);
+public record UserUpdated(string UserId, string? TenantId = null);
 
-public record UserDeleted(string UserId);
+public record UserDeleted(string UserId, string? TenantId = null);
 
 public record GetUser(string UserId);
 

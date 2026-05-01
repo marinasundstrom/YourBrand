@@ -16,6 +16,9 @@ public static class ServiceExtensions
 
         var connectionString = Infrastructure.ConfigurationExtensions.GetConnectionString(configuration, ConnectionStringKey, "Orders")
             ?? configuration.GetValue<string>("yourbrand:sales-svc:db:connectionstring");
+        var databasePerTenant = configuration.IsDatabasePerTenantEnabled(
+            "Sales",
+            additionalKeys: new[] { "yourbrand:sales-svc:db:databasepertenant" });
 
         services.AddDomainPersistence<SalesContext>(configuration);
 
@@ -25,8 +28,11 @@ public static class ServiceExtensions
 
             options
                 .UseDomainInterceptors(serviceProvider)
-                .UseTenancyInterceptor(serviceProvider)
-                .UseTenantDatabasePerTenant<SalesContext>(serviceProvider)
+                .UseTenancyInterceptor(serviceProvider);
+
+            options.UseTenantDatabasePerTenant<SalesContext>(serviceProvider, databasePerTenant);
+
+            options
                 .UseAuditabilityInterceptor(serviceProvider)
                 .UseSoftDeleteInterceptor(serviceProvider);
 
@@ -40,10 +46,10 @@ public static class ServiceExtensions
         services.AddScoped<ISalesContext>(sp => sp.GetRequiredService<SalesContext>());
 
         services.AddTenancyInterceptor();
-        services.AddTenantDatabasePerTenant(builder =>
+        services.AddTenantDatabasePerTenant(databasePerTenant, builder =>
         {
             builder.ForContext<SalesContext>()
-                .WithDatabase(tenantId => $"Orders_{tenantId.Value}");
+                .WithDatabasePrefix("Orders");
         });
         services.AddAuditabilityInterceptor();
         services.AddSoftDeleteInterceptor();

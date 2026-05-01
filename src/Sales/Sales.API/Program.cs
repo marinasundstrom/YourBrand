@@ -194,7 +194,7 @@ try
 
             var context = scope.ServiceProvider.GetRequiredService<SalesContext>();
 
-            await context.Database.EnsureDeletedAsync();
+            //await context.Database.EnsureDeletedAsync();
 
             await context.Database.EnsureCreatedAsync();
 

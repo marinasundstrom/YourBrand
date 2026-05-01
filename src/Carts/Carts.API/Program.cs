@@ -78,6 +78,9 @@ builder.AddDefaultOpenApi();
 //builder.Services.AddObservability("Carts.API", "1.0", builder.Configuration);
 
 builder.Services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+var cartsDatabasePerTenant = builder.Configuration.IsDatabasePerTenantEnabled(
+    "Carts",
+    additionalKeys: new[] { "yourbrand:carts-svc:db:databasepertenant" });
 
 builder.Services.AddDbContext<CartsContext>((sp, options) =>
 {
@@ -89,11 +92,19 @@ builder.Services.AddDbContext<CartsContext>((sp, options) =>
         //sp.GetRequiredService<OutboxSaveChangesInterceptor>(),
         sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
 
+    options.UseTenantDatabasePerTenant<CartsContext>(sp, cartsDatabasePerTenant);
+
 #if DEBUG
     options
         //.LogTo(Console.WriteLine)
         .EnableSensitiveDataLogging();
 #endif
+});
+
+builder.Services.AddTenantDatabasePerTenant(cartsDatabasePerTenant, tenancy =>
+{
+    tenancy.ForContext<CartsContext>()
+        .WithDatabasePrefix("Carts");
 });
 
 builder.Services.AddAuthenticationServices(builder.Configuration);

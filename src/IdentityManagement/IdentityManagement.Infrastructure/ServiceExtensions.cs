@@ -14,6 +14,7 @@ using YourBrand.IdentityManagement.Infrastructure.Idempotence;
 using YourBrand.IdentityManagement.Infrastructure.Persistence;
 using YourBrand.IdentityManagement.Infrastructure.Persistence.Interceptors;
 using YourBrand.IdentityManagement.Infrastructure.Services;
+using YourBrand.Tenancy;
 
 namespace YourBrand.IdentityManagement.Infrastructure;
 
@@ -42,13 +43,18 @@ public static class ServiceExtensions
 
     private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
+        const string DatabaseName = "IdentityManagement";
+
         var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var databasePerTenant = configuration.IsDatabasePerTenantEnabled("IdentityManagement");
 
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
             options.UseSqlServer(connectionString);
 
             options.AddInterceptors(sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
+
+            options.UseTenantDatabasePerTenant<ApplicationDbContext>(sp, databasePerTenant);
 
 #if DEBUG
             options.EnableSensitiveDataLogging();
@@ -61,6 +67,8 @@ public static class ServiceExtensions
 
             options.AddInterceptors(sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
 
+            options.UseTenantDatabasePerTenant<ApplicationDbContextWithTenantFilter>(sp, databasePerTenant);
+
 #if DEBUG
             options.EnableSensitiveDataLogging();
 #endif
@@ -70,6 +78,14 @@ public static class ServiceExtensions
         services.AddTransient<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContextWithTenantFilter>());
 
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+        services.AddTenantDatabasePerTenant(databasePerTenant, builder =>
+        {
+            builder.ForContext<ApplicationDbContext>()
+                .WithDatabasePrefix(DatabaseName);
+
+            builder.ForContext<ApplicationDbContextWithTenantFilter>()
+                .WithDatabasePrefix(DatabaseName);
+        });
 
         services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 

@@ -27,7 +27,7 @@ public record DeleteOrganizationCommand(string OrganizationId) : IRequest
 
             await context.SaveChangesAsync(cancellationToken);
 
-            await eventPublisher.PublishEvent(new OrganizationDeleted(organization.Id));
+            await eventPublisher.PublishEvent(new OrganizationDeleted(organization.Id, organization.TenantId));
 
         }
     }
