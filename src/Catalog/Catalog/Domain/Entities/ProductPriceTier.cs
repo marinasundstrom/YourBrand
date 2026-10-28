@@ -9,7 +9,7 @@ namespace YourBrand.Catalog.Domain.Entities;
 
 public class ProductPriceTier : Entity<string>, IHasTenant, IHasOrganization, IAuditableEntity<string>, ISoftDeletableWithAudit
 {
-    private ProductPriceTier()
+    protected ProductPriceTier()
     {
     }
 

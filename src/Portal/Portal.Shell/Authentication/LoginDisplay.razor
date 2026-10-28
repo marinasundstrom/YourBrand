@@ -2,7 +2,6 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject IStringLocalizer<LoginDisplay> T
 @inject NavigationManager Navigation
-@inject SignOutSessionStateManager SignOutManager
 @inject IDialogService DialogService
 
 <AuthorizeView>
@@ -39,7 +38,6 @@
             return;
         }
 
-        await SignOutManager.SetSignOutState();
-        Navigation.NavigateTo("authentication/logout");
+        Navigation.NavigateToLogout("authentication/logout");
     }
 }
