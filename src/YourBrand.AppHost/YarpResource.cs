@@ -1,4 +1,5 @@
 ﻿using Aspire.Hosting.ApplicationModel;
+using Aspire.Hosting.Eventing;
 using Aspire.Hosting.Lifecycle;
 
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +27,7 @@ public static class YarpResoruceExtensions
             throw new InvalidOperationException("A yarp resource has already been added to this application");
         }
 
-        builder.Services.TryAddLifecycleHook<YarpResourceLifecyclehook>();
+        builder.Services.TryAddEventingSubscriber<YarpResourceEventingSubscriber>();
 
         var resource = new YarpResource(name);
         return builder.AddResource(resource).ExcludeFromManifest();
@@ -117,14 +118,52 @@ public class YarpResource(string name) : Resource(name), IResourceWithServiceDis
 }
 
 // This starts up the YARP reverse proxy with the configuration from the resource
-internal sealed class YarpResourceLifecyclehook(
+internal sealed class YarpResourceEventingSubscriber(
     DistributedApplicationExecutionContext executionContext,
     ResourceNotificationService resourceNotificationService,
-    ResourceLoggerService resourceLoggerService) : IDistributedApplicationLifecycleHook, IAsyncDisposable
+    ResourceLoggerService resourceLoggerService) : IDistributedApplicationEventingSubscriber, IAsyncDisposable
 {
     private WebApplication? _app;
 
-    public async Task BeforeStartAsync(DistributedApplicationModel appModel, CancellationToken cancellationToken = default)
+    public Task SubscribeAsync(IDistributedApplicationEventing eventing,
+        DistributedApplicationExecutionContext context, CancellationToken cancellationToken)
+    {
+        if (context.IsRunMode)
+        {
+            eventing.Subscribe<BeforeStartEvent>((e, ct) => BeforeStartAsync(e.Model, ct));
+            // Custom in-process resources initialize themselves. Resolving the environment below
+            // asynchronously waits for referenced endpoints and connection strings to be available.
+            eventing.Subscribe<InitializeResourceEvent>(async (e, ct) =>
+            {
+                if (e.Resource is not YarpResource resource)
+                {
+                    return;
+                }
+
+                try
+                {
+                    await StartAsync(resource, ct);
+                }
+                catch (OperationCanceledException) when (ct.IsCancellationRequested)
+                {
+                    // AppHost is shutting down.
+                }
+                catch (Exception ex)
+                {
+                    e.Logger.LogError(ex, "Failed to start ingress {ResourceName}", resource.Name);
+                    await e.Notifications.PublishUpdateAsync(resource, s => s with
+                    {
+                        State = KnownResourceStates.FailedToStart
+                    });
+                    throw;
+                }
+            });
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private async Task BeforeStartAsync(DistributedApplicationModel appModel, CancellationToken cancellationToken)
     {
         if (executionContext.IsPublishMode)
         {
@@ -154,20 +193,8 @@ internal sealed class YarpResourceLifecyclehook(
         }
     }
 
-    public async Task AfterEndpointsAllocatedAsync(DistributedApplicationModel appModel, CancellationToken cancellationToken = default)
+    private async Task StartAsync(YarpResource yarpResource, CancellationToken cancellationToken)
     {
-        if (executionContext.IsPublishMode)
-        {
-            return;
-        }
-
-        var yarpResource = appModel.Resources.OfType<YarpResource>().SingleOrDefault();
-
-        if (yarpResource is null)
-        {
-            return;
-        }
-
         var builder = WebApplication.CreateBuilder();
 
         //var builder = WebApplication.CreateSlimBuilder();
@@ -180,7 +207,7 @@ internal sealed class YarpResourceLifecyclehook(
         // Convert environment variables into configuration
         if (yarpResource.TryGetEnvironmentVariables(out var envAnnotations))
         {
-            var context = new EnvironmentCallbackContext(executionContext, cancellationToken: cancellationToken);
+            var context = new EnvironmentCallbackContext(executionContext, yarpResource, cancellationToken: cancellationToken);
 
             foreach (var cb in envAnnotations)
             {
@@ -240,7 +267,6 @@ internal sealed class YarpResourceLifecyclehook(
                 }
                 else
                 {
-                    Console.WriteLine("PORT: {0}", ep.Port);
                     _app.Urls.Add($"{scheme}://localhost:{ep.Port}");
                 }
             }
@@ -261,9 +287,13 @@ internal sealed class YarpResourceLifecyclehook(
         });
     }
 
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
-        return _app?.DisposeAsync() ?? default;
+        if (_app is not null)
+        {
+            await _app.StopAsync();
+            await _app.DisposeAsync();
+        }
     }
 
     private sealed class ResourceLoggerProvider(ILogger logger) : ILoggerProvider
