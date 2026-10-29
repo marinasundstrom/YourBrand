@@ -8,6 +8,7 @@ namespace YourBrand.ChatApp.Features.Chat;
 public interface IChatNotificationService
 {
     Task NotifyMessagePosted(MessageDto message, CancellationToken cancellationToken = default);
+    Task NotifyMessageSendError(string channelId, string senderId, string messageId, string reasonCode, CancellationToken cancellationToken = default);
     Task SendMessageToUser(string userId, MessageDto message, CancellationToken cancellationToken = default);
     Task SendConfirmationToSender(string channelId, string senderId, string messageId, CancellationToken cancellationToken = default);
     Task NotifyMessageEdited(string channelId, MessageEditedData data, CancellationToken cancellationToken = default);
@@ -31,6 +32,15 @@ public class ChatNotificationService : IChatNotificationService
         await hubsContext.Clients
             .Group($"channel-{message.ChannelId}")
             .OnMessagePosted(message.Map());
+    }
+
+    public async Task NotifyMessageSendError(string channelId, string senderId, string messageId, string reasonCode, CancellationToken cancellationToken = default)
+    {
+        Console.WriteLine(senderId);
+
+        await hubsContext.Clients
+            .User(senderId.ToString())
+            .OnMessageSendError(messageId, reasonCode);
     }
 
     public async Task SendMessageToUser(string userId, MessageDto message, CancellationToken cancellationToken = default)

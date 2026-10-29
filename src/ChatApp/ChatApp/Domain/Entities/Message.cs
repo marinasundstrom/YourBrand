@@ -12,6 +12,16 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage, IHasT
     {
     }
 
+    public Message(MessageId id, OrganizationId organizationId, ChannelId channelId, string content)
+        : base(id)
+    {
+        OrganizationId = organizationId;
+        ChannelId = channelId;
+        Content = content;
+
+        AddDomainEvent(new MessagePosted(TenantId, ChannelId, Id, null));
+    }
+
     public Message(OrganizationId organizationId, ChannelId channelId, string content)
         : base(new MessageId())
     {
@@ -33,6 +43,19 @@ public sealed class Message : AggregateRoot<MessageId>, IAuditableMessage, IHasT
 
         AddDomainEvent(new MessagePosted(TenantId, ChannelId, Id, ReplyToId));
     }
+
+    public Message(MessageId id, OrganizationId organizationId, ChannelId channelId, MessageId replyToId, string content)
+        : base(id)
+    {
+        OrganizationId = organizationId;
+        ChannelId = channelId;
+        Content = content;
+
+        ReplyToId = replyToId;
+
+        AddDomainEvent(new MessagePosted(TenantId, ChannelId, Id, ReplyToId));
+    }
+
 
     public TenantId TenantId { get; set; }
 

@@ -31,6 +31,8 @@ public class MessageViewModel : IComparable<MessageViewModel>
 
     public List<Reaction> Reactions { get; set; } = new List<Reaction>();
 
+    public string? ErrorReasonCode { get; set; } = null;
+
     public int CompareTo(MessageViewModel? other)
     {
         if (other is null) return 1;

@@ -1,5 +1,7 @@
 using FluentValidation;
 
+using MassTransit;
+
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +33,8 @@ public sealed record PostMessage(OrganizationId OrganizationId, ChannelId Channe
     public sealed class Handler(
         IUserContext userContext,
         ApplicationDbContext applicationDbContext,
-        IAdminCommandProcessor adminCommandProcessor) : IRequestHandler<PostMessage, Result<string>>
+        IAdminCommandProcessor adminCommandProcessor,
+        IPublishEndpoint publisher) : IRequestHandler<PostMessage, Result<string>>
     {
         public async Task<Result<string>> Handle(PostMessage request, CancellationToken cancellationToken)
         {
@@ -51,30 +54,10 @@ public sealed record PostMessage(OrganizationId OrganizationId, ChannelId Channe
                 return await adminCommandProcessor.ProcessAdminCommand(request.ChannelId.ToString(), args, cancellationToken);
             }
 
-            Message message;
+            string id = Guid.NewGuid().ToString();
 
-            if (request.ReplyToId is not null)
-            {
-                message = new Message(request.OrganizationId, request.ChannelId, request.ReplyToId.GetValueOrDefault(), request.Content);
-            }
-            else
-            {
-                message = new Message(request.OrganizationId, request.ChannelId, request.Content);
-            }
-
-            message.PostedBy = await applicationDbContext.ChannelParticipants
-                .FirstOrDefaultAsync(x => x.UserId == userContext.UserId, cancellationToken);
-
-            applicationDbContext.Messages.Add(message);
-
-            var participant = channel.Participants.First(x => x.UserId == userContext.UserId);
-
-            message.Posted = DateTimeOffset.UtcNow;
-            message.PostedById = participant.Id;
-
-            await applicationDbContext.SaveChangesAsync(cancellationToken);
-
-            return (string)message.Id;
+            await publisher.Publish(new YourBrand.ChatApp.Consumers.PostMessage2(id, notification.OrganizationId, notification.ChannelId, notification.ReplyToId, notification.Content));
+            return id;
         }
 
         private bool IsAdminCommand(string message, out string[] args)

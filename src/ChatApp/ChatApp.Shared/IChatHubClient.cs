@@ -4,6 +4,8 @@ public interface IChatHubClient
 {
     Task OnMessagePosted(MessageData message);
 
+    Task OnMessageSendError(string messageId, string reasonCode);
+
     Task OnMessagePostedConfirmed(string messageId);
 
     Task OnMessageEdited(string channelId, MessageEditedData data);

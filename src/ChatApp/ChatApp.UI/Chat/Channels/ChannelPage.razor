@@ -47,6 +47,9 @@
             }
         </SideAreaTemplate>
         <ChildContent>
+                @if (message.ErrorReasonCode is not null) {
+                    <p style="color: red">@message.ErrorReasonCode</p>
+                }
              <Bubble Class="@(message.Deleted is not null ? "deleted" : string.Empty)">
                 @if (message.Deleted is not null)
                 {

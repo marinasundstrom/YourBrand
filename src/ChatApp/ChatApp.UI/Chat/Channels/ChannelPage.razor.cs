@@ -560,4 +560,15 @@ public partial class ChannelPage : IChatHubClient
 
         StateHasChanged();
     }
+
+    public async Task OnMessageSendError(string messageId, string reasonCode)
+    {
+        var messageVm = loadedMessages.FirstOrDefault(x => x.Id == messageId);
+
+        if (messageVm is null) return;
+
+        messageVm.ErrorReasonCode = reasonCode;
+
+        StateHasChanged();
+    }
 }
