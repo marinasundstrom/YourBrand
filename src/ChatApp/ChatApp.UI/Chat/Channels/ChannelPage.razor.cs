@@ -264,6 +264,21 @@ public partial class ChannelPage : IChatHubClient
         StateHasChanged();
     }
 
+    private string GetColor(MessageViewModel message)
+    {
+        if(message.ErrorReasonCode is not null)
+        {
+            return "red";
+        }
+
+        if(message.IsFromCurrentUser)
+        {
+            return "blue";
+        }
+
+        return "white";
+    }
+
     private void ResetChannelWindow()
     {
         Text = string.Empty;

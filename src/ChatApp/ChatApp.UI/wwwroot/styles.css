@@ -107,14 +107,13 @@
 
 .message.message-right .bubble {
     color: #fff;
-    background-color: #157cdf;
+    /* background-color: #157cdf; */
     border-radius: 20px;
     /* float: right; */
 }
 
 .message.message-left .bubble {
-    /* background-color: #f5f5f5; */
-    background-color: #fff;
+    /* background-color: #fff; */
     border-radius: 20px;
 }
 
@@ -374,4 +373,16 @@
 
 .dark .message .reaction.marked {
     border: 2px solid #8cb0d3 !important;
+}
+
+.blue {
+    background-color: #157cdf;
+}
+
+.white {
+    background-color: #fff;
+}
+
+.red {
+    background-color: rgb(245, 36, 36);
 }

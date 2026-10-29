@@ -1,4 +1,5 @@
-<div class="message message-@(Direction == MessageDirection.Right ? "right" : "left") @(First ? "first" : null) @(Last ? "last" : null)" @attributes="AdditionalAttributes">
+<div class="message message-@(Direction == MessageDirection.Right ? "right" : "left") @(First ? "first" : null) @(Last ? "last" : null)"
+     @attributes="AdditionalAttributes">
     <div class="message-inner d-flex flex-row flex-grow-1 gap-2">
         @if(IsSideAreaVisible) 
         {
@@ -30,6 +31,7 @@
 </div>
 
 @code {
+
     [Parameter]
     public MessageDirection Direction { get; set; } = MessageDirection.Left;
 
