@@ -9,6 +9,7 @@ var password = builder.AddParameter("messaging-password", true);
 
 var messaging = builder.AddRabbitMQ("messaging", userName: username, password: password, port: 5672)
     .WithHttpEndpoint(port: 15672, targetPort: 15672, name: "management")
+    .WithManagementPlugin()
     .WithBindMount(
         "./rabbitmq.conf",
         "/etc/rabbitmq/rabbitmq.conf",
