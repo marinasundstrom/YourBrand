@@ -74,7 +74,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="11.0.0-*" />
     <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client.SourceGenerator" Version="7.0.0-preview.7.22376.6" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0-2.final" />
-    <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.1.0" />
+    <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.1.1" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="11.0.0-*" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="11.0.0-*" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="11.0.0-*" />

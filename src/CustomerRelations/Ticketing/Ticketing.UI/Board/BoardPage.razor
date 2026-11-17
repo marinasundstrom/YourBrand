@@ -105,15 +105,15 @@
 }
 
 @code {
-    CancellationTokenSource cts = new();
-    MudDropContainer<Ticket> dropContainer = null!;
-    HubConnection hubConnection = null!;
-    List<Ticket> tickets = new();
-    List<TicketStatus> ticketStatuses = new();
-    bool loaded = false;
+        CancellationTokenSource cts = new();
+        MudDropContainer<Ticket> dropContainer = null!;
+        HubConnection hubConnection = null!;
+        List<Ticket> tickets = new();
+        List<TicketStatus> ticketStatuses = new();
+        bool loaded = false;
 
-    [CascadingParameter(Name = "Organization")]
-    public YourBrand.Portal.Services.Organization Organization { get; set; }
+        [CascadingParameter(Name = "Organization")]
+        public YourBrand.Portal.Services.Organization Organization { get; set; }
 
     public YourBrand.Ticketing.Project? Project { get; set; }
 
@@ -142,6 +142,10 @@
             .WithUrl($"{ServiceUrls.CustomerServiceServiceUrl}/hubs/tickets", options =>
             {
                 options.AccessTokenProvider = async () => await AccessTokenProvider.GetAccessTokenAsync();
+            })
+            .WithAuthenticationRefresh(options =>
+            {
+                options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
             })
             .WithAutomaticReconnect().Build();
 

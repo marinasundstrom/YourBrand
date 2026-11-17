@@ -4,7 +4,11 @@ public static class WebApplicationExtensions
 {
     public static WebApplication MapHubsForApp(this WebApplication app)
     {
-        app.MapHub<OrdersHub>("/hubs/orders");
+        app.MapHub<OrdersHub>("/hubs/orders", options =>
+        {
+            options.EnableAuthenticationRefresh = true;
+            options.CloseOnAuthenticationExpiration = true;
+        });
 
         return app;
     }

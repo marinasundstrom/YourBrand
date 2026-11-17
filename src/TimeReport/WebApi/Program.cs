@@ -157,7 +157,11 @@ app.MapGet("/info", () =>
 .Produces<string>();
 
 app.MapControllers();
-app.MapHub<ItemsHub>("/hubs/items");
+app.MapHub<ItemsHub>("/hubs/items", options =>
+{
+    options.EnableAuthenticationRefresh = true;
+    options.CloseOnAuthenticationExpiration = true;
+});
 
 if (args.Contains("--seed"))
 {

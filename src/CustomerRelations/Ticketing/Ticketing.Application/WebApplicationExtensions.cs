@@ -8,7 +8,11 @@ public static class WebApplicationExtensions
 {
     public static WebApplication MapHubsForApp(this WebApplication app)
     {
-        app.MapHub<TicketsHub>("/hubs/tickets");
+        app.MapHub<TicketsHub>("/hubs/tickets", options =>
+        {
+            options.EnableAuthenticationRefresh = true;
+            options.CloseOnAuthenticationExpiration = true;
+        });
 
         return app;
     }

@@ -137,6 +137,10 @@
                         return null!;
                     };
                 })
+                .WithAuthenticationRefresh(options =>
+                {
+                    options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+                })
                 .WithAutomaticReconnect()
                 .Build();
 

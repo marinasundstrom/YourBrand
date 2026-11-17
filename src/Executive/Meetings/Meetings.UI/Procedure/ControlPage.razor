@@ -563,7 +563,12 @@ else
             {
                 return await AccessTokenProvider.GetAccessTokenAsync();
             };
-        }).WithAutomaticReconnect().Build();
+        })
+        .WithAuthenticationRefresh(options =>
+        {
+            options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+        })
+        .WithAutomaticReconnect().Build();
 
         hubProxy = procedureHub.ServerProxy<IDiscussionsHub>();
         meetingsHubProxy = procedureHub.ServerProxy<IMeetingsProcedureHub>();

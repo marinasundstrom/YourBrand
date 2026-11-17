@@ -174,7 +174,11 @@ group.MapPut("/{transactionId}/reference", async (string organizationId, string 
     .WithName("Transactions_SetTransactionReference")
     .Produces(StatusCodes.Status200OK);
 
-app.MapHub<TransactionsHub>("/hubs/transactions");
+app.MapHub<TransactionsHub>("/hubs/transactions", options =>
+{
+    options.EnableAuthenticationRefresh = true;
+    options.CloseOnAuthenticationExpiration = true;
+});
 
 app.MapControllers();
 

@@ -77,7 +77,12 @@ public partial class ChannelPage : IChatHubClient
                 {
                     return await AccessTokenProvider.GetAccessTokenAsync();
                 };
-            }).WithAutomaticReconnect().Build();
+            })
+            .WithAuthenticationRefresh(options =>
+            {
+                options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+            })
+            .WithAutomaticReconnect().Build();
 
 
             hubProxy = hubConnection.ServerProxy<IChatHub>();

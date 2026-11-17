@@ -195,7 +195,11 @@ paymentsGroup.MapPut("/{paymentId}/Status", async (string organizationId, string
     .WithTags("Payments")
     .Produces(StatusCodes.Status200OK);
 
-app.MapHub<PaymentsHub>("/hubs/payments");
+app.MapHub<PaymentsHub>("/hubs/payments", options =>
+{
+    options.EnableAuthenticationRefresh = true;
+    options.CloseOnAuthenticationExpiration = true;
+});
 
 app.MapControllers();
 

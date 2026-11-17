@@ -47,6 +47,10 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
             {
                 options.AccessTokenProvider = async () => await AccessTokenProvider.GetAccessTokenAsync();
             })
+            .WithAuthenticationRefresh(options =>
+            {
+                options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+            })
             .WithAutomaticReconnect()
             .Build();
 

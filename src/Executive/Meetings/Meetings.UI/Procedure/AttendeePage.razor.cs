@@ -66,7 +66,12 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
             {
                 return await AccessTokenProvider.GetAccessTokenAsync();
             };
-        }).WithAutomaticReconnect().Build();
+        })
+        .WithAuthenticationRefresh(options =>
+        {
+            options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+        })
+        .WithAutomaticReconnect().Build();
 
         hubProxy = procedureHub.ServerProxy<IDiscussionsHub>();
         _ = procedureHub.ClientRegistration<IMeetingsProcedureHubClient>(this);

@@ -171,9 +171,21 @@ app.MapGet("/info", () =>
 .Produces<string>();
 
 app.MapControllers();
-app.MapHub<SomethingHub>("/hubs/something");
-app.MapHub<WorkerHub>("/hubs/worker");
-app.MapHub<NotificationHub>("/hubs/notifications");
+app.MapHub<SomethingHub>("/hubs/something", options =>
+{
+    options.EnableAuthenticationRefresh = true;
+    options.CloseOnAuthenticationExpiration = true;
+});
+app.MapHub<WorkerHub>("/hubs/worker", options =>
+{
+    options.EnableAuthenticationRefresh = true;
+    options.CloseOnAuthenticationExpiration = true;
+});
+app.MapHub<NotificationHub>("/hubs/notifications", options =>
+{
+    options.EnableAuthenticationRefresh = true;
+    options.CloseOnAuthenticationExpiration = true;
+});
 
 if (args.Contains("--seed"))
 {

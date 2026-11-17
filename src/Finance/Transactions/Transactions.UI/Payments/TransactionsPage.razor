@@ -114,7 +114,11 @@
         try
         {
             hubConnection = new HubConnectionBuilder()
-            .WithUrl($"{NavigationManager.BaseUri}api/transactions/hubs/transactions")
+            .WithUrl($"{NavigationManager.BaseUri}api/transactions/hubs/transactions")            
+            .WithAuthenticationRefresh(options =>
+            {
+                options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+            })
             .WithAutomaticReconnect()
             .Build();
 

@@ -40,7 +40,11 @@
         try
         {
             hubConnection = new HubConnectionBuilder()
-                .WithUrl($"{NavigationManager.BaseUri}api/hubs/something")
+                .WithUrl($"{NavigationManager.BaseUri}api/hubs/something")     
+                .WithAuthenticationRefresh(options =>
+                {
+                    options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+                })
                 .WithAutomaticReconnect()
                 .Build();
 

@@ -536,7 +536,11 @@
         try
         {
             hubConnection = new HubConnectionBuilder()
-                .WithUrl($"{NavigationManager.BaseUri}api/payments/hubs/payments?paymentId={paymentId}")
+                .WithUrl($"{NavigationManager.BaseUri}api/payments/hubs/payments?paymentId={paymentId}")      
+                .WithAuthenticationRefresh(options =>
+                {
+                    options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+                })
                 .WithAutomaticReconnect()
                 .Build();
 

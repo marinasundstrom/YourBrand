@@ -60,7 +60,12 @@ public partial class DisplayPage : IMeetingsProcedureHubClient
             {
                 return await AccessTokenProvider.GetAccessTokenAsync();
             };
-        }).WithAutomaticReconnect().Build();
+        })
+        .WithAuthenticationRefresh(options =>
+        {
+            options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+        })
+        .WithAutomaticReconnect().Build();
 
         hubProxy = hubConnection.ServerProxy<IMeetingsProcedureHub>();
         _ = hubConnection.ClientRegistration<IMeetingsProcedureHubClient>(this);
