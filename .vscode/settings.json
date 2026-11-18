@@ -1,5 +1,5 @@
 {
-    "dotnet.defaultSolution": "YourBrand.sln",
+    "dotnet.defaultSolution": "YourBrand.slnx",
     "editor.formatOnSave": false,
     "restoreTerminals.terminals": [
         

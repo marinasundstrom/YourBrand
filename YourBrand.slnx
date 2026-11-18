@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Commands.md" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Contracts/Contracts.csproj" />
+    <Project Path="src/Seeder/Seeder.csproj" />
+    <Project Path="src/Utils/Utils.csproj" />
+    <Project Path="src/OrderPriceCalculator/OrderPriceCalculator.csproj" />
+    <Project Path="src/Proxy/Proxy.csproj" />
+    <Project Path="src/Diagnostics/Diagnostics.csproj" />
+    <Project Path="src/Extensions/Extensions.csproj" />
+    <Project Path="src/Core/Core.csproj" />
+    <Project Path="src/YourBrand.AppHost/YourBrand.AppHost.csproj" />
+    <Project Path="src/YourBrand.ServiceDefaults/YourBrand.ServiceDefaults.csproj" />
+    <Project Path="src/TemplateCompiler/TemplateCompiler.csproj" />
+    <Project Path="src/IdentityService2/IdentityService2.csproj" />
+  </Folder>
+  <Folder Name="/src/Analytics/">
+    <Project Path="src/Analytics/Analytics.Web/Analytics.Web.csproj" />
+    <Project Path="src/Analytics/Analytics.Components/Analytics.Components.csproj" />
+    <Project Path="src/Analytics/Analytics.UI/Analytics.UI.csproj" />
+    <Project Path="src/Analytics/Analytics.Application/Analytics.Application.csproj" />
+    <Project Path="src/Analytics/Analytics.Client/Analytics.Client.csproj" />
+    <Project Path="src/Analytics/Analytics.Consumers/Analytics.Consumers.csproj" />
+    <Project Path="src/Analytics/Analytics.Contracts/Analytics.Contracts.csproj" />
+    <Project Path="src/Analytics/Analytics.Domain/Analytics.Domain.csproj" />
+    <Project Path="src/Analytics/Analytics.Infrastructure/Analytics.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/ApiKeys/">
+    <Project Path="src/ApiKeys/ApiKeys/ApiKeys.csproj" />
+    <Project Path="src/ApiKeys/ApiKeys.Integration/ApiKeys.Integration.csproj" />
+    <Project Path="src/ApiKeys/ApiKeys.Client/ApiKeys.Client.csproj" />
+    <Project Path="src/ApiKeys/ApiKeys.Integration.Abstractions/ApiKeys.Integration.Abstractions.csproj" />
+  </Folder>
+  <Folder Name="/src/AppService/">
+    <Project Path="src/AppService/WebApi/WebApi.csproj" />
+    <Project Path="src/AppService/AppService.Client/AppService.Client.csproj" />
+    <Project Path="src/AppService/Application/Application.csproj" />
+    <Project Path="src/AppService/Infrastructure/Infrastructure.csproj" />
+    <Project Path="src/AppService/Domain/Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Carts/">
+    <Project Path="src/Carts/Carts.API/Carts.API.csproj" />
+    <Project Path="src/Carts/Carts.Client/Carts.Client.csproj" />
+    <Project Path="src/Carts/Carts.Contracts/Carts.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Catalog/">
+    <Project Path="src/Catalog/Catalog/Catalog.csproj" />
+    <Project Path="src/Catalog/Catalog.Client/Catalog.Client.csproj" />
+    <Project Path="src/Catalog/Catalog.Contracts/Catalog.Contracts.csproj" />
+    <Project Path="src/Catalog/Catalog.UI/Catalog.UI.csproj" />
+    <Project Path="src/Catalog/Catalog.Components/Catalog.Components.csproj" />
+  </Folder>
+  <Folder Name="/src/ChatApp/">
+    <Project Path="src/ChatApp/ChatApp.Client/ChatApp.Client.csproj" />
+    <Project Path="src/ChatApp/ChatApp.Components/ChatApp.Components.csproj" />
+    <Project Path="src/ChatApp/ChatApp.UI/ChatApp.UI.csproj" />
+    <Project Path="src/ChatApp/MudEmojiPicker/MudEmojiPicker.csproj" />
+    <Project Path="src/ChatApp/ChatApp.Contracts/ChatApp.Contracts.csproj" />
+    <Project Path="src/ChatApp/ChatApp.Shared/ChatApp.Shared.csproj" />
+    <Project Path="src/ChatApp/ChatApp/ChatApp.csproj" />
+    <Project Path="src/ChatApp/ChatApp.Tests/ChatApp.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Common/">
+    <Project Path="src/Common/Tenancy.AspNetCore/Tenancy.AspNetCore.csproj" />
+    <Project Path="src/Common/Tenancy.Abstractions/Tenancy.Abstractions.csproj" />
+    <Project Path="src/Common/Identity.AspNetCore/Identity.AspNetCore.csproj" />
+    <Project Path="src/Common/Identity.Abstractions/Identity.Abstractions.csproj" />
+    <Project Path="src/Common/Domain/Domain.csproj" />
+    <Project Path="src/Common/Domain.Infrastructure/Domain.Infrastructure.csproj" />
+    <Project Path="src/Common/Domain.Persistence/Domain.Persistence.csproj" />
+    <Project Path="src/Common/SampleTenant/SampleTenant.csproj" />
+    <Project Path="src/Common/Tenancy.EFCore/Tenancy.EFCore.csproj" />
+    <Project Path="src/Common/SoftDelete.Abstractions/SoftDelete.Abstractions.csproj" />
+    <Project Path="src/Common/SoftDelete.EFCore/SoftDelete.EFCore.csproj" />
+    <Project Path="src/Common/Integration.MassTransit/Integration.MassTransit.csproj" />
+    <Project Path="src/Common/Organizations.Abstractions/Organizations.Abstractions.csproj" />
+    <Project Path="src/Common/Organizations.EFCore/Organizations.EFCore.csproj" />
+    <Project Path="src/Common/Identity.EFCore/Identity.EFCore.csproj" />
+    <Project Path="src/Common/CoreServices/CoreServices.csproj" />
+    <Project Path="src/Common/Services.Authentication/Services.Authentication.csproj" />
+    <Project Path="src/Common/QueryFilters/QueryFilters.csproj" />
+    <Project Path="src/Common/Domain.Auditability.Abstractions/Domain.Auditability.Abstractions.csproj" />
+    <Project Path="src/Common/Domain.Auditability.EFCore/Domain.Auditability.EFCore.csproj" />
+    <Project Path="src/Common/Domain.Addresses/Domain.Addresses.csproj" />
+    <Project Path="src/Common/Domain.EFCore/Domain.EFCore.csproj" />
+    <Project Path="src/Common/Domain.AspNetCore/Domain.AspNetCore.csproj" />
+  </Folder>
+  <Folder Name="/src/CustomerRelations/" />
+  <Folder Name="/src/CustomerRelations/Customers/">
+    <Project Path="src/CustomerRelations/Customers/Customers/Customers.csproj" />
+    <Project Path="src/CustomerRelations/Customers/Customers.Client/Customers.Client.csproj" />
+    <Project Path="src/CustomerRelations/Customers/Customers.Components/Customers.Components.csproj" />
+    <Project Path="src/CustomerRelations/Customers/Customers.Contracts/Customers.Contracts.csproj" />
+    <Project Path="src/CustomerRelations/Customers/Customers.UI/Customers.UI.csproj" />
+  </Folder>
+  <Folder Name="/src/CustomerRelations/Ticketing/">
+    <Project Path="src/CustomerRelations/Ticketing/Ticketing.Web/Ticketing.Web.csproj" />
+    <Project Path="src/CustomerRelations/Ticketing/Ticketing.UI/Ticketing.UI.csproj" />
+    <Project Path="src/CustomerRelations/Ticketing/Ticketing.Infrastructure/Ticketing.Infrastructure.csproj" />
+    <Project Path="src/CustomerRelations/Ticketing/Ticketing.Domain/Ticketing.Domain.csproj" />
+    <Project Path="src/CustomerRelations/Ticketing/Ticketing.Core/Ticketing.Core.csproj" />
+    <Project Path="src/CustomerRelations/Ticketing/Ticketing.Contracts/Ticketing.Contracts.csproj" />
+    <Project Path="src/CustomerRelations/Ticketing/Ticketing.Consumers/Ticketing.Consumers.csproj" />
+    <Project Path="src/CustomerRelations/Ticketing/Ticketing.Components/Ticketing.Components.csproj" />
+    <Project Path="src/CustomerRelations/Ticketing/Ticketing.Client/Ticketing.Client.csproj" />
+    <Project Path="src/CustomerRelations/Ticketing/Ticketing.Application/Ticketing.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/Documents/">
+    <Project Path="src/Documents/Documents/Documents.csproj" />
+    <Project Path="src/Documents/Documents.Client/Documents.Client.csproj" />
+    <Project Path="src/Documents/Documents.Contracts/Documents.Contracts.csproj" />
+    <Project Path="src/Documents/Documents.UI/Documents.UI.csproj" />
+  </Folder>
+  <Folder Name="/src/EmailService/">
+    <Project Path="src/EmailService/EmailService/EmailService.csproj" />
+    <Project Path="src/EmailService/EmailService.Contracts/EmailService.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Executive/" />
+  <Folder Name="/src/Executive/Meetings/">
+    <Project Path="src/Executive/Meetings/Meetings/Meetings.csproj" />
+    <Project Path="src/Executive/Meetings/Meetings.UI/Meetings.UI.csproj" />
+    <Project Path="src/Executive/Meetings/Meetings.Core/Meetings.Core.csproj" />
+    <Project Path="src/Executive/Meetings/Meetings.Contracts/Meetings.Contracts.csproj" />
+    <Project Path="src/Executive/Meetings/Meetings.Components/Meetings.Components.csproj" />
+    <Project Path="src/Executive/Meetings/Meetings.Client/Meetings.Client.csproj" />
+    <Project Path="src/Executive/Meetings/Meetings.Shared/Meetings.Shared.csproj" />
+    <Project Path="src/Executive/Meetings/Meetings.Domain.Tests/Meetings.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Finance/">
+    <Project Path="src/Finance/Client/Client.csproj" />
+    <Project Path="src/Finance/Formulas/Formulas.csproj" />
+  </Folder>
+  <Folder Name="/src/Finance/Accounting/">
+    <Project Path="src/Finance/Accounting/Accounting.Client/Accounting.Client.csproj" />
+    <Project Path="src/Finance/Accounting/Accounting.UI/Accounting.UI.csproj" />
+  </Folder>
+  <Folder Name="/src/Finance/Accounting/Accountant/">
+    <Project Path="src/Finance/Accounting/Accountant/Accountant/Accountant.csproj" />
+    <Project Path="src/Finance/Accounting/Accountant/Accountant.Tests/Accountant.Tests.csproj" />
+    <Project Path="src/Finance/Accounting/Accountant/Accountant.Domain/Accountant.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Finance/Accounting/Accounting/">
+    <Project Path="src/Finance/Accounting/Accounting/Application/Application.csproj" />
+    <Project Path="src/Finance/Accounting/Accounting/Domain/Domain.csproj" />
+    <Project Path="src/Finance/Accounting/Accounting/Infrastructure/Infrastructure.csproj" />
+    <Project Path="src/Finance/Accounting/Accounting/WebApi/WebApi.csproj" />
+    <Project Path="src/Finance/Accounting/Accounting/Domain.Tests/Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Finance/Invoicing/">
+    <Project Path="src/Finance/Invoicing/Invoicing/Invoicing.csproj" />
+    <Project Path="src/Finance/Invoicing/Invoicing.Client/Invoicing.Client.csproj" />
+    <Project Path="src/Finance/Invoicing/Invoicing.Contracts/Invoicing.Contracts.csproj" />
+    <Project Path="src/Finance/Invoicing/Invoicing.UI/Invoicing.UI.csproj" />
+  </Folder>
+  <Folder Name="/src/Finance/Payments/">
+    <Project Path="src/Finance/Payments/Payments/Payments.csproj" />
+    <Project Path="src/Finance/Payments/Payments.Client/Payments.Client.csproj" />
+    <Project Path="src/Finance/Payments/Payments.Contracts/Payments.Contracts.csproj" />
+    <Project Path="src/Finance/Payments/Payments.UI/Payments.UI.csproj" />
+  </Folder>
+  <Folder Name="/src/Finance/RotRutService/">
+    <Project Path="src/Finance/RotRutService/RotRutService/RotRutService.csproj" />
+    <Project Path="src/Finance/RotRutService/RotRut/RotRut.csproj" />
+    <Project Path="src/Finance/RotRutService/RotRutService.Client/RotRutService.Client.csproj" />
+    <Project Path="src/Finance/RotRutService/RotRutService.Contracts/RotRutService.Contracts.csproj" />
+    <Project Path="src/Finance/RotRutService/RotRutService.UI/RotRutService.UI.csproj" />
+    <Project Path="src/Finance/RotRutService/RotRutService.Tests/RotRutService.Tests.csproj" />
+    <Project Path="src/Finance/RotRutService/RotRutService.Domain/RotRutService.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/Finance/Transactions/">
+    <Project Path="src/Finance/Transactions/Transactions/Transactions.csproj" />
+    <Project Path="src/Finance/Transactions/Transactions.Client/Transactions.Client.csproj" />
+    <Project Path="src/Finance/Transactions/Transactions.Contracts/Transactions.Contracts.csproj" />
+    <Project Path="src/Finance/Transactions/Transactions.UI/Transactions.UI.csproj" />
+  </Folder>
+  <Folder Name="/src/HumanResources/">
+    <Project Path="src/HumanResources/Application/Application.csproj" />
+    <Project Path="src/HumanResources/Domain/Domain.csproj" />
+    <Project Path="src/HumanResources/HumanResources/HumanResources.csproj" />
+    <Project Path="src/HumanResources/HumanResources.Contracts/HumanResources.Contracts.csproj" />
+    <Project Path="src/HumanResources/Infrastructure/Infrastructure.csproj" />
+    <Project Path="src/HumanResources/HumanResources.Client/HumanResources.Client.csproj" />
+    <Project Path="src/HumanResources/HumanResources.UI/HumanResources.UI.csproj" />
+    <Project Path="src/HumanResources/HumanResources.Consumers/HumanResources.Consumers.csproj" />
+  </Folder>
+  <Folder Name="/src/IdentityManagement/">
+    <Project Path="src/IdentityManagement/IdentityManagement/IdentityManagement.csproj" />
+    <Project Path="src/IdentityManagement/IdentityManagement.Application/IdentityManagement.Application.csproj" />
+    <Project Path="src/IdentityManagement/IdentityManagement.Client/IdentityManagement.Client.csproj" />
+    <Project Path="src/IdentityManagement/IdentityManagement.Consumers/IdentityManagement.Consumers.csproj" />
+    <Project Path="src/IdentityManagement/IdentityManagement.Contracts/IdentityManagement.Contracts.csproj" />
+    <Project Path="src/IdentityManagement/IdentityManagement.Domain/IdentityManagement.Domain.csproj" />
+    <Project Path="src/IdentityManagement/IdentityManagement.Infrastructure/IdentityManagement.Infrastructure.csproj" />
+    <Project Path="src/IdentityManagement/IdentityManagement.UI/IdentityManagement.UI.csproj" />
+  </Folder>
+  <Folder Name="/src/Inventory/">
+    <Project Path="src/Inventory/Inventory/Inventory.csproj" />
+    <Project Path="src/Inventory/Inventory.Client/Inventory.Client.csproj" />
+    <Project Path="src/Inventory/Inventory.Contracts/Inventory.Contracts.csproj" />
+    <Project Path="src/Inventory/Inventory.UI/Inventory.UI.csproj" />
+    <Project Path="src/Inventory/Inventory.Tests/Inventory.Tests.csproj" />
+  </Folder>
+  <Folder Name="/src/Marketing/">
+    <Project Path="src/Marketing/Marketing/Marketing.csproj" />
+    <Project Path="src/Marketing/Marketing.Client/Marketing.Client.csproj" />
+    <Project Path="src/Marketing/Marketing.Contracts/Marketing.Contracts.csproj" />
+    <Project Path="src/Marketing/Marketing.UI/Marketing.UI.csproj" />
+  </Folder>
+  <Folder Name="/src/Notifications/">
+    <Project Path="src/Notifications/Notifications/Notifications.csproj" />
+    <Project Path="src/Notifications/Notifications.Client/Notifications.Client.csproj" />
+    <Project Path="src/Notifications/Notifications.Contracts/Notifications.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Portal/">
+    <Project Path="src/Portal/Portal/Portal.csproj" />
+    <Project Path="src/Portal/Portal.Tests/Portal.Tests.csproj" />
+    <Project Path="src/Portal/Portal.Shell/Portal.Shell.csproj" />
+    <Project Path="src/Portal/MudBlazor.Extensions/MudBlazor.Extensions.csproj" />
+    <Project Path="src/Portal/Portal.Services/Portal.Services.csproj" />
+    <Project Path="src/Portal/Portal.Components/Portal.Components.csproj" />
+    <Project Path="src/Portal/Portal.Modules.Components/Portal.Modules.Components.csproj" />
+  </Folder>
+  <Folder Name="/src/Portal/Modules/">
+    <Project Path="src/Portal/Portal.Modules/Portal.Modules.csproj" />
+    <Project Path="src/Portal/Portal.Modules.Abstractions/Portal.Modules.Abstractions.csproj" />
+  </Folder>
+  <Folder Name="/src/Sales/">
+    <Project Path="src/Sales/Sales.API/Sales.API.csproj" />
+    <Project Path="src/Sales/Sales.Client/Sales.Client.csproj" />
+    <Project Path="src/Sales/Sales.Contracts/Sales.Contracts.csproj" />
+    <Project Path="src/Sales/Sales.UI/Sales.UI.csproj" />
+    <Project Path="src/Sales/Sales.UnitTests/Sales.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/src/Showroom/">
+    <Project Path="src/Showroom/Showroom.UI/Showroom.UI.csproj" />
+    <Project Path="src/Showroom/Showroom.Components/Showroom.Components.csproj" />
+  </Folder>
+  <Folder Name="/src/Showroom/Service/">
+    <Project Path="src/Showroom/Application/Application.csproj" />
+    <Project Path="src/Showroom/Domain/Domain.csproj" />
+    <Project Path="src/Showroom/Infrastructure/Infrastructure.csproj" />
+    <Project Path="src/Showroom/WebApi/WebApi.csproj" />
+    <Project Path="src/Showroom/Showroom.Client/Showroom.Client.csproj" />
+    <Project Path="src/Showroom/Exporter/Exporter.csproj" />
+    <Project Path="src/Showroom/TestData/TestData.csproj" />
+  </Folder>
+  <Folder Name="/src/Store/" />
+  <Folder Name="/src/Store/Web/">
+    <Project Path="src/Store/Web/Client/Client.csproj" />
+    <Project Path="src/Store/Web/Server/BlazorApp.csproj" />
+    <Project Path="src/Store/Web/Shared/Shared.csproj" />
+    <Project Path="src/Store/Web/Server.UnitTests/BlazorApp.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/src/StoreFront/">
+    <Project Path="src/StoreFront/StoreFront.API/StoreFront.API.csproj" />
+    <Project Path="src/StoreFront/StoreFront.Client/StoreFront.Client.csproj" />
+    <Project Path="src/StoreFront/StoreFront.Contracts/StoreFront.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/TimeReport/">
+    <Project Path="src/TimeReport/TimeReport.UI/TimeReport.UI.csproj" />
+    <Project Path="src/TimeReport/TimeReport.Components/TimeReport.Components.csproj" />
+  </Folder>
+  <Folder Name="/src/TimeReport/Service/">
+    <Project Path="src/TimeReport/Application/Application.csproj" />
+    <Project Path="src/TimeReport/Domain/Domain.csproj" />
+    <Project Path="src/TimeReport/Infrastructure/Infrastructure.csproj" />
+    <Project Path="src/TimeReport/WebApi/WebApi.csproj" />
+    <Project Path="src/TimeReport/TimeReport.Client/TimeReport.Client.csproj" />
+    <Project Path="src/TimeReport/Application.Tests/Application.Tests.csproj" />
+    <Project Path="src/TimeReport/Domain.Tests/Domain.Tests.csproj" />
+  </Folder>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+</Solution>
