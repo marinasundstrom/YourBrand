@@ -49,7 +49,7 @@ public partial class SpeakerDisplay : IDiscussionsHubClient
             })
             .WithAuthenticationRefresh(options =>
             {
-                options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+                options.RefreshBeforeExpiration = TimeSpan.FromMinutes(2);
             })
             .WithAutomaticReconnect()
             .Build();

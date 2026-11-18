@@ -69,7 +69,7 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
         })
         .WithAuthenticationRefresh(options =>
         {
-            options.RefreshBeforeExpiration = TimeSpan.FromMinutes(1);
+            options.RefreshBeforeExpiration = TimeSpan.FromMinutes(2);
         })
         .WithAutomaticReconnect().Build();
 
