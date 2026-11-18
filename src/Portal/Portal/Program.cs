@@ -27,6 +27,7 @@ builder.Services.AddOidcAuthentication(options =>
     options.ProviderOptions.DefaultScopes.Add("profile");
     options.ProviderOptions.DefaultScopes.Add("email");
     options.ProviderOptions.DefaultScopes.Add("myapi");
+    options.ProviderOptions.DefaultScopes.Add("offline_access");
 
     options.UserOptions.NameClaim = "name";
     options.UserOptions.RoleClaim = "role";
