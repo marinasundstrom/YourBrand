@@ -65,6 +65,7 @@
     <Project Path="src/ChatApp/ChatApp.Tests/ChatApp.Tests.csproj" />
   </Folder>
   <Folder Name="/src/Common/">
+    <Project Path="src/Common/AspNetCore.Idempotency/AspNetCore.Idempotency.csproj" />
     <Project Path="src/Common/Tenancy.AspNetCore/Tenancy.AspNetCore.csproj" />
     <Project Path="src/Common/Tenancy.Abstractions/Tenancy.Abstractions.csproj" />
     <Project Path="src/Common/Identity.AspNetCore/Identity.AspNetCore.csproj" />
