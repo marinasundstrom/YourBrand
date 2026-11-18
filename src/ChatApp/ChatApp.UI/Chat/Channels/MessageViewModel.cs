@@ -33,6 +33,14 @@ public class MessageViewModel : IComparable<MessageViewModel>
 
     public string? ErrorReasonCode { get; set; } = null;
 
+    public bool CanEdit => IsFromCurrentUser && ErrorReasonCode is null && Deleted == null;
+
+    public bool CanDelete => IsFromCurrentUser && ErrorReasonCode is null && Deleted == null;
+
+    public bool CanReply => ErrorReasonCode is null && Deleted == null;
+
+    public bool CanReact => ErrorReasonCode is null && Deleted == null;
+
     public int CompareTo(MessageViewModel? other)
     {
         if (other is null) return 1;

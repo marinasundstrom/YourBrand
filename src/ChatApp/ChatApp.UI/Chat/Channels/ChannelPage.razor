@@ -33,8 +33,9 @@
     bool first = IsFirst(message);
     bool last = IsLast(message);
 
-    var isAuthorizedToDelete = isInAdminRole || message.PostedByUserId == currentUserId;
-    var isAuthorizedToEdit = message.PostedByUserId == currentUserId;
+    var isAuthorizedToDelete = message.CanDelete || isInAdminRole; // isInAdminRole || message.PostedByUserId == currentUserId;
+    var isAuthorizedToEdit = message.CanEdit; // message.PostedByUserId == currentUserId;
+    var canReply = message.CanReply;
 
     <Message @key="message.GetHashCode()" Direction="@(message.IsFromCurrentUser ? MessageDirection.Right : MessageDirection.Left)"
         First=@first Last=@last IsFooterVisible=@(last || message.Reactions.Any()) IsSideAreaVisible=@(message.PostedByUserId != currentUserId)>
@@ -145,7 +146,7 @@
         *@
 
         <ActionsTemplate>
-            @if (message.Deleted is null)
+            @if (message.CanReact)
             {
                 string[] reactionEmojis = { "👍", "👎", "🙏", "❤️", "😊", "😂", "🤣", "🙁", "😢", "😡" };
 
@@ -192,12 +193,15 @@
                                 </div>
                             </MudMenuItem>
                         }
-                        <MudMenuItem>
-                            <div class="d-flex flex-row flex-grow-1 gap-2">
-                                <MudIcon Icon="@Icons.Material.Filled.Report" Size="Size.Medium" />
-                                @T["Report"]
-                            </div>
-                        </MudMenuItem>
+                        @if (canReply)
+                        {
+                            <MudMenuItem>
+                                <div class="d-flex flex-row flex-grow-1 gap-2">
+                                    <MudIcon Icon="@Icons.Material.Filled.Report" Size="Size.Medium" />
+                                    @T["Report"]
+                                </div>
+                            </MudMenuItem>
+                        }
                     </ChildContent>
                 </MudMenu>
             }
