@@ -11,12 +11,12 @@
     <PackageVersion Include="AspNetCore.HealthChecks.Rabbitmq" Version="9.0.0" />
     <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.6.4" />
-    <PackageVersion Include="Aspire.Hosting.Blazor" Version="13.6.4-preview.1.26523.11" />
-    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="13.6.4" />
-    <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="13.6.4" />
-    <PackageVersion Include="Aspire.Hosting.Redis" Version="13.6.4" />
-    <PackageVersion Include="Aspire.Hosting.SqlServer" Version="13.6.4" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.6.5" />
+    <PackageVersion Include="Aspire.Hosting.Blazor" Version="13.6.5-preview.1.26559.7" />
+    <PackageVersion Include="Aspire.Hosting.Azure.Storage" Version="13.6.5" />
+    <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="13.6.5" />
+    <PackageVersion Include="Aspire.Hosting.Redis" Version="13.6.5" />
+    <PackageVersion Include="Aspire.Hosting.SqlServer" Version="13.6.5" />
     <PackageVersion Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
     <PackageVersion Include="Azure.Identity" Version="1.21.0" />
     <PackageVersion Include="Azure.Security.KeyVault.Secrets" Version="4.11.2" />
