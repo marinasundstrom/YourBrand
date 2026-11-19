@@ -76,7 +76,9 @@ public static class Config
                 AbsoluteRefreshTokenLifetime = 2592000, // 30 days
 
                 RefreshTokenUsage = TokenUsage.OneTimeOnly,
-                RefreshTokenExpiration = TokenExpiration.Absolute,
+                RefreshTokenExpiration = TokenExpiration.Sliding,
+
+                //SlidingRefreshTokenLifetime = 60 * 60 * 24 * 7,  // 7 days
 
                 RedirectUris =
                 [
