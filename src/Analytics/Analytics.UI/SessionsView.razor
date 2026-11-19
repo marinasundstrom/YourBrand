@@ -2,12 +2,12 @@
 
 <MudCheckBox Value="DistinctByClient2" ValueChanged="new Func<bool, Task>(DistinctByClientChanged2)" Label="Distinct by clients" />
 
-<Chart Series="@Series2" XAxisLabels="@XAxisLabels2" />
+<Chart Series="@Series2" ChartLabels="@ChartLabels2" />
 
 @code 
 {
     public List<ChartSeries<double>> Series2 = new List<ChartSeries<double>>();
-    public string[] XAxisLabels2 = new string[0];
+    public string[] ChartLabels2 = new string[0];
 
     public bool DistinctByClient2 { get; set;}
 
@@ -26,7 +26,7 @@
     {
         var data = await StatisticsClient.GetSessionsCountAsync(null, null, DistinctByClient2);
 
-        XAxisLabels2 = data.Labels.ToArray();
+        ChartLabels2 = data.Labels.ToArray();
 
         if(Series2.Any()) Series2.Clear();
 

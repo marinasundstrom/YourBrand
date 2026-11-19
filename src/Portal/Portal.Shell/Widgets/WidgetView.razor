@@ -10,8 +10,8 @@
                     }
                 </div>
                 <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" Dense="true">
-                    <ActivatorContent>
-                        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" aria-label="settings" Size="Size.Small"></MudIconButton>
+                    <ActivatorContent Context="menu">           
+                        <MudIconButton OnClick="menu.ToggleAsync" Icon="@Icons.Material.Filled.MoreVert" aria-label="settings" Size="Size.Small"></MudIconButton>
                     </ActivatorContent>
                     <ChildContent>
                         <MudMenuItem>

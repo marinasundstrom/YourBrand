@@ -10,7 +10,7 @@
 
     <MudCheckBox Value="DistinctByClient" ValueChanged="new Func<bool, Task>(DistinctByClientChanged)" Label="Distinct by clients" />
 
-    <Chart Series="@Series" XAxisLabels="@XAxisLabels" />
+    <Chart Series="@Series" ChartLabels="@ChartLabels" />
 </MudPaper>
 
 <MudPaper Elevation="25" Class="pa-8 mt-8">
@@ -18,7 +18,7 @@
 
     <MudCheckBox Value="DistinctByClient2" ValueChanged="new Func<bool, Task>(DistinctByClientChanged2)" Label="Distinct by clients" />
 
-    <Chart Series="@Series2" XAxisLabels="@XAxisLabels2" />
+    <Chart Series="@Series2" ChartLabels="@ChartLabels2" />
 </MudPaper>
 
 <MudPaper Elevation="25" Class="pa-8 mt-8">
@@ -35,13 +35,13 @@
 
 
     public List<ChartSeries<double>> Series = new List<ChartSeries<double>>();
-    public string[] XAxisLabels = new string[0];
+    public string[] ChartLabels = new string[0];
 
     public bool DistinctByClient { get; set;}
 
 
     public List<ChartSeries<double>> Series2 = new List<ChartSeries<double>>();
-    public string[] XAxisLabels2 = new string[0];
+    public string[] ChartLabels2 = new string[0];
 
     public bool DistinctByClient2 { get; set;}
 
@@ -75,7 +75,7 @@
     {
         var data = await StatisticsClient.GetMostViewedItemsAsync(null, null, DistinctByClient);
 
-        XAxisLabels = data.Labels.ToArray();
+        ChartLabels = data.Labels.ToArray();
 
         if(Series.Any()) Series.Clear();
 
@@ -89,7 +89,7 @@
     {
         var data = await StatisticsClient.GetSessionsCountAsync(null, null, DistinctByClient2);
 
-        XAxisLabels2 = data.Labels.ToArray();
+        ChartLabels2 = data.Labels.ToArray();
 
         if(Series2.Any()) Series2.Clear();
 

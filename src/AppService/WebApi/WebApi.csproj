@@ -25,7 +25,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="MassTransit.RabbitMQ" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" />
     <PackageReference Include="MiniValidation" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />  
   </ItemGroup>

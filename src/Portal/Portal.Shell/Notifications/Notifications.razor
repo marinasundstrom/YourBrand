@@ -14,8 +14,8 @@
 <MudBadge Color="Color.Secondary" Content="BadgeText" Overlap="true" Visible="@(unreadNotificationsCount > 0)" class="notification-button">
     <MudMenu AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight" PopoverClass="docs-layout-menu-shadow rounded-lg" ListClass="notifications-menu-list" LockScroll="true">
         
-        <ActivatorContent>
-            <MudIconButton class="me-1" Color="Color.Inherit" Icon="@(unreadNotificationsCount > 0 ? Icons.Material.Filled.Notifications : Icons.Material.Outlined.Notifications)" />
+        <ActivatorContent Context="menu">
+            <MudIconButton OnClick="menu.ToggleAsync" class="me-1" Color="Color.Inherit" Icon="@(unreadNotificationsCount > 0 ? Icons.Material.Filled.Notifications : Icons.Material.Outlined.Notifications)" />
         </ActivatorContent>
         
         <ChildContent>

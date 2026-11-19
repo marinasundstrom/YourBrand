@@ -23,17 +23,17 @@
     <MudButton OnClick="ExportTheme" Variant="Variant.Filled" Class="me-4">Export theme</MudButton>
 
     <MudFileUpload T="IBrowserFile" FilesChanged="ImportTheme">
-        <ActivatorContent>
+        <CustomContent>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload">
                 Import theme
             </MudButton>
-        </ActivatorContent>
+        </CustomContent>
     </MudFileUpload>
 </div>
 
 @if (brandProfile is not null) 
 {
-    <MudTabs Elevation="25" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+    <MudTabs Elevation="25" Rounded="true" ApplyEffectsToContainer="true" TabPanelsClass="pa-6">
         <MudTabPanel Text="Light">
             <EditForm Model="brandProfile.Theme.ColorSchemes.Light">
                 <BrandColorPaletteView ColorScheme="brandProfile.Theme.ColorSchemes.Light" />

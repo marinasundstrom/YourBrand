@@ -32,7 +32,7 @@
                     <MudTd>
                         <MudNumericField T="int" Min="1" Value="line.Quantity" ValueChanged="quantity => OnQuantityChanged(line, quantity)" Immediate="true" Class="w-100" />
                     </MudTd>
-                    <MudTd Align="Align.Right">
+                    <MudTd>
                         <MudIconButton Size="Size.Small" Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => RemoveLine(line)" />
                     </MudTd>
                 </RowTemplate>

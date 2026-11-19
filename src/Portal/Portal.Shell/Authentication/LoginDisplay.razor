@@ -9,9 +9,14 @@
         <MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomLeft"
             TransformOrigin="Origin.TopCenter" PopoverClass="docs-layout-menu-shadow" ListClass="pa-2 docs-menu-list"
             LockScroll="true">
-            <ActivatorContent>
-                <MudAvatar Size="Size.Small" Class="mt-3 mb-3 mx-3">@authStateContext.User.Identity.Name.First()
+            <ActivatorContent Context="menu">
+    <div @onclick="menu.ToggleAsync" style="cursor: pointer">
+                <MudAvatar Size="Size.Small" Class="mt-3 mb-3 mx-3">
+                    @(authStateContext.User?.Identity?.Name?.FirstOrDefault() is char initial && initial != '\0'
+    ? initial.ToString().ToUpperInvariant()
+    : "?")
                 </MudAvatar>
+                </div>
             </ActivatorContent>
             <ChildContent>
                 <MudMenuItem OnClick="BeginSignOut">

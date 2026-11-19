@@ -4,8 +4,8 @@
 
 <MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
              PopoverClass="docs-layout-menu-shadow" ListClass="pa-0 docs-menu-list" LockScroll="true">
-        <ActivatorContent>
-            <MudIconButton Icon="@(ThemeManager.IsAutoColorScheme ? Icons.Material.Filled.AutoMode : (_currentColorScheme == ColorScheme.Light ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode))" Color="Color.Inherit" Edge="Edge.End" Class="me-1" />
+        <ActivatorContent Context="menu">    
+            <MudIconButton OnClick="menu.ToggleAsync" Icon="@(ThemeManager.IsAutoColorScheme ? Icons.Material.Filled.AutoMode : (_currentColorScheme == ColorScheme.Light ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode))" Color="Color.Inherit" Edge="Edge.End" Class="me-1" />
         </ActivatorContent>
         <ChildContent>
             <MudMenuItem Class="py-2" OnClick="@(async (e) => ThemeManager.SetPreferredColorScheme(ColorScheme.Light))">

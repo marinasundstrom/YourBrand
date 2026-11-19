@@ -16,12 +16,12 @@
 else
 {
     <MudFileUpload T="IBrowserFile" Accept="*.jpg, *.jpeg, *.png" FilesChanged="UploadProductImage" Class="mb-4">
-        <ActivatorContent>
+        <CustomContent>
             <MudButton Variant="Variant.Filled" Color="Color.Primary"
                 StartIcon="@Icons.Material.Filled.CloudUpload">
                 Upload image
             </MudButton>
-        </ActivatorContent>
+        </CustomContent>
     </MudFileUpload>
 
     <MudTable T="ProductImage" Items="productImages"

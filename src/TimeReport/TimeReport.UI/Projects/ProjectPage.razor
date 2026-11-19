@@ -139,7 +139,7 @@ else
         {
             <MudText Typo="Typo.h6" GutterBottom="true">Task hours per month</MudText>
 
-            <MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+            <MudChart Class="mt-8" ChartType="ChartType.Line" ChartSeries="@Series" ChartLabels="@ChartLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
         }
     </MudPaper>
 }
@@ -162,7 +162,7 @@ else
         YAxisTicks = 10
     };
     public List<ChartSeries<double>> Series = new List<ChartSeries<double>>();
-    public string[] XAxisLabels = new string[0];
+    public string[] ChartLabels = new string[0];
 
     [Parameter]
     public string ProjectId { get; set; }
@@ -172,7 +172,7 @@ else
         project = await ProjectsClient.GetProjectAsync(Organization.Id, ProjectId);
         data = await ProjectsClient.GetProjectStatisticsAsync(Organization.Id, ProjectId, null, null);
 
-        XAxisLabels = data.Labels.ToArray();
+        ChartLabels = data.Labels.ToArray();
 
         foreach (var d in data.Series)
         {

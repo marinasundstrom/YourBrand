@@ -170,8 +170,8 @@
                 <MudIconButton Icon="@Icons.Material.Filled.Reply" Style="margin-top: -5px; padding: 10px;" Size="Size.Medium" OnClick="() => ReplyToMessage(message)" />
                 
                 <MudMenu AnchorOrigin="Origin.BottomLeft">
-                    <ActivatorContent>
-                        <MudIconButton Style="margin-top: -5px; padding: 10px;" Icon="@Icons.Material.Filled.MoreVert"
+                    <ActivatorContent Context="menu">
+                        <MudIconButton OnClick="menu.ToggleAsync" Style="margin-top: -5px; padding: 10px;" Icon="@Icons.Material.Filled.MoreVert"
                                         Variant="Variant.Text" Color="Color.Secondary" />
                     </ActivatorContent>
                     <ChildContent>

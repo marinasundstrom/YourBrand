@@ -8,8 +8,8 @@
 
 <MudMenu Dense="true" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
     PopoverClass="docs-layout-menu-shadow" ListClass="pa-0 docs-menu-list" LockScroll="true">
-    <ActivatorContent>
-        <MudIconButton Class="ma-1" Icon="@Icons.Material.Filled.Shop" Color="Color.Inherit" Edge="Edge.Start" />
+    <ActivatorContent Context="menu">
+        <MudIconButton OnClick="menu.ToggleAsync" Class="ma-1" Icon="@Icons.Material.Filled.Shop" Color="Color.Inherit" Edge="Edge.Start" />
     </ActivatorContent>
     <ChildContent>
       @if(error) 

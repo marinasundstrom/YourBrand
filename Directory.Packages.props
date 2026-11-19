@@ -83,7 +83,6 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="11.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Azure" Version="1.14.1" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="11.0.0" />

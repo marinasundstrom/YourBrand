@@ -34,7 +34,7 @@
 
         <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">History</MudText>
 
-        <MudChart Class="mt-8 mb-16" ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+        <MudChart Class="mt-8 mb-16" ChartType="ChartType.Line" ChartSeries="@Series" ChartLabels="@ChartLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
 
     </MudPaper>
 
@@ -79,7 +79,7 @@
 
     LineChartOptions options = new ();
     List<ChartSeries<double>> Series = new List<ChartSeries<double>>();
-    string[] XAxisLabels = new string[0];
+    string[] ChartLabels = new string[0];
 
     [Parameter]
     public int AccountNo { get; set; }
@@ -95,7 +95,7 @@
         options.YAxisTicks = 10_000;
 
         var data = await AccountsClient.GetAccountHistoryAsync(Organization.Id, new int[] { AccountNo });
-        XAxisLabels = data.Labels.ToArray();
+        ChartLabels = data.Labels.ToArray();
 
         foreach (var d in data.Series)
         {

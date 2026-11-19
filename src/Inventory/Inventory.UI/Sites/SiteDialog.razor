@@ -11,7 +11,7 @@
                               For="@(() => Name)" />
                 @if(SiteId is null)
                 {
-                    <MudCheckBox Label="Create warehouse" Variant="Variant.Outlined" Class="mt-4" @bind-Value="CreateWarehouse"
+                    <MudCheckBox Label="Create warehouse" Class="mt-4" @bind-Value="CreateWarehouse"
                                 For="@(() => CreateWarehouse)" />
 
                     @if(CreateWarehouse)

@@ -1,4 +1,4 @@
-<MudChart Class="mt-8" ChartType="ChartType.Bar" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
+<MudChart Class="mt-8" ChartType="ChartType.Line" ChartSeries="@Series" ChartLabels="@ChartLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
 
 @code 
 {
@@ -14,5 +14,5 @@
     public List<ChartSeries<double>> Series { get; set; }
 
     [Parameter]   
-    public string[] XAxisLabels { get; set; }
+    public string[] ChartLabels { get; set; }
 }
