@@ -7,7 +7,7 @@
 <div class="d-flex flex-grow-1">
     <div class="flex-1 d-flex">
         <MudAutocomplete T="Theme" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class"
-            Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchThemes" ToStringFunc="(x) => x.Name"
+            Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchThemes" ToStringFunc="x => x?.Name ?? string.Empty"
             ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
             <ItemTemplate Context="context2">
                 <MudText Typo="Typo.body1">@context2.Name</MudText>
