@@ -5,15 +5,21 @@
 <div class="d-flex flex-grow-1">
     <div class="flex-1 d-flex">
         <MudAutocomplete T="Skill" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
-            For="For" SearchFunc="SearchSkills" ToStringFunc="(x) => x.Name"
+            For="For" SearchFunc="SearchSkills" ToStringFunc="(x) => x?.Name ?? string.Empty"
             ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
             <ItemTemplate Context="context2">
-                <MudText Typo="Typo.body1">@context2.Name</MudText>
-                <MudText Typo="Typo.body2">@context2.Area.Name (@context2.Area.Industry.Name)</MudText>
+                @if (context2 is not null) 
+                {
+                    <MudText Typo="Typo.body1">@context2.Name</MudText>
+                    <MudText Typo="Typo.body2">@context2.Area.Name (@context2.Area.Industry.Name)</MudText>
+                }
             </ItemTemplate>
 
             <ItemSelectedTemplate Context="context2">
-                <MudText Typo="Typo.body1">@context2.Name</MudText>
+                @if (context2 is not null) 
+                {
+                    <MudText Typo="Typo.body1">@context2.Name</MudText>
+                }
             </ItemSelectedTemplate>
         </MudAutocomplete>
     </div>

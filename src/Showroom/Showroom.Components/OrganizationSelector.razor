@@ -2,14 +2,14 @@
 @inject IOrganizationsClient OrganizationsClient
 
 <MudAutocomplete T="Organization" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
-    For="For" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x.Name"
+    For="For" SearchFunc="SearchOrganizations" ToStringFunc="(x) => x?.Name ?? string.Empty"
     ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
     <ItemTemplate Context="context2">
-        <MudText Typo="Typo.body1">@context2.Name</MudText>
+        <MudText Typo="Typo.body1">@context2?.Name</MudText>
     </ItemTemplate>
 
     <ItemSelectedTemplate Context="context2">
-        <MudText Typo="Typo.body1">@context2.Name</MudText>
+        <MudText Typo="Typo.body1">@context2?.Name</MudText>
     </ItemSelectedTemplate>
 </MudAutocomplete>
 
