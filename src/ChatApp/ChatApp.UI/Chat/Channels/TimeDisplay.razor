@@ -12,7 +12,7 @@
             
                 @if (timeSince.TotalMinutes >= 1)
                 {
-                    <text>@T["TimeDisplay", timeSince.Humanize(minUnit: Humanizer.Localisation.TimeUnit.Minute)]</text>
+                    <text>@T["TimeDisplay", timeSince.Humanize(minUnit: Humanizer.TimeUnit.Minute)]</text>
                 }
                 else
                 {

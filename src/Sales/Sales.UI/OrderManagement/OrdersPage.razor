@@ -25,8 +25,8 @@
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
     <ToolBarContent>
         <MudSelect T="OrderType?" Label="Type" MultiSelection="true" @bind-Value="Type"
-        SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" 
-        ToStringFunc="(o) => o.Name" Class="mt-0">
+                   SelectedValues="selectedTypes.AsReadOnly()" SelectedValuesChanged="OnSelectedTypesChanged"
+                   ToStringFunc="(o) => o.Name" Class="mt-0">
             @foreach (var type in orderTypes)
             {
                 <MudSelectItem T="OrderType?" Value="@type">@type.Name</MudSelectItem>
@@ -34,7 +34,7 @@
         </MudSelect>
         <MudSpacer />
         <MudSelect T="OrderStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
-            SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedStatusesChanged"
+            SelectedValues="selectedStatuses.AsReadOnly()" SelectedValuesChanged="OnSelectedStatusesChanged"
             ToStringFunc="(o) => o.Name" Class="mt-0">
             @foreach (var status in orderStatuses)
             {
@@ -105,10 +105,10 @@
     bool loading = false;
     OrderType? Type;
     IEnumerable<OrderType> orderTypes = new List<OrderType>();
-    IEnumerable<OrderType?> selectedTypes = new List<OrderType?>();
+    List<OrderType?> selectedTypes = new List<OrderType?>();
     OrderStatus? Status;
-    IEnumerable<OrderStatus> orderStatuses = new List<OrderStatus>();
-    IEnumerable<OrderStatus?> selectedStatuses = new List<OrderStatus?>();
+    List<OrderStatus> orderStatuses = new List<OrderStatus>();
+    List<OrderStatus?> selectedStatuses = new List<OrderStatus?>();
 
     string organizationId;
 
@@ -161,20 +161,20 @@
 
     private async Task OnSelectedTypesChanged(IEnumerable<OrderType?> selectedValues)
     {
-        selectedTypes = selectedValues;
+        selectedTypes = selectedValues.ToList();
         await table.ReloadServerData();
     }
 
 
     private async Task OnSelectedStatusesChanged(IEnumerable<OrderStatus?> selectedValues)
     {
-        selectedStatuses = selectedValues;
+        selectedStatuses = selectedValues.ToList();
         await table.ReloadServerData();
     }
 
     private async Task DeleteOrder(Order order)
     {
-        var result = await DialogService.ShowMessageBox("Delete draft order", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete draft order", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;

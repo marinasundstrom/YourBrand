@@ -759,7 +759,7 @@ else
 
     private async Task ResetProcedure() 
     {
-        var r = await DialogService.ShowMessageBox("Reset the procedure?", "This can't be undone.", "Yes", "No");
+        var r = await DialogService.ShowMessageBoxAsync("Reset the procedure?", "This can't be undone.", "Yes", "No");
 
         if(!r.GetValueOrDefault()) 
         {
@@ -874,7 +874,7 @@ else
 
     private async Task CancelMeeting()
     {
-        var r = await DialogService.ShowMessageBox("Cancel the meeting?", "This can't be undone.", "Yes", "No");
+        var r = await DialogService.ShowMessageBoxAsync("Cancel the meeting?", "This can't be undone.", "Yes", "No");
 
         if(!r.GetValueOrDefault())
         {

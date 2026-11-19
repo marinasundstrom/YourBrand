@@ -12,6 +12,6 @@ public static class DateFormatExtensions
     public static string Humanize2(this DateTime startDate, DateTime? endDate)
     {
         var now = ExperienceExtensions.GetNowDate();
-        return $"{((endDate == null ? now : endDate.GetValueOrDefault()).AddMonths(1) - startDate).Humanize(maxUnit: Humanizer.Localisation.TimeUnit.Year, minUnit: Humanizer.Localisation.TimeUnit.Month, precision: 2)}";
+        return $"{((endDate == null ? now : endDate.GetValueOrDefault()).AddMonths(1) - startDate).Humanize(maxUnit: Humanizer.TimeUnit.Year, minUnit: Humanizer.TimeUnit.Month, precision: 2)}";
     }
 }

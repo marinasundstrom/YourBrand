@@ -18,7 +18,7 @@ public sealed class ProcessOutboxMessagesJob<TDbContext>(TDbContext dbContext, I
     ILogger<ProcessOutboxMessagesJob<TDbContext>> logger) : IJob
     where TDbContext : DbContext
 {
-    public async Task Execute(IJobExecutionContext context)
+    public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
     {
         logger.LogDebug("Processing Outbox");
 
@@ -27,7 +27,7 @@ public sealed class ProcessOutboxMessagesJob<TDbContext>(TDbContext dbContext, I
             .Where(m => m.ProcessedOnUtc == null)
             .OrderBy(m => m.OccurredOnUtc)
             .Take(20)
-            .ToListAsync(context.CancellationToken);
+            .ToListAsync(cancellationToken);
 
         foreach (OutboxMessage outboxMessage in messages)
         {

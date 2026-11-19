@@ -26,8 +26,8 @@
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
     <ToolBarContent>
         <MudSelect T="SubscriptionType?" Label="Type" MultiSelection="true" @bind-Value="Type"
-        SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" 
-        ToStringFunc="(o) => o.Name" Class="mt-0">
+                   SelectedValues="selectedTypes.AsReadOnly()" SelectedValuesChanged="OnSelectedTypesChanged"
+                   ToStringFunc="(o) => o.Name" Class="mt-0">
             @foreach (var type in orderTypes)
             {
                 <MudSelectItem T="SubscriptionType?" Value="@type">@type.Name</MudSelectItem>
@@ -35,7 +35,7 @@
         </MudSelect>
         <MudSpacer />
         <MudSelect T="SubscriptionStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
-            SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedStatusesChanged"
+            SelectedValues="selectedStatuses.AsReadOnly()" SelectedValuesChanged="OnSelectedStatusesChanged"
             ToStringFunc="(o) => o.Name" Class="mt-0">
             @foreach (var status in orderStatuses)
             {
@@ -96,10 +96,10 @@
 
     SubscriptionType? Type;
     IEnumerable<SubscriptionType> orderTypes = new List<SubscriptionType>();
-    IEnumerable<SubscriptionType?> selectedTypes = new List<SubscriptionType?>();
+    List<SubscriptionType?> selectedTypes = new List<SubscriptionType?>();
     SubscriptionStatus? Status;
     IEnumerable<SubscriptionStatus> orderStatuses = new List<SubscriptionStatus>();
-    IEnumerable<SubscriptionStatus?> selectedStatuses = new List<SubscriptionStatus?>();
+    List<SubscriptionStatus?> selectedStatuses = new List<SubscriptionStatus?>();
 
     string organizationId;
 
@@ -149,21 +149,21 @@
 
     private async Task OnSelectedTypesChanged(IEnumerable<SubscriptionType?> selectedValues)
     {
-        selectedTypes = selectedValues;
+        selectedTypes = selectedValues.ToList();
         await table.ReloadServerData();
     }
 
 
     private async Task OnSelectedStatusesChanged(IEnumerable<SubscriptionStatus?> selectedValues)
     {
-        selectedStatuses = selectedValues;
+        selectedStatuses = selectedValues.ToList();
         await table.ReloadServerData();
     }
 
     /*
     private async Task DeleteSubscription(Subscription subscription)
     {
-        var result = await DialogService.ShowMessageBox("Delete draft subscription", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete draft subscription", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;

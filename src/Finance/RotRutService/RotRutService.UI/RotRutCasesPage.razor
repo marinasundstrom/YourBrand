@@ -26,7 +26,7 @@
             }
         </MudSelect>
         <MudSpacer />
-        <MudSelect T="RotRutCaseStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
+        <MudSelect T="RotRutCaseStatus?" Label="Status" MultiSelection="true" @bind-Value="Status" SelectedValues="selectedStatuses.AsReadOnly()" SelectedValuesChanged="OnSelectedValuesChanged" Class="mt-0">
             @foreach (var status in Enum.GetValues<RotRutCaseStatus>())
             {
                 <MudSelectItem T="RotRutCaseStatus?" Value="@status">@Enum.GetName(typeof(RotRutCaseStatus), status)</MudSelectItem>
@@ -82,7 +82,7 @@
     bool loading = false;
     DomesticServiceKind? kind;
     RotRutCaseStatus? Status;
-    IEnumerable<RotRutCaseStatus?> selectedStatuses = new List<RotRutCaseStatus?>();
+    List<RotRutCaseStatus?> selectedStatuses = new List<RotRutCaseStatus?>();
 
     private async Task<TableData<RotRutCaseDto>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
@@ -108,7 +108,7 @@
 
     private async Task OnSelectedValuesChanged(IEnumerable<RotRutCaseStatus?> selectedValues)
     {
-        selectedStatuses = selectedValues;
+        selectedStatuses = selectedValues.ToList();
         await table.ReloadServerData();
     }
 }

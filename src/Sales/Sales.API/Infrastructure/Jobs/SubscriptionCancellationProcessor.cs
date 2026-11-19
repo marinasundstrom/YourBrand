@@ -10,7 +10,7 @@ namespace YourBrand.Sales.Infrastructure.Jobs;
 [DisallowConcurrentExecution]
 public class SubscriptionCancellationProcessor(SalesContext salesContext, TimeProvider timeProvider) : IJob
 {
-    public async Task Execute(IJobExecutionContext context)
+    public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
     {
         await ProcessPendingCancellations(context.CancellationToken);
     }

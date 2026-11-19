@@ -244,7 +244,7 @@ public partial class AttendeePage : IMeetingsProcedureHubClient
 
         var roleName = meeting.JoinAs?.Name ?? "attendee";
 
-        var result = await DialogService.ShowMessageBox("Join meeting", $"Welcome! This meeting is open to guests. Would you like to join as {roleName.ToLowerInvariant()}?", yesText: "Join", cancelText: "Not now");
+        var result = await DialogService.ShowMessageBoxAsync("Join meeting", $"Welcome! This meeting is open to guests. Would you like to join as {roleName.ToLowerInvariant()}?", yesText: "Join", cancelText: "Not now");
 
         if (!result.GetValueOrDefault())
         {

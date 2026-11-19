@@ -100,7 +100,7 @@
 
     private async Task DeleteMotion(Motion motion)
     {
-        var result = await DialogService.ShowMessageBox("Delete draft motion", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete draft motion", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;

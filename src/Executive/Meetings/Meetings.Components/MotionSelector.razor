@@ -77,7 +77,7 @@
             var type = System.Reflection.Assembly.Load("Meetings.UI")
             .GetType("YourBrand.Meetings.Motions.Add");
 
-            var dialogReference = DialogService.Show(type, "New Motion", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync(type, "New Motion", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

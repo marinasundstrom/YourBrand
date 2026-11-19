@@ -730,7 +730,7 @@
 
     private async Task DeleteInvoice(Invoice invoice)
     {
-        var result = await DialogService.ShowMessageBox("Delete draft invoice", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete draft invoice", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;
@@ -742,7 +742,7 @@
 
     async Task DeleteItem(InvoiceItemViewModel invoiceItem)
     {
-        var result = await DialogService.ShowMessageBox("Delete item", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete item", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;

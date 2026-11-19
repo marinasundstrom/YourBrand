@@ -378,7 +378,7 @@ else
 
     async Task DeleteTask(TaskModel taskLine)
     {
-        var result = await DialogService.ShowMessageBox("Delete task?", "This will delete all entries for this task. Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete task?", "This will delete all entries for this task. Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;
@@ -561,7 +561,7 @@ else
 
     async Task OnCloseClicked()
     {
-        var result = await DialogService.ShowMessageBox("Close week?", "This will close this week's timesheet. Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Close week?", "This will close this week's timesheet. Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;
@@ -587,7 +587,7 @@ else
     {
         try
         {
-            var result = await DialogService.ShowMessageBox("Lock month?", "This will lock the past month. Are you sure?", "Yes", "No");
+            var result = await DialogService.ShowMessageBoxAsync("Lock month?", "This will lock the past month. Are you sure?", "Yes", "No");
 
             if (!result.GetValueOrDefault())
                 return;

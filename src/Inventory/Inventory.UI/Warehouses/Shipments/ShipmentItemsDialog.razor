@@ -127,7 +127,7 @@
 
     private async Task OnRemoveItem(ShipmentItem item)
     {
-        bool? confirmed = await DialogService.ShowMessageBox("Remove item", $"Remove {item.WarehouseItem?.Item?.Name} from shipment?", yesText: "Remove", cancelText: "Cancel");
+        bool? confirmed = await DialogService.ShowMessageBoxAsync("Remove item", $"Remove {item.WarehouseItem?.Item?.Name} from shipment?", yesText: "Remove", cancelText: "Cancel");
 
         if (confirmed != true)
         {

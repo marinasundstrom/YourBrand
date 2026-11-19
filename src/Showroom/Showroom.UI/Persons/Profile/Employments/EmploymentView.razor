@@ -40,7 +40,7 @@
     <MudText Typo="Typo.body2">
         @employment.StartDate.ToString("MMMM yyyy") - @(employment.EndDate?.ToString("MMMM yyyy") ??
     "Now") · @(((employment.EndDate ?? DateTime.Now.Date) - employment.StartDate).Humanize(minUnit:
-    Humanizer.Localisation.TimeUnit.Month, maxUnit: Humanizer.Localisation.TimeUnit.Year, precision: 2))
+    Humanizer.TimeUnit.Month, maxUnit: Humanizer.TimeUnit.Year, precision: 2))
     </MudText>
 
     <MudText Typo="Typo.body1" Class="mt-4 mb-2">

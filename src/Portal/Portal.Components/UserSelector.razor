@@ -75,7 +75,7 @@
             var type = System.Reflection.Assembly.Load("Showroom.UI")
                 .GetType("YourBrand.Showroom.Users.UserDialog");
 
-            var dialogReference = DialogService.Show(type, "New User", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync(type, "New User", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

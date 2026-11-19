@@ -3,7 +3,6 @@ using System.Globalization;
 using System.IO;
 
 using CsvHelper;
-using CsvHelper.Configuration;
 
 using MediatR;
 
@@ -40,14 +39,14 @@ public sealed record ImportProducts(string OrganizationId, Stream Stream) : IReq
             var importedProducts = new List<Product>();
             var productImageFiles = new Dictionary<Product, string>(ReferenceEqualityComparer.Instance);
 
-            var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
+            var configuration = new CsvReaderOptions()
             {
-                HasHeaderRecord = true,
-                Delimiter = ","
+                HasHeader = true,
+                Separator = ','
             };
 
             using (var reader = new StreamReader(fileStream))
-            using (var csv = new CsvReader(reader, configuration))
+            using (var csv = CsvReader.Create(reader, configuration))
             {
                 var records = csv.GetRecords<ProductRecord>();
 

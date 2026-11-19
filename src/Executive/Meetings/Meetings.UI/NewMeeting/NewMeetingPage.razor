@@ -216,7 +216,7 @@
 
     async Task RemoveAttendee(AddEditAttendeeViewModel attendee)
     {
-        var r = await DialogService.ShowMessageBox("Delete attendee?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+        var r = await DialogService.ShowMessageBoxAsync("Delete attendee?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
 
         if(!r.GetValueOrDefault()) 
         {

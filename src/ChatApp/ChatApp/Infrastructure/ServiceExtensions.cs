@@ -31,19 +31,20 @@ public static class ServiceExtensions
             Console.WriteLine(exc);
         }
 
-        services.AddQuartz(configure =>
-            {
-                var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
+        services.AddQuartz(q =>
+        {
+            var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
 
-                configure
-                    .AddJob<ProcessOutboxMessagesJob>(jobKey)
-                    .AddTrigger(trigger => trigger.ForJob(jobKey)
-                        .WithSimpleSchedule(schedule => schedule
-                            .WithIntervalInSeconds(2)
-                            .RepeatForever()));
+            q.AddJob<ProcessOutboxMessagesJob>(job =>
+                job.WithIdentity(jobKey));
 
-                configure.UseMicrosoftDependencyInjectionJobFactory();
-            });
+            q.AddTrigger<ProcessOutboxMessagesJob>(trigger => trigger
+                .WithIdentity($"{jobKey.Name}-trigger")
+                .ForJob(jobKey)
+                .WithSimpleSchedule(schedule => schedule
+                    .WithInterval(TimeSpan.FromSeconds(10))
+                    .RepeatForever()));
+        });
 
         services.AddQuartzHostedService();
 

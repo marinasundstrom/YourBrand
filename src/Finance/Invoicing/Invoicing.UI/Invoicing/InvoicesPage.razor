@@ -17,7 +17,7 @@
 <MudTable T="Invoice" @ref="table" ServerData="ServerReload" Dense="true" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info" OnRowClick="async (e) => await GoTo(e.Item)">
     <ToolBarContent>
-        <MudSelect T="InvoiceType?" Label="Type" MultiSelection="true" @bind-Value="Type" SelectedValues="selectedTypes" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
+        <MudSelect T="InvoiceType?" Label="Type" MultiSelection="true" @bind-Value="Type" SelectedValues="selectedTypes.AsReadOnly()" SelectedValuesChanged="OnSelectedTypesChanged" Class="mt-0">
             @foreach (var type in Enum.GetValues<InvoiceType>())
             {
                 <MudSelectItem T="InvoiceType?" Value="@type">@Enum.GetName(typeof(InvoiceType), type)</MudSelectItem>
@@ -25,7 +25,7 @@
         </MudSelect>
         <MudSpacer />
         <MudSelect T="InvoiceStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
-            SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged"
+            SelectedValues="selectedStatuses.AsReadOnly()" SelectedValuesChanged="OnSelectedValuesChanged"
             ToStringFunc="(o) => o.Name" Class="mt-0">
             @foreach (var status in invoiceStatuses)
             {
@@ -93,10 +93,10 @@
     MudTable<Invoice> table;
     bool loading = false;
     InvoiceType? Type;
-    IEnumerable<InvoiceType?> selectedTypes = new List<InvoiceType?>();
+    List<InvoiceType?> selectedTypes = new List<InvoiceType?>();
     InvoiceStatus? Status;
     IEnumerable<InvoiceStatus> invoiceStatuses = new List<InvoiceStatus>();
-    IEnumerable<InvoiceStatus?> selectedStatuses = new List<InvoiceStatus?>();
+    List<InvoiceStatus?> selectedStatuses = new List<InvoiceStatus?>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -154,19 +154,19 @@
 
     private async Task OnSelectedTypesChanged(IEnumerable<InvoiceType?> selectedTypes)
     {
-        this.selectedTypes = selectedTypes;
+        this.selectedTypes = selectedTypes.ToList();
         await table.ReloadServerData();
     }
 
     private async Task OnSelectedValuesChanged(IEnumerable<InvoiceStatus?> selectedValues)
     {
-        selectedStatuses = selectedValues;
+        selectedStatuses = selectedValues.ToList();
         await table.ReloadServerData();
     }
 
     private async Task DeleteInvoice(Invoice invoice)
     {
-        var result = await DialogService.ShowMessageBox("Delete draft invoice", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete draft invoice", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;

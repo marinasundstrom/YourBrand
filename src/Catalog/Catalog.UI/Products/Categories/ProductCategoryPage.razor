@@ -227,7 +227,7 @@ else
 
     async Task DeleteCategory(ProductCategory productCategory)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the category?", "The category will be deleted, but the options will remain.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBoxAsync("Delete the category?", "The category will be deleted, but the options will remain.\nThis can't be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;

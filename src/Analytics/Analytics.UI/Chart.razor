@@ -4,14 +4,14 @@
 {
     Data? data;
 
-    private ChartOptions options = new ChartOptions()
+    private LineChartOptions options = new()
     {
         YAxisFormat = "0 views",
         YAxisTicks = 10
     };
 
     [Parameter]
-    public List<ChartSeries> Series { get; set; }
+    public List<ChartSeries<double>> Series { get; set; }
 
     [Parameter]   
     public string[] XAxisLabels { get; set; }

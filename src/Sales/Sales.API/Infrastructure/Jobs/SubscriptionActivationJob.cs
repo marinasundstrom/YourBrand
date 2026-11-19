@@ -11,7 +11,7 @@ namespace YourBrand.Sales.Infrastructure.Jobs;
 public class SubscriptionActivationJob(SalesContext salesContext,
     TimeProvider timeProvider, ILogger<SubscriptionActivationJob> logger) : IJob
 {
-    public async Task Execute(IJobExecutionContext context)
+    public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
     {
         logger.LogInformation("Checking for pending activations");
 

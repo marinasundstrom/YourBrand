@@ -87,7 +87,7 @@
                 dependantOn = items.Where(m => module.Module.DependantOn.Any(m2 => m2 == m.Module.Assembly));
                 var str = string.Join(", ", dependantOn.Select(x => x.Module.Name));
 
-                var r = await DialogService.ShowMessageBox("Activate module?", $"This will also activate the following modules: {str}", "Yes", "No");
+                var r = await DialogService.ShowMessageBoxAsync("Activate module?", $"This will also activate the following modules: {str}", "Yes", "No");
 
                 if(!r.GetValueOrDefault())
                     return;
@@ -101,7 +101,7 @@
                 {
                     var str = string.Join(", ", dependants.Select(x => x.Module.Name));
 
-                    var r = await DialogService.ShowMessageBox("Deactivate module?", $"This will affect these dependant modules, that will remain active: {str}", "Yes", "No");
+                    var r = await DialogService.ShowMessageBoxAsync("Deactivate module?", $"This will affect these dependant modules, that will remain active: {str}", "Yes", "No");
 
                     if(!r.GetValueOrDefault())
                         return;
@@ -138,7 +138,7 @@
 
     private async Task Reload() 
     {   
-        var r = await DialogService.ShowMessageBox("Reload app", "Are you sure?", "Yes, reload", "Cancel");
+        var r = await DialogService.ShowMessageBoxAsync("Reload app", "Are you sure?", "Yes, reload", "Cancel");
 
         if(r.GetValueOrDefault()) 
         {

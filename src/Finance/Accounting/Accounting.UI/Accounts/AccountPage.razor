@@ -77,8 +77,8 @@
     Account? account;
     bool loading;
 
-    ChartOptions options = new ChartOptions();
-    List<ChartSeries> Series = new List<ChartSeries>();
+    LineChartOptions options = new ();
+    List<ChartSeries<double>> Series = new List<ChartSeries<double>>();
     string[] XAxisLabels = new string[0];
 
     [Parameter]
@@ -99,7 +99,7 @@
 
         foreach (var d in data.Series)
         {
-            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+            Series.Add(new ChartSeries<double>() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
         }
 
         StateHasChanged();

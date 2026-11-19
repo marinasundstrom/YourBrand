@@ -79,12 +79,12 @@
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization? Organization { get; set; }
 
-    private ChartOptions options = new ChartOptions()
+    private LineChartOptions options = new ()
     {
         YAxisFormat = "0 h",
         YAxisTicks = 10
     };
-    public List<ChartSeries> Series = new List<ChartSeries>();
+    public List<ChartSeries<double>> Series = new List<ChartSeries<double>>();
     public string[] XAxisLabels = new string[0];
 
     protected override async Task OnInitializedAsync()
@@ -95,7 +95,7 @@
 
         foreach (var d in data.Series)
         {
-            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+            Series.Add(new ChartSeries<double>() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
         }
 
         statisticsSummary = await ProjectsClient.GetStatisticsSummaryAsync(Organization.Id);

@@ -105,7 +105,7 @@
     {
         try
         {
-            var dialogResult = await DialogService.ShowMessageBox($"Delete {person.FirstName}?", "Are you sure?", "Yes", "No");
+            var dialogResult = await DialogService.ShowMessageBoxAsync($"Delete {person.FirstName}?", "Are you sure?", "Yes", "No");
 
             if (!dialogResult.GetValueOrDefault())
                 return;

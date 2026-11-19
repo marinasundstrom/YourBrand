@@ -1,93 +1,130 @@
 ﻿@page "/orders/schedule"
 @using Heron.MudCalendar
 @using YourBrand.Portal.Services
+
 @inject NavigationManager NavigationManager
 @inject IOrdersClient OrdersClient
 @inject IOrganizationProvider OrganizationProvider
 
 <AppPageTitle>Schedule</AppPageTitle>
 
-<MudText Typo="Typo.h3" GutterBottom="true" Class="mt-4 mb-8">Schedule</MudText>
+<MudText Typo="Typo.h3" GutterBottom="true" Class="mt-4 mb-8">
+    Schedule
+</MudText>
 
-<CustomCalendar Items="_events" CellClicked="CellClicked" ItemClicked="ItemClicked"
-DayTimeInterval="CalendarTimeInterval.Minutes15" EnableDragItems="true" ShowTodayButton="true"
-EnableResizeItems="true" DateRangeChanged="OnDateRangeChanged" ItemChanged="OnItemChanged" ViewChanged="OnViewChanged" />
+<MudCalendar T="CalendarItem" Items="_events" CellClicked="CellClicked" ItemClicked="ItemClicked"
+             DayTimeInterval="CalendarTimeInterval.Minutes15" EnableDragItems="true" EnableResizeItems="true"
+             ShowTodayButton="true" DateRangeChanged="OnDateRangeChanged" ItemChanged="OnItemChanged"
+             ViewChanged="OnViewChanged" />
+
 @code {
-
     [Inject]
-    private IDialogService DialogService { get; set; }
-
-    protected override async Task OnInitializedAsync() 
-    {
-        var organization = await OrganizationProvider.GetCurrentOrganizationAsync();
-
-        //await GetOrders(organization.Id, );
-    }
-
-    async Task GetOrders(string organizationId, DateTimeOffset plannedStart, DateTimeOffset plannedEnd)
-    {
-        var result = await OrdersClient.GetOrdersAsync(organizationId, [], null, null, null,
-            null, null, null, null, plannedStart, plannedEnd, 1,
-            100, null, null);
-
-        _events.Clear();
-
-        foreach(var order in result.Items) 
-        {
-            if (order.Schedule is null)
-                continue;
-            
-            _events.Add(new CalendarItem
-                {
-                    Start = order.Schedule.PlannedStartDate.GetValueOrDefault().DateTime,
-                    End = order.Schedule.PlannedEndDate.GetValueOrDefault().DateTime,
-                    Text = order.OrderNo?.ToString()     
-                });
-        }
-    }
-
-    private async Task CellClicked(DateTime dateTime)
-    {
-        //return DialogService.ShowMessageBox("Cell Clicked", dateTime.ToString(Thread.CurrentThread.CurrentCulture));
-    }
-
-    private async Task ItemClicked(CalendarItem item)
-    {
-        //return DialogService.ShowMessageBox("Item Clicked", item.Text);
-
-        NavigationManager.NavigateTo($"/orders/{item.Text}");
-    }
+    private IDialogService DialogService { get; set; } = default!;
 
     private List<CalendarItem> _events = new();
 
-    async Task OnDateRangeChanged(DateRange dateRange) 
+    protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine($"New date range: {dateRange}");
+        // Initial data loading is handled by DateRangeChanged.
+        await base.OnInitializedAsync();
+    }
 
-        var organization = await OrganizationProvider.GetCurrentOrganizationAsync();
+    private async Task GetOrders(
+        string organizationId,
+        DateTimeOffset plannedStart,
+        DateTimeOffset plannedEnd)
+    {
+        var result = await OrdersClient.GetOrdersAsync(
+            organizationId,
+            [],
+            null, null, null, null, null, null, null,
+            plannedStart,
+            plannedEnd,
+            1,
+            100,
+            null,
+            null);
 
-        var start = DateTime.SpecifyKind(dateRange.Start.GetValueOrDefault(), DateTimeKind.Local);
-        DateTimeOffset localTime1 = start;
+        var events = new List<CalendarItem>();
 
-        var end = DateTime.SpecifyKind(dateRange.End.GetValueOrDefault(), DateTimeKind.Local);
-        DateTimeOffset localTime2 = end;
-
-        if (localTime1 == localTime2) 
+        foreach (var order in result.Items)
         {
-            localTime2 = localTime2.AddHours(24);
+            if (order.Schedule?.PlannedStartDate is not { } start ||
+                order.Schedule.PlannedEndDate is not { } end)
+            {
+                continue;
+            }
+
+            events.Add(new CalendarItem
+            {
+                Start = start.LocalDateTime,
+                End = end.LocalDateTime,
+                Text = order.OrderNo?.ToString()
+            });
         }
 
-        await GetOrders(organization.Id, localTime1, localTime2);
+        _events = events;
     }
 
-    void OnItemChanged(CalendarItem item) 
+    private Task CellClicked(DateTime dateTime)
     {
-        Console.WriteLine($"Item changed: {item.Start} - {item.End}");
+        return Task.CompletedTask;
     }
 
-    Task OnViewChanged(CalendarView calendarView) 
+    private Task ItemClicked(CalendarItem item)
+    {
+        if (!string.IsNullOrWhiteSpace(item.Text))
+        {
+            NavigationManager.NavigateTo(
+                $"/orders/{item.Text}");
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private async Task OnDateRangeChanged(DateRange dateRange)
+    {
+        if (dateRange.Start is null ||
+            dateRange.End is null)
+        {
+            return;
+        }
+
+        var organization =
+            await OrganizationProvider.GetCurrentOrganizationAsync();
+
+        var start = DateTime.SpecifyKind(
+            dateRange.Start.Value,
+            DateTimeKind.Local);
+
+        var end = DateTime.SpecifyKind(
+            dateRange.End.Value,
+            DateTimeKind.Local);
+
+        DateTimeOffset plannedStart = start;
+        DateTimeOffset plannedEnd = end;
+
+        if (plannedStart == plannedEnd)
+        {
+            plannedEnd = plannedEnd.AddDays(1);
+        }
+
+        await GetOrders(
+            organization.Id,
+            plannedStart,
+            plannedEnd);
+    }
+
+    private void OnItemChanged(CalendarItem item)
+    {
+        Console.WriteLine(
+            $"Item changed: {item.Start} - {item.End}");
+    }
+
+    private Task OnViewChanged(CalendarView calendarView)
     {
         Console.WriteLine($"View changed: {calendarView}");
+
         return Task.CompletedTask;
     }
 }

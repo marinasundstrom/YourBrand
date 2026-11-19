@@ -11,7 +11,7 @@ namespace YourBrand.Sales.Infrastructure.Jobs;
 public class SubscriptionAutoRenewalJob(SalesContext salesContext, IDeliveryDateCalculator deliveryDateCalculator, IBillingDateCalculator billingDateCalculator,
     TimeProvider timeProvider, ILogger<SubscriptionAutoRenewalJob> logger) : IJob
 {
-    public async Task Execute(IJobExecutionContext context)
+    public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
     {
         logger.LogInformation("Processing auto-renewals");
 

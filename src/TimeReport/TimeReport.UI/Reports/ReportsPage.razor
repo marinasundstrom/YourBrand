@@ -43,7 +43,9 @@ else
                         }
                     </MudSelect>
 
-                    <MudSelect T="TimeSheetStatus" Label="Statuses" Class="mt-8" HelperText="Select statuses of timesheets to include" MultiSelection="true" @bind-SelectedValues="selectedStatuses" ToStringFunc="x => x.ToString()">
+                    <MudSelect T="TimeSheetStatus" Label="Statuses" Class="mt-8"
+                               HelperText="Select statuses of timesheets to include" MultiSelection="true"
+                               @bind-SelectedValues="selectedStatuses" ToStringFunc="x => x.ToString()">
                         @foreach (var status in statuses)
                         {
                             <MudSelectItem Value="@status">@status.ToString()</MudSelectItem>
@@ -70,7 +72,7 @@ else
 
     private Project? value { get; set; }
 
-    private IEnumerable<Project> options { get; set; } = new HashSet<Project>();
+    private IReadOnlyCollection<Project> options { get; set; } = new HashSet<Project>();
 
     private IEnumerable<Project>? projects = null;
 
@@ -78,7 +80,7 @@ else
 
     private IEnumerable<TimeSheetStatus>? statuses = null;
 
-    private IEnumerable<TimeSheetStatus> selectedStatuses { get; set; } = new HashSet<TimeSheetStatus>();
+    private IReadOnlyCollection<TimeSheetStatus> selectedStatuses { get; set; } = new HashSet<TimeSheetStatus>();
 
     private ReportMode mode = ReportMode.Project;
 
@@ -104,7 +106,7 @@ else
             projects = page2.Items;
 
             statuses = Enum.GetValues<TimeSheetStatus>().Select(x => (TimeSheetStatus)x);
-            ((HashSet<TimeSheetStatus?>)selectedStatuses).Add(TimeSheetStatus.Approved);
+            ((HashSet<TimeSheetStatus>)selectedStatuses).Add(TimeSheetStatus.Approved);
         }
         catch (Exception e)
         {

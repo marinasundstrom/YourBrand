@@ -128,7 +128,7 @@
 
     async Task DeleteSubscriptionType(SubscriptionType subcriptionType)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the order type?", "The order type will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBoxAsync("Delete the order type?", "The order type will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;

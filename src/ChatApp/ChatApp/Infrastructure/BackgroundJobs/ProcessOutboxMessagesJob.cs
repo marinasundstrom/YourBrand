@@ -29,7 +29,7 @@ public sealed class ProcessOutboxMessagesJob : IJob
         this.logger = logger;
     }
 
-    public async Task Execute(IJobExecutionContext context)
+    public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
     {
         logger.LogInformation("Processing Outbox");
 
@@ -38,7 +38,7 @@ public sealed class ProcessOutboxMessagesJob : IJob
             .Where(m => m.ProcessedOnUtc == null)
             .OrderBy(m => m.OccurredOnUtc)
             .Take(20)
-            .ToListAsync(context.CancellationToken);
+            .ToListAsync(cancellationToken);
 
         foreach (OutboxMessage outboxMessage in messages)
         {

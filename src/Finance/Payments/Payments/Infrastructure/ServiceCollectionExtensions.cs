@@ -31,18 +31,20 @@ public static class ServiceCollectionExtensions
             Console.WriteLine(exc);
         }
 
-        services.AddQuartz(configure =>
-            {
-                var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
+        services.AddQuartz(q =>
+        {
+            var jobKey = new JobKey(nameof(ProcessOutboxMessagesJob));
 
-                configure
-                    .AddJob<ProcessOutboxMessagesJob>(jobKey)
-                    .AddTrigger(trigger => trigger.ForJob(jobKey)
-                        .WithSimpleSchedule(schedule => schedule
-                            .WithIntervalInSeconds(10)
-                            .RepeatForever()));
+            q.AddJob<ProcessOutboxMessagesJob>(job =>
+                job.WithIdentity(jobKey));
 
-            });
+            q.AddTrigger<ProcessOutboxMessagesJob>(trigger => trigger
+                .WithIdentity($"{jobKey.Name}-trigger")
+                .ForJob(jobKey)
+                .WithSimpleSchedule(schedule => schedule
+                    .WithInterval(TimeSpan.FromSeconds(10))
+                    .RepeatForever()));
+        });
 
         services.AddQuartzHostedService();
 

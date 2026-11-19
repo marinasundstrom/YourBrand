@@ -75,7 +75,7 @@
             var type = System.Reflection.Assembly.Load("Showroom.UI")
                 .GetType("YourBrand.Showroom.Companies.CompanyDialog");
 
-            var dialogReference = DialogService.Show(type, "New Company", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync(type, "New Company", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

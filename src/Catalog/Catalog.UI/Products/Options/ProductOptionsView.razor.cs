@@ -120,7 +120,7 @@ sealed partial class ProductOptionsView : ComponentBase
 
     async Task DeleteOption(string optionId)
     {
-        var result = await DialogService.ShowMessageBox("Delete option", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete option", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault()) return;
 

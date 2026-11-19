@@ -128,7 +128,7 @@
 
     async Task DeleteSubscriptionStatus(SubscriptionStatus subscriptionStatus)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the subscription status?", "The subscription status will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBoxAsync("Delete the subscription status?", "The subscription status will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;

@@ -12,7 +12,7 @@ namespace YourBrand.Sales.Infrastructure.Jobs;
 public class SubscriptionOrderGenerationProcess(SalesContext salesContext, IDeliveryDateCalculator deliveryDateCalculator,
     TimeProvider timeProvider, ILogger<SubscriptionOrderGenerationProcess> logger) : IJob
 {
-    public async Task Execute(IJobExecutionContext context)
+    public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
     {
         int batchSize = 50;
 

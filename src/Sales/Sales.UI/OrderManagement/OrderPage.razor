@@ -635,7 +635,7 @@ Delete
 
     private async Task DeleteOrder(Order order)
     {
-        var result = await DialogService.ShowMessageBox("Delete draft order", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete draft order", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;
@@ -647,7 +647,7 @@ Delete
 
     private async Task BillOrder(Order order)
     {
-        var result = await DialogService.ShowMessageBox("Bill for the order", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Bill for the order", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;
@@ -659,7 +659,7 @@ Delete
 
     async Task DeleteItem(OrderItemViewModel orderItem)
     {
-        var result = await DialogService.ShowMessageBox("Delete item", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete item", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;

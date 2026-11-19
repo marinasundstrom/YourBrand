@@ -85,7 +85,7 @@
 
     public async Task DeleteDocument(DocumentDto document)
     {
-        var result = await DialogService.ShowMessageBox($"Delete {document.Name}", " Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync($"Delete {document.Name}", " Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault()) return;
 

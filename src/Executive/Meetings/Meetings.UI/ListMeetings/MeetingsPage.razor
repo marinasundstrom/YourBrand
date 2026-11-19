@@ -109,7 +109,7 @@
 
     private async Task DeleteMeeting(Meeting meeting)
     {
-        var result = await DialogService.ShowMessageBox("Delete draft meeting", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete draft meeting", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;

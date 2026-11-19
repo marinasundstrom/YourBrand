@@ -8,11 +8,11 @@ namespace YourBrand.Meetings.Procedure;
 
 internal static class ResultsPresentationHelper
 {
-    public static List<ChartSeries> BuildVoteSeries(VoteBreakdown? breakdown, ResultsValueMode valueMode)
+    public static List<ChartSeries<double>> BuildVoteSeries(VoteBreakdown? breakdown, ResultsValueMode valueMode)
     {
         var data = BuildVoteData(breakdown, valueMode);
 
-        return new List<ChartSeries>
+        return new List<ChartSeries<double>>
         {
             new()
             {
@@ -34,12 +34,12 @@ internal static class ResultsPresentationHelper
             : FormatVotes(count);
     }
 
-    public static List<ChartSeries> BuildElectionSeries(IEnumerable<ElectionResult> results, ResultsValueMode valueMode)
+    public static List<ChartSeries<double>> BuildElectionSeries(IEnumerable<ElectionResult> results, ResultsValueMode valueMode)
     {
         var resultList = results.ToList();
         var data = BuildElectionData(resultList, valueMode);
 
-        return new List<ChartSeries>
+        return new List<ChartSeries<double>>
         {
             new()
             {

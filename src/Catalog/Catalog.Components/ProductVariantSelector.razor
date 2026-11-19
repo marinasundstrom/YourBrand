@@ -80,7 +80,7 @@
             var type = System.Reflection.Assembly.Load("Showroom.UI")
                 .GetType("YourBrand.Showroom.ProductVariants.ProductVariantDialog");
 
-            var dialogReference = DialogService.Show(type, "New ProductVariant", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync(type, "New ProductVariant", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

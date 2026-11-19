@@ -156,12 +156,12 @@ else
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization? Organization { get; set; }
 
-    private ChartOptions options = new ChartOptions()
+    private LineChartOptions options = new ()
     {
         YAxisFormat = "0 h",
         YAxisTicks = 10
     };
-    public List<ChartSeries> Series = new List<ChartSeries>();
+    public List<ChartSeries<double>> Series = new List<ChartSeries<double>>();
     public string[] XAxisLabels = new string[0];
 
     [Parameter]
@@ -176,7 +176,7 @@ else
 
         foreach (var d in data.Series)
         {
-            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+            Series.Add(new ChartSeries<double>() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
         }
 
         statisticsSummary = await ProjectsClient.GetStatisticsSummary2Async(Organization.Id, ProjectId);
@@ -269,7 +269,7 @@ else
 
     async System.Threading.Tasks.Task DeleteMembership(ProjectMembership membership)
     {
-        var modalResult = await DialogService.ShowMessageBox($"Revoke the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBoxAsync($"Revoke the membership for {membership.User.FirstName}?", "If you regret it, you can just add the user back later.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;
@@ -322,7 +322,7 @@ else
 
     async Task DeleteExpense(Expense expense)
     {
-        var modalResult = await DialogService.ShowMessageBox($"Delete the expense?", "This cannot be undone.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBoxAsync($"Delete the expense?", "This cannot be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;

@@ -162,7 +162,7 @@ public class PriceUpdateViewModel(IProductsClient productsClient, IDialogService
             MaxWidth = MaxWidth.Small
         };
 
-        var dialog = dialogService.Show<ProductPriceTierDialog>(title, parameters, options);
+        var dialog = await dialogService.ShowAsync<ProductPriceTierDialog>(title, parameters, options);
         var result = await dialog.Result;
 
         if (result.Canceled)
@@ -179,7 +179,7 @@ public class PriceUpdateViewModel(IProductsClient productsClient, IDialogService
         parameters.Add(nameof(SetProductDiscountPriceDialog.ProductId), ProductId);
         parameters.Add(nameof(SetProductDiscountPriceDialog.RegularPrice), Price);
 
-        var dialogRef = dialogService.Show<SetProductDiscountPriceDialog>("Set discount price", parameters);
+        var dialogRef = await dialogService.ShowAsync<SetProductDiscountPriceDialog>("Set discount price", parameters);
 
         var r = await dialogRef.Result;
 

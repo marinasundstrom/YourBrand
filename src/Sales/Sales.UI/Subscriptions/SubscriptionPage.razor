@@ -77,7 +77,7 @@ else
                 </MudSelect> *@
                 <MudSpacer />
                 <MudSelect T="OrderStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
-                    SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedValuesChanged"
+                    SelectedValues="selectedStatuses.AsReadOnly()" SelectedValuesChanged="OnSelectedValuesChanged"
                     ToStringFunc="(o) => o.Name" Class="mt-0">
                     @foreach (var status in orderStatuses)
                     {
@@ -161,7 +161,7 @@ else
     bool loading = false;
     OrderStatus? Status;
     IEnumerable<OrderStatus> orderStatuses = new List<OrderStatus>();
-    IEnumerable<OrderStatus?> selectedStatuses = new List<OrderStatus?>();
+    List<OrderStatus?> selectedStatuses = new List<OrderStatus?>();
 
     string organizationId;
 
@@ -206,13 +206,13 @@ else
 
     private async Task OnSelectedValuesChanged(IEnumerable<OrderStatus?> selectedValues)
     {
-        selectedStatuses = selectedValues;
+        selectedStatuses = selectedValues.ToList();
         await table.ReloadServerData();
     }
 
     private async Task DeleteOrder(Order order)
     {
-        var result = await DialogService.ShowMessageBox("Delete draft order", "Are you sure?", "Yes", "No");
+        var result = await DialogService.ShowMessageBoxAsync("Delete draft order", "Are you sure?", "Yes", "No");
 
         if (!result.GetValueOrDefault())
             return;

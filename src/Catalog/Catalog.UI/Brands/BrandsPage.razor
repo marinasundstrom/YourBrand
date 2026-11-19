@@ -131,7 +131,7 @@
 
     async Task DeleteBrand(Brand brand)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the brand?", "The brand will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBoxAsync("Delete the brand?", "The brand will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;

@@ -222,7 +222,7 @@
     {
         try
         {
-            var result = await DialogService.ShowMessageBox(T["DeleteTicket", item.Subject], T["AreYouSure"], T["Yes"], T["No"]);
+            var result = await DialogService.ShowMessageBoxAsync(T["DeleteTicket", item.Subject], T["AreYouSure"], T["Yes"], T["No"]);
 
             if (result.GetValueOrDefault())
             {

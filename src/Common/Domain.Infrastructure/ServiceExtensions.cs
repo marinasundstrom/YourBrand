@@ -38,19 +38,23 @@ public static class ServiceExtensions
     private static void SetUpProcessOutboxMessagesJob<TDbContext>(IServiceCollection services, IConfiguration configuration)
         where TDbContext : DbContext
     {
-        services.AddQuartz(configure =>
-        {
-            var jobKey = new JobKey(typeof(ProcessOutboxMessagesJob<TDbContext>).Name);
+        services.AddQuartz(q =>
+      {
+          var jobKey = new JobKey(typeof(ProcessOutboxMessagesJob<TDbContext>).Name);
 
-            int interval = configuration.GetValue<int?>("ProcessOutboxMessagesJob:Interval") ?? 10;
+          int interval = configuration.GetValue<int?>(
+              "ProcessOutboxMessagesJob:Interval") ?? 10;
 
-            configure
-                .AddJob<ProcessOutboxMessagesJob<TDbContext>>(jobKey)
-                .AddTrigger(trigger => trigger.ForJob(jobKey)
-                    .WithSimpleSchedule(schedule => schedule
-                        .WithIntervalInSeconds(interval)
-                        .RepeatForever()));
-        });
+          q.AddJob<ProcessOutboxMessagesJob<TDbContext>>(job =>
+              job.WithIdentity(jobKey));
+
+          q.AddTrigger<ProcessOutboxMessagesJob<TDbContext>>(trigger => trigger
+              .WithIdentity($"{jobKey.Name}-trigger")
+              .ForJob(jobKey)
+              .WithSimpleSchedule(schedule => schedule
+                  .WithInterval(TimeSpan.FromSeconds(interval))
+                  .RepeatForever()));
+      });
 
         services.AddQuartzHostedService();
     }

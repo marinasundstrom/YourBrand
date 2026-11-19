@@ -34,13 +34,13 @@
     Data? data;
 
 
-    public List<ChartSeries> Series = new List<ChartSeries>();
+    public List<ChartSeries<double>> Series = new List<ChartSeries<double>>();
     public string[] XAxisLabels = new string[0];
 
     public bool DistinctByClient { get; set;}
 
 
-    public List<ChartSeries> Series2 = new List<ChartSeries>();
+    public List<ChartSeries<double>> Series2 = new List<ChartSeries<double>>();
     public string[] XAxisLabels2 = new string[0];
 
     public bool DistinctByClient2 { get; set;}
@@ -81,7 +81,7 @@
 
         foreach (var d in data.Series)
         {
-            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+            Series.Add(new ChartSeries<double>() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
         }
     }
 
@@ -95,7 +95,7 @@
 
         foreach (var d in data.Series)
         {
-            Series2.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+            Series2.Add(new ChartSeries<double>() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
         }
     }
 }

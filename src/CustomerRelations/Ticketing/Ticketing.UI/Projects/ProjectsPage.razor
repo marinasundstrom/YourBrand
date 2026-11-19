@@ -127,7 +127,7 @@
 
     async Task DeleteProject(Project orderStatus)
     {
-        var modalResult = await DialogService.ShowMessageBox("Delete the order status?", "The order status will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBoxAsync("Delete the order status?", "The order status will be deleted.\nThis can't be undone.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;

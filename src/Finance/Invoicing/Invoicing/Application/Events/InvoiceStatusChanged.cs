@@ -2,8 +2,6 @@ using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 
-using Quartz.Xml.JobSchedulingData20;
-
 using YourBrand.Domain;
 using YourBrand.Invoicing.Application.Common.Interfaces;
 using YourBrand.Invoicing.Contracts;

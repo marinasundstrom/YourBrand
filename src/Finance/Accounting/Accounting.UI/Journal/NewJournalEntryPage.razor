@@ -197,7 +197,7 @@
         {
             if (!files.Any())
             {
-                var r = await DialogService.ShowMessageBox("Verification lacks attachment", "Are you sure that you want to continue?",
+                var r = await DialogService.ShowMessageBoxAsync("Verification lacks attachment", "Are you sure that you want to continue?",
                 "Yes", "No");
 
                 if (!r.GetValueOrDefault())

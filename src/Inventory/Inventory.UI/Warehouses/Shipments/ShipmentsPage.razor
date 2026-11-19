@@ -204,7 +204,7 @@
             return;
         }
 
-        bool? confirmed = await DialogService.ShowMessageBox("Ship shipment", $"Mark shipment {shipment.OrderNo} as shipped?", yesText: "Ship", cancelText: "Cancel");
+        bool? confirmed = await DialogService.ShowMessageBoxAsync("Ship shipment", $"Mark shipment {shipment.OrderNo} as shipped?", yesText: "Ship", cancelText: "Cancel");
 
         if (confirmed != true)
         {
@@ -238,7 +238,7 @@
             return;
         }
 
-        bool? confirmed = await DialogService.ShowMessageBox("Delete shipment", $"Are you sure you want to delete shipment {shipment.OrderNo}?", yesText: "Delete", cancelText: "Cancel");
+        bool? confirmed = await DialogService.ShowMessageBoxAsync("Delete shipment", $"Are you sure you want to delete shipment {shipment.OrderNo}?", yesText: "Delete", cancelText: "Cancel");
 
         if (confirmed != true)
         {

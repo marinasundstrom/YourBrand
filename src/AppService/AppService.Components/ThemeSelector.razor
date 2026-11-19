@@ -88,7 +88,7 @@
         var type = System.Reflection.Assembly.Load("Showroom.UI")
         .GetType("YourBrand.AppService.Themes.ThemesDialog");
 
-        var dialogReference = DialogService.Show(type, "New Themes", parameters, new DialogOptions
+        var dialogReference = await DialogService.ShowAsync(type, "New Themes", parameters, new DialogOptions
             {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge

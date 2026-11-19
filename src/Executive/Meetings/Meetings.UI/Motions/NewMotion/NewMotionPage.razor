@@ -164,7 +164,7 @@
 
     async Task RemoveOperativeClause(AddEditOperativeClauseViewModel item)
     {
-        var r = await DialogService.ShowMessageBox("Delete item?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
+        var r = await DialogService.ShowMessageBoxAsync("Delete item?", "This can't be undone. You will have to manually add again.", "Delete", "Cancel");
 
         if(!r.GetValueOrDefault()) 
         {

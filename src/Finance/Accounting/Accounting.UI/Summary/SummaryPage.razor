@@ -56,8 +56,8 @@
     private int[] accounts = new[] { 1510, 1930, 2013, 2018, 2440, 4000,
         3000, 3001, 3002, 3003, 3040, 3041, 3042, 3043, 3050, 3051, 3052, 3053 };
 
-    private ChartOptions options = new ChartOptions();
-    public List<ChartSeries> Series = new List<ChartSeries>();
+    private LineChartOptions options = new ();
+    public List<ChartSeries<double>> Series = new List<ChartSeries<double>>();
     public string[] XAxisLabels = new string[0];
 
     IEnumerable<AccountClassSummaryItemViewModel>? accountClasses = null;
@@ -80,7 +80,7 @@
 
         foreach (var d in data.Series)
         {
-            Series.Add(new ChartSeries() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
+            Series.Add(new ChartSeries<double>() { Name = d.Name, Data = d.Data.Select(x => (double)x).ToArray() });
         }
 
         StateHasChanged();

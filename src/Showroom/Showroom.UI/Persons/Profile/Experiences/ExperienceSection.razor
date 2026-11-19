@@ -118,7 +118,7 @@
         /*
         try
         {
-            var result = await DialogService.ShowMessageBox($"Delete experience at {experience.Company.Name}?", "Are you sure?", "Yes", "No");
+            var result = await DialogService.ShowMessageBoxAsync($"Delete experience at {experience.Company.Name}?", "Are you sure?", "Yes", "No");
             if (result.GetValueOrDefault())
             {
                 await PersonProfilesClient.RemoveExperienceAsync(PersonProfileId, experience.Id);

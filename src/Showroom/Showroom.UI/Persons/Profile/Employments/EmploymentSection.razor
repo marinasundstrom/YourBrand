@@ -114,7 +114,7 @@
     {
         try
         {
-            var result = await DialogService.ShowMessageBox($"Delete employment at {employment.Employer.Name}?", "Are you sure?", "Yes", "No");
+            var result = await DialogService.ShowMessageBoxAsync($"Delete employment at {employment.Employer.Name}?", "Are you sure?", "Yes", "No");
             if (result.GetValueOrDefault())
             {
                 //await PersonProfilesClient.RemoveEmploymentAsync(PersonProfileId, employment.Id);

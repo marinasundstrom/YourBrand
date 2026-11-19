@@ -24,10 +24,6 @@
 	<ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Http" />
         <PackageReference Include="Newtonsoft.Json" />
-		<PackageReference Include="Microsoft.Extensions.ApiDescription.Client">
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
 		<PackageReference Include="NSwag.ApiDescription.Client">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>

@@ -123,7 +123,7 @@
 
     async Task DeleteMembership(TeamMembership membership)
     {
-        var modalResult = await DialogService.ShowMessageBox($"Remove the membership for {membership.Person.FirstName}?", "If you regret it, you can just add the person back later.", yesText: "Delete", noText: "No");
+        var modalResult = await DialogService.ShowMessageBoxAsync($"Remove the membership for {membership.Person.FirstName}?", "If you regret it, you can just add the person back later.", yesText: "Delete", noText: "No");
         if (!modalResult.GetValueOrDefault())
         {
             return;

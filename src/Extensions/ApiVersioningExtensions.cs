@@ -23,7 +23,7 @@ public static class ApiVersioningExtensions
             option.GroupNameFormat = "VVV";
             option.SubstituteApiVersionInUrl = true;
         })
-        .EnableApiVersionBinding()
+        //.EnableApiVersionBinding()
         .AddMvc();
 
         return services;

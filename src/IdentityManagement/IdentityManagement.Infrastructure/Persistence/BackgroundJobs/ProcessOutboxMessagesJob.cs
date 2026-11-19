@@ -20,7 +20,7 @@ namespace YourBrand.IdentityManagement.Infrastructure.BackgroundJobs;
 public sealed class ProcessOutboxMessagesJob(ApplicationDbContext dbContext, IDomainEventDispatcher domainEventDispatcher,
     ILogger<ProcessOutboxMessagesJob> logger) : IJob
 {
-    public async Task Execute(IJobExecutionContext context)
+    public async ValueTask Execute(IJobExecutionContext context, CancellationToken cancellationToken)
     {
         logger.LogDebug("Processing Outbox");
 
@@ -29,7 +29,7 @@ public sealed class ProcessOutboxMessagesJob(ApplicationDbContext dbContext, IDo
             .Where(m => m.ProcessedOnUtc == null)
             .OrderBy(m => m.OccurredOnUtc)
             .Take(20)
-            .ToListAsync(context.CancellationToken);
+            .ToListAsync(cancellationToken);
 
         foreach (OutboxMessage outboxMessage in messages)
         {

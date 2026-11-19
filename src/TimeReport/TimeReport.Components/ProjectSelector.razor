@@ -79,7 +79,7 @@
             var type = System.Reflection.Assembly.Load("Showroom.UI")
                 .GetType("YourBrand.Showroom.Projects.ProjectDialog");
 
-            var dialogReference = DialogService.Show(type, "New Project", parameters, new DialogOptions {
+            var dialogReference = await DialogService.ShowAsync(type, "New Project", parameters, new DialogOptions {
                 //FullScreen = true,
                 MaxWidth = MaxWidth.ExtraLarge
             });

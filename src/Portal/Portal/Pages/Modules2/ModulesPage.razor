@@ -86,7 +86,7 @@
 
     private async Task Reload() 
     {   
-        var r = await DialogService.ShowMessageBox("Reload app", "Are you sure?", "Yes, reload", "Cancel");
+        var r = await DialogService.ShowMessageBoxAsync("Reload app", "Are you sure?", "Yes, reload", "Cancel");
 
         if(r.GetValueOrDefault()) 
         {
