@@ -1,5 +1,5 @@
 ﻿@page "/orders/schedule"
-@using Heron.MudCalendar
+@* @using Heron.MudCalendar *@
 @using YourBrand.Portal.Services
 
 @inject NavigationManager NavigationManager
@@ -12,16 +12,16 @@
     Schedule
 </MudText>
 
-<MudCalendar T="CalendarItem" Items="_events" CellClicked="CellClicked" ItemClicked="ItemClicked"
+@* <MudCalendar T="CalendarItem" Items="_events" CellClicked="CellClicked" ItemClicked="ItemClicked"
              DayTimeInterval="CalendarTimeInterval.Minutes15" EnableDragItems="true" EnableResizeItems="true"
              ShowTodayButton="true" DateRangeChanged="OnDateRangeChanged" ItemChanged="OnItemChanged"
-             ViewChanged="OnViewChanged" />
+             ViewChanged="OnViewChanged" /> *@
 
 @code {
     [Inject]
     private IDialogService DialogService { get; set; } = default!;
 
-    private List<CalendarItem> _events = new();
+    //private List<CalendarItem> _events = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,6 +45,8 @@
             null,
             null);
 
+        /*
+
         var events = new List<CalendarItem>();
 
         foreach (var order in result.Items)
@@ -64,6 +66,7 @@
         }
 
         _events = events;
+        */
     }
 
     private Task CellClicked(DateTime dateTime)
@@ -71,6 +74,7 @@
         return Task.CompletedTask;
     }
 
+    /*
     private Task ItemClicked(CalendarItem item)
     {
         if (!string.IsNullOrWhiteSpace(item.Text))
@@ -81,6 +85,7 @@
 
         return Task.CompletedTask;
     }
+    */
 
     private async Task OnDateRangeChanged(DateRange dateRange)
     {
@@ -115,6 +120,8 @@
             plannedEnd);
     }
 
+    /*
+
     private void OnItemChanged(CalendarItem item)
     {
         Console.WriteLine(
@@ -126,5 +133,5 @@
         Console.WriteLine($"View changed: {calendarView}");
 
         return Task.CompletedTask;
-    }
+    }*/
 }

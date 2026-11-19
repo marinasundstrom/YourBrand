@@ -37,7 +37,7 @@
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.25" />
     <PackageVersion Include="Hangfire.Core" Version="1.8.25" />
     <PackageVersion Include="Hangfire.SqlServer" Version="1.8.25" />
-    <PackageVersion Include="Heron.MudCalendar" Version="4.1.0" />
+    <!-- <PackageVersion Include="Heron.MudCalendar" Version="4.1.0" /> -->
     <PackageVersion Include="HtmlSanitizer" Version="11.0.26" />
     <PackageVersion Include="Humanizer" Version="3.0.10" />
     <PackageVersion Include="IdentityModel" Version="7.0.0" />
