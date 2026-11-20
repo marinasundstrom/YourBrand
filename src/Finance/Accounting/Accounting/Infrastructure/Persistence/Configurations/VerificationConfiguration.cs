@@ -5,11 +5,11 @@ using YourBrand.Accounting.Domain.Entities;
 
 namespace YourBrand.Accounting.Infrastructure.Persistence.Configurations;
 
-public class VerificationConfiguration : IEntityTypeConfiguration<Verification>
+public class SupportingDocumentConfiguration : IEntityTypeConfiguration<SupportingDocument>
 {
-    public void Configure(EntityTypeBuilder<Verification> builder)
+    public void Configure(EntityTypeBuilder<SupportingDocument> builder)
     {
-        builder.ToTable("Verifications");
+        builder.ToTable("SupportingDocuments");
 
         builder.HasKey(x => new { x.OrganizationId, x.Id });
 

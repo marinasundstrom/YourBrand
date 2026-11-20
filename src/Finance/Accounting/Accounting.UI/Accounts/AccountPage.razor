@@ -53,7 +53,7 @@
         <RowTemplate Context="entry">
             <MudTd DataLabel="Date">@entry.Date.Date.ToShortDateString()</MudTd>
             <MudTd DataLabel="Verification No">
-                <MudLink Href="@($"/ledger?verificationId={entry.Verification.Id}")">@entry.Verification.Id</MudLink>
+                <MudLink Href="@($"/ledger?supportingDocumentId={entry.Verification.Id}")">@entry.Verification.Id</MudLink>
             </MudTd>
             @*
         <MudTd DataLabel="Debit">@entry.Debit?.FormatCurrency(currency)</MudTd>

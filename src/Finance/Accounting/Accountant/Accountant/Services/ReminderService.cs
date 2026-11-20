@@ -8,7 +8,7 @@ using YourBrand.Invoicing.Client;
 
 namespace YourBrand.Accountant.Services;
 
-public class ReminderService(IInvoicesClient invoicesClient, IJournalEntriesClient journalEntriesClient,
+public class ReminderService(IInvoicesClient invoicesClient, IVerificationsClient verificationsClient,
     IDocumentsClient documentsClient, IServiceScopeFactory serviceScopeFactory, ILogger<RefundService> logger) : IReminderService
 {
     public async Task IssueReminders()

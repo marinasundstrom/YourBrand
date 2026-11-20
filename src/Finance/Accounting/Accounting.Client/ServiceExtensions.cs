@@ -8,7 +8,7 @@ public static class ServiceExtensions
     {
         services
             .AddAccounts(configureClient, builder)
-            .AddVerifications(configureClient, builder)
+            .AddSupportingDocuments(configureClient, builder)
             .AddEntries(configureClient, builder);
 
         return services;
@@ -25,11 +25,11 @@ public static class ServiceExtensions
         return services;
     }
 
-    public static IServiceCollection AddVerifications(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
+    public static IServiceCollection AddSupportingDocuments(this IServiceCollection services, Action<IServiceProvider, HttpClient> configureClient, Action<IHttpClientBuilder>? builder = null)
     {
         var b = services
-            .AddHttpClient(nameof(IJournalEntriesClient), configureClient)
-            .AddTypedClient<IJournalEntriesClient>((http, sp) => new JournalEntriesClient(http));
+            .AddHttpClient(nameof(IVerificationsClient), configureClient)
+            .AddTypedClient<IVerificationsClient>((http, sp) => new VerificationsClient(http));
 
         builder?.Invoke(b);
 

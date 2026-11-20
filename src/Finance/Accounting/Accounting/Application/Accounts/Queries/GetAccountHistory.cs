@@ -25,7 +25,7 @@ public record GetAccountHistoryQuery(string OrganizationId, int[] AccountNo) : I
             var query = context.Accounts
                 .InOrganization(request.OrganizationId)
                 .Include(a => a.Entries)
-                .ThenInclude(e => e.JournalEntry)
+                .ThenInclude(e => e.Verification)
                 .Where(a => a.Entries.Any())
                 .AsNoTracking()
                 .AsQueryable();
@@ -49,7 +49,7 @@ public record GetAccountHistoryQuery(string OrganizationId, int[] AccountNo) : I
                         series[account] = new List<decimal>();
                     }
 
-                    var entries = account.Entries.Where(x => x.JournalEntry.Date.Year == month.Year && x.JournalEntry.Date.Month == month.Month);
+                    var entries = account.Entries.Where(x => x.Verification.Date.Year == month.Year && x.Verification.Date.Month == month.Month);
                     var sum = entries.Select(g => g.Debit.GetValueOrDefault() - g.Credit.GetValueOrDefault()).Sum();
 
                     if (sum < 0)

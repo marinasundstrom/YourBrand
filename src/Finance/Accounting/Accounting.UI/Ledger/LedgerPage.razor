@@ -2,7 +2,7 @@
 @using Accounting
 @inject NavigationManager NavigationManager
 @inject ILedgerEntriesClient LedgerEntriesClient
-@inject IJournalEntriesClient JournalEntriesClient
+@inject IVerificationsClient VerificationsClient
 @inject ISnackbar Snackbar
 @implements IDisposable
 
@@ -10,26 +10,26 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">@title</MudText>
 
-@if(journalEntry is not null)
+@if(verification is not null)
 {
     <MudCard Class="mb-4" Elevation="25">
         <MudCardContent>
-            <MudText Typo="@Typo.subtitle1">@journalEntry.Date.Date.ToShortDateString()</MudText>
-            <MudText Typo="@Typo.body1">@journalEntry.Description</MudText>
+            <MudText Typo="@Typo.subtitle1">@verification.Date.Date.ToShortDateString()</MudText>
+            <MudText Typo="@Typo.body1">@verification.Description</MudText>
 
-            @if(journalEntry.InvoiceNo is not null) 
+            @if(verification.InvoiceNo is not null) 
             {
                 <div class="mt-4">
                     <MudText Typo="@Typo.subtitle2">Invoice</MudText>
-                    <MudLink Typo="@Typo.body1" Href="@($"/invoices/{journalEntry.InvoiceNo}")" Class="mt-4">@journalEntry.InvoiceNo</MudLink>
+                    <MudLink Typo="@Typo.body1" Href="@($"/invoices/{verification.InvoiceNo}")" Class="mt-4">@verification.InvoiceNo</MudLink>
                 </div>
             }
 
             <div class="mt-4">
-                @if (journalEntry.Verifications.Any())
+                @if (verification.SupportingDocuments.Any())
                 {
                     <MudText Typo="@Typo.subtitle2">Attachment</MudText>
-                    @foreach (var attachment in journalEntry.Verifications)
+                    @foreach (var attachment in verification.SupportingDocuments)
                     {
                         <MudLink Typo="@Typo.body1" Href="@attachment.Url">@attachment.Name</MudLink>
                     }
@@ -53,7 +53,7 @@
     <RowTemplate Context="entry">
         <MudTd DataLabel="Date">@entry.Date.Date.ToShortDateString()</MudTd>
         <MudTd DataLabel="Journal Entry">
-            <MudLink Href="@($"/ledger?journalEntryId={entry.Verification.Id}")">@entry.Verification.Id</MudLink>
+            <MudLink Href="@($"/ledger?verificationId={entry.Verification.Id}")">@entry.Verification.Id</MudLink>
         </MudTd>
         <MudTd DataLabel="Account No"><MudLink Href="@($"/accounts/{entry.Account.AccountNo}")">@entry.Account.AccountNo</MudLink></MudTd>
         <MudTd DataLabel="Account Name">@entry.Account.Name</MudTd>
@@ -78,14 +78,14 @@
     string currency = "SEK";
 
     MudTable<LedgerEntry>? table = null!;
-    JournalEntry? journalEntry;
+    Verification? verification;
 
     string title = "Ledger";
     bool loading = false;
 
     [SupplyParameterFromQuery]
     [Parameter]
-    public int? JournalEntryId { get; set; }
+    public int? VerificationId { get; set; }
 
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization? Organization { get; set; }
@@ -117,22 +117,22 @@
 
         try
         {
-            var result = await LedgerEntriesClient.GetLedgerEntriesAsync(Organization.Id, null, JournalEntryId, state.Page, state.PageSize, ResultDirection.Desc, cancellationToken);
+            var result = await LedgerEntriesClient.GetLedgerEntriesAsync(Organization.Id, null, VerificationId, state.Page, state.PageSize, ResultDirection.Desc, cancellationToken);
 
-            Console.WriteLine($"JournalEntryId: {JournalEntryId}");
+            Console.WriteLine($"VerificationId: {VerificationId}");
 
-            if (JournalEntryId is not null)
+            if (VerificationId is not null)
             {
                 var description = result.Entries.First().Verification.Description;
 
-                title = (!string.IsNullOrEmpty(description) ? $"{JournalEntryId} - {description}" : JournalEntryId.ToString())!;
+                title = (!string.IsNullOrEmpty(description) ? $"{VerificationId} - {description}" : VerificationId.ToString())!;
 
-                journalEntry = await JournalEntriesClient.GetJournalEntryAsync(Organization.Id, JournalEntryId.GetValueOrDefault());
+                verification = await VerificationsClient.GetVerificationAsync(Organization.Id, VerificationId.GetValueOrDefault());
             }
             else
             {
                 title = $"Ledger";
-                journalEntry = null;
+                verification = null;
             }
 
             StateHasChanged();

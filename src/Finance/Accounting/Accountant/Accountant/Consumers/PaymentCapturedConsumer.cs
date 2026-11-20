@@ -7,7 +7,7 @@ using YourBrand.Payments.Contracts;
 
 namespace YourBrand.Accountant.Consumers;
 
-public class PaymentCapturedConsumer(IJournalEntriesClient journalEntriesClient, IInvoicesClient invoicesClient, IPaymentsClient paymentsClient) : IConsumer<PaymentCaptured>
+public class PaymentCapturedConsumer(IVerificationsClient verificationsClient, IInvoicesClient invoicesClient, IPaymentsClient paymentsClient) : IConsumer<PaymentCaptured>
 {
     public async Task Consume(ConsumeContext<PaymentCaptured> context)
     {
@@ -25,7 +25,7 @@ public class PaymentCapturedConsumer(IJournalEntriesClient journalEntriesClient,
         // Is it underpaid?
         // Overpaid? Pay back
 
-        // Create verification
+        // Create supportingDocument
 
         var invoice = await invoicesClient.GetInvoiceAsync(organizationId, payment.InvoiceId, cancellationToken);
 
@@ -77,7 +77,7 @@ public class PaymentCapturedConsumer(IJournalEntriesClient journalEntriesClient,
                 // Mark transaktion for re-pay
                 //await _transactionsClient.SetTransactionStatusAsync(payment.Id, YourBrand.Transactions.Client.TransactionStatus.Payback);
 
-                // Create verification in a worker
+                // Create supportingDocument in a worker
                 return;
         }
 
@@ -101,13 +101,13 @@ public class PaymentCapturedConsumer(IJournalEntriesClient journalEntriesClient,
                     }
                 };
 
-        var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(organizationId, new CreateJournalEntry
+        var verificationId = await verificationsClient.CreateVerificationAsync(organizationId, new CreateVerification
         {
             Description = $"Betalade faktura #{invoice.InvoiceNo}",
             InvoiceNo = invoice.InvoiceNo,
             Entries = entries
         }, cancellationToken);
 
-        //await _journalEntriesClient.AddFileAttachmentToVerificationAsync(verificationId, new FileParameter());
+        //await _verificationsClient.AddFileAttachmentToSupportingDocumentAsync(supportingDocumentId, new FileParameter());
     }
 }

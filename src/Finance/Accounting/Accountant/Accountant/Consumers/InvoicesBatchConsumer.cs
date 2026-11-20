@@ -8,7 +8,7 @@ using YourBrand.Invoicing.Contracts;
 
 namespace YourBrand.Accountant.Consumers;
 
-public class InvoicesBatchConsumer(IJournalEntriesClient journalEntriesClient,
+public class InvoicesBatchConsumer(IVerificationsClient verificationsClient,
     IInvoicesClient invoicesClient, IDocumentsClient documentsClient, EntriesFactory entriesFactory,
     ILogger<InvoicesBatchConsumer> logger) : IConsumer<InvoicesBatch>
 {
@@ -35,14 +35,14 @@ public class InvoicesBatchConsumer(IJournalEntriesClient journalEntriesClient,
             return;
         }
 
-        await CreateVerificationFromInvoice(invoice, cancellationToken);
+        await CreateSupportingDocumentFromInvoice(invoice, cancellationToken);
     }
 
-    private async Task CreateVerificationFromInvoice(YourBrand.Invoicing.Client.Invoice invoice, CancellationToken cancellationToken)
+    private async Task CreateSupportingDocumentFromInvoice(YourBrand.Invoicing.Client.Invoice invoice, CancellationToken cancellationToken)
     {
         var entries = entriesFactory.CreateEntriesFromInvoice(invoice);
 
-        var journalEntryId = await journalEntriesClient.CreateJournalEntryAsync(invoice.OrganizationId, new CreateJournalEntry
+        var verificationId = await verificationsClient.CreateVerificationAsync(invoice.OrganizationId, new CreateVerification
         {
             Description = $"Skickade ut faktura #{invoice.InvoiceNo}",
             InvoiceNo = invoice.InvoiceNo,
@@ -51,15 +51,15 @@ public class InvoicesBatchConsumer(IJournalEntriesClient journalEntriesClient,
 
         try
         {
-            await UploadDocuments(invoice, journalEntryId);
+            await UploadDocuments(invoice, verificationId);
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Failed to add verification to journal entry,");
+            logger.LogError(e, "Failed to add supportingDocument to journal entry,");
         }
     }
 
-    private async Task UploadDocuments(YourBrand.Invoicing.Client.Invoice invoice, int journalEntryId)
+    private async Task UploadDocuments(YourBrand.Invoicing.Client.Invoice invoice, int verificationId)
     {
         MemoryStream stream, stream2;
 
@@ -80,8 +80,8 @@ public class InvoicesBatchConsumer(IJournalEntriesClient journalEntriesClient,
         stream2.Seek(0, SeekOrigin.Begin);
         stream.Seek(0, SeekOrigin.Begin);
 
-        await journalEntriesClient.AddFileToJournalEntryAsVerificationAsync(invoice.OrganizationId,
-            journalEntryId, null, int.Parse(invoice.Id),
+        await verificationsClient.AddFileToVerificationAsSupportingDocumentAsync(invoice.OrganizationId,
+            verificationId, null, int.Parse(invoice.Id),
             new Accounting.Client.FileParameter(stream, $"invoice-{invoice.Id}{fileExt}", contentType));
 
         try

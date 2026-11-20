@@ -20,7 +20,7 @@ public class LedgerEntryIdGenerator(IAccountingContext accountingContext) : ILed
 
         try
         {
-            id = (await accountingContext.JournalEntries.InOrganization(organizationId).MaxAsync(x => x.Id, cancellationToken)) + 1;
+            id = (await accountingContext.Verifications.InOrganization(organizationId).MaxAsync(x => x.Id, cancellationToken)) + 1;
         }
         catch (Exception)
         {

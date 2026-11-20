@@ -1,42 +1,100 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 using YourBrand.Accounting.Domain.Common;
-using YourBrand.Accounting.Domain.Enums;
 using YourBrand.Domain;
 using YourBrand.Tenancy;
 
 namespace YourBrand.Accounting.Domain.Entities;
 
-public class Verification : AuditableEntity<string>, IHasTenant, IHasOrganization
+public class Verification : AuditableEntity<int>, IHasTenant, IHasOrganization
 {
+    private readonly HashSet<LedgerEntry> _entries = new();
+    private readonly HashSet<SupportingDocument> _supportingDocuments = new HashSet<SupportingDocument>();
+
     protected Verification()
     {
+
     }
 
-    public Verification(string id) : base(id)
+    public Verification(int id, DateTimeOffset date, string description, int? invoiceNo = null, int? receiptId = null)
+     : base(id)
     {
-
+        Date = date;
+        Description = description;
+        InvoiceNo = invoiceNo;
+        ReceiptId = receiptId;
     }
 
     public TenantId TenantId { get; set; }
 
     public OrganizationId OrganizationId { get; set; }
 
-    public string Name { get; set; } = null!;
+    public DateTimeOffset Date { get; private set; }
 
-    public string ContentType { get; set; } = null!;
+    public string Description { get; private set; } = null!;
 
-    public AttachmentType Type { get; set; }
+    public int? InvoiceNo { get; private set; }
 
-    public int JournalEntryId { get; set; }
+    public int? ReceiptId { get; private set; }
 
-    public JournalEntry JournalEntry { get; set; } = null!;
+    public IReadOnlyCollection<LedgerEntry> Entries => _entries;
 
-    public DateTimeOffset Date { get; set; }
+    public void AddEntries(IEnumerable<LedgerEntry> entries) => entries.ToList().ForEach(entry =>
+    {
+        entry.OrganizationId = OrganizationId;
+        entry.Account.AddEntry(entry);
+        if (entry.Debit > 0)
+        {
+            Debit += entry.Debit.GetValueOrDefault();
+        }
+        else
+        {
+            Credit += entry.Credit.GetValueOrDefault();
+        }
+        _entries.Add(entry);
+    });
 
-    public string? Description { get; set; }
+    public async Task<LedgerEntry> AddDebitEntry(Account account, decimal debit, string? description, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
+    {
+        var id = await ledgerEntryIdGenerator.GetIdAsync(OrganizationId);
+        var entry = new LedgerEntry(id, Date, account, debit, null, description);
+        entry.OrganizationId = OrganizationId;
+        account.AddEntry(entry);
+        _entries.Add(entry);
+        Debit += debit;
+        return entry;
+    }
 
-    public int? InvoiceNo { get; set; }
+    public async Task<LedgerEntry> AddCreditEntry(Account account, decimal credit, string? description, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
+    {
+        var id = await ledgerEntryIdGenerator.GetIdAsync(OrganizationId);
+        var entry = new LedgerEntry(id, Date, account, null, credit, description);
+        entry.OrganizationId = OrganizationId;
+        account.AddEntry(entry);
+        _entries.Add(entry);
+        Credit += credit;
+        return entry;
+    }
 
-    public int? ReceiptNo { get; set; }
+    public IReadOnlyCollection<SupportingDocument> SupportingDocuments => _supportingDocuments;
+
+    public void AddSupportingDocument(SupportingDocument supportingDocument)
+    {
+        supportingDocument.OrganizationId = OrganizationId;
+        _supportingDocuments.Add(supportingDocument);
+    }
+
+    public decimal Debit { get; set; }
+
+    public decimal Credit { get; set; }
+
+    public decimal Sum => _entries.Sum(x => x.Debit.GetValueOrDefault() - x.Credit.GetValueOrDefault());
+
+    public bool IsValid => Sum == 0;
+
+}
+
+public interface ILedgerEntryIdGenerator
+{
+    Task<int> GetIdAsync(OrganizationId organizationId, CancellationToken cancellationToken = default);
 }

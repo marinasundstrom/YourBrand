@@ -10,10 +10,10 @@ using YourBrand.Domain;
 
 namespace YourBrand.Accounting.Domain.Tests;
 
-public class VerificationTest
+public class SupportingDocumentTest
 {
-    [Fact(DisplayName = "Verification is created")]
-    public void VerificationIsCreated()
+    [Fact(DisplayName = "SupportingDocument is created")]
+    public void SupportingDocumentIsCreated()
     {
         OrganizationId organizationId = "test";
 
@@ -24,14 +24,14 @@ public class VerificationTest
         var account3001 = accounts.First(a => a.AccountNo == 3001);
 
         /*
-        JournalEntry verification = new(DateTimeOffset.UtcNow, "Test", null, null);
-        verification.AddDebitEntry(account1510, debit: 10000m, description: null);
-        verification.AddCreditEntry(account2610, credit: 2000m, description: null);
-        verification.AddCreditEntry(account3001, credit: 8000m, description: null);
+        Verification supportingDocument = new(DateTimeOffset.UtcNow, "Test", null, null);
+        supportingDocument.AddDebitEntry(account1510, debit: 10000m, description: null);
+        supportingDocument.AddCreditEntry(account2610, credit: 2000m, description: null);
+        supportingDocument.AddCreditEntry(account3001, credit: 8000m, description: null);
 
-        verification.Entries.Count().ShouldBe(3);
-        verification.Sum.ShouldBe(0);
-        verification.IsValid.ShouldBeTrue();
+        supportingDocument.Entries.Count().ShouldBe(3);
+        supportingDocument.Sum.ShouldBe(0);
+        supportingDocument.IsValid.ShouldBeTrue();
         */
     }
 }

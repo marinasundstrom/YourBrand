@@ -12,7 +12,7 @@ namespace YourBrand.RotRutService.Application.Commands;
 
 public record ReadRotRutResponse(string OrganizationId, RotRut.Beslut.BeslutFil BeslutJson) : IRequest
 {
-    public class Handler(IRotRutContext context, IJournalEntriesClient journalEntriesClient, ITransactionsClient transactionsClient) : IRequestHandler<ReadRotRutResponse>
+    public class Handler(IRotRutContext context, IVerificationsClient verificationsClient, ITransactionsClient transactionsClient) : IRequestHandler<ReadRotRutResponse>
     {
         public async Task Handle(ReadRotRutResponse request, CancellationToken cancellationToken)
         {
@@ -46,7 +46,7 @@ public record ReadRotRutResponse(string OrganizationId, RotRut.Beslut.BeslutFil 
                         Credit = rotRutCase.RequestedAmount
                     });
 
-                    var verificationId2 = await journalEntriesClient.CreateJournalEntryAsync(request.OrganizationId, new CreateJournalEntry
+                    var verificationId2 = await verificationsClient.CreateVerificationAsync(request.OrganizationId, new CreateVerification
                     {
                         Description = $"Utbetalning RUT/RUT",
                         InvoiceNo = rotRutCase.InvoiceNo,

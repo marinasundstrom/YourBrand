@@ -1,7 +1,7 @@
 ﻿@page "/journal"
 @using YourBrand.Accounting
 @inject NavigationManager NavigationManager
-@inject IJournalEntriesClient JournalEntriesClient
+@inject IVerificationsClient VerificationsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
@@ -9,13 +9,10 @@
 
 <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">Journal</MudText>
 
-<MudButton StartIcon="@Icons.Material.Outlined.Add" Href="/journal/new" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
-    Create entry
-</MudButton>
-
-<MudButton StartIcon="@Icons.Material.Outlined.Add" Href="/journal/sale" Variant="Variant.Filled" Color="Color.Primary" Class="mb-2">
-    Register sale
-</MudButton>
+<MudMenu Icon="@Icons.Material.Outlined.Add" Label="New verification">
+    <MudMenuItem Label="Register sale" Href="/journal/sale"></MudMenuItem>
+    <MudMenuItem Label="Custom" Href="/journal/new"></MudMenuItem>
+</MudMenu>
 
 <MudTable @ref="table" ServerData="ServerReload" Hover="true" Elevation="25" Breakpoint="Breakpoint.Sm"
     Loading="@loading" LoadingProgressColor="Color.Info">
@@ -36,7 +33,7 @@
     </HeaderContent>
     <RowTemplate Context="ledgerEntry">
         <MudTd DataLabel="Id">
-            <MudLink Href="@($"/ledger?journalEntryId={ledgerEntry.Id}")">@ledgerEntry.Id</MudLink>
+            <MudLink Href="@($"/ledger?verificationId={ledgerEntry.Id}")">@ledgerEntry.Id</MudLink>
         </MudTd>
         <MudTd DataLabel="Date">@ledgerEntry.Date.ToString("g")</MudTd>
         <MudTd DataLabel="Description">@ledgerEntry.Description</MudTd>
@@ -60,7 +57,7 @@
 
     bool loading = false;
     private int? invoiceNo = null;
-    private MudTable<JournalEntry> table;
+    private MudTable<Verification> table;
 
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization? Organization { get; set; }
@@ -71,21 +68,21 @@
         table.ReloadServerData();
     }
 
-    private async Task<TableData<JournalEntry>> ServerReload(TableState state, CancellationToken cancellationToken)
+    private async Task<TableData<Verification>> ServerReload(TableState state, CancellationToken cancellationToken)
     {
         loading = true;
 
         try
         {
-            var result = await JournalEntriesClient.GetJournalEntriesAsync(Organization.Id, state.Page, state.PageSize, invoiceNo, cancellationToken);
+            var result = await VerificationsClient.GetVerificationsAsync(Organization.Id, state.Page, state.PageSize, invoiceNo, cancellationToken);
 
-            return new TableData<JournalEntry>() { TotalItems = result.TotalItems, Items = result.Verifications };
+            return new TableData<Verification>() { TotalItems = result.TotalItems, Items = result.SupportingDocuments };
         }
         catch (ApiException<ProblemDetails> exc)
         {
             Snackbar.Add(exc.Result.Title, Severity.Error);
 
-            return new TableData<JournalEntry>() { TotalItems = 0, Items = [] };
+            return new TableData<Verification>() { TotalItems = 0, Items = [] };
         }
         finally
         {
@@ -93,10 +90,10 @@
         }
     }
 
-    private async Task OpenNewJournalEntryDialog()
+    private async Task OpenNewVerificationDialog()
     {
         /*
-        var dialogReference = await DialogService.ShowAsync<NewJournalEntryDialog>("New JournalEntry");
+        var dialogReference = await DialogService.ShowAsync<NewVerificationDialog>("New Verification");
 
         var result = await dialogReference.Result;
 
@@ -108,9 +105,9 @@
         NavigationManager.NavigateTo("/journal/new");
     }
 
-    class JournalEntryViewModel
+    class VerificationViewModel
     {
-        public int JournalEntryId { get; set; }
+        public int VerificationId { get; set; }
 
         public DateTimeOffset Date { get; set; }
 
@@ -121,10 +118,10 @@
         public decimal Credit { get; set; }
     }
 
-    public static decimal Amount(JournalEntry journalEntry) 
+    public static decimal Amount(Verification verification) 
     {
         /*
-        var liablity = journalEntry.Entries.FirstOrDefault(x => x.Account.Class.Id == 2);
+        var liablity = verification.Entries.FirstOrDefault(x => x.Account.Class.Id == 2);
 
         if(liablity is not null) 
         {
@@ -135,6 +132,6 @@
         }
         */
 
-        return journalEntry.Debit;
+        return verification.Debit;
     }
 }

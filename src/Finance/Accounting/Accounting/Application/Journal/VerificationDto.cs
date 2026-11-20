@@ -1,16 +1,22 @@
+﻿using YourBrand.Accounting.Application.Ledger;
+
 namespace YourBrand.Accounting.Application.Journal;
 
 public class VerificationDto
 {
-    public string Id { get; set; } = null!;
+    public int Id { get; set; }
 
-    public string Name { get; set; } = null!;
+    public DateTimeOffset Date { get; set; }
 
-    public string ContentType { get; set; } = null!;
+    public string Description { get; set; } = null!;
 
-    public string? Description { get; set; }
+    public decimal Debit { get; set; }
+
+    public decimal Credit { get; set; }
 
     public int? InvoiceNo { get; set; }
 
-    public string Url { get; set; } = null!;
+    public IEnumerable<LedgerEntryDto> Entries { get; set; } = null!;
+
+    public IEnumerable<SupportingDocumentDto> SupportingDocuments { get; set; } = null!;
 }

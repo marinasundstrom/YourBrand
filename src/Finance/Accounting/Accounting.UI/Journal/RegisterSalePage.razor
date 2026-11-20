@@ -2,7 +2,7 @@
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavigationManager
 @inject IAccountsClient AccountsClient
-@inject IJournalEntriesClient JournalEntriesClient
+@inject IVerificationsClient VerificationsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
@@ -150,8 +150,6 @@
         table.SetEditingItem(item);
 
         isEditingEntry = true;
-
-        StateHasChanged();
     }
 
     private void ItemHasBeenCommitted(object element)
@@ -172,7 +170,7 @@
     {
         if (file is null)
         {
-            var r = await DialogService.ShowMessageBoxAsync("Verification lacks attachment", "Are you sure that you want to continue?",
+            var r = await DialogService.ShowMessageBoxAsync("SupportingDocument lacks attachment", "Are you sure that you want to continue?",
             "Yes", "No");
 
             if (!r.GetValueOrDefault())
@@ -182,7 +180,7 @@
             }
         }
 
-        var createJournalEntry = new CreateJournalEntry
+        var createVerification = new CreateVerification
             {
                 Description = formModel.Description ?? String.Empty
             };
@@ -269,13 +267,13 @@
             }
         }
 
-        createJournalEntry.Entries = entries;
+        createVerification.Entries = entries;
 
-        var journalEntryId = await JournalEntriesClient.CreateJournalEntryAsync(Organization.Id, createJournalEntry);
+        var verificationId = await VerificationsClient.CreateVerificationAsync(Organization.Id, createVerification);
 
         if (file is not null)
         {
-            await JournalEntriesClient.AddFileToJournalEntryAsVerificationAsync(Organization.Id, journalEntryId, string.Empty, null, new
+            await VerificationsClient.AddFileToVerificationAsSupportingDocumentAsync(Organization.Id, verificationId, string.Empty, null, new
             FileParameter(file.OpenReadStream(10 * 10000), file.Name));
         }
 

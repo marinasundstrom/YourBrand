@@ -1,3 +1,3 @@
 ﻿namespace YourBrand.Accounting.Application.Journal;
 
-public record JournalEntryResult(IEnumerable<JournalEntryDto> Verifications, int TotalItems);
+public record VerificationResult(IEnumerable<VerificationDto> SupportingDocuments, int TotalItems);

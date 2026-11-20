@@ -15,7 +15,7 @@ public static class Seed
 
     public static bool SeedAccounts { get; set; } = true;
 
-    public static bool SeedVerifications { get; set; } = true;
+    public static bool SeedSupportingDocuments { get; set; } = true;
 
     public static async Task SeedAsync(this IServiceProvider serviceProvider, string? tenantId = null)
     {
@@ -44,9 +44,9 @@ public static class Seed
             DoSeedAccounts(context, TenantConstants.OrganizationId);
         }
 
-        if (SeedVerifications)
+        if (SeedSupportingDocuments)
         {
-            await DoSeedVerifications(context, TenantConstants.OrganizationId, ledgerEntryIdGenerator);
+            await DoSeedSupportingDocuments(context, TenantConstants.OrganizationId, ledgerEntryIdGenerator);
         }
 
         await context.SaveChangesAsync();
@@ -59,9 +59,9 @@ public static class Seed
         await context.SaveChangesAsync();
     }
 
-    static int journalEntryId = 1;
+    static int verificationId = 1;
 
-    private static async Task DoSeedVerifications(AccountingContext context, string organizationId, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
+    private static async Task DoSeedSupportingDocuments(AccountingContext context, string organizationId, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
         await InsertMoney(context, organizationId, ledgerEntryIdGenerator);
 
@@ -77,69 +77,69 @@ public static class Seed
 
     private static async Task InsertMoney(AccountingContext context, string organizationId, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
-        var journalEntry = new JournalEntry(journalEntryId++,
+        var verification = new Verification(verificationId++,
             DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)),
             "Du sätter in egna pengar på företagskontot");
-        journalEntry.OrganizationId = organizationId;
+        verification.OrganizationId = organizationId;
 
-        context.JournalEntries.Add(journalEntry);
+        context.Verifications.Add(verification);
 
-        await journalEntry.AddCreditEntry(await context.GetAccount(2018), 30000m, null, ledgerEntryIdGenerator);
-        await journalEntry.AddDebitEntry(await context.GetAccount(1930), 30000m, null, ledgerEntryIdGenerator);
+        await verification.AddCreditEntry(await context.GetAccount(2018), 30000m, null, ledgerEntryIdGenerator);
+        await verification.AddDebitEntry(await context.GetAccount(1930), 30000m, null, ledgerEntryIdGenerator);
 
         await context.SaveChangesAsync();
     }
 
     private static async Task YouSendAnInvoiceToCustomer(AccountingContext context, string organizationId, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
-        var journalEntry = new JournalEntry(journalEntryId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du skickar en faktura");
-        journalEntry.OrganizationId = organizationId;
+        var verification = new Verification(verificationId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du skickar en faktura");
+        verification.OrganizationId = organizationId;
 
-        context.JournalEntries.Add(journalEntry);
+        context.Verifications.Add(verification);
 
-        await journalEntry.AddDebitEntry(await context.GetAccount(1510), 10000m, null, ledgerEntryIdGenerator);
-        await journalEntry.AddCreditEntry(await context.GetAccount(2610), 2000m, null, ledgerEntryIdGenerator);
-        await journalEntry.AddCreditEntry(await context.GetAccount(3001), 8000m, null, ledgerEntryIdGenerator);
+        await verification.AddDebitEntry(await context.GetAccount(1510), 10000m, null, ledgerEntryIdGenerator);
+        await verification.AddCreditEntry(await context.GetAccount(2610), 2000m, null, ledgerEntryIdGenerator);
+        await verification.AddCreditEntry(await context.GetAccount(3001), 8000m, null, ledgerEntryIdGenerator);
 
         await context.SaveChangesAsync();
     }
 
     private static async Task TheCustomerPaysTheInvoice(AccountingContext context, string organizationId, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
-        var journalEntry = new JournalEntry(journalEntryId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Kunden betalar fakturan");
-        journalEntry.OrganizationId = organizationId;
+        var verification = new Verification(verificationId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Kunden betalar fakturan");
+        verification.OrganizationId = organizationId;
 
-        context.JournalEntries.Add(journalEntry);
+        context.Verifications.Add(verification);
 
-        await journalEntry.AddDebitEntry(await context.GetAccount(1920), 10000m, null, ledgerEntryIdGenerator);
-        await journalEntry.AddCreditEntry(await context.GetAccount(1510), 10000m, null, ledgerEntryIdGenerator);
+        await verification.AddDebitEntry(await context.GetAccount(1920), 10000m, null, ledgerEntryIdGenerator);
+        await verification.AddCreditEntry(await context.GetAccount(1510), 10000m, null, ledgerEntryIdGenerator);
 
         await context.SaveChangesAsync();
     }
 
     private static async Task YouReceiveAInvoice(AccountingContext context, string organizationId, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
-        var journalEntry = new JournalEntry(journalEntryId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du tar emot fakturan");
-        journalEntry.OrganizationId = organizationId;
+        var verification = new Verification(verificationId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du tar emot fakturan");
+        verification.OrganizationId = organizationId;
 
-        context.JournalEntries.Add(journalEntry);
+        context.Verifications.Add(verification);
 
-        await journalEntry.AddDebitEntry(await context.GetAccount(4000), 4000m, null, ledgerEntryIdGenerator);
-        await journalEntry.AddDebitEntry(await context.GetAccount(2640), 1000m, null, ledgerEntryIdGenerator);
-        await journalEntry.AddCreditEntry(await context.GetAccount(2440), 5000m, null, ledgerEntryIdGenerator);
+        await verification.AddDebitEntry(await context.GetAccount(4000), 4000m, null, ledgerEntryIdGenerator);
+        await verification.AddDebitEntry(await context.GetAccount(2640), 1000m, null, ledgerEntryIdGenerator);
+        await verification.AddCreditEntry(await context.GetAccount(2440), 5000m, null, ledgerEntryIdGenerator);
 
         await context.SaveChangesAsync();
     }
 
     private static async Task YouPayForTheInvoice(AccountingContext context, string organizationId, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
-        var journalEntry = new JournalEntry(journalEntryId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du betalar fakturan");
-        journalEntry.OrganizationId = organizationId;
+        var verification = new Verification(verificationId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du betalar fakturan");
+        verification.OrganizationId = organizationId;
 
-        context.JournalEntries.Add(journalEntry);
+        context.Verifications.Add(verification);
 
-        await journalEntry.AddDebitEntry(await context.GetAccount(2440), 5000m, null, ledgerEntryIdGenerator);
-        await journalEntry.AddCreditEntry(await context.GetAccount(1930), 5000m, null, ledgerEntryIdGenerator);
+        await verification.AddDebitEntry(await context.GetAccount(2440), 5000m, null, ledgerEntryIdGenerator);
+        await verification.AddCreditEntry(await context.GetAccount(1930), 5000m, null, ledgerEntryIdGenerator);
 
         await context.SaveChangesAsync();
     }
@@ -147,39 +147,39 @@ public static class Seed
 
     private static async Task YouWithdrawMoneyAsSalary(AccountingContext context, string organizationId, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
-        var journalEntry = new JournalEntry(journalEntryId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du tar ut egen lön");
-        journalEntry.OrganizationId = organizationId;
+        var verification = new Verification(verificationId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du tar ut egen lön");
+        verification.OrganizationId = organizationId;
 
-        context.JournalEntries.Add(journalEntry);
+        context.Verifications.Add(verification);
 
-        await journalEntry.AddDebitEntry(await context.GetAccount(2013), 30000, null, ledgerEntryIdGenerator);
-        await journalEntry.AddCreditEntry(await context.GetAccount(1930), 30000m, null, ledgerEntryIdGenerator);
+        await verification.AddDebitEntry(await context.GetAccount(2013), 30000, null, ledgerEntryIdGenerator);
+        await verification.AddCreditEntry(await context.GetAccount(1930), 30000m, null, ledgerEntryIdGenerator);
 
         await context.SaveChangesAsync();
     }
 
     private static async Task YouTransferFromPlusGiroToCorporateAccount(AccountingContext context, string organizationId, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
-        var journalEntry = new JournalEntry(journalEntryId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från PlusGiro till företagskonto");
-        journalEntry.OrganizationId = organizationId;
+        var verification = new Verification(verificationId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från PlusGiro till företagskonto");
+        verification.OrganizationId = organizationId;
 
-        context.JournalEntries.Add(journalEntry);
+        context.Verifications.Add(verification);
 
-        await journalEntry.AddCreditEntry(await context.GetAccount(1920), 10000m, null, ledgerEntryIdGenerator);
-        await journalEntry.AddDebitEntry(await context.GetAccount(1930), 10000m, null, ledgerEntryIdGenerator);
+        await verification.AddCreditEntry(await context.GetAccount(1920), 10000m, null, ledgerEntryIdGenerator);
+        await verification.AddDebitEntry(await context.GetAccount(1930), 10000m, null, ledgerEntryIdGenerator);
 
         await context.SaveChangesAsync();
     }
 
     private static async Task YouTransferFromTaxAccountToCorporateAccount(AccountingContext context, string organizationId, ILedgerEntryIdGenerator ledgerEntryIdGenerator)
     {
-        var journalEntry = new JournalEntry(journalEntryId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från skattekonto till företagskonto");
-        journalEntry.OrganizationId = organizationId;
+        var verification = new Verification(verificationId++, DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(19)), "Du överför pengar från skattekonto till företagskonto");
+        verification.OrganizationId = organizationId;
 
-        context.JournalEntries.Add(journalEntry);
+        context.Verifications.Add(verification);
 
-        await journalEntry.AddCreditEntry(await context.GetAccount(1630), 4000m, null, ledgerEntryIdGenerator);
-        await journalEntry.AddDebitEntry(await context.GetAccount(1930), 4000m, null, ledgerEntryIdGenerator);
+        await verification.AddCreditEntry(await context.GetAccount(1630), 4000m, null, ledgerEntryIdGenerator);
+        await verification.AddDebitEntry(await context.GetAccount(1930), 4000m, null, ledgerEntryIdGenerator);
 
         await context.SaveChangesAsync();
     }

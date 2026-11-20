@@ -173,11 +173,11 @@ paths:
                 $ref: '#/components/schemas/AccountBalanceHistory'
       security:
       - JWT: []
-  /v1/JournalEntries:
+  /v1/Verifications:
     get:
       tags:
-      - JournalEntries
-      operationId: JournalEntries_GetJournalEntries
+      - Verifications
+      operationId: Verifications_GetVerifications
       parameters:
       - name: organizationId
         in: query
@@ -211,13 +211,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JournalEntryResult'
+                $ref: '#/components/schemas/VerificationResult'
       security:
       - JWT: []
     post:
       tags:
-      - JournalEntries
-      operationId: JournalEntries_CreateJournalEntry
+      - Verifications
+      operationId: Verifications_CreateVerification
       parameters:
       - name: organizationId
         in: query
@@ -229,7 +229,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateJournalEntry'
+              $ref: '#/components/schemas/CreateVerification'
         required: true
         x-position: 2
       responses:
@@ -242,11 +242,11 @@ paths:
                 format: int32
       security:
       - JWT: []
-  /v1/JournalEntries/{id}:
+  /v1/Verifications/{id}:
     get:
       tags:
-      - JournalEntries
-      operationId: JournalEntries_GetJournalEntry
+      - Verifications
+      operationId: Verifications_GetVerification
       parameters:
       - name: organizationId
         in: query
@@ -266,7 +266,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/JournalEntry'
+                $ref: '#/components/schemas/Verification'
         404:
           description: ''
           content:
@@ -275,11 +275,11 @@ paths:
                 $ref: '#/components/schemas/ProblemDetails'
       security:
       - JWT: []
-  /v1/JournalEntries/{id}/Verifications:
+  /v1/Verifications/{id}/SupportingDocuments:
     post:
       tags:
-      - JournalEntries
-      operationId: JournalEntries_AddFileToJournalEntryAsVerification
+      - Verifications
+      operationId: Verifications_AddFileToVerificationAsSupportingDocument
       parameters:
       - name: organizationId
         in: query
@@ -348,7 +348,7 @@ paths:
           format: int32
           nullable: true
         x-position: 2
-      - name: journalEntryId
+      - name: verificationId
         in: query
         schema:
           type: integer
@@ -447,18 +447,18 @@ components:
           items:
             type: number
             format: decimal
-    JournalEntryResult:
+    VerificationResult:
       type: object
       additionalProperties: false
       properties:
-        verifications:
+        supportingDocuments:
           type: array
           items:
-            $ref: '#/components/schemas/JournalEntry'
+            $ref: '#/components/schemas/Verification'
         totalItems:
           type: integer
           format: int32
-    JournalEntry:
+    Verification:
       type: object
       additionalProperties: false
       properties:
@@ -484,10 +484,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LedgerEntry'
-        verifications:
+        supportingDocuments:
           type: array
           items:
-            $ref: '#/components/schemas/Verification'
+            $ref: '#/components/schemas/SupportingDocument'
     LedgerEntry:
       type: object
       additionalProperties: false
@@ -499,7 +499,7 @@ components:
           type: string
           format: date-time
         verification:
-          $ref: '#/components/schemas/JournalEntryShort'
+          $ref: '#/components/schemas/VerificationShort'
         account:
           $ref: '#/components/schemas/AccountShort'
         description:
@@ -512,7 +512,7 @@ components:
           type: number
           format: decimal
           nullable: true
-    JournalEntryShort:
+    VerificationShort:
       type: object
       additionalProperties: false
       properties:
@@ -535,7 +535,7 @@ components:
           $ref: '#/components/schemas/AccountClass'
         name:
           type: string
-    Verification:
+    SupportingDocument:
       type: object
       additionalProperties: false
       properties:
@@ -575,7 +575,7 @@ components:
         instance:
           type: string
           nullable: true
-    CreateJournalEntry:
+    CreateVerification:
       type: object
       additionalProperties: false
       required:

@@ -17,8 +17,8 @@ namespace YourBrand.Accounting.Controllers;
 public class LedgerEntriesController(IMediator mediator) : Controller
 {
     [HttpGet]
-    public async Task<LedgerEntriesResult> GetLedgerEntriesAsync(string organizationId, int? accountNo = null, int? journalEntryId = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc, CancellationToken cancellationToken = default)
+    public async Task<LedgerEntriesResult> GetLedgerEntriesAsync(string organizationId, int? accountNo = null, int? verificationId = null, int page = 0, int pageSize = 10, ResultDirection direction = ResultDirection.Asc, CancellationToken cancellationToken = default)
     {
-        return await mediator.Send(new GetLedgerEntriesQuery(organizationId, accountNo, journalEntryId, page, pageSize, direction), cancellationToken);
+        return await mediator.Send(new GetLedgerEntriesQuery(organizationId, accountNo, verificationId, page, pageSize, direction), cancellationToken);
     }
 }

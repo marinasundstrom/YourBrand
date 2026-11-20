@@ -16,11 +16,11 @@ public static class Mappings
         return new LedgerEntryDto(
                     e.Id,
                     e.Date,
-                    new JournalEntryShort
+                    new VerificationShort
                     {
-                        Id = e.JournalEntry.Id,
-                        Date = e.JournalEntry.Date,
-                        Description = e.JournalEntry.Description,
+                        Id = e.Verification.Id,
+                        Date = e.Verification.Date,
+                        Description = e.Verification.Description,
                     },
                     new AccountShortDto
                     {
@@ -38,9 +38,9 @@ public static class Mappings
                 );
     }
 
-    public static JournalEntryDto ToDto(this JournalEntry v)
+    public static VerificationDto ToDto(this Verification v)
     {
-        return new JournalEntryDto
+        return new VerificationDto
         {
             Id = v.Id,
             Date = v.Date,
@@ -49,13 +49,13 @@ public static class Mappings
             Credit = v.Credit,
             InvoiceNo = v.InvoiceNo,
             Entries = v.Entries.Select(e => e.ToDto()),
-            Verifications = v.Verifications.Select(e => e.ToDto())
+            SupportingDocuments = v.SupportingDocuments.Select(e => e.ToDto())
         };
     }
 
-    public static VerificationDto ToDto(this Verification a)
+    public static SupportingDocumentDto ToDto(this SupportingDocument a)
     {
-        return new VerificationDto
+        return new SupportingDocumentDto
         {
             Id = a.Id,
             Name = a.Name,

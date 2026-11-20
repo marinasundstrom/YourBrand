@@ -6,7 +6,7 @@ using YourBrand.Accounting.Application.Common.Interfaces;
 
 namespace YourBrand.Accounting.Application.Ledger.Queries;
 
-public record GetLedgerEntriesQuery(string OrganizationId, int? AccountNo = null, int? VerificationId = null, int Page = 0, int PageSize = 10, ResultDirection Direction = ResultDirection.Asc) : IRequest<LedgerEntriesResult>
+public record GetLedgerEntriesQuery(string OrganizationId, int? AccountNo = null, int? SupportingDocumentId = null, int Page = 0, int PageSize = 10, ResultDirection Direction = ResultDirection.Asc) : IRequest<LedgerEntriesResult>
 {
     public class GetLedgerEntriesQueryHandler(IAccountingContext context) : IRequestHandler<GetLedgerEntriesQuery, LedgerEntriesResult>
     {
@@ -24,7 +24,7 @@ public record GetLedgerEntriesQuery(string OrganizationId, int? AccountNo = null
 
             var query = context.LedgerEntries
                    .InOrganization(request.OrganizationId)
-                   .Include(e => e.JournalEntry)
+                   .Include(e => e.Verification)
                    .Include(e => e.Account)
                    .AsNoTracking()
                    .AsQueryable();
@@ -43,9 +43,9 @@ public record GetLedgerEntriesQuery(string OrganizationId, int? AccountNo = null
                 query = query.Where(e => e.AccountNo == request.AccountNo);
             }
 
-            if (request.VerificationId is not null)
+            if (request.SupportingDocumentId is not null)
             {
-                query = query.Where(e => e.JournalEntryId == request.VerificationId);
+                query = query.Where(e => e.VerificationId == request.SupportingDocumentId);
             }
 
             var totalItems = await query.CountAsync(cancellationToken);

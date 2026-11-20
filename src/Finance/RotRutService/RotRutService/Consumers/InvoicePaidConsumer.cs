@@ -7,7 +7,7 @@ using YourBrand.RotRutService.Domain;
 
 namespace YourBrand.RotRutService.Consumers;
 
-public class InvoicePaidConsumer(IRotRutContext context, IJournalEntriesClient journalEntriesClient,
+public class InvoicePaidConsumer(IRotRutContext context, IVerificationsClient verificationsClient,
     IInvoicesClient invoicesClient, RotRutCaseFactory rotRutCaseFactory) : IConsumer<InvoicePaid>
 {
     public async Task Consume(ConsumeContext<InvoicePaid> context)

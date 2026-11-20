@@ -51,9 +51,9 @@ public class AccountingContext(DbContextOptions<AccountingContext> options,
 
     public DbSet<LedgerEntry> LedgerEntries { get; set; }
 
-    public DbSet<JournalEntry> JournalEntries { get; set; }
-
     public DbSet<Verification> Verifications { get; set; }
+
+    public DbSet<SupportingDocument> SupportingDocuments { get; set; }
 
 #nullable restore
 

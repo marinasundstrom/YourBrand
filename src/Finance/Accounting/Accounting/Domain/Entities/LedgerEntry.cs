@@ -30,9 +30,9 @@ public class LedgerEntry : AuditableEntity<int>, IHasTenant, IHasOrganization
 
     public DateTimeOffset Date { get; set; } = DateTimeOffset.UtcNow;
 
-    public int? JournalEntryId { get; set; }
+    public int? VerificationId { get; set; }
 
-    public JournalEntry? JournalEntry { get; set; }
+    public Verification? Verification { get; set; }
 
     public int AccountNo { get; set; }
 

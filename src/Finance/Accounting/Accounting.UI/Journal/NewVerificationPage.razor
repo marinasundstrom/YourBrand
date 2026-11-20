@@ -2,13 +2,13 @@
 @using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavigationManager
 @inject IAccountsClient AccountsClient
-@inject IJournalEntriesClient JournalEntriesClient
+@inject IVerificationsClient VerificationsClient
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
-<AppPageTitle>New Verification</AppPageTitle>
+<AppPageTitle>New verification</AppPageTitle>
 
-<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">New Verification</MudText>
+<MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true" Class="mt-4 mb-8">New verification</MudText>
 
     <EditForm Model="@formModel" OnValidSubmit="OnValidSubmit">
         <MudPaper Elevation="25" Class="pa-4">
@@ -131,7 +131,7 @@
 
         List<Account> accounts = new List<Account>();
 
-        VerificationFormModel formModel = new VerificationFormModel();
+        SupportingDocumentFormModel formModel = new SupportingDocumentFormModel();
 
         EntryFormModel? elementBeforeEdit;
 
@@ -197,7 +197,7 @@
         {
             if (!files.Any())
             {
-                var r = await DialogService.ShowMessageBoxAsync("Verification lacks attachment", "Are you sure that you want to continue?",
+                var r = await DialogService.ShowMessageBoxAsync("SupportingDocument lacks attachment", "Are you sure that you want to continue?",
                 "Yes", "No");
 
                 if (!r.GetValueOrDefault())
@@ -207,7 +207,7 @@
                 }
             }
 
-            var createJournalEntry = new CreateJournalEntry
+            var createVerification = new CreateVerification
             {
                 Description = formModel.Description ?? String.Empty
             };
@@ -222,13 +222,13 @@
                 Credit = e.Credit
             }));
 
-            createJournalEntry.Entries = entries;
+            createVerification.Entries = entries;
 
-            var journalEntryId = await JournalEntriesClient.CreateJournalEntryAsync(Organization.Id, createJournalEntry);
+            var verificationId = await VerificationsClient.CreateVerificationAsync(Organization.Id, createVerification);
 
             foreach (var file in files)
             {
-                await JournalEntriesClient.AddFileToJournalEntryAsVerificationAsync(Organization.Id, journalEntryId, string.Empty, null, new FileParameter(file.OpenReadStream(10
+                await VerificationsClient.AddFileToVerificationAsSupportingDocumentAsync(Organization.Id, verificationId, string.Empty, null, new FileParameter(file.OpenReadStream(10
                 * 10000), file.Name));
             }
 
@@ -246,7 +246,7 @@
             a.Name.ToLower().Contains(value.ToLower())));
         }
 
-        class VerificationFormModel
+        class SupportingDocumentFormModel
         {
             [MaxLength(240, ErrorMessage = "Max 240 characters")]
             public string? Description { get; set; }
