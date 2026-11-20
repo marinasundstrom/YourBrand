@@ -38,22 +38,31 @@
                 </MudTh>
             </HeaderContent>
             <RowTemplate Context="account">
-                <MudTd DataLabel="Account">@account.Account!.AccountNo @account.Account!.Name</MudTd>
-                <MudTd DataLabel="Debit">@account.Debit</MudTd>
-                <MudTd DataLabel="Credit">@account.Credit</MudTd>
+                @if (account.Account is not null)
+                {
+                    <MudTd DataLabel="Account">@account.Account!.AccountNo @account.Account!.Name</MudTd>
+                    <MudTd DataLabel="Debit">@account.Debit</MudTd>
+                    <MudTd DataLabel="Credit">@account.Credit</MudTd>
+                }
             </RowTemplate>
             <RowEditingTemplate Context="account">
                 <MudTd DataLabel="Account">
                     <MudAutocomplete @bind-Value="account.Account" SearchFunc="@Search"
-                        ToStringFunc="@(e=> e==null?null : $"{e.AccountNo} {e.Name}")">
+                        ToStringFunc="@(e=> e is null? string.Empty : $"{e.AccountNo} {e.Name}")">
                         <ItemTemplate Context="e">
                             <MudText>
-                                @($"{e.AccountNo} {e.Name}")
+                                @if (e is not null) 
+                                {
+                                    @($"{e.AccountNo} {e.Name}")
+                                }
                             </MudText>
                         </ItemTemplate>
                         <ItemSelectedTemplate Context="e">
                             <MudText>
-                                @($"{e.AccountNo} {e.Name}")
+                                @if (e is not null) 
+                                {
+                                    @($"{e.AccountNo} {e.Name}")
+                                }
                             </MudText>
                         </ItemSelectedTemplate>
                     </MudAutocomplete>
@@ -146,10 +155,12 @@
             await AccountsClient.GetAccountsAsync(Organization.Id, null, true, true));
         }
 
-        void AddEntry()
+        async Task AddEntry()
         {
             var item = new EntryFormModel() { Account = null };
             formModel.Entries.Add(item);
+
+            await Task.Delay(50);
 
             table.SetEditingItem(item);
 

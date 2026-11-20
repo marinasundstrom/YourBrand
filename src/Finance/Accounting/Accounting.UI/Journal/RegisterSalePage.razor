@@ -56,7 +56,6 @@
         </RowTemplate>
         <RowEditingTemplate Context="entry">
             <MudTd DataLabel="Type">
-    using YourBrand.AppService.Client;
                 <MudSelect Variant="Variant.Outlined" @bind-Value="entry.EntryType" For="@(() => entry.EntryType)">
                     @foreach (EntryType entryType in Enum.GetValues<EntryType>())
                     {
@@ -142,12 +141,16 @@
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization? Organization { get; set; }
 
-    void AddEntry()
+    async Task AddEntry()
     {
         var item = new EntryModel();
         formModel.Entries.Add(item);
 
+        await Task.Delay(50);
+
         table.SetEditingItem(item);
+
+        StateHasChanged();
 
         isEditingEntry = true;
     }
