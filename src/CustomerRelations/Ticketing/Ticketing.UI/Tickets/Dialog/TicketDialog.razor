@@ -33,10 +33,11 @@ else
             <AppPageTitle>@ticket?.Id - @ticket?.Subject</AppPageTitle>
         }
 
+        <EditForm EditContext="editContext" OnValidSubmit="Submit">
+            <DataAnnotationsValidator />
+
             <MudDialog Gutters="false">
                 <TitleContent>
-                     <EditForm EditContext="editContext" OnValidSubmit="Submit">
-                        <DataAnnotationsValidator />
                         <div class="d-flex">
                             @if(Id is not null) 
                             {
@@ -45,7 +46,6 @@ else
                             <MudTextField T="string" Label="@T["Title"]" Variant="Variant.Text" Value="@Form.Title" ValueChanged="(x) => { Form.Title = x; editContext.NotifyFieldChanged(FieldIdentifier.Create<string>(() => Form.Title)); }" For="() => Form.Title"
                                 Immediate="true" Class="pe-8" />
                         </div>
-                    </EditForm>
                 </TitleContent>
                     
                 <DialogContent>
@@ -68,8 +68,6 @@ else
 
                 </DialogContent>
                 <DialogActions>
-                     <EditForm EditContext="editContext" OnValidSubmit="Submit">
-                        <DataAnnotationsValidator />
                     @if (saveButtonVisible)
                     {
                         <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled">
@@ -83,9 +81,10 @@ else
                             }
                         </MudButton>
                     }
-                    </EditForm>
                 </DialogActions>
             </MudDialog>
+
+        </EditForm>
     }
     else
     {
@@ -260,7 +259,9 @@ else
     }
 
     async Task CreateTicket()
-    {
+    {   
+        Console.WriteLine("Description: " + Form.Description);
+
         ticket = await TicketsClient.CreateTicketAsync(Organization.Id, new CreateTicketData
         {
             ProjectId = Form.Project.Id,

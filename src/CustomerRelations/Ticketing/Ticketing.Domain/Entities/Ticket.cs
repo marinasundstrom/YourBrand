@@ -13,10 +13,10 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
     {
     }
 
-    public Ticket(int id, string subject, string? description) : base(id)
+    public Ticket(int id, string subject, string? text) : base(id)
     {
         Subject = subject;
-        Description = description;
+        Text = text;
     }
 
     public TenantId TenantId { get; set; }
@@ -42,8 +42,6 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
     }
 
     public string Subject { get; set; } = default!;
-
-    public string? Description { get; }
 
     public TicketParticipant? ReportedBy { get; set; }
 
