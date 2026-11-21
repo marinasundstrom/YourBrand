@@ -24,7 +24,9 @@
 
     <MudFileUpload T="IBrowserFile" FilesChanged="ImportTheme">
         <CustomContent>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.CloudUpload">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary"   
+                OnClick="@context.OpenFilePickerAsync"
+                StartIcon="@Icons.Material.Filled.CloudUpload">
                 Import theme
             </MudButton>
         </CustomContent>

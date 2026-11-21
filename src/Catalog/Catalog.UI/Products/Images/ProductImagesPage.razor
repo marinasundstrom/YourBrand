@@ -17,7 +17,7 @@ else
 {
     <MudFileUpload T="IBrowserFile" Accept="*.jpg, *.jpeg, *.png" FilesChanged="UploadProductImage" Class="mb-4">
         <CustomContent>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary"
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@context.OpenFilePickerAsync"
                 StartIcon="@Icons.Material.Filled.CloudUpload">
                 Upload image
             </MudButton>
