@@ -41,7 +41,7 @@
         <DialogActions>
             @if (_documentDto is null)
             {
-                <MudButton OnClick="() => Modal.Cancel()">Cancel</MudButton>
+                <MudButton  ButtonType="ButtonType.Button" OnClick="() => Modal.Cancel()">Cancel</MudButton>
             }
             @if (_documentDto is not null)
             {

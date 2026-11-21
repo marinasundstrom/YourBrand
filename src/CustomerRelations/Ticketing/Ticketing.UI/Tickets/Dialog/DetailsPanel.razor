@@ -23,7 +23,7 @@
                     @bind-Value="Form.Project" For="() => Form.Project" Class="mb-4" />
 
                 <MudSelect Label="@T["Status"]" @bind-Value="Form.Status" For="() => Form.Status" Immediate="true"
-                    Variant="Variant.Outlined" Class="mb-4" ToStringFunc="(s) => s.Name">
+                           Variant="Variant.Outlined" Class="mb-4" ToStringFunc="(s) => s is null ? string.Empty : s.Name">
                     @foreach (var status in ticketStatuses)
                     {
                         <MudSelectItem Value="@status">@T[status.Name]</MudSelectItem>

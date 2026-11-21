@@ -4,7 +4,7 @@
 
 <div class="d-flex flex-grow-1">
     <div class="flex-1 d-flex">
-        <MudAutocomplete T="MeetingGroup" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchMeetingGroups" ToStringFunc="(x) => x.Title"
+        <MudAutocomplete T="MeetingGroup" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchMeetingGroups" ToStringFunc="(x) => x is null ? string.Empty : x.Title"
             ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false">
             <ItemTemplate Context="context2">
                 <MudText Typo="Typo.body1">@context2.Title</MudText>

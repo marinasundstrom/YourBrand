@@ -91,7 +91,8 @@
                     </div>
 
                     <MudSelect T="OptionValueVM" Label="Default value" Class="mb-6" Variant="Variant.Outlined"
-                        @bind-Value="SelectedValue" ToStringFunc="x => x?.Name" For="() => SelectedValue">
+                               @bind-Value="SelectedValue" ToStringFunc="x => x is null ? string.Empty : x?.Name"
+                               For="() => SelectedValue">
                         @foreach (var value in Values)
                         {
                             <MudSelectItem Value="@value">@value.Name</MudSelectItem>

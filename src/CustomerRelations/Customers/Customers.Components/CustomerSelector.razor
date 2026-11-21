@@ -1,9 +1,8 @@
 @using System.Linq.Expressions
 @inject ICustomersClient CustomersClient
 
-<MudAutocomplete T="Customer" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
-    For="For" SearchFunc="SearchCustomers" ToStringFunc="(x) => x.Name" 
-    ResetValueOnEmptyText="false" CoerceText="false" CoerceValue="false" Strict="false">
+<MudAutocomplete T="Customer" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged" For="For" SearchFunc="SearchCustomers"
+                 ToStringFunc="(x) => x is null ? string.Empty : x.Name" ResetValueOnEmptyText="false" CoerceText="false" CoerceValue="false" Strict="false">
     <ItemTemplate Context="context2">
         <MudText Typo="Typo.body1">@context2.Name (@(context2.OrgNo ?? context2.Ssn))</MudText>
     </ItemTemplate>

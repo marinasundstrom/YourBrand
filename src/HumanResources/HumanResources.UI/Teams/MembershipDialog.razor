@@ -12,8 +12,8 @@
 
                 <MudAutocomplete T="Person" Label="Person" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Person" SearchFunc="@Search1"
                                  For="() => Person"
-                                 ToStringFunc="u => u?.GetDisplayName()"
-                                 ResetValueOnEmptyText="true"
+                                ToStringFunc="u => u is null ? string.Empty : u?.GetDisplayName()"       
+                                ResetValueOnEmptyText="true"
                                  CoerceText="true" CoerceValue="true"
                                  AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
             @*}*@

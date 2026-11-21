@@ -23,7 +23,7 @@
                             <MudAutocomplete T="AttributeValue" Class="mb-6" Variant="Variant.Outlined"
                                 Label="@productAttribute.Attribute.Name" @bind-Value="productAttribute.Value"
                                 SearchFuncWithCancel="@(async (string value, CancellationToken ct) => await SearchAttributeValue(productAttribute.Attribute.Id, value, ct))"
-                                ShowProgressIndicator="true" ToStringFunc="(x) => x.Name" Required />
+                                     ShowProgressIndicator="true" ToStringFunc="(x) => x is null ? string.Empty : x.Name" Required />
                 }
 
             </MudContainer>

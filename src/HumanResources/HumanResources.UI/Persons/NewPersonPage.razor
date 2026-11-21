@@ -28,7 +28,8 @@
 
             <MudTextField Label="Email" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Email" For="() => Email" />
 
-            <MudAutocomplete Label="Role" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Role" For="() => Role" SearchFunc="SearchRole" ToStringFunc="(x) => x.Name">
+            <MudAutocomplete Label="Role" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Role" For="() => Role"
+                             SearchFunc="SearchRole" ToStringFunc="(x) => x is null ? string.Empty :  x.Name">
                 <ItemTemplate Context="context2">
                     <MudText Typo="Typo.body1">@context2.Name</MudText>
                 </ItemTemplate>
@@ -38,7 +39,9 @@
                 </ItemSelectedTemplate>
             </MudAutocomplete>
 
-            <MudAutocomplete Label="Reports to" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ReportsTo" For="() => ReportsTo" SearchFunc="SearchPerson" ToStringFunc="(x) => x.GetDisplayName()">
+            <MudAutocomplete Label="Reports to" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ReportsTo"
+                             For="() => ReportsTo" SearchFunc="SearchPerson"
+                             ToStringFunc="(x) => x is null ? string.Empty :  x.GetDisplayName()">
                 <ItemTemplate Context="context2">
                     <MudText Typo="Typo.body1">@context2.GetDisplayName()</MudText>
                 </ItemTemplate>

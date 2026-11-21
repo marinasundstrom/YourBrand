@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.Extensions.Logging;
 
 using YourBrand.AppService.Client;
@@ -20,7 +21,7 @@ public sealed class BrandProfileService(IThemeManager themeManager, IBrandProfil
                 themeManager.SetTheme(brandProfile.Theme);
             }
         }
-        catch (Exception)
+        catch
         {
             logger.LogDebug("Could not load brand profile.");
         }

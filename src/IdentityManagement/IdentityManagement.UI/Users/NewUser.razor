@@ -18,7 +18,8 @@
             <DataAnnotationsValidator />
 
             <MudAutocomplete Label="Organization" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Organization"
-                For="() => Organization" SearchFunc="SearchOrganization" ToStringFunc="(x) => x.Name">
+                             For="() => Organization" SearchFunc="SearchOrganization"
+                             ToStringFunc="(x) => x is null ? string.Empty : x.Name">
                 <ItemTemplate Context="context2">
                     <MudText Typo="Typo.body1">@context2.Name</MudText>
                 </ItemTemplate>

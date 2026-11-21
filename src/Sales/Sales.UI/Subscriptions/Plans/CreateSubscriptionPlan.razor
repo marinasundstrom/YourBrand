@@ -15,7 +15,8 @@
                 <MudText Typo="Typo.body1" Class="mb-4">@Model.GetDescription()</MudText>
 
                 <MudSelect T="TimeInterval" Label="Recurrence" @bind-Value="Model.Frequency" Variant="Variant.Outlined"
-                    ToStringFunc="x => x.ToString()" For="() => Model.Frequency" Class="mb-4">
+                           ToStringFunc="x => x.ToString()" For="() => Model.Frequency"
+                           Class="mb-4">
                     @foreach (var item in Enum.GetValues<TimeInterval>())
                     {
                         <MudSelectItem T="TimeInterval" Value="@item" />
@@ -25,7 +26,8 @@
                 @if (Model.Frequency == TimeInterval.Daily) 
                 {
                     <MudSelect T="int?" Label="Every" @bind-Value="Model.EveryDays" Variant="Variant.Outlined"
-                        ToStringFunc="x => x.ToString()" For="() => Model.EveryDays" Class="mb-4">
+                               ToStringFunc="x => x is null ? string.Empty : x.ToString()" For="() => Model.EveryDays"
+                               Class="mb-4">
                         @for (int i = 1; i < 31; i++)
                         {
                             int y = i;
@@ -58,7 +60,7 @@
                     </MudNumericField>
 
                     <MudSelect T="int?" Label="Nth" @bind-Value="Model.OnDay" Variant="Variant.Outlined"
-                        ToStringFunc="x => x.ToString()" For="() => Model.OnDay" Class="mb-4">
+                               ToStringFunc="x => x is null ? string.Empty : x.ToString()" For="() => Model.OnDay" Class="mb-4">
                         @for (int i = 1; i <= 4; i++)
                         {
                             int y = i;
@@ -68,8 +70,8 @@
                     </MudSelect>
 
                     <MudSelect T="Sales.DayOfWeek?" Label="Day of week" @bind-Value="Model.OnDayOfWeek"
-                        Variant="Variant.Outlined" ToStringFunc="x => x.ToString()" For="() => Model.OnDayOfWeek"
-                        Class="mb-4">
+                               Variant="Variant.Outlined" ToStringFunc="x => x is null ? string.Empty : x.ToString()"
+                               For="() => Model.OnDayOfWeek"            Class="mb-4">
                         @foreach (var dayOfWeek in Enum.GetValues<Sales.DayOfWeek>())
                         {
                             <MudSelectItem T="Sales.DayOfWeek?" Value="@dayOfWeek">@dayOfWeek</MudSelectItem>
@@ -83,7 +85,7 @@
                     </MudNumericField>
 
                     <MudSelect T="Month?" Label="Month" @bind-Value="Model.InMonth" Variant="Variant.Outlined"
-                        ToStringFunc="x => x.ToString()" For="() => Model.InMonth" Class="mb-4">
+                               ToStringFunc="x => x is null ? string.Empty : x.ToString()" For="() => Model.InMonth" Class="mb-4">
                         @foreach (var month in Enum.GetValues<Month>())
                         {
                             <MudSelectItem T="Month?" Value="@month" />
@@ -91,7 +93,7 @@
                     </MudSelect>
 
                     <MudSelect T="int?" Label="Nth" @bind-Value="Model.OnDay" Variant="Variant.Outlined"
-                        ToStringFunc="x => x.ToString()" For="() => Model.OnDay" Class="mb-4">
+                               ToStringFunc="x => x is null ? string.Empty : x.ToString()" For="() => Model.OnDay" Class="mb-4">
                         @for (int i = 1; i <= 4; i++)
                         {
                             int y = i;
@@ -100,8 +102,8 @@
                         }
                     </MudSelect>
 
-                    <MudSelect T="Sales.DayOfWeek?" Label="Day of week" @bind-Value="Model.OnDayOfWeek" Variant="Variant.Outlined"
-                        ToStringFunc="x => x.ToString()" For="() => Model.OnDayOfWeek" Class="mb-4">
+                    <MudSelect T="Sales.DayOfWeek?" Label="Day of week" @bind-Value="Model.OnDayOfWeek" Variant="Variant.Outlined" ToStringFunc="x => x is null ? string.Empty : x.ToString()"
+                               For="() => Model.OnDayOfWeek" Class="mb-4">
                         @foreach (var dayOfWeek in Enum.GetValues<Sales.DayOfWeek>())
                         {
                             <MudSelectItem T="Sales.DayOfWeek?" Value="@dayOfWeek">@dayOfWeek</MudSelectItem>

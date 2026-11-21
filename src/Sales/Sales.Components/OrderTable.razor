@@ -13,7 +13,7 @@
     <ToolBarContent>
         <MudSelect T="OrderType?" Label="Type" MultiSelection="true" @bind-Value="Type"
         SelectedValues="selectedTypes.AsReadOnly()" SelectedValuesChanged="OnSelectedTypesChanged" 
-        ToStringFunc="(o) => o.Name" Class="mt-0">
+        ToStringFunc="(o) => o is null ? string.Empty : o.Name" Class="mt-0">
             @foreach (var type in orderTypes)
             {
                 <MudSelectItem T="OrderType?" Value="@type">@type.Name</MudSelectItem>
@@ -22,7 +22,7 @@
         <MudSpacer />
         <MudSelect T="OrderStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
             SelectedValues="selectedStatuses.AsReadOnly()" SelectedValuesChanged="OnSelectedStatusesChanged"
-            ToStringFunc="(o) => o.Name" Class="mt-0">
+            ToStringFunc="(o) => o is null ? string.Empty : o.Name" Class="mt-0">
             @foreach (var status in orderStatuses)
             {
                 <MudSelectItem T="OrderStatus?" Value="@status">@status.Name</MudSelectItem>

@@ -64,7 +64,7 @@
 
         var result = await dialogRef.Result;
 
-        //if (result.Canceled) return;
+        if (result.Canceled) return;
 
         await table.ReloadServerData();
     }
@@ -78,7 +78,7 @@
 
         var result = await dialogRef.Result;
 
-        //if (result.Canceled) return;
+        if (result.Canceled) return;
 
         await table.ReloadServerData();
     }

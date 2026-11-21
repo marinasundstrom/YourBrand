@@ -14,7 +14,7 @@
 
                 <MudAutocomplete T="YourBrand.Catalog.Attribute" Class="mb-6" Variant="Variant.Outlined"
                     Label="Attribute" @bind-Value="Attribute" SearchFuncWithCancel="SearchAttribute"
-                    ShowProgressIndicator="true" ToStringFunc="(x) => x.Name" Required />
+                                 ShowProgressIndicator="true" ToStringFunc="(x) => x is null ? string.Empty : x.Name" Required />
 
                 @if (!IsVariant)
                 {

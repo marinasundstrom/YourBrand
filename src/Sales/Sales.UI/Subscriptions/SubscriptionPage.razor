@@ -78,7 +78,7 @@ else
                 <MudSpacer />
                 <MudSelect T="OrderStatus?" Label="Status" MultiSelection="true" @bind-Value="Status"
                     SelectedValues="selectedStatuses.AsReadOnly()" SelectedValuesChanged="OnSelectedValuesChanged"
-                    ToStringFunc="(o) => o.Name" Class="mt-0">
+                               ToStringFunc="(o) => o is null ? string.Empty : o.Name" Class="mt-0">
                     @foreach (var status in orderStatuses)
                     {
                         <MudSelectItem T="OrderStatus?" Value="@status">@status.Name</MudSelectItem>

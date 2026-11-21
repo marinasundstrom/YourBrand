@@ -2,7 +2,7 @@
 @inject ISubscriptionPlansClient SubscriptionPlansClient
 
 <MudAutocomplete T="SubscriptionPlan" Label="@Label" Dense="true" Variant="Variant" Style="@Style" Class="@Class" Value="Value" ValueChanged="ValueChanged"
-    For="For" SearchFunc="SearchSubscriptionPlans" ToStringFunc="(x) => x.Name"
+    For="For" SearchFunc="SearchSubscriptionPlans" ToStringFunc="(x) => x is null ? string.Empty : x.Name"
     ResetValueOnEmptyText="true" CoerceText="false" CoerceValue="false" HelperText="@Value?.GetDescription()">
     <ItemTemplate Context="context2">
         <MudText Typo="Typo.body1">@context2.Name</MudText>

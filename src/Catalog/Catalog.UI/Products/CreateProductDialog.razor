@@ -19,8 +19,9 @@
                 <MudTextField Label="Description" Lines="5" @bind-Value="Description" Variant="Variant.Outlined"
                     For="() => Description" Class="mb-4"></MudTextField>
 
-                <MudAutocomplete Label="Category" SearchFunc="Search" @bind-Value="Category" ToStringFunc="x => x.Name"
-                    Variant="Variant.Outlined" For="() => Category" Class="mb-4" Strict="false" />
+                <MudAutocomplete Label="Category" SearchFunc="Search" @bind-Value="Category"
+                                 ToStringFunc="x => x is null ? string.Empty : x.Name"                    
+                                 Variant="Variant.Outlined" For="() => Category" Class="mb-4" Strict="false" />
 
                 <MudCheckBox Label="Is grouped product" Lines="5" @bind-Value="IsGroupedProduct"
                     Variant="Variant.Outlined" For="() => IsGroupedProduct" Class="mb-4"></MudCheckBox>

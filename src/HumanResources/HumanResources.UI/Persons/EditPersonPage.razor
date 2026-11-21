@@ -28,7 +28,9 @@
 
                 <MudField Label="Role" Class="mb-6" Variant="Variant.Outlined" Disabled="true">@Role</MudField>
 
-                <MudAutocomplete Label="Reports to" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ReportsTo" For="() => ReportsTo" SearchFunc="SearchPerson" ToStringFunc="(x) => x.GetDisplayName()">
+                <MudAutocomplete Label="Reports to" Class="mb-6" Variant="Variant.Outlined" @bind-Value="ReportsTo"
+                                 For="() => ReportsTo" SearchFunc="SearchPerson"
+                                 ToStringFunc="(x) => x is null ? string.Empty : x.GetDisplayName()">
                     <ItemTemplate Context="context2">
                         <MudText Typo="Typo.body1">@context2.GetDisplayName()</MudText>
                     </ItemTemplate>

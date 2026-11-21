@@ -4,7 +4,7 @@
     <DataAnnotationsValidator />
 
     <MudSelect T="ProductListingState" Label="ListingState" @bind-Value="Model.ListingState" Variant="Variant.Outlined"
-        ToStringFunc="x => x.ToString()" For="() => Model.ListingState">
+               ToStringFunc="x => x.ToString()" For="() => Model.ListingState">
         @foreach (var item in Enum.GetValues<ProductListingState>())
         {
             <MudSelectItem T="ProductListingState" Value="@item" />

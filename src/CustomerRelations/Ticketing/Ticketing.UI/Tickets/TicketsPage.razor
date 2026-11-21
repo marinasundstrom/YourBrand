@@ -46,8 +46,7 @@
 
         <MudSpacer />
 
-        <MudSelect T="TicketStatus?" Label="@T["Status"]" Dense="true" MultiSelection="true" Value="Status" ValueChanged="OnStatusChanged"
-            ToStringFunc="@((i) => i.Name)"
+        <MudSelect T="TicketStatus?" Label="@T["Status"]" Dense="true" MultiSelection="true" Value="Status" ValueChanged="OnStatusChanged" ToStringFunc="(i) => i is null ? string.Empty : i.Name"
             SelectedValues="selectedStatuses" SelectedValuesChanged="OnSelectedStatusesChanged" For="() => Status" Immediate="true" Variant="Variant.Outlined">
             @foreach (var status in ticketStatuses)
             {
