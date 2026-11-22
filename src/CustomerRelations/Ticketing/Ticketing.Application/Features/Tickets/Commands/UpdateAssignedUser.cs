@@ -27,9 +27,11 @@ public sealed record UpdateAssignee(string OrganizationId, int Id, string? UserI
                 return Result.Failure(Errors.Tickets.TicketNotFound);
             }
 
+            User? user = null;
+
             if (request.UserId is not null)
             {
-                var user = await userRepository.FindByIdAsync(request.UserId, cancellationToken);
+                user = await userRepository.FindByIdAsync(request.UserId, cancellationToken);
 
                 if (user is null)
                 {
@@ -44,7 +46,7 @@ public sealed record UpdateAssignee(string OrganizationId, int Id, string? UserI
                 participant = new TicketParticipant
                 {
                     OrganizationId = request.OrganizationId,
-                    Name = null,
+                    Name = user?.Name,
                     UserId = request.UserId
                 };
 

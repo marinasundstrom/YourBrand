@@ -115,7 +115,7 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
             Text = subject;
 
             AddDomainEvent(new TicketUpdated(TenantId, OrganizationId, Id));
-            AddDomainEvent(new TicketDescriptionUpdated(TenantId, OrganizationId, Id, Text, oldText));
+            AddDomainEvent(domainEvent: new TicketDescriptionUpdated(TenantId, OrganizationId, Id, Text, oldText));
 
             return true;
         }

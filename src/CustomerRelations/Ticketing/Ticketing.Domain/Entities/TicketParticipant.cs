@@ -24,6 +24,8 @@ public class TicketParticipant : Entity<TicketParticipantId>, IAuditableEntity<T
 
     public UserId? UserId { get; set; }
 
+    public string? TeamMembershipId { get; set; }
+
     public string? Email { get; set; }
 
     public User? CreatedBy { get; set; } = null!;

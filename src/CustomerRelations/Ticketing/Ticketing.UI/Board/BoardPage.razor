@@ -23,6 +23,8 @@
 {
     <MudPaper Elevation="25">
         <MudToolBar Gutters="false" Class="mt-2">
+            <MudButton Class="ms-4" Variant="Variant.Filled" Color="Color.Primary" OnClick="async () => await CreateTicket()">
+                @T["CreateTicket"]</MudButton>
             <MudSpacer />
             <MudSpacer />
             <ProjectSelector Label="@T["Project"]" OrganizationId="@(Organization?.Id)" Variant="Variant.Outlined"
@@ -32,16 +34,38 @@
         <div style="overflow-x: scroll;">
 
             <MudDropContainer @ref="dropContainer" T="Ticket" Items="tickets" Context="context"
-                            ItemsSelector="@((item, dropzone) => item.Status.Id.ToString() == dropzone)"
-                            ItemDropped="ItemUpdated" Class="d-flex flex-row">
+                              ItemsSelector="@((item, dropzone) => (item?.Assignee?.UserId ?? string.Empty) + "_" + item.Status.Id.ToString() == dropzone)"
+                            ItemDropped="ItemUpdated">
                 <ChildContent>
+
+                    <div class="d-flex flex-row">       
+                        <div class="pa-4 d-flex flex-column" style="min-width: 250px;">
+                            <MudText Typo="@Typo.h6"> </MudText>
+                            <MudSpacer />
+                        </div>
+
+                        @foreach (var status in ticketStatuses)
+                        {
+                            <div class="px-4 mx-4 pt-4 d-flex flex-column "                       
+                                style="min-width: 250px;">
+                                <MudText Typo="Typo.h6" Class="mb-4"><b>@T[status.Name]</b></MudText>
+                            </div>
+                        }
+                    </div>
+
+                    @foreach(var group in groupings) {
+                        <div class="d-flex flex-row" style="min-width: 250px;">
+
+                            <div class="pa-4 d-flex flex-column" style="min-width: 250px;">
+                                <MudText Typo="@Typo.h6">@group.Name</MudText>
+                                <MudSpacer />
+                            </div>
+
                     @foreach (var status in ticketStatuses)
                     {
                         <MudPaper Elevation="0" Class="pa-4 ma-4 d-flex flex-column mud-background-gray rounded-lg"
                             Style="min-width: 250px; min-height: 300px;">
                             <MudToolBar DisableGutters="true" Dense="true">
-                                <MudText Typo="Typo.h6" Class="mb-4"><b>@T[status.Name]</b></MudText>
-                                <MudSpacer />
                                 @*
                                     <MudMenu Icon="@Icons.Material.Rounded.MoreHoriz" AnchorOrigin="Origin.BottomRight"
                                     TransformOrigin="Origin.TopRight" ListClass="pa-2 d-flex flex-column"
@@ -53,12 +77,15 @@
                                     </MudMenu>
                                 *@
                             </MudToolBar>
-                            <MudDropZone T="Ticket" Identifier="@($"{status.Id}")" Class="mud-height-full" />
+                                    <MudDropZone T="Ticket" Identifier="@($"{group.UserId + "_" + status.Id}")" Class="mud-height-full" />
                             @*
                                 <MudButton OnClick="@(() => {})" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.Add" FullWidth="true"
                                 Class="py-2" Style="background-color: inherit;">Add Task</MudButton>
                             *@
                         </MudPaper>
+                    }
+                        
+                        </div>
                     }
                 </ChildContent>
                 <ItemRenderer>
@@ -105,15 +132,16 @@
 }
 
 @code {
-        CancellationTokenSource cts = new();
-        MudDropContainer<Ticket> dropContainer = null!;
-        HubConnection hubConnection = null!;
-        List<Ticket> tickets = new();
-        List<TicketStatus> ticketStatuses = new();
-        bool loaded = false;
+    CancellationTokenSource cts = new();
+    MudDropContainer<Ticket> dropContainer = null!;
+    HubConnection hubConnection = null!;
+    List<Ticket> tickets = new();
+    ICollection<TicketGrouping> groupings = new List<TicketGrouping>();
+    List<TicketStatus> ticketStatuses = new();
+    bool loaded = false;
 
-        [CascadingParameter(Name = "Organization")]
-        public YourBrand.Portal.Services.Organization Organization { get; set; }
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization Organization { get; set; }
 
     public YourBrand.Ticketing.Project? Project { get; set; }
 
@@ -121,8 +149,11 @@
     {
         try
         {
-            tickets.AddRange((await TicketsClient.GetTicketsAsync(Organization.Id, Project?.Id, null, null, 1, 100, null, null,
-            cts.Token)).Items);
+            groupings = (await TicketsClient.GetTicketsGroupedAsync(Organization.Id, Project?.Id, null, null, 1, 100, null,
+null,
+            cts.Token)).Items;
+
+            tickets.AddRange(groupings.SelectMany(x => x.Tickets));
             ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(Organization.Id, null, 1, 100, null, null, cts.Token)).Items);
 
             loaded = true;
@@ -153,6 +184,7 @@
             //hubConnection.On<int, string>("Updated", OnUpdated);
             hubConnection.On<int, string>("Deleted", OnDeleted);
 
+            hubConnection.On<int, string>("AssigneeUpdated", OnAssigneeUpdated);
             hubConnection.On<int, string>("SubjectUpdated", OnSubjectUpdated);
             hubConnection.On<int, string?>("DescriptionUpdated", OnDescriptionUpdated);
             hubConnection.On<int, TicketStatus>("StatusUpdated", OnStatusUpdated);
@@ -188,6 +220,21 @@
         catch (Exception exc)
         {
             Snackbar.Add(exc.Message.ToString(), Severity.Error);
+        }
+    }
+
+    async Task CreateTicket()
+    {
+        var uri = NavigationManager.Uri;
+
+        DialogOptions dialogOptions = new DialogOptions() { FullWidth = true, MaxWidth = MaxWidth.Large, CloseButton = true };
+        var dialogRef = await DialogService.ShowAsync<Tickets.Dialog.TicketDialog>(string.Empty, dialogOptions);
+        var result = await dialogRef.Result;
+
+        if (!result.Canceled)
+        {
+            dropContainer.Refresh();
+            StateHasChanged();
         }
     }
 
@@ -244,7 +291,11 @@
 
     private async void ItemUpdated(MudItemDropInfo<Ticket> dropItem)
     {
-        var id = dropItem.DropzoneIdentifier;
+        var key = dropItem.DropzoneIdentifier.Split("_");
+
+        var userId = key.First();
+
+        var id = key.Last();
 
         var newStatus = ticketStatuses.First(x => x.Id == int.Parse(id));
 
@@ -269,6 +320,42 @@
         {
             Snackbar.Add(exc.Message, Severity.Error);
         }
+
+        var oldAssigneeUserId = dropItem.Item.Assignee.UserId;
+
+        if(userId != dropItem.Item.Assignee.UserId) 
+        {
+            try
+            {
+                if (dropItem.Item.Assignee is null)
+                {
+                    dropItem.Item.Assignee = new TicketParticipant();
+                }
+
+                var group = groupings.First(x => x.UserId == userId);
+
+                dropItem.Item.Assignee.UserId = userId;
+                dropItem.Item.Assignee.Name = group.Name;
+
+                await TicketsClient.UpdateAssigneeAsync(Organization.Id, dropItem.Item.Id, userId, cts.Token);
+            }
+            catch (ApiException<ProblemDetails> exc)
+            {
+                dropItem.Item.Assignee.UserId = oldAssigneeUserId;
+
+                Snackbar.Add(exc.Result.Title, Severity.Error);
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
+            }
+            catch (Exception exc)
+            {
+                Snackbar.Add(exc.Message, Severity.Error);
+            }
+        }
+
+        dropContainer.Refresh();
     }
 
     async Task OnCreated(int ticketId, string title)
@@ -290,6 +377,17 @@
     {
         var item = tickets.First(x => x.Id == ticketId);
         tickets.Remove(item);
+        dropContainer.Refresh();
+        StateHasChanged();
+    }
+
+    async Task OnAssigneeUpdated(int ticketId, string assignedId)
+    {
+        var x = await TicketsClient.GetTicketByIdAsync(Organization.Id, ticketId);
+
+        var item = tickets.First(x => x.Id == ticketId);
+        item.Assignee = x.Assignee;
+
         dropContainer.Refresh();
         StateHasChanged();
     }

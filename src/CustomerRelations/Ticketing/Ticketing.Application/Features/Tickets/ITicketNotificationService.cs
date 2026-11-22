@@ -19,4 +19,6 @@ public interface ITicketNotificationService
     Task EstimatedTimeUpdated(int ticketId, TimeSpan? time);
 
     Task RemainingTimeUpdated(int ticketId, TimeSpan? time);
+
+    Task AssigneeUpdated(int ticketId, string? participantId, string? name);
 }

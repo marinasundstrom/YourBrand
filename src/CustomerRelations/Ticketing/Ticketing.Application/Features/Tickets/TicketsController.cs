@@ -28,6 +28,14 @@ public sealed class TicketsController(IMediator mediator) : ControllerBase
     public async Task<PagedResult<TicketDto>> GetTickets(string organizationId, int? projectId, [FromQuery] int[]? status, string? assigneeId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
         => await mediator.Send(new GetTickets(organizationId, projectId, status, assigneeId, page, pageSize, sortBy, sortDirection), cancellationToken);
 
+    [HttpGet("grouped")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<TicketGroupingDto>))]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    [ProducesDefaultResponseType]
+    public async Task<PagedResult<TicketGroupingDto>> GetTicketsGrouped(string organizationId, int? projectId, [FromQuery] int[]? status, string? assigneeId, int page = 1, int pageSize = 10, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+        => await mediator.Send(new GetTicketsGrouped(organizationId, projectId, status, assigneeId, page, pageSize, sortBy, sortDirection), cancellationToken);
+
+
     [HttpGet("{id}/events")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResult<TicketEventDto>))]
     [ProducesResponseType(StatusCodes.Status429TooManyRequests)]

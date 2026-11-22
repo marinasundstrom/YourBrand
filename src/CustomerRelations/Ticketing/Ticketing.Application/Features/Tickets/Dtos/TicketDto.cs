@@ -1,6 +1,14 @@
 ﻿using YourBrand.Ticketing.Application.Features.Projects;
 
 namespace YourBrand.Ticketing.Application.Features.Tickets.Dtos;
+
+public sealed record TicketGroupingDto(
+    string? Name,
+    string? UserId,
+    string? ProjectMembershipId,
+    IEnumerable<TicketDto> Tickets
+);
+
 public sealed record TicketDto(
     int Id,
     ProjectDto Project,

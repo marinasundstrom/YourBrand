@@ -26,6 +26,11 @@ public class TicketNotificationService(IHubContext<TicketsHub, ITicketsHubClient
         await hubsContext.Clients.All.DescriptionUpdated(ticketId, description);
     }
 
+    public async Task AssigneeUpdated(int ticketId, string? participantId, string? name)
+    {
+        await hubsContext.Clients.All.AssigneeUpdated(ticketId, participantId, name);
+    }
+
     public async Task StatusUpdated(int ticketId, TicketStatusDto status)
     {
         await hubsContext.Clients.All.StatusUpdated(ticketId, status);

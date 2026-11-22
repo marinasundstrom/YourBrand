@@ -17,6 +17,9 @@ public sealed class TicketAssigneeUpdatedEventHandler(IApplicationDbContext cont
 
         await ticketNotificationService.StatusUpdated(ticket.Id, ticket.Status.ToDto());
 
+        await ticketNotificationService.AssigneeUpdated(ticket.Id, ticket.AssigneeId, ticket.Assignee?.Name);
+
+
         var ev = new TicketEvent();
         ev.OrganizationId = notification.OrganizationId;
         ev.TicketId = notification.TicketId;
