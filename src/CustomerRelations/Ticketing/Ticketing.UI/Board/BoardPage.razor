@@ -224,19 +224,19 @@
             groupings.AddRange(members.Items.Select(x =>
                 new MemberLane(x.User.Name, x.Id, x.User.Id)));
 
-            var t = (await TicketsClient.GetTicketsGroupedAsync(Organization.Id, Project?.Id, null, null, 1, 100, null,
+            var ticketGroups = (await TicketsClient.GetTicketsGroupedAsync(Organization.Id, Project?.Id, null, null, 1, 100, null,
 null,
             cts.Token)).Items;
 
-            foreach(var i in t)
+            foreach(var ticketGroup in ticketGroups)
             {
-                var x = groupings.FirstOrDefault(x => x.ProjectMembershipId == i.ProjectMembershipId && x.UserId == i.UserId);
-                if (x is null)
+                var memberLane = groupings.FirstOrDefault(x => x.ProjectMembershipId == ticketGroup.ProjectMembershipId && x.UserId == ticketGroup.UserId);
+                if (memberLane is null)
                 {
-                    x = new MemberLane(i.Name, i.ProjectMembershipId, i.UserId);
-                    groupings.Add(x);
+                    memberLane = new MemberLane(ticketGroup.Name, ticketGroup.ProjectMembershipId, ticketGroup.UserId);
+                    groupings.Add(memberLane);
                 }
-                x.Tickets.AddRange(i.Tickets);
+                memberLane.Tickets.AddRange(ticketGroup.Tickets);
             }
 
             tickets.AddRange(groupings.SelectMany(x => x.Tickets));
