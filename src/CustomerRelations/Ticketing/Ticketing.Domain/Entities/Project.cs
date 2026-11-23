@@ -11,6 +11,7 @@ public class Project : AggregateRoot<ProjectId>, IHasTenant, IHasOrganization, I
     readonly HashSet<Team> _teams = new HashSet<Team>();
     readonly HashSet<ProjectMembership> _memberships = new HashSet<ProjectMembership>();
     readonly HashSet<ProjectTeam> _projectTeams = new HashSet<ProjectTeam>();
+    //readonly HashSet<Ticket> _tickets = new HashSet<Ticket>();
 
     public Project()
     {
@@ -53,6 +54,8 @@ public class Project : AggregateRoot<ProjectId>, IHasTenant, IHasOrganization, I
     public IReadOnlyCollection<ProjectMembership> Memberships => _memberships;
 
     public IReadOnlyCollection<ProjectTeam> ProjectTeams => _projectTeams;
+
+    //public IReadOnlyCollection<Ticket> Tickets => _tickets;
 
     public void AddTeam(Team team) => _projectTeams.Add(new ProjectTeam(team));
 

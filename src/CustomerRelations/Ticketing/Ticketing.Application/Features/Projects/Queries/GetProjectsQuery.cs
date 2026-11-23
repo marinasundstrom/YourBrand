@@ -7,7 +7,7 @@ using YourBrand.Ticketing.Application.Common;
 
 namespace YourBrand.Ticketing.Application.Features.Projects.Queries;
 
-public record GetProjectsQuery(string OrganizationId, int Page = 0, int PageSize = 10, string? UserId = null, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectDto>>
+public record GetProjectsQuery(string OrganizationId, int Page = 1, int PageSize = 10, string? UserId = null, string? SearchString = null, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<ItemsResult<ProjectDto>>
 {
     public class GetProjectsQueryHandler(IApplicationDbContext context) : IRequestHandler<GetProjectsQuery, ItemsResult<ProjectDto>>
     {

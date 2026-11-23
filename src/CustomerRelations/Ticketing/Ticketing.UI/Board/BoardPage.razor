@@ -6,6 +6,7 @@
 @using YourBrand.CustomerService
 @using YourBrand.Ticketing.Tickets
 @implements IAsyncDisposable
+@inject IProjectsClient ProjectsClient
 @inject ITicketsClient TicketsClient
 @inject ITicketStatusesClient TicketStatusesClient
 @inject ISnackbar Snackbar
@@ -136,7 +137,7 @@
     MudDropContainer<Ticket> dropContainer = null!;
     HubConnection hubConnection = null!;
     List<Ticket> tickets = new();
-    ICollection<TicketGrouping> groupings = new List<TicketGrouping>();
+    List<MemberLane> groupings = new List<MemberLane>();
     List<TicketStatus> ticketStatuses = new();
     bool loaded = false;
 
@@ -147,25 +148,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            groupings = (await TicketsClient.GetTicketsGroupedAsync(Organization.Id, Project?.Id, null, null, 1, 100, null,
-null,
-            cts.Token)).Items;
+        if(Organization is null) 
+            return;
 
-            tickets.AddRange(groupings.SelectMany(x => x.Tickets));
-            ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(Organization.Id, null, 1, 100, null, null, cts.Token)).Items);
+        if(Project is null)
+        {
+            var projects = await ProjectsClient.GetProjectsAsync(Organization.Id, null, null, null, null, null, null);
+            Project = projects.Items.First();
+        }
 
-            loaded = true;
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-        catch (Exception)
-        {
-            Snackbar.Add(T["FailedToGetTickets"], Severity.Error);
-        }
+        await LoadProject();
 
         try
         {
@@ -223,6 +215,46 @@ null,
         }
     }
 
+    async Task LoadProject()
+    {
+        try
+        {
+            ItemsResultOfProjectMembership? members = await ProjectsClient.GetProjectMembershipsAsync(Organization.Id, Project.Id, null, null, null, null);
+
+            groupings.AddRange(members.Items.Select(x =>
+                new MemberLane(x.User.Name, x.Id, x.User.Id)));
+
+            var t = (await TicketsClient.GetTicketsGroupedAsync(Organization.Id, Project?.Id, null, null, 1, 100, null,
+null,
+            cts.Token)).Items;
+
+            foreach(var i in t)
+            {
+                var x = groupings.FirstOrDefault(x => x.ProjectMembershipId == i.ProjectMembershipId && x.UserId == i.UserId);
+                if (x is null)
+                {
+                    x = new MemberLane(i.Name, i.ProjectMembershipId, i.UserId);
+                    groupings.Add(x);
+                }
+                x.Tickets.AddRange(i.Tickets);
+            }
+
+            tickets.AddRange(groupings.SelectMany(x => x.Tickets));
+            ticketStatuses.AddRange((await TicketStatusesClient.GetStatusesAsync(Organization.Id, null, 1, 100, null, null, cts.Token)).Items);
+
+            loaded = true;
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception)
+        {
+            throw;
+            Snackbar.Add(T["FailedToGetTickets"], Severity.Error);
+        }
+    }
+
     async Task CreateTicket()
     {
         var uri = NavigationManager.Uri;
@@ -240,12 +272,16 @@ null,
 
     async Task OnSelectedProjectChanged(Project? project)
     {
+        if(project is null)
+            return;
+
         Project = project;
 
+        groupings.Clear();
         tickets.Clear();
+        ticketStatuses.Clear();
 
-        tickets.AddRange((await TicketsClient.GetTicketsAsync(Organization.Id, Project?.Id, null, null, 1, 100, null, null,
-        cts.Token)).Items);
+        await LoadProject();
 
         dropContainer.Refresh();
 
@@ -370,7 +406,7 @@ null,
     async Task OnUpdated(int ticketId, string title)
     {
 
-    }
+        }
     */
 
     void OnDeleted(int ticketId, string title)
@@ -445,4 +481,9 @@ null,
         cts.Cancel();
         await hubConnection.DisposeAsync();
     }
+
+    public record MemberLane(string Name, string ProjectMembershipId, string UserId)
+    {
+        public List<Ticket> Tickets { get; set; } = new List<Ticket>();
+    };
 }

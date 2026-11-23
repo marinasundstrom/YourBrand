@@ -9,7 +9,7 @@ namespace YourBrand.Ticketing.Application.Features.Tickets.Queries;
 
 public record GetTicketsGrouped(string OrganizationId, int? ProjectId, int[]? Status, string? AssigneeId, int Page = 1, int PageSize = 10, string? SortBy = null, SortDirection? SortDirection = null) : IRequest<PagedResult<TicketGroupingDto>>
 {
-    public class Handler(ITicketRepository ticketRepository, IDtoComposer dtoComposer) : IRequestHandler<GetTicketsGrouped, PagedResult<TicketGroupingDto>>
+    public class Handler(ITicketRepository ticketRepository, IProjectRepository projectRepository, IDtoComposer dtoComposer) : IRequestHandler<GetTicketsGrouped, PagedResult<TicketGroupingDto>>
     {
         public async Task<PagedResult<TicketGroupingDto>> Handle(GetTicketsGrouped request, CancellationToken cancellationToken)
         {

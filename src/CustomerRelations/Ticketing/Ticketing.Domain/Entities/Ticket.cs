@@ -23,6 +23,8 @@ public class Ticket : AggregateRoot<TicketId>, IHasTenant, IHasOrganization
 
     public OrganizationId OrganizationId { get; set; }
 
+    //public Project Project { get; set; }
+
     public ProjectId ProjectId { get; set; }
 
     public bool UpdateProject(ProjectId projectId)

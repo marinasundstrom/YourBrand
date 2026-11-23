@@ -20,7 +20,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ItemsResult<ProjectDto>>> GetProjects(string organizationId, int page = 0, int pageSize = 10, string? userId = null, string? searchString = null, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<ItemsResult<ProjectDto>>> GetProjects(string organizationId, int page = 1, int pageSize = 10, string? userId = null, string? searchString = null, string? sortBy = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default)
     {
         var user = Request.HttpContext.User;
 
