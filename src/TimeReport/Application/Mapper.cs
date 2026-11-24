@@ -1,5 +1,6 @@
 using YourBrand.TimeReport.Application.Tasks;
 using YourBrand.TimeReport.Application.Tasks.TaskTypes;
+using YourBrand.TimeReport.Application.Tasks.TaskCharges;
 using YourBrand.TimeReport.Application.Organizations;
 using YourBrand.TimeReport.Application.Projects;
 using YourBrand.TimeReport.Application.Projects.Expenses;
@@ -39,12 +40,17 @@ public static class Mapper
 
     public static TaskDto ToDto(this Domain.Entities.Task task)
     {
-        return new(task.Id, task.Name, task.TaskType.ToDto(), task.Description, task.HourlyRate, task.Project.ToDto());
+        return new TaskDto(task.Id, task.Name, task.TaskType.ToDto(), task.Description, task.HourlyRate, task.Charges.Select(x => x.ToDto()), task.Project.ToDto());
     }
 
     public static TaskTypeDto ToDto(this Domain.Entities.TaskType taskType)
     {
         return new(taskType.Id, taskType.Name, taskType.Description, taskType.ExcludeHours, taskType.Project?.ToDto());
+    }
+
+    public static TaskChargeDto ToDto(this Domain.Entities.TaskCharge taskCharge)
+    {
+        return new(taskCharge.Id, taskCharge.Type, taskCharge.Task?.ToDto(), null, taskCharge.Basis, taskCharge.Amount, taskCharge.Description);
     }
 
     public static ExpenseDto ToDto(this Domain.Entities.Expense expense)

@@ -69,6 +69,8 @@ public class TimeReportContext(
 
     public DbSet<TaskType> TaskTypes { get; set; } = null!;
 
+    public DbSet<TaskCharge> TaskCharges { get; set; } = null!;
+
     public DbSet<Entry> Entries { get; set; } = null!;
 
     public DbSet<TimeSheet> TimeSheets { get; set; } = null!;

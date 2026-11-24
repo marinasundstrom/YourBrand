@@ -41,8 +41,7 @@ public record CreateTaskCommand(string OrganizationId, string ProjectId, string 
             var task = new Domain.Entities.Task(request.Name, taskType, request.Description)
             {
                 OrganizationId = request.OrganizationId,
-                Project = project,
-                HourlyRate = request.HourlyRate
+                Project = project
             };
 
             context.Tasks.Add(task);

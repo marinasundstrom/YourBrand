@@ -22,6 +22,7 @@ public interface ITimeReportContext : IDisposable
     DbSet<Expense> Expenses { get; set; }
     DbSet<Domain.Entities.Task> Tasks { get; set; }
     DbSet<TaskType> TaskTypes { get; set; }
+    DbSet<TaskCharge> TaskCharges { get; set; }
     DbSet<Entry> Entries { get; set; }
     DbSet<TimeSheet> TimeSheets { get; set; }
     DbSet<ReportingPeriod> ReportingPeriods { get; set; }

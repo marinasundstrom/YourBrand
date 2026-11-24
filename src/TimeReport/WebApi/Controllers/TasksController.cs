@@ -15,7 +15,7 @@ namespace YourBrand.TimeReport.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-public class TasksController(IMediator mediator) : ControllerBase
+public partial class TasksController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -7,7 +7,7 @@ using YourBrand.TimeReport.Application.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Application.Tasks.TaskTypes.Commands;
 
-public record DeleteTaskTypeCommand(string OrganizationId, string TaskId) : IRequest
+public record DeleteTaskTypeCommand(string OrganizationId, string TypeId) : IRequest
 {
     public class DeleteTaskCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteTaskTypeCommand>
     {
@@ -16,7 +16,7 @@ public record DeleteTaskTypeCommand(string OrganizationId, string TaskId) : IReq
             var taskType = await context.TaskTypes
                 .InOrganization(request.OrganizationId)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync(x => x.Id == request.TaskId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.TypeId, cancellationToken);
 
             if (taskType is null)
             {

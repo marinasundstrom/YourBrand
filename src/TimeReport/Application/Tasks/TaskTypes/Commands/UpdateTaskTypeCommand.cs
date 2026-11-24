@@ -8,7 +8,7 @@ using YourBrand.TimeReport.Domain.Entities;
 
 namespace YourBrand.TimeReport.Application.Tasks.TaskTypes.Commands;
 
-public record UpdateTaskTypeCommand(string OrganizationId, string TaskId, string Name, string? Description, string? ProjectId, bool ExcludeHours) : IRequest<TaskTypeDto>
+public record UpdateTaskTypeCommand(string OrganizationId, string TypeId, string Name, string? Description, string? ProjectId, bool ExcludeHours) : IRequest<TaskTypeDto>
 {
     public class UpdateTaskCommandHandler(ITimeReportContext context) : IRequestHandler<UpdateTaskTypeCommand, TaskTypeDto>
     {
@@ -18,7 +18,7 @@ public record UpdateTaskTypeCommand(string OrganizationId, string TaskId, string
                 .InOrganization(request.OrganizationId)
                 .Include(x => x.Project)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync(x => x.Id == request.TaskId, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == request.TypeId, cancellationToken);
 
             if (taskType is null)
             {

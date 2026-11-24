@@ -12,6 +12,9 @@ public class TaskConfiguration : IEntityTypeConfiguration<Domain.Entities.Task>
     {
         builder.ToTable("Tasks");
 
+        builder.HasMany(x => x.Charges)
+            .WithOne(x => x.Task);
+
         builder.Ignore(x => x.DomainEvents);
 
         builder.HasOne(x => x.CreatedBy)
@@ -25,5 +28,24 @@ public class TaskConfiguration : IEntityTypeConfiguration<Domain.Entities.Task>
         builder.HasOne(x => x.DeletedBy)
             .WithMany()
             .OnDelete(DeleteBehavior.NoAction);
+    }
+}
+
+public class TaskChargeConfiguration : IEntityTypeConfiguration<Domain.Entities.TaskCharge>
+{
+    public void Configure(EntityTypeBuilder<Domain.Entities.TaskCharge> builder)
+    {
+        builder.ToTable("TaskCharges");
+
+        builder.Property(x => x.Type)
+            .HasConversion<string>()
+            .HasMaxLength(32);
+
+        builder.Property(x => x.Basis)
+            .HasConversion<string>()
+            .HasMaxLength(32);
+
+        builder.Property(x => x.Amount)
+            .HasPrecision(18, 4);
     }
 }
