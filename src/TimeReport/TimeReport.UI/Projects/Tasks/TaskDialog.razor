@@ -1,6 +1,8 @@
 ﻿@using System.ComponentModel.DataAnnotations
+
 @inject ITasksClient TasksClient
 @inject ITaskTypesClient TaskTypesClient
+@inject IDialogService DialogService
 @inject IStringLocalizer<TaskDialog> T
 
 @using Task = System.Threading.Tasks.Task
@@ -12,94 +14,382 @@
     <MudDialog>
         <DialogContent>
 
-            <MudTextField Label="@(T["Name"])" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name" For="() => Name" />
+            <MudTabs @bind-ActivePanelIndex="activeTab" KeepPanelsAlive="true" Elevation="0" Rounded="false"
+                     ApplyEffectsToContainer="true" PanelClass="pt-6">
 
-            <MudAutocomplete T="TaskType" Label="Task Type" Class="mb-6" Variant="Variant.Outlined" @bind-Value="TaskType" SearchFunc="@Search1"
-                                 For="() => TaskType"
-                                 ToStringFunc="u => u?.Name"
-                                 ResetValueOnEmptyText="true"
-                                 CoerceText="true" CoerceValue="true"
-                                 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+                <MudTabPanel Text="@(T["General"])" Icon="@Icons.Material.Filled.Settings">
 
-            <MudTextField Lines="3" Label="@(T["Description"])" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Description" For="() => Description" />
+                    <MudTextField Label="@(T["Name"])" Class="mb-6" Variant="Variant.Outlined" @bind-Value="Name"
+                                  For="() => Name" />
 
-            <MudNumericField Label="@(T["HourlyRate"])" Class="mb-6" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.AttachMoney" @bind-Value="HourlyRate" For="() => HourlyRate" HideSpinButtons="true" />
+                    <MudAutocomplete T="TaskType" Label="@(T["TaskType"])" Class="mb-6" Variant="Variant.Outlined"
+                                     @bind-Value="TaskType" SearchFunc="@Search1" For="() => TaskType" ToStringFunc="u => u?.Name"
+                                     ResetValueOnEmptyText="true" CoerceText="true" CoerceValue="true"
+                                     AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary" />
+
+                    <MudTextField Lines="3" Label="@(T["Description"])" Class="mb-6" Variant="Variant.Outlined"
+                                  @bind-Value="Description" For="() => Description" />
+
+                    @if (TaskId is null)
+                    {
+                        <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">
+                            @T["ChargesCanBeAddedAfterCreatingTask"]
+                        </MudAlert>
+                    }
+
+                </MudTabPanel>
+
+                <MudTabPanel Text="@(T["Charges"])" Icon="@Icons.Material.Filled.ReceiptLong"
+                             Disabled="@(TaskId is null)">
+
+                    @if (TaskId is not null)
+                    {
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Button"
+                                   StartIcon="@Icons.Material.Filled.Add" OnClick="OnAddChargeClicked">
+                            @T["NewCharge"]
+                        </MudButton>
+
+                        <MudTable T="TaskCharge" ServerData="ServerReloadCharges" @ref="chargesTable" Hover="true"
+                                  Dense="true" Class="mt-4 mb-4" Elevation="0">
+
+                            <HeaderContent>
+
+                                <MudTh>
+                                    <MudTableSortLabel T="TaskCharge" SortLabel="Type">
+                                        @T["ChargeType"]
+                                    </MudTableSortLabel>
+                                </MudTh>
+
+                                <MudTh>
+                                    <MudTableSortLabel T="TaskCharge" SortLabel="Basis">
+                                        @T["ChargeBasis"]
+                                    </MudTableSortLabel>
+                                </MudTh>
+
+                                <MudTh>
+                                    <MudTableSortLabel T="TaskCharge" SortLabel="Amount">
+                                        @T["Amount"]
+                                    </MudTableSortLabel>
+                                </MudTh>
+
+                                <MudTh>
+                                    @T["Description"]
+                                </MudTh>
+
+                                <MudTh></MudTh>
+
+                            </HeaderContent>
+
+                            <RowTemplate Context="charge">
+
+                                <MudTd DataLabel="@(T["ChargeType"])">
+                                    @T[charge.Type.ToString()]
+                                </MudTd>
+
+                                <MudTd DataLabel="@(T["ChargeBasis"])">
+                                    @T[charge.Basis.ToString()]
+                                </MudTd>
+
+                                <MudTd DataLabel="@(T["Amount"])">
+                                    @charge.Amount.FormatCurrency(currency)
+                                </MudTd>
+
+                                <MudTd DataLabel="@(T["Description"])">
+                                    @charge.Description
+                                </MudTd>
+
+                                <MudTd>
+                                    <MudStack Row="true" Spacing="0">
+
+                                        <MudIconButton Icon="@Icons.Material.Filled.Edit" ButtonType="ButtonType.Button"
+                                                       OnClick="() => OnEditChargeClicked(charge)" />
+
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" ButtonType="ButtonType.Button"
+                                                       OnClick="() => DeleteCharge(charge)" />
+
+                                    </MudStack>
+                                </MudTd>
+
+                            </RowTemplate>
+
+                            <NoRecordsContent>
+                                <MudText>
+                                    @T["NoChargesFound"]
+                                </MudText>
+                            </NoRecordsContent>
+
+                            <LoadingContent>
+                                <MudText>@T["Loading"]</MudText>
+                            </LoadingContent>
+
+                            <PagerContent>
+                                <MudTablePager />
+                            </PagerContent>
+
+                        </MudTable>
+
+                        <MudAlert Severity="Severity.Info" Variant="Variant.Text" Dense="true">
+                            @T["ChargeChangesAreSavedImmediately"]
+                        </MudAlert>
+                    }
+
+                </MudTabPanel>
+
+            </MudTabs>
 
         </DialogContent>
 
         <DialogActions>
-            <MudButton OnClick="() => Modal.Cancel()">@T["Cancel"]</MudButton>
-            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary">@(TaskId is null ? T["Create"] : T["SaveChanges"])</MudButton>
+
+            @if (activeTab == 0)
+            {
+                <MudButton ButtonType="ButtonType.Button" OnClick="OnClose">
+                    @T["Cancel"]
+                </MudButton>
+
+                <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Disabled="@isBusy">
+                    @(TaskId is null
+                        ? T["Create"]
+                        : T["SaveChanges"])
+                </MudButton>
+            }
+            else
+            {
+                <MudButton ButtonType="ButtonType.Button" Color="Color.Primary" OnClick="OnClose">
+                    @T["Close"]
+                </MudButton>
+            }
+
         </DialogActions>
+
     </MudDialog>
 
 </EditForm>
 
 @code {
-    [CascadingParameter] IMudDialogInstance Modal { get; set; }
+    private string currency = "SEK";
+
+    private int activeTab;
+
+    private bool isBusy;
+
+    private bool chargesChanged;
+
+    private ProjectTask? currentTask;
+
+    private MudTable<TaskCharge> chargesTable = null!;
+
+    [CascadingParameter]
+    IMudDialogInstance Modal { get; set; } = null!;
 
     [CascadingParameter(Name = "Organization")]
     public YourBrand.Portal.Services.Organization? Organization { get; set; }
 
-    [Parameter] public string? ProjectId { get; set; }
+    [Parameter]
+    public string? ProjectId { get; set; }
 
-    [Parameter] public string? TaskId { get; set; }
+    [Parameter]
+    public string? TaskId { get; set; }
 
     [Required]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Required]
-    public TaskType TaskType { get; set; }
+    public TaskType TaskType { get; set; } = null!;
 
     public string? Description { get; set; }
 
-    public decimal? HourlyRate { get; set; }
-
-    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         if (TaskId is not null)
         {
-            var result = await TasksClient.GetTaskAsync(Organization.Id, TaskId);
+            currentTask = await TasksClient.GetTaskAsync(
+                Organization!.Id,
+                TaskId);
 
-            Name = result.Name;
-            TaskType = result.TaskType;
-            Description = result.Description;
-            HourlyRate = result.HourlyRate;
+            Name = currentTask.Name;
+            TaskType = currentTask.TaskType;
+            Description = currentTask.Description;
         }
     }
 
-    async System.Threading.Tasks.Task OnSubmit()
+    private async Task OnSubmit()
     {
-        ProjectTask? result = null;
+        if (isBusy || activeTab != 0)
+            return;
 
-        if (TaskId is null)
+        isBusy = true;
+
+        try
         {
-            result = await TasksClient.CreateTaskAsync(Organization.Id, ProjectId, new CreateTask
+            if (TaskId is null)
             {
-                Name = Name,
-                TaskTypeId = TaskType.Id,
-                Description = Description,
-                HourlyRate = HourlyRate
-            });
+                currentTask = await TasksClient.CreateTaskAsync(
+                    Organization!.Id,
+                    ProjectId!,
+                    new CreateTask
+                    {
+                        Name = Name,
+                        TaskTypeId = TaskType.Id,
+                        Description = Description
+                    });
+            }
+            else
+            {
+                currentTask = await TasksClient.UpdateTaskAsync(
+                    Organization!.Id,
+                    TaskId,
+                    new UpdateTask
+                    {
+                        Name = Name,
+                        TaskTypeId = TaskType.Id,
+                        Description = Description
+                    });
+            }
+
+            Modal.Close(DialogResult.Ok(currentTask));
+        }
+        finally
+        {
+            isBusy = false;
+        }
+    }
+
+    private void OnClose()
+    {
+        if (chargesChanged)
+        {
+            Modal.Close(DialogResult.Ok(currentTask));
         }
         else
         {
-            result = await TasksClient.UpdateTaskAsync(Organization.Id, TaskId, new UpdateTask
-            {
-                Name = Name,
-                TaskTypeId = TaskType.Id,
-                Description = Description,
-                HourlyRate = HourlyRate
-            });
+            Modal.Cancel();
         }
-
-        Modal.Close(DialogResult.Ok(result));
     }
 
-    private async Task<IEnumerable<TaskType>> Search1(string value, CancellationToken cancellationToken)
+    private async Task<IEnumerable<TaskType>> Search1(
+        string value,
+        CancellationToken cancellationToken)
     {
-        var page = await TaskTypesClient.GetTaskTypesAsync(Organization.Id, 0, 10, null!, value, null, null, cancellationToken);
+        var page = await TaskTypesClient.GetTaskTypesAsync(
+            Organization!.Id,
+            0,
+            10,
+            null!,
+            value,
+            null,
+            null,
+            cancellationToken);
 
         return page.Items;
+    }
+
+    private async Task<TableData<TaskCharge>> ServerReloadCharges(
+        TableState state,
+        CancellationToken cancellationToken)
+    {
+        if (TaskId is null)
+        {
+            return new TableData<TaskCharge>
+            {
+                TotalItems = 0,
+                Items = Array.Empty<TaskCharge>()
+            };
+        }
+
+        var result = await TasksClient.GetTaskChargesAsync(
+            organizationId: Organization!.Id,
+            page: state.Page,
+            pageSize: state.PageSize,
+            projectId: ProjectId!,
+            taskId: TaskId,
+            searchString: null!,
+            sortBy: state.SortLabel,
+            sortDirection: state.SortDirection switch
+            {
+                MudBlazor.SortDirection.Ascending =>
+                    YourBrand.TimeReport.Client.SortDirection.Asc,
+
+                MudBlazor.SortDirection.Descending =>
+                    YourBrand.TimeReport.Client.SortDirection.Desc,
+
+                _ => null
+            },
+            cancellationToken: cancellationToken);
+
+        return new TableData<TaskCharge>
+        {
+            TotalItems = result.TotalItems,
+            Items = result.Items
+        };
+    }
+
+    private async Task OnAddChargeClicked()
+    {
+        DialogParameters parameters = new();
+
+        parameters.Add(
+            nameof(TaskChargeDialog.TaskId),
+            TaskId);
+
+        var dialogRef = await DialogService.ShowAsync<TaskChargeDialog>(
+            T["NewCharge"],
+            parameters);
+
+        var dialogResult = await dialogRef.Result;
+
+        if (dialogResult is null || dialogResult.Canceled)
+            return;
+
+        chargesChanged = true;
+
+        await chargesTable.ReloadServerData();
+    }
+
+    private async Task OnEditChargeClicked(TaskCharge charge)
+    {
+        DialogParameters parameters = new();
+
+        parameters.Add(
+            nameof(TaskChargeDialog.TaskId),
+            TaskId);
+
+        parameters.Add(
+            nameof(TaskChargeDialog.TaskChargeId),
+            charge.Id);
+
+        var dialogRef = await DialogService.ShowAsync<TaskChargeDialog>(
+            T["EditCharge"],
+            parameters);
+
+        var dialogResult = await dialogRef.Result;
+
+        if (dialogResult is null || dialogResult.Canceled)
+            return;
+
+        chargesChanged = true;
+
+        await chargesTable.ReloadServerData();
+    }
+
+    private async Task DeleteCharge(TaskCharge charge)
+    {
+        var modalResult = await DialogService.ShowMessageBoxAsync(
+            T["DeleteChargeConfirmation"],
+            T["ThisCannotBeUndone"],
+            yesText: T["Delete"],
+            noText: T["No"]);
+
+        if (!modalResult.GetValueOrDefault())
+            return;
+
+        await TasksClient.DeleteTaskChargeAsync(
+            organizationId: Organization!.Id,
+            taskId: TaskId!,
+            id: charge.Id);
+
+        chargesChanged = true;
+
+        await chargesTable.ReloadServerData();
     }
 }

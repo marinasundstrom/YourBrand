@@ -1,4 +1,4 @@
-x-generator: NSwag v14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))
+x-generator: NSwag v14.8.0.0 (NJsonSchema v11.6.2.0 (Newtonsoft.Json v13.0.0.0))
 openapi: 3.0.0
 info:
   title: TimeReport
@@ -1555,6 +1555,207 @@ paths:
                 format: binary
       security:
       - JWT: []
+  /Tasks/{taskId}/Charges:
+    get:
+      tags:
+      - Tasks
+      operationId: Tasks_GetTaskCharges
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: page
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 0
+        x-position: 2
+      - name: pageSize
+        in: query
+        schema:
+          type: integer
+          format: int32
+          default: 10
+        x-position: 3
+      - name: projectId
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 4
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 5
+      - name: searchString
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 6
+      - name: sortBy
+        in: query
+        schema:
+          type: string
+          nullable: true
+        x-position: 7
+      - name: sortDirection
+        in: query
+        schema:
+          oneOf:
+          - nullable: true
+            oneOf:
+            - $ref: '#/components/schemas/SortDirection'
+        x-position: 8
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemsResultOfTaskCharge'
+      security:
+      - JWT: []
+    post:
+      tags:
+      - Tasks
+      operationId: Tasks_CreateTaskCharge
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      requestBody:
+        x-name: createTaskChargeDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskCharge'
+        required: true
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCharge'
+      security:
+      - JWT:
+        - Administrator
+        - Manager
+  /Tasks/{taskId}/Charges/{id}:
+    get:
+      tags:
+      - Tasks
+      operationId: Tasks_GetTaskCharge
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCharge'
+      security:
+      - JWT: []
+    put:
+      tags:
+      - Tasks
+      operationId: Tasks_UpdateTaskCharge
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      requestBody:
+        x-name: updateTaskChargeDto
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskCharge'
+        required: true
+        x-position: 4
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCharge'
+      security:
+      - JWT: []
+    delete:
+      tags:
+      - Tasks
+      operationId: Tasks_DeleteTaskCharge
+      parameters:
+      - name: organizationId
+        in: query
+        schema:
+          type: string
+        x-position: 1
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 2
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: string
+        x-position: 3
+      responses:
+        200:
+          description: ''
+      security:
+      - JWT:
+        - Administrator
+        - Manager
   /Tasks:
     get:
       tags:
@@ -2098,13 +2299,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Entry'
-        403:
+        400:
           description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-        400:
+        403:
           description: ''
           content:
             application/json:
@@ -2150,13 +2351,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Entry'
-        403:
+        400:
           description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-        400:
+        403:
           description: ''
           content:
             application/json:
@@ -2202,13 +2403,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Entry'
-        403:
+        400:
           description: ''
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetails'
-        400:
+        403:
           description: ''
           content:
             application/json:
@@ -3105,17 +3306,50 @@ components:
       enum:
       - 0
       - 1
-    ItemsResultOfTask:
+    ItemsResultOfTaskCharge:
       type: object
       additionalProperties: false
       properties:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/Task'
+            $ref: '#/components/schemas/TaskCharge'
         totalItems:
           type: integer
           format: int32
+    TaskCharge:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+        type:
+          $ref: '#/components/schemas/ChargeType'
+        task:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Task'
+        taskType:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/TaskType'
+        basis:
+          $ref: '#/components/schemas/ChargeBasis'
+        amount:
+          type: number
+          format: decimal
+        description:
+          type: string
+          nullable: true
+    ChargeType:
+      type: integer
+      description: ''
+      x-enumNames:
+      - Cost
+      - Revenue
+      enum:
+      - 0
+      - 1
     Task:
       type: object
       additionalProperties: false
@@ -3133,6 +3367,10 @@ components:
           type: number
           format: decimal
           nullable: true
+        charge:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskCharge'
         project:
           nullable: true
           oneOf:
@@ -3154,6 +3392,56 @@ components:
           nullable: true
           oneOf:
           - $ref: '#/components/schemas/Project'
+    ChargeBasis:
+      type: integer
+      description: ''
+      x-enumNames:
+      - PerHour
+      - PerOccurrence
+      - PerTask
+      enum:
+      - 0
+      - 1
+      - 2
+    CreateTaskCharge:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/ChargeType'
+        basis:
+          $ref: '#/components/schemas/ChargeBasis'
+        amount:
+          type: number
+          format: decimal
+        description:
+          type: string
+          nullable: true
+    UpdateTaskCharge:
+      type: object
+      additionalProperties: false
+      properties:
+        type:
+          $ref: '#/components/schemas/ChargeType'
+        basis:
+          $ref: '#/components/schemas/ChargeBasis'
+        amount:
+          type: number
+          format: decimal
+        description:
+          type: string
+          nullable: true
+    ItemsResultOfTask:
+      type: object
+      additionalProperties: false
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        totalItems:
+          type: integer
+          format: int32
     CreateTask:
       type: object
       additionalProperties: false

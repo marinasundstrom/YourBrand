@@ -1,0 +1,188 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using YourBrand.TimeReport.Client
+
+@inject ITasksClient TasksClient
+@inject IStringLocalizer<TaskChargeDialog> T
+
+<EditForm Model="@this" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+
+            <MudSelect T="ChargeType"
+                       Label="@(T["ChargeType"])"
+                       Class="mb-6"
+                       Variant="Variant.Outlined"
+                       @bind-Value="Type"
+                       For="() => Type"
+                       ToStringFunc="type => T[type.ToString()].Value">
+
+                @foreach (var type in Enum.GetValues<ChargeType>())
+                {
+                    <MudSelectItem Value="@type">
+                        @T[type.ToString()]
+                    </MudSelectItem>
+                }
+
+            </MudSelect>
+
+            <MudSelect T="ChargeBasis"
+                       Label="@(T["ChargeBasis"])"
+                       Class="mb-6"
+                       Variant="Variant.Outlined"
+                       @bind-Value="Basis"
+                       For="() => Basis"
+                       ToStringFunc="basis => T[basis.ToString()].Value">
+
+                @foreach (var basis in Enum.GetValues<ChargeBasis>())
+                {
+                    <MudSelectItem Value="@basis">
+                        @T[basis.ToString()]
+                    </MudSelectItem>
+                }
+
+            </MudSelect>
+
+            <MudNumericField T="decimal"
+                             Label="@AmountLabel"
+                             Class="mb-6"
+                             Variant="Variant.Outlined"
+                             @bind-Value="Amount"
+                             For="() => Amount"
+                             Adornment="Adornment.Start"
+                             AdornmentIcon="@Icons.Material.Filled.AttachMoney"
+                             HideSpinButtons="true"
+                             Min="0m" />
+
+            <MudTextField Lines="3"
+                          Label="@(T["Description"])"
+                          Class="mb-6"
+                          Variant="Variant.Outlined"
+                          @bind-Value="Description"
+                          For="() => Description" />
+
+        </DialogContent>
+
+        <DialogActions>
+
+            <MudButton OnClick="() => Modal.Cancel()">
+                @T["Cancel"]
+            </MudButton>
+
+            <MudButton ButtonType="ButtonType.Submit"
+                       Color="Color.Primary"
+                       Disabled="@IsBusy">
+                @(TaskChargeId is null
+                    ? T["Create"]
+                    : T["SaveChanges"])
+            </MudButton>
+
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    IMudDialogInstance Modal { get; set; } = null!;
+
+    [CascadingParameter(Name = "Organization")]
+    public YourBrand.Portal.Services.Organization? Organization { get; set; }
+
+    [Parameter, EditorRequired]
+    public string TaskId { get; set; } = null!;
+
+    [Parameter]
+    public string? TaskChargeId { get; set; }
+
+    public ChargeType Type { get; set; } = ChargeType.Cost;
+
+    public ChargeBasis Basis { get; set; } = ChargeBasis.PerHour;
+
+    [Range(typeof(decimal), "0", "79228162514264337593543950335")]
+    public decimal Amount { get; set; }
+
+    public string? Description { get; set; }
+
+    private bool IsBusy { get; set; }
+
+    private string AmountLabel => Basis switch
+    {
+        ChargeBasis.PerHour => T["HourlyRate"],
+        ChargeBasis.PerOccurrence => T["AmountPerOccurrence"],
+        ChargeBasis.PerTask => T["AmountPerTask"],
+        _ => T["Amount"]
+    };
+
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
+    {
+        if (TaskChargeId is null)
+            return;
+
+        IsBusy = true;
+
+        try
+        {
+            var result = await TasksClient.GetTaskChargeAsync(
+                Organization!.Id,
+                TaskId,
+                TaskChargeId);
+
+            Type = result.Type;
+            Basis = result.Basis;
+            Amount = result.Amount;
+            Description = result.Description;
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private async System.Threading.Tasks.Task OnSubmit()
+    {
+        if (IsBusy)
+            return;
+
+        IsBusy = true;
+
+        try
+        {
+            TaskCharge result;
+
+            if (TaskChargeId is null)
+            {
+                result = await TasksClient.CreateTaskChargeAsync(
+                    Organization!.Id,
+                    TaskId,
+                    new CreateTaskCharge
+                    {
+                        Type = Type,
+                        Basis = Basis,
+                        Amount = Amount,
+                        Description = Description!
+                    });
+            }
+            else
+            {
+                result = await TasksClient.UpdateTaskChargeAsync(
+                    Organization!.Id,
+                    TaskId,
+                    TaskChargeId,
+                    new UpdateTaskCharge
+                    {
+                        Type = Type,
+                        Basis = Basis,
+                        Amount = Amount,
+                        Description = Description!
+                    });
+            }
+
+            Modal.Close(DialogResult.Ok(result));
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+}

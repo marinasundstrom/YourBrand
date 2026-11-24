@@ -211,7 +211,15 @@ else
         DialogParameters parameters = new();
         parameters.Add(nameof(TaskDialog.ProjectId), project.Id);
 
-        var dialogRef = await DialogService.ShowAsync<TaskDialog>("New task", parameters);
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.Large,
+            FullWidth = true,
+            BackdropClick = false,
+            CloseOnEscapeKey = false
+        };
+
+        var dialogRef = await DialogService.ShowAsync<TaskDialog>("New task", parameters, options);
 
         var dialogResult = await dialogRef.Result;
 
@@ -226,7 +234,15 @@ else
         DialogParameters parameters = new();
         parameters.Add(nameof(TaskDialog.TaskId), task.Id);
 
-        var dialogRef = await DialogService.ShowAsync<TaskDialog>($"Edit {task.Name}", parameters);
+        var options = new DialogOptions
+        {
+            MaxWidth = MaxWidth.Large,
+            FullWidth = true,
+            BackdropClick = false,
+            CloseOnEscapeKey = false
+        };
+
+        var dialogRef = await DialogService.ShowAsync<TaskDialog>($"Edit {task.Name}", parameters, options);
 
         var dialogResult = await dialogRef.Result;
 

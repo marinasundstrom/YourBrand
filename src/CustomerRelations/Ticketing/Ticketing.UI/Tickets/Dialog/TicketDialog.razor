@@ -50,17 +50,17 @@ else
                     
                 <DialogContent>
                     <MudTabs Elevation="0" Rounded="false" ApplyEffectsToContainer="true" TabPanelsClass="pa-6">
-                        <MudTabPanel Text="Details">
+                        <MudTabPanel Text="Details" Icon="@Icons.Material.Filled.Info">
                             <DetailsPanel Id="@Id" Form="Form" EditContext="editContext" />
                         </MudTabPanel>
 
                         @if(Id is not null) 
                         {
-                            <MudTabPanel Text="Comments">
+                            <MudTabPanel Text="Comments" Icon="@Icons.Material.Filled.Comment">
                                 <CommentsPanel Id="@Id" />
                             </MudTabPanel>
 
-                            <MudTabPanel Text="History">
+                            <MudTabPanel Text="History" Icon="@Icons.Material.Filled.History">
                                 <HistoryPanel Id="@Id" />
                             </MudTabPanel>
                         }

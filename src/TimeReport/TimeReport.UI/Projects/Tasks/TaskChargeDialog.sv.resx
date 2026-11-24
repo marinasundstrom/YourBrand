@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+
+    <!-- Charge properties -->
+    <data name="ChargeType">
+        <value>Typ</value>
+    </data>
+    <data name="ChargeBasis">
+        <value>Beräkningsgrund</value>
+    </data>
+    <data name="Amount">
+        <value>Belopp</value>
+    </data>
+    <data name="Description">
+        <value>Beskrivning</value>
+    </data>
+
+    <!-- Charge types -->
+    <data name="Cost">
+        <value>Kostnad</value>
+    </data>
+    <data name="Revenue">
+        <value>Intäkt</value>
+    </data>
+
+    <!-- Charge bases -->
+    <data name="PerHour">
+        <value>Per timme</value>
+    </data>
+    <data name="PerOccurrence">
+        <value>Per tillfälle</value>
+    </data>
+    <data name="PerTask">
+        <value>Per uppgift</value>
+    </data>
+
+    <!-- Dynamic amount labels -->
+    <data name="HourlyRate">
+        <value>Belopp per timme</value>
+    </data>
+    <data name="AmountPerOccurrence">
+        <value>Belopp per tillfälle</value>
+    </data>
+    <data name="AmountPerTask">
+        <value>Belopp per uppgift</value>
+    </data>
+
+    <!-- Actions -->
+    <data name="Cancel">
+        <value>Avbryt</value>
+    </data>
+    <data name="Create">
+        <value>Skapa</value>
+    </data>
+    <data name="SaveChanges">
+        <value>Spara ändringar</value>
+    </data>
+</root>
