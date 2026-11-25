@@ -37,7 +37,7 @@
     <ProjectReference Include="..\IdentityService2\IdentityService2.csproj" AspireProjectMetadataTypeName="IdentityService" />
     <ProjectReference Include="..\Showroom\WebApi\WebApi.csproj" AspireProjectMetadataTypeName="Showroom" />
 
-    <ProjectReference Include="..\TimeReport\WebApi\WebApi.csproj" AspireProjectMetadataTypeName="TimeReport" />
+    <ProjectReference Include="..\TimeReport\TimeReport\WebApi.csproj" AspireProjectMetadataTypeName="TimeReport" />
     <ProjectReference Include="..\Finance\Accounting\Accounting\WebApi\WebApi.csproj" AspireProjectMetadataTypeName="Accounting" />
     <ProjectReference Include="..\Finance\Transactions\Transactions\Transactions.csproj" AspireProjectMetadataTypeName="Transactions" />
     <ProjectReference Include="..\Finance\Payments\Payments\Payments.csproj" AspireProjectMetadataTypeName="Payments" />

@@ -267,11 +267,10 @@
   </Folder>
   <Folder Name="/src/TimeReport/Service/">
     <Project Path="src/TimeReport/Domain/Domain.csproj" />
-    <Project Path="src/TimeReport/Infrastructure/Infrastructure.csproj" />
-    <Project Path="src/TimeReport/WebApi/WebApi.csproj" />
     <Project Path="src/TimeReport/TimeReport.Client/TimeReport.Client.csproj" />
-    <Project Path="src/TimeReport/Application.Tests/Application.Tests.csproj" />
-    <Project Path="src/TimeReport/Domain.Tests/Domain.Tests.csproj" />
+    <!-- <Project Path="src/TimeReport/Application.Tests/Application.Tests.csproj" />
+    <Project Path="src/TimeReport/Domain.Tests/Domain.Tests.csproj" /> -->
+    <Project Path="src/TimeReport/TimeReport/TimeReport.csproj" />
   </Folder>
   <Configurations>
     <Platform Name="Any CPU" />
