@@ -10,9 +10,9 @@ using Shouldly;
 using Xunit;
 
 using YourBrand.Identity;
-using YourBrand.TimeReport.Application.Common.Interfaces;
-using YourBrand.TimeReport.Application.TimeSheets;
-using YourBrand.TimeReport.Application.TimeSheets.Queries;
+using YourBrand.TimeReport.Features.Common.Interfaces;
+using YourBrand.TimeReport.Features.TimeSheets;
+using YourBrand.TimeReport.Features.TimeSheets.Queries;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Domain.Repositories;

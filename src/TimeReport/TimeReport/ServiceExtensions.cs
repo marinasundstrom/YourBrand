@@ -1,6 +1,6 @@
 ﻿using YourBrand.Identity;
 using YourBrand.Invoicing.Client;
-using YourBrand.TimeReport.Application.Projects.Expenses.Queries;
+using YourBrand.TimeReport.Features.Projects.Expenses.Queries;
 
 namespace YourBrand.TimeReport;
 

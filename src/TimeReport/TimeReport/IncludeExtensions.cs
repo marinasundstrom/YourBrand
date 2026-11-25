@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using YourBrand.TimeReport.Domain.Entities;
 
-namespace YourBrand.TimeReport.Application;
+namespace YourBrand.TimeReport.Features;
 
 public static class IncludeExtensions
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Features.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Hubs;
 

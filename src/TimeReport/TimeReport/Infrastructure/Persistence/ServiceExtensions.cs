@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Scrutor;
 
-using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Features.Common.Interfaces;
 using YourBrand.TimeReport.Domain;
 using YourBrand.TimeReport.Domain.Repositories;
 using YourBrand.TimeReport.Infrastructure.Idempotence;

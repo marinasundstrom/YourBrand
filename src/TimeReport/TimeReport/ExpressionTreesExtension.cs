@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace YourBrand.TimeReport.Application;
+namespace YourBrand.TimeReport.Features;
 
 public static class ExpressionTreesExtension
 {

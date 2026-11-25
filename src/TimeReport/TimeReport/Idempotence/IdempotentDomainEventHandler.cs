@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using YourBrand.Domain;
-using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Features.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Common;
 using YourBrand.TimeReport.Infrastructure.Persistence;
 using YourBrand.TimeReport.Infrastructure.Persistence.Outbox;

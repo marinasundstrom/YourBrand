@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 
-using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Features.Common.Interfaces;
 
 namespace YourBrand.TimeReport.Services;
 

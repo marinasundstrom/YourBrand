@@ -4,7 +4,7 @@ using MediatR;
 
 using YourBrand.HumanResources.Contracts;
 using YourBrand.Identity;
-using YourBrand.TimeReport.Application.Teams.Commands;
+using YourBrand.TimeReport.Features.Teams.Commands;
 
 namespace YourBrand.TimeReport.Consumers;
 

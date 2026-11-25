@@ -6,7 +6,7 @@ using YourBrand.Domain;
 using YourBrand.Domain.Persistence;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Features.Common.Interfaces;
 using YourBrand.TimeReport.Domain.Entities;
 using YourBrand.TimeReport.Infrastructure.Persistence.Configurations;
 using YourBrand.TimeReport.Infrastructure.Persistence.Outbox;

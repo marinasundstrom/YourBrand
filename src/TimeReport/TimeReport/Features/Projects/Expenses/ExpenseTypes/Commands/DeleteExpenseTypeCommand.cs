@@ -1,0 +1,32 @@
+﻿
+using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
+using YourBrand.TimeReport.Features.Common.Interfaces;
+
+namespace YourBrand.TimeReport.Features.Projects.Expenses.ExpenseTypes.Commands;
+
+public record DeleteExpenseTypeCommand(string OrganizationId, string ExpenseId) : IRequest
+{
+    public class DeleteExpenseCommandHandler(ITimeReportContext context) : IRequestHandler<DeleteExpenseTypeCommand>
+    {
+        public async Task Handle(DeleteExpenseTypeCommand request, CancellationToken cancellationToken)
+        {
+            var expenseType = await context.ExpenseTypes
+                .InOrganization(request.OrganizationId)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(x => x.Id == request.ExpenseId, cancellationToken);
+
+            if (expenseType is null)
+            {
+                throw new Exception();
+            }
+
+            context.ExpenseTypes.Remove(expenseType);
+
+            await context.SaveChangesAsync(cancellationToken);
+
+        }
+    }
+}

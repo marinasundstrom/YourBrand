@@ -5,7 +5,7 @@ using MediatR;
 using YourBrand.Identity;
 using YourBrand.IdentityManagement.Contracts;
 using YourBrand.Tenancy;
-using YourBrand.TimeReport.Application.Users.Commands;
+using YourBrand.TimeReport.Features.Users.Commands;
 
 namespace YourBrand.TimeReport.Consumers;
 

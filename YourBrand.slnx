@@ -266,7 +266,6 @@
     <Project Path="src/TimeReport/TimeReport.Components/TimeReport.Components.csproj" />
   </Folder>
   <Folder Name="/src/TimeReport/Service/">
-    <Project Path="src/TimeReport/Domain/Domain.csproj" />
     <Project Path="src/TimeReport/TimeReport.Client/TimeReport.Client.csproj" />
     <!-- <Project Path="src/TimeReport/Application.Tests/Application.Tests.csproj" />
     <Project Path="src/TimeReport/Domain.Tests/Domain.Tests.csproj" /> -->

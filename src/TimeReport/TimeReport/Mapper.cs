@@ -1,18 +1,18 @@
-using YourBrand.TimeReport.Application.Tasks;
-using YourBrand.TimeReport.Application.Tasks.TaskTypes;
-using YourBrand.TimeReport.Application.Tasks.TaskCharges;
-using YourBrand.TimeReport.Application.Organizations;
-using YourBrand.TimeReport.Application.Projects;
-using YourBrand.TimeReport.Application.Projects.Expenses;
-using YourBrand.TimeReport.Application.Projects.Expenses.ExpenseTypes;
-using YourBrand.TimeReport.Application.Projects.ProjectGroups;
-using YourBrand.TimeReport.Application.Teams;
-using YourBrand.TimeReport.Application.TimeSheets;
-using YourBrand.TimeReport.Application.Users;
-using YourBrand.TimeReport.Application.Users.Absence;
+using YourBrand.TimeReport.Features.Tasks;
+using YourBrand.TimeReport.Features.Tasks.TaskTypes;
+using YourBrand.TimeReport.Features.Tasks.TaskCharges;
+using YourBrand.TimeReport.Features.Organizations;
+using YourBrand.TimeReport.Features.Projects;
+using YourBrand.TimeReport.Features.Projects.Expenses;
+using YourBrand.TimeReport.Features.Projects.Expenses.ExpenseTypes;
+using YourBrand.TimeReport.Features.Projects.ProjectGroups;
+using YourBrand.TimeReport.Features.Teams;
+using YourBrand.TimeReport.Features.TimeSheets;
+using YourBrand.TimeReport.Features.Users;
+using YourBrand.TimeReport.Features.Users.Absence;
 using YourBrand.TimeReport.Domain.Entities;
 
-namespace YourBrand.TimeReport.Application;
+namespace YourBrand.TimeReport.Features;
 
 public static class Mapper
 {

@@ -7,7 +7,7 @@ using NSubstitute;
 using YourBrand.ApiKeys;
 using YourBrand.Identity;
 using YourBrand.Tenancy;
-using YourBrand.TimeReport.Application.Common.Interfaces;
+using YourBrand.TimeReport.Features.Common.Interfaces;
 using YourBrand.TimeReport.Infrastructure.Persistence;
 
 namespace Tests;
