@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path="Commands.md" />
@@ -266,7 +266,6 @@
     <Project Path="src/TimeReport/TimeReport.Components/TimeReport.Components.csproj" />
   </Folder>
   <Folder Name="/src/TimeReport/Service/">
-    <Project Path="src/TimeReport/Application/Application.csproj" />
     <Project Path="src/TimeReport/Domain/Domain.csproj" />
     <Project Path="src/TimeReport/Infrastructure/Infrastructure.csproj" />
     <Project Path="src/TimeReport/WebApi/WebApi.csproj" />
@@ -275,8 +274,6 @@
     <Project Path="src/TimeReport/Domain.Tests/Domain.Tests.csproj" />
   </Folder>
   <Configurations>
-    <BuildType Name="Debug" />
-    <BuildType Name="Release" />
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
     <Platform Name="x86" />
