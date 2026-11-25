@@ -6,6 +6,9 @@ using YourBrand.TimeReport.Domain.Common;
 
 namespace YourBrand.TimeReport.Domain.Entities;
 
+/// <summary>
+/// Represents the membership in a Project. A member.
+/// </summary>
 public class ProjectMembership : AuditableEntity<string>, IHasTenant, IHasOrganization, ISoftDeletableWithAudit<User>
 {
     public ProjectMembership() : base(Guid.NewGuid().ToString())
@@ -19,6 +22,8 @@ public class ProjectMembership : AuditableEntity<string>, IHasTenant, IHasOrgani
     public Project Project { get; set; } = null!;
 
     public Team? Team { get; set; }
+
+    public TeamMembership? TeamMember { get; set; }
 
     public User User { get; set; } = null!;
 
@@ -36,6 +41,9 @@ public class ProjectMembership : AuditableEntity<string>, IHasTenant, IHasOrgani
     /// </summary>
     public double? RequiredHoursWeekly { get; set; }
 
+    // Contains task settings overrides.
+    public List<ProjectMembershipTask> Tasks { get; set; } = [];
+    
     public bool IsDeleted { get; set; }
 
     public DateTimeOffset? Deleted { get; set; }
